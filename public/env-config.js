@@ -1,0 +1,1 @@
+window.__RUNTIME_CONFIG__ = {"NODE_ENV":"development","REACT_APP_CLIENT_ID":"1TWq7XyPLEILD7xPdF7mavvz1LAECjh8","REACT_APP_DOMAIN":"dev-ywhyatwt.us.auth0.com","REACT_APP_AUDIENCE":"https://app.keibi.io","REACT_APP_BASE_URL":"https://app.kaytu.dev"};
