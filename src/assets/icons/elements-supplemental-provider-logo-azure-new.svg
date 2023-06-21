@@ -1,0 +1,31 @@
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="58.826%" y1="7.411%" x2="37.398%" y2="103.762%" id="srv4de4b2c">
+            <stop stop-color="#114A8B" offset="0%"/>
+            <stop stop-color="#0669BC" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="59.561%" y1="52.313%" x2="52.648%" y2="54.864%" id="mu0prqd20d">
+            <stop stop-opacity=".3" offset="0%"/>
+            <stop stop-opacity=".2" offset="7.1%"/>
+            <stop stop-opacity=".1" offset="32.1%"/>
+            <stop stop-opacity=".05" offset="62.3%"/>
+            <stop stop-opacity="0" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="37.485%" y1="4.6%" x2="62.271%" y2="99.979%" id="6xkyw9sxqe">
+            <stop stop-color="#3CCBF4" offset="0%"/>
+            <stop stop-color="#2892DF" offset="100%"/>
+        </linearGradient>
+        <path id="q676b7opda" d="M0 0h24v24H0z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="fj1l1xs4nb" fill="#fff">
+            <use xlink:href="#q676b7opda"/>
+        </mask>
+        <g mask="url(#fj1l1xs4nb)" fill-rule="nonzero">
+            <path d="M8 0h7.103L7.73 22.023a1.133 1.133 0 0 1-1.072.777H1.13c-.364 0-.706-.177-.919-.475a1.148 1.148 0 0 1-.153-1.03L6.928.778A1.133 1.133 0 0 1 8 0z" fill="url(#srv4de4b2c)" transform="translate(0 .6)"/>
+            <path d="M18.32 15.372H7.06a.521.521 0 0 0-.486.332.529.529 0 0 0 .13.578l7.236 6.81c.21.198.488.308.776.308h6.377l-2.772-8.028z" fill="#0078D4"/>
+            <path d="M8 0a1.124 1.124 0 0 0-1.075.792L.068 21.277c-.124.35-.072.738.14 1.04.212.304.558.484.926.483h5.67c.43-.078.785-.382.93-.798L9.1 17.94l4.885 4.593c.205.171.461.266.727.268h6.353l-2.786-8.028-8.123.002L15.128 0H8.001z" fill="url(#mu0prqd20d)" transform="translate(0 .6)"/>
+            <path d="M17.072.776A1.131 1.131 0 0 0 16 0H8.085c.486 0 .917.312 1.072.776l6.869 20.52c.116.347.06.73-.153 1.029a1.128 1.128 0 0 1-.919.475h7.916c.364 0 .706-.177.918-.475.212-.299.27-.682.153-1.03L17.07.775z" fill="url(#6xkyw9sxqe)" transform="translate(0 .6)"/>
+        </g>
+    </g>
+</svg>

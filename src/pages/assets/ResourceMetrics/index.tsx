@@ -1,0 +1,84 @@
+import React from 'react'
+import { Grid, SearchSelect, SearchSelectItem, Title} from '@tremor/react'
+import { useAtom } from 'jotai/index'
+import Swiper from '../../../components/Swiper'
+import MetricCard from '../../../components/Cards/KPICards/MetricCard'
+import { selectedResourceCategoryAtom } from '../../../store'
+import { useInventoryApiV2ResourcesMetricList } from '../../../api/inventory.gen'
+import dayjs from 'dayjs'
+import { numericDisplay } from '../../../utilities/numericDisplay'
+
+interface IProps {
+    provider: any
+    timeRange: any
+    categories: {
+        label: string
+        value: string
+    }[]
+    pageSize: any
+}
+
+export default function ResourceMetrics({
+    provider,
+    timeRange,
+    pageSize,
+    categories,
+}: IProps) {
+    const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(selectedResourceCategoryAtom)
+    const activeCategory = selectedResourceCategory === 'All Categories' ? '' : selectedResourceCategory
+    const query = {
+        ...(provider && { connector: provider }),
+        ...(activeCategory && { tag: [`category=${activeCategory}`] }),
+        ...(timeRange['from'] && { startTime: dayjs(timeRange['from']).unix() }),
+        ...(timeRange['to'] && { endTime: dayjs(timeRange['to']).unix() }),
+        ...(pageSize && { pageSize })
+    }
+    const { response: metrics } = useInventoryApiV2ResourcesMetricList(query)
+    const percentage = (a?: number, b?: number): number => {
+        return a && b ? ((a - b) / b) * 100 : 0
+    }
+
+    return (
+        <div>
+            {/* <div className="h-80" /> */}
+            <div className="flex justify-normal gap-x-2">
+                <Title>Resource metrics in </Title>
+                <SearchSelect
+                    onValueChange={(e) =>setSelectedResourceCategory(e)}
+                    value={selectedResourceCategory}
+                    placeholder="Source Selection"
+                    className="max-w-xs mb-6"
+                >
+                    {categories.map((category) => (
+                        <SearchSelectItem key={category.label} value={category.value}>
+                            {category.value}
+                        </SearchSelectItem>
+                    ))}
+                </SearchSelect>
+            </div>
+            <Grid>
+                <Swiper
+                    gridContainerProps={{
+                        numItemsSm: 2,
+                        numItemsMd: 3,
+                        className: "gap-6",
+                    }}
+                >
+                    {metrics?.resource_types?.map((metric) => (
+                        <MetricCard
+                            title={
+                                metric.resource_name
+                                    ? metric.resource_name
+                                    : String(metric.resource_type)
+                            }
+                            metric={String(numericDisplay(metric.count ? metric.count : 0))}
+                            metricPrev={String(numericDisplay(metric.old_count ? metric.old_count : 0))}
+                            delta={Math.abs(percentage(metric.count, metric.old_count)).toFixed(2)}
+                            deltaType={percentage(metric.count, metric.old_count) > 0 ? 'moderateIncrease' : 'moderateDecrease'}
+                        />
+                    ))}
+                </Swiper>
+            </Grid>
+        </div>
+    )
+}

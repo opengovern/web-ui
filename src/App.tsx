@@ -1,26 +1,15 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { setAuthHeader } from './api/ApiConfig'
+import AppNavigator from './navigator/AppNavigator'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    setAuthHeader('eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFMWmdSa1R2cFRyQmp0b2t6ZXBJZiJ9.eyJodHRwczovL2FwcC5rZWliaS5pby9lbWFpbCI6ImFsaWRAa2F5dHUuaW8iLCJodHRwczovL2FwcC5rZWliaS5pby9hY2Nlc3MiOnsiYzRhMDQ5ZjAtMjhhOS00OWQ3LWIyZWItZmEzOTk5NTY4MmQ4IjoiQURNSU4iLCJ0ZXN0IjoiQURNSU4iLCJ3cy00NjEwNDU4NTI2MTAyNDM0OTEiOiJBRE1JTiJ9LCJodHRwczovL2FwcC5rZWliaS5pby93b3Jrc3BhY2VBY2Nlc3MiOnsiYzRhMDQ5ZjAtMjhhOS00OWQ3LWIyZWItZmEzOTk5NTY4MmQ4IjoiQURNSU4iLCJ0ZXN0IjoiQURNSU4iLCJ3cy00NjEwNDU4NTI2MTAyNDM0OTEiOiJBRE1JTiJ9LCJpc3MiOiJodHRwczovL2Rldi15d2h5YXR3dC51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDk1OTYyNDM1MTExNDc4Mjk1NjEiLCJhdWQiOlsiaHR0cHM6Ly9hcHAua2VpYmkuaW8iLCJodHRwczovL2Rldi15d2h5YXR3dC51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjg3MzI0OTM4LCJleHAiOjE2ODc0MTEzMzgsImF6cCI6IjFUV3E3WHlQTEVJTEQ3eFBkRjdtYXZ2ejFMQUVDamg4Iiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbXX0.EVuKTJWeeTRXxpA3Bxn_DU0bMdvMUBuXF3ICdcuheruBr8ujdLNlar6Yp6DD_yMjMPpcYy6QCzQXgScfRbIowhSo_0ik72Jl7DJO1feSmOjH0u6kz-lkf4WZxfIhMbHURWP9T99-27o6URV0dbqNMTkFCl_AnLa4tHU7hSeejd-B0KCuLfiW3gKcxtNEUxIRhDS6TjsaSl5hLWu0ud68F9gE6ImB5TdOWqgU4WV3fvEwFKHESl533E5n0KbVn3cFbp2-Q7JPp8jV25CTapa8VfiE_qltAbJrKSO1O61naayIG0J5QGVhtZQ6m3VW71qhY0lrZ9o3R0I4bngqiJsHxA')
+    return (
+            <Router>
+                <AppNavigator />
+            </Router>
+    )
 }
 
 export default App;
