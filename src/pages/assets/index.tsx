@@ -18,6 +18,7 @@ import Region from '../../components/Blocks/Region'
 import SummaryMetrics from './SummaryMetrics'
 import ResourceMetrics from './ResourceMetrics'
 import GrowthTrend from './GrowthTrend'
+import LoggedInLayout from '../../layouts/LoggedInLayout'
 import {
     timeAtom,
     filterAtom
@@ -52,91 +53,93 @@ export default function Assets () {
     }
 
     return (
-        <main>
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                alignItems="center"
-            >
-                <Title>
-                    Assets
-                </Title>
-                <DateRangePicker
-                    className="max-w-md"
-                    value={activeTimeRange}
-                    onValueChange={setActiveTimeRange}
-                    selectPlaceholder="Selection"
-                />
-            </Flex>
-
-            <TabGroup className="mt-6">
-                <TabList>
-                    <Tab>All</Tab>
-                </TabList>
+        <LoggedInLayout>
+            <main>
                 <Flex
                     flexDirection="row"
-                    justifyContent="end"
+                    justifyContent="between"
+                    alignItems="center"
                 >
-                    <Button variant="light" className="mt-4 mb-6" onClick={() => setOpenDrawer(true)}>
-                        <FunnelIcon className="h-6 w-6" />
-                    </Button>
+                    <Title>
+                        Assets
+                    </Title>
+                    <DateRangePicker
+                        className="max-w-md"
+                        value={activeTimeRange}
+                        onValueChange={setActiveTimeRange}
+                        selectPlaceholder="Selection"
+                    />
                 </Flex>
-                <TabPanels>
-                    <TabPanel>
-                        <ConnectionList
-                            connections={connections || []}
-                            open={openDrawer}
-                            selectedConnectionsProps={selectedConnections}
-                            onClose={(data: any) => handleDrawer(data)}
-                        />
-                        <SummaryMetrics
-                            provider={selectedConnections.provider}
-                            connections={selectedConnections.connections}
-                            timeRange={activeTimeRange}
-                        />
-                        <div className="mt-10">
-                            <ResourceMetrics
+
+                <TabGroup className="mt-6">
+                    <TabList>
+                        <Tab>All</Tab>
+                    </TabList>
+                    <Flex
+                        flexDirection="row"
+                        justifyContent="end"
+                    >
+                        <Button variant="light" className="mt-4 mb-6" onClick={() => setOpenDrawer(true)}>
+                            <FunnelIcon className="h-6 w-6" />
+                        </Button>
+                    </Flex>
+                    <TabPanels>
+                        <TabPanel>
+                            <ConnectionList
+                                connections={connections || []}
+                                open={openDrawer}
+                                selectedConnectionsProps={selectedConnections}
+                                onClose={(data: any) => handleDrawer(data)}
+                            />
+                            <SummaryMetrics
                                 provider={selectedConnections.provider}
-                                // connection={selectedConnections.connections}
-                                categories={categoryOptions}
+                                connections={selectedConnections.connections}
                                 timeRange={activeTimeRange}
-                                pageSize={1000}
                             />
-                        </div>
-                        {/* Main section */}
-                        <div className="mt-20">
-                            {/* <div className="h-96" /> */}
-                            <GrowthTrend
-                                categories={categoryOptions}
-                                timeRange={activeTimeRange}
-
-                            />
-                        </div>
-
-                        {/* KPI section */}
-                        <Grid numItemsMd={2} className="mt-20 gap-6 flex justify-between">
-                            <div className="w-full">
-                                {/* Placeholder to set height */}
-                                {/* <div className="h-28" /> */}
-                                <Composition
-                                    connector={selectedConnections.provider}
-                                    top={5}
-                                    time={activeTimeRange}
-                                /> {/* Composition */}
-                            </div>
-                            <div className="w-full">
-                                {/* Placeholder to set height */}
-                                {/* <div className="h-28" /> */}
-                                <Region
+                            <div className="mt-10">
+                                <ResourceMetrics
                                     provider={selectedConnections.provider}
-                                    connections={selectedConnections.connections}
-                                    count={5}
-                                /> {/* region */}
+                                    // connection={selectedConnections.connections}
+                                    categories={categoryOptions}
+                                    timeRange={activeTimeRange}
+                                    pageSize={1000}
+                                />
                             </div>
-                        </Grid>
-                    </TabPanel>
-                </TabPanels>
-            </TabGroup>
-        </main>
+                            {/* Main section */}
+                            <div className="mt-20">
+                                {/* <div className="h-96" /> */}
+                                <GrowthTrend
+                                    categories={categoryOptions}
+                                    timeRange={activeTimeRange}
+
+                                />
+                            </div>
+
+                            {/* KPI section */}
+                            <Grid numItemsMd={2} className="mt-20 gap-6 flex justify-between">
+                                <div className="w-full">
+                                    {/* Placeholder to set height */}
+                                    {/* <div className="h-28" /> */}
+                                    <Composition
+                                        connector={selectedConnections.provider}
+                                        top={5}
+                                        time={activeTimeRange}
+                                    /> {/* Composition */}
+                                </div>
+                                <div className="w-full">
+                                    {/* Placeholder to set height */}
+                                    {/* <div className="h-28" /> */}
+                                    <Region
+                                        provider={selectedConnections.provider}
+                                        connections={selectedConnections.connections}
+                                        count={5}
+                                    /> {/* region */}
+                                </div>
+                            </Grid>
+                        </TabPanel>
+                    </TabPanels>
+                </TabGroup>
+            </main>
+        </LoggedInLayout>
     )
 }
