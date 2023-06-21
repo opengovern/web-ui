@@ -13,6 +13,7 @@ env:
   
 jobs:
   build:
+    environment: golang
     runs-on: ubuntu-latest
 
     steps:
