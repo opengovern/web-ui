@@ -1,7 +1,7 @@
 type IProps = {
     error?: any
 }
-const NotFound = ({error}: IProps) => {
+export default function NotFound({ error }: IProps) {
     console.log(error)
     return (
         <div>
@@ -9,5 +9,3 @@ const NotFound = ({error}: IProps) => {
         </div>
     )
 }
-
-export default NotFound

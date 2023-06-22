@@ -1,9 +1,9 @@
-import {Grid} from '@tremor/react'
+import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
-import {useOnboardApiV1ConnectionsSummaryList} from '../../../api/onboard.gen'
-import {useInventoryApiV2ServicesSummaryList} from '../../../api/inventory.gen'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import { useInventoryApiV2ServicesSummaryList } from '../../../api/inventory.gen'
 import SummaryCard from '../../../components/Cards/KPICards/SummaryCard'
-import {numericDisplay} from '../../../utilities/numericDisplay'
+import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IProps {
     provider: any
@@ -16,16 +16,14 @@ export default function SummaryMetrics({
     connections,
     timeRange,
 }: IProps) {
-
-    const { response: accounts } =
-        useOnboardApiV1ConnectionsSummaryList({
-            connector: provider,
-            connectionId: connections,
-            startTime: dayjs(timeRange['from']).unix(),
-            endTime: dayjs(timeRange['to']).unix(),
-            pageSize: 10000,
-            pageNumber: 1,
-        })
+    const { response: accounts } = useOnboardApiV1ConnectionsSummaryList({
+        connector: provider,
+        connectionId: connections,
+        startTime: dayjs(timeRange.from).unix(),
+        endTime: dayjs(timeRange.to).unix(),
+        pageSize: 10000,
+        pageNumber: 1,
+    })
     const { response: services } = useInventoryApiV2ServicesSummaryList({
         connector: provider,
         connectionId: connections,
@@ -42,7 +40,7 @@ export default function SummaryMetrics({
                 {/* Placeholder to set height */}
                 {/* <div className="h-28" /> */}
                 <SummaryCard
-                    title={'Accounts'}
+                    title="Accounts"
                     metric={String(numericDisplay(accounts?.connectionCount))}
                     // metricPrev={MockData[0].metricPrev}
                     // delta={MockData[0].delta}
@@ -54,7 +52,7 @@ export default function SummaryMetrics({
                 {/* Placeholder to set height */}
                 {/* <div className="h-28" /> */}
                 <SummaryCard
-                    title={"Services"}
+                    title="Services"
                     metric={String(numericDisplay(services?.totalCount))}
                     // metricPrev={MockData[1].metricPrev}
                     // delta={MockData[1].delta}
@@ -66,8 +64,10 @@ export default function SummaryMetrics({
                 {/* Placeholder to set height */}
                 {/* <div className="h-28" /> */}
                 <SummaryCard
-                    title={"Resources"}
-                    metric={String(numericDisplay(accounts?.TotalResourceCount))}
+                    title="Resources"
+                    metric={String(
+                        numericDisplay(accounts?.TotalResourceCount)
+                    )}
                     // metricPrev={MockData[2].metricPrev}
                     // delta={MockData[2].delta}
                     // deltaType={MockData[2].deltaType}
