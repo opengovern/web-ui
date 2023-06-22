@@ -1,15 +1,14 @@
-import React, { useState, Suspense } from 'react'
-import {Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import React, { Suspense, useState } from 'react'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import Spinner from '../../components/Spinner'
 import Assets from '../../pages/assets'
 import NotFound from '../../pages/errors/404'
-
 
 export const defaultRoutes = [
     {
         name: '',
         path: '/',
-        component: <Navigate to='/assets' replace />,
+        component: <Navigate to="/assets" replace />,
     },
     {
         name: 'Assets',
@@ -72,7 +71,7 @@ const getRouteElement = (meta: any, component: any) => {
     )
 }
 
-const AppNavigator = () => {
+export default function AppNavigator() {
     const navigate = useNavigate()
     const [err, setErr] = useState(404)
     // generate routes
@@ -81,25 +80,14 @@ const AppNavigator = () => {
             <Route key="*" path="*" element={<NotFound error={err} />} />
         ) : (
             normalizeRoutes(defaultRoutes).map(
-                ({
-                     name,
-                     path,
-                     component,
-                     meta,
-                 }): JSX.Element => (
+                ({ name, path, component, meta }): JSX.Element => (
                     <Route
                         key={`${name}${path}`}
                         path={path}
                         element={getRouteElement(meta, component)}
                     />
-
                 )
             )
         )
-    return (
-        <Routes>
-            {routeElements}
-        </Routes>
-    )
+    return <Routes>{routeElements}</Routes>
 }
-export default AppNavigator

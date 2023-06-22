@@ -1,15 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
+import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
+import { Bold, Button, Grid, Text } from '@tremor/react'
 import { ReactComponent as AzureIcon } from '../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/elements-icons-plus-2.svg'
-import {
-    Grid,
-    Text,
-    Button,
-    Bold,
-} from '@tremor/react'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import DrawerPanel from '../../../components/DrawerPanel'
@@ -215,8 +210,8 @@ export default function ConnectionList({
         const conns =
             selectedProvider.value === ''
                 ? gridRef.current?.api
-                    .getSelectedNodes()
-                    .map((data) => data.data?.id)
+                      .getSelectedNodes()
+                      .map((data) => data.data?.id)
                 : []
 
         onClose({
@@ -244,16 +239,11 @@ export default function ConnectionList({
     console.log('gridOptions', gridOptions)
 
     return (
-        <DrawerPanel
-            open={open}
-            onClose={() => handleClose()}
-        >
+        <DrawerPanel open={open} onClose={() => handleClose()}>
             <div>
                 <Grid>
                     <Grid>
-                        <Text>
-                            Quick Select:
-                        </Text>
+                        <Text>Quick Select:</Text>
                         {tags.map((tag) => (
                             <Button
                                 onClick={() => {
@@ -266,9 +256,7 @@ export default function ConnectionList({
                         ))}
                     </Grid>
                 </Grid>
-                <Bold>
-                    {selectionText(gridRef.current?.api)}
-                </Bold>
+                <Bold>{selectionText(gridRef.current?.api)}</Bold>
                 <div className="ag-theme-alpine" style={{ height: '500px' }}>
                     <AgGridReact ref={gridRef} gridOptions={gridOptions} />
                 </div>

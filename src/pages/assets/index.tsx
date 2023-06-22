@@ -1,16 +1,16 @@
 import React, { useMemo, useState } from 'react'
 import { useAtom } from 'jotai'
 import {
+    Button,
+    DateRangePicker,
     Flex,
     Grid,
-    DateRangePicker,
+    Tab,
     TabGroup,
     TabList,
-    Tab,
-    Button,
-    Title,
     TabPanel,
     TabPanels,
+    Title,
 } from '@tremor/react'
 import { FunnelIcon } from '@heroicons/react/24/outline'
 import Composition from '../../components/Blocks/Composition'
@@ -19,26 +19,24 @@ import SummaryMetrics from './SummaryMetrics'
 import ResourceMetrics from './ResourceMetrics'
 import GrowthTrend from './GrowthTrend'
 import LoggedInLayout from '../../layouts/LoggedInLayout'
-import {
-    timeAtom,
-    filterAtom
-} from '../../store'
+import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import { useOnboardApiV1SourcesList } from '../../api/onboard.gen'
 import ConnectionList from './ConnectionList'
 
-
-export default function Assets () {
+export default function Assets() {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
     const { response: connections } = useOnboardApiV1SourcesList()
-    const { response: inventoryCategories } = useInventoryApiV2ResourcesTagList()
+    const { response: inventoryCategories } =
+        useInventoryApiV2ResourcesTagList()
 
     const categoryOptions = useMemo(() => {
-        if (!inventoryCategories) return [{ label: 'no data', value: 'no data' }]
+        if (!inventoryCategories)
+            return [{ label: 'no data', value: 'no data' }]
         return [{ label: 'All Categories', value: 'All Categories' }].concat(
-            inventoryCategories['category'].map((categoryName) => ({
+            inventoryCategories.category.map((categoryName) => ({
                 label: categoryName,
                 value: categoryName,
             }))
@@ -60,9 +58,7 @@ export default function Assets () {
                     justifyContent="between"
                     alignItems="center"
                 >
-                    <Title>
-                        Assets
-                    </Title>
+                    <Title>Assets</Title>
                     <DateRangePicker
                         className="max-w-md"
                         value={activeTimeRange}
@@ -75,11 +71,12 @@ export default function Assets () {
                     <TabList>
                         <Tab>All</Tab>
                     </TabList>
-                    <Flex
-                        flexDirection="row"
-                        justifyContent="end"
-                    >
-                        <Button variant="light" className="mt-4 mb-6" onClick={() => setOpenDrawer(true)}>
+                    <Flex flexDirection="row" justifyContent="end">
+                        <Button
+                            variant="light"
+                            className="mt-4 mb-6"
+                            onClick={() => setOpenDrawer(true)}
+                        >
                             <FunnelIcon className="h-6 w-6" />
                         </Button>
                     </Flex>
@@ -111,12 +108,14 @@ export default function Assets () {
                                 <GrowthTrend
                                     categories={categoryOptions}
                                     timeRange={activeTimeRange}
-
                                 />
                             </div>
 
                             {/* KPI section */}
-                            <Grid numItemsMd={2} className="mt-20 gap-6 flex justify-between">
+                            <Grid
+                                numItemsMd={2}
+                                className="mt-20 gap-6 flex justify-between"
+                            >
                                 <div className="w-full">
                                     {/* Placeholder to set height */}
                                     {/* <div className="h-28" /> */}
@@ -124,16 +123,20 @@ export default function Assets () {
                                         connector={selectedConnections.provider}
                                         top={5}
                                         time={activeTimeRange}
-                                    /> {/* Composition */}
+                                    />{' '}
+                                    {/* Composition */}
                                 </div>
                                 <div className="w-full">
                                     {/* Placeholder to set height */}
                                     {/* <div className="h-28" /> */}
                                     <Region
                                         provider={selectedConnections.provider}
-                                        connections={selectedConnections.connections}
+                                        connections={
+                                            selectedConnections.connections
+                                        }
                                         count={5}
-                                    /> {/* region */}
+                                    />{' '}
+                                    {/* region */}
                                 </div>
                             </Grid>
                         </TabPanel>
