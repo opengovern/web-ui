@@ -1,8 +1,8 @@
 import React, { Suspense, useState } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
-import Spinner from '../../components/Spinner'
-import Assets from '../../pages/assets'
-import NotFound from '../../pages/errors/404'
+import Spinner from '../components/Spinner'
+import Assets from '../pages/Assets'
+import NotFound from '../pages/Errors'
 
 export const defaultRoutes = [
     {

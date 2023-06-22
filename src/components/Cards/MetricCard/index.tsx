@@ -1,5 +1,4 @@
-import { Card, Metric, Text, Flex, BadgeDelta, DeltaType } from "@tremor/react"
-
+import { BadgeDelta, Card, DeltaType, Flex, Metric, Text } from '@tremor/react'
 
 type IProps = {
     title: string
@@ -8,7 +7,7 @@ type IProps = {
     deltaType: DeltaType
     delta: string
 }
-export default function CMBCard ({
+export default function CMBCard({
     title,
     metric,
     deltaType,
@@ -16,13 +15,17 @@ export default function CMBCard ({
     delta,
     ...props
 }: IProps) {
-    return(
+    return (
         <Card key={title} {...props}>
             <Flex alignItems="start">
                 <Text>{title}</Text>
                 <BadgeDelta deltaType={deltaType}>{delta}</BadgeDelta>
             </Flex>
-            <Flex justifyContent="start" alignItems="baseline" className="truncate space-x-3">
+            <Flex
+                justifyContent="start"
+                alignItems="baseline"
+                className="truncate space-x-3"
+            >
                 <Metric>{metric}</Metric>
                 <Text className="truncate">from {metricPrev}</Text>
             </Flex>

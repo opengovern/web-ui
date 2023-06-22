@@ -1,18 +1,18 @@
 import {
     BadgeDelta,
+    Bold,
     Button,
     Card,
     DeltaType,
+    Divider,
     DonutChart,
     Flex,
-    TabGroup,
-    Tab,
-    TabList,
-    Bold,
-    Divider,
     List,
     ListItem,
     Metric,
+    Tab,
+    TabGroup,
+    TabList,
     Text,
     Title,
 } from '@tremor/react'
@@ -23,7 +23,6 @@ import dayjs from 'dayjs'
 import { useInventoryApiV2ResourcesCompositionDetail } from '../../../api/inventory.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 
-
 interface StockData {
     name: string
     value: number
@@ -33,81 +32,85 @@ interface StockData {
 
 const stocks: StockData[] = [
     {
-        name: "Off Running AG",
+        name: 'Off Running AG',
         value: 10456,
-        performance: "6.1%",
-        deltaType: "increase",
+        performance: '6.1%',
+        deltaType: 'increase',
     },
     {
-        name: "Not Normal Inc.",
+        name: 'Not Normal Inc.',
         value: 5789,
-        performance: "1.2%",
-        deltaType: "moderateDecrease",
+        performance: '1.2%',
+        deltaType: 'moderateDecrease',
     },
     {
-        name: "Logibling Inc.",
+        name: 'Logibling Inc.',
         value: 4367,
-        performance: "2.3%",
-        deltaType: "moderateIncrease",
+        performance: '2.3%',
+        deltaType: 'moderateIncrease',
     },
     {
-        name: "Raindrop Inc.",
+        name: 'Raindrop Inc.',
         value: 3421,
-        performance: "0.5%",
-        deltaType: "moderateDecrease",
+        performance: '0.5%',
+        deltaType: 'moderateDecrease',
     },
     {
-        name: "Mwatch Group",
+        name: 'Mwatch Group',
         value: 1432,
-        performance: "3.4%",
-        deltaType: "decrease",
+        performance: '3.4%',
+        deltaType: 'decrease',
     },
 ]
 
 type IProps = {
     // key: string,
-    top: number,
-    connector?: string,
-    connectionId?: string[],
-    time?: any,
+    top: number
+    connector?: string
+    connectionId?: string[]
+    time?: any
 }
 export default function Composition({
     // key,
     top,
     connector,
     connectionId,
-    time
+    time,
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const query = {
-        top: top,
-        ...(connector && { connector: connector }),
-        ...(connectionId && { connectionId: connectionId }),
-        ...(time['to'] && { time: dayjs(time['to']).unix() }),
+        top,
+        ...(connector && { connector }),
+        ...(connectionId && { connectionId }),
+        ...(time.to && { time: dayjs(time.to).unix() }),
     }
-    const { response: composition } = useInventoryApiV2ResourcesCompositionDetail('category', query)
+    const { response: composition } =
+        useInventoryApiV2ResourcesCompositionDetail('category', query)
 
     function compositionData(inputObject: any) {
-        let outputArray = []
+        const outputArray = []
 
         if (!inputObject) {
-            return [{
-                name: 'No data',
-                value: 0
-            }]
+            return [
+                {
+                    name: 'No data',
+                    value: 0,
+                },
+            ]
         }
         // iterate over top_values
-        for (let key in inputObject.top_values) {
+        // eslint-disable-next-line guard-for-in,no-restricted-syntax
+        for (const key in inputObject.top_values) {
             outputArray.push({
                 name: key,
-                value: inputObject.top_values[key]
+                value: inputObject.top_values[key],
             })
         }
 
         // add others key-value pair
         outputArray.push({
             name: 'others',
-            value: inputObject.others
+            value: inputObject.others,
         })
 
         return outputArray
@@ -115,13 +118,20 @@ export default function Composition({
 
     return (
         <Card>
-            <Flex className="space-x-8" justifyContent="between" alignItems="center">
+            <Flex
+                className="space-x-8"
+                justifyContent="between"
+                alignItems="center"
+            >
                 <Title>Overview</Title>
                 <span>
-                    <TabGroup index={selectedIndex} onIndexChange={setSelectedIndex}>
+                    <TabGroup
+                        index={selectedIndex}
+                        onIndexChange={setSelectedIndex}
+                    >
                         <TabList variant="solid">
                             <Tab icon={ChartPieIcon}>Chart</Tab>
-                             {/* <Tab icon={Bars4Icon}>List</Tab> */}
+                            {/* <Tab icon={Bars4Icon}>List</Tab> */}
                         </TabList>
                     </TabGroup>
                 </span>
@@ -154,9 +164,20 @@ export default function Composition({
                         {stocks.map((stock) => (
                             <ListItem key={stock.name}>
                                 <Text>{stock.name}</Text>
-                                <Flex justifyContent="end" className="space-x-2">
-                                    <Text>$ {Intl.NumberFormat("us").format(stock.value).toString()}</Text>
-                                    <BadgeDelta deltaType={stock.deltaType} size="xs">
+                                <Flex
+                                    justifyContent="end"
+                                    className="space-x-2"
+                                >
+                                    <Text>
+                                        ${' '}
+                                        {Intl.NumberFormat('us')
+                                            .format(stock.value)
+                                            .toString()}
+                                    </Text>
+                                    <BadgeDelta
+                                        deltaType={stock.deltaType}
+                                        size="xs"
+                                    >
                                         {stock.performance}
                                     </BadgeDelta>
                                 </Flex>
@@ -166,7 +187,12 @@ export default function Composition({
                 </>
             )}
             <Flex className="mt-6 pt-4 border-t">
-                <Button size="xs" variant="light" icon={ArrowLongRightIcon} iconPosition="right">
+                <Button
+                    size="xs"
+                    variant="light"
+                    icon={ArrowLongRightIcon}
+                    iconPosition="right"
+                >
                     View more
                 </Button>
             </Flex>

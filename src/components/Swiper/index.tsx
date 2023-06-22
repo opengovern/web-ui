@@ -1,17 +1,7 @@
-import {
-    ChevronRightIcon,
-    ChevronLeftIcon,
-} from '@heroicons/react/24/outline'
-import {
-    Grid,
-    Button,
-    GridProps
-} from '@tremor/react'
-import React, { useMemo, useState, Children } from 'react'
-import {
-    pagination,
-    cardContainer,
-} from './styles'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { Button, Flex, Grid, GridProps } from '@tremor/react'
+import React, { Children, useMemo, useState } from 'react'
+import { cardContainer, pagination } from './styles'
 
 interface IProps {
     children: React.ReactNode
@@ -57,11 +47,10 @@ const Swiper = ({
     const previousButton = () => {
         const preventPrevious = activeSlide === 1
         return (
-            <div
+            <Flex
+                alignItems="center"
+                justifyContent="center"
                 style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
                     position: 'absolute',
                     top: '50%',
                     width: '50px',
@@ -80,10 +69,11 @@ const Swiper = ({
                 <Button
                     aria-label="previous"
                     disabled={preventPrevious}
-                    size="xl" variant="light"
+                    size="xl"
+                    variant="light"
                     icon={ChevronLeftIcon}
                 />
-            </div>
+            </Flex>
         )
     }
 
@@ -92,11 +82,10 @@ const Swiper = ({
             itemsCount > pageSize &&
             Math.ceil(itemsCount / pageSize) > activeSlide
         return (
-            <div
+            <Flex
+                alignItems="center"
+                justifyContent="center"
                 style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
                     position: 'absolute',
                     top: '50%',
                     width: '50px',
@@ -113,10 +102,11 @@ const Swiper = ({
                 <Button
                     aria-label="previous"
                     disabled={!allowNext}
-                    size="xl" variant="light"
+                    size="xl"
+                    variant="light"
                     icon={ChevronRightIcon}
                 />
-            </div>
+            </Flex>
         )
     }
 
@@ -163,9 +153,7 @@ const Swiper = ({
         >
             <span style={cardContainer}>
                 {previousButton()}
-                <Grid
-                    {...gridContainerProps}
-                >{renderItems(activeSlide)}</Grid>
+                <Grid {...gridContainerProps}>{renderItems(activeSlide)}</Grid>
                 {nextButton()}
             </span>
             <span

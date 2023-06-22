@@ -3,16 +3,12 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 interface Iprops {
-    open: boolean,
-    onClose: any,
+    open: boolean
+    onClose: any
     children?: React.ReactNode
 }
 
-export default function DrawerPanel({
-    open,
-    onClose,
-    children
-}: Iprops) {
+export default function DrawerPanel({ open, onClose, children }: Iprops) {
     // const [open, setOpen] = useState(true)
 
     return (
@@ -58,8 +54,13 @@ export default function DrawerPanel({
                                                 className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                                                 onClick={onClose}
                                             >
-                                                <span className="sr-only">Close panel</span>
-                                                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                                                <span className="sr-only">
+                                                    Close panel
+                                                </span>
+                                                <XMarkIcon
+                                                    className="h-6 w-6"
+                                                    aria-hidden="true"
+                                                />
                                             </button>
                                         </div>
                                     </Transition.Child>
@@ -69,7 +70,9 @@ export default function DrawerPanel({
                                                 Panel title
                                             </Dialog.Title>
                                         </div>
-                                        <div className="relative mt-6 flex-1 px-4 sm:px-6">{children}</div>
+                                        <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                                            {children}
+                                        </div>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

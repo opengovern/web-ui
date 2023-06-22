@@ -2,7 +2,7 @@ import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import { useInventoryApiV2ServicesSummaryList } from '../../../api/inventory.gen'
-import SummaryCard from '../../../components/Cards/KPICards/SummaryCard'
+import SummaryCard from '../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IProps {

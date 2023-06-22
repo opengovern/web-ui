@@ -1,21 +1,21 @@
 import {
-    Card,
-    TabList,
-    Tab,
-    Text,
-    Flex,
+    Bold,
     Button,
-    Title,
-    TabGroup,
+    Card,
+    Flex,
     List,
     ListItem,
-    Bold,
-} from "@tremor/react";
+    Tab,
+    TabGroup,
+    TabList,
+    Text,
+    Title,
+} from '@tremor/react'
 import { ArrowLongRightIcon } from '@heroicons/react/24/solid'
 import { useEffect, useState } from 'react'
-import {useInventoryApiV1ResourcesTopRegionsList} from '../../../api/inventory.gen'
-import {numericDisplay} from '../../../utilities/numericDisplay'
-import {REGIONS} from '../../../utilities/regions'
+import { useInventoryApiV1ResourcesTopRegionsList } from '../../../api/inventory.gen'
+import { numericDisplay } from '../../../utilities/numericDisplay'
+import { REGIONS } from '../../../utilities/regions'
 import Spinner from '../../Spinner'
 
 type IProps = {
@@ -24,22 +24,19 @@ type IProps = {
     connections?: any
 }
 
-export default function Region({
-    count = 5,
-    provider,
-    connections,
-}: IProps) {
+export default function Region({ count = 5, provider, connections }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
-    const [formatedData, setFormatedData] = useState<any>(undefined)
+    const [formattedData, setFormattedData] = useState<any>(undefined)
     const [tabs, setTabs] = useState<string[]>([])
     const query = {
-        count: count,
-        ...(provider && {connector: provider}),
-        ...(connections && {connectionId: connections})
+        count,
+        ...(provider && { connector: provider }),
+        ...(connections && { connectionId: connections }),
     }
-    const {response, isLoading} = useInventoryApiV1ResourcesTopRegionsList(query)
+    const { response, isLoading } =
+        useInventoryApiV1ResourcesTopRegionsList(query)
     const formatData = (data: any[] | undefined) => {
-        let output = Object.create(null)
+        const output = Object.create(null)
         if (!data) {
             return {
                 location: 'No data',
@@ -47,10 +44,12 @@ export default function Region({
                 resources: [],
             }
         }
-        data.map(item => {
+        // eslint-disable-next-line array-callback-return
+        data.map((item) => {
             const location = REGIONS[item.location as keyof typeof REGIONS]
             if (output[location.country as keyof typeof output]) {
-                output[location.country as keyof typeof output].total += item.resourceCount
+                output[location.country as keyof typeof output].total +=
+                    item.resourceCount
                 output[location.country as keyof typeof output].resources.push({
                     location: item.location,
                     value: item.resourceCount,
@@ -58,10 +57,12 @@ export default function Region({
             } else {
                 output[location.country as keyof typeof output] = {
                     total: item.resourceCount,
-                    resources: [{
-                        location: item.location,
-                        value: item.resourceCount,
-                    }],
+                    resources: [
+                        {
+                            location: item.location,
+                            value: item.resourceCount,
+                        },
+                    ],
                 }
             }
         })
@@ -71,29 +72,26 @@ export default function Region({
     useEffect(() => {
         try {
             const newData = formatData(response)
-            setFormatedData(newData)
+            setFormattedData(newData)
             setTabs(Object.keys(newData))
-        }
-        catch (e) {
+        } catch (e) {
             console.log(e)
         }
     }, [response])
 
+    // eslint-disable-next-line consistent-return
     const tabDetails = (tab: string) => {
-        const data = formatedData[tab]
+        const data = formattedData[tab]
         try {
-            return (
-                data.resources.map((resource: any) => (
-                    <ListItem key={resource.location}>
-                        <Text>{resource.location}</Text>
-                        <Flex justifyContent="end" className="space-x-2">
-                            <Text>{numericDisplay(resource.value)}</Text>
-                        </Flex>
-                    </ListItem>
-                ))
-            )
-        }
-        catch (e) {
+            return data.resources.map((resource: any) => (
+                <ListItem key={resource.location}>
+                    <Text>{resource.location}</Text>
+                    <Flex justifyContent="end" className="space-x-2">
+                        <Text>{numericDisplay(resource.value)}</Text>
+                    </Flex>
+                </ListItem>
+            ))
+        } catch (e) {
             console.log(e)
         }
     }
@@ -103,37 +101,48 @@ export default function Region({
             <Flex alignItems="start">
                 <Title>Top {count} Locations</Title>
             </Flex>
-            <TabGroup index={selectedIndex} onIndexChange={setSelectedIndex} className="mt-6">
+            <TabGroup
+                index={selectedIndex}
+                onIndexChange={setSelectedIndex}
+                className="mt-6"
+            >
                 <TabList>
-                    {formatedData && tabs.map((item) => (
-                        <Tab key={item}>{item}</Tab>
-                    ))}
+                    {formattedData &&
+                        tabs.map((item) => <Tab key={item}>{item}</Tab>)}
                 </TabList>
             </TabGroup>
             <List className="mt-4">
                 <Flex className="mt-8" justifyContent="between">
                     <Bold>Total Resources</Bold>
-                    <Bold>{numericDisplay(formatedData[tabs[selectedIndex]].total)}</Bold>
+                    <Bold>
+                        {numericDisplay(
+                            formattedData[tabs[selectedIndex]].total
+                        )}
+                    </Bold>
                 </Flex>
                 {tabDetails(tabs[selectedIndex])}
             </List>
 
             <Flex className="mt-6 pt-4 border-t">
-                <Button size="xs" variant="light" icon={ArrowLongRightIcon} iconPosition="right">
+                <Button
+                    size="xs"
+                    variant="light"
+                    icon={ArrowLongRightIcon}
+                    iconPosition="right"
+                >
                     View more
                 </Button>
             </Flex>
         </Card>
     )
 
-    return (
-            isLoading ? (
-                    <Card>
-                        <div className="flex items-center justify-center h-96">
-                            <Spinner />
-                        </div>
-                    </Card>
-            ) :
-                render()
+    return isLoading ? (
+        <Card>
+            <div className="flex items-center justify-center h-96">
+                <Spinner />
+            </div>
+        </Card>
+    ) : (
+        render()
     )
 }

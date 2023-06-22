@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { setAuthHeader } from './api/ApiConfig'
-import AppNavigator from './navigator/AppNavigator'
+import AppNavigator from './appNavigator'
 
 function App() {
     setAuthHeader(
