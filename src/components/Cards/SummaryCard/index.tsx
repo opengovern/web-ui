@@ -1,11 +1,11 @@
 import {
-    Card,
-    Metric,
-    Text,
     AreaChart,
     BadgeDelta,
+    Card,
+    DeltaType,
     Flex,
-    DeltaType
+    Metric,
+    Text,
 } from '@tremor/react'
 
 type IProps = {
@@ -17,7 +17,7 @@ type IProps = {
     areaChartData?: any
     className?: string
 }
-export default function SummaryCard ({
+export default function SummaryCard({
     title,
     metric,
     metricPrev,
@@ -30,9 +30,15 @@ export default function SummaryCard ({
         <Card key={title} className={className}>
             <Flex alignItems="start">
                 <Text>{title}</Text>
-                {delta && <BadgeDelta deltaType={deltaType}>{delta}</BadgeDelta>}
+                {delta && (
+                    <BadgeDelta deltaType={deltaType}>{delta}</BadgeDelta>
+                )}
             </Flex>
-            <Flex className="space-x-3 truncate" justifyContent="start" alignItems="baseline">
+            <Flex
+                className="space-x-3 truncate"
+                justifyContent="start"
+                alignItems="baseline"
+            >
                 <Metric>{metric}</Metric>
                 {metricPrev && <Text>from {metricPrev}</Text>}
             </Flex>
@@ -41,10 +47,10 @@ export default function SummaryCard ({
                 data={areaChartData}
                 index="Month"
                 categories={[title]}
-                colors={["blue"]}
-                showXAxis={true}
+                colors={['blue']}
+                showXAxis
                 showGridLines={false}
-                startEndOnly={true}
+                startEndOnly
                 showYAxis={false}
                 showLegend={false}
             />

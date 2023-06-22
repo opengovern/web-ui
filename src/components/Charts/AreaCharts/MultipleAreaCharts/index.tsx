@@ -1,4 +1,4 @@
-import { AreaChart, Title, Text, AreaChartProps } from '@tremor/react'
+import { AreaChart, AreaChartProps, Text, Title } from '@tremor/react'
 
 type IProps = {
     title?: string
@@ -13,9 +13,7 @@ export default function MultipleAreaCharts({
         <>
             <Title>{title}</Title>
             <Text>{description}</Text>
-            <AreaChart
-                {...props}
-            />
+            <AreaChart {...props} />
         </>
-    );
+    )
 }
