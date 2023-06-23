@@ -10,15 +10,11 @@ function App() {
     const [accessTokenLoading, setAccessTokenLoading] = useState<boolean>(false)
 
     if (isAuthenticated && token === '') {
-        console.log('authenticated')
         if (!accessTokenLoading) {
-            console.log('access token loading')
-
             setAccessTokenLoading(true)
 
             getAccessTokenSilently()
                 .then((accessToken) => {
-                    console.log('got the token')
                     setToken(accessToken)
                     setAuthHeader(accessToken)
                     setAccessTokenLoading(false)
@@ -31,7 +27,6 @@ function App() {
     }
 
     if (isLoading || accessTokenLoading) {
-        console.log('loading', isLoading, accessTokenLoading)
         return <Spinner />
     }
 
