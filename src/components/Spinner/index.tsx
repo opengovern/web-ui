@@ -1,4 +1,16 @@
-export default function Spinner({ color = 'blue-600', width = 8, height = 8 }) {
+import React from 'react'
+
+interface SpinnerProps {
+    color?: string
+    width?: number
+    height?: number
+}
+
+const Spinner: React.FC<SpinnerProps> = ({
+    color = 'blue-600',
+    width = 8,
+    height = 8,
+}) => {
     return (
         <div className="flex justify-self-center">
             <svg
@@ -20,3 +32,4 @@ export default function Spinner({ color = 'blue-600', width = 8, height = 8 }) {
         </div>
     )
 }
+export default Spinner

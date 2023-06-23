@@ -2,7 +2,7 @@ export {}
 
 declare global {
     interface Window {
-        __RUNTIME_CONFIG__: {
+        RUNTIME_CONFIG: {
             NODE_ENV: string
             REACT_APP_CLIENT_ID: string
             REACT_APP_DOMAIN: string
