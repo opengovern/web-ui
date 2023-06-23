@@ -1,121 +1,122 @@
 import useSWR from 'swr'
 import React, { useState, useEffect } from 'react'
 import { atom, useAtom } from 'jotai'
+import { useParams } from 'react-router-dom'
 import {
     Api,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkResultTrend,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStack,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest,
-    GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspace,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest,
-    DescribeInsightJob,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimits,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest,
-    GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetadataResponse,
-    DescribeDescribeResourceJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetadataResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummariesResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAzureResourceResponse,
     GitlabComKeibiengineKeibiEnginePkgOnboardApiListConnectionSummaryResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiSource,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetRoleBindingsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiCostTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    DescribeSummarizerJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationByProviderResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositionResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount,
-    DescribeDescribeSourceJob,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup,
     GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetRoleBindingsResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimits,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary,
+    DescribeComplianceReportJob,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummariesResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspace,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    AwsResources,
+    DescribeInsightJob,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadata,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse,
+    DescribeSummarizerJob,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiCostTrendDatapoint,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiService,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignedSource,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiSource,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroupTrendResponse,
     GitlabComKeibiengineKeibiEnginePkgComplianceApiQuery,
     GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest,
-    DescribeComplianceReportJob,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiService,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse,
     GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiMembership,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroupTrendResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAWSResourceResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignedSource,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadata,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkResultTrend,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree,
     GitlabComKeibiengineKeibiEnginePkgInventoryApiConnectionData,
-    AwsResources,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse,
+    DescribeDescribeResourceJob,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiStack,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAWSResourceResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAzureResourceResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetadataResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersRequest,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
+    GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositionResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup,
+    DescribeDescribeSourceJob,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiMembership,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationByProviderResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest,
     RequestParams,
 } from './api'
 
-import AxiosAPI from './ApiConfig'
+import AxiosAPI, { setWorkspace } from './ApiConfig'
 
 interface IuseInventoryApiV1LocationsDetailState {
     isLoading: boolean
@@ -127,8 +128,16 @@ export const useInventoryApiV1LocationsDetail = (
     connector: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV1LocationsDetailState>({
         isLoading: true,
@@ -138,6 +147,10 @@ export const useInventoryApiV1LocationsDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1LocationsDetail(connector, params)
@@ -180,8 +193,16 @@ export const useInventoryApiV1QueryList = (
     request: GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV1QueryListState>({
         isLoading: true,
@@ -191,6 +212,10 @@ export const useInventoryApiV1QueryList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1QueryList(request, params)
@@ -234,8 +259,16 @@ export const useInventoryApiV1QueryCreate = (
     request: GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV1QueryCreateState>({
         isLoading: true,
@@ -245,6 +278,10 @@ export const useInventoryApiV1QueryCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1QueryCreate(queryId, request, params)
@@ -287,8 +324,16 @@ export const useInventoryApiV1QueryCountList = (
     request: GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV1QueryCountListState>({
         isLoading: true,
@@ -298,6 +343,10 @@ export const useInventoryApiV1QueryCountList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1QueryCountList(request, params)
@@ -340,8 +389,16 @@ export const useInventoryApiV1ResourceCreate = (
     request: GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV1ResourceCreateState>({
         isLoading: true,
@@ -351,6 +408,10 @@ export const useInventoryApiV1ResourceCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1ResourceCreate(request, params)
@@ -396,8 +457,16 @@ export const useInventoryApiV1ResourcesCreate = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV1ResourcesCreateState>({
         isLoading: true,
@@ -407,6 +476,10 @@ export const useInventoryApiV1ResourcesCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1ResourcesCreate(request, query, params)
@@ -452,8 +525,16 @@ export const useInventoryApiV1ResourcesAwsCreate = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesAwsCreateState>({
@@ -464,6 +545,10 @@ export const useInventoryApiV1ResourcesAwsCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1ResourcesAwsCreate(request, query, params)
@@ -509,8 +594,16 @@ export const useInventoryApiV1ResourcesAzureCreate = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesAzureCreateState>({
@@ -521,6 +614,10 @@ export const useInventoryApiV1ResourcesAzureCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1ResourcesAzureCreate(request, query, params)
@@ -562,8 +659,16 @@ interface IuseInventoryApiV1ResourcesCountListState {
 export const useInventoryApiV1ResourcesCountList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesCountListState>({
@@ -572,6 +677,10 @@ export const useInventoryApiV1ResourcesCountList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1ResourcesCountList(params)
@@ -617,8 +726,16 @@ export const useInventoryApiV1ResourcesFiltersCreate = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesFiltersCreateState>({
@@ -629,6 +746,10 @@ export const useInventoryApiV1ResourcesFiltersCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1ResourcesFiltersCreate(request, query, params)
@@ -683,8 +804,16 @@ export const useInventoryApiV1ResourcesRegionsList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesRegionsListState>({
@@ -695,6 +824,10 @@ export const useInventoryApiV1ResourcesRegionsList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1ResourcesRegionsList(query, params)
@@ -743,8 +876,16 @@ export const useInventoryApiV1ResourcesTopRegionsList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesTopRegionsListState>({
@@ -755,6 +896,10 @@ export const useInventoryApiV1ResourcesTopRegionsList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV1ResourcesTopRegionsList(query, params)
@@ -806,8 +951,16 @@ export const useInventoryApiV2ConnectionsDataList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ConnectionsDataListState>({
@@ -818,6 +971,10 @@ export const useInventoryApiV2ConnectionsDataList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ConnectionsDataList(query, params)
@@ -865,8 +1022,16 @@ export const useInventoryApiV2ConnectionsDataDetail = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ConnectionsDataDetailState>({
@@ -877,6 +1042,10 @@ export const useInventoryApiV2ConnectionsDataDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ConnectionsDataDetail(connectionId, query, params)
@@ -929,8 +1098,16 @@ export const useInventoryApiV2CostCompositionList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2CostCompositionListState>({
@@ -941,6 +1118,10 @@ export const useInventoryApiV2CostCompositionList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2CostCompositionList(query, params)
@@ -997,8 +1178,16 @@ export const useInventoryApiV2CostMetricList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV2CostMetricListState>({
         isLoading: true,
@@ -1008,6 +1197,10 @@ export const useInventoryApiV2CostMetricList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2CostMetricList(query, params)
@@ -1060,8 +1253,16 @@ export const useInventoryApiV2CostTrendList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV2CostTrendListState>({
         isLoading: true,
@@ -1071,6 +1272,10 @@ export const useInventoryApiV2CostTrendList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2CostTrendList(query, params)
@@ -1124,8 +1329,16 @@ export const useInventoryApiV2InsightsList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV2InsightsListState>({
         isLoading: true,
@@ -1135,6 +1348,10 @@ export const useInventoryApiV2InsightsList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2InsightsList(query, params)
@@ -1182,8 +1399,16 @@ export const useInventoryApiV2InsightsDetail = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV2InsightsDetailState>({
         isLoading: true,
@@ -1193,6 +1418,10 @@ export const useInventoryApiV2InsightsDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2InsightsDetail(insightId, query, params)
@@ -1245,8 +1474,16 @@ export const useInventoryApiV2InsightsTrendDetail = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2InsightsTrendDetailState>({
@@ -1257,6 +1494,10 @@ export const useInventoryApiV2InsightsTrendDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2InsightsTrendDetail(insightId, query, params)
@@ -1299,8 +1540,16 @@ export const useInventoryApiV2InsightsJobDetail = (
     jobId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2InsightsJobDetailState>({
@@ -1311,6 +1560,10 @@ export const useInventoryApiV2InsightsJobDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2InsightsJobDetail(jobId, params)
@@ -1363,8 +1616,16 @@ export const useInventoryApiV2MetadataResourcetypeList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataResourcetypeListState>({
@@ -1375,6 +1636,10 @@ export const useInventoryApiV2MetadataResourcetypeList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2MetadataResourcetypeList(query, params)
@@ -1417,8 +1682,16 @@ export const useInventoryApiV2MetadataResourcetypeDetail = (
     resourceType: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataResourcetypeDetailState>({
@@ -1429,6 +1702,10 @@ export const useInventoryApiV2MetadataResourcetypeDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2MetadataResourcetypeDetail(resourceType, params)
@@ -1479,8 +1756,16 @@ export const useInventoryApiV2MetadataServicesList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataServicesListState>({
@@ -1491,6 +1776,10 @@ export const useInventoryApiV2MetadataServicesList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2MetadataServicesList(query, params)
@@ -1533,8 +1822,16 @@ export const useInventoryApiV2MetadataServicesDetail = (
     serviceName: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataServicesDetailState>({
@@ -1545,6 +1842,10 @@ export const useInventoryApiV2MetadataServicesDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2MetadataServicesDetail(serviceName, params)
@@ -1596,8 +1897,16 @@ export const useInventoryApiV2ResourcesCompositionDetail = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesCompositionDetailState>({
@@ -1608,6 +1917,10 @@ export const useInventoryApiV2ResourcesCompositionDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ResourcesCompositionDetail(key, query, params)
@@ -1660,6 +1973,8 @@ export const useInventoryApiV2ResourcesMetricList = (
 
         startTime?: string
 
+        minCount?: number
+
         sortBy?: 'name' | 'count'
 
         pageSize?: number
@@ -1668,8 +1983,16 @@ export const useInventoryApiV2ResourcesMetricList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesMetricListState>({
@@ -1680,6 +2003,10 @@ export const useInventoryApiV2ResourcesMetricList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ResourcesMetricList(query, params)
@@ -1729,8 +2056,16 @@ export const useInventoryApiV2ResourcesMetricDetail = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesMetricDetailState>({
@@ -1741,6 +2076,10 @@ export const useInventoryApiV2ResourcesMetricDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ResourcesMetricDetail(resourceType, query, params)
@@ -1784,11 +2123,23 @@ export const useInventoryApiV2ResourcesTagList = (
         connector?: string[]
 
         connectionId?: string[]
+
+        minCount?: number
+
+        endTime?: number
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV2ResourcesTagListState>(
         {
@@ -1800,6 +2151,10 @@ export const useInventoryApiV2ResourcesTagList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ResourcesTagList(query, params)
@@ -1844,11 +2199,23 @@ export const useInventoryApiV2ResourcesTagDetail = (
         connector?: string[]
 
         connectionId?: string[]
+
+        minCount?: number
+
+        endTime?: number
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesTagDetailState>({
@@ -1859,6 +2226,10 @@ export const useInventoryApiV2ResourcesTagDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ResourcesTagDetail(key, query, params)
@@ -1915,8 +2286,16 @@ export const useInventoryApiV2ResourcesTrendList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesTrendListState>({
@@ -1927,6 +2306,10 @@ export const useInventoryApiV2ResourcesTrendList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ResourcesTrendList(query, params)
@@ -1985,8 +2368,16 @@ export const useInventoryApiV2ServicesMetricList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesMetricListState>({
@@ -1997,6 +2388,10 @@ export const useInventoryApiV2ServicesMetricList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ServicesMetricList(query, params)
@@ -2046,8 +2441,16 @@ export const useInventoryApiV2ServicesMetricDetail = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesMetricDetailState>({
@@ -2058,6 +2461,10 @@ export const useInventoryApiV2ServicesMetricDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ServicesMetricDetail(serviceName, query, params)
@@ -2114,8 +2521,16 @@ export const useInventoryApiV2ServicesSummaryList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesSummaryListState>({
@@ -2126,6 +2541,10 @@ export const useInventoryApiV2ServicesSummaryList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ServicesSummaryList(query, params)
@@ -2175,8 +2594,16 @@ export const useInventoryApiV2ServicesSummaryDetail = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesSummaryDetailState>({
@@ -2187,6 +2614,10 @@ export const useInventoryApiV2ServicesSummaryDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ServicesSummaryDetail(serviceName, query, params)
@@ -2228,8 +2659,16 @@ interface IuseInventoryApiV2ServicesTagListState {
 export const useInventoryApiV2ServicesTagList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseInventoryApiV2ServicesTagListState>({
         isLoading: true,
@@ -2237,6 +2676,10 @@ export const useInventoryApiV2ServicesTagList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ServicesTagList(params)
@@ -2279,8 +2722,16 @@ export const useInventoryApiV2ServicesTagDetail = (
     key: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesTagDetailState>({
@@ -2291,6 +2742,10 @@ export const useInventoryApiV2ServicesTagDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.inventory
                 .apiV2ServicesTagDetail(key, params)

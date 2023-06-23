@@ -29,6 +29,7 @@
     "react-scripts": "5.0.1",
     "runtime-env-cra": "^0.2.4",
     "swr": "^2.1.5",
+    "swagger-typescript-api": "^12.0.4",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
@@ -44,7 +45,8 @@
     "format": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\"",
     "storybook": "storybook dev -p 6006 -s public",
     "build-storybook": "storybook build -s public",
-    "chromatic": "npx chromatic --project-token=2ae656df246a --allow-console-errors"
+    "chromatic": "npx chromatic --project-token=2ae656df246a --allow-console-errors",
+    "codegen": "npx swagger-typescript-api --axios -p https://app.kaytu.dev/docs/api/1.0/swagger.yaml -o ./src/api -n api.ts && go run codegen/generate.go"
   },
   "eslintConfig": {
     "overrides": [

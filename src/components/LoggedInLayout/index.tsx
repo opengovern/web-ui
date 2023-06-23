@@ -20,7 +20,12 @@ const navigation = [
     { name: 'Assets', href: '#', icon: CubeIcon, current: true },
     { name: 'Spend', href: '#', icon: ArrowTrendingUpIcon, current: false },
     { name: 'Compliance', href: '#', icon: ShieldCheckIcon, current: false },
-    { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
+    {
+        name: 'Settings',
+        href: 'settings',
+        icon: Cog6ToothIcon,
+        current: false,
+    },
 ]
 const userNavigation = [
     { name: 'Your profile', href: '#' },

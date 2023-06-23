@@ -3,6 +3,9 @@ import Assets from '../pages/Assets'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
 import { CallbackPage } from '../pages/Callback'
+import Settings from '../pages/Settings'
+import Workspaces from '../pages/Workspaces'
+import { setWorkspace } from '../api/ApiConfig'
 
 interface NavigateToWorkspacePageProps {
     page: string
@@ -17,7 +20,7 @@ const NavigateToWorkspacePage = ({ page }: NavigateToWorkspacePageProps) => {
 const AppNavigator = () => {
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/demo" replace />} />
+            <Route path="/" element={<Navigate to="/workspaces" replace />} />
             <Route path="/callback" element={<CallbackPage />} />
             <Route
                 key="assets"
@@ -25,7 +28,17 @@ const AppNavigator = () => {
                 element={<AuthenticationGuard component={Assets} />}
             />
             <Route
-                key="workspace"
+                key="settings"
+                path="/:ws/settings"
+                element={<AuthenticationGuard component={Settings} />}
+            />
+            <Route
+                key="workspaces"
+                path="/workspaces"
+                element={<AuthenticationGuard component={Workspaces} />}
+            />
+            <Route
+                key="workspaceHome"
                 path="/:ws"
                 element={<NavigateToWorkspacePage page="/assets" />}
             />

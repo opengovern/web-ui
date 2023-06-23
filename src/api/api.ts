@@ -4652,6 +4652,8 @@ export class Api<
                 endTime?: string
                 /** timestamp for resource count change comparison in epoch seconds */
                 startTime?: string
+                /** Minimum number of resources with this tag value, default 1 */
+                minCount?: number
                 /** Sort by field - default is count */
                 sortBy?: 'name' | 'count'
                 /** page size - default is 20 */
@@ -4723,6 +4725,10 @@ export class Api<
                 connector?: string[]
                 /** Connection IDs to filter by */
                 connectionId?: string[]
+                /** Minimum number of resources with this tag value, default 1 */
+                minCount?: number
+                /** End time in unix timestamp format, default now */
+                endTime?: number
             },
             params: RequestParams = {}
         ) =>
@@ -4752,6 +4758,10 @@ export class Api<
                 connector?: string[]
                 /** Connection IDs to filter by */
                 connectionId?: string[]
+                /** Minimum number of resources with this tag value, default 1 */
+                minCount?: number
+                /** End time in unix timestamp format, default now */
+                endTime?: number
             },
             params: RequestParams = {}
         ) =>
