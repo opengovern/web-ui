@@ -1,121 +1,122 @@
 import useSWR from 'swr'
 import React, { useState, useEffect } from 'react'
 import { atom, useAtom } from 'jotai'
+import { useParams } from 'react-router-dom'
 import {
     Api,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkResultTrend,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStack,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest,
-    GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspace,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest,
-    DescribeInsightJob,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimits,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest,
-    GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetadataResponse,
-    DescribeDescribeResourceJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetadataResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummariesResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAzureResourceResponse,
     GitlabComKeibiengineKeibiEnginePkgOnboardApiListConnectionSummaryResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiSource,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetRoleBindingsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiCostTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    DescribeSummarizerJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationByProviderResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositionResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount,
-    DescribeDescribeSourceJob,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup,
     GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetRoleBindingsResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimits,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary,
+    DescribeComplianceReportJob,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummariesResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspace,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    AwsResources,
+    DescribeInsightJob,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadata,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse,
+    DescribeSummarizerJob,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiCostTrendDatapoint,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiService,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignedSource,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiSource,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroupTrendResponse,
     GitlabComKeibiengineKeibiEnginePkgComplianceApiQuery,
     GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest,
-    DescribeComplianceReportJob,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiService,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse,
     GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiMembership,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroupTrendResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAWSResourceResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignedSource,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadata,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkResultTrend,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree,
     GitlabComKeibiengineKeibiEnginePkgInventoryApiConnectionData,
-    AwsResources,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse,
+    DescribeDescribeResourceJob,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiStack,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAWSResourceResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAzureResourceResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetadataResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersRequest,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
+    GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositionResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup,
+    DescribeDescribeSourceJob,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiMembership,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationByProviderResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest,
     RequestParams,
 } from './api'
 
-import AxiosAPI from './ApiConfig'
+import AxiosAPI, { setWorkspace } from './ApiConfig'
 
 interface IuseMetadataApiV1MetadataCreateState {
     isLoading: boolean
@@ -127,8 +128,16 @@ export const useMetadataApiV1MetadataCreate = (
     req: GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseMetadataApiV1MetadataCreateState>({
         isLoading: true,
@@ -138,6 +147,10 @@ export const useMetadataApiV1MetadataCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.metadata
                 .apiV1MetadataCreate(req, params)
@@ -180,8 +193,16 @@ export const useMetadataApiV1MetadataDetail = (
     key: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseMetadataApiV1MetadataDetailState>({
         isLoading: true,
@@ -191,6 +212,10 @@ export const useMetadataApiV1MetadataDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.metadata
                 .apiV1MetadataDetail(key, params)

@@ -1,121 +1,122 @@
 import useSWR from 'swr'
 import React, { useState, useEffect } from 'react'
 import { atom, useAtom } from 'jotai'
+import { useParams } from 'react-router-dom'
 import {
     Api,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkResultTrend,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStack,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest,
-    GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspace,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest,
-    DescribeInsightJob,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimits,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest,
-    GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetadataResponse,
-    DescribeDescribeResourceJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetadataResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummariesResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAzureResourceResponse,
     GitlabComKeibiengineKeibiEnginePkgOnboardApiListConnectionSummaryResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiSource,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetRoleBindingsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiCostTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    DescribeSummarizerJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationByProviderResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositionResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount,
-    DescribeDescribeSourceJob,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup,
     GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetRoleBindingsResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimits,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary,
+    DescribeComplianceReportJob,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummariesResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspace,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    AwsResources,
+    DescribeInsightJob,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadata,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse,
+    DescribeSummarizerJob,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiCostTrendDatapoint,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiService,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignedSource,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiSource,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroupTrendResponse,
     GitlabComKeibiengineKeibiEnginePkgComplianceApiQuery,
     GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest,
-    DescribeComplianceReportJob,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiService,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse,
     GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiMembership,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroupTrendResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAWSResourceResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignedSource,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadata,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkResultTrend,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree,
     GitlabComKeibiengineKeibiEnginePkgInventoryApiConnectionData,
-    AwsResources,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse,
+    DescribeDescribeResourceJob,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiStack,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAWSResourceResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAzureResourceResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetadataResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersRequest,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
+    GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositionResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsRequest,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup,
+    DescribeDescribeSourceJob,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiMembership,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationByProviderResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse,
+    GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy,
+    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse,
+    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics,
+    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest,
     RequestParams,
 } from './api'
 
-import AxiosAPI from './ApiConfig'
+import AxiosAPI, { setWorkspace } from './ApiConfig'
 
 interface IuseWorkspaceApiV1WorkspaceCreateState {
     isLoading: boolean
@@ -127,8 +128,16 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     request: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceCreateState>({
         isLoading: true,
@@ -138,6 +147,10 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspaceCreate(request, params)
@@ -180,8 +193,16 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     workspaceId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceDeleteState>({
         isLoading: true,
@@ -191,6 +212,10 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspaceDelete(workspaceId, params)
@@ -234,8 +259,16 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     request: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceNameCreateState>({
@@ -246,6 +279,10 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspaceNameCreate(workspaceId, request, params)
@@ -289,8 +326,16 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     request: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceOrganizationCreateState>({
@@ -301,6 +346,10 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspaceOrganizationCreate(workspaceId, request, params)
@@ -344,8 +393,16 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     request: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceOwnerCreateState>({
@@ -356,6 +413,10 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspaceOwnerCreate(workspaceId, request, params)
@@ -398,8 +459,16 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     workspaceId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceResumeCreateState>({
@@ -410,6 +479,10 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspaceResumeCreate(workspaceId, params)
@@ -452,8 +525,16 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     workspaceId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceSuspendCreateState>({
@@ -464,6 +545,10 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspaceSuspendCreate(workspaceId, params)
@@ -507,8 +592,16 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     request: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceTierCreateState>({
@@ -519,6 +612,10 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspaceTierCreate(workspaceId, request, params)
@@ -560,8 +657,16 @@ interface IuseWorkspaceApiV1WorkspaceCurrentListState {
 export const useWorkspaceApiV1WorkspaceCurrentList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceCurrentListState>({
@@ -570,6 +675,10 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspaceCurrentList(params)
@@ -609,8 +718,16 @@ interface IuseWorkspaceApiV1WorkspacesListState {
 }
 
 export const useWorkspaceApiV1WorkspacesList = (params: RequestParams = {}) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesListState>({
         isLoading: true,
@@ -618,6 +735,10 @@ export const useWorkspaceApiV1WorkspacesList = (params: RequestParams = {}) => {
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspacesList(params)
@@ -660,8 +781,16 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     workspaceId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesDetailState>(
         {
@@ -673,6 +802,10 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspacesDetail(workspaceId, params)
@@ -715,8 +848,16 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     workspaceId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesByidDetailState>({
@@ -727,6 +868,10 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspacesByidDetail(workspaceId, params)
@@ -772,8 +917,16 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesLimitsDetailState>({
@@ -784,6 +937,10 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspacesLimitsDetail(workspaceName, query, params)
@@ -826,8 +983,16 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     workspaceId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesLimitsByidDetailState>({
@@ -838,6 +1003,10 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.workspace
                 .apiV1WorkspacesLimitsByidDetail(workspaceId, params)
