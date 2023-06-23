@@ -3,14 +3,20 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider as JotaiProvider } from 'jotai'
 import './index.css'
+import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+import { Auth0ProviderWithNavigate } from './auth0-provider-with-navigate'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
     <React.StrictMode>
         <JotaiProvider>
-            <App />
+            <BrowserRouter>
+                <Auth0ProviderWithNavigate>
+                    <App />
+                </Auth0ProviderWithNavigate>
+            </BrowserRouter>
         </JotaiProvider>
     </React.StrictMode>
 )

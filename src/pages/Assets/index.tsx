@@ -24,7 +24,7 @@ import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import { useOnboardApiV1SourcesList } from '../../api/onboard.gen'
 import ConnectionList from './ConnectionList'
 
-export default function Assets() {
+const Assets: React.FC<any> = () => {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -146,3 +146,5 @@ export default function Assets() {
         </LoggedInLayout>
     )
 }
+
+export default Assets
