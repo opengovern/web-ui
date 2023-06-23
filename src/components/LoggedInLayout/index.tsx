@@ -1,18 +1,18 @@
 import React, { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
-    ArrowTrendingUpIcon,
     Bars3Icon,
     BellIcon,
-    CogIcon,
-    CubeIcon,
-    DocumentChartBarIcon,
     HomeIcon,
-    ShieldCheckIcon,
     XMarkIcon,
+    DocumentChartBarIcon,
+    CubeIcon,
+    ArrowTrendingUpIcon,
+    ShieldCheckIcon,
+    Cog6ToothIcon,
 } from '@heroicons/react/24/outline'
 
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 const navigation = [
     { name: 'Home', href: '#', icon: HomeIcon, current: false },
@@ -20,7 +20,7 @@ const navigation = [
     { name: 'Assets', href: '#', icon: CubeIcon, current: true },
     { name: 'Spend', href: '#', icon: ArrowTrendingUpIcon, current: false },
     { name: 'Compliance', href: '#', icon: ShieldCheckIcon, current: false },
-    { name: 'Settings', href: '#', icon: CogIcon, current: false },
+    { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },
 ]
 const userNavigation = [
     { name: 'Your profile', href: '#' },
@@ -37,7 +37,6 @@ type IProps = {
 
 export default function LoggedInLayout({ children }: IProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
-
     return (
         <div>
             <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -96,8 +95,8 @@ export default function LoggedInLayout({ children }: IProps) {
                                         </button>
                                     </div>
                                 </Transition.Child>
-
-                                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
+                                {/* Sidebar component, swap this element with another sidebar if you like */}
+                                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                                     <div className="flex h-16 shrink-0 items-center">
                                         <img
                                             className="h-8 w-auto"
@@ -106,26 +105,38 @@ export default function LoggedInLayout({ children }: IProps) {
                                         />
                                     </div>
                                     <nav className="flex flex-1 flex-col">
-                                        <ul className="-mx-2 flex-1 space-y-1">
-                                            {navigation.map((item) => (
-                                                <li key={item.name}>
-                                                    <a
-                                                        href={item.href}
-                                                        className={classNames(
-                                                            item.current
-                                                                ? 'bg-gray-800 text-white'
-                                                                : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                                        )}
-                                                    >
-                                                        <item.icon
-                                                            className="h-6 w-6 shrink-0"
-                                                            aria-hidden="true"
-                                                        />
-                                                        {item.name}
-                                                    </a>
-                                                </li>
-                                            ))}
+                                        {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+                                        <ul
+                                            role="list"
+                                            className="flex flex-1 flex-col gap-y-7"
+                                        >
+                                            <li>
+                                                {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+                                                <ul
+                                                    role="list"
+                                                    className="-mx-2 space-y-1"
+                                                >
+                                                    {navigation.map((item) => (
+                                                        <li key={item.name}>
+                                                            <a
+                                                                href={item.href}
+                                                                className={classNames(
+                                                                    item.current
+                                                                        ? 'bg-gray-50 text-indigo-600 dark:bg-gray-800 dark:text-white'
+                                                                        : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800',
+                                                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                                                )}
+                                                            >
+                                                                <item.icon
+                                                                    className="h-6 w-6 shrink-0"
+                                                                    aria-hidden="true"
+                                                                />
+                                                                {item.name}
+                                                            </a>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -136,77 +147,95 @@ export default function LoggedInLayout({ children }: IProps) {
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-20 lg:overflow-y-auto lg:bg-gray-900 lg:pb-4">
-                <div className="flex h-16 shrink-0 items-center justify-center">
-                    <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
-                    />
-                </div>
-                <nav className="mt-8">
-                    <ul className="flex flex-col items-center space-y-1">
-                        {navigation.map((item) => (
-                            <li key={item.name}>
-                                <a
-                                    href={item.href}
-                                    className={classNames(
-                                        item.current
-                                            ? 'bg-gray-800 text-white'
-                                            : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                        'group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold'
-                                    )}
-                                >
-                                    <item.icon
-                                        className="h-6 w-6 shrink-0"
-                                        aria-hidden="true"
-                                    />
-                                    <span className="sr-only">{item.name}</span>
-                                </a>
+            <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+                {/* Sidebar component, swap this element with another sidebar if you like */}
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4">
+                    <div className="flex h-16 shrink-0 items-center">
+                        <img
+                            className="h-8 w-auto"
+                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                            alt="Your Company"
+                        />
+                    </div>
+                    <nav className="flex flex-1 flex-col">
+                        {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+                        <ul
+                            role="list"
+                            className="flex flex-1 flex-col gap-y-7"
+                        >
+                            <li>
+                                {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
+                                <ul role="list" className="-mx-2 space-y-1">
+                                    {navigation.map((item) => (
+                                        <li key={item.name}>
+                                            <a
+                                                href={item.href}
+                                                className={classNames(
+                                                    item.current
+                                                        ? 'bg-blue-900/50 text-gray-200'
+                                                        : 'text-gray-300 hover:bg-blue-900/50',
+                                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                                )}
+                                            >
+                                                <item.icon
+                                                    className="h-6 w-6 shrink-0"
+                                                    aria-hidden="true"
+                                                />
+                                                {item.name}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
                             </li>
-                        ))}
-                    </ul>
-                </nav>
+                        </ul>
+                    </nav>
+                </div>
             </div>
 
-            <div className="lg:pl-20">
-                <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+            <div className="lg:pl-72">
+                <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
                     <button
                         type="button"
                         className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
                         onClick={() => setSidebarOpen(true)}
                     >
+                        {' '}
+                        {/* dark mode??? */}
                         <span className="sr-only">Open sidebar</span>
-                        <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                        <Bars3Icon
+                            className="h-6 w-6 dark:text-gray-300"
+                            aria-hidden="true"
+                        />
                     </button>
 
                     {/* Separator */}
                     <div
-                        className="h-6 w-px bg-gray-900/10 lg:hidden"
+                        className="h-6 w-px bg-gray-900/10 dark:bg-white/20 lg:hidden"
                         aria-hidden="true"
                     />
 
-                    <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-                        <form
-                            className="relative flex flex-1"
-                            action="#"
-                            method="GET"
-                        >
-                            <MagnifyingGlassIcon
-                                className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
-                                aria-hidden="true"
-                            />
-                            {/* <label htmlFor="search-field" className="sr-only"> */}
-                            {/*    Search */}
-                            {/* </label> */}
-                            <input
-                                id="search-field"
-                                className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
-                                placeholder="Search..."
-                                type="search"
-                                name="search"
-                            />
-                        </form>
+                    <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
+                        {/* <form */}
+                        {/*    className="relative flex flex-1" */}
+                        {/*    action="#" */}
+                        {/*    method="GET" */}
+                        {/* > */}
+                        {/*    /!* eslint-disable-next-line jsx-a11y/label-has-associated-control *!/ */}
+                        {/*    <label htmlFor="search-field" className="sr-only"> */}
+                        {/*        Search */}
+                        {/*    </label> */}
+                        {/*    <MagnifyingGlassIcon */}
+                        {/*        className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400 dark:text-gray-300" */}
+                        {/*        aria-hidden="true" */}
+                        {/*    /> */}
+                        {/*    <input */}
+                        {/*        id="search-field" */}
+                        {/*        className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-400 dark:bg-gray-900 focus:ring-0 sm:text-sm" */}
+                        {/*        placeholder="Search..." */}
+                        {/*        type="search" */}
+                        {/*        name="search" */}
+                        {/*    /> */}
+                        {/* </form> */}
                         <div className="flex items-center gap-x-4 lg:gap-x-6">
                             <button
                                 type="button"
@@ -223,7 +252,7 @@ export default function LoggedInLayout({ children }: IProps) {
 
                             {/* Separator */}
                             <div
-                                className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
+                                className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-white/20"
                                 aria-hidden="true"
                             />
 
@@ -240,7 +269,7 @@ export default function LoggedInLayout({ children }: IProps) {
                                     />
                                     <span className="hidden lg:flex lg:items-center">
                                         <span
-                                            className="ml-4 text-sm font-semibold leading-6 text-gray-900"
+                                            className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
                                             aria-hidden="true"
                                         >
                                             Tom Cook
@@ -260,7 +289,7 @@ export default function LoggedInLayout({ children }: IProps) {
                                     leaveFrom="transform opacity-100 scale-100"
                                     leaveTo="transform opacity-0 scale-95"
                                 >
-                                    <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                                    <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white dark:bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                                         {userNavigation.map((item) => (
                                             <Menu.Item key={item.name}>
                                                 {({ active }) => (
@@ -285,16 +314,12 @@ export default function LoggedInLayout({ children }: IProps) {
                     </div>
                 </div>
 
-                <main className="xl:pl-48 pr-48">
+                <main className="xl:pl-48 pr-48 dark:bg-gray-900">
                     <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                         {children}
                     </div>
                 </main>
             </div>
-
-            {/* <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block"> */}
-            {/*    /!* Secondary column (hidden on smaller screens) *!/ */}
-            {/* </aside> */}
         </div>
     )
 }
