@@ -1,12 +1,14 @@
 import {
     AreaChart,
     BadgeDelta,
+    Button,
     Card,
     DeltaType,
     Flex,
     Metric,
     Text,
 } from '@tremor/react'
+import { ArrowLongRightIcon } from '@heroicons/react/24/solid'
 
 type IProps = {
     title: string
@@ -16,6 +18,8 @@ type IProps = {
     deltaType?: DeltaType
     areaChartData?: any
     className?: string
+    viewMore?: boolean
+    onClick?: () => void
 }
 export default function SummaryCard({
     title,
@@ -25,6 +29,8 @@ export default function SummaryCard({
     deltaType,
     areaChartData,
     className,
+    viewMore,
+    onClick,
 }: IProps) {
     return (
         <Card key={title} className={className}>
@@ -42,18 +48,33 @@ export default function SummaryCard({
                 <Metric>{metric}</Metric>
                 {metricPrev && <Text>from {metricPrev}</Text>}
             </Flex>
-            <AreaChart
-                className="mt-6 h-28"
-                data={areaChartData}
-                index="Month"
-                categories={[title]}
-                colors={['blue']}
-                showXAxis
-                showGridLines={false}
-                startEndOnly
-                showYAxis={false}
-                showLegend={false}
-            />
+            {areaChartData && (
+                <AreaChart
+                    className="mt-6 h-28"
+                    data={areaChartData}
+                    index="Month"
+                    categories={[title]}
+                    colors={['blue']}
+                    showXAxis
+                    showGridLines={false}
+                    startEndOnly
+                    showYAxis={false}
+                    showLegend={false}
+                />
+            )}
+            {viewMore && (
+                <Flex className="mt-6 pt-4 border-t">
+                    <Button
+                        size="xs"
+                        variant="light"
+                        icon={ArrowLongRightIcon}
+                        iconPosition="right"
+                        onClick={onClick}
+                    >
+                        View more
+                    </Button>
+                </Flex>
+            )}
         </Card>
     )
 }
