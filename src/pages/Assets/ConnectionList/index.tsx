@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-import { Bold, Button, Grid, Text } from '@tremor/react'
+import { Bold, Button, Grid, Text, Flex } from '@tremor/react'
 import { ReactComponent as AzureIcon } from '../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/elements-icons-plus-2.svg'
@@ -39,7 +39,7 @@ const columns: ColDef[] = [
         cellStyle: { padding: 0 },
         cellRenderer: (params: ICellRendererParams<IConnection>) => {
             return (
-                <div>
+                <div className="flex justify-center items-center w-full h-full">
                     {params.data?.connector === 'Azure' ? (
                         <AzureIcon />
                     ) : (
@@ -84,10 +84,13 @@ const columns: ColDef[] = [
 ]
 
 const tags = [
-    { label: 'All', value: 'All' },
     { label: 'AWS', value: 'AWS' },
     { label: 'Azure', value: 'Azure' },
 ]
+const TagIcon = {
+    aws: <AWSIcon />,
+    azure: <AzureIcon />,
+}
 
 export default function ConnectionList({
     open,
@@ -220,44 +223,69 @@ export default function ConnectionList({
         })
     }
 
-    const tagIcon = (tag: any) => {
-        if (tag.label === 'Azure')
-            return (
-                <AzureIcon
-                    width="12px"
-                    height="16px"
-                    style={{ margin: '4px' }}
-                />
-            )
-        if (tag.label === 'AWS')
-            return (
-                <AWSIcon width="12px" height="16px" style={{ margin: '4px' }} />
-            )
-        return <PlusIcon />
-    }
-
-    console.log('gridOptions', gridOptions)
-
     return (
-        <DrawerPanel open={open} onClose={() => handleClose()}>
+        <DrawerPanel
+            open={open}
+            onClose={() => handleClose()}
+            title="Connections"
+        >
             <div>
-                <Grid>
-                    <Grid>
-                        <Text>Quick Select:</Text>
+                <Flex>
+                    <Flex justifyContent="start" className="mb-4">
+                        <Text className="mr-5">Quick Select:</Text>
                         {tags.map((tag) => (
                             <Button
                                 onClick={() => {
                                     setSelectedProvider(tag)
                                 }}
-                                // icon={tagIcon(tag)}
+                                size="xs"
+                                className="mr-1"
+                                variant={
+                                    selectedProvider.value === tag.value
+                                        ? 'primary'
+                                        : 'secondary'
+                                }
                             >
-                                <Text>{tag.label}</Text>
+                                <Flex>
+                                    <div className="mr-1">
+                                        {tag.label === 'AWS' ? (
+                                            <AWSIcon className="w-4 h-4" />
+                                        ) : (
+                                            <AzureIcon className="w-4 h-4" />
+                                        )}
+                                    </div>
+                                    <Text className="text-xs">{tag.label}</Text>
+                                </Flex>
                             </Button>
                         ))}
-                    </Grid>
-                </Grid>
-                <Bold>{selectionText(gridRef.current?.api)}</Bold>
-                <div className="ag-theme-alpine" style={{ height: '500px' }}>
+                        {!!selectedProvider.value && (
+                            <Button
+                                onClick={() => {
+                                    setSelectedProvider({
+                                        label: 'All',
+                                        value: 'All',
+                                    })
+                                }}
+                                size="xs"
+                                className="mr-1"
+                                variant="secondary"
+                            >
+                                <Flex>
+                                    <div className="mr-1">
+                                        <PlusIcon className="w-4 h-4" />
+                                    </div>
+                                    <Text className="text-xs">
+                                        Clear Selected
+                                    </Text>
+                                </Flex>
+                            </Button>
+                        )}
+                    </Flex>
+                </Flex>
+                <div className="mb-2">
+                    <Bold>{selectionText(gridRef.current?.api)}</Bold>
+                </div>
+                <div className="ag-theme-alpine" style={{ height: '80vh' }}>
                     <AgGridReact ref={gridRef} gridOptions={gridOptions} />
                 </div>
             </div>
