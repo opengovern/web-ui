@@ -4,7 +4,6 @@ import {
     Button,
     DateRangePicker,
     Flex,
-    Grid,
     Tab,
     TabGroup,
     TabList,
@@ -13,16 +12,14 @@ import {
     Title,
 } from '@tremor/react'
 import { FunnelIcon } from '@heroicons/react/24/outline'
-import Composition from '../../components/Blocks/Composition'
-import Region from '../../components/Blocks/Region'
-import SummaryMetrics from './SummaryMetrics'
-import ResourceMetrics from './ResourceMetrics'
-import GrowthTrend from './GrowthTrend'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import { useOnboardApiV1SourcesList } from '../../api/onboard.gen'
 import ConnectionList from './ConnectionList'
+import SummaryTab from './SummaryTab'
+import TrendsTab from './TrendsTab'
+import CompositionTab from './CompositionTab/indedx'
 
 const Assets: React.FC<any> = () => {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
@@ -60,86 +57,65 @@ const Assets: React.FC<any> = () => {
                     className="mb-6"
                 >
                     <Title>Assets</Title>
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        selectPlaceholder="Selection"
-                    />
-                </Flex>
-
-                <TabGroup>
-                    <TabList>
-                        <Tab>All</Tab>
-                    </TabList>
-                    <Flex flexDirection="row" justifyContent="end">
+                    <div className="flex flex-row justify-start items-start">
+                        <DateRangePicker
+                            className="max-w-md"
+                            value={activeTimeRange}
+                            onValueChange={setActiveTimeRange}
+                            selectPlaceholder="Selection"
+                        />
                         <Button
                             variant="light"
-                            className="mt-4 mb-6"
+                            className="ml-2 mt-2"
                             onClick={() => setOpenDrawer(true)}
                         >
                             <FunnelIcon className="h-6 w-6" />
                         </Button>
-                    </Flex>
+                        <ConnectionList
+                            connections={connections || []}
+                            open={openDrawer}
+                            selectedConnectionsProps={selectedConnections}
+                            onClose={(data: any) => handleDrawer(data)}
+                        />
+                    </div>
+                </Flex>
+
+                <TabGroup className="mt-6">
+                    <TabList>
+                        <Tab>Summary</Tab>
+                        <Tab>Trends</Tab>
+                        <Tab>Composition</Tab>
+                    </TabList>
                     <TabPanels>
                         <TabPanel>
-                            <ConnectionList
-                                connections={connections || []}
-                                open={openDrawer}
-                                selectedConnectionsProps={selectedConnections}
-                                onClose={(data: any) => handleDrawer(data)}
-                            />
-                            <SummaryMetrics
+                            <SummaryTab
                                 provider={selectedConnections.provider}
                                 connections={selectedConnections.connections}
+                                categories={categoryOptions}
                                 timeRange={activeTimeRange}
+                                pageSize={1000}
                             />
-                            <div className="mt-10">
-                                <ResourceMetrics
-                                    provider={selectedConnections.provider}
-                                    connection={selectedConnections.connections}
-                                    categories={categoryOptions}
-                                    timeRange={activeTimeRange}
-                                    pageSize={1000}
-                                />
-                            </div>
+                        </TabPanel>
+                        <TabPanel>
                             {/* Main section */}
-                            <div className="mt-20">
-                                {/* <div className="h-96" /> */}
-                                <GrowthTrend
-                                    categories={categoryOptions}
-                                    timeRange={activeTimeRange}
-                                />
-                            </div>
-
+                            {/* <div className="h-96" /> */}
+                            <TrendsTab
+                                categories={categoryOptions}
+                                timeRange={activeTimeRange}
+                                connections={selectedConnections.connections}
+                                count={5}
+                            />
+                        </TabPanel>
+                        <TabPanel>
                             {/* KPI section */}
-                            <Grid
-                                numItemsMd={2}
-                                className="mt-20 gap-6 flex justify-between"
-                            >
-                                <div className="w-full">
-                                    {/* Placeholder to set height */}
-                                    {/* <div className="h-28" /> */}
-                                    <Composition
-                                        connector={selectedConnections.provider}
-                                        top={5}
-                                        time={activeTimeRange}
-                                    />{' '}
-                                    {/* Composition */}
-                                </div>
-                                <div className="w-full">
-                                    {/* Placeholder to set height */}
-                                    {/* <div className="h-28" /> */}
-                                    <Region
-                                        // provider={selectedConnections.provider}
-                                        connections={
-                                            selectedConnections.connections
-                                        }
-                                        count={5}
-                                    />{' '}
-                                    {/* region */}
-                                </div>
-                            </Grid>
+                            {/* Placeholder to set height */}
+                            {/* <div className="h-28" /> */}
+                            <CompositionTab
+                                connector={selectedConnections.provider}
+                                top={5}
+                                time={activeTimeRange}
+                            />{' '}
+                            {/* Composition */}
                         </TabPanel>
                     </TabPanels>
                 </TabGroup>
