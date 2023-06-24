@@ -4,197 +4,123 @@ import { atom, useAtom } from 'jotai'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiListConnectionSummaryResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetRoleBindingsResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimits,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary,
-    DescribeComplianceReportJob,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummariesResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetadataResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspace,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    AwsResources,
-    DescribeInsightJob,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadata,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse,
-    DescribeSummarizerJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiCostTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiService,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignedSource,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiSource,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroupTrendResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiQuery,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkResultTrend,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiConnectionData,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse,
-    DescribeDescribeResourceJob,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStack,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAWSResourceResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAzureResourceResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetadataResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
-    GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositionResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
     DescribeDescribeSourceJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiMembership,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationByProviderResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
+    DescribeDescribeResourceJob,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    AwsResources,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
+    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    DescribeComplianceReportJob,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
+    DescribeInsightJob,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
+    DescribeSummarizerJob,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
     RequestParams,
 } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
 
-interface IuseOnboardApiV1CatalogConnectorsListState {
-    isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector[]
-    error?: any
-}
-
-export const useOnboardApiV1CatalogConnectorsList = (
-    query?: {
-        category?: string
-
-        state?: string
-
-        minConnection?: string
-
-        id?: string
-    },
-    params: RequestParams = {}
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1CatalogConnectorsListState>({
-            isLoading: true,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-        })
-        try {
-            api.onboard
-                .apiV1CatalogConnectorsList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err })
-                })
-        } catch (err) {
-            setState({ ...state, error: err })
-        }
-    }
-
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
-    }
-
-    useEffect(() => {
-        sendRequest()
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 interface IuseOnboardApiV1CatalogMetricsListState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics
     error?: any
 }
 
@@ -264,7 +190,7 @@ interface IuseOnboardApiV1ConnectionsStateCreateState {
 
 export const useOnboardApiV1ConnectionsStateCreate = (
     connectionId: number,
-    request: GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
     params: RequestParams = {}
 ) => {
     const workspace = useParams<{ ws: string }>().ws
@@ -330,7 +256,7 @@ interface IuseOnboardApiV1ConnectionsCountListState {
 }
 
 export const useOnboardApiV1ConnectionsCountList = (
-    type: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest,
+    type: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
     params: RequestParams = {}
 ) => {
     const workspace = useParams<{ ws: string }>().ws
@@ -391,7 +317,7 @@ export const useOnboardApiV1ConnectionsCountList = (
 
 interface IuseOnboardApiV1ConnectionsSummaryListState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiListConnectionSummaryResponse
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
     error?: any
 }
 
@@ -475,7 +401,7 @@ export const useOnboardApiV1ConnectionsSummaryList = (
 
 interface IuseOnboardApiV1ConnectionsSummaryDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     error?: any
 }
 
@@ -546,7 +472,7 @@ export const useOnboardApiV1ConnectionsSummaryDetail = (
 
 interface IuseOnboardApiV1ConnectorListState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount[]
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount[]
     error?: any
 }
 
@@ -606,7 +532,7 @@ export const useOnboardApiV1ConnectorList = (params: RequestParams = {}) => {
 
 interface IuseOnboardApiV1ConnectorDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnector
     error?: any
 }
 
@@ -671,7 +597,7 @@ export const useOnboardApiV1ConnectorDetail = (
 
 interface IuseOnboardApiV1CredentialListState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential[]
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
     error?: any
 }
 
@@ -744,12 +670,12 @@ export const useOnboardApiV1CredentialList = (
 
 interface IuseOnboardApiV1CredentialCreateState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse
     error?: any
 }
 
 export const useOnboardApiV1CredentialCreate = (
-    config: GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest,
+    config: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
     params: RequestParams = {}
 ) => {
     const workspace = useParams<{ ws: string }>().ws
@@ -874,7 +800,7 @@ export const useOnboardApiV1CredentialDelete = (
 
 interface IuseOnboardApiV1CredentialDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential
     error?: any
 }
 
@@ -945,7 +871,7 @@ interface IuseOnboardApiV1CredentialUpdateState {
 
 export const useOnboardApiV1CredentialUpdate = (
     credentialId: string,
-    config: GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest,
+    config: GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
     params: RequestParams = {}
 ) => {
     const workspace = useParams<{ ws: string }>().ws
@@ -1005,7 +931,7 @@ export const useOnboardApiV1CredentialUpdate = (
 
 interface IuseOnboardApiV1CredentialAutoonboardCreateState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection[]
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     error?: any
 }
 
@@ -1269,7 +1195,7 @@ export const useOnboardApiV1CredentialHealthcheckDetail = (
 
 interface IuseOnboardApiV1CredentialSourcesListListState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential[]
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
     error?: any
 }
 
@@ -1406,7 +1332,7 @@ export const useOnboardApiV1SourceDelete = (
 
 interface IuseOnboardApiV1SourceDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     error?: any
 }
 
@@ -1471,7 +1397,7 @@ export const useOnboardApiV1SourceDetail = (
 
 interface IuseOnboardApiV1SourceCredentialsDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential
     error?: any
 }
 
@@ -1603,7 +1529,7 @@ export const useOnboardApiV1SourceCredentialsUpdate = (
 
 interface IuseOnboardApiV1SourceHealthcheckCreateState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     error?: any
 }
 
@@ -1669,7 +1595,7 @@ export const useOnboardApiV1SourceHealthcheckCreate = (
 
 interface IuseOnboardApiV1SourceAccountDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     error?: any
 }
 
@@ -1735,12 +1661,12 @@ export const useOnboardApiV1SourceAccountDetail = (
 
 interface IuseOnboardApiV1SourceAwsCreateState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse
     error?: any
 }
 
 export const useOnboardApiV1SourceAwsCreate = (
-    request: GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest,
+    request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     params: RequestParams = {}
 ) => {
     const workspace = useParams<{ ws: string }>().ws
@@ -1800,12 +1726,12 @@ export const useOnboardApiV1SourceAwsCreate = (
 
 interface IuseOnboardApiV1SourceAzureCreateState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse
     error?: any
 }
 
 export const useOnboardApiV1SourceAzureCreate = (
-    request: GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest,
+    request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
     params: RequestParams = {}
 ) => {
     const workspace = useParams<{ ws: string }>().ws
@@ -1865,7 +1791,7 @@ export const useOnboardApiV1SourceAzureCreate = (
 
 interface IuseOnboardApiV1SourcesListState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection[]
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     error?: any
 }
 
@@ -1932,12 +1858,12 @@ export const useOnboardApiV1SourcesList = (
 
 interface IuseOnboardApiV1SourcesCreateState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection[]
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     error?: any
 }
 
 export const useOnboardApiV1SourcesCreate = (
-    request: GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest,
+    request: GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
     query?: {
         type?: 'aws' | 'azure'
     },
