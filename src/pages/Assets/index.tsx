@@ -97,7 +97,7 @@ const Assets: React.FC<any> = () => {
                             <div className="mt-10">
                                 <ResourceMetrics
                                     provider={selectedConnections.provider}
-                                    // connection={selectedConnections.connections}
+                                    connection={selectedConnections.connections}
                                     categories={categoryOptions}
                                     timeRange={activeTimeRange}
                                     pageSize={1000}
@@ -131,7 +131,7 @@ const Assets: React.FC<any> = () => {
                                     {/* Placeholder to set height */}
                                     {/* <div className="h-28" /> */}
                                     <Region
-                                        provider={selectedConnections.provider}
+                                        // provider={selectedConnections.provider}
                                         connections={
                                             selectedConnections.connections
                                         }
