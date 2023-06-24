@@ -31,7 +31,7 @@ export interface DescribeComplianceReportJob {
     /** @example "Azure" */
     SourceType?: SourceType
     /** @example "InProgress" */
-    Status?: GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReportJobStatus
+    Status?: GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReportJobStatus
     createdAt?: string
     deletedAt?: GormDeletedAt
     /** Should be NULLSTRING */
@@ -54,7 +54,7 @@ export interface DescribeDescribeResourceJob {
     parentJobID?: number
     resourceType?: string
     retryCount?: number
-    status?: GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeResourceJobStatus
+    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResourceJobStatus
     updatedAt?: string
 }
 
@@ -69,8 +69,8 @@ export interface DescribeDescribeSourceJob {
     /** Not the primary key but should be a unique identifier */
     sourceID?: string
     sourceType?: SourceType
-    status?: GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSourceJobStatus
-    triggerType?: GitlabComKeibiengineKeibiEnginePkgDescribeEnumsDescribeTriggerType
+    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSourceJobStatus
+    triggerType?: GithubComKaytuIoKaytuEnginePkgDescribeEnumsDescribeTriggerType
     updatedAt?: string
 }
 
@@ -84,7 +84,7 @@ export interface DescribeInsightJob {
     scheduleUUID?: string
     sourceID?: string
     sourceType?: SourceType
-    status?: GitlabComKeibiengineKeibiEnginePkgInsightApiInsightJobStatus
+    status?: GithubComKaytuIoKaytuEnginePkgInsightApiInsightJobStatus
     updatedAt?: string
 }
 
@@ -95,7 +95,7 @@ export interface DescribeSummarizerJob {
     id?: number
     jobType?: SummarizerJobType
     scheduleJobID?: number
-    status?: GitlabComKeibiengineKeibiEnginePkgSummarizerApiSummarizerJobStatus
+    status?: GithubComKaytuIoKaytuEnginePkgSummarizerApiSummarizerJobStatus
     updatedAt?: string
 }
 
@@ -115,7 +115,7 @@ export interface DescriberResource {
     type?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest {
     /** Name of the key */
     name?: string
     /**
@@ -125,7 +125,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest {
     roleName?: 'admin' | 'editor' | 'viewer'
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse {
     /**
      * Activity state of the key
      * @example true
@@ -155,17 +155,17 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse {
     token?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiGetRoleBindingsResponse {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse {
     /**
      * Global Access
      * @example "admin"
      */
     globalRoles?: 'admin' | 'editor' | 'viewer'
     /** List of user roles in each workspace */
-    roleBindings?: GitlabComKeibiengineKeibiEnginePkgAuthApiUserRoleBinding[]
+    roleBindings?: GithubComKaytuIoKaytuEnginePkgAuthApiUserRoleBinding[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse {
     /**
      * Is the user blocked or not
      * @example false
@@ -213,7 +213,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse {
     userName?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest {
     /** @example "johndoe@example.com" */
     email?: string
     /**
@@ -228,7 +228,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest {
     roleName?: 'admin' | 'editor' | 'viewer'
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse {
     /**
      * Email address of the user
      * @example "johndoe@example.com"
@@ -256,7 +256,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse {
     userName?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest {
     /**
      * User email address
      * @example "johndoe@example.com"
@@ -269,12 +269,12 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest {
     roleName?: 'admin' | 'editor' | 'viewer'
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgAuthApiInviteStatus {
+export enum GithubComKaytuIoKaytuEnginePkgAuthApiInviteStatus {
     InviteStatusACCEPTED = 'accepted',
     InviteStatusPENDING = 'pending',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiMembership {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiMembership {
     /**
      * Assignment timestamp in UTC
      * @example "2023-03-31T09:36:09.855Z"
@@ -302,7 +302,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiMembership {
     workspaceName?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest {
     /**
      * Name of the role
      * @example "admin"
@@ -315,13 +315,13 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest 
     userId: string
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgAuthApiRole {
+export enum GithubComKaytuIoKaytuEnginePkgAuthApiRole {
     AdminRole = 'admin',
     EditorRole = 'editor',
     ViewerRole = 'viewer',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse {
     /**
      * Role Description and accesses
      * @example "The Administrator role is a super user role with all of the capabilities that can be assigned to a role, and its enables access to all data & configuration on a Kaytu Workspace. You cannot edit or delete the Administrator role."
@@ -338,10 +338,10 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse {
      */
     userCount?: number
     /** List of users having the role */
-    users?: GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse[]
+    users?: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser {
     /**
      * Is the user blocked or not
      * @example false
@@ -394,7 +394,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser {
     workspaces?: string[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse {
     /**
      * Role Description and accesses
      * @example "The Administrator role is a super user role with all of the capabilities that can be assigned to a role, and its enables access to all data & configuration on a Kaytu Workspace. You cannot edit or delete the Administrator role."
@@ -412,7 +412,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse {
     userCount?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest {
     /** Unique identifier for the key */
     id?: number
     /**
@@ -422,7 +422,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest {
     roleName?: 'admin' | 'editor' | 'viewer'
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiUserRoleBinding {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiUserRoleBinding {
     /**
      * Name of the binding Role
      * @example "admin"
@@ -435,7 +435,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiUserRoleBinding {
     workspaceID?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey {
     /**
      * Activity state of the key
      * @example true
@@ -478,7 +478,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey {
     updatedAt?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding {
+export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
     /**
      * Creation timestamp in UTC
      * @example "2023-03-31T09:36:09.855Z"
@@ -516,7 +516,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding {
     userName?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
     /**
      * Whether the benchmark is auto assigned or not
      * @example true
@@ -590,7 +590,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark {
     updatedAt?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignedSource {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource {
     /**
      * Connection ID
      * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
@@ -610,7 +610,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssigne
     status?: boolean
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment {
     /** Unix timestamp */
     assignedAt?: number
     /**
@@ -625,15 +625,15 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignm
     sourceId?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkResultTrend {
-    resultTrend?: GitlabComKeibiengineKeibiEnginePkgComplianceApiResultDatapoint[]
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend {
+    resultTrend?: GithubComKaytuIoKaytuEnginePkgComplianceApiResultDatapoint[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary {
     /** Checks summary */
     checks?: TypesSeverityResult
     /** Compliancy trend data points */
-    compliancyTrend?: GitlabComKeibiengineKeibiEnginePkgComplianceApiDatapoint[]
+    compliancyTrend?: GithubComKaytuIoKaytuEnginePkgComplianceApiDatapoint[]
     /**
      * Cloud providers
      * @example ["[Azure]"]
@@ -680,14 +680,14 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary
     title?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree {
-    children?: GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree[]
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree {
+    children?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree[]
     /**
      * Benchmark ID
      * @example "azure_cis_v140"
      */
     id?: string
-    policies?: GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicyTree[]
+    policies?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree[]
     /**
      * Benchmark title
      * @example "CIS v1.4.0"
@@ -695,7 +695,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree {
     title?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport {
     /** @example "" */
     failureMessage?: string
     /** @example 1 */
@@ -703,31 +703,31 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport
     /** @example 1619510400 */
     reportCreatedAt?: number
     /** @example "InProgress" */
-    status?: GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReportJobStatus
+    status?: GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReportJobStatus
     /** @example "2021-01-01T00:00:00Z" */
     updatedAt?: string
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReportJobStatus {
+export enum GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReportJobStatus {
     ComplianceReportJobCreated = 'CREATED',
     ComplianceReportJobInProgress = 'IN_PROGRESS',
     ComplianceReportJobCompletedWithFailure = 'COMPLETED_WITH_FAILURE',
     ComplianceReportJobCompleted = 'COMPLETED',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiDatapoint {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiDatapoint {
     /** Time */
     time?: number
     /** Value */
     value?: number
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgComplianceApiDirectionType {
+export enum GithubComKaytuIoKaytuEnginePkgComplianceApiDirectionType {
     DirectionAscending = 'asc',
     DirectionDescending = 'desc',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiFindingFilters {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
     /**
      * Benchmark ID
      * @example ["azure_cis_v140"]
@@ -770,7 +770,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiFindingFilters {
     status?: TypesComplianceResult[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiFindingSortItem {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingSortItem {
     /**
      * Sort direction
      * @example "asc"
@@ -799,14 +799,14 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiFindingSortItem 
         | 'policySeverity'
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiGetBenchmarksSummaryResponse {
-    benchmarkSummary?: GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary[]
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse {
+    benchmarkSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary[]
     failedResources?: number
     passedResources?: number
     totalAssets?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetricsResponse {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse {
     /** @example 10 */
     failedFindings?: number
     /** @example 10 */
@@ -825,19 +825,19 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetri
     unknownFindings?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsRequest {
-    filters?: GitlabComKeibiengineKeibiEnginePkgComplianceApiFindingFilters
-    page: GitlabComKeibiengineKeibiEnginePkgComplianceApiPage
-    sorts?: GitlabComKeibiengineKeibiEnginePkgComplianceApiFindingSortItem[]
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
+    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
+    page: GithubComKaytuIoKaytuEnginePkgComplianceApiPage
+    sorts?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingSortItem[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse {
-    findings?: GitlabComKeibiengineKeibiEnginePkgComplianceEsFinding[]
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse {
+    findings?: GithubComKaytuIoKaytuEnginePkgComplianceEsFinding[]
     /** @example 100 */
     totalCount?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRequest {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest {
     /**
      * Number of items to return
      * @example 1
@@ -848,14 +848,14 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldReque
      * @example "resourceType"
      */
     field?: 'resourceType' | 'serviceName' | 'sourceID' | 'resourceID'
-    filters?: GitlabComKeibiengineKeibiEnginePkgComplianceApiFindingFilters
+    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse {
-    records?: GitlabComKeibiengineKeibiEnginePkgComplianceApiTopFieldRecord[]
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse {
+    records?: GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsight {
     /**
      * Cloud Provider
      * @example "Azure"
@@ -890,9 +890,9 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight {
      */
     oldTotalResultValue?: number
     /** Query */
-    query?: GitlabComKeibiengineKeibiEnginePkgComplianceApiQuery
+    query?: GithubComKaytuIoKaytuEnginePkgComplianceApiQuery
     /** Insight Results */
-    result?: GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightResult[]
+    result?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightResult[]
     /**
      * Short Title
      * @example "Clusters with no RBAC"
@@ -907,17 +907,17 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight {
     totalResultValue?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightConnection {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightConnection {
     connection_id?: string
     original_id?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightDetail {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightDetail {
     headers?: string[]
     rows?: any[][]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup {
     /** @example ["[\"Azure\""," \"AWS\"]"] */
     connectors?: SourceType[]
     /** @example "List clusters that have role-based access control (RBAC) disabled" */
@@ -926,7 +926,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup {
     id?: number
     insights?: Record<
         string,
-        GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight
+        GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
     >
     /** @example "https://kaytu.io/logo.png" */
     logoURL?: string
@@ -941,24 +941,24 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup {
     totalResultValue?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroupTrendResponse {
-    trend?: GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint[]
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse {
+    trend?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[]
     trendPerInsight?: Record<
         string,
-        GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint[]
+        GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[]
     >
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightResult {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightResult {
     /**
      * Connection ID
      * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
      */
     connectionID?: string
     /** Connections */
-    connections?: GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightConnection[]
+    connections?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightConnection[]
     /** Insight Details */
-    details?: GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightDetail
+    details?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightDetail
     /**
      * Time of Execution
      * @example "2023-04-21T08:53:09.928Z"
@@ -983,7 +983,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightResult {
     result?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint {
     /**
      * Time
      * @example 1686346668
@@ -996,7 +996,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendData
     value?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiPage {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPage {
     /**
      * Number of pages
      * @example 5
@@ -1009,7 +1009,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiPage {
     size?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy {
     /** @example "Azure" */
     connector?: SourceType
     /** @example "2020-01-01T00:00:00Z" */
@@ -1037,7 +1037,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy {
     updatedAt?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicyTree {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree {
     /**
      * Policy ID
      * @example "azure_cis_v140_7_5"
@@ -1065,7 +1065,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicyTree {
     title?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiQuery {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     /** @example "Azure" */
     connector?: string
     /** @example "2023-06-07T14:00:15.677558Z" */
@@ -1089,14 +1089,14 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiQuery {
     updatedAt?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiResultDatapoint {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResultDatapoint {
     /** Result */
     result?: TypesSeverityResult
     /** Datapoint Time */
     time?: number
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgComplianceApiSortFieldType {
+export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortFieldType {
     FieldResourceID = 'resourceID',
     FieldResourceName = 'resourceName',
     FieldResourceType = 'resourceType',
@@ -1115,19 +1115,19 @@ export enum GitlabComKeibiengineKeibiEnginePkgComplianceApiSortFieldType {
     FieldPolicySeverity = 'policySeverity',
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgComplianceApiTopField {
+export enum GithubComKaytuIoKaytuEnginePkgComplianceApiTopField {
     TopFieldResourceType = 'resourceType',
     TopFieldCloudService = 'serviceName',
     TopFieldCloudAccount = 'sourceID',
     TopFieldResources = 'resourceID',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiTopFieldRecord {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
     count?: number
     value?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgComplianceEsFinding {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceEsFinding {
     /**
      * Finding ID
      * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1-azure_cis_v140_7_5"
@@ -1220,7 +1220,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceEsFinding {
     stateActive?: boolean
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeResource {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResource {
     failureMessage?: string
     /** @example "Microsoft.Compute/virtualMachines" */
     resourceType?: string
@@ -1228,10 +1228,10 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeResource {
      * CREATED, QUEUED, IN_PROGRESS, TIMEOUT, FAILED, SUCCEEDED
      * @example "IN_PROGRESS"
      */
-    status?: GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeResourceJobStatus
+    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResourceJobStatus
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeResourceJobStatus {
+export enum GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResourceJobStatus {
     DescribeResourceJobCreated = 'CREATED',
     DescribeResourceJobQueued = 'QUEUED',
     DescribeResourceJobInProgress = 'IN_PROGRESS',
@@ -1240,7 +1240,7 @@ export enum GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeResourceJobStat
     DescribeResourceJobSucceeded = 'SUCCEEDED',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest {
     accessKey?: string
     accountID?: string
     additionalFields?: Record<string, string>
@@ -1249,35 +1249,41 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleReso
     secretKey?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource {
-    describeResourceJobs?: GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeResource[]
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource {
+    describeResourceJobs?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResource[]
     /**
      * CREATED, QUEUED, IN_PROGRESS, TIMEOUT, FAILED, SUCCEEDED
      * @example "IN_PROGRESS"
      */
-    status?: GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSourceJobStatus
+    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSourceJobStatus
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSourceJobStatus {
+export enum GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSourceJobStatus {
     DescribeSourceJobCreated = 'CREATED',
     DescribeSourceJobInProgress = 'IN_PROGRESS',
     DescribeSourceJobCompletedWithFailure = 'COMPLETED_WITH_FAILURE',
     DescribeSourceJobCompleted = 'COMPLETED',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest {
+    config?: any
+    /** @example "stack-twr32a5d-5as5-4ffe-b1cc-e32w1ast87s0" */
+    stackId?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings {
     /**
      * Benchmark IDs to filter
      * @example ["azure_cis_v140"]
      */
     benchmarkIds?: string[]
     /** Pages count to retrieve */
-    page: GitlabComKeibiengineKeibiEnginePkgComplianceApiPage
+    page: GithubComKaytuIoKaytuEnginePkgComplianceApiPage
     /** Sorts to apply */
-    sorts?: GitlabComKeibiengineKeibiEnginePkgComplianceApiFindingSortItem[]
+    sorts?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingSortItem[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob {
     /**
      * Failure Message
      * @example ""
@@ -1319,7 +1325,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob {
      * Insight Job Status
      * @example "InProgress"
      */
-    status?: GitlabComKeibiengineKeibiEnginePkgInsightApiInsightJobStatus
+    status?: GithubComKaytuIoKaytuEnginePkgInsightApiInsightJobStatus
     /**
      * Insight Job last update timestamp
      * @example "2021-04-27T15:04:05Z"
@@ -1327,7 +1333,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob {
     updatedAt?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest {
     /**
      * Filter evaluations for this benchmark
      * @example "azure_cis_v1"
@@ -1355,12 +1361,12 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvalu
     evaluatedAtBefore?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail {
     resourceTypeARN?: string
     resourceTypeName?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiSource {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiSource {
     /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
     id?: string
     /** @example "2021-01-01T00:00:00Z" */
@@ -1373,7 +1379,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiSource {
     type?: SourceType
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiStack {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
     /**
      * Accounts included in the stack
      * @example ["[0123456789]"]
@@ -1385,7 +1391,12 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiStack {
      */
     createdAt?: string
     /** Stack evaluations history, including insight evaluations and compliance evaluations */
-    evaluations?: GitlabComKeibiengineKeibiEnginePkgDescribeApiStackEvaluation[]
+    evaluations?: GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluation[]
+    /**
+     * Stack resource types
+     * @example ["[Microsoft.Compute/virtualMachines]"]
+     */
+    resourceTypes?: string[]
     /**
      * Stack resources list
      * @example ["[/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1]"]
@@ -1405,7 +1416,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiStack {
     updatedAt?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest {
     /**
      * Benchmarks to add to the stack
      * @example ["[azure_cis_v140"," azure_cis_v140_1"," azure_cis_v140_1_1]"]
@@ -1418,7 +1429,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequ
     stackId: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiStackEvaluation {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluation {
     /**
      * Evaluation creation date
      * @example "2020-01-01T00:00:00Z"
@@ -1441,10 +1452,10 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiStackEvaluation {
     type?: string
 }
 
-export type GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest =
+export type GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest =
     object
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest {
     /**
      * Benchmark ID to evaluate
      * @example "azure_cis_v1"
@@ -1462,7 +1473,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEv
     resourceIDs?: string[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest {
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest {
     /**
      * Connection ID to evaluate
      * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
@@ -1480,24 +1491,25 @@ export interface GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEval
     resourceIDs?: string[]
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgDescribeEnumsDescribeTriggerType {
+export enum GithubComKaytuIoKaytuEnginePkgDescribeEnumsDescribeTriggerType {
     DescribeTriggerTypeInitialDiscovery = 'initial_discovery',
     DescribeTriggerTypeScheduled = 'scheduled',
     DescribeTriggerTypeManual = 'manual',
+    DescribeTriggerTypeStack = 'stack',
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgInsightApiInsightJobStatus {
+export enum GithubComKaytuIoKaytuEnginePkgInsightApiInsightJobStatus {
     InsightJobInProgress = 'IN_PROGRESS',
     InsightJobFailed = 'FAILED',
     InsightJobSucceeded = 'SUCCEEDED',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInsightEsInsightConnection {
+export interface GithubComKaytuIoKaytuEnginePkgInsightEsInsightConnection {
     connection_id?: string
     original_id?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource {
+export interface GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource {
     /** AccountID */
     account_id?: string
     /** Description */
@@ -1505,7 +1517,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource {
     /** ExecutedAt is when the query is executed */
     executed_at?: number
     /** IncludedConnections list of the connections ids of the resources included in this insight */
-    included_connections?: GitlabComKeibiengineKeibiEnginePkgInsightEsInsightConnection[]
+    included_connections?: GithubComKaytuIoKaytuEnginePkgInsightEsInsightConnection[]
     /** InsightID is the ID of insight which has been executed */
     insight_id?: number
     /** Internal hidden to user */
@@ -1519,7 +1531,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource {
     /** Query */
     query?: string
     /** ResourceType shows which collection of docs this resource belongs to */
-    resource_type?: GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResourceType
+    resource_type?: GithubComKaytuIoKaytuEnginePkgInsightEsInsightResourceType
     /** Result of query */
     result?: number
     s3_location?: string
@@ -1527,14 +1539,14 @@ export interface GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource {
     source_id?: string
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResourceType {
+export enum GithubComKaytuIoKaytuEnginePkgInsightEsInsightResourceType {
     InsightResourceHistory = 'history',
     InsightResourceLast = 'last',
     InsightResourceProviderHistory = 'provider_history',
     InsightResourceProviderLast = 'provider_last',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiAWSResource {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAWSResource {
     attributes?: Record<string, string>
     location?: string
     providerConnectionID?: string
@@ -1546,12 +1558,12 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiAWSResource {
     resourceTypeName?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiAllResource {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAllResource {
     attributes?: Record<string, string>
     /** The Region of the resource */
     location?: string
     /** Resource Provider */
-    provider?: GitlabComKeibiengineKeibiEnginePkgInventoryApiSourceType
+    provider?: GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType
     /** Provider Connection Id */
     providerConnectionID?: string
     /** Provider Connection Name */
@@ -1568,7 +1580,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiAllResource {
     resourceTypeName?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiAzureResource {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAzureResource {
     attributes?: Record<string, string>
     /** The Region of the resource */
     location?: string
@@ -1590,19 +1602,20 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiAzureResource {
     resourceTypeName?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiConnectionData {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData {
     connectionID?: string
     cost?: number
     count?: number
     lastInventory?: string
+    oldCount?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiConnectionFull {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionFull {
     id?: string
     name?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiCostMetric {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
     /** @example "azure" */
     connector?: SourceType
     cost_dimension_name?: string
@@ -1611,18 +1624,23 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiCostMetric {
     total_cost?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiCostTrendDatapoint {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint {
     count?: number
     date?: string
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgInventoryApiDirectionType {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair {
+    count?: number
+    old_count?: number
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgInventoryApiDirectionType {
     DirectionAscending = 'asc',
     DirectionDescending = 'desc',
 }
 
 /** if you provide two values for same filter OR operation would be used if you provide value for two filters AND operation would be used */
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiFilters {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiFilters {
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
     category?: string[]
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
@@ -1637,57 +1655,57 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiFilters {
     tags?: Record<string, string>
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAWSResourceResponse {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse {
     /** A list of AWS resources with details */
-    resources?: GitlabComKeibiengineKeibiEnginePkgInventoryApiAWSResource[]
+    resources?: GithubComKaytuIoKaytuEnginePkgInventoryApiAWSResource[]
     /** Number of returned resources */
     totalCount?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAzureResourceResponse {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse {
     /** A list of Azure resources with details */
-    resources?: GitlabComKeibiengineKeibiEnginePkgInventoryApiAzureResource[]
+    resources?: GithubComKaytuIoKaytuEnginePkgInventoryApiAzureResource[]
     /** Number of returned resources */
     totalCount?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersRequest {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest {
     /** search filters */
-    filters: GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceFilters
+    filters: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceFilters
     /** search query */
     query?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersResponse {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse {
     /** search filters */
-    filters?: GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceFiltersResponse
+    filters?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceFiltersResponse
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest {
     /** Resource ID */
     ID: string
     /** Resource ID */
     resourceType: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest {
     /** search filters */
-    filters: GitlabComKeibiengineKeibiEnginePkgInventoryApiFilters
-    page: GitlabComKeibiengineKeibiEnginePkgInventoryApiPage
+    filters: GithubComKaytuIoKaytuEnginePkgInventoryApiFilters
+    page: GithubComKaytuIoKaytuEnginePkgInventoryApiPage
     /** search query */
     query?: string
     /** NOTE: we don't support multi-field sort for now, if sort is empty, results would be sorted by first column */
-    sorts?: GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceSortItem[]
+    sorts?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesResponse {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse {
     /** A list of AWS resources with details */
-    resources?: GitlabComKeibiengineKeibiEnginePkgInventoryApiAllResource[]
+    resources?: GithubComKaytuIoKaytuEnginePkgInventoryApiAllResource[]
     /** Number of returned resources */
     totalCount?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositionResponse {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse {
     /** @example 100 */
     others?: number
     top_values?: Record<string, number>
@@ -1697,59 +1715,65 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositi
     total_count?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostMetricsResponse {
-    metrics?: GitlabComKeibiengineKeibiEnginePkgInventoryApiCostMetric[]
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse {
+    metrics?: GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric[]
     /** @example 1000 */
     total_cost?: number
     /** @example 10 */
     total_count?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest {
     /** Labels */
     labels?: string[]
     /** Specifies the Provider */
-    providerFilter?: GitlabComKeibiengineKeibiEnginePkgInventoryApiSourceType
+    providerFilter?: GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType
     /** Specifies the Title */
     titleFilter?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeCompositionResponse {
-    others?: number
-    top_values?: Record<string, number>
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse {
+    others?: GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
+    top_values?: Record<
+        string,
+        GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
+    >
     total_count?: number
     total_value_count?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetadataResponse {
-    resource_types?: GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType[]
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse {
+    resource_types?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType[]
     /** @example 100 */
     total_resource_type_count?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetricsResponse {
-    resource_types?: GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType[]
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse {
+    resource_types?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType[]
     total_count?: number
+    total_old_count?: number
     total_resource_types?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetadataResponse {
-    services?: GitlabComKeibiengineKeibiEnginePkgInventoryApiService[]
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse {
+    services?: GithubComKaytuIoKaytuEnginePkgInventoryApiService[]
     /** @example 100 */
     total_service_count?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetricsResponse {
-    services?: GitlabComKeibiengineKeibiEnginePkgInventoryApiService[]
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse {
+    services?: GithubComKaytuIoKaytuEnginePkgInventoryApiService[]
     /** @example 10000 */
     total_count?: number
+    /** @example 9000 */
+    total_old_count?: number
     /** @example 50 */
     total_services?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummariesResponse {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse {
     /** A list of service summeries */
-    services?: GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary[]
+    services?: GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary[]
     /**
      * Number of services
      * @example 20
@@ -1757,12 +1781,12 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummar
     totalCount?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationByProviderResponse {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse {
     /** Name of the region */
     name?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse {
     /** Region */
     location?: string
     /** Number of resources in the region */
@@ -1771,13 +1795,13 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse 
     resourceCountChangePercent?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiPage {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiPage {
     no?: number
     size?: number
 }
 
 /** if you provide two values for same filter OR operation would be used if you provide value for two filters AND operation would be used */
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceFilters {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceFilters {
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
     category?: string[]
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
@@ -1796,17 +1820,17 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceFilters {
     tagValues?: Record<string, string[]>
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceFiltersResponse {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceFiltersResponse {
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
     category?: Record<string, string>
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
-    connections?: GitlabComKeibiengineKeibiEnginePkgInventoryApiConnectionFull[]
+    connections?: GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionFull[]
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
     location?: string[]
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
     provider?: string[]
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
-    resourceType?: GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeFull[]
+    resourceType?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeFull[]
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
     service?: Record<string, string>
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
@@ -1815,7 +1839,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceFiltersRe
     tagValues?: Record<string, string[]>
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceSortItem {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem {
     direction?: 'asc' | 'desc'
     field?:
         | 'resourceID'
@@ -1827,7 +1851,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceSortItem 
         | 'connectionID'
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType {
     /** List supported steampipe Attributes (columns) for this resource type - Metadata (GET only) */
     attributes?: string[]
     /** List of Compliance that support this Resource Type - Metadata (GET only) */
@@ -1874,23 +1898,23 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType {
     tags?: Record<string, string[]>
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeFull {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeFull {
     resource_type_arn?: string
     resource_type_name?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeTrendDatapoint {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint {
     count?: number
     date?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest {
-    page: GitlabComKeibiengineKeibiEnginePkgInventoryApiPage
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest {
+    page: GithubComKaytuIoKaytuEnginePkgInventoryApiPage
     /** NOTE: we don't support multi-field sort for now, if sort is empty, results would be sorted by first column */
-    sorts?: GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQuerySortItem[]
+    sorts?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryResponse {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse {
     /** Column names */
     headers?: string[]
     /** Query */
@@ -1901,7 +1925,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryResponse 
     title?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiService {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiService {
     /** @example "Azure" */
     connector?: SourceType
     logo_uri?: string
@@ -1909,7 +1933,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiService {
     old_resource_count?: number
     /** @example 100 */
     resource_count?: number
-    resource_types?: GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType[]
+    resource_types?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType[]
     /** @example "Compute" */
     service_label?: string
     /** @example "compute" */
@@ -1917,7 +1941,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiService {
     tags?: Record<string, string[]>
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary {
     /**
      * Cloud provider
      * @example "Azure"
@@ -1940,7 +1964,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary {
     serviceName?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem {
     /** Category (Tags[category]) */
     category?: string
     /** Description */
@@ -1957,13 +1981,13 @@ export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem {
     title?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQuerySortItem {
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem {
     direction?: 'asc' | 'desc'
     /** fill this with column name */
     field?: string
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgInventoryApiSortFieldType {
+export enum GithubComKaytuIoKaytuEnginePkgInventoryApiSortFieldType {
     SortFieldResourceID = 'resourceID',
     SortFieldName = 'resourceName',
     SortFieldSourceType = 'provider',
@@ -1973,30 +1997,30 @@ export enum GitlabComKeibiengineKeibiEnginePkgInventoryApiSortFieldType {
     SortFieldSourceID = 'connectionID',
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgInventoryApiSourceType {
+export enum GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType {
     SourceCloudAWS = 'AWS',
     SourceCloudAzure = 'Azure',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest {
+export interface GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest {
     key?: string
     value?: any
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadata {
-    key?: GitlabComKeibiengineKeibiEnginePkgMetadataModelsMetadataKey
-    type?: GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadataType
+export interface GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata {
+    key?: GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey
+    type?: GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadataType
     value?: string
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadataType {
+export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadataType {
     ConfigMetadataTypeString = 'string',
     ConfigMetadataTypeInt = 'int',
     ConfigMetadataTypeBool = 'bool',
     ConfigMetadataTypeJSON = 'json',
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgMetadataModelsMetadataKey {
+export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyWorkspaceOwnership = 'workspace_ownership',
     MetadataKeyWorkspaceID = 'workspace_id',
     MetadataKeyWorkspaceName = 'workspace_name',
@@ -2025,44 +2049,18 @@ export enum GitlabComKeibiengineKeibiEnginePkgMetadataModelsMetadataKey {
     MetadataKeyDataRetention = 'data_retention_duration',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiAWSCredential {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredential {
     accessKey?: string
     secretKey?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential {
     clientID?: string
     clientSecret?: string
     tenantID?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector {
-    ID?: number
-    /** @example true */
-    allowNewConnections?: boolean
-    category?: string
-    /** @example 1 */
-    connectionCount?: number
-    connectionFederator?: string
-    description?: string
-    displayName?: string
-    logo?: string
-    /** @example 10 */
-    maxConnectionsLimit?: number
-    name?: string
-    /**
-     * Cloud provider
-     * @example "Azure"
-     */
-    sourceType?: SourceType
-    /**
-     * ACTIVE, NOT_SETUP
-     * @example "ACTIVE"
-     */
-    state?: 'ACTIVE' | 'NOT_SETUP'
-}
-
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics {
     /** @example 20 */
     connectionsEnabled?: number
     /** @example 15 */
@@ -2073,11 +2071,11 @@ export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics {
     unhealthyConnections?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest {
-    state?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionLifecycleState
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest {
+    state?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     /** @example "scheduled" */
     assetDiscoveryMethod?: SourceAssetDiscoveryMethodType
     /** @example "Azure" */
@@ -2101,8 +2099,10 @@ export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection {
     /** @example "2023-05-07T00:00:00Z" */
     lastInventory?: string
     /** @example "enabled" */
-    lifecycleState?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionLifecycleState
+    lifecycleState?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
     metadata?: Record<string, any>
+    /** @example 100 */
+    oldResourceCount?: number
     /** @example "2023-05-07T00:00:00Z" */
     onboardDate?: string
     /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
@@ -2113,13 +2113,13 @@ export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection {
     resourceCount?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest {
     connectors?: string[]
     health?: SourceHealthStatus
-    state?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionLifecycleState
+    state?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionLifecycleState {
+export enum GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState {
     ConnectionLifecycleStatePending = 'pending',
     ConnectionLifecycleStateInitialDiscovery = 'initial-discovery',
     ConnectionLifecycleStateEnabled = 'enabled',
@@ -2127,7 +2127,7 @@ export enum GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionLifecycleState
     ConnectionLifecycleStateDeleted = 'deleted',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnector {
     allowNewConnections?: boolean
     autoOnboardSupport?: boolean
     description?: string
@@ -2143,7 +2143,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector {
     tags?: Record<string, any>
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount {
     allowNewConnections?: boolean
     autoOnboardSupport?: boolean
     connection_count?: number
@@ -2160,28 +2160,23 @@ export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount {
     tags?: Record<string, any>
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorState {
-    ConnectorStateActive = 'ACTIVE',
-    ConnectorStateNotSetup = 'NOT_SETUP',
-}
-
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest {
     config?: any
     name?: string
     /** @example "Azure" */
     source_type?: SourceType
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse {
     id?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse {
     id?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential {
-    connections?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection[]
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
+    connections?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     connectorType?: SourceType
     credentialType?: SourceCredentialType
     enabled?: boolean
@@ -2197,45 +2192,49 @@ export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential {
     unhealthy_connections?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest {
     source_ids?: string[]
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiListConnectionSummaryResponse {
-    /** @example 100 */
-    TotalResourceCount?: number
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse {
     /** @example 10 */
     connectionCount?: number
-    connections?: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection[]
+    connections?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    /** @example 10 */
+    oldConnectionCount?: number
     /** @example 1000 */
     totalCost?: number
     /** @example 10 */
     totalDisabledCount?: number
+    /** @example 100 */
+    totalOldResourceCount?: number
+    /** @example 100 */
+    totalResourceCount?: number
     /** @example 10 */
     totalUnhealthyCount?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest {
-    config?: GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceConfigAWS
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest {
+    config?: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceConfigAWS
     description?: string
     email?: string
     name?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest {
-    config?: GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceConfigAzure
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest {
+    config?: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceConfigAzure
     description?: string
     name?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceConfigAWS {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiSourceConfigAWS {
     accessKey: string
     accountId?: string
     regions?: string[]
     secretKey: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceConfigAzure {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiSourceConfigAzure {
     clientId: string
     clientSecret: string
     objectId: string
@@ -2244,46 +2243,46 @@ export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceConfigAzure {
     tenantId: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest {
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest {
     config?: any
     /** @example "Azure" */
     connector?: SourceType
     name?: string
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgSummarizerApiSummarizerJobStatus {
+export enum GithubComKaytuIoKaytuEnginePkgSummarizerApiSummarizerJobStatus {
     SummarizerJobInProgress = 'IN_PROGRESS',
     SummarizerJobFailed = 'FAILED',
     SummarizerJobSucceeded = 'SUCCEEDED',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest {
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest {
     newName?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest {
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest {
     newOrgID?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest {
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest {
     newOwnerUserID?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest {
-    newName?: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiTier
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest {
+    newName?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest {
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest {
     description?: string
     name?: string
     tier?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceResponse {
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse {
     id?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiOrganizationResponse {
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganizationResponse {
     addressLine1?: string
     addressLine2?: string
     addressLine3?: string
@@ -2298,30 +2297,30 @@ export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiOrganizationRespo
     url?: string
 }
 
-export enum GitlabComKeibiengineKeibiEnginePkgWorkspaceApiTier {
+export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier {
     TierFree = 'FREE',
     TierTeams = 'TEAMS',
     TierEnterprise = 'ENTERPRISE',
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspace {
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
     description?: string
     id?: string
     name?: string
     organization_id?: number
     owner_id?: string
     status?: string
-    tier?: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiTier
+    tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
     uri?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimits {
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits {
     maxConnections?: number
     maxResources?: number
     maxUsers?: number
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUsage {
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage {
     currentConnections?: number
     currentResources?: number
     currentUsers?: number
@@ -2332,12 +2331,12 @@ export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUs
     name?: string
 }
 
-export interface GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse {
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     createdAt?: string
     description?: string
     id?: string
     name?: string
-    organization?: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiOrganizationResponse
+    organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganizationResponse
     ownerId?: string
     status?: string
     tier?: string
@@ -2629,7 +2628,7 @@ export class Api<
          */
         apiV1KeyDetail: (id: string, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
+                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
                 any
             >({
                 path: `/auth/api/v1/key/${id}`,
@@ -2650,7 +2649,7 @@ export class Api<
          */
         apiV1KeyActivateCreate: (id: string, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
+                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
                 any
             >({
                 path: `/auth/api/v1/key/${id}/activate`,
@@ -2688,7 +2687,7 @@ export class Api<
          */
         apiV1KeySuspendCreate: (id: string, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
+                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
                 any
             >({
                 path: `/auth/api/v1/key/${id}/suspend`,
@@ -2708,11 +2707,11 @@ export class Api<
          * @secure
          */
         apiV1KeyCreateCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest,
+            request: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse,
+                GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
                 any
             >({
                 path: `/auth/api/v1/key/create`,
@@ -2734,11 +2733,11 @@ export class Api<
          * @secure
          */
         apiV1KeyRoleCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest,
+            request: GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
+                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
                 any
             >({
                 path: `/auth/api/v1/key/role`,
@@ -2761,7 +2760,7 @@ export class Api<
          */
         apiV1KeysList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey[],
+                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey[],
                 any
             >({
                 path: `/auth/api/v1/keys`,
@@ -2782,7 +2781,7 @@ export class Api<
          */
         apiV1RoleKeysDetail: (roleName: string, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey[],
+                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey[],
                 any
             >({
                 path: `/auth/api/v1/role/${roleName}/keys`,
@@ -2802,10 +2801,7 @@ export class Api<
          * @secure
          */
         apiV1RoleUsersDetail: (roleName: string, params: RequestParams = {}) =>
-            this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser[], any>({
                 path: `/auth/api/v1/role/${roleName}/users`,
                 method: 'GET',
                 secure: true,
@@ -2824,7 +2820,7 @@ export class Api<
          */
         apiV1RolesList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse[],
+                GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse[],
                 any
             >({
                 path: `/auth/api/v1/roles`,
@@ -2845,7 +2841,7 @@ export class Api<
          */
         apiV1RolesDetail: (roleName: string, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse,
+                GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
                 any
             >({
                 path: `/auth/api/v1/roles/${roleName}`,
@@ -2866,7 +2862,7 @@ export class Api<
          */
         apiV1UserDetail: (userId: string, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse,
+                GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
                 any
             >({
                 path: `/auth/api/v1/user/${userId}`,
@@ -2890,7 +2886,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiMembership[],
+                GithubComKaytuIoKaytuEnginePkgAuthApiMembership[],
                 any
             >({
                 path: `/auth/api/v1/user/${userId}/workspace/membership`,
@@ -2934,7 +2930,7 @@ export class Api<
          * @secure
          */
         apiV1UserInviteCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest,
+            request: GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
@@ -2980,7 +2976,7 @@ export class Api<
          * @secure
          */
         apiV1UserRoleBindingUpdate: (
-            request: GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest,
+            request: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
@@ -3003,7 +2999,7 @@ export class Api<
          */
         apiV1UserRoleBindingsList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiGetRoleBindingsResponse,
+                GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
                 any
             >({
                 path: `/auth/api/v1/user/role/bindings`,
@@ -3023,11 +3019,11 @@ export class Api<
          * @secure
          */
         apiV1UsersList: (
-            request: GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest,
+            request: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse[],
+                GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse[],
                 any
             >({
                 path: `/auth/api/v1/users`,
@@ -3050,7 +3046,7 @@ export class Api<
          */
         apiV1WorkspaceRoleBindingsList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding[],
+                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding[],
                 any
             >({
                 path: `/auth/api/v1/workspace/role/bindings`,
@@ -3071,11 +3067,11 @@ export class Api<
          * @secure
          */
         apiV1AlarmsTopCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRequest,
+            request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
                 any
             >({
                 path: `/compliance/api/v1/alarms/top`,
@@ -3098,7 +3094,7 @@ export class Api<
          */
         apiV1AssignmentsList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[],
                 any
             >({
                 path: `/compliance/api/v1/assignments`,
@@ -3146,7 +3142,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
                 any
             >({
                 path: `/compliance/api/v1/assignments/${benchmarkId}/connection/${connectionId}`,
@@ -3171,7 +3167,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignedSource[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource[],
                 any
             >({
                 path: `/compliance/api/v1/assignments/benchmark/${benchmarkId}`,
@@ -3196,7 +3192,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[],
                 any
             >({
                 path: `/compliance/api/v1/assignments/connection/${connectionId}`,
@@ -3221,7 +3217,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
                 any
             >({
                 path: `/compliance/api/v1/benchmark/${benchmarkId}/summary`,
@@ -3252,7 +3248,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkResultTrend,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
                 any
             >({
                 path: `/compliance/api/v1/benchmark/${benchmarkId}/summary/result/trend`,
@@ -3282,7 +3278,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
                 any
             >({
                 path: `/compliance/api/v1/benchmark/${benchmarkId}/tree`,
@@ -3305,7 +3301,7 @@ export class Api<
          */
         apiV1BenchmarksList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark[],
                 any
             >({
                 path: `/compliance/api/v1/benchmarks`,
@@ -3330,7 +3326,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
                 any
             >({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}`,
@@ -3355,7 +3351,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy[],
                 any
             >({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies`,
@@ -3382,7 +3378,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
                 any
             >({
                 path: `/compliance/api/v1/benchmarks/policies/${policyId}`,
@@ -3412,7 +3408,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
                 any
             >({
                 path: `/compliance/api/v1/benchmarks/summary`,
@@ -3434,11 +3430,11 @@ export class Api<
          * @secure
          */
         apiV1FindingsCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsRequest,
+            request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
                 any
             >({
                 path: `/compliance/api/v1/findings`,
@@ -3466,7 +3462,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
                 any
             >({
                 path: `/compliance/api/v1/findings/${benchmarkId}/${field}/top/${count}`,
@@ -3496,7 +3492,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetricsResponse,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
                 any
             >({
                 path: `/compliance/api/v1/findings/metrics`,
@@ -3533,7 +3529,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[],
                 any
             >({
                 path: `/compliance/api/v1/insight`,
@@ -3566,7 +3562,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
                 any
             >({
                 path: `/compliance/api/v1/insight/${insightId}`,
@@ -3601,7 +3597,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[],
                 any
             >({
                 path: `/compliance/api/v1/insight/${insightId}/trend`,
@@ -3637,7 +3633,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup[],
                 any
             >({
                 path: `/compliance/api/v1/insight/group`,
@@ -3671,7 +3667,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
                 any
             >({
                 path: `/compliance/api/v1/insight/group/${insightGroupId}`,
@@ -3707,7 +3703,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroupTrendResponse,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
                 any
             >({
                 path: `/compliance/api/v1/insight/group/${insightGroupId}/trend`,
@@ -3735,7 +3731,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[],
                 any
             >({
                 path: `/compliance/api/v1/metadata/insight`,
@@ -3760,7 +3756,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
                 any
             >({
                 path: `/compliance/api/v1/metadata/insight/${insightId}`,
@@ -3821,17 +3817,16 @@ export class Api<
          * @secure
          */
         apiV1QueriesDetail: (queryId: string, params: RequestParams = {}) =>
-            this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiQuery,
-                any
-            >({
-                path: `/compliance/api/v1/queries/${queryId}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiQuery, any>(
+                {
+                    path: `/compliance/api/v1/queries/${queryId}`,
+                    method: 'GET',
+                    secure: true,
+                    type: ContentType.Json,
+                    format: 'json',
+                    ...params,
+                }
+            ),
     }
     inventory = {
         /**
@@ -3845,7 +3840,7 @@ export class Api<
          */
         apiV1LocationsDetail: (connector: string, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationByProviderResponse[],
+                GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse[],
                 any
             >({
                 path: `/inventory/api/v1/locations/${connector}`,
@@ -3865,11 +3860,11 @@ export class Api<
          * @secure
          */
         apiV1QueryList: (
-            request: GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem[],
+                GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem[],
                 any
             >({
                 path: `/inventory/api/v1/query`,
@@ -3891,11 +3886,11 @@ export class Api<
          */
         apiV1QueryCreate: (
             queryId: string,
-            request: GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest,
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
                 any
             >({
                 path: `/inventory/api/v1/query/${queryId}`,
@@ -3917,7 +3912,7 @@ export class Api<
          * @secure
          */
         apiV1QueryCountList: (
-            request: GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
             params: RequestParams = {}
         ) =>
             this.request<number, any>({
@@ -3939,7 +3934,7 @@ export class Api<
          * @secure
          */
         apiV1ResourceCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest,
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
             params: RequestParams = {}
         ) =>
             this.request<Record<string, string>, any>({
@@ -3962,7 +3957,7 @@ export class Api<
          * @secure
          */
         apiV1ResourcesCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
             query?: {
                 /** Common filter */
                 common?: 'true' | 'false' | 'all'
@@ -3970,7 +3965,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
                 any
             >({
                 path: `/inventory/api/v1/resources`,
@@ -3993,7 +3988,7 @@ export class Api<
          * @secure
          */
         apiV1ResourcesAwsCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
             query?: {
                 /** Common filter */
                 common?: 'true' | 'false' | 'all'
@@ -4001,7 +3996,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAWSResourceResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
                 any
             >({
                 path: `/inventory/api/v1/resources/aws`,
@@ -4024,7 +4019,7 @@ export class Api<
          * @secure
          */
         apiV1ResourcesAzureCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
             query?: {
                 /** Common filter */
                 common?: 'true' | 'false' | 'all'
@@ -4032,7 +4027,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAzureResourceResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
                 any
             >({
                 path: `/inventory/api/v1/resources/azure`,
@@ -4074,7 +4069,7 @@ export class Api<
          * @secure
          */
         apiV1ResourcesFiltersCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersRequest,
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
             query?: {
                 /** Common filter */
                 common?: 'true' | 'false' | 'all'
@@ -4082,7 +4077,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
                 any
             >({
                 path: `/inventory/api/v1/resources/filters`,
@@ -4122,7 +4117,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse[],
+                GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse[],
                 any
             >({
                 path: `/inventory/api/v1/resources/regions`,
@@ -4155,7 +4150,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse[],
+                GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse[],
                 any
             >({
                 path: `/inventory/api/v1/resources/top/regions`,
@@ -4190,7 +4185,7 @@ export class Api<
             this.request<
                 Record<
                     string,
-                    GitlabComKeibiengineKeibiEnginePkgInventoryApiConnectionData
+                    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData
                 >,
                 any
             >({
@@ -4223,7 +4218,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiConnectionData,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
                 any
             >({
                 path: `/inventory/api/v2/connections/data/${connectionId}`,
@@ -4260,7 +4255,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositionResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
                 any
             >({
                 path: `/inventory/api/v2/cost/composition`,
@@ -4301,7 +4296,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostMetricsResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
                 any
             >({
                 path: `/inventory/api/v2/cost/metric`,
@@ -4338,7 +4333,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiCostTrendDatapoint[],
+                GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
                 any
             >({
                 path: `/inventory/api/v2/cost/trend`,
@@ -4375,7 +4370,7 @@ export class Api<
             this.request<
                 Record<
                     string,
-                    GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource[]
+                    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[]
                 >,
                 any
             >({
@@ -4407,7 +4402,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource[],
+                GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[],
                 any
             >({
                 path: `/inventory/api/v2/insights/${insightId}`,
@@ -4442,7 +4437,7 @@ export class Api<
             this.request<
                 Record<
                     string,
-                    GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource[]
+                    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[]
                 >,
                 any
             >({
@@ -4465,7 +4460,7 @@ export class Api<
          */
         apiV2InsightsJobDetail: (jobId: string, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource,
+                GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
                 any
             >({
                 path: `/inventory/api/v2/insights/job/${jobId}`,
@@ -4500,7 +4495,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetadataResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
                 any
             >({
                 path: `/inventory/api/v2/metadata/resourcetype`,
@@ -4525,7 +4520,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
                 any
             >({
                 path: `/inventory/api/v2/metadata/resourcetype/${resourceType}`,
@@ -4558,7 +4553,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetadataResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
                 any
             >({
                 path: `/inventory/api/v2/metadata/services`,
@@ -4583,7 +4578,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiService,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiService,
                 any
             >({
                 path: `/inventory/api/v2/metadata/services/${serviceName}`,
@@ -4612,12 +4607,14 @@ export class Api<
                 /** Connection IDs to filter by */
                 connectionId?: string[]
                 /** timestamp for resource count in epoch seconds */
-                time?: string
+                endTime?: string
+                /** timestamp for resource count change comparison in epoch seconds */
+                startTime?: string
             },
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeCompositionResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
                 any
             >({
                 path: `/inventory/api/v2/resources/composition/${key}`,
@@ -4664,7 +4661,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetricsResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
                 any
             >({
                 path: `/inventory/api/v2/resources/metric`,
@@ -4698,7 +4695,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
                 any
             >({
                 path: `/inventory/api/v2/resources/metric/${resourceType}`,
@@ -4804,7 +4801,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeTrendDatapoint[],
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[],
                 any
             >({
                 path: `/inventory/api/v2/resources/trend`,
@@ -4847,7 +4844,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetricsResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
                 any
             >({
                 path: `/inventory/api/v2/services/metric`,
@@ -4880,7 +4877,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiService,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiService,
                 any
             >({
                 path: `/inventory/api/v2/services/metric/${serviceName}`,
@@ -4920,7 +4917,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummariesResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
                 any
             >({
                 path: `/inventory/api/v2/services/summary`,
@@ -4954,7 +4951,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
                 any
             >({
                 path: `/inventory/api/v2/services/summary/${serviceName}`,
@@ -5014,7 +5011,7 @@ export class Api<
          * @secure
          */
         apiV1MetadataCreate: (
-            req: GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest,
+            req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
@@ -5037,7 +5034,7 @@ export class Api<
          */
         apiV1MetadataDetail: (key: string, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadata,
+                GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
                 any
             >({
                 path: `/metadata/api/v1/metadata/${key}`,
@@ -5049,40 +5046,6 @@ export class Api<
     }
     onboard = {
         /**
-         * @description Returns the list of connectors for catalog page.
-         *
-         * @tags onboard
-         * @name ApiV1CatalogConnectorsList
-         * @summary Get catalog connectors
-         * @request GET:/onboard/api/v1/catalog/connectors
-         * @secure
-         */
-        apiV1CatalogConnectorsList: (
-            query?: {
-                /** Category filter */
-                category?: string
-                /** State filter */
-                state?: string
-                /** Minimum connection filter */
-                minConnection?: string
-                /** ID filter */
-                id?: string
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector[],
-                any
-            >({
-                path: `/onboard/api/v1/catalog/connectors`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Returns the list of metrics for catalog page.
          *
          * @tags onboard
@@ -5093,7 +5056,7 @@ export class Api<
          */
         apiV1CatalogMetricsList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
                 any
             >({
                 path: `/onboard/api/v1/catalog/metrics`,
@@ -5114,7 +5077,7 @@ export class Api<
          */
         apiV1ConnectionsStateCreate: (
             connectionId: number,
-            request: GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+            request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
@@ -5136,7 +5099,7 @@ export class Api<
          * @secure
          */
         apiV1ConnectionsCountList: (
-            type: GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest,
+            type: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
             params: RequestParams = {}
         ) =>
             this.request<number, any>({
@@ -5182,7 +5145,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiListConnectionSummaryResponse,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
                 any
             >({
                 path: `/onboard/api/v1/connections/summary`,
@@ -5214,7 +5177,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
                 any
             >({
                 path: `/onboard/api/v1/connections/summary/${connectionId}`,
@@ -5237,7 +5200,7 @@ export class Api<
          */
         apiV1ConnectorList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount[],
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount[],
                 any
             >({
                 path: `/onboard/api/v1/connector`,
@@ -5261,7 +5224,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
                 any
             >({
                 path: `/onboard/api/v1/connector/${connectorName}`,
@@ -5300,7 +5263,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential[],
+                GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[],
                 any
             >({
                 path: `/onboard/api/v1/credential`,
@@ -5321,11 +5284,11 @@ export class Api<
          * @secure
          */
         apiV1CredentialCreate: (
-            config: GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest,
+            config: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
                 any
             >({
                 path: `/onboard/api/v1/credential`,
@@ -5371,7 +5334,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
                 any
             >({
                 path: `/onboard/api/v1/credential/${credentialId}`,
@@ -5392,7 +5355,7 @@ export class Api<
          */
         apiV1CredentialUpdate: (
             credentialId: string,
-            config: GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest,
+            config: GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
@@ -5418,7 +5381,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection[],
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[],
                 any
             >({
                 path: `/onboard/api/v1/credential/${credentialId}/autoonboard`,
@@ -5515,7 +5478,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential[],
+                GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[],
                 any
             >({
                 path: `/onboard/api/v1/credential/sources/list`,
@@ -5554,7 +5517,7 @@ export class Api<
          */
         apiV1SourceDetail: (sourceId: number, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
                 any
             >({
                 path: `/onboard/api/v1/source/${sourceId}`,
@@ -5578,7 +5541,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
                 any
             >({
                 path: `/onboard/api/v1/source/${sourceId}/credentials`,
@@ -5622,7 +5585,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
                 any
             >({
                 path: `/onboard/api/v1/source/${sourceId}/healthcheck`,
@@ -5646,7 +5609,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
                 any
             >({
                 path: `/onboard/api/v1/source/account/${accountId}`,
@@ -5666,11 +5629,11 @@ export class Api<
          * @secure
          */
         apiV1SourceAwsCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest,
+            request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
                 any
             >({
                 path: `/onboard/api/v1/source/aws`,
@@ -5692,11 +5655,11 @@ export class Api<
          * @secure
          */
         apiV1SourceAzureCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest,
+            request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
                 any
             >({
                 path: `/onboard/api/v1/source/azure`,
@@ -5725,7 +5688,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection[],
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[],
                 any
             >({
                 path: `/onboard/api/v1/sources`,
@@ -5746,7 +5709,7 @@ export class Api<
          * @secure
          */
         apiV1SourcesCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest,
+            request: GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
             query?: {
                 /** Type */
                 type?: 'aws' | 'azure'
@@ -5754,7 +5717,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection[],
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[],
                 any
             >({
                 path: `/onboard/api/v1/sources`,
@@ -5888,7 +5851,7 @@ export class Api<
          * @secure
          */
         apiV1BenchmarkEvaluationTriggerUpdate: (
-            request: GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+            request: GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
             params: RequestParams = {}
         ) =>
             this.request<DescribeComplianceReportJob[], any>({
@@ -5911,7 +5874,7 @@ export class Api<
          * @secure
          */
         apiV1BenchmarkEvaluationsList: (
-            request: GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+            request: GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
             params: RequestParams = {}
         ) =>
             this.request<DescribeComplianceReportJob[], any>({
@@ -5952,7 +5915,7 @@ export class Api<
          * @secure
          */
         apiV1DescribeResourceCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest,
+            request: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
             params: RequestParams = {}
         ) =>
             this.request<AwsResources, any>({
@@ -6031,7 +5994,7 @@ export class Api<
          * @secure
          */
         apiV1InsightEvaluationTriggerUpdate: (
-            request: GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+            request: GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
             params: RequestParams = {}
         ) =>
             this.request<DescribeInsightJob[], any>({
@@ -6055,7 +6018,7 @@ export class Api<
          */
         apiV1InsightJobDetail: (jobId: string, params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob,
+                GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
                 any
             >({
                 path: `/schedule/api/v1/insight/job/${jobId}`,
@@ -6098,7 +6061,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail[],
+                GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail[],
                 any
             >({
                 path: `/schedule/api/v1/resource_type/${provider}`,
@@ -6119,7 +6082,7 @@ export class Api<
          */
         apiV1SourcesList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgDescribeApiSource[],
+                GithubComKaytuIoKaytuEnginePkgDescribeApiSource[],
                 any
             >({
                 path: `/schedule/api/v1/sources`,
@@ -6139,10 +6102,7 @@ export class Api<
          * @secure
          */
         apiV1SourcesDetail: (sourceId: string, params: RequestParams = {}) =>
-            this.request<
-                GitlabComKeibiengineKeibiEnginePkgDescribeApiSource,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiSource, any>({
                 path: `/schedule/api/v1/sources/${sourceId}`,
                 method: 'GET',
                 secure: true,
@@ -6170,7 +6130,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport[],
                 any
             >({
                 path: `/schedule/api/v1/sources/${sourceId}/jobs/compliance`,
@@ -6215,7 +6175,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource[],
+                GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource[],
                 any
             >({
                 path: `/schedule/api/v1/sources/${sourceId}/jobs/describe`,
@@ -6263,18 +6223,17 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GitlabComKeibiengineKeibiEnginePkgDescribeApiStack[],
-                any
-            >({
-                path: `/schedule/api/v1/stacks`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack[], any>(
+                {
+                    path: `/schedule/api/v1/stacks`,
+                    method: 'GET',
+                    query: query,
+                    secure: true,
+                    type: ContentType.Json,
+                    format: 'json',
+                    ...params,
+                }
+            ),
 
         /**
          * @description Delete a stack by ID
@@ -6304,10 +6263,7 @@ export class Api<
          * @secure
          */
         apiV1StacksDetail: (stackId: string, params: RequestParams = {}) =>
-            this.request<
-                GitlabComKeibiengineKeibiEnginePkgDescribeApiStack,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack, any>({
                 path: `/schedule/api/v1/stacks/${stackId}`,
                 method: 'GET',
                 secure: true,
@@ -6327,11 +6283,11 @@ export class Api<
          */
         apiV1StacksFindingsCreate: (
             stackId: string,
-            request: GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings,
+            request: GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
                 any
             >({
                 path: `/schedule/api/v1/stacks/${stackId}/findings`,
@@ -6365,7 +6321,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
                 any
             >({
                 path: `/schedule/api/v1/stacks/${stackId}/insight`,
@@ -6387,7 +6343,7 @@ export class Api<
          * @secure
          */
         apiV1StacksBenchmarkTriggerCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest,
+            request: GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
             params: RequestParams = {}
         ) =>
             this.request<DescribeComplianceReportJob[], any>({
@@ -6401,7 +6357,7 @@ export class Api<
             }),
 
         /**
-         * @description Create a stack by giving terraform statefile and additional resources
+         * @description Create a stack by giving terraform statefile and additional resources Config structure for azure: {tenantId: string, objectId: string, secretId: string, clientId: string, clientSecret:string} Config structure for aws: {accessKey: string, secretKey: string}
          *
          * @tags stack
          * @name ApiV1StacksCreateCreate
@@ -6420,19 +6376,40 @@ export class Api<
                 tag?: string
                 /** Additional Resources */
                 resources?: string[]
+                /** Config json structure */
+                config?: string
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GitlabComKeibiengineKeibiEnginePkgDescribeApiStack,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack, any>({
                 path: `/schedule/api/v1/stacks/create`,
                 method: 'POST',
                 body: data,
                 secure: true,
                 type: ContentType.FormData,
                 format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Describe stack resources. This is needed before triggering insights and benchmarks Config structure for azure: {tenantId: string, objectId: string, secretId: string, clientId: string, clientSecret:string} Config structure for aws: {accessKey: string, secretKey: string}
+         *
+         * @tags stack
+         * @name ApiV1StacksDescriberTriggerCreate
+         * @summary Trigger Stack Describer
+         * @request POST:/schedule/api/v1/stacks/describer/trigger
+         * @secure
+         */
+        apiV1StacksDescriberTriggerCreate: (
+            req: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/schedule/api/v1/stacks/describer/trigger`,
+                method: 'POST',
+                body: req,
+                secure: true,
+                type: ContentType.Json,
                 ...params,
             }),
 
@@ -6446,11 +6423,11 @@ export class Api<
          * @secure
          */
         apiV1StacksInsightTriggerCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest,
+            request: GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob[],
+                GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob[],
                 any
             >({
                 path: `/schedule/api/v1/stacks/insight/trigger`,
@@ -6478,18 +6455,17 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GitlabComKeibiengineKeibiEnginePkgDescribeApiStack[],
-                any
-            >({
-                path: `/schedule/api/v1/stacks/resource`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack[], any>(
+                {
+                    path: `/schedule/api/v1/stacks/resource`,
+                    method: 'GET',
+                    query: query,
+                    secure: true,
+                    type: ContentType.Json,
+                    format: 'json',
+                    ...params,
+                }
+            ),
 
         /**
          * No description
@@ -6520,11 +6496,11 @@ export class Api<
          * @secure
          */
         apiV1WorkspaceCreate: (
-            request: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest,
+            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceResponse,
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
                 any
             >({
                 path: `/workspace/api/v1/workspace`,
@@ -6568,7 +6544,7 @@ export class Api<
          */
         apiV1WorkspaceNameCreate: (
             workspaceId: string,
-            request: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
@@ -6591,7 +6567,7 @@ export class Api<
          */
         apiV1WorkspaceOrganizationCreate: (
             workspaceId: string,
-            request: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
@@ -6614,7 +6590,7 @@ export class Api<
          */
         apiV1WorkspaceOwnerCreate: (
             workspaceId: string,
-            request: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
@@ -6679,7 +6655,7 @@ export class Api<
          */
         apiV1WorkspaceTierCreate: (
             workspaceId: string,
-            request: GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
@@ -6702,7 +6678,7 @@ export class Api<
          */
         apiV1WorkspaceCurrentList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse,
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
                 any
             >({
                 path: `/workspace/api/v1/workspace/current`,
@@ -6724,7 +6700,7 @@ export class Api<
          */
         apiV1WorkspacesList: (params: RequestParams = {}) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse[],
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse[],
                 any
             >({
                 path: `/workspace/api/v1/workspaces`,
@@ -6770,7 +6746,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspace,
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
                 any
             >({
                 path: `/workspace/api/v1/workspaces/byid/${workspaceId}`,
@@ -6799,7 +6775,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
                 any
             >({
                 path: `/workspace/api/v1/workspaces/limits/${workspaceName}`,
@@ -6825,7 +6801,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimits,
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
                 any
             >({
                 path: `/workspace/api/v1/workspaces/limits/byid/${workspaceId}`,
