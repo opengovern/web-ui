@@ -14,11 +14,11 @@ import {
     CommandLineIcon,
     QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
-
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Title } from '@tremor/react'
+import { ReactComponent as KaytuLogo } from '../../assets/icons/logo-dark-sqare-sm-glyph 2.svg'
 
 const navigation = [
     {
@@ -133,13 +133,14 @@ export default function LoggedInLayout({
                                     </div>
                                 </Transition.Child>
                                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
+                                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4 ring-1 ring-white/10">
                                     <div className="flex h-16 shrink-0 items-center">
-                                        <img
-                                            className="h-8 w-auto"
-                                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                                            alt="Your Company"
-                                        />
+                                        {/* <img */}
+                                        {/*    className="h-8 w-auto" */}
+                                        {/*    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" */}
+                                        {/*    alt="Your Company" */}
+                                        {/* /> */}
+                                        <KaytuLogo className="h-8 w-auto" />
                                     </div>
                                     <nav className="flex flex-1 flex-col">
                                         {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
@@ -160,8 +161,8 @@ export default function LoggedInLayout({
                                                                 className={classNames(
                                                                     item.page ===
                                                                         currentPage
-                                                                        ? 'bg-gray-50 text-indigo-600 dark:bg-gray-800 dark:text-white'
-                                                                        : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800',
+                                                                        ? 'bg-blue-900/50 text-gray-200'
+                                                                        : 'text-gray-300 hover:bg-blue-900/50',
                                                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                                                 )}
                                                             >
@@ -189,11 +190,12 @@ export default function LoggedInLayout({
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
-                        <img
-                            className="h-8 w-auto"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                            alt="Your Company"
-                        />
+                        {/* <img */}
+                        {/*    className="h-8 w-auto" */}
+                        {/*    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" */}
+                        {/*    alt="Your Company" */}
+                        {/* /> */}
+                        <KaytuLogo />
                     </div>
                     <nav className="flex flex-1 flex-col">
                         {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
@@ -264,27 +266,6 @@ export default function LoggedInLayout({
                     />
 
                     <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
-                        {/* <form */}
-                        {/*    className="relative flex flex-1" */}
-                        {/*    action="#" */}
-                        {/*    method="GET" */}
-                        {/* > */}
-                        {/*    /!* eslint-disable-next-line jsx-a11y/label-has-associated-control *!/ */}
-                        {/*    <label htmlFor="search-field" className="sr-only"> */}
-                        {/*        Search */}
-                        {/*    </label> */}
-                        {/*    <MagnifyingGlassIcon */}
-                        {/*        className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400 dark:text-gray-300" */}
-                        {/*        aria-hidden="true" */}
-                        {/*    /> */}
-                        {/*    <input */}
-                        {/*        id="search-field" */}
-                        {/*        className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-400 dark:bg-gray-900 focus:ring-0 sm:text-sm" */}
-                        {/*        placeholder="Search..." */}
-                        {/*        type="search" */}
-                        {/*        name="search" */}
-                        {/*    /> */}
-                        {/* </form> */}
                         <div className="flex items-center gap-x-4 lg:gap-x-6">
                             <button
                                 type="button"
@@ -339,7 +320,7 @@ export default function LoggedInLayout({
 
                                     <span className="hidden lg:flex lg:items-center">
                                         <span
-                                            className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
+                                            className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
                                             aria-hidden="true"
                                         >
                                             {user?.name || user?.email || ''}
