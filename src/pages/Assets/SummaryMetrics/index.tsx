@@ -46,6 +46,7 @@ export default function SummaryMetrics({
                     // delta={MockData[0].delta}
                     // deltaType={MockData[0].deltaType}
                     // areaChartData={[{}]}
+                    viewMore
                 />
             </span>
             <span>
@@ -58,6 +59,7 @@ export default function SummaryMetrics({
                     // delta={MockData[1].delta}
                     // deltaType={MockData[1].deltaType}
                     // areaChartData={[{}]}
+                    viewMore
                 />
             </span>
             <span>
@@ -72,6 +74,7 @@ export default function SummaryMetrics({
                     // delta={MockData[2].delta}
                     // deltaType={MockData[2].deltaType}
                     // areaChartData={[{}]}
+                    viewMore
                 />
             </span>
         </Grid>
