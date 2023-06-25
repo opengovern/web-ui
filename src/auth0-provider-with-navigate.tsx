@@ -30,7 +30,7 @@ export const Auth0ProviderWithNavigate = ({
             domain={domain}
             clientId={clientId}
             authorizationParams={{
-                scope: 'api:read',
+                scope: 'openid profile email api:read',
                 redirect_uri: redirectUri,
                 audience: audienceStr,
             }}

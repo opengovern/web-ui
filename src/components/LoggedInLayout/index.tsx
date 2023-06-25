@@ -13,6 +13,8 @@ import {
 } from '@heroicons/react/24/outline'
 
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { useAuth0 } from '@auth0/auth0-react'
+import { Link } from 'react-router-dom'
 
 const navigation = [
     { name: 'Home', href: '#', icon: HomeIcon, current: false },
@@ -42,6 +44,8 @@ type IProps = {
 
 export default function LoggedInLayout({ children }: IProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const { user } = useAuth0()
+
     return (
         <div>
             <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -267,17 +271,20 @@ export default function LoggedInLayout({ children }: IProps) {
                                     <span className="sr-only">
                                         Open user menu
                                     </span>
-                                    <img
-                                        className="h-8 w-8 rounded-full bg-gray-50"
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                        alt=""
-                                    />
+                                    {user?.picture && (
+                                        <img
+                                            className="h-8 w-8 rounded-full bg-gray-50"
+                                            src={user.picture}
+                                            alt=""
+                                        />
+                                    )}
+
                                     <span className="hidden lg:flex lg:items-center">
                                         <span
                                             className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200"
                                             aria-hidden="true"
                                         >
-                                            Tom Cook
+                                            {user?.name || user?.email || ''}
                                         </span>
                                         <ChevronDownIcon
                                             className="ml-2 h-5 w-5 text-gray-400"
