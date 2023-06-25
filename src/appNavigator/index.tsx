@@ -6,6 +6,7 @@ import { CallbackPage } from '../pages/Callback'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import { setWorkspace } from '../api/ApiConfig'
+import Logout from '../pages/Logout'
 
 interface NavigateToWorkspacePageProps {
     page: string
@@ -22,6 +23,7 @@ const AppNavigator = () => {
         <Routes>
             <Route path="/" element={<Navigate to="/workspaces" replace />} />
             <Route path="/callback" element={<CallbackPage />} />
+            <Route path="/logout" element={<Logout />} />
             <Route
                 key="assets"
                 path="/:ws/assets"
