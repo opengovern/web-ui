@@ -29,6 +29,8 @@ export const Auth0ProviderWithNavigate = ({
         return null
     }
 
+    console.log('redirect url', redirectUri)
+
     return (
         <Auth0Provider
             domain={domain}
