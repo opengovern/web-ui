@@ -66,7 +66,7 @@ export default function SummaryMetrics({
                 <SummaryCard
                     title="Resources"
                     metric={String(
-                        numericDisplay(accounts?.TotalResourceCount)
+                        numericDisplay(accounts?.totalResourceCount)
                     )}
                     // metricPrev={MockData[2].metricPrev}
                     // delta={MockData[2].delta}
