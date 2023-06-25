@@ -16,6 +16,11 @@ export const Auth0ProviderWithNavigate = ({
     const redirectUri = `${window.location.origin}/callback`
 
     const onRedirectCallback = (appState: AppState | undefined) => {
+        console.log(
+            'redirect callback',
+            appState?.returnTo,
+            window.location.pathname
+        )
         navigate(appState?.returnTo || window.location.pathname)
     }
 
