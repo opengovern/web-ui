@@ -1,20 +1,22 @@
 import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
-import { useInventoryApiV2ServicesSummaryList } from '../../../api/inventory.gen'
-import SummaryCard from '../../../components/Cards/SummaryCard'
-import { numericDisplay } from '../../../utilities/numericDisplay'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { useInventoryApiV2ServicesSummaryList } from '../../../../api/inventory.gen'
+import SummaryCard from '../../../../components/Cards/SummaryCard'
+import { numericDisplay } from '../../../../utilities/numericDisplay'
 
 interface IProps {
     provider: any
     connections: any
     timeRange: any
+    setActiveSubPage: (subPage: string) => void
 }
 
 export default function SummaryMetrics({
     provider,
     connections,
     timeRange,
+    setActiveSubPage,
 }: IProps) {
     const { response: accounts } = useOnboardApiV1ConnectionsSummaryList({
         connector: provider,
@@ -47,6 +49,7 @@ export default function SummaryMetrics({
                     // deltaType={MockData[0].deltaType}
                     // areaChartData={[{}]}
                     viewMore
+                    onClick={() => setActiveSubPage('Accounts')}
                 />
             </span>
             <span>
@@ -60,6 +63,7 @@ export default function SummaryMetrics({
                     // deltaType={MockData[1].deltaType}
                     // areaChartData={[{}]}
                     viewMore
+                    onClick={() => setActiveSubPage('Services')}
                 />
             </span>
             <span>
@@ -75,6 +79,7 @@ export default function SummaryMetrics({
                     // deltaType={MockData[2].deltaType}
                     // areaChartData={[{}]}
                     viewMore
+                    // onClick={() => setActiveSubPage('Resources')}
                 />
             </span>
         </Grid>

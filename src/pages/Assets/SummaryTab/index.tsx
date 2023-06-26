@@ -1,6 +1,6 @@
-import React from 'react'
-import SummaryMetrics from '../SummaryMetrics'
-import ResourceMetrics from '../ResourceMetrics'
+import React, { Dispatch } from 'react'
+import SummaryMetrics from './SummaryMetrics'
+import ResourceMetrics from './ResourceMetrics'
 
 type IProps = {
     provider: any
@@ -8,6 +8,7 @@ type IProps = {
     categories: any
     timeRange: any
     pageSize: any
+    setActiveSubPage: Dispatch<any>
 }
 export default function SummaryTab({
     provider,
@@ -15,6 +16,7 @@ export default function SummaryTab({
     categories,
     timeRange,
     pageSize,
+    setActiveSubPage,
 }: IProps) {
     return (
         <>
@@ -22,6 +24,7 @@ export default function SummaryTab({
                 provider={provider}
                 connections={connections}
                 timeRange={timeRange}
+                setActiveSubPage={setActiveSubPage}
             />
             <div className="mt-10">
                 <ResourceMetrics
@@ -30,6 +33,7 @@ export default function SummaryTab({
                     categories={categories}
                     timeRange={timeRange}
                     pageSize={pageSize}
+                    setActiveSubPage={setActiveSubPage}
                 />
             </div>
         </>
