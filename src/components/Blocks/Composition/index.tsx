@@ -147,46 +147,49 @@ export default function Composition({
             </Text>
             <Text>{composition?.total_value_count} Asset</Text>
             {selectedIndex === 0 ? (
-                <>
-                    <DonutChart
-                        data={compositionData(composition, false)}
-                        showAnimation={false}
-                        category="value"
-                        index="name"
-                        // valueFormatter={valueFormatter}
-                        className="mt-6"
-                    />
-                    <Flex className="mt-8" justifyContent="between">
-                        <Text className="truncate">
-                            <Bold>Stocks</Bold>
-                        </Text>
-                        <Text>Since transaction</Text>
-                    </Flex>
-                    <List className="mt-4">
-                        {stocks.map((stock) => (
-                            <ListItem key={stock.name}>
-                                <Text>{stock.name}</Text>
-                                <Flex
-                                    justifyContent="end"
-                                    className="space-x-2"
-                                >
-                                    <Text>
-                                        ${' '}
-                                        {Intl.NumberFormat('us')
-                                            .format(stock.value)
-                                            .toString()}
-                                    </Text>
-                                    <BadgeDelta
-                                        deltaType={stock.deltaType}
-                                        size="xs"
+                <div className="">
+                    <div className="mt-6">
+                        <DonutChart
+                            data={compositionData(composition, false)}
+                            showAnimation={false}
+                            category="value"
+                            index="name"
+                            // valueFormatter={valueFormatter}
+                        />
+                    </div>
+                    <div>
+                        <Flex className="mt-8" justifyContent="between">
+                            <Text className="truncate">
+                                <Bold>Stocks</Bold>
+                            </Text>
+                            <Text>Since transaction</Text>
+                        </Flex>
+                        <List className="mt-4">
+                            {stocks.map((stock) => (
+                                <ListItem key={stock.name}>
+                                    <Text>{stock.name}</Text>
+                                    <Flex
+                                        justifyContent="end"
+                                        className="space-x-2"
                                     >
-                                        {stock.performance}
-                                    </BadgeDelta>
-                                </Flex>
-                            </ListItem>
-                        ))}
-                    </List>
-                </>
+                                        <Text>
+                                            ${' '}
+                                            {Intl.NumberFormat('us')
+                                                .format(stock.value)
+                                                .toString()}
+                                        </Text>
+                                        <BadgeDelta
+                                            deltaType={stock.deltaType}
+                                            size="xs"
+                                        >
+                                            {stock.performance}
+                                        </BadgeDelta>
+                                    </Flex>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </div>
+                </div>
             ) : (
                 // <>
                 //     <Flex className="mt-8" justifyContent="between">
