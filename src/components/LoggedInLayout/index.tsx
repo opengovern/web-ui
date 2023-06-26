@@ -1,23 +1,28 @@
 import React, { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
+    ArrowTrendingUpIcon,
     Bars3Icon,
     BellIcon,
-    HomeIcon,
-    XMarkIcon,
-    DocumentChartBarIcon,
-    CubeIcon,
-    ArrowTrendingUpIcon,
-    ShieldCheckIcon,
     Cog6ToothIcon,
+    CubeIcon,
+    DocumentChartBarIcon,
+    HomeIcon,
+    ShieldCheckIcon,
+    XMarkIcon,
 } from '@heroicons/react/24/outline'
 
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 const navigation = [
     { name: 'Home', href: '#', icon: HomeIcon, current: false },
-    { name: 'Insight', href: '#', icon: DocumentChartBarIcon, current: false },
-    { name: 'Assets', href: '#', icon: CubeIcon, current: true },
+    {
+        name: 'Insight',
+        href: '/demo/insights',
+        icon: DocumentChartBarIcon,
+        current: false,
+    },
+    { name: 'Assets', href: '/demo/assets', icon: CubeIcon, current: true },
     { name: 'Spend', href: '#', icon: ArrowTrendingUpIcon, current: false },
     { name: 'Compliance', href: '#', icon: ShieldCheckIcon, current: false },
     { name: 'Settings', href: '#', icon: Cog6ToothIcon, current: false },

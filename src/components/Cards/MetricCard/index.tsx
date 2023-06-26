@@ -7,6 +7,7 @@ type IProps = {
     deltaType: DeltaType
     delta: string
 }
+
 export default function CMBCard({
     title,
     metric,
