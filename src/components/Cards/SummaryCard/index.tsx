@@ -65,15 +65,19 @@ export default function SummaryCard({
             )}
             {viewMore && (
                 <Flex className="mt-6 pt-4 border-t">
-                    <Button
-                        size="xs"
-                        variant="light"
-                        icon={ArrowLongRightIcon}
-                        iconPosition="right"
-                        onClick={onClick}
-                    >
-                        View more
-                    </Button>
+                    {onClick ? (
+                        <Button
+                            size="xs"
+                            variant="light"
+                            icon={ArrowLongRightIcon}
+                            iconPosition="right"
+                            onClick={onClick}
+                        >
+                            View more
+                        </Button>
+                    ) : (
+                        <div className="text-sm text-blue-500 mt-4" />
+                    )}
                 </Flex>
             )}
         </Card>

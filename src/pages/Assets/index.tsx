@@ -10,8 +10,10 @@ import {
     TabPanel,
     TabPanels,
     Title,
+    Bold,
 } from '@tremor/react'
-import { FunnelIcon } from '@heroicons/react/24/outline'
+import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
+import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
@@ -20,8 +22,21 @@ import ConnectionList from './ConnectionList'
 import SummaryTab from './SummaryTab'
 import TrendsTab from './TrendsTab'
 import CompositionTab from './CompositionTab/indedx'
+import ResourceMetricsDetails from './SubPages/ResourceMetricsDetails'
+import AccountsDetails from './SubPages/AccountsDetails'
+import Breadcrumbs from '../../components/Breadcrumbs'
+import ServicesDetails from './SubPages/ServicesDetails'
 
 const Assets: React.FC<any> = () => {
+    const [activeSubPage, setActiveSubPage] = useState<
+        | 'All'
+        | 'Resource Metrics'
+        | 'Accounts'
+        | 'Services'
+        | 'Regions'
+        | 'Resources'
+    >('All')
+    console.log('activeSubPage', activeSubPage)
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -47,40 +62,10 @@ const Assets: React.FC<any> = () => {
         } else setOpenDrawer(true)
     }
 
-    return (
-        <LoggedInLayout currentPage="assets">
+    const renderSubPageAll = () => {
+        return (
             <main>
-                <Flex
-                    flexDirection="row"
-                    justifyContent="between"
-                    alignItems="center"
-                    className="mb-6"
-                >
-                    <Title>Assets</Title>
-                    <div className="flex flex-row justify-start items-start">
-                        <DateRangePicker
-                            className="max-w-md"
-                            value={activeTimeRange}
-                            onValueChange={setActiveTimeRange}
-                            selectPlaceholder="Selection"
-                        />
-                        <Button
-                            variant="light"
-                            className="ml-2 mt-2"
-                            onClick={() => setOpenDrawer(true)}
-                        >
-                            <FunnelIcon className="h-6 w-6" />
-                        </Button>
-                        <ConnectionList
-                            connections={connections || []}
-                            open={openDrawer}
-                            selectedConnectionsProps={selectedConnections}
-                            onClose={(data: any) => handleDrawer(data)}
-                        />
-                    </div>
-                </Flex>
-
-                <TabGroup className="mt-6">
+                <TabGroup className="mt-3">
                     <TabList>
                         <Tab>Summary</Tab>
                         <Tab>Trends</Tab>
@@ -94,6 +79,7 @@ const Assets: React.FC<any> = () => {
                                 categories={categoryOptions}
                                 timeRange={activeTimeRange}
                                 pageSize={1000}
+                                setActiveSubPage={setActiveSubPage}
                             />
                         </TabPanel>
                         <TabPanel>
@@ -120,6 +106,77 @@ const Assets: React.FC<any> = () => {
                     </TabPanels>
                 </TabGroup>
             </main>
+        )
+    }
+
+    const breadcrubmsPages = [
+        {
+            name: 'Assets',
+            path: () => {
+                setActiveSubPage('All')
+            },
+            current: false,
+        },
+        { name: activeSubPage, path: '', current: true },
+    ]
+
+    return (
+        <LoggedInLayout>
+            <Flex
+                flexDirection="row"
+                justifyContent="between"
+                alignItems="center"
+            >
+                {activeSubPage === 'All' ? (
+                    <Title>Assets</Title>
+                ) : (
+                    <Breadcrumbs pages={breadcrubmsPages} />
+                )}
+                <div className="flex flex-row justify-start items-start">
+                    <DateRangePicker
+                        className="max-w-md"
+                        value={activeTimeRange}
+                        onValueChange={setActiveTimeRange}
+                        selectPlaceholder="Time Range"
+                    />
+                    <Button
+                        variant="secondary"
+                        className="ml-2 h-9"
+                        onClick={() => setOpenDrawer(true)}
+                        icon={
+                            selectedConnections.connections.length > 0 ||
+                            selectedConnections.provider !== ''
+                                ? FunnelIconSolid
+                                : FunnelIconOutline
+                        }
+                    >
+                        {selectedConnections.connections.length > 0 ||
+                        selectedConnections.provider !== '' ? (
+                            <Bold>Filters</Bold>
+                        ) : (
+                            'Filters'
+                        )}
+                    </Button>
+                    <ConnectionList
+                        connections={connections || []}
+                        open={openDrawer}
+                        selectedConnectionsProps={selectedConnections}
+                        onClose={(data: any) => handleDrawer(data)}
+                    />
+                </div>
+            </Flex>
+            {activeSubPage === 'All' && renderSubPageAll()}
+            {activeSubPage === 'Resource Metrics' && (
+                <ResourceMetricsDetails
+                    provider={selectedConnections.provider}
+                    connection={selectedConnections.connections}
+                    categories={categoryOptions}
+                    timeRange={activeTimeRange}
+                    pageSize={1000}
+                />
+            )}
+            {activeSubPage === 'Accounts' && <AccountsDetails />}
+            {activeSubPage === 'Services' && <ServicesDetails />}
         </LoggedInLayout>
     )
 }

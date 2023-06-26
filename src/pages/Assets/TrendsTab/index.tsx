@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, Grid } from '@tremor/react'
-import GrowthTrend from '../GrowthTrend'
+import GrowthTrend from './GrowthTrend'
 import Region from '../../../components/Blocks/Region'
 
 type IProps = {

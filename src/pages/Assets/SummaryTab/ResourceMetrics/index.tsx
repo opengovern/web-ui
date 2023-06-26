@@ -9,11 +9,12 @@ import {
 } from '@tremor/react'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
-import Swiper from '../../../components/Swiper'
-import MetricCard from '../../../components/Cards/MetricCard'
-import { selectedResourceCategoryAtom } from '../../../store'
-import { useInventoryApiV2ResourcesMetricList } from '../../../api/inventory.gen'
-import { numericDisplay } from '../../../utilities/numericDisplay'
+import { useNavigate } from 'react-router-dom'
+import Swiper from '../../../../components/Swiper'
+import MetricCard from '../../../../components/Cards/MetricCard'
+import { selectedResourceCategoryAtom } from '../../../../store'
+import { useInventoryApiV2ResourcesMetricList } from '../../../../api/inventory.gen'
+import { numericDisplay } from '../../../../utilities/numericDisplay'
 
 interface IProps {
     provider: any
@@ -24,6 +25,7 @@ interface IProps {
         value: string
     }[]
     pageSize: any
+    setActiveSubPage: (subPage: string) => void
 }
 
 export default function ResourceMetrics({
@@ -32,6 +34,7 @@ export default function ResourceMetrics({
     pageSize,
     categories,
     connection,
+    setActiveSubPage,
 }: IProps) {
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
@@ -59,7 +62,11 @@ export default function ResourceMetrics({
             <div className="flex justify-between gap-x-2">
                 <div className="flex flex-row justify-start items-start">
                     <Title>Resource metrics </Title>
-                    <Button variant="light" className="mt-1 ml-2">
+                    <Button
+                        variant="light"
+                        className="mt-1 ml-2"
+                        onClick={() => setActiveSubPage('Resource Metrics')}
+                    >
                         <Text color="blue">(see All)</Text>
                     </Button>
                 </div>
