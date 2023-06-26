@@ -285,8 +285,12 @@ export default function ConnectionList({
                 <div className="mb-2">
                     <Bold>{selectionText(gridRef.current?.api)}</Bold>
                 </div>
-                <div className="ag-theme-alpine" style={{ height: '80vh' }}>
-                    <AgGridReact ref={gridRef} gridOptions={gridOptions} />
+                <div className="ag-theme-alpine">
+                    <AgGridReact
+                        ref={gridRef}
+                        domLayout="autoHeight"
+                        gridOptions={gridOptions}
+                    />
                 </div>
             </div>
         </DrawerPanel>
