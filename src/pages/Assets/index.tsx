@@ -36,7 +36,6 @@ const Assets: React.FC<any> = () => {
         | 'Regions'
         | 'Resources'
     >('All')
-    console.log('activeSubPage', activeSubPage)
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -175,8 +174,18 @@ const Assets: React.FC<any> = () => {
                     pageSize={1000}
                 />
             )}
-            {activeSubPage === 'Accounts' && <AccountsDetails />}
-            {activeSubPage === 'Services' && <ServicesDetails />}
+            {activeSubPage === 'Accounts' && (
+                <AccountsDetails
+                    selectedConnections={selectedConnections}
+                    timeRange={activeTimeRange}
+                />
+            )}
+            {activeSubPage === 'Services' && (
+                <ServicesDetails
+                    selectedConnections={selectedConnections}
+                    timeRange={activeTimeRange}
+                />
+            )}
         </LoggedInLayout>
     )
 }
