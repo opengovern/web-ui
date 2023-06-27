@@ -8,6 +8,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
+import { useNavigate } from 'react-router-dom'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { ReactComponent as AWSIcon } from '../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
 import { ReactComponent as CloudIcon } from '../../../assets/icons/icon-cloud.svg'
@@ -15,10 +16,8 @@ import { ReactComponent as AzureIcon } from '../../../assets/icons/elements-supp
 
 interface IInsightsCard {
     metric: any
-    onClick?: () => void
     showTitle?: boolean
     showDetails?: boolean
-    showRefresh?: boolean
     showIcon?: boolean
 }
 
@@ -74,12 +73,18 @@ export default function InsightCard({
     metric,
     showTitle = false,
     showDetails = false,
-    showRefresh = false,
     showIcon = false,
-    onClick,
 }: IInsightsCard) {
+    const navigate = useNavigate()
+    const navigateToAssetsInsightsDetails = (id: any) => {
+        navigate(`${id}`)
+    }
     return (
-        <Card key={metric}>
+        <Card
+            key={metric}
+            className="cursor-pointer"
+            onClick={() => navigateToAssetsInsightsDetails(metric.id)}
+        >
             <Flex
                 flexDirection="col"
                 alignItems="start"
@@ -119,6 +124,7 @@ export default function InsightCard({
                                         ? 'moderateIncrease'
                                         : 'moderateDecrease'
                                 }
+                                className="cursor-pointer"
                             >
                                 {`${
                                     calculatePercent(metric) > 0

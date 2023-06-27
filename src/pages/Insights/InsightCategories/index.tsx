@@ -14,11 +14,10 @@ export default function InsightCategories({ onChange }: IInsightCategories) {
     }, [selectedCategory])
 
     return (
-        <Flex flexDirection="row">
+        <Flex flexDirection="row" justifyContent="start" className="mb-6">
             {categories?.category.map((category) => (
                 <Button
                     size="xs"
-                    value={category}
                     variant={
                         selectedCategory === category ? 'primary' : 'secondary'
                     }
@@ -27,7 +26,10 @@ export default function InsightCategories({ onChange }: IInsightCategories) {
                             setSelectedCategory('')
                         else setSelectedCategory(category)
                     }}
-                />
+                    className="mr-2"
+                >
+                    {category}
+                </Button>
             ))}
         </Flex>
     )

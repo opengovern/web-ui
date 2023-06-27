@@ -1,6 +1,5 @@
 import { DateRangePicker, Flex, Grid, Title } from '@tremor/react'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import LoggedInLayout from '../../components/LoggedInLayout'
@@ -10,7 +9,7 @@ import InsightCard from '../../components/Cards/InsightCard'
 import { timeAtom } from '../../store'
 
 export default function Insights() {
-    const [selectedCategory, setSelectedCategory] = useState<string>()
+    const [selectedCategory, setSelectedCategory] = useState('')
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
 
     const query = {
@@ -22,11 +21,6 @@ export default function Insights() {
         }),
     }
     const { response: insightList } = useComplianceApiV1InsightList(query)
-
-    const navigate = useNavigate()
-    const navigateToAssetsInsightsDetails = (id: any) => {
-        navigate(`${id}`)
-    }
 
     return (
         <LoggedInLayout currentPage="insight">
@@ -57,18 +51,19 @@ export default function Insights() {
                     className="gap-3 w-100"
                 >
                     {insightList
-                        // ?.filter((insight) =>
-                        //     insight.tags.category.includes(selectedCategory)
-                        // )
-                        ?.map((insight) => (
+                        ?.filter((insight) => {
+                            if (selectedCategory.length)
+                                return insight.tags?.category.includes(
+                                    selectedCategory
+                                )
+                            return insight
+                        })
+                        .map((insight) => (
                             <InsightCard
                                 metric={insight}
                                 showIcon
                                 showTitle
                                 showDetails
-                                onClick={() =>
-                                    navigateToAssetsInsightsDetails(insight.id)
-                                }
                             />
                         ))}
                 </Grid>

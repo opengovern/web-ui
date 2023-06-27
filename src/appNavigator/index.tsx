@@ -7,6 +7,7 @@ import Insights from '../pages/Insights'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
+import InsightDetail from '../pages/Insights/InsightDetail'
 
 interface NavigateToWorkspacePageProps {
     page: string
@@ -95,6 +96,11 @@ export default function AppNavigator() {
                 key="insights"
                 path="/:ws/insight"
                 element={<AuthenticationGuard component={Insights} />}
+            />
+            <Route
+                key="insight detail"
+                path="/:ws/insight/:id"
+                element={<AuthenticationGuard component={InsightDetail} />}
             />
             <Route
                 key="settings"
