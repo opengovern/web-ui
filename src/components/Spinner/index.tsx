@@ -12,7 +12,7 @@ const Spinner: React.FC<SpinnerProps> = ({
     height = 8,
 }) => {
     return (
-        <div className="flex justify-self-center">
+        <div className="flex w-100 h-100 justify-center items-center">
             <svg
                 aria-hidden="true"
                 className={`w-${width} h-${height} mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-${color}`}

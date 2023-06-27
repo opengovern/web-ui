@@ -57,6 +57,7 @@ const Assets: React.FC<any> = () => {
                     flexDirection="row"
                     justifyContent="between"
                     alignItems="center"
+                    className="mb-6"
                 >
                     <Title>Assets</Title>
                     <DateRangePicker
@@ -67,7 +68,7 @@ const Assets: React.FC<any> = () => {
                     />
                 </Flex>
 
-                <TabGroup className="mt-6">
+                <TabGroup>
                     <TabList>
                         <Tab>All</Tab>
                     </TabList>

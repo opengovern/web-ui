@@ -856,6 +856,7 @@ export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRespo
 }
 
 export interface GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight {
+    labels: any
     /**
      * Cloud Provider
      * @example "Azure"
