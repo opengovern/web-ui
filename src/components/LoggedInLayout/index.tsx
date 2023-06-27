@@ -10,11 +10,15 @@ import {
     ArrowTrendingUpIcon,
     ShieldCheckIcon,
     Cog6ToothIcon,
+    MoonIcon,
+    CommandLineIcon,
+    QuestionMarkCircleIcon,
 } from '@heroicons/react/24/outline'
 
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Title } from '@tremor/react'
 
 const navigation = [
     {
@@ -247,6 +251,12 @@ export default function LoggedInLayout({
                         />
                     </button>
 
+                    <div className="-m-2.5 p-2.5 text-gray-900">
+                        <p className="text-md">
+                            &#128075; Welcome back,{' '}
+                            {user?.name || user?.email || ''}
+                        </p>
+                    </div>
                     {/* Separator */}
                     <div
                         className="h-6 w-px bg-gray-900/10 dark:bg-white/20 lg:hidden"
@@ -280,10 +290,28 @@ export default function LoggedInLayout({
                                 type="button"
                                 className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
                             >
-                                <span className="sr-only">
-                                    View notifications
-                                </span>
-                                <BellIcon
+                                <span className="sr-only">Theme</span>
+                                <MoonIcon
+                                    className="h-6 w-6"
+                                    aria-hidden="true"
+                                />
+                            </button>
+                            <button
+                                type="button"
+                                className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                            >
+                                <span className="sr-only">CLI</span>
+                                <CommandLineIcon
+                                    className="h-6 w-6"
+                                    aria-hidden="true"
+                                />
+                            </button>
+                            <button
+                                type="button"
+                                className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                            >
+                                <span className="sr-only">Help</span>
+                                <QuestionMarkCircleIcon
                                     className="h-6 w-6"
                                     aria-hidden="true"
                                 />
