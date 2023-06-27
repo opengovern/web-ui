@@ -21,37 +21,32 @@ const navigation = [
         name: 'Home',
         page: 'home',
         icon: HomeIcon,
-        current: false,
     },
     {
         name: 'Insight',
         page: 'insight',
         icon: DocumentChartBarIcon,
-        current: false,
     },
-    { name: 'Assets', page: 'assets', icon: CubeIcon, current: true },
+    { name: 'Assets', page: 'assets', icon: CubeIcon },
     {
         name: 'Spend',
         page: 'spend',
         icon: ArrowTrendingUpIcon,
-        current: false,
     },
     {
         name: 'Compliance',
         page: 'compliance',
         icon: ShieldCheckIcon,
-        current: false,
     },
     {
         name: 'Settings',
         page: 'settings',
         icon: Cog6ToothIcon,
-        current: false,
     },
 ]
 const userNavigation = [
     { name: 'Your profile', href: '#' },
-    { name: 'Sign out', href: '#' },
+    { name: 'Sign out', href: '/logout' },
 ]
 
 function classNames(...classes: string[]) {
@@ -60,15 +55,27 @@ function classNames(...classes: string[]) {
 
 type IProps = {
     children: React.ReactNode
+    currentPage:
+        | 'home'
+        | 'insight'
+        | 'assets'
+        | 'spend'
+        | 'compliance'
+        | 'settings'
+    showSidebar?: boolean
 }
 
-export default function LoggedInLayout({ children }: IProps) {
+export default function LoggedInLayout({
+    children,
+    currentPage,
+    showSidebar = true,
+}: IProps) {
     const workspace = useParams<{ ws: string }>().ws
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const { user } = useAuth0()
 
-    return (
-        <div>
+    const sidebar = (
+        <>
             <Transition.Root show={sidebarOpen} as={Fragment}>
                 <Dialog
                     as="div"
@@ -151,7 +158,8 @@ export default function LoggedInLayout({ children }: IProps) {
                                                             <Link
                                                                 to={`/${workspace}/${item.page}`}
                                                                 className={classNames(
-                                                                    item.current
+                                                                    item.page ===
+                                                                        currentPage
                                                                         ? 'bg-gray-50 text-indigo-600 dark:bg-gray-800 dark:text-white'
                                                                         : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-800',
                                                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
@@ -201,7 +209,7 @@ export default function LoggedInLayout({ children }: IProps) {
                                             <Link
                                                 to={`/${workspace}/${item.page}`}
                                                 className={classNames(
-                                                    item.current
+                                                    item.page === currentPage
                                                         ? 'bg-blue-900/50 text-gray-200'
                                                         : 'text-gray-300 hover:bg-blue-900/50',
                                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
@@ -221,8 +229,13 @@ export default function LoggedInLayout({ children }: IProps) {
                     </nav>
                 </div>
             </div>
+        </>
+    )
 
-            <div className="lg:pl-72">
+    return (
+        <div>
+            {showSidebar && sidebar}
+            <div className={showSidebar ? 'lg:pl-72' : ''}>
                 <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
                     <button
                         type="button"
@@ -326,8 +339,8 @@ export default function LoggedInLayout({ children }: IProps) {
                                         {userNavigation.map((item) => (
                                             <Menu.Item key={item.name}>
                                                 {({ active }) => (
-                                                    <a
-                                                        href={item.href}
+                                                    <Link
+                                                        to={item.href}
                                                         className={classNames(
                                                             active
                                                                 ? 'bg-gray-50'
@@ -336,7 +349,7 @@ export default function LoggedInLayout({ children }: IProps) {
                                                         )}
                                                     >
                                                         {item.name}
-                                                    </a>
+                                                    </Link>
                                                 )}
                                             </Menu.Item>
                                         ))}
