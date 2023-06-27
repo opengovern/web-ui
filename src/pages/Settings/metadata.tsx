@@ -67,7 +67,7 @@ const SettingsMetadata: React.FC<any> = () => {
         },
         {
             title: 'Workspace Owner',
-            value: currentWorkspace?.ownerId, //TODO get name from backend
+            value: currentWorkspace?.ownerId, // TODO get name from backend
         },
         {
             title: 'Workspace Version',
