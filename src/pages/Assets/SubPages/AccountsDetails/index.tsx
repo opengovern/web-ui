@@ -131,6 +131,15 @@ export default function ServicesDetails({
             pageSize: 10000,
             pageNumber: 1,
         })
+    const { response: TopAccounts } = useOnboardApiV1ConnectionsSummaryList({
+        connector: selectedConnections?.provider,
+        connectionId: selectedConnections?.connections,
+        startTime: timeRange[0],
+        endTime: timeRange[1],
+        pageSize: 5,
+        pageNumber: 1,
+        sortBy: 'resource_count',
+    })
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -175,7 +184,7 @@ export default function ServicesDetails({
     return (
         <main>
             <div className="mt-5">
-                <Summary />
+                <Summary accounts={TopAccounts?.connections} />
                 <div className="ag-theme-alpine mt-10">
                     <AgGridReact
                         ref={gridRef}

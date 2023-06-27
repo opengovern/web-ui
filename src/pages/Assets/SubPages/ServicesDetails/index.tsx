@@ -58,7 +58,22 @@ export default function ServicesDetails({
             pageNumber: 1,
             endTime: String(dayjs(timeRange.to).unix()),
         })
-
+    const { response: TopServices } = useInventoryApiV2ServicesMetricList({
+        connector: selectedConnections?.provider,
+        connectionId: selectedConnections?.connections,
+        pageSize: 5,
+        pageNumber: 1,
+        endTime: String(dayjs(timeRange.to).unix()),
+    })
+    const { response: TopFastestServices } =
+        useInventoryApiV2ServicesMetricList({
+            connector: selectedConnections?.provider,
+            connectionId: selectedConnections?.connections,
+            pageSize: 5,
+            pageNumber: 1,
+            endTime: String(dayjs(timeRange.to).unix()),
+            sortBy: 'growth_rate',
+        })
     if (!flag && serviceList?.total_count) {
         rowCount = serviceList?.total_count
         flag = true
@@ -84,7 +99,11 @@ export default function ServicesDetails({
     })
     return (
         <main>
-            <Summary serviceList={serviceList} />
+            <Summary
+                TopServices={TopServices?.services}
+                TopFastestServices={TopFastestServices?.services}
+                TotalServices={serviceList?.total_services}
+            />
             <div className="ag-theme-alpine mt-10">
                 <AgGridReact
                     ref={gridRef}
