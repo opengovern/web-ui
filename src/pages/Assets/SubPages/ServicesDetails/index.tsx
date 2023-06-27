@@ -4,7 +4,10 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions } from 'ag-grid-community'
 import dayjs from 'dayjs'
-import { useInventoryApiV2ServicesSummaryList } from '../../../../api/inventory.gen'
+import {
+    useInventoryApiV2ServicesSummaryList,
+    useInventoryApiV2ServicesMetricList,
+} from '../../../../api/inventory.gen'
 import Summary from './Summary'
 
 type IProps = {
@@ -22,7 +25,7 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'serviceLabel',
+        field: 'service_label',
         headerName: 'Service Name',
         sortable: true,
         filter: true,
@@ -30,7 +33,7 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'resourceCount',
+        field: 'resource_count',
         headerName: 'Resource Count',
         sortable: true,
         filter: true,
@@ -48,7 +51,7 @@ export default function ServicesDetails({
 }: IProps) {
     const gridRef = useRef<AgGridReact>(null)
     const { response: serviceList, isLoading: isServiceListLoading } =
-        useInventoryApiV2ServicesSummaryList({
+        useInventoryApiV2ServicesMetricList({
             connector: selectedConnections?.provider,
             connectionId: selectedConnections?.connections,
             pageSize: 1000,
@@ -56,8 +59,8 @@ export default function ServicesDetails({
             endTime: String(dayjs(timeRange.to).unix()),
         })
 
-    if (!flag && serviceList?.totalCount) {
-        rowCount = serviceList?.totalCount
+    if (!flag && serviceList?.total_count) {
+        rowCount = serviceList?.total_count
         flag = true
     }
 
@@ -76,7 +79,7 @@ export default function ServicesDetails({
 
     const rowData = (serviceList?.services || []).map((data) => {
         const newData = { ...data }
-        newData.resourceCount = data.resourceCount
+        newData.resource_count = data.resource_count
         return newData
     })
     return (

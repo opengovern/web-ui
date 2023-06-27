@@ -120,7 +120,7 @@ const Assets: React.FC<any> = () => {
     ]
 
     return (
-        <LoggedInLayout>
+        <LoggedInLayout currentPage="assets">
             <Flex
                 flexDirection="row"
                 justifyContent="between"
@@ -137,6 +137,7 @@ const Assets: React.FC<any> = () => {
                         value={activeTimeRange}
                         onValueChange={setActiveTimeRange}
                         selectPlaceholder="Time Range"
+                        enableClear={false}
                     />
                     <Button
                         variant="secondary"

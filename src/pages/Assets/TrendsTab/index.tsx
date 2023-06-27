@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Grid } from '@tremor/react'
 import GrowthTrend from './GrowthTrend'
-import Region from '../../../components/Blocks/Region'
+import CardWithList from '../../../components/Blocks/CardWithList'
 
 type IProps = {
     categories: any
@@ -23,15 +23,23 @@ export default function TrendsTab({
                 <div className="w-full">
                     {/* Placeholder to set height */}
                     {/* <Card className="h-40" /> */}
-                    <Region
+                    <CardWithList
+                        title="Top by Consumption"
+                        tabs={['Accounts', 'Services', 'Regions']}
                         // provider={selectedConnections.provider}
-                        connections={connections}
-                        count={count}
+                        // connections={connections}
+                        // count={count}
                     />
                 </div>
                 <div className="w-full">
                     {/* Placeholder to set height */}
-                    <Card className="h-[49vh]" />
+                    <CardWithList
+                        title="Top by Growth"
+                        tabs={['Accounts', 'Services', 'Regions']}
+                        // provider={selectedConnections.provider}
+                        // connections={connections}
+                        // count={count}
+                    />
                 </div>
             </Grid>
         </div>
