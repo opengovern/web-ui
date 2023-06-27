@@ -1,18 +1,18 @@
 import React, { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
+    ArrowTrendingUpIcon,
     Bars3Icon,
     BellIcon,
-    HomeIcon,
-    XMarkIcon,
-    DocumentChartBarIcon,
-    CubeIcon,
-    ArrowTrendingUpIcon,
-    ShieldCheckIcon,
     Cog6ToothIcon,
+    CubeIcon,
+    DocumentChartBarIcon,
+    HomeIcon,
+    ShieldCheckIcon,
     MoonIcon,
     CommandLineIcon,
     QuestionMarkCircleIcon,
+    XMarkIcon,
 } from '@heroicons/react/24/outline'
 
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
@@ -402,7 +402,7 @@ export default function LoggedInLayout({
                     </div>
                 </div>
 
-                <main className="xl:pl-48 pr-48 dark:bg-gray-900">
+                <main className="xl:pl-36 xl:pr-36 dark:bg-gray-900">
                     <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                         {children}
                     </div>

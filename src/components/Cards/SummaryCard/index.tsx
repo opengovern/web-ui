@@ -17,6 +17,7 @@ type IProps = {
     areaChartData?: any
     className?: string
 }
+
 export default function SummaryCard({
     title,
     metric,

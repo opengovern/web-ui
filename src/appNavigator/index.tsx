@@ -3,10 +3,11 @@ import Assets from '../pages/Assets'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
 import { CallbackPage } from '../pages/Callback'
+import Insights from '../pages/Insights'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
-import { setWorkspace } from '../api/ApiConfig'
 import Logout from '../pages/Logout'
+import InsightDetail from '../pages/Insights/InsightDetail'
 
 interface NavigateToWorkspacePageProps {
     page: string
@@ -19,7 +20,68 @@ const NavigateToWorkspacePage = ({ page }: NavigateToWorkspacePageProps) => {
     return <Navigate to={path} replace />
 }
 
-const AppNavigator = () => {
+export const defaultRoutes = [
+    {
+        name: '',
+        path: '/',
+        component: <Navigate to="/demo" replace />,
+    },
+    {
+        name: 'Callback',
+        path: '/callback',
+        component: CallbackPage,
+    },
+    {
+        name: 'Insights',
+        path: '/insights',
+        // component: Insights,
+    },
+]
+
+export const normalizeRoutes = (routes = defaultRoutes) => {
+    return routes.map((route) => {
+        if (
+            route?.path === '/' ||
+            /^workspaces.*/.test(route?.path) ||
+            route?.path === '/invitation' ||
+            route?.path === '/logout' ||
+            route?.path === '*'
+        ) {
+            return route
+        }
+        const pathWithWorkspaceParam = `:workspaceName${route.path}`
+        return {
+            ...route,
+            path: pathWithWorkspaceParam,
+        }
+    })
+}
+
+// const getRouteElement = (component) => {
+//     return (
+//         <Suspense key={component?.name} fallback={<Spinner />}>
+//             {component}
+//         </Suspense>
+//     )
+// }
+
+export default function AppNavigator() {
+    // const [err, setErr] = useState(404)
+    // const routeElements =
+    //     err === 403 || err === 500 || err === 503 ? (
+    //         <Route key="*" path="*" element={<NotFound error={err} />} />
+    //     ) : (
+    //         normalizeRoutes(defaultRoutes).map(
+    //             ({ name, path, component }): JSX.Element => (
+    //                 <Route
+    //                     key={`${name}${path}`}
+    //                     path={path}
+    //                     element={getRouteElement(component)}
+    //                 />
+    //             )
+    //         )
+    //     )
+
     return (
         <Routes>
             <Route path="/" element={<Navigate to="/workspaces" replace />} />
@@ -29,6 +91,16 @@ const AppNavigator = () => {
                 key="assets"
                 path="/:ws/assets"
                 element={<AuthenticationGuard component={Assets} />}
+            />
+            <Route
+                key="insights"
+                path="/:ws/insight"
+                element={<AuthenticationGuard component={Insights} />}
+            />
+            <Route
+                key="insight detail"
+                path="/:ws/insight/:id"
+                element={<AuthenticationGuard component={InsightDetail} />}
             />
             <Route
                 key="settings"
@@ -51,8 +123,10 @@ const AppNavigator = () => {
                 element={<NavigateToWorkspacePage page="/assets" />}
             />
             <Route key="*" path="*" element={<NotFound error={404} />} />
+            {/* <Routes> */}
+            {/*    {routeElements} */}
+            {/*    <Route key="*" path="*" element={<NotFound error={404} />} /> */}
+            {/* </Routes> */}
         </Routes>
     )
 }
-
-export default AppNavigator
