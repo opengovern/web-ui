@@ -1,20 +1,5 @@
 import React, { useMemo, useState } from 'react'
 import { useAtom } from 'jotai'
-import {
-    Button,
-    DateRangePicker,
-    Flex,
-    Grid,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Title,
-} from '@tremor/react'
-import { FunnelIcon } from '@heroicons/react/24/outline'
-import Composition from '../../components/Blocks/Composition'
-import Region from '../../components/Blocks/Region'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
@@ -47,7 +32,7 @@ const Settings: React.FC<any> = () => {
     }
 
     return (
-        <LoggedInLayout currentPage='settings'>
+        <LoggedInLayout currentPage="settings">
             <main />
         </LoggedInLayout>
     )

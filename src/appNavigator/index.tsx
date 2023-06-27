@@ -93,7 +93,7 @@ export default function AppNavigator() {
             />
             <Route
                 key="insights"
-                path="/:ws/insights"
+                path="/:ws/insight"
                 element={<AuthenticationGuard component={Insights} />}
             />
             <Route

@@ -30,7 +30,7 @@ export default function Insights() {
 
     return (
         <LoggedInLayout currentPage="insight">
-            <Flex>
+            <Flex flexDirection="col">
                 <Flex
                     flexDirection="row"
                     justifyContent="between"
@@ -54,13 +54,13 @@ export default function Insights() {
                     numItems={1}
                     numItemsSm={2}
                     numItemsLg={3}
-                    className="gap-3"
+                    className="gap-3 w-100"
                 >
                     {insightList
-                        ?.filter((insight) =>
-                            insight.labels.category.includes(selectedCategory)
-                        )
-                        .map((insight) => (
+                        // ?.filter((insight) =>
+                        //     insight.tags.category.includes(selectedCategory)
+                        // )
+                        ?.map((insight) => (
                             <InsightCard
                                 metric={insight}
                                 showIcon
