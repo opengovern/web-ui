@@ -5,6 +5,7 @@ import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions } from 'ag-grid-community'
 import dayjs from 'dayjs'
 import { useInventoryApiV2ServicesSummaryList } from '../../../../api/inventory.gen'
+import Summary from './Summary'
 
 type IProps = {
     selectedConnections: any
@@ -80,6 +81,7 @@ export default function ServicesDetails({
     })
     return (
         <main>
+            <Summary serviceList={serviceList} />
             <div className="ag-theme-alpine mt-10">
                 <AgGridReact
                     ref={gridRef}

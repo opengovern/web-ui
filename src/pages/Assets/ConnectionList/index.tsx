@@ -285,10 +285,10 @@ export default function ConnectionList({
                 <div className="mb-2">
                     <Bold>{selectionText(gridRef.current?.api)}</Bold>
                 </div>
-                <div className="ag-theme-alpine">
+                <div className="ag-theme-alpine h-[80vh]">
                     <AgGridReact
                         ref={gridRef}
-                        domLayout="autoHeight"
+                        // domLayout="autoHeight"
                         gridOptions={gridOptions}
                     />
                 </div>

@@ -7,14 +7,11 @@ import {
     List,
     ListItem,
     Flex,
-    Tab,
-    TabList,
-    TabGroup,
     Grid,
-    Subtitle,
     Metric,
 } from '@tremor/react'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import { useOnboardApiV1CatalogMetricsList } from '../../../../../api/onboard.gen'
 
 const MockData = {
     TopTotalResCount: [
@@ -61,24 +58,24 @@ const MockData = {
             resourceCount: 20545,
         },
     ],
-    totalAccountCount: 920,
-    totalUnhealthyCount: 10,
 }
 
 export default function Summary() {
+    const { response: topMetrics, isLoading } =
+        useOnboardApiV1CatalogMetricsList()
     return (
-        <Flex className="mt-10">
-            <div className="flex flex-col justify-between h-[33vh] mr-10 w-[14vw]">
+        <Flex className="mt-10 h-[34vh]">
+            <div className="flex flex-col justify-between h-full mr-10 w-[14vw]">
                 <Card className="flex flex-col h-32 gap-y-2">
                     <Text>Total Accounts</Text>
                     <Metric>
-                        {numericDisplay(MockData.totalAccountCount)}
+                        {numericDisplay(topMetrics?.totalConnections)}
                     </Metric>
                 </Card>
                 <Card className="flex flex-col h-32 gap-y-2">
                     <Text>Total Unhealthy Accounts</Text>
                     <Metric>
-                        {numericDisplay(MockData.totalUnhealthyCount)}
+                        {numericDisplay(topMetrics?.unhealthyConnections)}
                     </Metric>
                 </Card>
             </div>
