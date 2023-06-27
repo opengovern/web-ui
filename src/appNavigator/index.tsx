@@ -108,6 +108,11 @@ export default function AppNavigator() {
                 element={<AuthenticationGuard component={Settings} />}
             />
             <Route
+                key="settings"
+                path="/:ws/settings/:settingsPage"
+                element={<AuthenticationGuard component={Settings} />}
+            />
+            <Route
                 key="workspaces"
                 path="/workspaces"
                 element={<AuthenticationGuard component={Workspaces} />}
