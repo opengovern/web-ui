@@ -14,17 +14,37 @@ import {
 
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useAuth0 } from '@auth0/auth0-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 const navigation = [
-    { name: 'Home', href: '#', icon: HomeIcon, current: false },
-    { name: 'Insight', href: '#', icon: DocumentChartBarIcon, current: false },
-    { name: 'Assets', href: '#', icon: CubeIcon, current: true },
-    { name: 'Spend', href: '#', icon: ArrowTrendingUpIcon, current: false },
-    { name: 'Compliance', href: '#', icon: ShieldCheckIcon, current: false },
+    {
+        name: 'Home',
+        page: 'home',
+        icon: HomeIcon,
+        current: false,
+    },
+    {
+        name: 'Insight',
+        page: 'insight',
+        icon: DocumentChartBarIcon,
+        current: false,
+    },
+    { name: 'Assets', page: 'assets', icon: CubeIcon, current: true },
+    {
+        name: 'Spend',
+        page: 'spend',
+        icon: ArrowTrendingUpIcon,
+        current: false,
+    },
+    {
+        name: 'Compliance',
+        page: 'compliance',
+        icon: ShieldCheckIcon,
+        current: false,
+    },
     {
         name: 'Settings',
-        href: 'settings',
+        page: 'settings',
         icon: Cog6ToothIcon,
         current: false,
     },
@@ -43,6 +63,7 @@ type IProps = {
 }
 
 export default function LoggedInLayout({ children }: IProps) {
+    const workspace = useParams<{ ws: string }>().ws
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const { user } = useAuth0()
 
@@ -127,8 +148,8 @@ export default function LoggedInLayout({ children }: IProps) {
                                                 >
                                                     {navigation.map((item) => (
                                                         <li key={item.name}>
-                                                            <a
-                                                                href={item.href}
+                                                            <Link
+                                                                to={`/${workspace}/${item.page}`}
                                                                 className={classNames(
                                                                     item.current
                                                                         ? 'bg-gray-50 text-indigo-600 dark:bg-gray-800 dark:text-white'
@@ -141,7 +162,7 @@ export default function LoggedInLayout({ children }: IProps) {
                                                                     aria-hidden="true"
                                                                 />
                                                                 {item.name}
-                                                            </a>
+                                                            </Link>
                                                         </li>
                                                     ))}
                                                 </ul>
@@ -177,8 +198,8 @@ export default function LoggedInLayout({ children }: IProps) {
                                 <ul role="list" className="-mx-2 space-y-1">
                                     {navigation.map((item) => (
                                         <li key={item.name}>
-                                            <a
-                                                href={item.href}
+                                            <Link
+                                                to={`/${workspace}/${item.page}`}
                                                 className={classNames(
                                                     item.current
                                                         ? 'bg-blue-900/50 text-gray-200'
@@ -191,7 +212,7 @@ export default function LoggedInLayout({ children }: IProps) {
                                                     aria-hidden="true"
                                                 />
                                                 {item.name}
-                                            </a>
+                                            </Link>
                                         </li>
                                     ))}
                                 </ul>
