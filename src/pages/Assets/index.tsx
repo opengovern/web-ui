@@ -88,7 +88,7 @@ const Assets: React.FC<any> = () => {
                                 categories={categoryOptions}
                                 timeRange={activeTimeRange}
                                 connections={selectedConnections.connections}
-                                count={5}
+                                provider={selectedConnections.provider}
                             />
                         </TabPanel>
                         <TabPanel>

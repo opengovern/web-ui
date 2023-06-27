@@ -18,7 +18,7 @@ import {
     List,
     ListItem,
 } from '@tremor/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
 
 const MockData = {
@@ -137,10 +137,21 @@ const item = {
 }
 
 type IProps = {
-    serviceList: any
+    TopServices: any
+    TopFastestServices: any
+    TotalServices: any
 }
-export default function Summary({ serviceList }: IProps) {
-    console.log('serviceList', serviceList)
+export default function Summary({
+    TopServices,
+    TopFastestServices,
+    TotalServices,
+}: IProps) {
+    const [topServices, setTopServices] = useState([])
+    const [topFastest, setTopFastest] = useState([])
+    useEffect(() => {
+        setTopServices(TopServices || [])
+        setTopFastest(TopFastestServices || [])
+    }, [TopServices, TopFastestServices, TotalServices])
     return (
         <Grid numItemsLg={3} className="gap-x-10 mt-5">
             <Card key="Total Services" className="h-fit">
@@ -151,12 +162,12 @@ export default function Summary({ serviceList }: IProps) {
                 {/*    Last Inspection: <Bold>{item.date}</Bold> */}
                 {/* </Text> */}
                 <Metric className="mt-4 mb-3">
-                    {numericDisplay(item.total.value)}
+                    {numericDisplay(TotalServices)}
                 </Metric>
             </Card>
             <Card key="TopXServices" className="h-fit">
                 <Flex justifyContent="start" className="space-x-4">
-                    <Title className="truncate">TopXServices</Title>
+                    <Title className="truncate">Top Services</Title>
                 </Flex>
                 {/* <Text> */}
                 {/*    Last Inspection: <Bold>{item.date}</Bold> */}
@@ -169,13 +180,13 @@ export default function Summary({ serviceList }: IProps) {
                     </AccordionHeader>
                     <AccordionBody>
                         <List className="mt-2">
-                            {MockData.TopTotalResCount.map((thing) => (
-                                <ListItem key={thing.name}>
-                                    <Text>{thing.name}</Text>
+                            {topServices.map((thing: any) => (
+                                <ListItem key={thing.service_label}>
+                                    <Text>{thing.service_label}</Text>
                                     <Text>
                                         <Bold>
                                             {numericDisplay(
-                                                thing.resourceCount
+                                                thing.resource_count
                                             )}
                                         </Bold>{' '}
                                     </Text>
@@ -187,7 +198,7 @@ export default function Summary({ serviceList }: IProps) {
             </Card>
             <Card key="TopXFastest" className="h-fit">
                 <Flex justifyContent="start" className="space-x-4">
-                    <Title className="truncate">TopXFastest</Title>
+                    <Title className="truncate">Top Growing Services</Title>
                 </Flex>
                 {/* <Text> */}
                 {/*    Last Inspection: <Bold>{item.date}</Bold> */}
@@ -200,12 +211,14 @@ export default function Summary({ serviceList }: IProps) {
                     </AccordionHeader>
                     <AccordionBody>
                         <List className="mt-2">
-                            {item.TopXFastest.map((thing) => (
-                                <ListItem key={thing.title}>
-                                    <Text>{thing.title}</Text>
+                            {topFastest.map((thing: any) => (
+                                <ListItem key={thing.service_label}>
+                                    <Text>{thing.service_label}</Text>
                                     <Text>
                                         <Bold>
-                                            {numericDisplay(thing.value)}
+                                            {numericDisplay(
+                                                thing.resource_count
+                                            )}
                                         </Bold>{' '}
                                     </Text>
                                 </ListItem>
