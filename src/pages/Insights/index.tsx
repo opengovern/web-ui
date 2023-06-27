@@ -29,7 +29,7 @@ export default function Insights() {
     }
 
     return (
-        <LoggedInLayout>
+        <LoggedInLayout currentPage="insight">
             <Flex>
                 <Flex
                     flexDirection="row"

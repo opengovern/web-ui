@@ -1,121 +1,122 @@
 import useSWR from 'swr'
 import React, { useState, useEffect } from 'react'
 import { atom, useAtom } from 'jotai'
+import { useParams } from 'react-router-dom'
 import {
     Api,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRolesListResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectionCountRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkResultTrend,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceType,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiGetSourcesRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStack,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceApiKey,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryRequest,
-    GitlabComKeibiengineKeibiEnginePkgMetadataApiSetConfigMetadataRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspace,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogMetrics,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiUpdateKeyRoleRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiSmartQueryItem,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAwsRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiUpdateCredentialRequest,
-    DescribeInsightJob,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimits,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUsersRequest,
-    GitlabComKeibiengineKeibiEnginePkgInsightEsInsightResource,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceMetadataResponse,
-    DescribeDescribeResourceJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyResponse,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiSourceAzureRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetadataResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListServiceSummariesResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCatalogConnector,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAzureResourceResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiListConnectionSummaryResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetFiltersRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetUserResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiSource,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiGetRoleBindingsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiCostTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    DescribeSummarizerJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleDetailsResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkSummary,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiServiceSummary,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiWorkspaceRoleBinding,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmark,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationByProviderResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListCostCompositionResponse,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiPutRoleBindingRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsMetricsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCredential,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiCreateAPIKeyRequest,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiInviteRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignment,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiLocationResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
     DescribeDescribeSourceJob,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroup,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnection,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiAzureCredential,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiQuery,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiRunQueryResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourceRequest,
-    DescribeComplianceReportJob,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkTree,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiService,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetTopFieldResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightTrendDatapoint,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateSourceResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetResourcesResponse,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiConnector,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiMembership,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiInsightGroupTrendResponse,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiListQueryRequest,
-    GitlabComKeibiengineKeibiEnginePkgOnboardApiCreateCredentialRequest,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiGetAWSResourceResponse,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiBenchmarkAssignedSource,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GitlabComKeibiengineKeibiEnginePkgMetadataModelsConfigMetadata,
-    GitlabComKeibiengineKeibiEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob,
-    GitlabComKeibiengineKeibiEnginePkgAuthApiRoleUser,
-    GitlabComKeibiengineKeibiEnginePkgComplianceApiPolicy,
-    GitlabComKeibiengineKeibiEnginePkgInventoryApiConnectionData,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
+    DescribeDescribeResourceJob,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
     AwsResources,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
+    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    DescribeComplianceReportJob,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
+    DescribeInsightJob,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
+    DescribeSummarizerJob,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
     RequestParams,
 } from './api'
 
-import AxiosAPI from './ApiConfig'
+import AxiosAPI, { setWorkspace } from './ApiConfig'
 
 interface IuseScheduleApiV0ComplianceSummarizerTriggerListState {
     isLoading: boolean
@@ -126,8 +127,16 @@ interface IuseScheduleApiV0ComplianceSummarizerTriggerListState {
 export const useScheduleApiV0ComplianceSummarizerTriggerList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV0ComplianceSummarizerTriggerListState>({
@@ -136,6 +145,10 @@ export const useScheduleApiV0ComplianceSummarizerTriggerList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV0ComplianceSummarizerTriggerList(params)
@@ -177,8 +190,16 @@ interface IuseScheduleApiV0ComplianceTriggerListState {
 export const useScheduleApiV0ComplianceTriggerList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV0ComplianceTriggerListState>({
@@ -187,6 +208,10 @@ export const useScheduleApiV0ComplianceTriggerList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV0ComplianceTriggerList(params)
@@ -228,8 +253,16 @@ interface IuseScheduleApiV0DescribeTriggerListState {
 export const useScheduleApiV0DescribeTriggerList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV0DescribeTriggerListState>({
@@ -238,6 +271,10 @@ export const useScheduleApiV0DescribeTriggerList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV0DescribeTriggerList(params)
@@ -279,8 +316,16 @@ interface IuseScheduleApiV0InsightTriggerListState {
 export const useScheduleApiV0InsightTriggerList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV0InsightTriggerListState>({
@@ -289,6 +334,10 @@ export const useScheduleApiV0InsightTriggerList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV0InsightTriggerList(params)
@@ -330,8 +379,16 @@ interface IuseScheduleApiV0SummarizeTriggerListState {
 export const useScheduleApiV0SummarizeTriggerList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV0SummarizeTriggerListState>({
@@ -340,6 +397,10 @@ export const useScheduleApiV0SummarizeTriggerList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV0SummarizeTriggerList(params)
@@ -379,11 +440,19 @@ interface IuseScheduleApiV1BenchmarkEvaluationTriggerUpdateState {
 }
 
 export const useScheduleApiV1BenchmarkEvaluationTriggerUpdate = (
-    request: GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    request: GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1BenchmarkEvaluationTriggerUpdateState>({
@@ -394,6 +463,10 @@ export const useScheduleApiV1BenchmarkEvaluationTriggerUpdate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1BenchmarkEvaluationTriggerUpdate(request, params)
@@ -433,11 +506,19 @@ interface IuseScheduleApiV1BenchmarkEvaluationsListState {
 }
 
 export const useScheduleApiV1BenchmarkEvaluationsList = (
-    request: GitlabComKeibiengineKeibiEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    request: GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1BenchmarkEvaluationsListState>({
@@ -448,6 +529,10 @@ export const useScheduleApiV1BenchmarkEvaluationsList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1BenchmarkEvaluationsList(request, params)
@@ -489,8 +574,16 @@ interface IuseScheduleApiV1ComplianceReportLastCompletedListState {
 export const useScheduleApiV1ComplianceReportLastCompletedList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1ComplianceReportLastCompletedListState>({
@@ -499,6 +592,10 @@ export const useScheduleApiV1ComplianceReportLastCompletedList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1ComplianceReportLastCompletedList(params)
@@ -538,11 +635,19 @@ interface IuseScheduleApiV1DescribeResourceCreateState {
 }
 
 export const useScheduleApiV1DescribeResourceCreate = (
-    request: GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSingleResourceRequest,
+    request: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1DescribeResourceCreateState>({
@@ -553,6 +658,10 @@ export const useScheduleApiV1DescribeResourceCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1DescribeResourceCreate(request, params)
@@ -594,8 +703,16 @@ interface IuseScheduleApiV1DescribeResourceJobsPendingListState {
 export const useScheduleApiV1DescribeResourceJobsPendingList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1DescribeResourceJobsPendingListState>({
@@ -604,6 +721,10 @@ export const useScheduleApiV1DescribeResourceJobsPendingList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1DescribeResourceJobsPendingList(params)
@@ -645,8 +766,16 @@ interface IuseScheduleApiV1DescribeSourceJobsPendingListState {
 export const useScheduleApiV1DescribeSourceJobsPendingList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1DescribeSourceJobsPendingListState>({
@@ -655,6 +784,10 @@ export const useScheduleApiV1DescribeSourceJobsPendingList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1DescribeSourceJobsPendingList(params)
@@ -697,8 +830,16 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
     connectionId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1DescribeTriggerUpdateState>({
@@ -709,6 +850,10 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1DescribeTriggerUpdate(connectionId, params)
@@ -748,11 +893,19 @@ interface IuseScheduleApiV1InsightEvaluationTriggerUpdateState {
 }
 
 export const useScheduleApiV1InsightEvaluationTriggerUpdate = (
-    request: GitlabComKeibiengineKeibiEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    request: GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1InsightEvaluationTriggerUpdateState>({
@@ -763,6 +916,10 @@ export const useScheduleApiV1InsightEvaluationTriggerUpdate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1InsightEvaluationTriggerUpdate(request, params)
@@ -797,7 +954,7 @@ export const useScheduleApiV1InsightEvaluationTriggerUpdate = (
 
 interface IuseScheduleApiV1InsightJobDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob
     error?: any
 }
 
@@ -805,8 +962,16 @@ export const useScheduleApiV1InsightJobDetail = (
     jobId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseScheduleApiV1InsightJobDetailState>({
         isLoading: true,
@@ -816,6 +981,10 @@ export const useScheduleApiV1InsightJobDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1InsightJobDetail(jobId, params)
@@ -857,8 +1026,16 @@ interface IuseScheduleApiV1InsightJobsPendingListState {
 export const useScheduleApiV1InsightJobsPendingList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1InsightJobsPendingListState>({
@@ -867,6 +1044,10 @@ export const useScheduleApiV1InsightJobsPendingList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1InsightJobsPendingList(params)
@@ -901,7 +1082,7 @@ export const useScheduleApiV1InsightJobsPendingList = (
 
 interface IuseScheduleApiV1ResourceTypeDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgDescribeApiResourceTypeDetail[]
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail[]
     error?: any
 }
 
@@ -909,8 +1090,16 @@ export const useScheduleApiV1ResourceTypeDetail = (
     provider: 'aws' | 'azure',
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1ResourceTypeDetailState>({
@@ -921,6 +1110,10 @@ export const useScheduleApiV1ResourceTypeDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1ResourceTypeDetail(provider, params)
@@ -955,13 +1148,21 @@ export const useScheduleApiV1ResourceTypeDetail = (
 
 interface IuseScheduleApiV1SourcesListState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgDescribeApiSource[]
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiSource[]
     error?: any
 }
 
 export const useScheduleApiV1SourcesList = (params: RequestParams = {}) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseScheduleApiV1SourcesListState>({
         isLoading: true,
@@ -969,6 +1170,10 @@ export const useScheduleApiV1SourcesList = (params: RequestParams = {}) => {
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1SourcesList(params)
@@ -1003,7 +1208,7 @@ export const useScheduleApiV1SourcesList = (params: RequestParams = {}) => {
 
 interface IuseScheduleApiV1SourcesDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgDescribeApiSource
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiSource
     error?: any
 }
 
@@ -1011,8 +1216,16 @@ export const useScheduleApiV1SourcesDetail = (
     sourceId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseScheduleApiV1SourcesDetailState>({
         isLoading: true,
@@ -1022,6 +1235,10 @@ export const useScheduleApiV1SourcesDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1SourcesDetail(sourceId, params)
@@ -1056,7 +1273,7 @@ export const useScheduleApiV1SourcesDetail = (
 
 interface IuseScheduleApiV1SourcesJobsComplianceDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgComplianceApiComplianceReport[]
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport[]
     error?: any
 }
 
@@ -1069,8 +1286,16 @@ export const useScheduleApiV1SourcesJobsComplianceDetail = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1SourcesJobsComplianceDetailState>({
@@ -1081,6 +1306,10 @@ export const useScheduleApiV1SourcesJobsComplianceDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1SourcesJobsComplianceDetail(sourceId, query, params)
@@ -1123,8 +1352,16 @@ export const useScheduleApiV1SourcesJobsComplianceRefreshCreate = (
     sourceId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1SourcesJobsComplianceRefreshCreateState>({
@@ -1135,6 +1372,10 @@ export const useScheduleApiV1SourcesJobsComplianceRefreshCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1SourcesJobsComplianceRefreshCreate(sourceId, params)
@@ -1169,7 +1410,7 @@ export const useScheduleApiV1SourcesJobsComplianceRefreshCreate = (
 
 interface IuseScheduleApiV1SourcesJobsDescribeDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgDescribeApiDescribeSource[]
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource[]
     error?: any
 }
 
@@ -1177,8 +1418,16 @@ export const useScheduleApiV1SourcesJobsDescribeDetail = (
     sourceId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1SourcesJobsDescribeDetailState>({
@@ -1189,6 +1438,10 @@ export const useScheduleApiV1SourcesJobsDescribeDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1SourcesJobsDescribeDetail(sourceId, params)
@@ -1231,8 +1484,16 @@ export const useScheduleApiV1SourcesJobsDescribeRefreshCreate = (
     sourceId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1SourcesJobsDescribeRefreshCreateState>({
@@ -1243,6 +1504,10 @@ export const useScheduleApiV1SourcesJobsDescribeRefreshCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1SourcesJobsDescribeRefreshCreate(sourceId, params)
@@ -1277,7 +1542,7 @@ export const useScheduleApiV1SourcesJobsDescribeRefreshCreate = (
 
 interface IuseScheduleApiV1StacksListState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgDescribeApiStack[]
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiStack[]
     error?: any
 }
 
@@ -1289,8 +1554,16 @@ export const useScheduleApiV1StacksList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseScheduleApiV1StacksListState>({
         isLoading: true,
@@ -1300,6 +1573,10 @@ export const useScheduleApiV1StacksList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1StacksList(query, params)
@@ -1342,8 +1619,16 @@ export const useScheduleApiV1StacksDelete = (
     stackId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseScheduleApiV1StacksDeleteState>({
         isLoading: true,
@@ -1353,6 +1638,10 @@ export const useScheduleApiV1StacksDelete = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1StacksDelete(stackId, params)
@@ -1387,7 +1676,7 @@ export const useScheduleApiV1StacksDelete = (
 
 interface IuseScheduleApiV1StacksDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgDescribeApiStack
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiStack
     error?: any
 }
 
@@ -1395,8 +1684,16 @@ export const useScheduleApiV1StacksDetail = (
     stackId: string,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] = useState<IuseScheduleApiV1StacksDetailState>({
         isLoading: true,
@@ -1406,6 +1703,10 @@ export const useScheduleApiV1StacksDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1StacksDetail(stackId, params)
@@ -1440,17 +1741,25 @@ export const useScheduleApiV1StacksDetail = (
 
 interface IuseScheduleApiV1StacksFindingsCreateState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgComplianceApiGetFindingsResponse
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse
     error?: any
 }
 
 export const useScheduleApiV1StacksFindingsCreate = (
     stackId: string,
-    request: GitlabComKeibiengineKeibiEnginePkgDescribeApiGetStackFindings,
+    request: GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1StacksFindingsCreateState>({
@@ -1461,6 +1770,10 @@ export const useScheduleApiV1StacksFindingsCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1StacksFindingsCreate(stackId, request, params)
@@ -1495,7 +1808,7 @@ export const useScheduleApiV1StacksFindingsCreate = (
 
 interface IuseScheduleApiV1StacksInsightDetailState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgComplianceApiInsight
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
     error?: any
 }
 
@@ -1510,8 +1823,16 @@ export const useScheduleApiV1StacksInsightDetail = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1StacksInsightDetailState>({
@@ -1522,6 +1843,10 @@ export const useScheduleApiV1StacksInsightDetail = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1StacksInsightDetail(stackId, query, params)
@@ -1561,11 +1886,19 @@ interface IuseScheduleApiV1StacksBenchmarkTriggerCreateState {
 }
 
 export const useScheduleApiV1StacksBenchmarkTriggerCreate = (
-    request: GitlabComKeibiengineKeibiEnginePkgDescribeApiStackBenchmarkRequest,
+    request: GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1StacksBenchmarkTriggerCreateState>({
@@ -1576,6 +1909,10 @@ export const useScheduleApiV1StacksBenchmarkTriggerCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1StacksBenchmarkTriggerCreate(request, params)
@@ -1610,7 +1947,7 @@ export const useScheduleApiV1StacksBenchmarkTriggerCreate = (
 
 interface IuseScheduleApiV1StacksCreateCreateState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgDescribeApiStack
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiStack
     error?: any
 }
 
@@ -1621,11 +1958,21 @@ export const useScheduleApiV1StacksCreateCreate = (
         tag?: string
 
         resources?: string[]
+
+        config?: string
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1StacksCreateCreateState>({
@@ -1636,6 +1983,10 @@ export const useScheduleApiV1StacksCreateCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1StacksCreateCreate(data, params)
@@ -1668,18 +2019,92 @@ export const useScheduleApiV1StacksCreateCreate = (
     return { response, isLoading, error }
 }
 
+interface IuseScheduleApiV1StacksDescriberTriggerCreateState {
+    isLoading: boolean
+    response?: void
+    error?: any
+}
+
+export const useScheduleApiV1StacksDescriberTriggerCreate = (
+    req: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
+    params: RequestParams = {}
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseScheduleApiV1StacksDescriberTriggerCreateState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([req, params])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.schedule
+                .apiV1StacksDescriberTriggerCreate(req, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([req, params]) !== lastInput) {
+        setLastInput(JSON.stringify([req, params]))
+    }
+
+    useEffect(() => {
+        sendRequest()
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 interface IuseScheduleApiV1StacksInsightTriggerCreateState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgDescribeApiInsightJob[]
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob[]
     error?: any
 }
 
 export const useScheduleApiV1StacksInsightTriggerCreate = (
-    request: GitlabComKeibiengineKeibiEnginePkgDescribeApiStackInsightRequest,
+    request: GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1StacksInsightTriggerCreateState>({
@@ -1690,6 +2115,10 @@ export const useScheduleApiV1StacksInsightTriggerCreate = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1StacksInsightTriggerCreate(request, params)
@@ -1724,7 +2153,7 @@ export const useScheduleApiV1StacksInsightTriggerCreate = (
 
 interface IuseScheduleApiV1StacksResourceListState {
     isLoading: boolean
-    response?: GitlabComKeibiengineKeibiEnginePkgDescribeApiStack[]
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiStack[]
     error?: any
 }
 
@@ -1734,8 +2163,16 @@ export const useScheduleApiV1StacksResourceList = (
     },
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1StacksResourceListState>({
@@ -1746,6 +2183,10 @@ export const useScheduleApiV1StacksResourceList = (
     )
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1StacksResourceList(query, params)
@@ -1787,8 +2228,16 @@ interface IuseScheduleApiV1SummarizeJobsPendingListState {
 export const useScheduleApiV1SummarizeJobsPendingList = (
     params: RequestParams = {}
 ) => {
+    const workspace = useParams<{ ws: string }>().ws
+
     const api = new Api()
     api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
 
     const [state, setState] =
         useState<IuseScheduleApiV1SummarizeJobsPendingListState>({
@@ -1797,6 +2246,10 @@ export const useScheduleApiV1SummarizeJobsPendingList = (
     const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
 
     const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
         try {
             api.schedule
                 .apiV1SummarizeJobsPendingList(params)

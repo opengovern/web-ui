@@ -14,6 +14,7 @@ export const Auth0ProviderWithNavigate = ({
     const domain = process.env.REACT_APP_AUTH0_DOMAIN
     const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID
     const redirectUri = `${window.location.origin}/callback`
+    const audienceStr = process.env.REACT_APP_AUTH0_AUDIENCE
 
     const onRedirectCallback = (appState: AppState | undefined) => {
         navigate(appState?.returnTo || window.location.pathname)
@@ -29,7 +30,9 @@ export const Auth0ProviderWithNavigate = ({
             domain={domain}
             clientId={clientId}
             authorizationParams={{
+                scope: 'openid profile email api:read',
                 redirect_uri: redirectUri,
+                audience: audienceStr,
             }}
             onRedirectCallback={onRedirectCallback}
         >
