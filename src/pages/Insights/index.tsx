@@ -62,7 +62,6 @@ export default function Insights() {
                             <Col numColSpan={1}>
                                 <InsightCard
                                     metric={insight}
-                                    showIcon
                                     showTitle
                                     showDetails
                                     isClickable

@@ -3,18 +3,18 @@ import React, { useRef } from 'react'
 // @ts-ignore
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { CSVLink } from 'react-csv'
-import { Button, Icon } from '@tremor/react'
+import { Button, Flex, Icon, Text } from '@tremor/react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 
 export interface IProps {
     Headers: any
     Rows: any
-    Name: string
+    Name: any
 }
 
 const Downloader = ({ Headers, Rows, Name }: IProps) => {
     const csvLink = useRef<{ link: { click: () => void } }>()
-
+    console.log(Headers)
     const CSVData = () => {
         const csv: any = { headers: [], data: [], fileName: Name }
         for (let i = 0; i < Headers.length; i += 1) {
@@ -39,9 +39,14 @@ const Downloader = ({ Headers, Rows, Name }: IProps) => {
     }
 
     return (
-        <Button onClick={() => csvLink?.current?.link?.click()}>
-            {/* <DownloadIcon /> */}
-            <Icon icon={ArrowDownOnSquareIcon} />
+        <Button
+            variant="secondary"
+            onClick={() => csvLink?.current?.link?.click()}
+        >
+            <Flex flexDirection="row">
+                <Icon icon={ArrowDownOnSquareIcon} />
+                <Text>Download</Text>
+            </Flex>
             <CSVLink
                 {...CSVData()}
                 style={{ display: 'hidden' }}
