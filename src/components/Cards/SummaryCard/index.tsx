@@ -78,15 +78,6 @@ export default function SummaryCard({
                     ) : (
                         <div className="text-sm text-blue-500 mt-4" />
                     )}
-                    <Button
-                        size="xs"
-                        variant="light"
-                        icon={ArrowLongRightIcon}
-                        iconPosition="right"
-                        onClick={onClick}
-                    >
-                        View more
-                    </Button>
                 </Flex>
             )}
         </Card>

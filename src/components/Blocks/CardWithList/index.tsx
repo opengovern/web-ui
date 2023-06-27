@@ -19,24 +19,33 @@ import { REGIONS } from '../../../utilities/regions'
 import Spinner from '../../Spinner'
 
 type IProps = {
-    count?: any
+    // count?: any
     // provider?: any
-    connections?: any
+    // connections?: any
+    title?: any
+    tabs?: any
+    data?: any
+    loading?: boolean
 }
 
-export default function Region({ count = 5, connections }: IProps) {
+export default function CardWithList({
+    title = '',
+    tabs = [],
+    data = [],
+    loading = false,
+}: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     // const [formattedData, setFormattedData] = useState<any>(undefined)
     // const [tabs, setTabs] = useState<string[]>([])
-    const tabs = ['', 'AWS', 'Azure']
+    // const tabs = ['', 'AWS', 'Azure']
     // const [activeTab, setActiveTab] = useState<string>(tabs[0])
-    const query = {
-        count,
-        connector: tabs[selectedIndex],
-        ...(connections && { connectionId: connections }),
-    }
-    const { response, isLoading } =
-        useInventoryApiV1ResourcesTopRegionsList(query)
+    // const query = {
+    //     count,
+    //     connector: tabs[selectedIndex],
+    //     ...(connections && { connectionId: connections }),
+    // }
+    // const { response, isLoading } =
+    //     useInventoryApiV1ResourcesTopRegionsList(query)
     // const formatData = (data: any[] | undefined) => {
     //     const output = Object.create(null)
     //     if (!data) {
@@ -81,13 +90,13 @@ export default function Region({ count = 5, connections }: IProps) {
     //     }
     // }, [response])
 
-    const totalRes = (data: any) => {
-        let total = 0
-        data.forEach((item: any) => {
-            total += item.resourceCount
-        })
-        return total
-    }
+    // const totalRes = (data: any) => {
+    //     let total = 0
+    //     data.forEach((item: any) => {
+    //         total += item.resourceCount
+    //     })
+    //     return total
+    // }
 
     // eslint-disable-next-line consistent-return
     const tabDetails = (tab: string) => {
@@ -105,11 +114,11 @@ export default function Region({ count = 5, connections }: IProps) {
         //     console.log(e)
         // }
         try {
-            return response?.map((resource: any) => (
-                <ListItem key={resource.location}>
-                    <Text>{resource.location}</Text>
+            return data.tab.map((item: any) => (
+                <ListItem key={item.name}>
+                    <Text>{item.name}</Text>
                     <Flex justifyContent="end" className="space-x-2">
-                        <Text>{numericDisplay(resource.resourceCount)}</Text>
+                        {/* <Text>{numericDisplay(resource.resourceCount)}</Text> */}
                     </Flex>
                 </ListItem>
             ))
@@ -121,7 +130,7 @@ export default function Region({ count = 5, connections }: IProps) {
     const render = () => (
         <Card>
             <Flex alignItems="start">
-                <Title>Top Locations</Title>
+                <Title>{title}</Title>
             </Flex>
             <TabGroup
                 index={selectedIndex}
@@ -131,33 +140,22 @@ export default function Region({ count = 5, connections }: IProps) {
                 <TabList>
                     {/* {formattedData && */}
                     {/*    tabs.map((item) => <Tab key={item}>{item}</Tab>)} */}
-                    {tabs.map((item) => (
-                        <Tab key={item}>{item === '' ? 'All' : item}</Tab>
+                    {tabs.map((item: any) => (
+                        <Tab key={item}>{item}</Tab>
                     ))}
                 </TabList>
             </TabGroup>
             <List className="mt-4">
                 <Flex className="mt-8" justifyContent="between">
                     <Bold>Total Resources</Bold>
-                    <Bold>{numericDisplay(totalRes(response))}</Bold>
+                    <Bold>{12}</Bold>
                 </Flex>
-                {tabDetails(tabs[selectedIndex])}
+                {/* {tabDetails(tabs[selectedIndex])} */}
             </List>
-
-            <Flex className="mt-6 pt-4 border-t">
-                <Button
-                    size="xs"
-                    variant="light"
-                    icon={ArrowLongRightIcon}
-                    iconPosition="right"
-                >
-                    View more
-                </Button>
-            </Flex>
         </Card>
     )
 
-    return isLoading ? (
+    return loading ? (
         <Card>
             <div className="flex items-center justify-center h-96">
                 <Spinner />

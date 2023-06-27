@@ -1,8 +1,4 @@
 import {
-    FunnelIcon as FunnelIconOutline,
-    MagnifyingGlassIcon,
-} from '@heroicons/react/24/outline'
-import {
     Card,
     Table,
     TableHead,
@@ -17,7 +13,6 @@ import {
     SearchSelect,
     Flex,
     DeltaType,
-    TextInput,
 } from '@tremor/react'
 
 import React, { useEffect, useState } from 'react'
@@ -27,51 +22,6 @@ import { selectedResourceCategoryAtom } from '../../../../store'
 import { useInventoryApiV2ResourcesMetricList } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
-
-const data = [
-    {
-        metricName: 'Something Account',
-        count: '556',
-        from: '400',
-        changes: '0.018',
-    },
-    {
-        metricName: 'Something Account',
-        count: '556',
-        from: '400',
-        changes: '0.018',
-    },
-    {
-        metricName: 'Something Account',
-        count: '556',
-        from: '400',
-        changes: '0.018',
-    },
-    {
-        metricName: 'Something Account',
-        count: '556',
-        from: '400',
-        changes: '0.018',
-    },
-    {
-        metricName: 'Something Account',
-        count: '556',
-        from: '400',
-        changes: '0.018',
-    },
-    {
-        metricName: 'Something Account',
-        count: '556',
-        from: '400',
-        changes: '0.018',
-    },
-    {
-        metricName: 'Something Account',
-        count: '556',
-        from: '400',
-        changes: '0.018',
-    },
-]
 
 interface IProps {
     provider: any
