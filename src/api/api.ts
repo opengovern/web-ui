@@ -1606,6 +1606,8 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData {
     connectionID?: string
     cost?: number
     count?: number
+    dailyCostAtEndTime?: number
+    dailyCostAtStartTime?: number
     lastInventory?: string
     oldCount?: number
 }
@@ -2085,6 +2087,10 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     /** @example "7r6123ac-ca1c-434f-b1a3-91w2w9d277c8" */
     credentialID?: string
     credentialName?: string
+    /** @example 1000 */
+    dailyCostAtEndTime?: number
+    /** @example 1000 */
+    dailyCostAtStartTime?: number
     /** @example "This is an example connection" */
     description?: string
     /** @example "johndoe@example.com" */
@@ -4287,7 +4293,7 @@ export class Api<
                 /** timestamp for end in epoch seconds */
                 endTime?: string
                 /** Sort by field - default is cost */
-                sortBy?: 'dimension' | 'cost'
+                sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
                 /** page size - default is 20 */
                 pageSize?: number
                 /** page number - default is 1 */
@@ -4652,7 +4658,7 @@ export class Api<
                 /** Minimum number of resources with this tag value, default 1 */
                 minCount?: number
                 /** Sort by field - default is count */
-                sortBy?: 'name' | 'count'
+                sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
                 /** page size - default is 20 */
                 pageSize?: number
                 /** page number - default is 1 */
@@ -4835,7 +4841,7 @@ export class Api<
                 /** timestamp for current values in epoch seconds */
                 endTime?: string
                 /** Sort by field - default is count */
-                sortBy?: 'name' | 'count'
+                sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
                 /** page size - default is 20 */
                 pageSize?: number
                 /** page number - default is 1 */
@@ -4895,6 +4901,7 @@ export class Api<
          * @name ApiV2ServicesSummaryList
          * @summary List Cloud Services Summary
          * @request GET:/inventory/api/v2/services/summary
+         * @deprecated
          * @secure
          */
         apiV2ServicesSummaryList: (
@@ -4936,6 +4943,7 @@ export class Api<
          * @name ApiV2ServicesSummaryDetail
          * @summary Get Cloud Service Summary
          * @request GET:/inventory/api/v2/services/summary/{serviceName}
+         * @deprecated
          * @secure
          */
         apiV2ServicesSummaryDetail: (
@@ -5140,7 +5148,14 @@ export class Api<
                 /** end time in unix seconds */
                 endTime?: number
                 /** column to sort by - default is cost */
-                sortBy?: 'onboard_date' | 'resource_count' | 'cost'
+                sortBy?:
+                    | 'onboard_date'
+                    | 'resource_count'
+                    | 'cost'
+                    | 'growth'
+                    | 'growth_rate'
+                    | 'cost_growth'
+                    | 'cost_growth_rate'
             },
             params: RequestParams = {}
         ) =>
