@@ -47,7 +47,7 @@ const Settings: React.FC<any> = () => {
     }
 
     return (
-        <LoggedInLayout>
+        <LoggedInLayout currentPage='settings'>
             <main />
         </LoggedInLayout>
     )

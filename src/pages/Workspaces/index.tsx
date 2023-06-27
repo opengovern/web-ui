@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useAtom } from 'jotai'
+import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
     Badge,
     Button,
@@ -16,8 +17,21 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { FunnelIcon } from '@heroicons/react/24/outline'
+import {
+    FunnelIcon,
+    Bars3Icon,
+    BellIcon,
+    HomeIcon,
+    XMarkIcon,
+    DocumentChartBarIcon,
+    CubeIcon,
+    ArrowTrendingUpIcon,
+    ShieldCheckIcon,
+    Cog6ToothIcon,
+} from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { useAuth0 } from '@auth0/auth0-react'
 import Composition from '../../components/Blocks/Composition'
 import Region from '../../components/Blocks/Region'
 import LoggedInLayout from '../../components/LoggedInLayout'
@@ -28,6 +42,7 @@ import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 
 const Workspaces: React.FC<any> = () => {
     const navigate = useNavigate()
+    const { user } = useAuth0()
     const {
         response: workspaces,
         isLoading,
@@ -35,7 +50,7 @@ const Workspaces: React.FC<any> = () => {
     } = useWorkspaceApiV1WorkspacesList()
 
     return (
-        <LoggedInLayout>
+        <LoggedInLayout currentPage="assets" showSidebar={false}>
             <main>
                 <Flex
                     flexDirection="row"
