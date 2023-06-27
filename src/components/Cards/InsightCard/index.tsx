@@ -2,7 +2,6 @@ import {
     BadgeDelta,
     Card,
     Flex,
-    Icon,
     Metric,
     Subtitle,
     Text,
@@ -10,15 +9,11 @@ import {
 } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { numericDisplay } from '../../../utilities/numericDisplay'
-import { ReactComponent as AWSIcon } from '../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
-import { ReactComponent as CloudIcon } from '../../../assets/icons/icon-cloud.svg'
-import { ReactComponent as AzureIcon } from '../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 
 interface IInsightsCard {
     metric: any
     showTitle?: boolean
     showDetails?: boolean
-    showIcon?: boolean
     isClickable?: boolean
 }
 
@@ -55,25 +50,10 @@ const calculateTime = (inputData: any) => {
     return ''
 }
 
-const getProviderIcon = (provider: string) => {
-    switch (true) {
-        case provider === 'AWS':
-            return (
-                <Icon icon={AWSIcon} size="lg" color="orange" variant="solid" />
-            )
-        case provider === 'Azure':
-            return <Icon icon={AzureIcon} size="lg" variant="solid" />
-
-        default:
-            return <Icon icon={CloudIcon} size="lg" variant="solid" />
-    }
-}
-
 export default function InsightCard({
     metric,
     showTitle = false,
     showDetails = false,
-    showIcon = false,
     isClickable = false,
 }: IInsightsCard) {
     const navigate = useNavigate()
@@ -83,7 +63,7 @@ export default function InsightCard({
     return (
         <Card
             key={metric}
-            className="cursor-pointer"
+            className="cursor-pointer h-full"
             onClick={() =>
                 isClickable ? navigateToAssetsInsightsDetails(metric.id) : null
             }
@@ -92,61 +72,63 @@ export default function InsightCard({
                 flexDirection="col"
                 alignItems="start"
                 justifyContent="between"
+                className="h-full"
             >
                 <Flex flexDirection="col" alignItems="start">
+                    <Flex flexDirection="row" className="mb-1">
+                        <Title
+                            color={
+                                metric?.connector === 'AWS' ? 'orange' : 'blue'
+                            }
+                        >
+                            {metric?.connector}
+                        </Title>
+                        <BadgeDelta
+                            deltaType={
+                                calculatePercent(metric) > 0
+                                    ? 'moderateIncrease'
+                                    : 'moderateDecrease'
+                            }
+                            className={`opacity-${
+                                calculatePercent(metric) !== 0 ? 1 : 0
+                            } cursor-pointer`}
+                        >
+                            {`${
+                                calculatePercent(metric) > 0
+                                    ? Math.ceil(calculatePercent(metric))
+                                    : -1 * Math.floor(calculatePercent(metric))
+                            }%`}
+                        </BadgeDelta>
+                    </Flex>
                     <Flex
-                        flexDirection="row"
-                        justifyContent="between"
+                        flexDirection="col"
                         alignItems="start"
+                        className="mb-2"
                     >
                         <Flex
-                            flexDirection="col"
-                            alignItems="start"
-                            className="mb-6"
+                            flexDirection="row"
+                            alignItems="end"
+                            justifyContent="start"
+                            className="mb-3"
                         >
-                            <Flex
-                                flexDirection="row"
-                                alignItems="end"
-                                justifyContent="start"
-                                className="mb-3"
-                            >
-                                <Metric className="mr-1">
-                                    {numericDisplay(
-                                        metric?.totalResultValue || 0
-                                    )}
-                                </Metric>
-                                <Subtitle className="truncate">
-                                    {`from ${numericDisplay(
-                                        metric?.oldTotalResultValue || 0
-                                    )}`}
-                                </Subtitle>
-                            </Flex>
-                            <BadgeDelta
-                                deltaType={
-                                    calculatePercent(metric) > 0
-                                        ? 'moderateIncrease'
-                                        : 'moderateDecrease'
-                                }
-                                className="cursor-pointer"
-                            >
-                                {`${
-                                    calculatePercent(metric) > 0
-                                        ? Math.ceil(calculatePercent(metric))
-                                        : -1 *
-                                          Math.floor(calculatePercent(metric))
-                                }%`}
-                            </BadgeDelta>
+                            <Metric className="mr-1">
+                                {numericDisplay(metric?.totalResultValue || 0)}
+                            </Metric>
+                            <Subtitle className="truncate">
+                                {`from ${numericDisplay(
+                                    metric?.oldTotalResultValue || 0
+                                )}`}
+                            </Subtitle>
                         </Flex>
-                        {showIcon && getProviderIcon(metric?.connector)}
                     </Flex>
                     {showTitle && (
                         <Title className="mb-1">{metric?.shortTitle}</Title>
                     )}
                     {showDetails && <Text>{metric?.description}</Text>}
                 </Flex>
-                <Subtitle className="mt-1">
+                <Text className="mt-2">
                     {calculateTime(metric?.query?.updatedAt)}
-                </Subtitle>
+                </Text>
             </Flex>
         </Card>
     )

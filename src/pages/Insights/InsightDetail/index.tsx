@@ -1,4 +1,4 @@
-import { Col, DateRangePicker, Flex, Grid, Title } from '@tremor/react'
+import { Card, Col, DateRangePicker, Flex, Grid, Title } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
@@ -14,6 +14,7 @@ import { timeAtom } from '../../../store'
 import InsightCard from '../../../components/Cards/InsightCard'
 import InsightDescriptionCard from '../../../components/Cards/InsightDescriptionCard'
 import MultipleAreaCharts from '../../../components/Charts/AreaCharts/MultipleAreaCharts'
+import Downloader from './Downloader'
 
 const chartData = (inputData: any) => {
     const data = []
@@ -100,14 +101,14 @@ export default function InsightDetail() {
         query
     )
 
-    const columns = insightsHeadersToColumns(
+    const columns =
         insightDetail?.result && insightDetail?.result[0]?.details
             ? insightDetail?.result[0].details.headers
             : []
-    )
-    const rows = insightsResultToRows(
-        insightDetail?.result ? insightDetail?.result[0].details : []
-    )
+
+    const rows = insightDetail?.result
+        ? insightDetail?.result[0].details
+        : undefined
 
     return (
         <LoggedInLayout currentPage="insight">
@@ -139,21 +140,32 @@ export default function InsightDetail() {
                         <InsightDescriptionCard metric={insightDetail || {}} />
                     </Col>
                 </Grid>
-                <MultipleAreaCharts
-                    className="mt-4 h-80"
-                    index="date"
-                    yAxisWidth={60}
-                    categories={['count']}
-                    data={chartData(insightTrend)}
-                    colors={['indigo']}
-                />
-                <div className="w-full mt-6 ag-theme-alpine">
+                <Card>
+                    <MultipleAreaCharts
+                        title={`${insightDetail?.shortTitle} count`}
+                        className="mt-4 h-80"
+                        index="date"
+                        yAxisWidth={60}
+                        categories={['count']}
+                        data={chartData(insightTrend)}
+                        colors={['indigo']}
+                    />
+                </Card>
+                <Flex flexDirection="row" className="mt-6">
+                    <Title>Results</Title>
+                    <Downloader
+                        Headers={columns}
+                        Rows={rows?.rows ? rows.rows : []}
+                        Name={insightDetail?.shortTitle}
+                    />
+                </Flex>
+                <div className="w-full mt-3 ag-theme-alpine">
                     <AgGridReact
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
-                        columnDefs={columns}
-                        rowData={rows}
+                        columnDefs={insightsHeadersToColumns(columns)}
+                        rowData={insightsResultToRows(rows)}
                     />
                 </div>
             </Flex>
