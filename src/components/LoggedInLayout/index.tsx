@@ -44,10 +44,6 @@ const navigation = [
         icon: Cog6ToothIcon,
     },
 ]
-const userNavigation = [
-    { name: 'Your profile', href: '#' },
-    { name: 'Sign out', href: '/logout' },
-]
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -72,7 +68,7 @@ export default function LoggedInLayout({
 }: IProps) {
     const workspace = useParams<{ ws: string }>().ws
     const [sidebarOpen, setSidebarOpen] = useState(false)
-    const { user } = useAuth0()
+    const { user, logout } = useAuth0()
 
     const sidebar = (
         <>
@@ -336,11 +332,11 @@ export default function LoggedInLayout({
                                     leaveTo="transform opacity-0 scale-95"
                                 >
                                     <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white dark:bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                                        {userNavigation.map((item) => (
-                                            <Menu.Item key={item.name}>
+                                        {showSidebar && (
+                                            <Menu.Item key="Your profile">
                                                 {({ active }) => (
                                                     <Link
-                                                        to={item.href}
+                                                        to={`/${workspace}/profile`}
                                                         className={classNames(
                                                             active
                                                                 ? 'bg-gray-50'
@@ -348,11 +344,29 @@ export default function LoggedInLayout({
                                                             'block px-3 py-1 text-sm leading-6 text-gray-900'
                                                         )}
                                                     >
-                                                        {item.name}
+                                                        Your profile
                                                     </Link>
                                                 )}
                                             </Menu.Item>
-                                        ))}
+                                        )}
+                                        <Menu.Item key="Sign out">
+                                            {({ active }) => (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        logout()
+                                                    }}
+                                                    className={classNames(
+                                                        active
+                                                            ? 'bg-gray-50'
+                                                            : '',
+                                                        'block px-3 py-1 text-sm leading-6 text-gray-900'
+                                                    )}
+                                                >
+                                                    Sign out
+                                                </button>
+                                            )}
+                                        </Menu.Item>
                                     </Menu.Items>
                                 </Transition>
                             </Menu>
