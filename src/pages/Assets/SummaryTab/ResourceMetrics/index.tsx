@@ -1,21 +1,31 @@
 import React from 'react'
-import { Grid, SearchSelect, SearchSelectItem, Title } from '@tremor/react'
+import {
+    Button,
+    Text,
+    Grid,
+    SearchSelect,
+    SearchSelectItem,
+    Title,
+} from '@tremor/react'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
-import Swiper from '../../../components/Swiper'
-import MetricCard from '../../../components/Cards/MetricCard'
-import { selectedResourceCategoryAtom } from '../../../store'
-import { useInventoryApiV2ResourcesMetricList } from '../../../api/inventory.gen'
-import { numericDisplay } from '../../../utilities/numericDisplay'
+import { useNavigate } from 'react-router-dom'
+import Swiper from '../../../../components/Swiper'
+import MetricCard from '../../../../components/Cards/MetricCard'
+import { selectedResourceCategoryAtom } from '../../../../store'
+import { useInventoryApiV2ResourcesMetricList } from '../../../../api/inventory.gen'
+import { numericDisplay } from '../../../../utilities/numericDisplay'
 
 interface IProps {
     provider: any
     timeRange: any
+    connection: any
     categories: {
         label: string
         value: string
     }[]
     pageSize: any
+    setActiveSubPage: (subPage: string) => void
 }
 
 export default function ResourceMetrics({
@@ -23,6 +33,8 @@ export default function ResourceMetrics({
     timeRange,
     pageSize,
     categories,
+    connection,
+    setActiveSubPage,
 }: IProps) {
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
@@ -33,6 +45,7 @@ export default function ResourceMetrics({
             : selectedResourceCategory
     const query = {
         ...(provider && { connector: provider }),
+        ...(connection && { connectionId: connection }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
         ...(timeRange.from && { startTime: dayjs(timeRange.from).unix() }),
         ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
@@ -46,8 +59,17 @@ export default function ResourceMetrics({
     return (
         <div>
             {/* <div className="h-80" /> */}
-            <div className="flex justify-normal gap-x-2">
-                <Title>Resource metrics in </Title>
+            <div className="flex justify-between gap-x-2">
+                <div className="flex flex-row justify-start items-start">
+                    <Title>Resource metrics </Title>
+                    <Button
+                        variant="light"
+                        className="mt-1 ml-2"
+                        onClick={() => setActiveSubPage('Resource Metrics')}
+                    >
+                        <Text color="blue">(see All)</Text>
+                    </Button>
+                </div>
                 <SearchSelect
                     onValueChange={(e) => setSelectedResourceCategory(e)}
                     value={selectedResourceCategory}

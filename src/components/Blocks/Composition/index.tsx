@@ -87,7 +87,7 @@ export default function Composition({
     const { response: composition } =
         useInventoryApiV2ResourcesCompositionDetail('category', query)
 
-    function compositionData(inputObject: any) {
+    function compositionData(inputObject: any, oldData: boolean) {
         const outputArray = []
 
         if (!inputObject) {
@@ -103,16 +103,19 @@ export default function Composition({
         for (const key in inputObject.top_values) {
             outputArray.push({
                 name: key,
-                value: inputObject.top_values[key],
+                value: oldData
+                    ? inputObject.top_values[key].old_count
+                    : inputObject.top_values[key].count,
             })
         }
 
         // add others key-value pair
         outputArray.push({
             name: 'others',
-            value: inputObject.others,
+            value: oldData
+                ? inputObject.others.old_count
+                : inputObject.others.count,
         })
-
         return outputArray
     }
 
@@ -131,7 +134,7 @@ export default function Composition({
                     >
                         <TabList variant="solid">
                             <Tab icon={ChartPieIcon}>Chart</Tab>
-                            {/* <Tab icon={Bars4Icon}>List</Tab> */}
+                            <Tab>List</Tab>
                         </TabList>
                     </TabGroup>
                 </span>
@@ -144,58 +147,91 @@ export default function Composition({
             </Text>
             <Text>{composition?.total_value_count} Asset</Text>
             {selectedIndex === 0 ? (
+                <div className="">
+                    <div className="mt-6">
+                        <DonutChart
+                            data={compositionData(composition, false)}
+                            showAnimation={false}
+                            category="value"
+                            index="name"
+                            // valueFormatter={valueFormatter}
+                        />
+                    </div>
+                    <div>
+                        <Flex className="mt-8" justifyContent="between">
+                            <Text className="truncate">
+                                <Bold>Stocks</Bold>
+                            </Text>
+                            <Text>Since transaction</Text>
+                        </Flex>
+                        <List className="mt-4">
+                            {stocks.map((stock) => (
+                                <ListItem key={stock.name}>
+                                    <Text>{stock.name}</Text>
+                                    <Flex
+                                        justifyContent="end"
+                                        className="space-x-2"
+                                    >
+                                        <Text>
+                                            ${' '}
+                                            {Intl.NumberFormat('us')
+                                                .format(stock.value)
+                                                .toString()}
+                                        </Text>
+                                        <BadgeDelta
+                                            deltaType={stock.deltaType}
+                                            size="xs"
+                                        >
+                                            {stock.performance}
+                                        </BadgeDelta>
+                                    </Flex>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </div>
+                </div>
+            ) : (
+                // <>
+                //     <Flex className="mt-8" justifyContent="between">
+                //         <Text className="truncate">
+                //             <Bold>Stocks</Bold>
+                //         </Text>
+                //         <Text>Since transaction</Text>
+                //     </Flex>
+                //     <List className="mt-4">
+                //         {stocks.map((stock) => (
+                //             <ListItem key={stock.name}>
+                //                 <Text>{stock.name}</Text>
+                //                 <Flex
+                //                     justifyContent="end"
+                //                     className="space-x-2"
+                //                 >
+                //                     <Text>
+                //                         ${' '}
+                //                         {Intl.NumberFormat('us')
+                //                             .format(stock.value)
+                //                             .toString()}
+                //                     </Text>
+                //                     <BadgeDelta
+                //                         deltaType={stock.deltaType}
+                //                         size="xs"
+                //                     >
+                //                         {stock.performance}
+                //                     </BadgeDelta>
+                //                 </Flex>
+                //             </ListItem>
+                //         ))}
+                //     </List>
+                // </>
                 <DonutChart
-                    data={compositionData(composition)}
+                    data={compositionData(composition, true)}
                     showAnimation={false}
                     category="value"
                     index="name"
                     // valueFormatter={valueFormatter}
                     className="mt-6"
                 />
-            ) : (
-                <>
-                    <Flex className="mt-8" justifyContent="between">
-                        <Text className="truncate">
-                            <Bold>Stocks</Bold>
-                        </Text>
-                        <Text>Since transaction</Text>
-                    </Flex>
-                    <List className="mt-4">
-                        {stocks.map((stock) => (
-                            <ListItem key={stock.name}>
-                                <Text>{stock.name}</Text>
-                                <Flex
-                                    justifyContent="end"
-                                    className="space-x-2"
-                                >
-                                    <Text>
-                                        ${' '}
-                                        {Intl.NumberFormat('us')
-                                            .format(stock.value)
-                                            .toString()}
-                                    </Text>
-                                    <BadgeDelta
-                                        deltaType={stock.deltaType}
-                                        size="xs"
-                                    >
-                                        {stock.performance}
-                                    </BadgeDelta>
-                                </Flex>
-                            </ListItem>
-                        ))}
-                    </List>
-                </>
             )}
-            <Flex className="mt-6 pt-4 border-t">
-                <Button
-                    size="xs"
-                    variant="light"
-                    icon={ArrowLongRightIcon}
-                    iconPosition="right"
-                >
-                    View more
-                </Button>
-            </Flex>
         </Card>
     )
 }
