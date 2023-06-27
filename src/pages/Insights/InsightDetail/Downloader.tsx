@@ -1,6 +1,10 @@
 import React, { useRef } from 'react'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { CSVLink } from 'react-csv'
-import { Button } from '@tremor/react'
+import { Button, Icon } from '@tremor/react'
+import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 
 export interface IProps {
     Headers: any
@@ -37,6 +41,7 @@ const Downloader = ({ Headers, Rows, Name }: IProps) => {
     return (
         <Button onClick={() => csvLink?.current?.link?.click()}>
             {/* <DownloadIcon /> */}
+            <Icon icon={ArrowDownOnSquareIcon} />
             <CSVLink
                 {...CSVData()}
                 style={{ display: 'hidden' }}

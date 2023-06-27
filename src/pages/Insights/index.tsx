@@ -1,4 +1,4 @@
-import { DateRangePicker, Flex, Grid, Title } from '@tremor/react'
+import { Col, DateRangePicker, Flex, Grid, Title } from '@tremor/react'
 import React, { useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -59,12 +59,15 @@ export default function Insights() {
                             return insight
                         })
                         .map((insight) => (
-                            <InsightCard
-                                metric={insight}
-                                showIcon
-                                showTitle
-                                showDetails
-                            />
+                            <Col numColSpan={1}>
+                                <InsightCard
+                                    metric={insight}
+                                    showIcon
+                                    showTitle
+                                    showDetails
+                                    isClickable
+                                />
+                            </Col>
                         ))}
                 </Grid>
             </Flex>

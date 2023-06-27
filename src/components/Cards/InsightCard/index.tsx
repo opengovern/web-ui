@@ -19,6 +19,7 @@ interface IInsightsCard {
     showTitle?: boolean
     showDetails?: boolean
     showIcon?: boolean
+    isClickable?: boolean
 }
 
 const calculatePercent = (inputData: any) => {
@@ -36,7 +37,7 @@ const calculatePercent = (inputData: any) => {
 }
 
 const calculateTime = (inputData: any) => {
-    try {
+    if (inputData) {
         const date = Date.parse(inputData) / 1000
         const now = Date.now() / 1000
         const exeAt = Math.floor(now - date)
@@ -50,9 +51,8 @@ const calculateTime = (inputData: any) => {
             return `updated ${Math.floor(exeAt / 3600)}h ago`
         }
         return `updated ${Math.floor(exeAt / 86400)}d ago`
-    } catch (error) {
-        return null
     }
+    return ''
 }
 
 const getProviderIcon = (provider: string) => {
@@ -74,6 +74,7 @@ export default function InsightCard({
     showTitle = false,
     showDetails = false,
     showIcon = false,
+    isClickable = false,
 }: IInsightsCard) {
     const navigate = useNavigate()
     const navigateToAssetsInsightsDetails = (id: any) => {
@@ -83,7 +84,9 @@ export default function InsightCard({
         <Card
             key={metric}
             className="cursor-pointer"
-            onClick={() => navigateToAssetsInsightsDetails(metric.id)}
+            onClick={() =>
+                isClickable ? navigateToAssetsInsightsDetails(metric.id) : null
+            }
         >
             <Flex
                 flexDirection="col"
@@ -142,7 +145,7 @@ export default function InsightCard({
                     {showDetails && <Text>{metric?.description}</Text>}
                 </Flex>
                 <Subtitle className="mt-1">
-                    {calculateTime(metric?.query.updatedAt)}
+                    {calculateTime(metric?.query?.updatedAt)}
                 </Subtitle>
             </Flex>
         </Card>
