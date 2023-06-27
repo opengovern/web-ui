@@ -11,6 +11,7 @@ import Logout from '../pages/Logout'
 interface NavigateToWorkspacePageProps {
     page: string
 }
+
 const NavigateToWorkspacePage = ({ page }: NavigateToWorkspacePageProps) => {
     const workspace = useParams<{ ws: string }>().ws
 
