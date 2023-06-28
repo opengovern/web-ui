@@ -347,7 +347,7 @@ export default function LoggedInLayout({
                                             <Menu.Item key="Your profile">
                                                 {({ active }) => (
                                                     <Link
-                                                        to={`/${workspace}/profile`}
+                                                        to={`/${workspace}/settings/profile`}
                                                         className={classNames(
                                                             active
                                                                 ? 'bg-gray-50'

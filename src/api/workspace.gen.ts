@@ -4,115 +4,115 @@ import { atom, useAtom } from 'jotai'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    DescribeInsightJob,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    DescribeSummarizerJob,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
-    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
-    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    DescribeDescribeResourceJob,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
-    DescribeDescribeSourceJob,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
     AwsResources,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     DescribeComplianceReportJob,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    DescribeDescribeResourceJob,
+    DescribeDescribeSourceJob,
+    DescribeInsightJob,
+    DescribeSummarizerJob,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -126,7 +126,8 @@ interface IuseWorkspaceApiV1WorkspaceCreateState {
 
 export const useWorkspaceApiV1WorkspaceCreate = (
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -143,7 +144,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -169,12 +170,14 @@ export const useWorkspaceApiV1WorkspaceCreate = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -191,7 +194,8 @@ interface IuseWorkspaceApiV1WorkspaceDeleteState {
 
 export const useWorkspaceApiV1WorkspaceDelete = (
     workspaceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -208,7 +212,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params])
+        JSON.stringify([workspaceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -234,12 +238,14 @@ export const useWorkspaceApiV1WorkspaceDelete = (
         }
     }
 
-    if (JSON.stringify([workspaceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params]))
+    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -257,7 +263,8 @@ interface IuseWorkspaceApiV1WorkspaceNameCreateState {
 export const useWorkspaceApiV1WorkspaceNameCreate = (
     workspaceId: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -275,7 +282,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params])
+        JSON.stringify([workspaceId, request, params, wait])
     )
 
     const sendRequest = () => {
@@ -301,12 +308,14 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
         }
     }
 
-    if (JSON.stringify([workspaceId, request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params]))
+    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -324,7 +333,8 @@ interface IuseWorkspaceApiV1WorkspaceOrganizationCreateState {
 export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     workspaceId: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -342,7 +352,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params])
+        JSON.stringify([workspaceId, request, params, wait])
     )
 
     const sendRequest = () => {
@@ -368,12 +378,14 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
         }
     }
 
-    if (JSON.stringify([workspaceId, request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params]))
+    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -391,7 +403,8 @@ interface IuseWorkspaceApiV1WorkspaceOwnerCreateState {
 export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     workspaceId: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -409,7 +422,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params])
+        JSON.stringify([workspaceId, request, params, wait])
     )
 
     const sendRequest = () => {
@@ -435,12 +448,14 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
         }
     }
 
-    if (JSON.stringify([workspaceId, request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params]))
+    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -457,7 +472,8 @@ interface IuseWorkspaceApiV1WorkspaceResumeCreateState {
 
 export const useWorkspaceApiV1WorkspaceResumeCreate = (
     workspaceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -475,7 +491,7 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params])
+        JSON.stringify([workspaceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -501,12 +517,14 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
         }
     }
 
-    if (JSON.stringify([workspaceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params]))
+    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -523,7 +541,8 @@ interface IuseWorkspaceApiV1WorkspaceSuspendCreateState {
 
 export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     workspaceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -541,7 +560,7 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params])
+        JSON.stringify([workspaceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -567,12 +586,14 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
         }
     }
 
-    if (JSON.stringify([workspaceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params]))
+    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -590,7 +611,8 @@ interface IuseWorkspaceApiV1WorkspaceTierCreateState {
 export const useWorkspaceApiV1WorkspaceTierCreate = (
     workspaceId: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -608,7 +630,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params])
+        JSON.stringify([workspaceId, request, params, wait])
     )
 
     const sendRequest = () => {
@@ -634,12 +656,14 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
         }
     }
 
-    if (JSON.stringify([workspaceId, request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params]))
+    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -655,7 +679,8 @@ interface IuseWorkspaceApiV1WorkspaceCurrentListState {
 }
 
 export const useWorkspaceApiV1WorkspaceCurrentList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -672,7 +697,9 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
         useState<IuseWorkspaceApiV1WorkspaceCurrentListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -697,12 +724,14 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -717,7 +746,10 @@ interface IuseWorkspaceApiV1WorkspacesListState {
     error?: any
 }
 
-export const useWorkspaceApiV1WorkspacesList = (params: RequestParams = {}) => {
+export const useWorkspaceApiV1WorkspacesList = (
+    params: RequestParams = {},
+    wait = false
+) => {
     const workspace = useParams<{ ws: string }>().ws
 
     const api = new Api()
@@ -732,7 +764,9 @@ export const useWorkspaceApiV1WorkspacesList = (params: RequestParams = {}) => {
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesListState>({
         isLoading: true,
     })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -757,12 +791,14 @@ export const useWorkspaceApiV1WorkspacesList = (params: RequestParams = {}) => {
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -779,7 +815,8 @@ interface IuseWorkspaceApiV1WorkspacesDetailState {
 
 export const useWorkspaceApiV1WorkspacesDetail = (
     workspaceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -798,7 +835,7 @@ export const useWorkspaceApiV1WorkspacesDetail = (
         }
     )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params])
+        JSON.stringify([workspaceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -824,12 +861,14 @@ export const useWorkspaceApiV1WorkspacesDetail = (
         }
     }
 
-    if (JSON.stringify([workspaceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params]))
+    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -846,7 +885,8 @@ interface IuseWorkspaceApiV1WorkspacesByidDetailState {
 
 export const useWorkspaceApiV1WorkspacesByidDetail = (
     workspaceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -864,7 +904,7 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params])
+        JSON.stringify([workspaceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -890,12 +930,14 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
         }
     }
 
-    if (JSON.stringify([workspaceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params]))
+    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -915,7 +957,8 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     query?: {
         ignore_usage?: boolean
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -933,7 +976,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceName, query, params])
+        JSON.stringify([workspaceName, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -959,12 +1002,14 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
         }
     }
 
-    if (JSON.stringify([workspaceName, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceName, query, params]))
+    if (JSON.stringify([workspaceName, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceName, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -981,7 +1026,8 @@ interface IuseWorkspaceApiV1WorkspacesLimitsByidDetailState {
 
 export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     workspaceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -999,7 +1045,7 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params])
+        JSON.stringify([workspaceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1025,12 +1071,14 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
         }
     }
 
-    if (JSON.stringify([workspaceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params]))
+    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state

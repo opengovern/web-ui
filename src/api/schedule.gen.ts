@@ -4,115 +4,115 @@ import { atom, useAtom } from 'jotai'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    DescribeInsightJob,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    DescribeSummarizerJob,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
-    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
-    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    DescribeDescribeResourceJob,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
-    DescribeDescribeSourceJob,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
     AwsResources,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     DescribeComplianceReportJob,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    DescribeDescribeResourceJob,
+    DescribeDescribeSourceJob,
+    DescribeInsightJob,
+    DescribeSummarizerJob,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -125,7 +125,8 @@ interface IuseScheduleApiV0ComplianceSummarizerTriggerListState {
 }
 
 export const useScheduleApiV0ComplianceSummarizerTriggerList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -142,7 +143,9 @@ export const useScheduleApiV0ComplianceSummarizerTriggerList = (
         useState<IuseScheduleApiV0ComplianceSummarizerTriggerListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -167,12 +170,14 @@ export const useScheduleApiV0ComplianceSummarizerTriggerList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -188,7 +193,8 @@ interface IuseScheduleApiV0ComplianceTriggerListState {
 }
 
 export const useScheduleApiV0ComplianceTriggerList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -205,7 +211,9 @@ export const useScheduleApiV0ComplianceTriggerList = (
         useState<IuseScheduleApiV0ComplianceTriggerListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -230,12 +238,14 @@ export const useScheduleApiV0ComplianceTriggerList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -251,7 +261,8 @@ interface IuseScheduleApiV0DescribeTriggerListState {
 }
 
 export const useScheduleApiV0DescribeTriggerList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -268,7 +279,9 @@ export const useScheduleApiV0DescribeTriggerList = (
         useState<IuseScheduleApiV0DescribeTriggerListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -293,12 +306,14 @@ export const useScheduleApiV0DescribeTriggerList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -314,7 +329,8 @@ interface IuseScheduleApiV0InsightTriggerListState {
 }
 
 export const useScheduleApiV0InsightTriggerList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -331,7 +347,9 @@ export const useScheduleApiV0InsightTriggerList = (
         useState<IuseScheduleApiV0InsightTriggerListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -356,12 +374,14 @@ export const useScheduleApiV0InsightTriggerList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -377,7 +397,8 @@ interface IuseScheduleApiV0SummarizeTriggerListState {
 }
 
 export const useScheduleApiV0SummarizeTriggerList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -394,7 +415,9 @@ export const useScheduleApiV0SummarizeTriggerList = (
         useState<IuseScheduleApiV0SummarizeTriggerListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -419,12 +442,14 @@ export const useScheduleApiV0SummarizeTriggerList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -441,7 +466,8 @@ interface IuseScheduleApiV1BenchmarkEvaluationTriggerUpdateState {
 
 export const useScheduleApiV1BenchmarkEvaluationTriggerUpdate = (
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -459,7 +485,7 @@ export const useScheduleApiV1BenchmarkEvaluationTriggerUpdate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -485,12 +511,14 @@ export const useScheduleApiV1BenchmarkEvaluationTriggerUpdate = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -507,7 +535,8 @@ interface IuseScheduleApiV1BenchmarkEvaluationsListState {
 
 export const useScheduleApiV1BenchmarkEvaluationsList = (
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -525,7 +554,7 @@ export const useScheduleApiV1BenchmarkEvaluationsList = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -551,12 +580,14 @@ export const useScheduleApiV1BenchmarkEvaluationsList = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -572,7 +603,8 @@ interface IuseScheduleApiV1ComplianceReportLastCompletedListState {
 }
 
 export const useScheduleApiV1ComplianceReportLastCompletedList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -589,7 +621,9 @@ export const useScheduleApiV1ComplianceReportLastCompletedList = (
         useState<IuseScheduleApiV1ComplianceReportLastCompletedListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -614,12 +648,14 @@ export const useScheduleApiV1ComplianceReportLastCompletedList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -636,7 +672,8 @@ interface IuseScheduleApiV1DescribeResourceCreateState {
 
 export const useScheduleApiV1DescribeResourceCreate = (
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -654,7 +691,7 @@ export const useScheduleApiV1DescribeResourceCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -680,12 +717,14 @@ export const useScheduleApiV1DescribeResourceCreate = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -701,7 +740,8 @@ interface IuseScheduleApiV1DescribeResourceJobsPendingListState {
 }
 
 export const useScheduleApiV1DescribeResourceJobsPendingList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -718,7 +758,9 @@ export const useScheduleApiV1DescribeResourceJobsPendingList = (
         useState<IuseScheduleApiV1DescribeResourceJobsPendingListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -743,12 +785,14 @@ export const useScheduleApiV1DescribeResourceJobsPendingList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -764,7 +808,8 @@ interface IuseScheduleApiV1DescribeSourceJobsPendingListState {
 }
 
 export const useScheduleApiV1DescribeSourceJobsPendingList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -781,7 +826,9 @@ export const useScheduleApiV1DescribeSourceJobsPendingList = (
         useState<IuseScheduleApiV1DescribeSourceJobsPendingListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -806,12 +853,14 @@ export const useScheduleApiV1DescribeSourceJobsPendingList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -828,7 +877,8 @@ interface IuseScheduleApiV1DescribeTriggerUpdateState {
 
 export const useScheduleApiV1DescribeTriggerUpdate = (
     connectionId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -846,7 +896,7 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, params])
+        JSON.stringify([connectionId, params, wait])
     )
 
     const sendRequest = () => {
@@ -872,12 +922,14 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
         }
     }
 
-    if (JSON.stringify([connectionId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, params]))
+    if (JSON.stringify([connectionId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([connectionId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -894,7 +946,8 @@ interface IuseScheduleApiV1InsightEvaluationTriggerUpdateState {
 
 export const useScheduleApiV1InsightEvaluationTriggerUpdate = (
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -912,7 +965,7 @@ export const useScheduleApiV1InsightEvaluationTriggerUpdate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -938,12 +991,14 @@ export const useScheduleApiV1InsightEvaluationTriggerUpdate = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -960,7 +1015,8 @@ interface IuseScheduleApiV1InsightJobDetailState {
 
 export const useScheduleApiV1InsightJobDetail = (
     jobId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -977,7 +1033,7 @@ export const useScheduleApiV1InsightJobDetail = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([jobId, params])
+        JSON.stringify([jobId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1003,12 +1059,14 @@ export const useScheduleApiV1InsightJobDetail = (
         }
     }
 
-    if (JSON.stringify([jobId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([jobId, params]))
+    if (JSON.stringify([jobId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([jobId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1024,7 +1082,8 @@ interface IuseScheduleApiV1InsightJobsPendingListState {
 }
 
 export const useScheduleApiV1InsightJobsPendingList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1041,7 +1100,9 @@ export const useScheduleApiV1InsightJobsPendingList = (
         useState<IuseScheduleApiV1InsightJobsPendingListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -1066,12 +1127,14 @@ export const useScheduleApiV1InsightJobsPendingList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1088,7 +1151,8 @@ interface IuseScheduleApiV1ResourceTypeDetailState {
 
 export const useScheduleApiV1ResourceTypeDetail = (
     provider: 'aws' | 'azure',
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1106,7 +1170,7 @@ export const useScheduleApiV1ResourceTypeDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([provider, params])
+        JSON.stringify([provider, params, wait])
     )
 
     const sendRequest = () => {
@@ -1132,12 +1196,14 @@ export const useScheduleApiV1ResourceTypeDetail = (
         }
     }
 
-    if (JSON.stringify([provider, params]) !== lastInput) {
-        setLastInput(JSON.stringify([provider, params]))
+    if (JSON.stringify([provider, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([provider, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1152,7 +1218,10 @@ interface IuseScheduleApiV1SourcesListState {
     error?: any
 }
 
-export const useScheduleApiV1SourcesList = (params: RequestParams = {}) => {
+export const useScheduleApiV1SourcesList = (
+    params: RequestParams = {},
+    wait = false
+) => {
     const workspace = useParams<{ ws: string }>().ws
 
     const api = new Api()
@@ -1167,7 +1236,9 @@ export const useScheduleApiV1SourcesList = (params: RequestParams = {}) => {
     const [state, setState] = useState<IuseScheduleApiV1SourcesListState>({
         isLoading: true,
     })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -1192,12 +1263,14 @@ export const useScheduleApiV1SourcesList = (params: RequestParams = {}) => {
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1214,7 +1287,8 @@ interface IuseScheduleApiV1SourcesDetailState {
 
 export const useScheduleApiV1SourcesDetail = (
     sourceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1231,7 +1305,7 @@ export const useScheduleApiV1SourcesDetail = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params])
+        JSON.stringify([sourceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1257,12 +1331,14 @@ export const useScheduleApiV1SourcesDetail = (
         }
     }
 
-    if (JSON.stringify([sourceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params]))
+    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1284,7 +1360,8 @@ export const useScheduleApiV1SourcesJobsComplianceDetail = (
 
         to?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1302,7 +1379,7 @@ export const useScheduleApiV1SourcesJobsComplianceDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, query, params])
+        JSON.stringify([sourceId, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1328,12 +1405,14 @@ export const useScheduleApiV1SourcesJobsComplianceDetail = (
         }
     }
 
-    if (JSON.stringify([sourceId, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, query, params]))
+    if (JSON.stringify([sourceId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1350,7 +1429,8 @@ interface IuseScheduleApiV1SourcesJobsComplianceRefreshCreateState {
 
 export const useScheduleApiV1SourcesJobsComplianceRefreshCreate = (
     sourceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1368,7 +1448,7 @@ export const useScheduleApiV1SourcesJobsComplianceRefreshCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params])
+        JSON.stringify([sourceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1394,12 +1474,14 @@ export const useScheduleApiV1SourcesJobsComplianceRefreshCreate = (
         }
     }
 
-    if (JSON.stringify([sourceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params]))
+    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1416,7 +1498,8 @@ interface IuseScheduleApiV1SourcesJobsDescribeDetailState {
 
 export const useScheduleApiV1SourcesJobsDescribeDetail = (
     sourceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1434,7 +1517,7 @@ export const useScheduleApiV1SourcesJobsDescribeDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params])
+        JSON.stringify([sourceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1460,12 +1543,14 @@ export const useScheduleApiV1SourcesJobsDescribeDetail = (
         }
     }
 
-    if (JSON.stringify([sourceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params]))
+    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1482,7 +1567,8 @@ interface IuseScheduleApiV1SourcesJobsDescribeRefreshCreateState {
 
 export const useScheduleApiV1SourcesJobsDescribeRefreshCreate = (
     sourceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1500,7 +1586,7 @@ export const useScheduleApiV1SourcesJobsDescribeRefreshCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params])
+        JSON.stringify([sourceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1526,12 +1612,14 @@ export const useScheduleApiV1SourcesJobsDescribeRefreshCreate = (
         }
     }
 
-    if (JSON.stringify([sourceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params]))
+    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1552,7 +1640,8 @@ export const useScheduleApiV1StacksList = (
 
         accountIds?: string[]
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1569,7 +1658,7 @@ export const useScheduleApiV1StacksList = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1595,12 +1684,14 @@ export const useScheduleApiV1StacksList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1617,7 +1708,8 @@ interface IuseScheduleApiV1StacksDeleteState {
 
 export const useScheduleApiV1StacksDelete = (
     stackId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1634,7 +1726,7 @@ export const useScheduleApiV1StacksDelete = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([stackId, params])
+        JSON.stringify([stackId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1660,12 +1752,14 @@ export const useScheduleApiV1StacksDelete = (
         }
     }
 
-    if (JSON.stringify([stackId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([stackId, params]))
+    if (JSON.stringify([stackId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([stackId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1682,7 +1776,8 @@ interface IuseScheduleApiV1StacksDetailState {
 
 export const useScheduleApiV1StacksDetail = (
     stackId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1699,7 +1794,7 @@ export const useScheduleApiV1StacksDetail = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([stackId, params])
+        JSON.stringify([stackId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1725,12 +1820,14 @@ export const useScheduleApiV1StacksDetail = (
         }
     }
 
-    if (JSON.stringify([stackId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([stackId, params]))
+    if (JSON.stringify([stackId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([stackId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1748,7 +1845,8 @@ interface IuseScheduleApiV1StacksFindingsCreateState {
 export const useScheduleApiV1StacksFindingsCreate = (
     stackId: string,
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1766,7 +1864,7 @@ export const useScheduleApiV1StacksFindingsCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([stackId, request, params])
+        JSON.stringify([stackId, request, params, wait])
     )
 
     const sendRequest = () => {
@@ -1792,12 +1890,14 @@ export const useScheduleApiV1StacksFindingsCreate = (
         }
     }
 
-    if (JSON.stringify([stackId, request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([stackId, request, params]))
+    if (JSON.stringify([stackId, request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([stackId, request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1821,7 +1921,8 @@ export const useScheduleApiV1StacksInsightDetail = (
 
         endTime?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1839,7 +1940,7 @@ export const useScheduleApiV1StacksInsightDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([stackId, query, params])
+        JSON.stringify([stackId, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1865,12 +1966,14 @@ export const useScheduleApiV1StacksInsightDetail = (
         }
     }
 
-    if (JSON.stringify([stackId, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([stackId, query, params]))
+    if (JSON.stringify([stackId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([stackId, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1887,7 +1990,8 @@ interface IuseScheduleApiV1StacksBenchmarkTriggerCreateState {
 
 export const useScheduleApiV1StacksBenchmarkTriggerCreate = (
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1905,7 +2009,7 @@ export const useScheduleApiV1StacksBenchmarkTriggerCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -1931,12 +2035,14 @@ export const useScheduleApiV1StacksBenchmarkTriggerCreate = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1961,7 +2067,8 @@ export const useScheduleApiV1StacksCreateCreate = (
 
         config?: string
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1979,7 +2086,7 @@ export const useScheduleApiV1StacksCreateCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([data, params])
+        JSON.stringify([data, params, wait])
     )
 
     const sendRequest = () => {
@@ -2005,12 +2112,14 @@ export const useScheduleApiV1StacksCreateCreate = (
         }
     }
 
-    if (JSON.stringify([data, params]) !== lastInput) {
-        setLastInput(JSON.stringify([data, params]))
+    if (JSON.stringify([data, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([data, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -2027,7 +2136,8 @@ interface IuseScheduleApiV1StacksDescriberTriggerCreateState {
 
 export const useScheduleApiV1StacksDescriberTriggerCreate = (
     req: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2045,7 +2155,7 @@ export const useScheduleApiV1StacksDescriberTriggerCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([req, params])
+        JSON.stringify([req, params, wait])
     )
 
     const sendRequest = () => {
@@ -2071,12 +2181,14 @@ export const useScheduleApiV1StacksDescriberTriggerCreate = (
         }
     }
 
-    if (JSON.stringify([req, params]) !== lastInput) {
-        setLastInput(JSON.stringify([req, params]))
+    if (JSON.stringify([req, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([req, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -2093,7 +2205,8 @@ interface IuseScheduleApiV1StacksInsightTriggerCreateState {
 
 export const useScheduleApiV1StacksInsightTriggerCreate = (
     request: GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2111,7 +2224,7 @@ export const useScheduleApiV1StacksInsightTriggerCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -2137,12 +2250,14 @@ export const useScheduleApiV1StacksInsightTriggerCreate = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -2161,7 +2276,8 @@ export const useScheduleApiV1StacksResourceList = (
     query: {
         resourceId: string
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2179,7 +2295,7 @@ export const useScheduleApiV1StacksResourceList = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -2205,12 +2321,14 @@ export const useScheduleApiV1StacksResourceList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -2226,7 +2344,8 @@ interface IuseScheduleApiV1SummarizeJobsPendingListState {
 }
 
 export const useScheduleApiV1SummarizeJobsPendingList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2243,7 +2362,9 @@ export const useScheduleApiV1SummarizeJobsPendingList = (
         useState<IuseScheduleApiV1SummarizeJobsPendingListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -2268,12 +2389,14 @@ export const useScheduleApiV1SummarizeJobsPendingList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state

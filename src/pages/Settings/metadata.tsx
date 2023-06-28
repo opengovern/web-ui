@@ -36,8 +36,19 @@ const SettingsMetadata: React.FC<any> = () => {
     const { response: currentWorkspace, isLoading: loadingCurrentWS } =
         useWorkspaceApiV1WorkspaceCurrentList()
 
-    if (isLoading || loadingCurrentWS) {
-        return <Spinner />
+    const { response: ownerResp, isLoading: ownerIsLoading } =
+        useAuthApiV1UserDetail(
+            currentWorkspace?.ownerId || '',
+            {},
+            loadingCurrentWS
+        )
+
+    if (isLoading || loadingCurrentWS || ownerIsLoading) {
+        return (
+            <Flex justifyContent="center" className="mt-56">
+                <Spinner />
+            </Flex>
+        )
     }
 
     const currentUsers = response?.currentUsers || 0
@@ -67,7 +78,7 @@ const SettingsMetadata: React.FC<any> = () => {
         },
         {
             title: 'Workspace Owner',
-            value: currentWorkspace?.ownerId, // TODO get name from backend
+            value: ownerResp?.userName, // TODO get name from backend
         },
         {
             title: 'Workspace Version',

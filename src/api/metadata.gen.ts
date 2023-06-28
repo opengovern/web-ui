@@ -4,115 +4,115 @@ import { atom, useAtom } from 'jotai'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    DescribeInsightJob,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    DescribeSummarizerJob,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
-    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
-    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    DescribeDescribeResourceJob,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
-    DescribeDescribeSourceJob,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
     AwsResources,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     DescribeComplianceReportJob,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    DescribeDescribeResourceJob,
+    DescribeDescribeSourceJob,
+    DescribeInsightJob,
+    DescribeSummarizerJob,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -126,7 +126,8 @@ interface IuseMetadataApiV1MetadataCreateState {
 
 export const useMetadataApiV1MetadataCreate = (
     req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -143,7 +144,7 @@ export const useMetadataApiV1MetadataCreate = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([req, params])
+        JSON.stringify([req, params, wait])
     )
 
     const sendRequest = () => {
@@ -169,12 +170,14 @@ export const useMetadataApiV1MetadataCreate = (
         }
     }
 
-    if (JSON.stringify([req, params]) !== lastInput) {
-        setLastInput(JSON.stringify([req, params]))
+    if (JSON.stringify([req, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([req, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -191,7 +194,8 @@ interface IuseMetadataApiV1MetadataDetailState {
 
 export const useMetadataApiV1MetadataDetail = (
     key: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -208,7 +212,7 @@ export const useMetadataApiV1MetadataDetail = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, params])
+        JSON.stringify([key, params, wait])
     )
 
     const sendRequest = () => {
@@ -234,12 +238,14 @@ export const useMetadataApiV1MetadataDetail = (
         }
     }
 
-    if (JSON.stringify([key, params]) !== lastInput) {
-        setLastInput(JSON.stringify([key, params]))
+    if (JSON.stringify([key, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([key, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state

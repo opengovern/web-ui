@@ -21,7 +21,11 @@ const SettingsMembers: React.FC<any> = () => {
     const [drawerParam, setDrawerParam] = useState<string>('')
     const { response, isLoading } = useAuthApiV1WorkspaceRoleBindingsList()
     if (isLoading) {
-        return <Spinner />
+        return (
+            <Flex justifyContent="center" className="mt-56">
+                <Spinner />
+            </Flex>
+        )
     }
 
     const userDetail = (userId: string) => {

@@ -19,7 +19,11 @@ const SettingsOrganization: React.FC<any> = () => {
     const { response, isLoading } = useWorkspaceApiV1WorkspaceCurrentList()
 
     if (isLoading) {
-        return <Spinner />
+        return (
+            <Flex justifyContent="center" className="mt-56">
+                <Spinner />
+            </Flex>
+        )
     }
 
     const items = [

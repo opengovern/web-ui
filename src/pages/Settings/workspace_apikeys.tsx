@@ -14,10 +14,12 @@ import {
 import { ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
 import {
     useAuthApiV1KeysList,
+    useAuthApiV1UserDetail,
     useAuthApiV1WorkspaceRoleBindingsList,
 } from '../../api/auth.gen'
 import Spinner from '../../components/Spinner'
 import DrawerPanel from '../../components/DrawerPanel'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey } from '../../api/api'
 
 const CreateAPIKey: React.FC<any> = () => {
     return (
@@ -48,17 +50,13 @@ const CreateAPIKey: React.FC<any> = () => {
     )
 }
 
-const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
-    const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-    const { response, isLoading } = useAuthApiV1KeysList()
-
-    if (isLoading) {
-        return <Spinner />
-    }
-
-    const openCreateMenu = () => {
-        setDrawerOpen(true)
-    }
+interface APIKeyRecordProps {
+    item: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
+}
+const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item }) => {
+    const { response, isLoading } = useAuthApiV1UserDetail(
+        item.creatorUserID || ''
+    )
 
     const fixRole = (role: string) => {
         switch (role) {
@@ -71,6 +69,65 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
             default:
                 return role
         }
+    }
+
+    return (
+        <Flex
+            justifyContent="start"
+            flexDirection="row"
+            className="mb-4 py-2 border-b"
+        >
+            <Text className="text-sm mt-1 w-1/4">{item.name}</Text>
+            <Flex
+                alignItems="start"
+                justifyContent="start"
+                flexDirection="col"
+                className="w-1/4"
+            >
+                <Text className="text-sm font-medium">
+                    {fixRole(item.roleName || '')}
+                </Text>
+                <Text className="text-xs">{item.maskedKey}</Text>
+            </Flex>
+
+            {isLoading ? (
+                <Flex justifyContent="start" className="w-1/4">
+                    <Spinner />
+                </Flex>
+            ) : (
+                <Text className="text-base w-1/4">{response?.userName}</Text>
+            )}
+
+            <Flex
+                justifyContent="between"
+                flexDirection="row"
+                className="w-1/4"
+            >
+                <Text className="text-base">
+                    {new Date(
+                        Date.parse(item.createdAt || Date.now().toString())
+                    ).toLocaleDateString('en-US')}
+                </Text>
+                <TrashIcon className="w-4 h-4" />
+            </Flex>
+        </Flex>
+    )
+}
+
+const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
+    const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+    const { response, isLoading } = useAuthApiV1KeysList()
+
+    if (isLoading) {
+        return (
+            <Flex justifyContent="center" className="mt-56">
+                <Spinner />
+            </Flex>
+        )
+    }
+
+    const openCreateMenu = () => {
+        setDrawerOpen(true)
     }
 
     return (
@@ -107,41 +164,7 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
                     <Text className="text-xs w-1/4">Create Date</Text>
                 </Flex>
                 {response?.map((item) => (
-                    <Flex
-                        justifyContent="start"
-                        flexDirection="row"
-                        className="mb-4 py-2 border-b"
-                    >
-                        <Text className="text-sm mt-1 w-1/4">{item.name}</Text>
-                        <Flex
-                            alignItems="start"
-                            justifyContent="start"
-                            flexDirection="col"
-                            className="w-1/4"
-                        >
-                            <Text className="text-sm font-medium">
-                                {fixRole(item.roleName || '')}
-                            </Text>
-                            <Text className="text-xs">{item.maskedKey}</Text>
-                        </Flex>
-                        <Text className="text-base w-1/4">
-                            {item.creatorUserID}
-                        </Text>
-                        <Flex
-                            justifyContent="between"
-                            flexDirection="row"
-                            className="w-1/4"
-                        >
-                            <Text className="text-base">
-                                {new Date(
-                                    Date.parse(
-                                        item.createdAt || Date.now().toString()
-                                    )
-                                ).toLocaleDateString('en-US')}
-                            </Text>
-                            <TrashIcon className="w-4 h-4" />
-                        </Flex>
-                    </Flex>
+                    <APIKeyRecord item={item} />
                 ))}
             </Card>
         </>

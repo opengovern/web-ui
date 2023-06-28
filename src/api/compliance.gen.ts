@@ -4,115 +4,115 @@ import { atom, useAtom } from 'jotai'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    DescribeInsightJob,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    DescribeSummarizerJob,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
-    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
-    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    DescribeDescribeResourceJob,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
-    DescribeDescribeSourceJob,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
     AwsResources,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     DescribeComplianceReportJob,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    DescribeDescribeResourceJob,
+    DescribeDescribeSourceJob,
+    DescribeInsightJob,
+    DescribeSummarizerJob,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -126,7 +126,8 @@ interface IuseComplianceApiV1AlarmsTopCreateState {
 
 export const useComplianceApiV1AlarmsTopCreate = (
     request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -145,7 +146,7 @@ export const useComplianceApiV1AlarmsTopCreate = (
         }
     )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -171,12 +172,14 @@ export const useComplianceApiV1AlarmsTopCreate = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -192,7 +195,8 @@ interface IuseComplianceApiV1AssignmentsListState {
 }
 
 export const useComplianceApiV1AssignmentsList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -210,7 +214,9 @@ export const useComplianceApiV1AssignmentsList = (
             isLoading: true,
         }
     )
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -235,12 +241,14 @@ export const useComplianceApiV1AssignmentsList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -258,7 +266,8 @@ interface IuseComplianceApiV1AssignmentsConnectionDeleteState {
 export const useComplianceApiV1AssignmentsConnectionDelete = (
     benchmarkId: string,
     connectionId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -276,7 +285,7 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, connectionId, params])
+        JSON.stringify([benchmarkId, connectionId, params, wait])
     )
 
     const sendRequest = () => {
@@ -306,12 +315,16 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, connectionId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, connectionId, params]))
+    if (
+        JSON.stringify([benchmarkId, connectionId, params, wait]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([benchmarkId, connectionId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -329,7 +342,8 @@ interface IuseComplianceApiV1AssignmentsConnectionCreateState {
 export const useComplianceApiV1AssignmentsConnectionCreate = (
     benchmarkId: string,
     connectionId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -347,7 +361,7 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, connectionId, params])
+        JSON.stringify([benchmarkId, connectionId, params, wait])
     )
 
     const sendRequest = () => {
@@ -377,12 +391,16 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, connectionId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, connectionId, params]))
+    if (
+        JSON.stringify([benchmarkId, connectionId, params, wait]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([benchmarkId, connectionId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -399,7 +417,8 @@ interface IuseComplianceApiV1AssignmentsBenchmarkDetailState {
 
 export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     benchmarkId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -417,7 +436,7 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, params])
+        JSON.stringify([benchmarkId, params, wait])
     )
 
     const sendRequest = () => {
@@ -443,12 +462,14 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, params]))
+    if (JSON.stringify([benchmarkId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -465,7 +486,8 @@ interface IuseComplianceApiV1AssignmentsConnectionDetailState {
 
 export const useComplianceApiV1AssignmentsConnectionDetail = (
     connectionId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -483,7 +505,7 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, params])
+        JSON.stringify([connectionId, params, wait])
     )
 
     const sendRequest = () => {
@@ -509,12 +531,14 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
         }
     }
 
-    if (JSON.stringify([connectionId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, params]))
+    if (JSON.stringify([connectionId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([connectionId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -531,7 +555,8 @@ interface IuseComplianceApiV1BenchmarkSummaryDetailState {
 
 export const useComplianceApiV1BenchmarkSummaryDetail = (
     benchmarkId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -549,7 +574,7 @@ export const useComplianceApiV1BenchmarkSummaryDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, params])
+        JSON.stringify([benchmarkId, params, wait])
     )
 
     const sendRequest = () => {
@@ -575,12 +600,14 @@ export const useComplianceApiV1BenchmarkSummaryDetail = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, params]))
+    if (JSON.stringify([benchmarkId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -602,7 +629,8 @@ export const useComplianceApiV1BenchmarkSummaryResultTrendDetail = (
 
         end: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -620,7 +648,7 @@ export const useComplianceApiV1BenchmarkSummaryResultTrendDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, query, params])
+        JSON.stringify([benchmarkId, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -650,12 +678,14 @@ export const useComplianceApiV1BenchmarkSummaryResultTrendDetail = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, query, params]))
+    if (JSON.stringify([benchmarkId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -675,7 +705,8 @@ export const useComplianceApiV1BenchmarkTreeDetail = (
     query: {
         status: ('passed' | 'failed' | 'unknown')[]
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -693,7 +724,7 @@ export const useComplianceApiV1BenchmarkTreeDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, query, params])
+        JSON.stringify([benchmarkId, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -719,12 +750,14 @@ export const useComplianceApiV1BenchmarkTreeDetail = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, query, params]))
+    if (JSON.stringify([benchmarkId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -740,7 +773,8 @@ interface IuseComplianceApiV1BenchmarksListState {
 }
 
 export const useComplianceApiV1BenchmarksList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -756,7 +790,9 @@ export const useComplianceApiV1BenchmarksList = (
     const [state, setState] = useState<IuseComplianceApiV1BenchmarksListState>({
         isLoading: true,
     })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -781,12 +817,14 @@ export const useComplianceApiV1BenchmarksList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -803,7 +841,8 @@ interface IuseComplianceApiV1BenchmarksDetailState {
 
 export const useComplianceApiV1BenchmarksDetail = (
     benchmarkId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -821,7 +860,7 @@ export const useComplianceApiV1BenchmarksDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, params])
+        JSON.stringify([benchmarkId, params, wait])
     )
 
     const sendRequest = () => {
@@ -847,12 +886,14 @@ export const useComplianceApiV1BenchmarksDetail = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, params]))
+    if (JSON.stringify([benchmarkId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -869,7 +910,8 @@ interface IuseComplianceApiV1BenchmarksPoliciesDetailState {
 
 export const useComplianceApiV1BenchmarksPoliciesDetail = (
     benchmarkId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -887,7 +929,7 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, params])
+        JSON.stringify([benchmarkId, params, wait])
     )
 
     const sendRequest = () => {
@@ -913,12 +955,14 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, params]))
+    if (JSON.stringify([benchmarkId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -935,7 +979,8 @@ interface IuseComplianceApiV1BenchmarksPoliciesDetail2State {
 
 export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
     policyId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -953,7 +998,7 @@ export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([policyId, params])
+        JSON.stringify([policyId, params, wait])
     )
 
     const sendRequest = () => {
@@ -979,12 +1024,14 @@ export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
         }
     }
 
-    if (JSON.stringify([policyId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([policyId, params]))
+    if (JSON.stringify([policyId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([policyId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1005,7 +1052,8 @@ export const useComplianceApiV1BenchmarksSummaryList = (
 
         end: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1023,7 +1071,7 @@ export const useComplianceApiV1BenchmarksSummaryList = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1049,12 +1097,14 @@ export const useComplianceApiV1BenchmarksSummaryList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1071,7 +1121,8 @@ interface IuseComplianceApiV1FindingsCreateState {
 
 export const useComplianceApiV1FindingsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1088,7 +1139,7 @@ export const useComplianceApiV1FindingsCreate = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -1114,12 +1165,14 @@ export const useComplianceApiV1FindingsCreate = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1138,7 +1191,8 @@ export const useComplianceApiV1FindingsTopDetail = (
     benchmarkId: string,
     field: 'resourceType' | 'serviceName' | 'sourceID' | 'resourceID',
     count: number,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1156,7 +1210,7 @@ export const useComplianceApiV1FindingsTopDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, field, count, params])
+        JSON.stringify([benchmarkId, field, count, params, wait])
     )
 
     const sendRequest = () => {
@@ -1182,12 +1236,16 @@ export const useComplianceApiV1FindingsTopDetail = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, field, count, params]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, field, count, params]))
+    if (
+        JSON.stringify([benchmarkId, field, count, params, wait]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([benchmarkId, field, count, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1208,7 +1266,8 @@ export const useComplianceApiV1FindingsMetricsList = (
 
         end?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1226,7 +1285,7 @@ export const useComplianceApiV1FindingsMetricsList = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1252,12 +1311,14 @@ export const useComplianceApiV1FindingsMetricsList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1284,7 +1345,8 @@ export const useComplianceApiV1InsightList = (
 
         endTime?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1301,7 +1363,7 @@ export const useComplianceApiV1InsightList = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1327,12 +1389,14 @@ export const useComplianceApiV1InsightList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1356,7 +1420,8 @@ export const useComplianceApiV1InsightDetail = (
 
         endTime?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1373,7 +1438,7 @@ export const useComplianceApiV1InsightDetail = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, query, params])
+        JSON.stringify([insightId, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1399,12 +1464,14 @@ export const useComplianceApiV1InsightDetail = (
         }
     }
 
-    if (JSON.stringify([insightId, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, query, params]))
+    if (JSON.stringify([insightId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1430,7 +1497,8 @@ export const useComplianceApiV1InsightTrendDetail = (
 
         datapointCount?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1448,7 +1516,7 @@ export const useComplianceApiV1InsightTrendDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, query, params])
+        JSON.stringify([insightId, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1474,12 +1542,14 @@ export const useComplianceApiV1InsightTrendDetail = (
         }
     }
 
-    if (JSON.stringify([insightId, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, query, params]))
+    if (JSON.stringify([insightId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1506,7 +1576,8 @@ export const useComplianceApiV1InsightGroupList = (
 
         endTime?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1524,7 +1595,7 @@ export const useComplianceApiV1InsightGroupList = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1550,12 +1621,14 @@ export const useComplianceApiV1InsightGroupList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1579,7 +1652,8 @@ export const useComplianceApiV1InsightGroupDetail = (
 
         endTime?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1597,7 +1671,7 @@ export const useComplianceApiV1InsightGroupDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightGroupId, query, params])
+        JSON.stringify([insightGroupId, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1623,12 +1697,14 @@ export const useComplianceApiV1InsightGroupDetail = (
         }
     }
 
-    if (JSON.stringify([insightGroupId, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([insightGroupId, query, params]))
+    if (JSON.stringify([insightGroupId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([insightGroupId, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1654,7 +1730,8 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
 
         datapointCount?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1672,7 +1749,7 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightGroupId, query, params])
+        JSON.stringify([insightGroupId, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1698,12 +1775,14 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
         }
     }
 
-    if (JSON.stringify([insightGroupId, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([insightGroupId, query, params]))
+    if (JSON.stringify([insightGroupId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([insightGroupId, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1722,7 +1801,8 @@ export const useComplianceApiV1MetadataInsightList = (
     query?: {
         connector?: ('' | 'AWS' | 'Azure')[]
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1740,7 +1820,7 @@ export const useComplianceApiV1MetadataInsightList = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1766,12 +1846,14 @@ export const useComplianceApiV1MetadataInsightList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1788,7 +1870,8 @@ interface IuseComplianceApiV1MetadataInsightDetailState {
 
 export const useComplianceApiV1MetadataInsightDetail = (
     insightId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1806,7 +1889,7 @@ export const useComplianceApiV1MetadataInsightDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, params])
+        JSON.stringify([insightId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1832,12 +1915,14 @@ export const useComplianceApiV1MetadataInsightDetail = (
         }
     }
 
-    if (JSON.stringify([insightId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, params]))
+    if (JSON.stringify([insightId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1853,7 +1938,8 @@ interface IuseComplianceApiV1MetadataTagInsightListState {
 }
 
 export const useComplianceApiV1MetadataTagInsightList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1870,7 +1956,9 @@ export const useComplianceApiV1MetadataTagInsightList = (
         useState<IuseComplianceApiV1MetadataTagInsightListState>({
             isLoading: true,
         })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -1895,12 +1983,14 @@ export const useComplianceApiV1MetadataTagInsightList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1917,7 +2007,8 @@ interface IuseComplianceApiV1MetadataTagInsightDetailState {
 
 export const useComplianceApiV1MetadataTagInsightDetail = (
     key: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1935,7 +2026,7 @@ export const useComplianceApiV1MetadataTagInsightDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, params])
+        JSON.stringify([key, params, wait])
     )
 
     const sendRequest = () => {
@@ -1961,12 +2052,14 @@ export const useComplianceApiV1MetadataTagInsightDetail = (
         }
     }
 
-    if (JSON.stringify([key, params]) !== lastInput) {
-        setLastInput(JSON.stringify([key, params]))
+    if (JSON.stringify([key, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([key, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1983,7 +2076,8 @@ interface IuseComplianceApiV1QueriesDetailState {
 
 export const useComplianceApiV1QueriesDetail = (
     queryId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2000,7 +2094,7 @@ export const useComplianceApiV1QueriesDetail = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([queryId, params])
+        JSON.stringify([queryId, params, wait])
     )
 
     const sendRequest = () => {
@@ -2026,12 +2120,14 @@ export const useComplianceApiV1QueriesDetail = (
         }
     }
 
-    if (JSON.stringify([queryId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([queryId, params]))
+    if (JSON.stringify([queryId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([queryId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state

@@ -64,7 +64,6 @@ const Settings: React.FC<any> = () => {
     const workspace = useParams<{ ws: string }>().ws
     const currentSubPage = useParams<{ settingsPage: string }>().settingsPage
 
-    console.log(currentSubPage)
     return (
         <LoggedInLayout currentPage="settings" addContainer={false}>
             <main className="xl:pl-24 dark:bg-gray-900">
