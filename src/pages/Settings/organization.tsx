@@ -19,7 +19,11 @@ const SettingsOrganization: React.FC<any> = () => {
     const { response, isLoading } = useWorkspaceApiV1WorkspaceCurrentList()
 
     if (isLoading) {
-        return <Spinner />
+        return (
+            <Flex justifyContent="center" className="mt-56">
+                <Spinner />
+            </Flex>
+        )
     }
 
     const items = [
@@ -34,15 +38,15 @@ const SettingsOrganization: React.FC<any> = () => {
         {
             key: 'Address',
             value: (
-                <Flex justifyContent="start">
-                    <div>Line1: {response?.organization?.addressLine1}</div>
-                    <div>Line2: {response?.organization?.addressLine2}</div>
-                    <div>Line3: {response?.organization?.addressLine3}</div>
-                    <div>City: {response?.organization?.city}</div>
-                    <div>
+                <>
+                    <p>Line1: {response?.organization?.addressLine1}</p>
+                    <p>Line2: {response?.organization?.addressLine2}</p>
+                    <p>Line3: {response?.organization?.addressLine3}</p>
+                    <p>City: {response?.organization?.city}</p>
+                    <p>
                         State/Province/Region: {response?.organization?.state}
-                    </div>
-                </Flex>
+                    </p>
+                </>
             ),
         },
         {
@@ -52,11 +56,11 @@ const SettingsOrganization: React.FC<any> = () => {
         {
             key: 'Contact Details',
             value: (
-                <Flex justifyContent="start">
-                    <div>{response?.organization?.contactPerson}</div>
-                    <div>Phone: {response?.organization?.contactPhone}</div>
-                    <div>Email: {response?.organization?.contactEmail}</div>
-                </Flex>
+                <>
+                    <p>{response?.organization?.contactPerson}</p>
+                    <p>Phone: {response?.organization?.contactPhone}</p>
+                    <p>Email: {response?.organization?.contactEmail}</p>
+                </>
             ),
         },
     ]
@@ -70,7 +74,9 @@ const SettingsOrganization: React.FC<any> = () => {
                         <ListItem key="lb">
                             <Flex justifyContent="between">
                                 <Text className="text-md my-5">{item.key}</Text>
-                                <Text className="text-md">{item.value}</Text>
+                                <Text className="text-md text-start">
+                                    {item.value}
+                                </Text>
                             </Flex>
                         </ListItem>
                     )

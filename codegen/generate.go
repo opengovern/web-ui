@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -110,11 +111,13 @@ import { useParams } from 'react-router-dom'
 		contentAPI := fmt.Sprintf(`
 interface I%[6]sState {
 	isLoading: boolean
+	isExecuted: boolean
 	response?: %[3]s
 	error?: any
 }
 
-export const %[6]s = (%[2]s) => {
+
+export const %[7]s = (%[2]s, wait: boolean = false) => {
     const workspace = useParams<{ ws: string }>().ws
 
     const api = new Api()
@@ -129,15 +132,17 @@ export const %[6]s = (%[2]s) => {
     const [state, setState] =
         useState<I%[6]sState>({
             isLoading: true,
+			isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([%[5]s])
+        JSON.stringify([%[5]s, wait])
     )
 
     const sendRequest = () => {
 		setState({
 			...state,
 			isLoading: true,
+			isExecuted: true,
 		})
         try {
             api.%[4]s
@@ -150,32 +155,116 @@ export const %[6]s = (%[2]s) => {
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
-    if (JSON.stringify([%[5]s]) !== lastInput) {
-        setLastInput(JSON.stringify([%[5]s]))
+    if (JSON.stringify([%[5]s, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([%[5]s, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
-	const response = state.response
-	const isLoading = state.isLoading
-	const error = state.error
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
     return {response, isLoading, error}
 }
-`, apiName, req, resp, module, pmr, funcName)
+
+export const %[6]s = (%[2]s, autoExecute: boolean = true) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<I%[6]sState>({
+            isLoading: true,
+			isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([%[5]s, autoExecute])
+    )
+
+    const sendRequest = () => {
+		setState({
+			...state,
+			isLoading: true,
+			isExecuted: true,
+		})
+        try {
+            api.%[4]s
+                .%[1]s(%[5]s)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([%[5]s, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([%[5]s, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+`, apiName, req, resp, module, pmr, funcName, funcName[3:])
 		apiFiles[module] += contentAPI
 	}
 
 	ims := ""
+	var imps []string
 	for k := range imports {
+		imps = append(imps, k)
+	}
+	sort.Strings(imps)
+	
+	for _, k := range imps {
 		ims += k + "\n"
 	}
 	for k, v := range apiFiles {
