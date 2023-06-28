@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -114,7 +115,7 @@ interface I%[6]sState {
 	error?: any
 }
 
-export const %[6]s = (%[2]s) => {
+export const %[6]s = (%[2]s, wait: boolean = false) => {
     const workspace = useParams<{ ws: string }>().ws
 
     const api = new Api()
@@ -131,7 +132,7 @@ export const %[6]s = (%[2]s) => {
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([%[5]s])
+        JSON.stringify([%[5]s, wait])
     )
 
     const sendRequest = () => {
@@ -157,12 +158,14 @@ export const %[6]s = (%[2]s) => {
         }
     }
 
-    if (JSON.stringify([%[5]s]) !== lastInput) {
-        setLastInput(JSON.stringify([%[5]s]))
+    if (JSON.stringify([%[5]s, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([%[5]s, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
 	const response = state.response
@@ -175,7 +178,13 @@ export const %[6]s = (%[2]s) => {
 	}
 
 	ims := ""
+	var imps []string
 	for k := range imports {
+		imps = append(imps, k)
+	}
+	sort.Strings(imps)
+	
+	for _, k := range imps {
 		ims += k + "\n"
 	}
 	for k, v := range apiFiles {

@@ -4,115 +4,115 @@ import { atom, useAtom } from 'jotai'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    DescribeInsightJob,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    DescribeSummarizerJob,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
-    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
-    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    DescribeDescribeResourceJob,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
-    DescribeDescribeSourceJob,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
     AwsResources,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     DescribeComplianceReportJob,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    DescribeDescribeResourceJob,
+    DescribeDescribeSourceJob,
+    DescribeInsightJob,
+    DescribeSummarizerJob,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -125,7 +125,8 @@ interface IuseOnboardApiV1CatalogMetricsListState {
 }
 
 export const useOnboardApiV1CatalogMetricsList = (
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -143,7 +144,9 @@ export const useOnboardApiV1CatalogMetricsList = (
             isLoading: true,
         }
     )
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -168,12 +171,14 @@ export const useOnboardApiV1CatalogMetricsList = (
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -191,7 +196,8 @@ interface IuseOnboardApiV1ConnectionsStateCreateState {
 export const useOnboardApiV1ConnectionsStateCreate = (
     connectionId: number,
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -209,7 +215,7 @@ export const useOnboardApiV1ConnectionsStateCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, request, params])
+        JSON.stringify([connectionId, request, params, wait])
     )
 
     const sendRequest = () => {
@@ -235,12 +241,14 @@ export const useOnboardApiV1ConnectionsStateCreate = (
         }
     }
 
-    if (JSON.stringify([connectionId, request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, request, params]))
+    if (JSON.stringify([connectionId, request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([connectionId, request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -257,7 +265,8 @@ interface IuseOnboardApiV1ConnectionsCountListState {
 
 export const useOnboardApiV1ConnectionsCountList = (
     type: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -275,7 +284,7 @@ export const useOnboardApiV1ConnectionsCountList = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([type, params])
+        JSON.stringify([type, params, wait])
     )
 
     const sendRequest = () => {
@@ -301,12 +310,14 @@ export const useOnboardApiV1ConnectionsCountList = (
         }
     }
 
-    if (JSON.stringify([type, params]) !== lastInput) {
-        setLastInput(JSON.stringify([type, params]))
+    if (JSON.stringify([type, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([type, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -348,7 +359,8 @@ export const useOnboardApiV1ConnectionsSummaryList = (
             | 'cost_growth'
             | 'cost_growth_rate'
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -366,7 +378,7 @@ export const useOnboardApiV1ConnectionsSummaryList = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -392,12 +404,14 @@ export const useOnboardApiV1ConnectionsSummaryList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -419,7 +433,8 @@ export const useOnboardApiV1ConnectionsSummaryDetail = (
 
         endTime?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -437,7 +452,7 @@ export const useOnboardApiV1ConnectionsSummaryDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, query, params])
+        JSON.stringify([connectionId, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -463,12 +478,14 @@ export const useOnboardApiV1ConnectionsSummaryDetail = (
         }
     }
 
-    if (JSON.stringify([connectionId, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, query, params]))
+    if (JSON.stringify([connectionId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([connectionId, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -483,7 +500,10 @@ interface IuseOnboardApiV1ConnectorListState {
     error?: any
 }
 
-export const useOnboardApiV1ConnectorList = (params: RequestParams = {}) => {
+export const useOnboardApiV1ConnectorList = (
+    params: RequestParams = {},
+    wait = false
+) => {
     const workspace = useParams<{ ws: string }>().ws
 
     const api = new Api()
@@ -498,7 +518,9 @@ export const useOnboardApiV1ConnectorList = (params: RequestParams = {}) => {
     const [state, setState] = useState<IuseOnboardApiV1ConnectorListState>({
         isLoading: true,
     })
-    const [lastInput, setLastInput] = useState<string>(JSON.stringify([params]))
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
 
     const sendRequest = () => {
         setState({
@@ -523,12 +545,14 @@ export const useOnboardApiV1ConnectorList = (params: RequestParams = {}) => {
         }
     }
 
-    if (JSON.stringify([params]) !== lastInput) {
-        setLastInput(JSON.stringify([params]))
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -545,7 +569,8 @@ interface IuseOnboardApiV1ConnectorDetailState {
 
 export const useOnboardApiV1ConnectorDetail = (
     connectorName: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -562,7 +587,7 @@ export const useOnboardApiV1ConnectorDetail = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectorName, params])
+        JSON.stringify([connectorName, params, wait])
     )
 
     const sendRequest = () => {
@@ -588,12 +613,14 @@ export const useOnboardApiV1ConnectorDetail = (
         }
     }
 
-    if (JSON.stringify([connectorName, params]) !== lastInput) {
-        setLastInput(JSON.stringify([connectorName, params]))
+    if (JSON.stringify([connectorName, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([connectorName, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -618,7 +645,8 @@ export const useOnboardApiV1CredentialList = (
 
         pageNumber?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -635,7 +663,7 @@ export const useOnboardApiV1CredentialList = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -661,12 +689,14 @@ export const useOnboardApiV1CredentialList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -683,7 +713,8 @@ interface IuseOnboardApiV1CredentialCreateState {
 
 export const useOnboardApiV1CredentialCreate = (
     config: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -700,7 +731,7 @@ export const useOnboardApiV1CredentialCreate = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([config, params])
+        JSON.stringify([config, params, wait])
     )
 
     const sendRequest = () => {
@@ -726,12 +757,14 @@ export const useOnboardApiV1CredentialCreate = (
         }
     }
 
-    if (JSON.stringify([config, params]) !== lastInput) {
-        setLastInput(JSON.stringify([config, params]))
+    if (JSON.stringify([config, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([config, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -748,7 +781,8 @@ interface IuseOnboardApiV1CredentialDeleteState {
 
 export const useOnboardApiV1CredentialDelete = (
     credentialId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -765,7 +799,7 @@ export const useOnboardApiV1CredentialDelete = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params])
+        JSON.stringify([credentialId, params, wait])
     )
 
     const sendRequest = () => {
@@ -791,12 +825,14 @@ export const useOnboardApiV1CredentialDelete = (
         }
     }
 
-    if (JSON.stringify([credentialId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params]))
+    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -813,7 +849,8 @@ interface IuseOnboardApiV1CredentialDetailState {
 
 export const useOnboardApiV1CredentialDetail = (
     credentialId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -830,7 +867,7 @@ export const useOnboardApiV1CredentialDetail = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params])
+        JSON.stringify([credentialId, params, wait])
     )
 
     const sendRequest = () => {
@@ -856,12 +893,14 @@ export const useOnboardApiV1CredentialDetail = (
         }
     }
 
-    if (JSON.stringify([credentialId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params]))
+    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -879,7 +918,8 @@ interface IuseOnboardApiV1CredentialUpdateState {
 export const useOnboardApiV1CredentialUpdate = (
     credentialId: string,
     config: GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -896,7 +936,7 @@ export const useOnboardApiV1CredentialUpdate = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, config, params])
+        JSON.stringify([credentialId, config, params, wait])
     )
 
     const sendRequest = () => {
@@ -922,12 +962,14 @@ export const useOnboardApiV1CredentialUpdate = (
         }
     }
 
-    if (JSON.stringify([credentialId, config, params]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, config, params]))
+    if (JSON.stringify([credentialId, config, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, config, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -944,7 +986,8 @@ interface IuseOnboardApiV1CredentialAutoonboardCreateState {
 
 export const useOnboardApiV1CredentialAutoonboardCreate = (
     credentialId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -962,7 +1005,7 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params])
+        JSON.stringify([credentialId, params, wait])
     )
 
     const sendRequest = () => {
@@ -988,12 +1031,14 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
         }
     }
 
-    if (JSON.stringify([credentialId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params]))
+    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1010,7 +1055,8 @@ interface IuseOnboardApiV1CredentialDisableCreateState {
 
 export const useOnboardApiV1CredentialDisableCreate = (
     credentialId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1028,7 +1074,7 @@ export const useOnboardApiV1CredentialDisableCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params])
+        JSON.stringify([credentialId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1054,12 +1100,14 @@ export const useOnboardApiV1CredentialDisableCreate = (
         }
     }
 
-    if (JSON.stringify([credentialId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params]))
+    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1076,7 +1124,8 @@ interface IuseOnboardApiV1CredentialEnableCreateState {
 
 export const useOnboardApiV1CredentialEnableCreate = (
     credentialId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1094,7 +1143,7 @@ export const useOnboardApiV1CredentialEnableCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params])
+        JSON.stringify([credentialId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1120,12 +1169,14 @@ export const useOnboardApiV1CredentialEnableCreate = (
         }
     }
 
-    if (JSON.stringify([credentialId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params]))
+    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1142,7 +1193,8 @@ interface IuseOnboardApiV1CredentialHealthcheckDetailState {
 
 export const useOnboardApiV1CredentialHealthcheckDetail = (
     credentialId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1160,7 +1212,7 @@ export const useOnboardApiV1CredentialHealthcheckDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params])
+        JSON.stringify([credentialId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1186,12 +1238,14 @@ export const useOnboardApiV1CredentialHealthcheckDetail = (
         }
     }
 
-    if (JSON.stringify([credentialId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params]))
+    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1214,7 +1268,8 @@ export const useOnboardApiV1CredentialSourcesListList = (
 
         pageNumber?: number
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1232,7 +1287,7 @@ export const useOnboardApiV1CredentialSourcesListList = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1258,12 +1313,14 @@ export const useOnboardApiV1CredentialSourcesListList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1280,7 +1337,8 @@ interface IuseOnboardApiV1SourceDeleteState {
 
 export const useOnboardApiV1SourceDelete = (
     sourceId: number,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1297,7 +1355,7 @@ export const useOnboardApiV1SourceDelete = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params])
+        JSON.stringify([sourceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1323,12 +1381,14 @@ export const useOnboardApiV1SourceDelete = (
         }
     }
 
-    if (JSON.stringify([sourceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params]))
+    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1345,7 +1405,8 @@ interface IuseOnboardApiV1SourceDetailState {
 
 export const useOnboardApiV1SourceDetail = (
     sourceId: number,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1362,7 +1423,7 @@ export const useOnboardApiV1SourceDetail = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params])
+        JSON.stringify([sourceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1388,12 +1449,14 @@ export const useOnboardApiV1SourceDetail = (
         }
     }
 
-    if (JSON.stringify([sourceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params]))
+    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1410,7 +1473,8 @@ interface IuseOnboardApiV1SourceCredentialsDetailState {
 
 export const useOnboardApiV1SourceCredentialsDetail = (
     sourceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1428,7 +1492,7 @@ export const useOnboardApiV1SourceCredentialsDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params])
+        JSON.stringify([sourceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1454,12 +1518,14 @@ export const useOnboardApiV1SourceCredentialsDetail = (
         }
     }
 
-    if (JSON.stringify([sourceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params]))
+    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1476,7 +1542,8 @@ interface IuseOnboardApiV1SourceCredentialsUpdateState {
 
 export const useOnboardApiV1SourceCredentialsUpdate = (
     sourceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1494,7 +1561,7 @@ export const useOnboardApiV1SourceCredentialsUpdate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params])
+        JSON.stringify([sourceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1520,12 +1587,14 @@ export const useOnboardApiV1SourceCredentialsUpdate = (
         }
     }
 
-    if (JSON.stringify([sourceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params]))
+    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1542,7 +1611,8 @@ interface IuseOnboardApiV1SourceHealthcheckCreateState {
 
 export const useOnboardApiV1SourceHealthcheckCreate = (
     sourceId: string,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1560,7 +1630,7 @@ export const useOnboardApiV1SourceHealthcheckCreate = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params])
+        JSON.stringify([sourceId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1586,12 +1656,14 @@ export const useOnboardApiV1SourceHealthcheckCreate = (
         }
     }
 
-    if (JSON.stringify([sourceId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params]))
+    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1608,7 +1680,8 @@ interface IuseOnboardApiV1SourceAccountDetailState {
 
 export const useOnboardApiV1SourceAccountDetail = (
     accountId: number,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1626,7 +1699,7 @@ export const useOnboardApiV1SourceAccountDetail = (
             isLoading: true,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([accountId, params])
+        JSON.stringify([accountId, params, wait])
     )
 
     const sendRequest = () => {
@@ -1652,12 +1725,14 @@ export const useOnboardApiV1SourceAccountDetail = (
         }
     }
 
-    if (JSON.stringify([accountId, params]) !== lastInput) {
-        setLastInput(JSON.stringify([accountId, params]))
+    if (JSON.stringify([accountId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([accountId, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1674,7 +1749,8 @@ interface IuseOnboardApiV1SourceAwsCreateState {
 
 export const useOnboardApiV1SourceAwsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1691,7 +1767,7 @@ export const useOnboardApiV1SourceAwsCreate = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -1717,12 +1793,14 @@ export const useOnboardApiV1SourceAwsCreate = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1739,7 +1817,8 @@ interface IuseOnboardApiV1SourceAzureCreateState {
 
 export const useOnboardApiV1SourceAzureCreate = (
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1756,7 +1835,7 @@ export const useOnboardApiV1SourceAzureCreate = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params])
+        JSON.stringify([request, params, wait])
     )
 
     const sendRequest = () => {
@@ -1782,12 +1861,14 @@ export const useOnboardApiV1SourceAzureCreate = (
         }
     }
 
-    if (JSON.stringify([request, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params]))
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1806,7 +1887,8 @@ export const useOnboardApiV1SourcesList = (
     query?: {
         connector?: ('' | 'AWS' | 'Azure')[]
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1823,7 +1905,7 @@ export const useOnboardApiV1SourcesList = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1849,12 +1931,14 @@ export const useOnboardApiV1SourcesList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1874,7 +1958,8 @@ export const useOnboardApiV1SourcesCreate = (
     query?: {
         type?: 'aws' | 'azure'
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1891,7 +1976,7 @@ export const useOnboardApiV1SourcesCreate = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params])
+        JSON.stringify([request, query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1917,12 +2002,14 @@ export const useOnboardApiV1SourcesCreate = (
         }
     }
 
-    if (JSON.stringify([request, query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params]))
+    if (JSON.stringify([request, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
@@ -1941,7 +2028,8 @@ export const useOnboardApiV1SourcesCountList = (
     query?: {
         connector?: '' | 'AWS' | 'Azure'
     },
-    params: RequestParams = {}
+    params: RequestParams = {},
+    wait = false
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1958,7 +2046,7 @@ export const useOnboardApiV1SourcesCountList = (
         isLoading: true,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params])
+        JSON.stringify([query, params, wait])
     )
 
     const sendRequest = () => {
@@ -1984,12 +2072,14 @@ export const useOnboardApiV1SourcesCountList = (
         }
     }
 
-    if (JSON.stringify([query, params]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params]))
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
     }
 
     useEffect(() => {
-        sendRequest()
+        if (!wait) {
+            sendRequest()
+        }
     }, [lastInput])
 
     const { response } = state
