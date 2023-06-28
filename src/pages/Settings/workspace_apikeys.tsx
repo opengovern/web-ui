@@ -8,7 +8,9 @@ import {
     Grid,
     List,
     ListItem,
+    Subtitle,
     Text,
+    TextInput,
     Title,
 } from '@tremor/react'
 import { ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
@@ -23,29 +25,106 @@ import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey } from '../../api/
 
 const CreateAPIKey: React.FC<any> = () => {
     return (
-        <List className="mt-4">
-            <ListItem key="lb" />
+        <List className="mt-4 h-full">
             <ListItem key="lb">
                 <Flex justifyContent="start" className="truncate space-x-4">
-                    <Text className="font-medium text-gray-800">
+                    <Subtitle className="text-gray-900 py-2">
                         Properties
-                    </Text>
+                    </Subtitle>
                 </Flex>
             </ListItem>
             <ListItem key="lb">
-                <Flex justifyContent="start" className="truncate space-x-4">
-                    <Text className="font-medium text-gray-800">
-                        API Key Name
+                <Flex justifyContent="between" className="truncate space-x-4">
+                    <Text className="w-1/3 text-base font-medium text-gray-800 py-2">
+                        API Key Name*
                     </Text>
-                    <input type="input" className="font-medium text-gray-800" />
+                    <TextInput className="w-2/3" />
                 </Flex>
             </ListItem>
             <ListItem key="lb">
-                <Flex justifyContent="end" className="truncate space-x-4">
-                    <Button>Create API Key</Button>
-                    <Button>Cancel</Button>
+                <Flex
+                    justifyContent="between"
+                    alignItems="start"
+                    className="truncate space-x-4"
+                >
+                    <Text className="w-1/3 text-base font-medium text-gray-800 py-2">
+                        Role*
+                    </Text>
+
+                    <div className="w-2/3 space-y-5 sm:mt-0">
+                        <div className="relative flex items-start">
+                            <div className="absolute flex h-6 items-center">
+                                <input
+                                    id="public-access"
+                                    name="privacy"
+                                    aria-describedby="public-access-description"
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    defaultChecked
+                                />
+                            </div>
+                            <div className="pl-7 text-sm leading-6">
+                                <div className="font-medium text-gray-900">
+                                    Admin
+                                </div>
+                                <p
+                                    id="public-access-description"
+                                    className="text-gray-500"
+                                >
+                                    Have full access
+                                </p>
+                            </div>
+                        </div>
+                        <div className="relative flex items-start">
+                            <div className="absolute flex h-6 items-center">
+                                <input
+                                    id="restricted-access"
+                                    name="privacy"
+                                    aria-describedby="restricted-access-description"
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                />
+                            </div>
+                            <div className="pl-7 text-sm leading-6">
+                                <div className="font-medium text-gray-900">
+                                    Editor
+                                </div>
+                                <p
+                                    id="restricted-access-description"
+                                    className="text-gray-500"
+                                >
+                                    Can view, edit and delete data
+                                </p>
+                            </div>
+                        </div>
+                        <div className="relative flex items-start">
+                            <div className="absolute flex h-6 items-center">
+                                <input
+                                    id="private-access"
+                                    name="privacy"
+                                    aria-describedby="private-access-description"
+                                    type="radio"
+                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                />
+                            </div>
+                            <div className="pl-7 text-sm leading-6">
+                                <div className="font-medium text-gray-900">
+                                    Viewer
+                                </div>
+                                <p
+                                    id="private-access-description"
+                                    className="text-gray-500"
+                                >
+                                    Member can only view the data
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </Flex>
             </ListItem>
+
+            <Button variant="secondary">Cancel</Button>
+            <Button>Create API Key</Button>
         </List>
     )
 }
