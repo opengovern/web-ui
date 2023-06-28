@@ -16,52 +16,12 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChartPieIcon } from '@heroicons/react/24/outline'
 import { ArrowLongRightIcon } from '@heroicons/react/24/solid'
 import dayjs from 'dayjs'
 import { useInventoryApiV2ResourcesCompositionDetail } from '../../../api/inventory.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
-
-interface StockData {
-    name: string
-    value: number
-    performance: string
-    deltaType: DeltaType
-}
-
-const stocks: StockData[] = [
-    {
-        name: 'Off Running AG',
-        value: 10456,
-        performance: '6.1%',
-        deltaType: 'increase',
-    },
-    {
-        name: 'Not Normal Inc.',
-        value: 5789,
-        performance: '1.2%',
-        deltaType: 'moderateDecrease',
-    },
-    {
-        name: 'Logibling Inc.',
-        value: 4367,
-        performance: '2.3%',
-        deltaType: 'moderateIncrease',
-    },
-    {
-        name: 'Raindrop Inc.',
-        value: 3421,
-        performance: '0.5%',
-        deltaType: 'moderateDecrease',
-    },
-    {
-        name: 'Mwatch Group',
-        value: 1432,
-        performance: '3.4%',
-        deltaType: 'decrease',
-    },
-]
 
 type IProps = {
     // key: string,
@@ -87,7 +47,7 @@ export default function Composition({
     const { response: composition } =
         useInventoryApiV2ResourcesCompositionDetail('category', query)
 
-    function compositionData(inputObject: any) {
+    function compositionData(inputObject: any, oldData: number) {
         const outputArray = []
 
         if (!inputObject) {
@@ -103,18 +63,78 @@ export default function Composition({
         for (const key in inputObject.top_values) {
             outputArray.push({
                 name: key,
-                value: inputObject.top_values[key],
+                value:
+                    oldData === 1
+                        ? inputObject.top_values[key].old_count
+                        : inputObject.top_values[key].count,
             })
         }
 
         // add others key-value pair
         outputArray.push({
             name: 'others',
-            value: inputObject.others,
+            value: oldData
+                ? inputObject.others.old_count
+                : inputObject.others.count,
         })
-
         return outputArray
     }
+
+    function nowCompositionList(inputObject: any) {
+        const outputArray = []
+        if (!inputObject) {
+            return [
+                {
+                    name: 'No data',
+                    value: 0,
+                    delta: 0,
+                },
+            ]
+        }
+        // iterate over top_values
+        // eslint-disable-next-line guard-for-in,no-restricted-syntax
+        for (const key in inputObject.top_values) {
+            let delta
+            try {
+                delta =
+                    ((inputObject.top_values[key].count -
+                        inputObject.top_values[key].old_count) /
+                        inputObject.top_values[key].old_count) *
+                    100
+            } catch (e) {
+                delta = 0
+            }
+            outputArray.push({
+                name: key,
+                value: inputObject.top_values[key].count,
+                delta: Math.abs(delta).toFixed(2),
+            })
+        }
+        return outputArray
+    }
+    function prevCompositionList(inputObject: any) {
+        const outputArray = []
+        if (!inputObject) {
+            return [
+                {
+                    name: 'No data',
+                    value: 0,
+                },
+            ]
+        }
+        // iterate over top_values
+        // eslint-disable-next-line guard-for-in,no-restricted-syntax
+        for (const key in inputObject.top_values) {
+            outputArray.push({
+                name: key,
+                value: inputObject.top_values[key].old_count,
+            })
+        }
+        return outputArray
+    }
+
+    const nowDataList = nowCompositionList(composition)
+    const prevDataList = prevCompositionList(composition)
 
     return (
         <Card>
@@ -130,8 +150,8 @@ export default function Composition({
                         onIndexChange={setSelectedIndex}
                     >
                         <TabList variant="solid">
-                            <Tab icon={ChartPieIcon}>Chart</Tab>
-                            {/* <Tab icon={Bars4Icon}>List</Tab> */}
+                            <Tab>Now</Tab>
+                            <Tab>Before</Tab>
                         </TabList>
                     </TabGroup>
                 </span>
@@ -143,59 +163,69 @@ export default function Composition({
                 <Bold>Resource Allocation</Bold>
             </Text>
             <Text>{composition?.total_value_count} Asset</Text>
-            {selectedIndex === 0 ? (
-                <DonutChart
-                    data={compositionData(composition)}
-                    showAnimation={false}
-                    category="value"
-                    index="name"
-                    // valueFormatter={valueFormatter}
-                    className="mt-6"
-                />
-            ) : (
-                <>
-                    <Flex className="mt-8" justifyContent="between">
-                        <Text className="truncate">
-                            <Bold>Stocks</Bold>
-                        </Text>
-                        <Text>Since transaction</Text>
-                    </Flex>
+            <div className="">
+                <div className="mt-6">
+                    <DonutChart
+                        data={compositionData(composition, selectedIndex)}
+                        showAnimation={false}
+                        category="value"
+                        index="name"
+                        // valueFormatter={valueFormatter}
+                    />
+                </div>
+                <div>
+                    {/* <Flex className="mt-8" justifyContent="between"> */}
+                    {/*    <Text className="truncate"> */}
+                    {/*        <Bold>Stocks</Bold> */}
+                    {/*    </Text> */}
+                    {/*    <Text>Since transaction</Text> */}
+                    {/* </Flex> */}
                     <List className="mt-4">
-                        {stocks.map((stock) => (
-                            <ListItem key={stock.name}>
-                                <Text>{stock.name}</Text>
-                                <Flex
-                                    justifyContent="end"
-                                    className="space-x-2"
-                                >
-                                    <Text>
-                                        ${' '}
-                                        {Intl.NumberFormat('us')
-                                            .format(stock.value)
-                                            .toString()}
-                                    </Text>
-                                    <BadgeDelta
-                                        deltaType={stock.deltaType}
-                                        size="xs"
-                                    >
-                                        {stock.performance}
-                                    </BadgeDelta>
-                                </Flex>
-                            </ListItem>
-                        ))}
+                        {selectedIndex === 0
+                            ? nowDataList.map((item) => (
+                                  <ListItem key={item.name}>
+                                      <Text>{item.name}</Text>
+                                      <Flex
+                                          justifyContent="end"
+                                          className="space-x-2"
+                                      >
+                                          <Text>
+                                              {numericDisplay(item.value)}
+                                          </Text>
+                                          {item.delta && (
+                                              <BadgeDelta
+                                                  deltaType={
+                                                      // eslint-disable-next-line no-nested-ternary
+                                                      item.delta > 0
+                                                          ? 'moderateIncrease'
+                                                          : item.delta < 0
+                                                          ? 'moderateDecrease'
+                                                          : 'unchanged'
+                                                  }
+                                                  size="xs"
+                                              >
+                                                  {item.delta} %
+                                              </BadgeDelta>
+                                          )}
+                                      </Flex>
+                                  </ListItem>
+                              ))
+                            : prevDataList.map((item) => (
+                                  <ListItem key={item.name}>
+                                      <Text>{item.name}</Text>
+                                      <Flex
+                                          justifyContent="end"
+                                          className="space-x-2"
+                                      >
+                                          <Text>
+                                              {numericDisplay(item.value)}
+                                          </Text>
+                                      </Flex>
+                                  </ListItem>
+                              ))}
                     </List>
-                </>
-            )}
-            <Flex className="mt-6 pt-4 border-t">
-                <Button
-                    size="xs"
-                    variant="light"
-                    icon={ArrowLongRightIcon}
-                    iconPosition="right"
-                >
-                    View more
-                </Button>
-            </Flex>
+                </div>
+            </div>
         </Card>
     )
 }

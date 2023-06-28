@@ -1,12 +1,13 @@
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { Divider } from '@tremor/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 interface Iprops {
     open: boolean
     onClose: any
-    children?: React.ReactNode
     title?: string
+    children?: React.ReactNode
 }
 
 export default function DrawerPanel({
@@ -29,7 +30,7 @@ export default function DrawerPanel({
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    <div className="fixed inset-0 bg-gray-900 bg-opacity-40 transition-opacity" />
                 </Transition.Child>
 
                 <div className="fixed inset-0 overflow-hidden">
@@ -44,7 +45,7 @@ export default function DrawerPanel({
                                 leaveFrom="translate-x-0"
                                 leaveTo="translate-x-full"
                             >
-                                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md">
+                                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-4xl">
                                     <Transition.Child
                                         as={Fragment}
                                         enter="ease-in-out duration-500"
@@ -57,7 +58,7 @@ export default function DrawerPanel({
                                         <div className="absolute left-0 top-0 -ml-8 flex pr-2 pt-4 sm:-ml-10 sm:pr-4">
                                             <button
                                                 type="button"
-                                                className="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                                                className="rounded-md text-gray-300 hover:text-white focus:outline-none"
                                                 onClick={onClose}
                                             >
                                                 <span className="sr-only">
