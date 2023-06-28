@@ -120,6 +120,7 @@ import AxiosAPI, { setWorkspace } from './ApiConfig'
 
 interface IuseInventoryApiV1LocationsDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse[]
     error?: any
 }
@@ -142,6 +143,7 @@ export const InventoryApiV1LocationsDetail = (
 
     const [state, setState] = useState<IuseInventoryApiV1LocationsDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([connector, params, wait])
@@ -151,6 +153,7 @@ export const InventoryApiV1LocationsDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -163,10 +166,10 @@ export const InventoryApiV1LocationsDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -189,7 +192,7 @@ export const InventoryApiV1LocationsDetail = (
 export const useInventoryApiV1LocationsDetail = (
     connector: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -204,15 +207,17 @@ export const useInventoryApiV1LocationsDetail = (
 
     const [state, setState] = useState<IuseInventoryApiV1LocationsDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connector, params, wait])
+        JSON.stringify([connector, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -222,34 +227,50 @@ export const useInventoryApiV1LocationsDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([connector, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([connector, params, wait]))
+    if (JSON.stringify([connector, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([connector, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1QueryListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem[]
     error?: any
 }
@@ -272,6 +293,7 @@ export const InventoryApiV1QueryList = (
 
     const [state, setState] = useState<IuseInventoryApiV1QueryListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, wait])
@@ -281,6 +303,7 @@ export const InventoryApiV1QueryList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -293,10 +316,10 @@ export const InventoryApiV1QueryList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -319,7 +342,7 @@ export const InventoryApiV1QueryList = (
 export const useInventoryApiV1QueryList = (
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -334,15 +357,17 @@ export const useInventoryApiV1QueryList = (
 
     const [state, setState] = useState<IuseInventoryApiV1QueryListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -352,34 +377,50 @@ export const useInventoryApiV1QueryList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1QueryCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse
     error?: any
 }
@@ -403,6 +444,7 @@ export const InventoryApiV1QueryCreate = (
 
     const [state, setState] = useState<IuseInventoryApiV1QueryCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([queryId, request, params, wait])
@@ -412,6 +454,7 @@ export const InventoryApiV1QueryCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -424,10 +467,10 @@ export const InventoryApiV1QueryCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -451,7 +494,7 @@ export const useInventoryApiV1QueryCreate = (
     queryId: string,
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -466,15 +509,17 @@ export const useInventoryApiV1QueryCreate = (
 
     const [state, setState] = useState<IuseInventoryApiV1QueryCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([queryId, request, params, wait])
+        JSON.stringify([queryId, request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -484,34 +529,50 @@ export const useInventoryApiV1QueryCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([queryId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([queryId, request, params, wait]))
+    if (JSON.stringify([queryId, request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([queryId, request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1QueryCountListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: number
     error?: any
 }
@@ -534,6 +595,7 @@ export const InventoryApiV1QueryCountList = (
 
     const [state, setState] = useState<IuseInventoryApiV1QueryCountListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, wait])
@@ -543,6 +605,7 @@ export const InventoryApiV1QueryCountList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -555,10 +618,10 @@ export const InventoryApiV1QueryCountList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -581,7 +644,7 @@ export const InventoryApiV1QueryCountList = (
 export const useInventoryApiV1QueryCountList = (
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -596,15 +659,17 @@ export const useInventoryApiV1QueryCountList = (
 
     const [state, setState] = useState<IuseInventoryApiV1QueryCountListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -614,34 +679,50 @@ export const useInventoryApiV1QueryCountList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1ResourceCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: Record<string, string>
     error?: any
 }
@@ -664,6 +745,7 @@ export const InventoryApiV1ResourceCreate = (
 
     const [state, setState] = useState<IuseInventoryApiV1ResourceCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, wait])
@@ -673,6 +755,7 @@ export const InventoryApiV1ResourceCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -685,10 +768,10 @@ export const InventoryApiV1ResourceCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -711,7 +794,7 @@ export const InventoryApiV1ResourceCreate = (
 export const useInventoryApiV1ResourceCreate = (
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -726,15 +809,17 @@ export const useInventoryApiV1ResourceCreate = (
 
     const [state, setState] = useState<IuseInventoryApiV1ResourceCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -744,34 +829,50 @@ export const useInventoryApiV1ResourceCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1ResourcesCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse
     error?: any
 }
@@ -797,6 +898,7 @@ export const InventoryApiV1ResourcesCreate = (
 
     const [state, setState] = useState<IuseInventoryApiV1ResourcesCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, query, params, wait])
@@ -806,6 +908,7 @@ export const InventoryApiV1ResourcesCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -818,10 +921,10 @@ export const InventoryApiV1ResourcesCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -847,7 +950,7 @@ export const useInventoryApiV1ResourcesCreate = (
         common?: 'true' | 'false' | 'all'
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -862,15 +965,17 @@ export const useInventoryApiV1ResourcesCreate = (
 
     const [state, setState] = useState<IuseInventoryApiV1ResourcesCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, wait])
+        JSON.stringify([request, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -880,34 +985,50 @@ export const useInventoryApiV1ResourcesCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, wait]))
+    if (JSON.stringify([request, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1ResourcesAwsCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse
     error?: any
 }
@@ -934,6 +1055,7 @@ export const InventoryApiV1ResourcesAwsCreate = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesAwsCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, query, params, wait])
@@ -943,6 +1065,7 @@ export const InventoryApiV1ResourcesAwsCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -955,10 +1078,10 @@ export const InventoryApiV1ResourcesAwsCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -984,7 +1107,7 @@ export const useInventoryApiV1ResourcesAwsCreate = (
         common?: 'true' | 'false' | 'all'
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1000,15 +1123,17 @@ export const useInventoryApiV1ResourcesAwsCreate = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesAwsCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, wait])
+        JSON.stringify([request, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1018,34 +1143,50 @@ export const useInventoryApiV1ResourcesAwsCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, wait]))
+    if (JSON.stringify([request, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1ResourcesAzureCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse
     error?: any
 }
@@ -1072,6 +1213,7 @@ export const InventoryApiV1ResourcesAzureCreate = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesAzureCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, query, params, wait])
@@ -1081,6 +1223,7 @@ export const InventoryApiV1ResourcesAzureCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1093,10 +1236,10 @@ export const InventoryApiV1ResourcesAzureCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1122,7 +1265,7 @@ export const useInventoryApiV1ResourcesAzureCreate = (
         common?: 'true' | 'false' | 'all'
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1138,15 +1281,17 @@ export const useInventoryApiV1ResourcesAzureCreate = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesAzureCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, wait])
+        JSON.stringify([request, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1156,34 +1301,50 @@ export const useInventoryApiV1ResourcesAzureCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, wait]))
+    if (JSON.stringify([request, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1ResourcesCountListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: number
     error?: any
 }
@@ -1206,6 +1367,7 @@ export const InventoryApiV1ResourcesCountList = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesCountListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, wait])
@@ -1215,6 +1377,7 @@ export const InventoryApiV1ResourcesCountList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1227,10 +1390,10 @@ export const InventoryApiV1ResourcesCountList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1252,7 +1415,7 @@ export const InventoryApiV1ResourcesCountList = (
 
 export const useInventoryApiV1ResourcesCountList = (
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1268,15 +1431,17 @@ export const useInventoryApiV1ResourcesCountList = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesCountListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1286,34 +1451,50 @@ export const useInventoryApiV1ResourcesCountList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1ResourcesFiltersCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse
     error?: any
 }
@@ -1340,6 +1521,7 @@ export const InventoryApiV1ResourcesFiltersCreate = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesFiltersCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, query, params, wait])
@@ -1349,6 +1531,7 @@ export const InventoryApiV1ResourcesFiltersCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1361,10 +1544,10 @@ export const InventoryApiV1ResourcesFiltersCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1390,7 +1573,7 @@ export const useInventoryApiV1ResourcesFiltersCreate = (
         common?: 'true' | 'false' | 'all'
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1406,15 +1589,17 @@ export const useInventoryApiV1ResourcesFiltersCreate = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesFiltersCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, wait])
+        JSON.stringify([request, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1424,34 +1609,50 @@ export const useInventoryApiV1ResourcesFiltersCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, wait]))
+    if (JSON.stringify([request, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1ResourcesRegionsListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse[]
     error?: any
 }
@@ -1487,6 +1688,7 @@ export const InventoryApiV1ResourcesRegionsList = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesRegionsListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -1496,6 +1698,7 @@ export const InventoryApiV1ResourcesRegionsList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1508,10 +1711,10 @@ export const InventoryApiV1ResourcesRegionsList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1546,7 +1749,7 @@ export const useInventoryApiV1ResourcesRegionsList = (
         pageNumber?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1562,15 +1765,17 @@ export const useInventoryApiV1ResourcesRegionsList = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesRegionsListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1580,34 +1785,50 @@ export const useInventoryApiV1ResourcesRegionsList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV1ResourcesTopRegionsListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse[]
     error?: any
 }
@@ -1637,6 +1858,7 @@ export const InventoryApiV1ResourcesTopRegionsList = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesTopRegionsListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -1646,6 +1868,7 @@ export const InventoryApiV1ResourcesTopRegionsList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1658,10 +1881,10 @@ export const InventoryApiV1ResourcesTopRegionsList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1690,7 +1913,7 @@ export const useInventoryApiV1ResourcesTopRegionsList = (
         connectionId?: string[]
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1706,15 +1929,17 @@ export const useInventoryApiV1ResourcesTopRegionsList = (
     const [state, setState] =
         useState<IuseInventoryApiV1ResourcesTopRegionsListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1724,34 +1949,50 @@ export const useInventoryApiV1ResourcesTopRegionsList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ConnectionsDataListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: Record<
         string,
         GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData
@@ -1784,6 +2025,7 @@ export const InventoryApiV2ConnectionsDataList = (
     const [state, setState] =
         useState<IuseInventoryApiV2ConnectionsDataListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -1793,6 +2035,7 @@ export const InventoryApiV2ConnectionsDataList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1805,10 +2048,10 @@ export const InventoryApiV2ConnectionsDataList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1837,7 +2080,7 @@ export const useInventoryApiV2ConnectionsDataList = (
         endTime?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1853,15 +2096,17 @@ export const useInventoryApiV2ConnectionsDataList = (
     const [state, setState] =
         useState<IuseInventoryApiV2ConnectionsDataListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1871,34 +2116,50 @@ export const useInventoryApiV2ConnectionsDataList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ConnectionsDataDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData
     error?: any
 }
@@ -1927,6 +2188,7 @@ export const InventoryApiV2ConnectionsDataDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ConnectionsDataDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([connectionId, query, params, wait])
@@ -1936,6 +2198,7 @@ export const InventoryApiV2ConnectionsDataDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -1948,10 +2211,10 @@ export const InventoryApiV2ConnectionsDataDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1979,7 +2242,7 @@ export const useInventoryApiV2ConnectionsDataDetail = (
         endTime?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1995,15 +2258,17 @@ export const useInventoryApiV2ConnectionsDataDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ConnectionsDataDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, query, params, wait])
+        JSON.stringify([connectionId, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2013,34 +2278,52 @@ export const useInventoryApiV2ConnectionsDataDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([connectionId, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, query, params, wait]))
+    if (
+        JSON.stringify([connectionId, query, params, autoExecute]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([connectionId, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2CostCompositionListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
     error?: any
 }
@@ -2074,6 +2357,7 @@ export const InventoryApiV2CostCompositionList = (
     const [state, setState] =
         useState<IuseInventoryApiV2CostCompositionListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -2083,6 +2367,7 @@ export const InventoryApiV2CostCompositionList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2095,10 +2380,10 @@ export const InventoryApiV2CostCompositionList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2131,7 +2416,7 @@ export const useInventoryApiV2CostCompositionList = (
         endTime?: string
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2147,15 +2432,17 @@ export const useInventoryApiV2CostCompositionList = (
     const [state, setState] =
         useState<IuseInventoryApiV2CostCompositionListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2165,34 +2452,50 @@ export const useInventoryApiV2CostCompositionList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2CostMetricListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse
     error?: any
 }
@@ -2229,6 +2532,7 @@ export const InventoryApiV2CostMetricList = (
 
     const [state, setState] = useState<IuseInventoryApiV2CostMetricListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -2238,6 +2542,7 @@ export const InventoryApiV2CostMetricList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2250,10 +2555,10 @@ export const InventoryApiV2CostMetricList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2290,7 +2595,7 @@ export const useInventoryApiV2CostMetricList = (
         pageNumber?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2305,15 +2610,17 @@ export const useInventoryApiV2CostMetricList = (
 
     const [state, setState] = useState<IuseInventoryApiV2CostMetricListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2323,34 +2630,50 @@ export const useInventoryApiV2CostMetricList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2CostTrendListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
     error?: any
 }
@@ -2383,6 +2706,7 @@ export const InventoryApiV2CostTrendList = (
 
     const [state, setState] = useState<IuseInventoryApiV2CostTrendListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -2392,6 +2716,7 @@ export const InventoryApiV2CostTrendList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2404,10 +2729,10 @@ export const InventoryApiV2CostTrendList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2440,7 +2765,7 @@ export const useInventoryApiV2CostTrendList = (
         datapointCount?: string
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2455,15 +2780,17 @@ export const useInventoryApiV2CostTrendList = (
 
     const [state, setState] = useState<IuseInventoryApiV2CostTrendListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2473,34 +2800,50 @@ export const useInventoryApiV2CostTrendList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2InsightsListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: Record<
         string,
         GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[]
@@ -2534,6 +2877,7 @@ export const InventoryApiV2InsightsList = (
 
     const [state, setState] = useState<IuseInventoryApiV2InsightsListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -2543,6 +2887,7 @@ export const InventoryApiV2InsightsList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2555,10 +2900,10 @@ export const InventoryApiV2InsightsList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2589,7 +2934,7 @@ export const useInventoryApiV2InsightsList = (
         time?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2604,15 +2949,17 @@ export const useInventoryApiV2InsightsList = (
 
     const [state, setState] = useState<IuseInventoryApiV2InsightsListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2622,34 +2969,50 @@ export const useInventoryApiV2InsightsList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2InsightsDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[]
     error?: any
 }
@@ -2677,6 +3040,7 @@ export const InventoryApiV2InsightsDetail = (
 
     const [state, setState] = useState<IuseInventoryApiV2InsightsDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([insightId, query, params, wait])
@@ -2686,6 +3050,7 @@ export const InventoryApiV2InsightsDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2698,10 +3063,10 @@ export const InventoryApiV2InsightsDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2729,7 +3094,7 @@ export const useInventoryApiV2InsightsDetail = (
         time?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2744,15 +3109,17 @@ export const useInventoryApiV2InsightsDetail = (
 
     const [state, setState] = useState<IuseInventoryApiV2InsightsDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, query, params, wait])
+        JSON.stringify([insightId, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2762,34 +3129,50 @@ export const useInventoryApiV2InsightsDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([insightId, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, query, params, wait]))
+    if (JSON.stringify([insightId, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2InsightsTrendDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: Record<
         string,
         GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[]
@@ -2823,6 +3206,7 @@ export const InventoryApiV2InsightsTrendDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2InsightsTrendDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([insightId, query, params, wait])
@@ -2832,6 +3216,7 @@ export const InventoryApiV2InsightsTrendDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2844,10 +3229,10 @@ export const InventoryApiV2InsightsTrendDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2877,7 +3262,7 @@ export const useInventoryApiV2InsightsTrendDetail = (
         endTime?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2893,15 +3278,17 @@ export const useInventoryApiV2InsightsTrendDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2InsightsTrendDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, query, params, wait])
+        JSON.stringify([insightId, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2911,34 +3298,50 @@ export const useInventoryApiV2InsightsTrendDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([insightId, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, query, params, wait]))
+    if (JSON.stringify([insightId, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2InsightsJobDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource
     error?: any
 }
@@ -2962,6 +3365,7 @@ export const InventoryApiV2InsightsJobDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2InsightsJobDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([jobId, params, wait])
@@ -2971,6 +3375,7 @@ export const InventoryApiV2InsightsJobDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -2983,10 +3388,10 @@ export const InventoryApiV2InsightsJobDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3009,7 +3414,7 @@ export const InventoryApiV2InsightsJobDetail = (
 export const useInventoryApiV2InsightsJobDetail = (
     jobId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3025,15 +3430,17 @@ export const useInventoryApiV2InsightsJobDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2InsightsJobDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([jobId, params, wait])
+        JSON.stringify([jobId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3043,34 +3450,50 @@ export const useInventoryApiV2InsightsJobDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([jobId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([jobId, params, wait]))
+    if (JSON.stringify([jobId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([jobId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2MetadataResourcetypeListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse
     error?: any
 }
@@ -3104,6 +3527,7 @@ export const InventoryApiV2MetadataResourcetypeList = (
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataResourcetypeListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -3113,6 +3537,7 @@ export const InventoryApiV2MetadataResourcetypeList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3125,10 +3550,10 @@ export const InventoryApiV2MetadataResourcetypeList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3161,7 +3586,7 @@ export const useInventoryApiV2MetadataResourcetypeList = (
         pageNumber?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3177,15 +3602,17 @@ export const useInventoryApiV2MetadataResourcetypeList = (
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataResourcetypeListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3195,34 +3622,50 @@ export const useInventoryApiV2MetadataResourcetypeList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2MetadataResourcetypeDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType
     error?: any
 }
@@ -3246,6 +3689,7 @@ export const InventoryApiV2MetadataResourcetypeDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataResourcetypeDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([resourceType, params, wait])
@@ -3255,6 +3699,7 @@ export const InventoryApiV2MetadataResourcetypeDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3267,10 +3712,10 @@ export const InventoryApiV2MetadataResourcetypeDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3293,7 +3738,7 @@ export const InventoryApiV2MetadataResourcetypeDetail = (
 export const useInventoryApiV2MetadataResourcetypeDetail = (
     resourceType: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3309,15 +3754,17 @@ export const useInventoryApiV2MetadataResourcetypeDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataResourcetypeDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([resourceType, params, wait])
+        JSON.stringify([resourceType, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3327,34 +3774,50 @@ export const useInventoryApiV2MetadataResourcetypeDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([resourceType, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([resourceType, params, wait]))
+    if (JSON.stringify([resourceType, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([resourceType, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2MetadataServicesListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse
     error?: any
 }
@@ -3386,6 +3849,7 @@ export const InventoryApiV2MetadataServicesList = (
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataServicesListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -3395,6 +3859,7 @@ export const InventoryApiV2MetadataServicesList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3407,10 +3872,10 @@ export const InventoryApiV2MetadataServicesList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3441,7 +3906,7 @@ export const useInventoryApiV2MetadataServicesList = (
         pageNumber?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3457,15 +3922,17 @@ export const useInventoryApiV2MetadataServicesList = (
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataServicesListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3475,34 +3942,50 @@ export const useInventoryApiV2MetadataServicesList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2MetadataServicesDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiService
     error?: any
 }
@@ -3526,6 +4009,7 @@ export const InventoryApiV2MetadataServicesDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataServicesDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([serviceName, params, wait])
@@ -3535,6 +4019,7 @@ export const InventoryApiV2MetadataServicesDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3547,10 +4032,10 @@ export const InventoryApiV2MetadataServicesDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3573,7 +4058,7 @@ export const InventoryApiV2MetadataServicesDetail = (
 export const useInventoryApiV2MetadataServicesDetail = (
     serviceName: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3589,15 +4074,17 @@ export const useInventoryApiV2MetadataServicesDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataServicesDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([serviceName, params, wait])
+        JSON.stringify([serviceName, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3607,34 +4094,50 @@ export const useInventoryApiV2MetadataServicesDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([serviceName, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([serviceName, params, wait]))
+    if (JSON.stringify([serviceName, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([serviceName, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ResourcesCompositionDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse
     error?: any
 }
@@ -3669,6 +4172,7 @@ export const InventoryApiV2ResourcesCompositionDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesCompositionDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([key, query, params, wait])
@@ -3678,6 +4182,7 @@ export const InventoryApiV2ResourcesCompositionDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3690,10 +4195,10 @@ export const InventoryApiV2ResourcesCompositionDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3727,7 +4232,7 @@ export const useInventoryApiV2ResourcesCompositionDetail = (
         startTime?: string
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3743,15 +4248,17 @@ export const useInventoryApiV2ResourcesCompositionDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesCompositionDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, query, params, wait])
+        JSON.stringify([key, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3761,34 +4268,50 @@ export const useInventoryApiV2ResourcesCompositionDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([key, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([key, query, params, wait]))
+    if (JSON.stringify([key, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([key, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ResourcesMetricListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse
     error?: any
 }
@@ -3832,6 +4355,7 @@ export const InventoryApiV2ResourcesMetricList = (
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesMetricListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -3841,6 +4365,7 @@ export const InventoryApiV2ResourcesMetricList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3853,10 +4378,10 @@ export const InventoryApiV2ResourcesMetricList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3899,7 +4424,7 @@ export const useInventoryApiV2ResourcesMetricList = (
         pageNumber?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3915,15 +4440,17 @@ export const useInventoryApiV2ResourcesMetricList = (
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesMetricListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -3933,34 +4460,50 @@ export const useInventoryApiV2ResourcesMetricList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ResourcesMetricDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType
     error?: any
 }
@@ -3991,6 +4534,7 @@ export const InventoryApiV2ResourcesMetricDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesMetricDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([resourceType, query, params, wait])
@@ -4000,6 +4544,7 @@ export const InventoryApiV2ResourcesMetricDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4012,10 +4557,10 @@ export const InventoryApiV2ResourcesMetricDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -4045,7 +4590,7 @@ export const useInventoryApiV2ResourcesMetricDetail = (
         startTime?: string
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -4061,15 +4606,17 @@ export const useInventoryApiV2ResourcesMetricDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesMetricDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([resourceType, query, params, wait])
+        JSON.stringify([resourceType, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4079,34 +4626,52 @@ export const useInventoryApiV2ResourcesMetricDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([resourceType, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([resourceType, query, params, wait]))
+    if (
+        JSON.stringify([resourceType, query, params, autoExecute]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([resourceType, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ResourcesTagListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: Record<string, string[]>
     error?: any
 }
@@ -4138,6 +4703,7 @@ export const InventoryApiV2ResourcesTagList = (
     const [state, setState] = useState<IuseInventoryApiV2ResourcesTagListState>(
         {
             isLoading: true,
+            isExecuted: false,
         }
     )
     const [lastInput, setLastInput] = useState<string>(
@@ -4148,6 +4714,7 @@ export const InventoryApiV2ResourcesTagList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4160,10 +4727,10 @@ export const InventoryApiV2ResourcesTagList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -4194,7 +4761,7 @@ export const useInventoryApiV2ResourcesTagList = (
         endTime?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -4210,16 +4777,18 @@ export const useInventoryApiV2ResourcesTagList = (
     const [state, setState] = useState<IuseInventoryApiV2ResourcesTagListState>(
         {
             isLoading: true,
+            isExecuted: false,
         }
     )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4229,34 +4798,50 @@ export const useInventoryApiV2ResourcesTagList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ResourcesTagDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: string[]
     error?: any
 }
@@ -4289,6 +4874,7 @@ export const InventoryApiV2ResourcesTagDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesTagDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([key, query, params, wait])
@@ -4298,6 +4884,7 @@ export const InventoryApiV2ResourcesTagDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4310,10 +4897,10 @@ export const InventoryApiV2ResourcesTagDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -4345,7 +4932,7 @@ export const useInventoryApiV2ResourcesTagDetail = (
         endTime?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -4361,15 +4948,17 @@ export const useInventoryApiV2ResourcesTagDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesTagDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, query, params, wait])
+        JSON.stringify([key, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4379,34 +4968,50 @@ export const useInventoryApiV2ResourcesTagDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([key, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([key, query, params, wait]))
+    if (JSON.stringify([key, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([key, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ResourcesTrendListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
     error?: any
 }
@@ -4444,6 +5049,7 @@ export const InventoryApiV2ResourcesTrendList = (
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesTrendListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -4453,6 +5059,7 @@ export const InventoryApiV2ResourcesTrendList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4465,10 +5072,10 @@ export const InventoryApiV2ResourcesTrendList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -4505,7 +5112,7 @@ export const useInventoryApiV2ResourcesTrendList = (
         datapointCount?: string
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -4521,15 +5128,17 @@ export const useInventoryApiV2ResourcesTrendList = (
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesTrendListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4539,34 +5148,50 @@ export const useInventoryApiV2ResourcesTrendList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ServicesMetricListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse
     error?: any
 }
@@ -4606,6 +5231,7 @@ export const InventoryApiV2ServicesMetricList = (
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesMetricListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -4615,6 +5241,7 @@ export const InventoryApiV2ServicesMetricList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4627,10 +5254,10 @@ export const InventoryApiV2ServicesMetricList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -4669,7 +5296,7 @@ export const useInventoryApiV2ServicesMetricList = (
         pageNumber?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -4685,15 +5312,17 @@ export const useInventoryApiV2ServicesMetricList = (
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesMetricListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4703,34 +5332,50 @@ export const useInventoryApiV2ServicesMetricList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ServicesMetricDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiService
     error?: any
 }
@@ -4761,6 +5406,7 @@ export const InventoryApiV2ServicesMetricDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesMetricDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([serviceName, query, params, wait])
@@ -4770,6 +5416,7 @@ export const InventoryApiV2ServicesMetricDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4782,10 +5429,10 @@ export const InventoryApiV2ServicesMetricDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -4815,7 +5462,7 @@ export const useInventoryApiV2ServicesMetricDetail = (
         endTime?: string
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -4831,15 +5478,17 @@ export const useInventoryApiV2ServicesMetricDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesMetricDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([serviceName, query, params, wait])
+        JSON.stringify([serviceName, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4849,34 +5498,52 @@ export const useInventoryApiV2ServicesMetricDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([serviceName, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([serviceName, query, params, wait]))
+    if (
+        JSON.stringify([serviceName, query, params, autoExecute]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([serviceName, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ServicesSummaryListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse
     error?: any
 }
@@ -4914,6 +5581,7 @@ export const InventoryApiV2ServicesSummaryList = (
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesSummaryListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -4923,6 +5591,7 @@ export const InventoryApiV2ServicesSummaryList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -4935,10 +5604,10 @@ export const InventoryApiV2ServicesSummaryList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -4975,7 +5644,7 @@ export const useInventoryApiV2ServicesSummaryList = (
         sortBy?: 'servicecode' | 'resourcecount'
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -4991,15 +5660,17 @@ export const useInventoryApiV2ServicesSummaryList = (
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesSummaryListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -5009,34 +5680,50 @@ export const useInventoryApiV2ServicesSummaryList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ServicesSummaryDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary
     error?: any
 }
@@ -5067,6 +5754,7 @@ export const InventoryApiV2ServicesSummaryDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesSummaryDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([serviceName, query, params, wait])
@@ -5076,6 +5764,7 @@ export const InventoryApiV2ServicesSummaryDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -5088,10 +5777,10 @@ export const InventoryApiV2ServicesSummaryDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -5121,7 +5810,7 @@ export const useInventoryApiV2ServicesSummaryDetail = (
         endTime: string
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -5137,15 +5826,17 @@ export const useInventoryApiV2ServicesSummaryDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesSummaryDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([serviceName, query, params, wait])
+        JSON.stringify([serviceName, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -5155,34 +5846,52 @@ export const useInventoryApiV2ServicesSummaryDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([serviceName, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([serviceName, query, params, wait]))
+    if (
+        JSON.stringify([serviceName, query, params, autoExecute]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([serviceName, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ServicesTagListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: Record<string, string[]>
     error?: any
 }
@@ -5204,6 +5913,7 @@ export const InventoryApiV2ServicesTagList = (
 
     const [state, setState] = useState<IuseInventoryApiV2ServicesTagListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, wait])
@@ -5213,6 +5923,7 @@ export const InventoryApiV2ServicesTagList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -5225,10 +5936,10 @@ export const InventoryApiV2ServicesTagList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -5250,7 +5961,7 @@ export const InventoryApiV2ServicesTagList = (
 
 export const useInventoryApiV2ServicesTagList = (
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -5265,15 +5976,17 @@ export const useInventoryApiV2ServicesTagList = (
 
     const [state, setState] = useState<IuseInventoryApiV2ServicesTagListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -5283,34 +5996,50 @@ export const useInventoryApiV2ServicesTagList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseInventoryApiV2ServicesTagDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: string[]
     error?: any
 }
@@ -5334,6 +6063,7 @@ export const InventoryApiV2ServicesTagDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesTagDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([key, params, wait])
@@ -5343,6 +6073,7 @@ export const InventoryApiV2ServicesTagDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -5355,10 +6086,10 @@ export const InventoryApiV2ServicesTagDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -5381,7 +6112,7 @@ export const InventoryApiV2ServicesTagDetail = (
 export const useInventoryApiV2ServicesTagDetail = (
     key: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -5397,15 +6128,17 @@ export const useInventoryApiV2ServicesTagDetail = (
     const [state, setState] =
         useState<IuseInventoryApiV2ServicesTagDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, params, wait])
+        JSON.stringify([key, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.inventory
@@ -5415,28 +6148,43 @@ export const useInventoryApiV2ServicesTagDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([key, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([key, params, wait]))
+    if (JSON.stringify([key, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([key, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }

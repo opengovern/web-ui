@@ -1,11 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-    Bold,
     Button,
     Card,
-    Col,
     Flex,
-    Grid,
     List,
     ListItem,
     Subtitle,
@@ -13,17 +10,72 @@ import {
     TextInput,
     Title,
 } from '@tremor/react'
-import { ChevronRightIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { TrashIcon } from '@heroicons/react/24/outline'
+import { type } from 'os'
 import {
+    AuthApiV1KeyCreateCreate,
+    useAuthApiV1KeyCreateCreate,
+    useAuthApiV1KeyDeleteDelete,
     useAuthApiV1KeysList,
     useAuthApiV1UserDetail,
-    useAuthApiV1WorkspaceRoleBindingsList,
 } from '../../api/auth.gen'
 import Spinner from '../../components/Spinner'
 import DrawerPanel from '../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey } from '../../api/api'
 
-const CreateAPIKey: React.FC<any> = () => {
+interface CreateAPIKeyProps {
+    close: () => void
+}
+const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
+    const [apiKeyName, setApiKeyName] = useState<string>('')
+    const [role, setRole] = useState<string>('viewer')
+    const [roleValue, setRoleValue] = useState<
+        'admin' | 'editor' | 'viewer' | undefined
+    >()
+
+    const {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow: callCreate,
+    } = useAuthApiV1KeyCreateCreate(
+        { name: apiKeyName, roleName: roleValue },
+        {},
+        false
+    )
+
+    const roleItems = [
+        {
+            value: 'admin',
+            title: 'Admin',
+            description: 'Have full access',
+        },
+        {
+            value: 'editor',
+            title: 'Editor',
+            description: 'Can view, edit and delete data',
+        },
+        {
+            value: 'viewer',
+            title: 'Viewer',
+            description: 'Member can only view the data',
+        },
+    ]
+
+    useEffect(() => {
+        if (role === 'viewer' || role === 'editor' || role === 'admin') {
+            setRoleValue(role)
+        }
+    }, [role])
+
+    useEffect(() => {
+        console.log(isLoading, isExecuted)
+        if (!isLoading && isExecuted) {
+            close()
+        }
+    }, [isLoading])
+
     return (
         <List className="mt-4 h-full">
             <ListItem key="lb">
@@ -36,9 +88,14 @@ const CreateAPIKey: React.FC<any> = () => {
             <ListItem key="lb">
                 <Flex justifyContent="between" className="truncate space-x-4">
                     <Text className="w-1/3 text-base font-medium text-gray-800 py-2">
-                        API Key Name*
+                        API Key Name *
                     </Text>
-                    <TextInput className="w-2/3" />
+                    <TextInput
+                        className="w-2/3"
+                        onChange={(p) => {
+                            setApiKeyName(p.target.value)
+                        }}
+                    />
                 </Flex>
             </ListItem>
             <ListItem key="lb">
@@ -48,94 +105,75 @@ const CreateAPIKey: React.FC<any> = () => {
                     className="truncate space-x-4"
                 >
                     <Text className="w-1/3 text-base font-medium text-gray-800 py-2">
-                        Role*
+                        Role *
                     </Text>
 
                     <div className="w-2/3 space-y-5 sm:mt-0">
-                        <div className="relative flex items-start">
-                            <div className="absolute flex h-6 items-center">
-                                <input
-                                    id="public-access"
-                                    name="privacy"
-                                    aria-describedby="public-access-description"
-                                    type="radio"
-                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                    defaultChecked
-                                />
-                            </div>
-                            <div className="pl-7 text-sm leading-6">
-                                <div className="font-medium text-gray-900">
-                                    Admin
+                        {roleItems.map((item) => {
+                            return (
+                                <div className="relative flex items-start">
+                                    <div className="absolute flex h-6 items-center">
+                                        <input
+                                            name="roles"
+                                            type="radio"
+                                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                            onClick={() => {
+                                                setRole(item.value)
+                                            }}
+                                            checked={item.value === role}
+                                        />
+                                    </div>
+                                    <div className="pl-7 text-sm leading-6">
+                                        <div className="font-medium text-gray-900">
+                                            {item.title}
+                                        </div>
+                                        <p className="text-gray-500">
+                                            {item.description}
+                                        </p>
+                                    </div>
                                 </div>
-                                <p
-                                    id="public-access-description"
-                                    className="text-gray-500"
-                                >
-                                    Have full access
-                                </p>
-                            </div>
-                        </div>
-                        <div className="relative flex items-start">
-                            <div className="absolute flex h-6 items-center">
-                                <input
-                                    id="restricted-access"
-                                    name="privacy"
-                                    aria-describedby="restricted-access-description"
-                                    type="radio"
-                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                            </div>
-                            <div className="pl-7 text-sm leading-6">
-                                <div className="font-medium text-gray-900">
-                                    Editor
-                                </div>
-                                <p
-                                    id="restricted-access-description"
-                                    className="text-gray-500"
-                                >
-                                    Can view, edit and delete data
-                                </p>
-                            </div>
-                        </div>
-                        <div className="relative flex items-start">
-                            <div className="absolute flex h-6 items-center">
-                                <input
-                                    id="private-access"
-                                    name="privacy"
-                                    aria-describedby="private-access-description"
-                                    type="radio"
-                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                            </div>
-                            <div className="pl-7 text-sm leading-6">
-                                <div className="font-medium text-gray-900">
-                                    Viewer
-                                </div>
-                                <p
-                                    id="private-access-description"
-                                    className="text-gray-500"
-                                >
-                                    Member can only view the data
-                                </p>
-                            </div>
-                        </div>
+                            )
+                        })}
                     </div>
                 </Flex>
             </ListItem>
 
-            <Button variant="secondary">Cancel</Button>
-            <Button>Create API Key</Button>
+            <Button
+                variant="secondary"
+                onClick={() => {
+                    close()
+                }}
+            >
+                Cancel
+            </Button>
+            <Button
+                disabled={apiKeyName.length === 0}
+                onClick={() => {
+                    callCreate()
+                }}
+                loading={isExecuted && isLoading}
+            >
+                Create API Key
+            </Button>
         </List>
     )
 }
 
 interface APIKeyRecordProps {
     item: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
+    refresh: () => void
 }
-const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item }) => {
+const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
     const { response, isLoading } = useAuthApiV1UserDetail(
         item.creatorUserID || ''
     )
+    const {
+        response: responseDelete,
+        isLoading: deleteIsLoading,
+        isExecuted: deleteIsExecuted,
+        error,
+        sendNow: callDelete,
+    } = useAuthApiV1KeyDeleteDelete((item.id || 0).toString(), {}, false)
 
     const fixRole = (role: string) => {
         switch (role) {
@@ -149,6 +187,12 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item }) => {
                 return role
         }
     }
+
+    useEffect(() => {
+        if (!deleteIsLoading && deleteIsExecuted) {
+            refresh()
+        }
+    }, [deleteIsLoading])
 
     return (
         <Flex
@@ -187,7 +231,16 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item }) => {
                         Date.parse(item.createdAt || Date.now().toString())
                     ).toLocaleDateString('en-US')}
                 </Text>
-                <TrashIcon className="w-4 h-4" />
+                {deleteIsLoading && deleteIsExecuted ? (
+                    <Spinner />
+                ) : (
+                    <TrashIcon
+                        className="w-4 h-4 cursor-pointer"
+                        onClick={() => {
+                            callDelete()
+                        }}
+                    />
+                )}
             </Flex>
         </Flex>
     )
@@ -195,7 +248,7 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item }) => {
 
 const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-    const { response, isLoading } = useAuthApiV1KeysList()
+    const { response, isLoading, sendNow } = useAuthApiV1KeysList()
 
     if (isLoading) {
         return (
@@ -216,9 +269,15 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
                 title="Create new API Key"
                 onClose={() => {
                     setDrawerOpen(false)
+                    sendNow()
                 }}
             >
-                <CreateAPIKey />
+                <CreateAPIKey
+                    close={() => {
+                        setDrawerOpen(false)
+                        sendNow()
+                    }}
+                />
             </DrawerPanel>
             <Card key="summary" className="top-10">
                 <div className="flex mb-6">
@@ -243,7 +302,12 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
                     <Text className="text-xs w-1/4">Create Date</Text>
                 </Flex>
                 {response?.map((item) => (
-                    <APIKeyRecord item={item} />
+                    <APIKeyRecord
+                        item={item}
+                        refresh={() => {
+                            sendNow()
+                        }}
+                    />
                 ))}
             </Card>
         </>

@@ -111,6 +111,7 @@ import { useParams } from 'react-router-dom'
 		contentAPI := fmt.Sprintf(`
 interface I%[6]sState {
 	isLoading: boolean
+	isExecuted: boolean
 	response?: %[3]s
 	error?: any
 }
@@ -131,6 +132,7 @@ export const %[7]s = (%[2]s, wait: boolean = false) => {
     const [state, setState] =
         useState<I%[6]sState>({
             isLoading: true,
+			isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([%[5]s, wait])
@@ -140,6 +142,7 @@ export const %[7]s = (%[2]s, wait: boolean = false) => {
 		setState({
 			...state,
 			isLoading: true,
+			isExecuted: true,
 		})
         try {
             api.%[4]s
@@ -152,10 +155,10 @@ export const %[7]s = (%[2]s, wait: boolean = false) => {
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -169,13 +172,13 @@ export const %[7]s = (%[2]s, wait: boolean = false) => {
         }
     }, [lastInput])
 
-	const response = state.response
-	const isLoading = state.isLoading
-	const error = state.error
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
     return {response, isLoading, error}
 }
 
-export const %[6]s = (%[2]s, wait: boolean = false) => {
+export const %[6]s = (%[2]s, autoExecute: boolean = true) => {
     const workspace = useParams<{ ws: string }>().ws
 
     const api = new Api()
@@ -190,15 +193,17 @@ export const %[6]s = (%[2]s, wait: boolean = false) => {
     const [state, setState] =
         useState<I%[6]sState>({
             isLoading: true,
+			isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([%[5]s, wait])
+        JSON.stringify([%[5]s, autoExecute])
     )
 
     const sendRequest = () => {
 		setState({
 			...state,
 			isLoading: true,
+			isExecuted: true,
 		})
         try {
             api.%[4]s
@@ -208,30 +213,45 @@ export const %[6]s = (%[2]s, wait: boolean = false) => {
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([%[5]s, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([%[5]s, wait]))
+    if (JSON.stringify([%[5]s, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([%[5]s, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
-	const response = state.response
-	const isLoading = state.isLoading
-	const error = state.error
-    return {response, isLoading, error}
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 `, apiName, req, resp, module, pmr, funcName, funcName[3:])
 		apiFiles[module] += contentAPI

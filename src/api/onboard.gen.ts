@@ -120,6 +120,7 @@ import AxiosAPI, { setWorkspace } from './ApiConfig'
 
 interface IuseOnboardApiV1CatalogMetricsListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics
     error?: any
 }
@@ -142,6 +143,7 @@ export const OnboardApiV1CatalogMetricsList = (
     const [state, setState] = useState<IuseOnboardApiV1CatalogMetricsListState>(
         {
             isLoading: true,
+            isExecuted: false,
         }
     )
     const [lastInput, setLastInput] = useState<string>(
@@ -152,6 +154,7 @@ export const OnboardApiV1CatalogMetricsList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -164,10 +167,10 @@ export const OnboardApiV1CatalogMetricsList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -189,7 +192,7 @@ export const OnboardApiV1CatalogMetricsList = (
 
 export const useOnboardApiV1CatalogMetricsList = (
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -205,16 +208,18 @@ export const useOnboardApiV1CatalogMetricsList = (
     const [state, setState] = useState<IuseOnboardApiV1CatalogMetricsListState>(
         {
             isLoading: true,
+            isExecuted: false,
         }
     )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -224,34 +229,50 @@ export const useOnboardApiV1CatalogMetricsList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1ConnectionsStateCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -276,6 +297,7 @@ export const OnboardApiV1ConnectionsStateCreate = (
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionsStateCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([connectionId, request, params, wait])
@@ -285,6 +307,7 @@ export const OnboardApiV1ConnectionsStateCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -297,10 +320,10 @@ export const OnboardApiV1ConnectionsStateCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -324,7 +347,7 @@ export const useOnboardApiV1ConnectionsStateCreate = (
     connectionId: number,
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -340,15 +363,17 @@ export const useOnboardApiV1ConnectionsStateCreate = (
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionsStateCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, request, params, wait])
+        JSON.stringify([connectionId, request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -358,34 +383,55 @@ export const useOnboardApiV1ConnectionsStateCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([connectionId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, request, params, wait]))
+    if (
+        JSON.stringify([connectionId, request, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([connectionId, request, params, autoExecute])
+        )
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1ConnectionsCountListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: number
     error?: any
 }
@@ -409,6 +455,7 @@ export const OnboardApiV1ConnectionsCountList = (
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionsCountListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([type, params, wait])
@@ -418,6 +465,7 @@ export const OnboardApiV1ConnectionsCountList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -430,10 +478,10 @@ export const OnboardApiV1ConnectionsCountList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -456,7 +504,7 @@ export const OnboardApiV1ConnectionsCountList = (
 export const useOnboardApiV1ConnectionsCountList = (
     type: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -472,15 +520,17 @@ export const useOnboardApiV1ConnectionsCountList = (
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionsCountListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([type, params, wait])
+        JSON.stringify([type, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -490,34 +540,50 @@ export const useOnboardApiV1ConnectionsCountList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([type, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([type, params, wait]))
+    if (JSON.stringify([type, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([type, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1ConnectionsSummaryListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
     error?: any
 }
@@ -566,6 +632,7 @@ export const OnboardApiV1ConnectionsSummaryList = (
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionsSummaryListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -575,6 +642,7 @@ export const OnboardApiV1ConnectionsSummaryList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -587,10 +655,10 @@ export const OnboardApiV1ConnectionsSummaryList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -638,7 +706,7 @@ export const useOnboardApiV1ConnectionsSummaryList = (
             | 'cost_growth_rate'
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -654,15 +722,17 @@ export const useOnboardApiV1ConnectionsSummaryList = (
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionsSummaryListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -672,34 +742,50 @@ export const useOnboardApiV1ConnectionsSummaryList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1ConnectionsSummaryDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     error?: any
 }
@@ -728,6 +814,7 @@ export const OnboardApiV1ConnectionsSummaryDetail = (
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionsSummaryDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([connectionId, query, params, wait])
@@ -737,6 +824,7 @@ export const OnboardApiV1ConnectionsSummaryDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -749,10 +837,10 @@ export const OnboardApiV1ConnectionsSummaryDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -780,7 +868,7 @@ export const useOnboardApiV1ConnectionsSummaryDetail = (
         endTime?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -796,15 +884,17 @@ export const useOnboardApiV1ConnectionsSummaryDetail = (
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionsSummaryDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, query, params, wait])
+        JSON.stringify([connectionId, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -814,34 +904,52 @@ export const useOnboardApiV1ConnectionsSummaryDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([connectionId, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, query, params, wait]))
+    if (
+        JSON.stringify([connectionId, query, params, autoExecute]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([connectionId, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1ConnectorListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount[]
     error?: any
 }
@@ -863,6 +971,7 @@ export const OnboardApiV1ConnectorList = (
 
     const [state, setState] = useState<IuseOnboardApiV1ConnectorListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, wait])
@@ -872,6 +981,7 @@ export const OnboardApiV1ConnectorList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -884,10 +994,10 @@ export const OnboardApiV1ConnectorList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -909,7 +1019,7 @@ export const OnboardApiV1ConnectorList = (
 
 export const useOnboardApiV1ConnectorList = (
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -924,15 +1034,17 @@ export const useOnboardApiV1ConnectorList = (
 
     const [state, setState] = useState<IuseOnboardApiV1ConnectorListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -942,34 +1054,50 @@ export const useOnboardApiV1ConnectorList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1ConnectorDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnector
     error?: any
 }
@@ -992,6 +1120,7 @@ export const OnboardApiV1ConnectorDetail = (
 
     const [state, setState] = useState<IuseOnboardApiV1ConnectorDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([connectorName, params, wait])
@@ -1001,6 +1130,7 @@ export const OnboardApiV1ConnectorDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1013,10 +1143,10 @@ export const OnboardApiV1ConnectorDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1039,7 +1169,7 @@ export const OnboardApiV1ConnectorDetail = (
 export const useOnboardApiV1ConnectorDetail = (
     connectorName: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1054,15 +1184,17 @@ export const useOnboardApiV1ConnectorDetail = (
 
     const [state, setState] = useState<IuseOnboardApiV1ConnectorDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectorName, params, wait])
+        JSON.stringify([connectorName, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1072,34 +1204,50 @@ export const useOnboardApiV1ConnectorDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([connectorName, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([connectorName, params, wait]))
+    if (JSON.stringify([connectorName, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([connectorName, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1CredentialListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
     error?: any
 }
@@ -1130,6 +1278,7 @@ export const OnboardApiV1CredentialList = (
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -1139,6 +1288,7 @@ export const OnboardApiV1CredentialList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1151,10 +1301,10 @@ export const OnboardApiV1CredentialList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1185,7 +1335,7 @@ export const useOnboardApiV1CredentialList = (
         pageNumber?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1200,15 +1350,17 @@ export const useOnboardApiV1CredentialList = (
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1218,34 +1370,50 @@ export const useOnboardApiV1CredentialList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1CredentialCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse
     error?: any
 }
@@ -1268,6 +1436,7 @@ export const OnboardApiV1CredentialCreate = (
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([config, params, wait])
@@ -1277,6 +1446,7 @@ export const OnboardApiV1CredentialCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1289,10 +1459,10 @@ export const OnboardApiV1CredentialCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1315,7 +1485,7 @@ export const OnboardApiV1CredentialCreate = (
 export const useOnboardApiV1CredentialCreate = (
     config: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1330,15 +1500,17 @@ export const useOnboardApiV1CredentialCreate = (
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([config, params, wait])
+        JSON.stringify([config, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1348,34 +1520,50 @@ export const useOnboardApiV1CredentialCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([config, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([config, params, wait]))
+    if (JSON.stringify([config, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([config, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1CredentialDeleteState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -1398,6 +1586,7 @@ export const OnboardApiV1CredentialDelete = (
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialDeleteState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([credentialId, params, wait])
@@ -1407,6 +1596,7 @@ export const OnboardApiV1CredentialDelete = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1419,10 +1609,10 @@ export const OnboardApiV1CredentialDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1445,7 +1635,7 @@ export const OnboardApiV1CredentialDelete = (
 export const useOnboardApiV1CredentialDelete = (
     credentialId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1460,15 +1650,17 @@ export const useOnboardApiV1CredentialDelete = (
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialDeleteState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, wait])
+        JSON.stringify([credentialId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1478,34 +1670,50 @@ export const useOnboardApiV1CredentialDelete = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, wait]))
+    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1CredentialDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential
     error?: any
 }
@@ -1528,6 +1736,7 @@ export const OnboardApiV1CredentialDetail = (
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([credentialId, params, wait])
@@ -1537,6 +1746,7 @@ export const OnboardApiV1CredentialDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1549,10 +1759,10 @@ export const OnboardApiV1CredentialDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1575,7 +1785,7 @@ export const OnboardApiV1CredentialDetail = (
 export const useOnboardApiV1CredentialDetail = (
     credentialId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1590,15 +1800,17 @@ export const useOnboardApiV1CredentialDetail = (
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, wait])
+        JSON.stringify([credentialId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1608,34 +1820,50 @@ export const useOnboardApiV1CredentialDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, wait]))
+    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1CredentialUpdateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -1659,6 +1887,7 @@ export const OnboardApiV1CredentialUpdate = (
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialUpdateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([credentialId, config, params, wait])
@@ -1668,6 +1897,7 @@ export const OnboardApiV1CredentialUpdate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1680,10 +1910,10 @@ export const OnboardApiV1CredentialUpdate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1707,7 +1937,7 @@ export const useOnboardApiV1CredentialUpdate = (
     credentialId: string,
     config: GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1722,15 +1952,17 @@ export const useOnboardApiV1CredentialUpdate = (
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialUpdateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, config, params, wait])
+        JSON.stringify([credentialId, config, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1740,34 +1972,55 @@ export const useOnboardApiV1CredentialUpdate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([credentialId, config, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, config, params, wait]))
+    if (
+        JSON.stringify([credentialId, config, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([credentialId, config, params, autoExecute])
+        )
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1CredentialAutoonboardCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     error?: any
 }
@@ -1791,6 +2044,7 @@ export const OnboardApiV1CredentialAutoonboardCreate = (
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialAutoonboardCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([credentialId, params, wait])
@@ -1800,6 +2054,7 @@ export const OnboardApiV1CredentialAutoonboardCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1812,10 +2067,10 @@ export const OnboardApiV1CredentialAutoonboardCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1838,7 +2093,7 @@ export const OnboardApiV1CredentialAutoonboardCreate = (
 export const useOnboardApiV1CredentialAutoonboardCreate = (
     credentialId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1854,15 +2109,17 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialAutoonboardCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, wait])
+        JSON.stringify([credentialId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1872,34 +2129,50 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, wait]))
+    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1CredentialDisableCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -1923,6 +2196,7 @@ export const OnboardApiV1CredentialDisableCreate = (
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialDisableCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([credentialId, params, wait])
@@ -1932,6 +2206,7 @@ export const OnboardApiV1CredentialDisableCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -1944,10 +2219,10 @@ export const OnboardApiV1CredentialDisableCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1970,7 +2245,7 @@ export const OnboardApiV1CredentialDisableCreate = (
 export const useOnboardApiV1CredentialDisableCreate = (
     credentialId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1986,15 +2261,17 @@ export const useOnboardApiV1CredentialDisableCreate = (
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialDisableCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, wait])
+        JSON.stringify([credentialId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2004,34 +2281,50 @@ export const useOnboardApiV1CredentialDisableCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, wait]))
+    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1CredentialEnableCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -2055,6 +2348,7 @@ export const OnboardApiV1CredentialEnableCreate = (
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialEnableCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([credentialId, params, wait])
@@ -2064,6 +2358,7 @@ export const OnboardApiV1CredentialEnableCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2076,10 +2371,10 @@ export const OnboardApiV1CredentialEnableCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2102,7 +2397,7 @@ export const OnboardApiV1CredentialEnableCreate = (
 export const useOnboardApiV1CredentialEnableCreate = (
     credentialId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2118,15 +2413,17 @@ export const useOnboardApiV1CredentialEnableCreate = (
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialEnableCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, wait])
+        JSON.stringify([credentialId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2136,34 +2433,50 @@ export const useOnboardApiV1CredentialEnableCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, wait]))
+    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1CredentialHealthcheckDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -2187,6 +2500,7 @@ export const OnboardApiV1CredentialHealthcheckDetail = (
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialHealthcheckDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([credentialId, params, wait])
@@ -2196,6 +2510,7 @@ export const OnboardApiV1CredentialHealthcheckDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2208,10 +2523,10 @@ export const OnboardApiV1CredentialHealthcheckDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2234,7 +2549,7 @@ export const OnboardApiV1CredentialHealthcheckDetail = (
 export const useOnboardApiV1CredentialHealthcheckDetail = (
     credentialId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2250,15 +2565,17 @@ export const useOnboardApiV1CredentialHealthcheckDetail = (
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialHealthcheckDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, wait])
+        JSON.stringify([credentialId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2268,34 +2585,50 @@ export const useOnboardApiV1CredentialHealthcheckDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([credentialId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, wait]))
+    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1CredentialSourcesListListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
     error?: any
 }
@@ -2325,6 +2658,7 @@ export const OnboardApiV1CredentialSourcesListList = (
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialSourcesListListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -2334,6 +2668,7 @@ export const OnboardApiV1CredentialSourcesListList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2346,10 +2681,10 @@ export const OnboardApiV1CredentialSourcesListList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2378,7 +2713,7 @@ export const useOnboardApiV1CredentialSourcesListList = (
         pageNumber?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2394,15 +2729,17 @@ export const useOnboardApiV1CredentialSourcesListList = (
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialSourcesListListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2412,34 +2749,50 @@ export const useOnboardApiV1CredentialSourcesListList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourceDeleteState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -2462,6 +2815,7 @@ export const OnboardApiV1SourceDelete = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourceDeleteState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([sourceId, params, wait])
@@ -2471,6 +2825,7 @@ export const OnboardApiV1SourceDelete = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2483,10 +2838,10 @@ export const OnboardApiV1SourceDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2509,7 +2864,7 @@ export const OnboardApiV1SourceDelete = (
 export const useOnboardApiV1SourceDelete = (
     sourceId: number,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2524,15 +2879,17 @@ export const useOnboardApiV1SourceDelete = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourceDeleteState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params, wait])
+        JSON.stringify([sourceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2542,34 +2899,50 @@ export const useOnboardApiV1SourceDelete = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params, wait]))
+    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourceDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     error?: any
 }
@@ -2592,6 +2965,7 @@ export const OnboardApiV1SourceDetail = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourceDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([sourceId, params, wait])
@@ -2601,6 +2975,7 @@ export const OnboardApiV1SourceDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2613,10 +2988,10 @@ export const OnboardApiV1SourceDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2639,7 +3014,7 @@ export const OnboardApiV1SourceDetail = (
 export const useOnboardApiV1SourceDetail = (
     sourceId: number,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2654,15 +3029,17 @@ export const useOnboardApiV1SourceDetail = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourceDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params, wait])
+        JSON.stringify([sourceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2672,34 +3049,50 @@ export const useOnboardApiV1SourceDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params, wait]))
+    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourceCredentialsDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential
     error?: any
 }
@@ -2723,6 +3116,7 @@ export const OnboardApiV1SourceCredentialsDetail = (
     const [state, setState] =
         useState<IuseOnboardApiV1SourceCredentialsDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([sourceId, params, wait])
@@ -2732,6 +3126,7 @@ export const OnboardApiV1SourceCredentialsDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2744,10 +3139,10 @@ export const OnboardApiV1SourceCredentialsDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2770,7 +3165,7 @@ export const OnboardApiV1SourceCredentialsDetail = (
 export const useOnboardApiV1SourceCredentialsDetail = (
     sourceId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2786,15 +3181,17 @@ export const useOnboardApiV1SourceCredentialsDetail = (
     const [state, setState] =
         useState<IuseOnboardApiV1SourceCredentialsDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params, wait])
+        JSON.stringify([sourceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2804,34 +3201,50 @@ export const useOnboardApiV1SourceCredentialsDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params, wait]))
+    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourceCredentialsUpdateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -2855,6 +3268,7 @@ export const OnboardApiV1SourceCredentialsUpdate = (
     const [state, setState] =
         useState<IuseOnboardApiV1SourceCredentialsUpdateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([sourceId, params, wait])
@@ -2864,6 +3278,7 @@ export const OnboardApiV1SourceCredentialsUpdate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2876,10 +3291,10 @@ export const OnboardApiV1SourceCredentialsUpdate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2902,7 +3317,7 @@ export const OnboardApiV1SourceCredentialsUpdate = (
 export const useOnboardApiV1SourceCredentialsUpdate = (
     sourceId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2918,15 +3333,17 @@ export const useOnboardApiV1SourceCredentialsUpdate = (
     const [state, setState] =
         useState<IuseOnboardApiV1SourceCredentialsUpdateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params, wait])
+        JSON.stringify([sourceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -2936,34 +3353,50 @@ export const useOnboardApiV1SourceCredentialsUpdate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params, wait]))
+    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourceHealthcheckCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     error?: any
 }
@@ -2987,6 +3420,7 @@ export const OnboardApiV1SourceHealthcheckCreate = (
     const [state, setState] =
         useState<IuseOnboardApiV1SourceHealthcheckCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([sourceId, params, wait])
@@ -2996,6 +3430,7 @@ export const OnboardApiV1SourceHealthcheckCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3008,10 +3443,10 @@ export const OnboardApiV1SourceHealthcheckCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3034,7 +3469,7 @@ export const OnboardApiV1SourceHealthcheckCreate = (
 export const useOnboardApiV1SourceHealthcheckCreate = (
     sourceId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3050,15 +3485,17 @@ export const useOnboardApiV1SourceHealthcheckCreate = (
     const [state, setState] =
         useState<IuseOnboardApiV1SourceHealthcheckCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params, wait])
+        JSON.stringify([sourceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3068,34 +3505,50 @@ export const useOnboardApiV1SourceHealthcheckCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([sourceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params, wait]))
+    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourceAccountDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     error?: any
 }
@@ -3119,6 +3572,7 @@ export const OnboardApiV1SourceAccountDetail = (
     const [state, setState] =
         useState<IuseOnboardApiV1SourceAccountDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([accountId, params, wait])
@@ -3128,6 +3582,7 @@ export const OnboardApiV1SourceAccountDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3140,10 +3595,10 @@ export const OnboardApiV1SourceAccountDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3166,7 +3621,7 @@ export const OnboardApiV1SourceAccountDetail = (
 export const useOnboardApiV1SourceAccountDetail = (
     accountId: number,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3182,15 +3637,17 @@ export const useOnboardApiV1SourceAccountDetail = (
     const [state, setState] =
         useState<IuseOnboardApiV1SourceAccountDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([accountId, params, wait])
+        JSON.stringify([accountId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3200,34 +3657,50 @@ export const useOnboardApiV1SourceAccountDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([accountId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([accountId, params, wait]))
+    if (JSON.stringify([accountId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([accountId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourceAwsCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse
     error?: any
 }
@@ -3250,6 +3723,7 @@ export const OnboardApiV1SourceAwsCreate = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourceAwsCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, wait])
@@ -3259,6 +3733,7 @@ export const OnboardApiV1SourceAwsCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3271,10 +3746,10 @@ export const OnboardApiV1SourceAwsCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3297,7 +3772,7 @@ export const OnboardApiV1SourceAwsCreate = (
 export const useOnboardApiV1SourceAwsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3312,15 +3787,17 @@ export const useOnboardApiV1SourceAwsCreate = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourceAwsCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3330,34 +3807,50 @@ export const useOnboardApiV1SourceAwsCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourceAzureCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse
     error?: any
 }
@@ -3380,6 +3873,7 @@ export const OnboardApiV1SourceAzureCreate = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourceAzureCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, wait])
@@ -3389,6 +3883,7 @@ export const OnboardApiV1SourceAzureCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3401,10 +3896,10 @@ export const OnboardApiV1SourceAzureCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3427,7 +3922,7 @@ export const OnboardApiV1SourceAzureCreate = (
 export const useOnboardApiV1SourceAzureCreate = (
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3442,15 +3937,17 @@ export const useOnboardApiV1SourceAzureCreate = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourceAzureCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3460,34 +3957,50 @@ export const useOnboardApiV1SourceAzureCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourcesListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     error?: any
 }
@@ -3512,6 +4025,7 @@ export const OnboardApiV1SourcesList = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourcesListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -3521,6 +4035,7 @@ export const OnboardApiV1SourcesList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3533,10 +4048,10 @@ export const OnboardApiV1SourcesList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3561,7 +4076,7 @@ export const useOnboardApiV1SourcesList = (
         connector?: ('' | 'AWS' | 'Azure')[]
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3576,15 +4091,17 @@ export const useOnboardApiV1SourcesList = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourcesListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3594,34 +4111,50 @@ export const useOnboardApiV1SourcesList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourcesCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     error?: any
 }
@@ -3647,6 +4180,7 @@ export const OnboardApiV1SourcesCreate = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourcesCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, query, params, wait])
@@ -3656,6 +4190,7 @@ export const OnboardApiV1SourcesCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3668,10 +4203,10 @@ export const OnboardApiV1SourcesCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3697,7 +4232,7 @@ export const useOnboardApiV1SourcesCreate = (
         type?: 'aws' | 'azure'
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3712,15 +4247,17 @@ export const useOnboardApiV1SourcesCreate = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourcesCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, wait])
+        JSON.stringify([request, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3730,34 +4267,50 @@ export const useOnboardApiV1SourcesCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, wait]))
+    if (JSON.stringify([request, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseOnboardApiV1SourcesCountListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: number
     error?: any
 }
@@ -3782,6 +4335,7 @@ export const OnboardApiV1SourcesCountList = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourcesCountListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -3791,6 +4345,7 @@ export const OnboardApiV1SourcesCountList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3803,10 +4358,10 @@ export const OnboardApiV1SourcesCountList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -3831,7 +4386,7 @@ export const useOnboardApiV1SourcesCountList = (
         connector?: '' | 'AWS' | 'Azure'
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -3846,15 +4401,17 @@ export const useOnboardApiV1SourcesCountList = (
 
     const [state, setState] = useState<IuseOnboardApiV1SourcesCountListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.onboard
@@ -3864,28 +4421,43 @@ export const useOnboardApiV1SourcesCountList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
