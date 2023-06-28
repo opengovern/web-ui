@@ -63,12 +63,14 @@ type IProps = {
         | 'compliance'
         | 'settings'
     showSidebar?: boolean
+    addContainer?: boolean
 }
 
 export default function LoggedInLayout({
     children,
     currentPage,
     showSidebar = true,
+    addContainer = true,
 }: IProps) {
     const workspace = useParams<{ ws: string }>().ws
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -402,11 +404,15 @@ export default function LoggedInLayout({
                     </div>
                 </div>
 
-                <main className="xl:pl-48 pr-48 dark:bg-gray-900">
-                    <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-                        {children}
-                    </div>
-                </main>
+                {addContainer ? (
+                    <main className="xl:pl-48 pr-48 dark:bg-gray-900">
+                        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+                            {children}
+                        </div>
+                    </main>
+                ) : (
+                    children
+                )}
             </div>
         </div>
     )
