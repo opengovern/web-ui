@@ -278,7 +278,7 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
                 />
             </DrawerPanel>
             <Card key="summary">
-                <div className="flex mb-6">
+                <Flex className="mb-6">
                     <Title className="flex-auto">API Keys</Title>
                     <Button
                         className="float-right"
@@ -288,7 +288,7 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
                     >
                         Create API Key
                     </Button>
-                </div>
+                </Flex>
                 <Flex
                     justifyContent="start"
                     flexDirection="row"
