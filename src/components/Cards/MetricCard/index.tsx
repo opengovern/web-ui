@@ -19,7 +19,7 @@ export default function CMBCard({
     return (
         <Card key={title} {...props}>
             <Flex alignItems="start">
-                <Text>{title}</Text>
+                <Text className="truncate">{title}</Text>
                 <BadgeDelta deltaType={deltaType}>{delta}</BadgeDelta>
             </Flex>
             <Flex
