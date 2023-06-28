@@ -1,107 +1,40 @@
-import React, { Fragment, useState } from 'react'
-import { useAtom } from 'jotai'
-import { Dialog, Menu, Transition } from '@headlessui/react'
-import {
-    Badge,
-    Button,
-    Card,
-    DateRangePicker,
-    Flex,
-    Grid,
-    Metric,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Text,
-    Title,
-} from '@tremor/react'
-import {
-    FunnelIcon,
-    Bars3Icon,
-    BellIcon,
-    HomeIcon,
-    XMarkIcon,
-    DocumentChartBarIcon,
-    CubeIcon,
-    ArrowTrendingUpIcon,
-    ShieldCheckIcon,
-    Cog6ToothIcon,
-} from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { useAuth0 } from '@auth0/auth0-react'
-import Composition from '../../components/Blocks/Composition'
+import React, { useState } from 'react'
+import { Button, Col, Flex, Grid, Title } from '@tremor/react'
 import LoggedInLayout from '../../components/LoggedInLayout'
-import { filterAtom, timeAtom } from '../../store'
-import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
-import { useOnboardApiV1SourcesList } from '../../api/onboard.gen'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
+import WorkspaceCard from '../../components/Cards/WorkspaceCard'
+import CreateWorkspace from './CreateWorkspace'
 
-const Workspaces: React.FC<any> = () => {
-    const navigate = useNavigate()
-    const { user } = useAuth0()
-    const {
-        response: workspaces,
-        isLoading,
-        error,
-    } = useWorkspaceApiV1WorkspacesList()
+export default function Workspaces() {
+    const [openDrawer, setOpenDrawer] = useState(false)
+    const { response: workspaces } = useWorkspaceApiV1WorkspacesList()
 
     return (
         <LoggedInLayout currentPage="assets" showSidebar={false}>
             <main>
-                <Flex
-                    flexDirection="row"
-                    justifyContent="between"
-                    alignItems="center"
-                >
-                    <Title>Workspaces</Title>
+                <Flex flexDirection="row" className="mb-12">
+                    <Title>Your Workspaces</Title>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setOpenDrawer(true)}
+                    >
+                        Add new Kaytu instance
+                    </Button>
                 </Flex>
-
-                <TabGroup className="mt-6">
-                    <TabPanels>
-                        <TabPanel>
-                            <Grid
-                                numItemsMd={workspaces?.length || 0}
-                                className="mt-20 gap-6 flex justify-between"
-                            >
-                                {workspaces?.map((ws) => {
-                                    return (
-                                        <Card
-                                            className="max-w-xs mx-auto"
-                                            decoration="top"
-                                            decorationColor="indigo"
-                                            onClick={() => {
-                                                navigate(`/${ws.name}`)
-                                            }}
-                                            style={{ cursor: 'pointer' }}
-                                        >
-                                            <Metric>{ws.name}</Metric>
-                                            <Text>{`id:${ws.id}`}</Text>
-                                            <Text>
-                                                {`createdAt:${ws.createdAt}`}
-                                            </Text>
-                                            <Text>{`uri:${ws.uri}`}</Text>
-                                            <Badge size="xs">
-                                                Version: {ws.version}
-                                            </Badge>
-                                            <Badge size="xs">
-                                                Status: {ws.status}
-                                            </Badge>
-                                            <Badge size="xs">
-                                                Tier: {ws.tier}
-                                            </Badge>
-                                        </Card>
-                                    )
-                                })}
-                            </Grid>
-                        </TabPanel>
-                    </TabPanels>
-                </TabGroup>
+                <CreateWorkspace
+                    open={openDrawer}
+                    onClose={() => setOpenDrawer(false)}
+                />
+                <Grid numItems={1} className="gap-3">
+                    {workspaces?.map((ws) => {
+                        return (
+                            <Col>
+                                <WorkspaceCard workspace={ws} />
+                            </Col>
+                        )
+                    })}
+                </Grid>
             </main>
         </LoggedInLayout>
     )
 }
-
-export default Workspaces

@@ -3,21 +3,19 @@ import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
     ArrowTrendingUpIcon,
     Bars3Icon,
-    BellIcon,
     Cog6ToothIcon,
+    CommandLineIcon,
     CubeIcon,
     DocumentChartBarIcon,
     HomeIcon,
-    ShieldCheckIcon,
     MoonIcon,
-    CommandLineIcon,
     QuestionMarkCircleIcon,
+    ShieldCheckIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useAuth0 } from '@auth0/auth0-react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Title } from '@tremor/react'
+import { Link, useParams } from 'react-router-dom'
 import { ReactComponent as KaytuLogo } from '../../assets/icons/logo-dark-sqare-sm-glyph 2.svg'
 
 const navigation = [
@@ -137,25 +135,12 @@ export default function LoggedInLayout({
                                 {/* Sidebar component, swap this element with another sidebar if you like */}
                                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4 ring-1 ring-white/10">
                                     <div className="flex h-16 shrink-0 items-center">
-                                        {/* <img */}
-                                        {/*    className="h-8 w-auto" */}
-                                        {/*    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" */}
-                                        {/*    alt="Your Company" */}
-                                        {/* /> */}
                                         <KaytuLogo className="h-8 w-auto" />
                                     </div>
                                     <nav className="flex flex-1 flex-col">
-                                        {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
-                                        <ul
-                                            role="list"
-                                            className="flex flex-1 flex-col gap-y-7"
-                                        >
+                                        <ul className="flex flex-1 flex-col gap-y-7">
                                             <li>
-                                                {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
-                                                <ul
-                                                    role="list"
-                                                    className="-mx-2 space-y-1"
-                                                >
+                                                <ul className="-mx-2 space-y-1">
                                                     {navigation.map((item) => (
                                                         <li key={item.name}>
                                                             <Link
@@ -192,22 +177,12 @@ export default function LoggedInLayout({
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
-                        {/* <img */}
-                        {/*    className="h-8 w-auto" */}
-                        {/*    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" */}
-                        {/*    alt="Your Company" */}
-                        {/* /> */}
                         <KaytuLogo />
                     </div>
                     <nav className="flex flex-1 flex-col">
-                        {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
-                        <ul
-                            role="list"
-                            className="flex flex-1 flex-col gap-y-7"
-                        >
+                        <ul className="flex flex-1 flex-col gap-y-7">
                             <li>
-                                {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
-                                <ul role="list" className="-mx-2 space-y-1">
+                                <ul className="-mx-2 space-y-1">
                                     {navigation.map((item) => (
                                         <li key={item.name}>
                                             <Link
@@ -386,10 +361,8 @@ export default function LoggedInLayout({
                 </div>
 
                 {addContainer ? (
-                    <main className="xl:pl-36 pr-36 dark:bg-gray-900">
-                        <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-                            {children}
-                        </div>
+                    <main className="flex justify-center items-center xl:px-12 py-10 dark:bg-gray-900">
+                        <div className="max-w-6xl">{children}</div>
                     </main>
                 ) : (
                     children
