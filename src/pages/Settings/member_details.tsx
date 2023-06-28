@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Badge,
     Bold,
@@ -12,15 +12,60 @@ import {
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { RadioGroup } from '@headlessui/react'
-import { useAuthApiV1WorkspaceRoleBindingsList } from '../../api/auth.gen'
+import {
+    useAuthApiV1UserRoleBindingDelete,
+    useAuthApiV1UserRoleBindingUpdate,
+    useAuthApiV1WorkspaceRoleBindingsList,
+} from '../../api/auth.gen'
 import Spinner from '../../components/Spinner'
 import DrawerPanel from '../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../api/api'
 
 interface MemberDetailsProps {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
+    close: () => void
 }
-const MemberDetails: React.FC<MemberDetailsProps> = ({ user }) => {
+const MemberDetails: React.FC<MemberDetailsProps> = ({ user, close }) => {
+    const [role, setRole] = useState<string>(user?.roleName || 'viewer')
+    const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
+        'viewer'
+    )
+
+    const {
+        isExecuted,
+        isLoading,
+        sendNow: updateRole,
+    } = useAuthApiV1UserRoleBindingUpdate(
+        { userId: user?.userId || '', roleName: roleValue },
+        {},
+        false
+    )
+
+    const {
+        isExecuted: deleteExecuted,
+        isLoading: deleteLoading,
+        sendNow: deleteRole,
+    } = useAuthApiV1UserRoleBindingDelete(
+        { userId: user?.userId || '' },
+        {},
+        false
+    )
+
+    const loading =
+        (isExecuted && isLoading) || (deleteExecuted && deleteLoading)
+
+    useEffect(() => {
+        if (role === 'viewer' || role === 'editor' || role === 'admin') {
+            setRoleValue(role)
+        }
+    }, [role])
+
+    useEffect(() => {
+        if ((isExecuted && !isLoading) || (deleteExecuted && !deleteLoading)) {
+            close()
+        }
+    }, [isLoading, deleteLoading])
+
     if (user === undefined) {
         return <div />
     }
@@ -48,10 +93,27 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ user }) => {
         },
     ]
 
+    const roleItems = [
+        {
+            value: 'admin',
+            title: 'Admin',
+            description: 'Have full access',
+        },
+        {
+            value: 'editor',
+            title: 'Editor',
+            description: 'Can view, edit and delete data',
+        },
+        {
+            value: 'viewer',
+            title: 'Viewer',
+            description: 'Member can only view the data',
+        },
+    ]
+
     return (
-        <List className="mt-4">
-            <ListItem key="lb" />
-            <ListItem key="lb">
+        <List className="mt-4 h-full">
+            <ListItem key="title" className="py-4">
                 <Flex justifyContent="start" className="truncate space-x-4">
                     <Text className="font-medium text-gray-800">
                         Member Info
@@ -60,102 +122,68 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ user }) => {
             </ListItem>
             {items.map((item) => {
                 return (
-                    <ListItem key="lb">
+                    <ListItem key={item.title} className="py-4">
                         <Flex
                             justifyContent="start"
                             className="truncate space-x-4"
                         >
-                            <Text className="font-medium text-gray-800">
+                            <Text className="font-medium text-gray-500">
                                 {item.title}
                             </Text>
                         </Flex>
-                        <Text>{item.value}</Text>
+                        <Text className="text-gray-900">{item.value}</Text>
                     </ListItem>
                 )
             })}
-            <ListItem key="lb">
+            <ListItem key="item" className="py-4">
                 <Flex
                     justifyContent="between"
                     alignItems="start"
                     className="truncate space-x-4"
                 >
-                    <Text className="font-medium text-gray-800">Role</Text>
+                    <Text className="font-medium text-gray-500">Role</Text>
 
                     <div className="space-y-5 sm:mt-0">
-                        <div className="relative flex items-start">
-                            <div className="absolute flex h-6 items-center">
-                                <input
-                                    id="public-access"
-                                    name="privacy"
-                                    aria-describedby="public-access-description"
-                                    type="radio"
-                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                    defaultChecked
-                                />
-                            </div>
-                            <div className="pl-7 text-sm leading-6">
-                                <div className="font-medium text-gray-900">
-                                    Admin
+                        {roleItems.map((item) => {
+                            return (
+                                <div className="relative flex items-start">
+                                    <div className="absolute flex h-6 items-center">
+                                        <input
+                                            name="roles"
+                                            type="radio"
+                                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                            onClick={() => {
+                                                setRole(item.value)
+                                            }}
+                                            checked={item.value === role}
+                                        />
+                                    </div>
+                                    <div className="pl-7 text-sm leading-6">
+                                        <div className="font-medium text-gray-900">
+                                            {item.title}
+                                        </div>
+                                        <p className="text-gray-500">
+                                            {item.description}
+                                        </p>
+                                    </div>
                                 </div>
-                                <p
-                                    id="public-access-description"
-                                    className="text-gray-500"
-                                >
-                                    Have full access
-                                </p>
-                            </div>
-                        </div>
-                        <div className="relative flex items-start">
-                            <div className="absolute flex h-6 items-center">
-                                <input
-                                    id="restricted-access"
-                                    name="privacy"
-                                    aria-describedby="restricted-access-description"
-                                    type="radio"
-                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                            </div>
-                            <div className="pl-7 text-sm leading-6">
-                                <div className="font-medium text-gray-900">
-                                    Editor
-                                </div>
-                                <p
-                                    id="restricted-access-description"
-                                    className="text-gray-500"
-                                >
-                                    Can view, edit and delete data
-                                </p>
-                            </div>
-                        </div>
-                        <div className="relative flex items-start">
-                            <div className="absolute flex h-6 items-center">
-                                <input
-                                    id="private-access"
-                                    name="privacy"
-                                    aria-describedby="private-access-description"
-                                    type="radio"
-                                    className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                />
-                            </div>
-                            <div className="pl-7 text-sm leading-6">
-                                <div className="font-medium text-gray-900">
-                                    Viewer
-                                </div>
-                                <p
-                                    id="private-access-description"
-                                    className="text-gray-500"
-                                >
-                                    Member can only view the data
-                                </p>
-                            </div>
-                        </div>
+                            )
+                        })}
                     </div>
                 </Flex>
             </ListItem>
-            <ListItem key="lb">
+            <ListItem key="buttons">
                 <Flex justifyContent="end" className="truncate space-x-4">
-                    <Button>Delete</Button>
-                    <Button>Update Changes</Button>
+                    <Button
+                        loading={loading}
+                        onClick={() => deleteRole()}
+                        variant="secondary"
+                    >
+                        Delete
+                    </Button>
+                    <Button loading={loading} onClick={() => updateRole()}>
+                        Update Changes
+                    </Button>
                 </Flex>
             </ListItem>
         </List>

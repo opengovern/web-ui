@@ -1,5 +1,15 @@
 import React from 'react'
-import { Card, Flex, List, ListItem, Metric, Text, Title } from '@tremor/react'
+import {
+    Card,
+    Flex,
+    List,
+    ListItem,
+    Metric,
+    Select,
+    SelectItem,
+    Text,
+    Title,
+} from '@tremor/react'
 import {
     BuildingOfficeIcon,
     HomeIcon,
@@ -26,6 +36,11 @@ const SettingsOrganization: React.FC<any> = () => {
         )
     }
 
+    let link = response?.organization?.url || ''
+    if (!link.startsWith('http')) {
+        link = `http://${link}`
+    }
+
     const items = [
         {
             key: 'Company Name',
@@ -33,7 +48,11 @@ const SettingsOrganization: React.FC<any> = () => {
         },
         {
             key: 'Website',
-            value: response?.organization?.url,
+            value: (
+                <a className="text-blue-600" href={link}>
+                    {response?.organization?.url}
+                </a>
+            ),
         },
         {
             key: 'Address',
@@ -51,7 +70,13 @@ const SettingsOrganization: React.FC<any> = () => {
         },
         {
             key: 'Country',
-            value: response?.organization?.country,
+            value: (
+                <Select value="1">
+                    <SelectItem value="1">
+                        {response?.organization?.country}
+                    </SelectItem>
+                </Select>
+            ),
         },
         {
             key: 'Contact Details',
@@ -72,9 +97,11 @@ const SettingsOrganization: React.FC<any> = () => {
                 {items.map((item) => {
                     return (
                         <ListItem key="lb">
-                            <Flex justifyContent="between">
-                                <Text className="text-md my-5">{item.key}</Text>
-                                <Text className="text-md text-start">
+                            <Flex justifyContent="start" flexDirection="row">
+                                <Text className="text-md my-5 w-1/2 text-gray-900">
+                                    {item.key}
+                                </Text>
+                                <Text className="text-md text-start w-1/2 text-gray-500">
                                     {item.value}
                                 </Text>
                             </Flex>
