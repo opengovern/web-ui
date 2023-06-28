@@ -13,8 +13,8 @@ interface Iprops {
 export default function DrawerPanel({
     open,
     onClose,
-    title,
     children,
+    title,
 }: Iprops) {
     // const [open, setOpen] = useState(true)
 
