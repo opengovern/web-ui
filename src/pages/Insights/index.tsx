@@ -46,7 +46,7 @@ export default function Insights() {
                 />
                 <Grid
                     numItems={1}
-                    numItemsSm={2}
+                    numItemsMd={2}
                     numItemsLg={3}
                     className="gap-3 w-100"
                 >

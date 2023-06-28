@@ -1,26 +1,30 @@
-import React from 'react'
-import { Col, Flex, Grid, Title } from '@tremor/react'
-import { useAuth0 } from '@auth0/auth0-react'
+import React, { useState } from 'react'
+import { Button, Col, Flex, Grid, Title } from '@tremor/react'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
+import CreateWorkspace from './CreateWorkspace'
 
-const Workspaces: React.FC<any> = () => {
-    const { user } = useAuth0()
+export default function Workspaces() {
+    const [openDrawer, setOpenDrawer] = useState(false)
     const { response: workspaces } = useWorkspaceApiV1WorkspacesList()
 
     return (
         <LoggedInLayout currentPage="assets" showSidebar={false}>
             <main>
-                <Flex
-                    flexDirection="row"
-                    justifyContent="between"
-                    alignItems="center"
-                    className="mb-12"
-                >
+                <Flex flexDirection="row" className="mb-12">
                     <Title>Your Workspaces</Title>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setOpenDrawer(true)}
+                    >
+                        Add new Kaytu instance
+                    </Button>
                 </Flex>
-
+                <CreateWorkspace
+                    open={openDrawer}
+                    onClose={() => setOpenDrawer(false)}
+                />
                 <Grid numItems={1} className="gap-3">
                     {workspaces?.map((ws) => {
                         return (
@@ -34,5 +38,3 @@ const Workspaces: React.FC<any> = () => {
         </LoggedInLayout>
     )
 }
-
-export default Workspaces

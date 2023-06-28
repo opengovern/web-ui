@@ -75,14 +75,29 @@ export default function InsightCard({
                 className="h-full"
             >
                 <Flex flexDirection="col" alignItems="start">
-                    <Flex flexDirection="row" className="mb-1">
-                        <Title
-                            color={
-                                metric?.connector === 'AWS' ? 'orange' : 'blue'
-                            }
+                    <Title
+                        color={metric?.connector === 'AWS' ? 'orange' : 'blue'}
+                    >
+                        {metric?.connector}
+                    </Title>
+                    {showTitle && (
+                        <Title className="my-2">{metric?.shortTitle}</Title>
+                    )}
+                    <Flex flexDirection="row" className="mb-2">
+                        <Flex
+                            flexDirection="row"
+                            alignItems="end"
+                            className="w-fit"
                         >
-                            {metric?.connector}
-                        </Title>
+                            <Title className="mr-1">
+                                {numericDisplay(metric?.totalResultValue || 0)}
+                            </Title>
+                            <Subtitle>
+                                {`from ${numericDisplay(
+                                    metric?.oldTotalResultValue || 0
+                                )}`}
+                            </Subtitle>
+                        </Flex>
                         <BadgeDelta
                             deltaType={
                                 calculatePercent(metric) > 0
@@ -100,30 +115,6 @@ export default function InsightCard({
                             }%`}
                         </BadgeDelta>
                     </Flex>
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        className="mb-2"
-                    >
-                        <Flex
-                            flexDirection="row"
-                            alignItems="end"
-                            justifyContent="start"
-                            className="mb-3"
-                        >
-                            <Metric className="mr-1">
-                                {numericDisplay(metric?.totalResultValue || 0)}
-                            </Metric>
-                            <Subtitle className="truncate">
-                                {`from ${numericDisplay(
-                                    metric?.oldTotalResultValue || 0
-                                )}`}
-                            </Subtitle>
-                        </Flex>
-                    </Flex>
-                    {showTitle && (
-                        <Title className="mb-1">{metric?.shortTitle}</Title>
-                    )}
                     {showDetails && <Text>{metric?.description}</Text>}
                 </Flex>
                 <Text className="mt-2">
