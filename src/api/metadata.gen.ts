@@ -120,6 +120,7 @@ import AxiosAPI, { setWorkspace } from './ApiConfig'
 
 interface IuseMetadataApiV1MetadataCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -142,6 +143,7 @@ export const MetadataApiV1MetadataCreate = (
 
     const [state, setState] = useState<IuseMetadataApiV1MetadataCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([req, params, wait])
@@ -151,6 +153,7 @@ export const MetadataApiV1MetadataCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.metadata
@@ -163,10 +166,10 @@ export const MetadataApiV1MetadataCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -189,7 +192,7 @@ export const MetadataApiV1MetadataCreate = (
 export const useMetadataApiV1MetadataCreate = (
     req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -204,15 +207,17 @@ export const useMetadataApiV1MetadataCreate = (
 
     const [state, setState] = useState<IuseMetadataApiV1MetadataCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([req, params, wait])
+        JSON.stringify([req, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.metadata
@@ -222,34 +227,50 @@ export const useMetadataApiV1MetadataCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([req, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([req, params, wait]))
+    if (JSON.stringify([req, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([req, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseMetadataApiV1MetadataDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata
     error?: any
 }
@@ -272,6 +293,7 @@ export const MetadataApiV1MetadataDetail = (
 
     const [state, setState] = useState<IuseMetadataApiV1MetadataDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([key, params, wait])
@@ -281,6 +303,7 @@ export const MetadataApiV1MetadataDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.metadata
@@ -293,10 +316,10 @@ export const MetadataApiV1MetadataDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -319,7 +342,7 @@ export const MetadataApiV1MetadataDetail = (
 export const useMetadataApiV1MetadataDetail = (
     key: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -334,15 +357,17 @@ export const useMetadataApiV1MetadataDetail = (
 
     const [state, setState] = useState<IuseMetadataApiV1MetadataDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, params, wait])
+        JSON.stringify([key, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.metadata
@@ -352,28 +377,43 @@ export const useMetadataApiV1MetadataDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([key, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([key, params, wait]))
+    if (JSON.stringify([key, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([key, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }

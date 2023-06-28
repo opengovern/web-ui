@@ -120,6 +120,7 @@ import AxiosAPI, { setWorkspace } from './ApiConfig'
 
 interface IuseAuthApiV1KeyDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
     error?: any
 }
@@ -142,6 +143,7 @@ export const AuthApiV1KeyDetail = (
 
     const [state, setState] = useState<IuseAuthApiV1KeyDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([id, params, wait])
@@ -151,6 +153,7 @@ export const AuthApiV1KeyDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -163,10 +166,10 @@ export const AuthApiV1KeyDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -189,7 +192,7 @@ export const AuthApiV1KeyDetail = (
 export const useAuthApiV1KeyDetail = (
     id: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -204,15 +207,17 @@ export const useAuthApiV1KeyDetail = (
 
     const [state, setState] = useState<IuseAuthApiV1KeyDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([id, params, wait])
+        JSON.stringify([id, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -222,34 +227,50 @@ export const useAuthApiV1KeyDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([id, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([id, params, wait]))
+    if (JSON.stringify([id, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([id, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1KeyActivateCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
     error?: any
 }
@@ -272,6 +293,7 @@ export const AuthApiV1KeyActivateCreate = (
 
     const [state, setState] = useState<IuseAuthApiV1KeyActivateCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([id, params, wait])
@@ -281,6 +303,7 @@ export const AuthApiV1KeyActivateCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -293,10 +316,10 @@ export const AuthApiV1KeyActivateCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -319,7 +342,7 @@ export const AuthApiV1KeyActivateCreate = (
 export const useAuthApiV1KeyActivateCreate = (
     id: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -334,15 +357,17 @@ export const useAuthApiV1KeyActivateCreate = (
 
     const [state, setState] = useState<IuseAuthApiV1KeyActivateCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([id, params, wait])
+        JSON.stringify([id, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -352,34 +377,50 @@ export const useAuthApiV1KeyActivateCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([id, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([id, params, wait]))
+    if (JSON.stringify([id, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([id, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1KeyDeleteDeleteState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -402,6 +443,7 @@ export const AuthApiV1KeyDeleteDelete = (
 
     const [state, setState] = useState<IuseAuthApiV1KeyDeleteDeleteState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([id, params, wait])
@@ -411,6 +453,7 @@ export const AuthApiV1KeyDeleteDelete = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -423,10 +466,10 @@ export const AuthApiV1KeyDeleteDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -449,7 +492,7 @@ export const AuthApiV1KeyDeleteDelete = (
 export const useAuthApiV1KeyDeleteDelete = (
     id: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -464,15 +507,17 @@ export const useAuthApiV1KeyDeleteDelete = (
 
     const [state, setState] = useState<IuseAuthApiV1KeyDeleteDeleteState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([id, params, wait])
+        JSON.stringify([id, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -482,34 +527,50 @@ export const useAuthApiV1KeyDeleteDelete = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([id, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([id, params, wait]))
+    if (JSON.stringify([id, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([id, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1KeySuspendCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
     error?: any
 }
@@ -532,6 +593,7 @@ export const AuthApiV1KeySuspendCreate = (
 
     const [state, setState] = useState<IuseAuthApiV1KeySuspendCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([id, params, wait])
@@ -541,6 +603,7 @@ export const AuthApiV1KeySuspendCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -553,10 +616,10 @@ export const AuthApiV1KeySuspendCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -579,7 +642,7 @@ export const AuthApiV1KeySuspendCreate = (
 export const useAuthApiV1KeySuspendCreate = (
     id: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -594,15 +657,17 @@ export const useAuthApiV1KeySuspendCreate = (
 
     const [state, setState] = useState<IuseAuthApiV1KeySuspendCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([id, params, wait])
+        JSON.stringify([id, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -612,34 +677,50 @@ export const useAuthApiV1KeySuspendCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([id, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([id, params, wait]))
+    if (JSON.stringify([id, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([id, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1KeyCreateCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse
     error?: any
 }
@@ -662,6 +743,7 @@ export const AuthApiV1KeyCreateCreate = (
 
     const [state, setState] = useState<IuseAuthApiV1KeyCreateCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, wait])
@@ -671,6 +753,7 @@ export const AuthApiV1KeyCreateCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -683,10 +766,10 @@ export const AuthApiV1KeyCreateCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -709,7 +792,7 @@ export const AuthApiV1KeyCreateCreate = (
 export const useAuthApiV1KeyCreateCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -724,15 +807,17 @@ export const useAuthApiV1KeyCreateCreate = (
 
     const [state, setState] = useState<IuseAuthApiV1KeyCreateCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -742,34 +827,50 @@ export const useAuthApiV1KeyCreateCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1KeyRoleCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
     error?: any
 }
@@ -792,6 +893,7 @@ export const AuthApiV1KeyRoleCreate = (
 
     const [state, setState] = useState<IuseAuthApiV1KeyRoleCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, wait])
@@ -801,6 +903,7 @@ export const AuthApiV1KeyRoleCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -813,10 +916,10 @@ export const AuthApiV1KeyRoleCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -839,7 +942,7 @@ export const AuthApiV1KeyRoleCreate = (
 export const useAuthApiV1KeyRoleCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -854,15 +957,17 @@ export const useAuthApiV1KeyRoleCreate = (
 
     const [state, setState] = useState<IuseAuthApiV1KeyRoleCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -872,34 +977,50 @@ export const useAuthApiV1KeyRoleCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1KeysListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey[]
     error?: any
 }
@@ -918,6 +1039,7 @@ export const AuthApiV1KeysList = (params: RequestParams = {}, wait = false) => {
 
     const [state, setState] = useState<IuseAuthApiV1KeysListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, wait])
@@ -927,6 +1049,7 @@ export const AuthApiV1KeysList = (params: RequestParams = {}, wait = false) => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -939,10 +1062,10 @@ export const AuthApiV1KeysList = (params: RequestParams = {}, wait = false) => {
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -964,7 +1087,7 @@ export const AuthApiV1KeysList = (params: RequestParams = {}, wait = false) => {
 
 export const useAuthApiV1KeysList = (
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -979,15 +1102,17 @@ export const useAuthApiV1KeysList = (
 
     const [state, setState] = useState<IuseAuthApiV1KeysListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -997,34 +1122,50 @@ export const useAuthApiV1KeysList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1RoleKeysDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey[]
     error?: any
 }
@@ -1047,6 +1188,7 @@ export const AuthApiV1RoleKeysDetail = (
 
     const [state, setState] = useState<IuseAuthApiV1RoleKeysDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([roleName, params, wait])
@@ -1056,6 +1198,7 @@ export const AuthApiV1RoleKeysDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1068,10 +1211,10 @@ export const AuthApiV1RoleKeysDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1094,7 +1237,7 @@ export const AuthApiV1RoleKeysDetail = (
 export const useAuthApiV1RoleKeysDetail = (
     roleName: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1109,15 +1252,17 @@ export const useAuthApiV1RoleKeysDetail = (
 
     const [state, setState] = useState<IuseAuthApiV1RoleKeysDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([roleName, params, wait])
+        JSON.stringify([roleName, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1127,34 +1272,50 @@ export const useAuthApiV1RoleKeysDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([roleName, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([roleName, params, wait]))
+    if (JSON.stringify([roleName, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([roleName, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1RoleUsersDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser[]
     error?: any
 }
@@ -1177,6 +1338,7 @@ export const AuthApiV1RoleUsersDetail = (
 
     const [state, setState] = useState<IuseAuthApiV1RoleUsersDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([roleName, params, wait])
@@ -1186,6 +1348,7 @@ export const AuthApiV1RoleUsersDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1198,10 +1361,10 @@ export const AuthApiV1RoleUsersDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1224,7 +1387,7 @@ export const AuthApiV1RoleUsersDetail = (
 export const useAuthApiV1RoleUsersDetail = (
     roleName: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1239,15 +1402,17 @@ export const useAuthApiV1RoleUsersDetail = (
 
     const [state, setState] = useState<IuseAuthApiV1RoleUsersDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([roleName, params, wait])
+        JSON.stringify([roleName, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1257,34 +1422,50 @@ export const useAuthApiV1RoleUsersDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([roleName, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([roleName, params, wait]))
+    if (JSON.stringify([roleName, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([roleName, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1RolesListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse[]
     error?: any
 }
@@ -1306,6 +1487,7 @@ export const AuthApiV1RolesList = (
 
     const [state, setState] = useState<IuseAuthApiV1RolesListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, wait])
@@ -1315,6 +1497,7 @@ export const AuthApiV1RolesList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1327,10 +1510,10 @@ export const AuthApiV1RolesList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1352,7 +1535,7 @@ export const AuthApiV1RolesList = (
 
 export const useAuthApiV1RolesList = (
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1367,15 +1550,17 @@ export const useAuthApiV1RolesList = (
 
     const [state, setState] = useState<IuseAuthApiV1RolesListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1385,34 +1570,50 @@ export const useAuthApiV1RolesList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1RolesDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse
     error?: any
 }
@@ -1435,6 +1636,7 @@ export const AuthApiV1RolesDetail = (
 
     const [state, setState] = useState<IuseAuthApiV1RolesDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([roleName, params, wait])
@@ -1444,6 +1646,7 @@ export const AuthApiV1RolesDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1456,10 +1659,10 @@ export const AuthApiV1RolesDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1482,7 +1685,7 @@ export const AuthApiV1RolesDetail = (
 export const useAuthApiV1RolesDetail = (
     roleName: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1497,15 +1700,17 @@ export const useAuthApiV1RolesDetail = (
 
     const [state, setState] = useState<IuseAuthApiV1RolesDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([roleName, params, wait])
+        JSON.stringify([roleName, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1515,34 +1720,50 @@ export const useAuthApiV1RolesDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([roleName, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([roleName, params, wait]))
+    if (JSON.stringify([roleName, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([roleName, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1UserDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse
     error?: any
 }
@@ -1565,6 +1786,7 @@ export const AuthApiV1UserDetail = (
 
     const [state, setState] = useState<IuseAuthApiV1UserDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([userId, params, wait])
@@ -1574,6 +1796,7 @@ export const AuthApiV1UserDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1586,10 +1809,10 @@ export const AuthApiV1UserDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1612,7 +1835,7 @@ export const AuthApiV1UserDetail = (
 export const useAuthApiV1UserDetail = (
     userId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1627,15 +1850,17 @@ export const useAuthApiV1UserDetail = (
 
     const [state, setState] = useState<IuseAuthApiV1UserDetailState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([userId, params, wait])
+        JSON.stringify([userId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1645,34 +1870,50 @@ export const useAuthApiV1UserDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([userId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([userId, params, wait]))
+    if (JSON.stringify([userId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([userId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1UserWorkspaceMembershipDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiMembership[]
     error?: any
 }
@@ -1696,6 +1937,7 @@ export const AuthApiV1UserWorkspaceMembershipDetail = (
     const [state, setState] =
         useState<IuseAuthApiV1UserWorkspaceMembershipDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([userId, params, wait])
@@ -1705,6 +1947,7 @@ export const AuthApiV1UserWorkspaceMembershipDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1717,10 +1960,10 @@ export const AuthApiV1UserWorkspaceMembershipDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1743,7 +1986,7 @@ export const AuthApiV1UserWorkspaceMembershipDetail = (
 export const useAuthApiV1UserWorkspaceMembershipDetail = (
     userId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1759,15 +2002,17 @@ export const useAuthApiV1UserWorkspaceMembershipDetail = (
     const [state, setState] =
         useState<IuseAuthApiV1UserWorkspaceMembershipDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([userId, params, wait])
+        JSON.stringify([userId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1777,34 +2022,50 @@ export const useAuthApiV1UserWorkspaceMembershipDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([userId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([userId, params, wait]))
+    if (JSON.stringify([userId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([userId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1UserInviteDeleteState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -1829,6 +2090,7 @@ export const AuthApiV1UserInviteDelete = (
 
     const [state, setState] = useState<IuseAuthApiV1UserInviteDeleteState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([query, params, wait])
@@ -1838,6 +2100,7 @@ export const AuthApiV1UserInviteDelete = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1850,10 +2113,10 @@ export const AuthApiV1UserInviteDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1878,7 +2141,7 @@ export const useAuthApiV1UserInviteDelete = (
         userId: string
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1893,15 +2156,17 @@ export const useAuthApiV1UserInviteDelete = (
 
     const [state, setState] = useState<IuseAuthApiV1UserInviteDeleteState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1911,34 +2176,50 @@ export const useAuthApiV1UserInviteDelete = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1UserInviteCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -1961,6 +2242,7 @@ export const AuthApiV1UserInviteCreate = (
 
     const [state, setState] = useState<IuseAuthApiV1UserInviteCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, wait])
@@ -1970,6 +2252,7 @@ export const AuthApiV1UserInviteCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -1982,10 +2265,10 @@ export const AuthApiV1UserInviteCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2008,7 +2291,7 @@ export const AuthApiV1UserInviteCreate = (
 export const useAuthApiV1UserInviteCreate = (
     request: GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2023,15 +2306,17 @@ export const useAuthApiV1UserInviteCreate = (
 
     const [state, setState] = useState<IuseAuthApiV1UserInviteCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2041,34 +2326,50 @@ export const useAuthApiV1UserInviteCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1UserRoleBindingDeleteState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -2094,6 +2395,7 @@ export const AuthApiV1UserRoleBindingDelete = (
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingDeleteState>(
         {
             isLoading: true,
+            isExecuted: false,
         }
     )
     const [lastInput, setLastInput] = useState<string>(
@@ -2104,6 +2406,7 @@ export const AuthApiV1UserRoleBindingDelete = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2116,10 +2419,10 @@ export const AuthApiV1UserRoleBindingDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2144,7 +2447,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
         userId: string
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2160,16 +2463,18 @@ export const useAuthApiV1UserRoleBindingDelete = (
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingDeleteState>(
         {
             isLoading: true,
+            isExecuted: false,
         }
     )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2179,34 +2484,50 @@ export const useAuthApiV1UserRoleBindingDelete = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1UserRoleBindingUpdateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -2230,6 +2551,7 @@ export const AuthApiV1UserRoleBindingUpdate = (
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingUpdateState>(
         {
             isLoading: true,
+            isExecuted: false,
         }
     )
     const [lastInput, setLastInput] = useState<string>(
@@ -2240,6 +2562,7 @@ export const AuthApiV1UserRoleBindingUpdate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2252,10 +2575,10 @@ export const AuthApiV1UserRoleBindingUpdate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2278,7 +2601,7 @@ export const AuthApiV1UserRoleBindingUpdate = (
 export const useAuthApiV1UserRoleBindingUpdate = (
     request: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2294,16 +2617,18 @@ export const useAuthApiV1UserRoleBindingUpdate = (
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingUpdateState>(
         {
             isLoading: true,
+            isExecuted: false,
         }
     )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2313,34 +2638,50 @@ export const useAuthApiV1UserRoleBindingUpdate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1UserRoleBindingsListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse
     error?: any
 }
@@ -2362,6 +2703,7 @@ export const AuthApiV1UserRoleBindingsList = (
 
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingsListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, wait])
@@ -2371,6 +2713,7 @@ export const AuthApiV1UserRoleBindingsList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2383,10 +2726,10 @@ export const AuthApiV1UserRoleBindingsList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2408,7 +2751,7 @@ export const AuthApiV1UserRoleBindingsList = (
 
 export const useAuthApiV1UserRoleBindingsList = (
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2423,15 +2766,17 @@ export const useAuthApiV1UserRoleBindingsList = (
 
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingsListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2441,34 +2786,50 @@ export const useAuthApiV1UserRoleBindingsList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1UsersListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse[]
     error?: any
 }
@@ -2491,6 +2852,7 @@ export const AuthApiV1UsersList = (
 
     const [state, setState] = useState<IuseAuthApiV1UsersListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, wait])
@@ -2500,6 +2862,7 @@ export const AuthApiV1UsersList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2512,10 +2875,10 @@ export const AuthApiV1UsersList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2538,7 +2901,7 @@ export const AuthApiV1UsersList = (
 export const useAuthApiV1UsersList = (
     request: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2553,15 +2916,17 @@ export const useAuthApiV1UsersList = (
 
     const [state, setState] = useState<IuseAuthApiV1UsersListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2571,34 +2936,50 @@ export const useAuthApiV1UsersList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseAuthApiV1WorkspaceRoleBindingsListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding[]
     error?: any
 }
@@ -2621,6 +3002,7 @@ export const AuthApiV1WorkspaceRoleBindingsList = (
     const [state, setState] =
         useState<IuseAuthApiV1WorkspaceRoleBindingsListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, wait])
@@ -2630,6 +3012,7 @@ export const AuthApiV1WorkspaceRoleBindingsList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2642,10 +3025,10 @@ export const AuthApiV1WorkspaceRoleBindingsList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -2667,7 +3050,7 @@ export const AuthApiV1WorkspaceRoleBindingsList = (
 
 export const useAuthApiV1WorkspaceRoleBindingsList = (
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -2683,15 +3066,17 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
     const [state, setState] =
         useState<IuseAuthApiV1WorkspaceRoleBindingsListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.auth
@@ -2701,28 +3086,43 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }

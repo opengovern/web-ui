@@ -120,6 +120,7 @@ import AxiosAPI, { setWorkspace } from './ApiConfig'
 
 interface IuseWorkspaceApiV1WorkspaceCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse
     error?: any
 }
@@ -142,6 +143,7 @@ export const WorkspaceApiV1WorkspaceCreate = (
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, wait])
@@ -151,6 +153,7 @@ export const WorkspaceApiV1WorkspaceCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -163,10 +166,10 @@ export const WorkspaceApiV1WorkspaceCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -189,7 +192,7 @@ export const WorkspaceApiV1WorkspaceCreate = (
 export const useWorkspaceApiV1WorkspaceCreate = (
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -204,15 +207,17 @@ export const useWorkspaceApiV1WorkspaceCreate = (
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceCreateState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -222,34 +227,50 @@ export const useWorkspaceApiV1WorkspaceCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspaceDeleteState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -272,6 +293,7 @@ export const WorkspaceApiV1WorkspaceDelete = (
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceDeleteState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceId, params, wait])
@@ -281,6 +303,7 @@ export const WorkspaceApiV1WorkspaceDelete = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -293,10 +316,10 @@ export const WorkspaceApiV1WorkspaceDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -319,7 +342,7 @@ export const WorkspaceApiV1WorkspaceDelete = (
 export const useWorkspaceApiV1WorkspaceDelete = (
     workspaceId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -334,15 +357,17 @@ export const useWorkspaceApiV1WorkspaceDelete = (
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceDeleteState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
+        JSON.stringify([workspaceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -352,34 +377,50 @@ export const useWorkspaceApiV1WorkspaceDelete = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
+    if (JSON.stringify([workspaceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspaceNameCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -404,6 +445,7 @@ export const WorkspaceApiV1WorkspaceNameCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceNameCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceId, request, params, wait])
@@ -413,6 +455,7 @@ export const WorkspaceApiV1WorkspaceNameCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -425,10 +468,10 @@ export const WorkspaceApiV1WorkspaceNameCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -452,7 +495,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     workspaceId: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -468,15 +511,17 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceNameCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params, wait])
+        JSON.stringify([workspaceId, request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -486,34 +531,55 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
+    if (
+        JSON.stringify([workspaceId, request, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([workspaceId, request, params, autoExecute])
+        )
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspaceOrganizationCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -538,6 +604,7 @@ export const WorkspaceApiV1WorkspaceOrganizationCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceOrganizationCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceId, request, params, wait])
@@ -547,6 +614,7 @@ export const WorkspaceApiV1WorkspaceOrganizationCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -559,10 +627,10 @@ export const WorkspaceApiV1WorkspaceOrganizationCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -586,7 +654,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     workspaceId: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -602,15 +670,17 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceOrganizationCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params, wait])
+        JSON.stringify([workspaceId, request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -620,34 +690,55 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
+    if (
+        JSON.stringify([workspaceId, request, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([workspaceId, request, params, autoExecute])
+        )
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspaceOwnerCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -672,6 +763,7 @@ export const WorkspaceApiV1WorkspaceOwnerCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceOwnerCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceId, request, params, wait])
@@ -681,6 +773,7 @@ export const WorkspaceApiV1WorkspaceOwnerCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -693,10 +786,10 @@ export const WorkspaceApiV1WorkspaceOwnerCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -720,7 +813,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     workspaceId: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -736,15 +829,17 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceOwnerCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params, wait])
+        JSON.stringify([workspaceId, request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -754,34 +849,55 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
+    if (
+        JSON.stringify([workspaceId, request, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([workspaceId, request, params, autoExecute])
+        )
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspaceResumeCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -805,6 +921,7 @@ export const WorkspaceApiV1WorkspaceResumeCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceResumeCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceId, params, wait])
@@ -814,6 +931,7 @@ export const WorkspaceApiV1WorkspaceResumeCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -826,10 +944,10 @@ export const WorkspaceApiV1WorkspaceResumeCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -852,7 +970,7 @@ export const WorkspaceApiV1WorkspaceResumeCreate = (
 export const useWorkspaceApiV1WorkspaceResumeCreate = (
     workspaceId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -868,15 +986,17 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceResumeCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
+        JSON.stringify([workspaceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -886,34 +1006,50 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
+    if (JSON.stringify([workspaceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspaceSuspendCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -937,6 +1073,7 @@ export const WorkspaceApiV1WorkspaceSuspendCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceSuspendCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceId, params, wait])
@@ -946,6 +1083,7 @@ export const WorkspaceApiV1WorkspaceSuspendCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -958,10 +1096,10 @@ export const WorkspaceApiV1WorkspaceSuspendCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -984,7 +1122,7 @@ export const WorkspaceApiV1WorkspaceSuspendCreate = (
 export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     workspaceId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1000,15 +1138,17 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceSuspendCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
+        JSON.stringify([workspaceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1018,34 +1158,50 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
+    if (JSON.stringify([workspaceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspaceTierCreateState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -1070,6 +1226,7 @@ export const WorkspaceApiV1WorkspaceTierCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceTierCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceId, request, params, wait])
@@ -1079,6 +1236,7 @@ export const WorkspaceApiV1WorkspaceTierCreate = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1091,10 +1249,10 @@ export const WorkspaceApiV1WorkspaceTierCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1118,7 +1276,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     workspaceId: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1134,15 +1292,17 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceTierCreateState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params, wait])
+        JSON.stringify([workspaceId, request, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1152,34 +1312,55 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
+    if (
+        JSON.stringify([workspaceId, request, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([workspaceId, request, params, autoExecute])
+        )
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspaceCurrentListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse
     error?: any
 }
@@ -1202,6 +1383,7 @@ export const WorkspaceApiV1WorkspaceCurrentList = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceCurrentListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, wait])
@@ -1211,6 +1393,7 @@ export const WorkspaceApiV1WorkspaceCurrentList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1223,10 +1406,10 @@ export const WorkspaceApiV1WorkspaceCurrentList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1248,7 +1431,7 @@ export const WorkspaceApiV1WorkspaceCurrentList = (
 
 export const useWorkspaceApiV1WorkspaceCurrentList = (
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1264,15 +1447,17 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceCurrentListState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1282,34 +1467,50 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspacesListState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse[]
     error?: any
 }
@@ -1331,6 +1532,7 @@ export const WorkspaceApiV1WorkspacesList = (
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, wait])
@@ -1340,6 +1542,7 @@ export const WorkspaceApiV1WorkspacesList = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1352,10 +1555,10 @@ export const WorkspaceApiV1WorkspacesList = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1377,7 +1580,7 @@ export const WorkspaceApiV1WorkspacesList = (
 
 export const useWorkspaceApiV1WorkspacesList = (
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1392,15 +1595,17 @@ export const useWorkspaceApiV1WorkspacesList = (
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesListState>({
         isLoading: true,
+        isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
+        JSON.stringify([params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1410,34 +1615,50 @@ export const useWorkspaceApiV1WorkspacesList = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspacesDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: void
     error?: any
 }
@@ -1461,6 +1682,7 @@ export const WorkspaceApiV1WorkspacesDetail = (
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesDetailState>(
         {
             isLoading: true,
+            isExecuted: false,
         }
     )
     const [lastInput, setLastInput] = useState<string>(
@@ -1471,6 +1693,7 @@ export const WorkspaceApiV1WorkspacesDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1483,10 +1706,10 @@ export const WorkspaceApiV1WorkspacesDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1509,7 +1732,7 @@ export const WorkspaceApiV1WorkspacesDetail = (
 export const useWorkspaceApiV1WorkspacesDetail = (
     workspaceId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1525,16 +1748,18 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesDetailState>(
         {
             isLoading: true,
+            isExecuted: false,
         }
     )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
+        JSON.stringify([workspaceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1544,34 +1769,50 @@ export const useWorkspaceApiV1WorkspacesDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
+    if (JSON.stringify([workspaceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspacesByidDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace
     error?: any
 }
@@ -1595,6 +1836,7 @@ export const WorkspaceApiV1WorkspacesByidDetail = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesByidDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceId, params, wait])
@@ -1604,6 +1846,7 @@ export const WorkspaceApiV1WorkspacesByidDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1616,10 +1859,10 @@ export const WorkspaceApiV1WorkspacesByidDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1642,7 +1885,7 @@ export const WorkspaceApiV1WorkspacesByidDetail = (
 export const useWorkspaceApiV1WorkspacesByidDetail = (
     workspaceId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1658,15 +1901,17 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesByidDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
+        JSON.stringify([workspaceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1676,34 +1921,50 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
+    if (JSON.stringify([workspaceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspacesLimitsDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage
     error?: any
 }
@@ -1730,6 +1991,7 @@ export const WorkspaceApiV1WorkspacesLimitsDetail = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesLimitsDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceName, query, params, wait])
@@ -1739,6 +2001,7 @@ export const WorkspaceApiV1WorkspacesLimitsDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1751,10 +2014,10 @@ export const WorkspaceApiV1WorkspacesLimitsDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1780,7 +2043,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
         ignore_usage?: boolean
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1796,15 +2059,17 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesLimitsDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceName, query, params, wait])
+        JSON.stringify([workspaceName, query, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1814,34 +2079,55 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceName, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceName, query, params, wait]))
+    if (
+        JSON.stringify([workspaceName, query, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([workspaceName, query, params, autoExecute])
+        )
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }
 
 interface IuseWorkspaceApiV1WorkspacesLimitsByidDetailState {
     isLoading: boolean
+    isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits
     error?: any
 }
@@ -1865,6 +2151,7 @@ export const WorkspaceApiV1WorkspacesLimitsByidDetail = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesLimitsByidDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceId, params, wait])
@@ -1874,6 +2161,7 @@ export const WorkspaceApiV1WorkspacesLimitsByidDetail = (
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1886,10 +2174,10 @@ export const WorkspaceApiV1WorkspacesLimitsByidDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({ ...state, error: err, isLoading: false })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({ ...state, error: err, isLoading: false })
         }
     }
 
@@ -1912,7 +2200,7 @@ export const WorkspaceApiV1WorkspacesLimitsByidDetail = (
 export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     workspaceId: string,
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -1928,15 +2216,17 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesLimitsByidDetailState>({
             isLoading: true,
+            isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
+        JSON.stringify([workspaceId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
             isLoading: true,
+            isExecuted: true,
         })
         try {
             api.workspace
@@ -1946,28 +2236,43 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
+    if (JSON.stringify([workspaceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
 }

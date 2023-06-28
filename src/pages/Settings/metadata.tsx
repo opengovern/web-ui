@@ -40,7 +40,7 @@ const SettingsMetadata: React.FC<any> = () => {
         useAuthApiV1UserDetail(
             currentWorkspace?.ownerId || '',
             {},
-            loadingCurrentWS
+            !loadingCurrentWS
         )
 
     if (isLoading || loadingCurrentWS || ownerIsLoading) {
