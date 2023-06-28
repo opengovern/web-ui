@@ -124,6 +124,70 @@ interface IuseComplianceApiV1AlarmsTopCreateState {
     error?: any
 }
 
+export const ComplianceApiV1AlarmsTopCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseComplianceApiV1AlarmsTopCreateState>(
+        {
+            isLoading: true,
+        }
+    )
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([request, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1AlarmsTopCreate(request, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1AlarmsTopCreate = (
     request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
     params: RequestParams = {},
@@ -194,6 +258,69 @@ interface IuseComplianceApiV1AssignmentsListState {
     error?: any
 }
 
+export const ComplianceApiV1AssignmentsList = (
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseComplianceApiV1AssignmentsListState>(
+        {
+            isLoading: true,
+        }
+    )
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1AssignmentsList(params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1AssignmentsList = (
     params: RequestParams = {},
     wait = false
@@ -261,6 +388,76 @@ interface IuseComplianceApiV1AssignmentsConnectionDeleteState {
     isLoading: boolean
     response?: void
     error?: any
+}
+
+export const ComplianceApiV1AssignmentsConnectionDelete = (
+    benchmarkId: string,
+    connectionId: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1AssignmentsConnectionDeleteState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([benchmarkId, connectionId, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1AssignmentsConnectionDelete(
+                    benchmarkId,
+                    connectionId,
+                    params
+                )
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (
+        JSON.stringify([benchmarkId, connectionId, params, wait]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([benchmarkId, connectionId, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1AssignmentsConnectionDelete = (
@@ -339,6 +536,76 @@ interface IuseComplianceApiV1AssignmentsConnectionCreateState {
     error?: any
 }
 
+export const ComplianceApiV1AssignmentsConnectionCreate = (
+    benchmarkId: string,
+    connectionId: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1AssignmentsConnectionCreateState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([benchmarkId, connectionId, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1AssignmentsConnectionCreate(
+                    benchmarkId,
+                    connectionId,
+                    params
+                )
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (
+        JSON.stringify([benchmarkId, connectionId, params, wait]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([benchmarkId, connectionId, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1AssignmentsConnectionCreate = (
     benchmarkId: string,
     connectionId: string,
@@ -415,6 +682,69 @@ interface IuseComplianceApiV1AssignmentsBenchmarkDetailState {
     error?: any
 }
 
+export const ComplianceApiV1AssignmentsBenchmarkDetail = (
+    benchmarkId: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1AssignmentsBenchmarkDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([benchmarkId, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1AssignmentsBenchmarkDetail(benchmarkId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([benchmarkId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     benchmarkId: string,
     params: RequestParams = {},
@@ -482,6 +812,69 @@ interface IuseComplianceApiV1AssignmentsConnectionDetailState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[]
     error?: any
+}
+
+export const ComplianceApiV1AssignmentsConnectionDetail = (
+    connectionId: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1AssignmentsConnectionDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([connectionId, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1AssignmentsConnectionDetail(connectionId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([connectionId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([connectionId, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1AssignmentsConnectionDetail = (
@@ -553,6 +946,69 @@ interface IuseComplianceApiV1BenchmarkSummaryDetailState {
     error?: any
 }
 
+export const ComplianceApiV1BenchmarkSummaryDetail = (
+    benchmarkId: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1BenchmarkSummaryDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([benchmarkId, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1BenchmarkSummaryDetail(benchmarkId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([benchmarkId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1BenchmarkSummaryDetail = (
     benchmarkId: string,
     params: RequestParams = {},
@@ -620,6 +1076,78 @@ interface IuseComplianceApiV1BenchmarkSummaryResultTrendDetailState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend
     error?: any
+}
+
+export const ComplianceApiV1BenchmarkSummaryResultTrendDetail = (
+    benchmarkId: string,
+    query: {
+        start: number
+
+        end: number
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1BenchmarkSummaryResultTrendDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([benchmarkId, query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1BenchmarkSummaryResultTrendDetail(
+                    benchmarkId,
+                    query,
+                    params
+                )
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([benchmarkId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1BenchmarkSummaryResultTrendDetail = (
@@ -700,6 +1228,72 @@ interface IuseComplianceApiV1BenchmarkTreeDetailState {
     error?: any
 }
 
+export const ComplianceApiV1BenchmarkTreeDetail = (
+    benchmarkId: string,
+    query: {
+        status: ('passed' | 'failed' | 'unknown')[]
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1BenchmarkTreeDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([benchmarkId, query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1BenchmarkTreeDetail(benchmarkId, query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([benchmarkId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1BenchmarkTreeDetail = (
     benchmarkId: string,
     query: {
@@ -772,6 +1366,67 @@ interface IuseComplianceApiV1BenchmarksListState {
     error?: any
 }
 
+export const ComplianceApiV1BenchmarksList = (
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseComplianceApiV1BenchmarksListState>({
+        isLoading: true,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1BenchmarksList(params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1BenchmarksList = (
     params: RequestParams = {},
     wait = false
@@ -837,6 +1492,69 @@ interface IuseComplianceApiV1BenchmarksDetailState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark
     error?: any
+}
+
+export const ComplianceApiV1BenchmarksDetail = (
+    benchmarkId: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1BenchmarksDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([benchmarkId, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1BenchmarksDetail(benchmarkId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([benchmarkId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1BenchmarksDetail = (
@@ -908,6 +1626,69 @@ interface IuseComplianceApiV1BenchmarksPoliciesDetailState {
     error?: any
 }
 
+export const ComplianceApiV1BenchmarksPoliciesDetail = (
+    benchmarkId: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1BenchmarksPoliciesDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([benchmarkId, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1BenchmarksPoliciesDetail(benchmarkId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([benchmarkId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1BenchmarksPoliciesDetail = (
     benchmarkId: string,
     params: RequestParams = {},
@@ -977,6 +1758,69 @@ interface IuseComplianceApiV1BenchmarksPoliciesDetail2State {
     error?: any
 }
 
+export const ComplianceApiV1BenchmarksPoliciesDetail2 = (
+    policyId: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1BenchmarksPoliciesDetail2State>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([policyId, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1BenchmarksPoliciesDetail2(policyId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([policyId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([policyId, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
     policyId: string,
     params: RequestParams = {},
@@ -1044,6 +1888,73 @@ interface IuseComplianceApiV1BenchmarksSummaryListState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse
     error?: any
+}
+
+export const ComplianceApiV1BenchmarksSummaryList = (
+    query: {
+        start: number
+
+        end: number
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1BenchmarksSummaryListState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1BenchmarksSummaryList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1BenchmarksSummaryList = (
@@ -1119,6 +2030,68 @@ interface IuseComplianceApiV1FindingsCreateState {
     error?: any
 }
 
+export const ComplianceApiV1FindingsCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseComplianceApiV1FindingsCreateState>({
+        isLoading: true,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([request, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1FindingsCreate(request, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([request, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1FindingsCreate = (
     request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
     params: RequestParams = {},
@@ -1185,6 +2158,73 @@ interface IuseComplianceApiV1FindingsTopDetailState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
     error?: any
+}
+
+export const ComplianceApiV1FindingsTopDetail = (
+    benchmarkId: string,
+    field: 'resourceType' | 'serviceName' | 'sourceID' | 'resourceID',
+    count: number,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1FindingsTopDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([benchmarkId, field, count, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1FindingsTopDetail(benchmarkId, field, count, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (
+        JSON.stringify([benchmarkId, field, count, params, wait]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([benchmarkId, field, count, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1FindingsTopDetail = (
@@ -1260,6 +2300,73 @@ interface IuseComplianceApiV1FindingsMetricsListState {
     error?: any
 }
 
+export const ComplianceApiV1FindingsMetricsList = (
+    query?: {
+        start?: number
+
+        end?: number
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1FindingsMetricsListState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1FindingsMetricsList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1FindingsMetricsList = (
     query?: {
         start?: number
@@ -1331,6 +2438,78 @@ interface IuseComplianceApiV1InsightListState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[]
     error?: any
+}
+
+export const ComplianceApiV1InsightList = (
+    query?: {
+        tag?: string[]
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        startTime?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseComplianceApiV1InsightListState>({
+        isLoading: true,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1InsightList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1InsightList = (
@@ -1411,6 +2590,75 @@ interface IuseComplianceApiV1InsightDetailState {
     error?: any
 }
 
+export const ComplianceApiV1InsightDetail = (
+    insightId: string,
+    query?: {
+        connectionId?: string[]
+
+        startTime?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseComplianceApiV1InsightDetailState>({
+        isLoading: true,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([insightId, query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1InsightDetail(insightId, query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([insightId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId, query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1InsightDetail = (
     insightId: string,
     query?: {
@@ -1484,6 +2732,78 @@ interface IuseComplianceApiV1InsightTrendDetailState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[]
     error?: any
+}
+
+export const ComplianceApiV1InsightTrendDetail = (
+    insightId: string,
+    query?: {
+        connectionId?: string[]
+
+        startTime?: number
+
+        endTime?: number
+
+        datapointCount?: number
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1InsightTrendDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([insightId, query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1InsightTrendDetail(insightId, query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([insightId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId, query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1InsightTrendDetail = (
@@ -1562,6 +2882,79 @@ interface IuseComplianceApiV1InsightGroupListState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup[]
     error?: any
+}
+
+export const ComplianceApiV1InsightGroupList = (
+    query?: {
+        tag?: string[]
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        startTime?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1InsightGroupListState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1InsightGroupList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1InsightGroupList = (
@@ -1643,6 +3036,76 @@ interface IuseComplianceApiV1InsightGroupDetailState {
     error?: any
 }
 
+export const ComplianceApiV1InsightGroupDetail = (
+    insightGroupId: string,
+    query?: {
+        connectionId?: string[]
+
+        startTime?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1InsightGroupDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([insightGroupId, query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1InsightGroupDetail(insightGroupId, query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([insightGroupId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([insightGroupId, query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1InsightGroupDetail = (
     insightGroupId: string,
     query?: {
@@ -1717,6 +3180,78 @@ interface IuseComplianceApiV1InsightGroupTrendDetailState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse
     error?: any
+}
+
+export const ComplianceApiV1InsightGroupTrendDetail = (
+    insightGroupId: string,
+    query?: {
+        connectionId?: string[]
+
+        startTime?: number
+
+        endTime?: number
+
+        datapointCount?: number
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1InsightGroupTrendDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([insightGroupId, query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1InsightGroupTrendDetail(insightGroupId, query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([insightGroupId, query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([insightGroupId, query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1InsightGroupTrendDetail = (
@@ -1797,6 +3332,71 @@ interface IuseComplianceApiV1MetadataInsightListState {
     error?: any
 }
 
+export const ComplianceApiV1MetadataInsightList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+    },
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1MetadataInsightListState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1MetadataInsightList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([query, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1MetadataInsightList = (
     query?: {
         connector?: ('' | 'AWS' | 'Azure')[]
@@ -1868,6 +3468,69 @@ interface IuseComplianceApiV1MetadataInsightDetailState {
     error?: any
 }
 
+export const ComplianceApiV1MetadataInsightDetail = (
+    insightId: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1MetadataInsightDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([insightId, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1MetadataInsightDetail(insightId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([insightId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1MetadataInsightDetail = (
     insightId: string,
     params: RequestParams = {},
@@ -1935,6 +3598,68 @@ interface IuseComplianceApiV1MetadataTagInsightListState {
     isLoading: boolean
     response?: Record<string, string[]>
     error?: any
+}
+
+export const ComplianceApiV1MetadataTagInsightList = (
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1MetadataTagInsightListState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1MetadataTagInsightList(params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1MetadataTagInsightList = (
@@ -2005,6 +3730,69 @@ interface IuseComplianceApiV1MetadataTagInsightDetailState {
     error?: any
 }
 
+export const ComplianceApiV1MetadataTagInsightDetail = (
+    key: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1MetadataTagInsightDetailState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([key, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1MetadataTagInsightDetail(key, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([key, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([key, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useComplianceApiV1MetadataTagInsightDetail = (
     key: string,
     params: RequestParams = {},
@@ -2072,6 +3860,68 @@ interface IuseComplianceApiV1QueriesDetailState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiQuery
     error?: any
+}
+
+export const ComplianceApiV1QueriesDetail = (
+    queryId: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseComplianceApiV1QueriesDetailState>({
+        isLoading: true,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([queryId, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.compliance
+                .apiV1QueriesDetail(queryId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([queryId, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([queryId, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useComplianceApiV1QueriesDetail = (

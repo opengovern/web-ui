@@ -115,6 +115,66 @@ interface I%[6]sState {
 	error?: any
 }
 
+
+export const %[7]s = (%[2]s, wait: boolean = false) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<I%[6]sState>({
+            isLoading: true,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([%[5]s, wait])
+    )
+
+    const sendRequest = () => {
+		setState({
+			...state,
+			isLoading: true,
+		})
+        try {
+            api.%[4]s
+                .%[1]s(%[5]s)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([%[5]s, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([%[5]s, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+	const response = state.response
+	const isLoading = state.isLoading
+	const error = state.error
+    return {response, isLoading, error}
+}
+
 export const %[6]s = (%[2]s, wait: boolean = false) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -173,7 +233,7 @@ export const %[6]s = (%[2]s, wait: boolean = false) => {
 	const error = state.error
     return {response, isLoading, error}
 }
-`, apiName, req, resp, module, pmr, funcName)
+`, apiName, req, resp, module, pmr, funcName, funcName[3:])
 		apiFiles[module] += contentAPI
 	}
 

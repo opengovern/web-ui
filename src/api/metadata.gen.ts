@@ -124,6 +124,68 @@ interface IuseMetadataApiV1MetadataCreateState {
     error?: any
 }
 
+export const MetadataApiV1MetadataCreate = (
+    req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseMetadataApiV1MetadataCreateState>({
+        isLoading: true,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([req, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.metadata
+                .apiV1MetadataCreate(req, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([req, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([req, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
+}
+
 export const useMetadataApiV1MetadataCreate = (
     req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     params: RequestParams = {},
@@ -190,6 +252,68 @@ interface IuseMetadataApiV1MetadataDetailState {
     isLoading: boolean
     response?: GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata
     error?: any
+}
+
+export const MetadataApiV1MetadataDetail = (
+    key: string,
+    params: RequestParams = {},
+    wait = false
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseMetadataApiV1MetadataDetailState>({
+        isLoading: true,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([key, params, wait])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+        })
+        try {
+            api.metadata
+                .apiV1MetadataDetail(key, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                    })
+                })
+                .catch((err) => {
+                    setState({ ...state, error: err })
+                })
+        } catch (err) {
+            setState({ ...state, error: err })
+        }
+    }
+
+    if (JSON.stringify([key, params, wait]) !== lastInput) {
+        setLastInput(JSON.stringify([key, params, wait]))
+    }
+
+    useEffect(() => {
+        if (!wait) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { error } = state
+    return { response, isLoading, error }
 }
 
 export const useMetadataApiV1MetadataDetail = (
