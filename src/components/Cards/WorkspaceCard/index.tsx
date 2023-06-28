@@ -13,7 +13,12 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { ArrowPathIcon, ArrowSmallRightIcon } from '@heroicons/react/24/solid'
-import { useWorkspaceApiV1WorkspacesLimitsDetail } from '../../../api/workspace.gen'
+import {
+    useWorkspaceApiV1WorkspaceDelete,
+    useWorkspaceApiV1WorkspaceResumeCreate,
+    useWorkspaceApiV1WorkspacesLimitsDetail,
+    useWorkspaceApiV1WorkspaceSuspendCreate,
+} from '../../../api/workspace.gen'
 
 interface IWorkSpace {
     workspace: any
@@ -62,6 +67,21 @@ export default function WorkspaceCard({ workspace }: IWorkSpace) {
     const navigate = useNavigate()
     const { response: workspaceDetail } =
         useWorkspaceApiV1WorkspacesLimitsDetail(workspace.name)
+    const {
+        isLoading: suspendLoading,
+        sendNow: callSuspend,
+        isExecuted: eS,
+    } = useWorkspaceApiV1WorkspaceSuspendCreate(workspace.id, {}, false)
+    const {
+        isLoading: resumeLoading,
+        sendNow: callResume,
+        isExecuted: eR,
+    } = useWorkspaceApiV1WorkspaceResumeCreate(workspace.id, {}, false)
+    const {
+        isLoading: deleteLoading,
+        sendNow: callDelete,
+        isExecuted: eD,
+    } = useWorkspaceApiV1WorkspaceDelete(workspace.id, {}, false)
 
     const details = {
         Tier: workspace.tier,
@@ -91,6 +111,8 @@ export default function WorkspaceCard({ workspace }: IWorkSpace) {
                         variant="primary"
                         icon={ArrowPathIcon}
                         iconPosition="right"
+                        loading={resumeLoading && eR}
+                        onClick={() => callResume()}
                     >
                         Resume
                     </Button>
@@ -118,12 +140,19 @@ export default function WorkspaceCard({ workspace }: IWorkSpace) {
                         <Button
                             variant="light"
                             className="pr-2 border-r-gray-600"
+                            loading={suspendLoading && eS}
+                            onClick={() => callSuspend()}
                         >
                             Suspend
                         </Button>
                     )}
                     {showDelete(workspace.status) && (
-                        <Button variant="light" className="pl-2">
+                        <Button
+                            variant="light"
+                            className="pl-2"
+                            loading={deleteLoading && eD}
+                            onClick={() => callDelete()}
+                        >
                             Delete
                         </Button>
                     )}
