@@ -10,6 +10,7 @@ import {
 } from '@tremor/react'
 import { useState } from 'react'
 import DrawerPanel from '../../../components/DrawerPanel'
+import { useWorkspaceApiV1WorkspaceCreate } from '../../../api/workspace.gen'
 
 interface ICreateWorkspace {
     open: boolean
@@ -19,6 +20,9 @@ interface ICreateWorkspace {
 export default function CreateWorkspace({ open, onClose }: ICreateWorkspace) {
     const [name, setName] = useState('')
     const [tier, setTier] = useState('')
+
+    const { isLoading, sendNow, isExecuted, error } =
+        useWorkspaceApiV1WorkspaceCreate({ name, tier }, {}, false)
 
     return (
         <DrawerPanel open={open} onClose={onClose} title="Create Workspace">
@@ -39,6 +43,7 @@ export default function CreateWorkspace({ open, onClose }: ICreateWorkspace) {
                         <Text>Name *</Text>
                         <TextInput
                             value={name}
+                            error={error}
                             onChange={(e) => setName(e.target.value)}
                             className="w-3/5"
                         />
@@ -61,7 +66,14 @@ export default function CreateWorkspace({ open, onClose }: ICreateWorkspace) {
                     <Button variant="secondary" onClick={() => onClose()}>
                         Cancel
                     </Button>
-                    <Button className="ml-3">Create Workspace</Button>
+                    <Button
+                        className="ml-3"
+                        disabled={name.length < 1 && tier.length < 1}
+                        loading={isLoading && isExecuted}
+                        onClick={() => sendNow()}
+                    >
+                        Create Workspace
+                    </Button>
                 </Flex>
             </Flex>
         </DrawerPanel>
