@@ -70,7 +70,6 @@ const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
     }, [role])
 
     useEffect(() => {
-        console.log(isLoading, isExecuted)
         if (!isLoading && isExecuted) {
             close()
         }
@@ -269,7 +268,6 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
                 title="Create new API Key"
                 onClose={() => {
                     setDrawerOpen(false)
-                    sendNow()
                 }}
             >
                 <CreateAPIKey
@@ -279,7 +277,7 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
                     }}
                 />
             </DrawerPanel>
-            <Card key="summary" className="top-10">
+            <Card key="summary">
                 <div className="flex mb-6">
                     <Title className="flex-auto">API Keys</Title>
                     <Button

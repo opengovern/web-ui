@@ -30,11 +30,9 @@ function App() {
 
     if (isLoading || accessTokenLoading) {
         return (
-            <Card>
-                <div className="flex items-center justify-center h-96">
-                    <Spinner />
-                </div>
-            </Card>
+            <div className="flex items-center justify-center mt-96 w-full">
+                <Spinner />
+            </div>
         )
     }
 

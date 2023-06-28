@@ -19,7 +19,11 @@ import MemberInvite from './member_invite'
 const SettingsMembers: React.FC<any> = () => {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const [drawerParam, setDrawerParam] = useState<string>('')
-    const { response, isLoading } = useAuthApiV1WorkspaceRoleBindingsList()
+    const {
+        response,
+        isLoading,
+        sendNow: refreshRoleBindings,
+    } = useAuthApiV1WorkspaceRoleBindingsList()
     if (isLoading) {
         return (
             <Flex justifyContent="center" className="mt-56">
@@ -65,19 +69,28 @@ const SettingsMembers: React.FC<any> = () => {
                     setDrawerOpen(false)
                 }}
             >
-                <div>
-                    {drawerParam === 'openInviteMember' ? (
-                        <MemberInvite />
-                    ) : (
-                        <MemberDetails
-                            user={response?.find(
-                                (item) => item.userId === drawerParam
-                            )}
-                        />
-                    )}
-                </div>
+                {drawerParam === 'openInviteMember' ? (
+                    <MemberInvite
+                        close={(refresh: boolean) => {
+                            setDrawerOpen(false)
+                            if (refresh) {
+                                refreshRoleBindings()
+                            }
+                        }}
+                    />
+                ) : (
+                    <MemberDetails
+                        user={response?.find(
+                            (item) => item.userId === drawerParam
+                        )}
+                        close={() => {
+                            setDrawerOpen(false)
+                            refreshRoleBindings()
+                        }}
+                    />
+                )}
             </DrawerPanel>
-            <Card key="summary" className="top-10">
+            <Card key="summary">
                 <div className="flex">
                     <Title className="flex-auto">All members</Title>
                     <Button

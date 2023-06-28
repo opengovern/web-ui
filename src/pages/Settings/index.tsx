@@ -35,7 +35,7 @@ const navigation = [
     },
     {
         name: 'API Keys',
-        page: 'orgapikeys',
+        page: 'apikeys',
         component: <SettingsWorkspaceAPIKeys />,
     },
     {
@@ -66,7 +66,7 @@ const Settings: React.FC<any> = () => {
 
     return (
         <LoggedInLayout currentPage="settings" addContainer={false}>
-            <main className="xl:pl-24 dark:bg-gray-900">
+            <main className="xl:pl-24 h-full bg-gray-50 dark:bg-gray-900">
                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
                     <main className="lg:pl-72">
                         {navigation
@@ -110,8 +110,11 @@ const Settings: React.FC<any> = () => {
                                                                 to={`/${workspace}/settings/${item.page}`}
                                                                 className={classNames(
                                                                     item.page ===
-                                                                        '' // currentPage
-                                                                        ? 'bg-blue-100'
+                                                                        currentSubPage ||
+                                                                        (!currentSubPage &&
+                                                                            item.page ===
+                                                                                'metadata')
+                                                                        ? 'bg-blue-100 rounded-lg'
                                                                         : '',
                                                                     'text-gray-600 font-semibold group flex gap-x-3 p-1 px-12'
                                                                 )}

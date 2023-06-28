@@ -14,11 +14,9 @@ export const AuthenticationGuard: React.FC<IAuthenticationGuard> = ({
         // eslint-disable-next-line react/no-unstable-nested-components
         onRedirecting: () => {
             return (
-                <Card>
-                    <div className="flex items-center justify-center h-96">
-                        <Spinner />
-                    </div>
-                </Card>
+                <div className="flex items-center justify-center mt-96 w-full">
+                    <Spinner />
+                </div>
             )
         },
     })

@@ -140,12 +140,12 @@ const SettingsMetadata: React.FC<any> = () => {
                                 className="truncate space-x-4"
                             >
                                 <div className="truncate">
-                                    <Text className="truncate">
-                                        <Bold>{item.title}</Bold>
+                                    <Text className="truncate text-sm">
+                                        {item.title}
                                     </Text>
                                 </div>
                             </Flex>
-                            <Text>{item.value}</Text>
+                            <Text className="text-sm">{item.value}</Text>
                         </ListItem>
                     ))}
                 </List>
