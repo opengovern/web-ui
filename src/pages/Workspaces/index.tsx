@@ -11,29 +11,33 @@ export default function Workspaces() {
 
     return (
         <LoggedInLayout currentPage="assets" showSidebar={false}>
-            <main>
-                <Flex flexDirection="row" className="mb-12">
-                    <Title>Your Workspaces</Title>
-                    <Button
-                        variant="secondary"
-                        onClick={() => setOpenDrawer(true)}
-                    >
-                        Add new Kaytu instance
-                    </Button>
+            <main className="w-full">
+                <Flex justifyContent="center" flexDirection="row">
+                    <div className="max-w-6xl">
+                        <Flex flexDirection="row" className="mb-12">
+                            <Title>Your Workspaces</Title>
+                            <Button
+                                variant="secondary"
+                                onClick={() => setOpenDrawer(true)}
+                            >
+                                Add new Kaytu instance
+                            </Button>
+                        </Flex>
+                        <CreateWorkspace
+                            open={openDrawer}
+                            onClose={() => setOpenDrawer(false)}
+                        />
+                        <Grid numItems={1} className="gap-3">
+                            {workspaces?.map((ws) => {
+                                return (
+                                    <Col>
+                                        <WorkspaceCard workspace={ws} />
+                                    </Col>
+                                )
+                            })}
+                        </Grid>
+                    </div>
                 </Flex>
-                <CreateWorkspace
-                    open={openDrawer}
-                    onClose={() => setOpenDrawer(false)}
-                />
-                <Grid numItems={1} className="gap-3">
-                    {workspaces?.map((ws) => {
-                        return (
-                            <Col>
-                                <WorkspaceCard workspace={ws} />
-                            </Col>
-                        )
-                    })}
-                </Grid>
             </main>
         </LoggedInLayout>
     )
