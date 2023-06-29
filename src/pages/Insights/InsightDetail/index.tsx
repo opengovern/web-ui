@@ -125,6 +125,8 @@ export default function InsightDetail() {
                         value={activeTimeRange}
                         onValueChange={setActiveTimeRange}
                         selectPlaceholder="Selection"
+                        enableClear={false}
+                        maxDate={new Date()}
                     />
                 </Flex>
                 <Grid
