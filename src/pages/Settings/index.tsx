@@ -94,7 +94,7 @@ const Settings: React.FC<any> = () => {
                                                         {item.page === '' ? (
                                                             <div
                                                                 className={classNames(
-                                                                    'text-gray-400 font-semibold group flex gap-x-3 p-1'
+                                                                    'text-gray-400 font-medium group flex gap-x-3 p-1'
                                                                 )}
                                                             >
                                                                 {item.icon && (
@@ -116,7 +116,7 @@ const Settings: React.FC<any> = () => {
                                                                                 'metadata')
                                                                         ? 'bg-blue-100 rounded-lg'
                                                                         : '',
-                                                                    'text-gray-600 font-semibold group flex gap-x-3 p-1 px-12'
+                                                                    'text-gray-600 font-medium group flex gap-x-3 p-1 px-12'
                                                                 )}
                                                             >
                                                                 {item.name}
