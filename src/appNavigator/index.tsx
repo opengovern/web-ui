@@ -8,6 +8,7 @@ import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
 import InsightDetail from '../pages/Insights/InsightDetail'
+import Spend from '../pages/Spend'
 
 interface NavigateToWorkspacePageProps {
     page: string
@@ -116,6 +117,11 @@ export default function AppNavigator() {
                 key="workspaces"
                 path="/workspaces"
                 element={<AuthenticationGuard component={Workspaces} />}
+            />
+            <Route
+                key="spend"
+                path="/:ws/spend"
+                element={<AuthenticationGuard component={Spend} />}
             />
             <Route
                 key="workspaceHome"
