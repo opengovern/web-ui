@@ -1,12 +1,4 @@
-import {
-    BadgeDelta,
-    Card,
-    Flex,
-    Metric,
-    Subtitle,
-    Text,
-    Title,
-} from '@tremor/react'
+import { BadgeDelta, Card, Flex, Subtitle, Text, Title } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 
