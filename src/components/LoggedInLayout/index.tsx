@@ -22,27 +22,27 @@ import { Flex, Title } from '@tremor/react'
 import { ReactComponent as KaytuLogo } from '../../assets/icons/logo-dark-sqare-sm-glyph 2.svg'
 
 const navigation = [
-    {
-        name: 'Home',
-        page: 'home',
-        icon: HomeIcon,
-    },
+    // {
+    //     name: 'Home',
+    //     page: 'home',
+    //     icon: HomeIcon,
+    // },
+    { name: 'Assets', page: 'assets', icon: CubeIcon },
     {
         name: 'Insight',
         page: 'insight',
         icon: DocumentChartBarIcon,
     },
-    { name: 'Assets', page: 'assets', icon: CubeIcon },
-    {
-        name: 'Spend',
-        page: 'spend',
-        icon: ArrowTrendingUpIcon,
-    },
-    {
-        name: 'Compliance',
-        page: 'compliance',
-        icon: ShieldCheckIcon,
-    },
+    // {
+    //     name: 'Spend',
+    //     page: 'spend',
+    //     icon: ArrowTrendingUpIcon,
+    // },
+    // {
+    //     name: 'Compliance',
+    //     page: 'compliance',
+    //     icon: ShieldCheckIcon,
+    // },
     {
         name: 'Settings',
         page: 'settings',
@@ -394,13 +394,9 @@ export default function LoggedInLayout({
                     </Flex>
                 </div>
 
-                {addContainer ? (
-                    <main className="flex justify-center items-start px-12 pt-20 pb-10 dark:bg-gray-900 h-full overflow-y-scroll">
-                        <div className="max-w-6xl w-full">{children}</div>
-                    </main>
-                ) : (
-                    children
-                )}
+                <main className="flex justify-center items-start px-12 pt-20 pb-10 dark:bg-gray-900 h-full overflow-y-scroll">
+                    <div className="max-w-6xl h-full w-full">{children}</div>
+                </main>
             </div>
         </Flex>
     )

@@ -21,6 +21,7 @@ import {
 } from '../../api/compliance.gen'
 import InsightCard from '../../components/Cards/InsightCard'
 import { timeAtom } from '../../store'
+import InsightGroupCard from '../../components/Cards/InsightGroupCard'
 
 export default function Insights() {
     const [selectedCategory, setSelectedCategory] = useState('')
@@ -96,24 +97,28 @@ export default function Insights() {
                             </Grid>
                         </TabPanel>
                         <TabPanel>
-                            {insightGroup
-                                ?.filter((insight) => {
-                                    if (selectedCategory.length)
-                                        return insight.tags?.category.includes(
-                                            selectedCategory
-                                        )
-                                    return insight
-                                })
-                                .map((insight) => (
-                                    <Col numColSpan={1}>
-                                        <InsightCard
-                                            metric={insight}
-                                            showTitle
-                                            showDetails
-                                            isClickable
-                                        />
-                                    </Col>
-                                ))}
+                            <Grid
+                                numItems={1}
+                                numItemsMd={2}
+                                numItemsLg={3}
+                                className="gap-3 w-100"
+                            >
+                                {insightGroup
+                                    ?.filter((insight) => {
+                                        if (selectedCategory.length)
+                                            return insight.tags?.category.includes(
+                                                selectedCategory
+                                            )
+                                        return insight
+                                    })
+                                    .map((insight) => (
+                                        <Col numColSpan={1}>
+                                            <InsightGroupCard
+                                                metric={insight}
+                                            />
+                                        </Col>
+                                    ))}
+                            </Grid>
                         </TabPanel>
                     </TabPanels>
                 </TabGroup>
