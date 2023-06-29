@@ -130,7 +130,7 @@ const SettingsMetadata: React.FC<any> = () => {
                     <ProgressBar value={resourcesPercentage} className="mt-2" />
                 </Card>
             </Grid>
-            <Card key="summary" className="top-10">
+            <Card key="summary" className="top-6">
                 <Title>Summary</Title>
                 <List className="mt-4">
                     {wsDetails.map((item) => (

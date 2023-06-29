@@ -54,6 +54,8 @@ export default function Insights() {
                         value={activeTimeRange}
                         onValueChange={setActiveTimeRange}
                         selectPlaceholder="Selection"
+                        enableClear={false}
+                        maxDate={new Date()}
                     />
                 </Flex>
                 <TabGroup>

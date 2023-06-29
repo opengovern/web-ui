@@ -138,6 +138,7 @@ const Assets: React.FC<any> = () => {
                         onValueChange={setActiveTimeRange}
                         selectPlaceholder="Time Range"
                         enableClear={false}
+                        maxDate={new Date()}
                     />
                     <Button
                         variant="secondary"
