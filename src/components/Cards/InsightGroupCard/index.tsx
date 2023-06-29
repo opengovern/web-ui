@@ -145,50 +145,51 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                 ))}
                         </TableBody>
                     </Table>
-                    {insightRows(metric.insights).length > 2 && (
-                        <Accordion className="w-full border-0">
-                            <AccordionBody className="p-0 w-full">
-                                <Table className="w-full">
-                                    <TableBody>
-                                        {insightRows(metric.insights)
-                                            .filter(
-                                                (insight) => insight.num > 1
-                                            )
-                                            .map((insight) => (
-                                                <TableRow
-                                                    onClick={() =>
-                                                        navigateToAssetsInsightsDetails(
-                                                            insight.id
-                                                        )
-                                                    }
-                                                    className="cursor-pointer"
-                                                >
-                                                    <TableCell className="px-0">
-                                                        <Text>
-                                                            {insight.name}
-                                                        </Text>
-                                                    </TableCell>
-                                                    <TableCell className="px-0 flex justify-end">
-                                                        <Text
-                                                            color={
-                                                                insight.isPositive
-                                                                    ? 'green'
-                                                                    : 'red'
-                                                            }
-                                                        >
-                                                            {insight.value}
-                                                        </Text>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                    </TableBody>
-                                </Table>
-                            </AccordionBody>
-                            <AccordionHeader className="p-0 w-full pr-0.5">
-                                <Flex justifyContent="end">see more</Flex>
-                            </AccordionHeader>
-                        </Accordion>
-                    )}
+                    <Accordion className="w-full border-0">
+                        <AccordionBody className="p-0 w-full">
+                            <Table className="w-full">
+                                <TableBody>
+                                    {insightRows(metric.insights)
+                                        .filter((insight) => insight.num > 1)
+                                        .map((insight) => (
+                                            <TableRow
+                                                onClick={() =>
+                                                    navigateToAssetsInsightsDetails(
+                                                        insight.id
+                                                    )
+                                                }
+                                                className="cursor-pointer"
+                                            >
+                                                <TableCell className="px-0">
+                                                    <Text>{insight.name}</Text>
+                                                </TableCell>
+                                                <TableCell className="px-0 flex justify-end">
+                                                    <Text
+                                                        color={
+                                                            insight.isPositive
+                                                                ? 'green'
+                                                                : 'red'
+                                                        }
+                                                    >
+                                                        {insight.value}
+                                                    </Text>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                </TableBody>
+                            </Table>
+                        </AccordionBody>
+                        <AccordionHeader
+                            color="blue"
+                            className={`p-0 w-full pr-0.5 ${
+                                insightRows(metric.insights).length > 2
+                                    ? 'opacity-100'
+                                    : 'opacity-0 cursor-default'
+                            }`}
+                        >
+                            <Flex justifyContent="end">see more</Flex>
+                        </AccordionHeader>
+                    </Accordion>
                 </Flex>
             </Flex>
         </Card>
