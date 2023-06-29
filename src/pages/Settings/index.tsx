@@ -68,7 +68,7 @@ const Settings: React.FC<any> = () => {
         <LoggedInLayout currentPage="settings" addContainer={false}>
             <main className="xl:pl-24 h-full bg-gray-50 dark:bg-gray-900">
                 <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-                    <main className="lg:pl-72">
+                    <main className="pt-20 lg:pl-72">
                         {navigation
                             .filter(
                                 (item) =>

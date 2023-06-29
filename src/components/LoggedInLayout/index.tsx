@@ -16,6 +16,7 @@ import {
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link, useParams } from 'react-router-dom'
+import { Title } from '@tremor/react'
 import { ReactComponent as KaytuLogo } from '../../assets/icons/logo-dark-sqare-sm-glyph 2.svg'
 
 const navigation = [
@@ -215,7 +216,7 @@ export default function LoggedInLayout({
         <div className="h-screen">
             {showSidebar && sidebar}
             <div className={showSidebar ? 'lg:pl-72 h-full' : 'h-full'}>
-                <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+                <div className="fixed top-0 w-full z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
                     <button
                         type="button"
                         className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
@@ -231,10 +232,10 @@ export default function LoggedInLayout({
                     </button>
 
                     <div className="-m-2.5 p-2.5 text-gray-900">
-                        <p className="text-md">
+                        <Title>
                             &#128075; Welcome back,{' '}
                             {user?.name || user?.email || ''}
-                        </p>
+                        </Title>
                     </div>
                     {/* Separator */}
                     <div
@@ -361,8 +362,8 @@ export default function LoggedInLayout({
                 </div>
 
                 {addContainer ? (
-                    <main className="flex justify-center items-center xl:px-12 py-10 dark:bg-gray-900">
-                        <div className="max-w-6xl min-w-full">{children}</div>
+                    <main className="flex justify-center items-start xl:px-12 pt-20 pb-10 dark:bg-gray-900 h-full">
+                        <div className="max-w-6xl w-full">{children}</div>
                     </main>
                 ) : (
                     children
