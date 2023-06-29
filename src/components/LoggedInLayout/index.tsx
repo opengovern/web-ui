@@ -362,7 +362,7 @@ export default function LoggedInLayout({
                 </div>
 
                 {addContainer ? (
-                    <main className="flex justify-center items-start xl:px-12 pt-20 pb-10 dark:bg-gray-900 h-full">
+                    <main className="flex justify-center items-start px-12 pt-20 pb-10 dark:bg-gray-900 h-full">
                         <div className="max-w-6xl w-full">{children}</div>
                     </main>
                 ) : (

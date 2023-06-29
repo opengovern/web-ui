@@ -1,10 +1,24 @@
-import { Col, DateRangePicker, Flex, Grid, Title } from '@tremor/react'
+import {
+    Col,
+    DateRangePicker,
+    Flex,
+    Grid,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+    Title,
+} from '@tremor/react'
 import React, { useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import InsightCategories from './InsightCategories'
-import { useComplianceApiV1InsightList } from '../../api/compliance.gen'
+import {
+    useComplianceApiV1InsightGroupList,
+    useComplianceApiV1InsightList,
+} from '../../api/compliance.gen'
 import InsightCard from '../../components/Cards/InsightCard'
 import { timeAtom } from '../../store'
 
@@ -21,6 +35,8 @@ export default function Insights() {
         }),
     }
     const { response: insightList } = useComplianceApiV1InsightList(query)
+    const { response: insightGroup } = useComplianceApiV1InsightGroupList(query)
+    console.log(insightGroup)
 
     return (
         <LoggedInLayout currentPage="insight">
@@ -39,36 +55,66 @@ export default function Insights() {
                         selectPlaceholder="Selection"
                     />
                 </Flex>
-                <InsightCategories
-                    onChange={(category: string) =>
-                        setSelectedCategory(() => category)
-                    }
-                />
-                <Grid
-                    numItems={1}
-                    numItemsMd={2}
-                    numItemsLg={3}
-                    className="gap-3 w-100"
-                >
-                    {insightList
-                        ?.filter((insight) => {
-                            if (selectedCategory.length)
-                                return insight.tags?.category.includes(
-                                    selectedCategory
-                                )
-                            return insight
-                        })
-                        .map((insight) => (
-                            <Col numColSpan={1}>
-                                <InsightCard
-                                    metric={insight}
-                                    showTitle
-                                    showDetails
-                                    isClickable
-                                />
-                            </Col>
-                        ))}
-                </Grid>
+                <TabGroup>
+                    <TabList className="mb-6">
+                        <Tab>Insight list</Tab>
+                        <Tab>Insight groups</Tab>
+                    </TabList>
+                    <InsightCategories
+                        onChange={(category: string) =>
+                            setSelectedCategory(() => category)
+                        }
+                    />
+                    <TabPanels>
+                        <TabPanel>
+                            <Grid
+                                numItems={1}
+                                numItemsMd={2}
+                                numItemsLg={3}
+                                className="gap-3 w-100"
+                            >
+                                {insightList
+                                    ?.filter((insight) => {
+                                        if (selectedCategory.length)
+                                            return insight.tags?.category.includes(
+                                                selectedCategory
+                                            )
+                                        return insight
+                                    })
+                                    .map((insight) => (
+                                        <Col numColSpan={1}>
+                                            <InsightCard
+                                                metric={insight}
+                                                showTitle
+                                                showDetails
+                                                isClickable
+                                            />
+                                        </Col>
+                                    ))}
+                            </Grid>
+                        </TabPanel>
+                        <TabPanel>
+                            {insightGroup
+                                ?.filter((insight) => {
+                                    if (selectedCategory.length)
+                                        return insight.tags?.category.includes(
+                                            selectedCategory
+                                        )
+                                    return insight
+                                })
+                                .map((insight) => (
+                                    <Col numColSpan={1}>
+                                        <InsightCard
+                                            metric={insight}
+                                            showTitle
+                                            showDetails
+                                            isClickable
+                                        />
+                                    </Col>
+                                ))}
+                        </TabPanel>
+                    </TabPanels>
+                </TabGroup>
             </Flex>
         </LoggedInLayout>
     )
