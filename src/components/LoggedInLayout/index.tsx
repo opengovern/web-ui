@@ -394,13 +394,9 @@ export default function LoggedInLayout({
                     </Flex>
                 </div>
 
-                {addContainer ? (
-                    <main className="flex justify-center items-start px-12 pt-20 pb-10 dark:bg-gray-900 h-full overflow-y-scroll">
-                        <div className="max-w-6xl w-full">{children}</div>
-                    </main>
-                ) : (
-                    children
-                )}
+                <main className="flex justify-center items-start px-12 pt-20 pb-10 dark:bg-gray-900 h-full overflow-y-scroll">
+                    <div className="max-w-6xl h-full w-full">{children}</div>
+                </main>
             </div>
         </Flex>
     )
