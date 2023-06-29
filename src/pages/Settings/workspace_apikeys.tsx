@@ -22,6 +22,8 @@ import {
 import Spinner from '../../components/Spinner'
 import DrawerPanel from '../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey } from '../../api/api'
+import Modal from '../../components/Modal'
+import InformationModal from '../../components/Modal/InformationModal'
 
 interface CreateAPIKeyProps {
     close: () => void
@@ -69,92 +71,104 @@ const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
         }
     }, [role])
 
-    useEffect(() => {
-        if (!isLoading && isExecuted) {
-            close()
-        }
-    }, [isLoading])
-
     return (
-        <List className="mt-4 h-full">
-            <ListItem key="lb">
-                <Flex justifyContent="start" className="truncate space-x-4">
-                    <Subtitle className="text-gray-900 py-2">
-                        Properties
-                    </Subtitle>
-                </Flex>
-            </ListItem>
-            <ListItem key="lb">
-                <Flex justifyContent="between" className="truncate space-x-4">
-                    <Text className="w-1/3 text-base font-medium text-gray-800 py-2">
-                        API Key Name *
-                    </Text>
-                    <TextInput
-                        className="w-2/3"
-                        onChange={(p) => {
-                            setApiKeyName(p.target.value)
-                        }}
-                    />
-                </Flex>
-            </ListItem>
-            <ListItem key="lb">
-                <Flex
-                    justifyContent="between"
-                    alignItems="start"
-                    className="truncate space-x-4"
-                >
-                    <Text className="w-1/3 text-base font-medium text-gray-800 py-2">
-                        Role *
-                    </Text>
-
-                    <div className="w-2/3 space-y-5 sm:mt-0">
-                        {roleItems.map((item) => {
-                            return (
-                                <div className="relative flex items-start">
-                                    <div className="absolute flex h-6 items-center">
-                                        <input
-                                            name="roles"
-                                            type="radio"
-                                            className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                            onClick={() => {
-                                                setRole(item.value)
-                                            }}
-                                            checked={item.value === role}
-                                        />
-                                    </div>
-                                    <div className="pl-7 text-sm leading-6">
-                                        <div className="font-medium text-gray-900">
-                                            {item.title}
-                                        </div>
-                                        <p className="text-gray-500">
-                                            {item.description}
-                                        </p>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                </Flex>
-            </ListItem>
-
-            <Button
-                variant="secondary"
-                onClick={() => {
+        <>
+            <InformationModal
+                title={error === undefined ? 'Successful' : 'Failed'}
+                description={
+                    error === undefined
+                        ? `API Key Created, copy the key and keep it safe: ${response?.token}`
+                        : `Failed to create the API Key`
+                }
+                successful={error === undefined}
+                open={!isLoading && isExecuted}
+                onClose={() => {
                     close()
                 }}
-            >
-                Cancel
-            </Button>
-            <Button
-                disabled={apiKeyName.length === 0}
-                onClick={() => {
-                    callCreate()
-                }}
-                loading={isExecuted && isLoading}
-            >
-                Create API Key
-            </Button>
-        </List>
+            />
+            <List className="mt-4 h-full">
+                <ListItem key="lb">
+                    <Flex justifyContent="start" className="truncate space-x-4">
+                        <Subtitle className="text-gray-900 py-2">
+                            Properties
+                        </Subtitle>
+                    </Flex>
+                </ListItem>
+                <ListItem key="lb">
+                    <Flex
+                        justifyContent="between"
+                        className="truncate space-x-4"
+                    >
+                        <Text className="w-1/3 text-base font-medium text-gray-800 py-2">
+                            API Key Name *
+                        </Text>
+                        <TextInput
+                            className="w-2/3"
+                            onChange={(p) => {
+                                setApiKeyName(p.target.value)
+                            }}
+                        />
+                    </Flex>
+                </ListItem>
+                <ListItem key="lb">
+                    <Flex
+                        justifyContent="between"
+                        alignItems="start"
+                        className="truncate space-x-4"
+                    >
+                        <Text className="w-1/3 text-base font-medium text-gray-800 py-2">
+                            Role *
+                        </Text>
+
+                        <div className="w-2/3 space-y-5 sm:mt-0">
+                            {roleItems.map((item) => {
+                                return (
+                                    <div className="relative flex items-start">
+                                        <div className="absolute flex h-6 items-center">
+                                            <input
+                                                name="roles"
+                                                type="radio"
+                                                className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                                onClick={() => {
+                                                    setRole(item.value)
+                                                }}
+                                                checked={item.value === role}
+                                            />
+                                        </div>
+                                        <div className="pl-7 text-sm leading-6">
+                                            <div className="font-medium text-gray-900">
+                                                {item.title}
+                                            </div>
+                                            <p className="text-gray-500">
+                                                {item.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </Flex>
+                </ListItem>
+
+                <Button
+                    variant="secondary"
+                    onClick={() => {
+                        close()
+                    }}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    disabled={apiKeyName.length === 0}
+                    onClick={() => {
+                        callCreate()
+                    }}
+                    loading={isExecuted && isLoading}
+                >
+                    Create API Key
+                </Button>
+            </List>
+        </>
     )
 }
 
@@ -194,54 +208,64 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
     }, [deleteIsLoading])
 
     return (
-        <Flex
-            justifyContent="start"
-            flexDirection="row"
-            className="mb-4 py-2 border-b"
-        >
-            <Text className="text-sm mt-1 w-1/4">{item.name}</Text>
+        <>
+            <InformationModal
+                title="Delete Failed"
+                description="Failed to delete API Key"
+                successful={false}
+                open={error !== undefined}
+            />
             <Flex
-                alignItems="start"
                 justifyContent="start"
-                flexDirection="col"
-                className="w-1/4"
-            >
-                <Text className="text-sm font-medium">
-                    {fixRole(item.roleName || '')}
-                </Text>
-                <Text className="text-xs">{item.maskedKey}</Text>
-            </Flex>
-
-            {isLoading ? (
-                <Flex justifyContent="start" className="w-1/4">
-                    <Spinner />
-                </Flex>
-            ) : (
-                <Text className="text-base w-1/4">{response?.userName}</Text>
-            )}
-
-            <Flex
-                justifyContent="between"
                 flexDirection="row"
-                className="w-1/4"
+                className="mb-4 py-2 border-b"
             >
-                <Text className="text-base">
-                    {new Date(
-                        Date.parse(item.createdAt || Date.now().toString())
-                    ).toLocaleDateString('en-US')}
-                </Text>
-                {deleteIsLoading && deleteIsExecuted ? (
-                    <Spinner />
+                <Text className="text-sm mt-1 w-1/4">{item.name}</Text>
+                <Flex
+                    alignItems="start"
+                    justifyContent="start"
+                    flexDirection="col"
+                    className="w-1/4"
+                >
+                    <Text className="text-sm font-medium">
+                        {fixRole(item.roleName || '')}
+                    </Text>
+                    <Text className="text-xs">{item.maskedKey}</Text>
+                </Flex>
+
+                {isLoading ? (
+                    <Flex justifyContent="start" className="w-1/4">
+                        <Spinner />
+                    </Flex>
                 ) : (
-                    <TrashIcon
-                        className="w-4 h-4 cursor-pointer"
-                        onClick={() => {
-                            callDelete()
-                        }}
-                    />
+                    <Text className="text-base w-1/4">
+                        {response?.userName}
+                    </Text>
                 )}
+
+                <Flex
+                    justifyContent="between"
+                    flexDirection="row"
+                    className="w-1/4"
+                >
+                    <Text className="text-base">
+                        {new Date(
+                            Date.parse(item.createdAt || Date.now().toString())
+                        ).toLocaleDateString('en-US')}
+                    </Text>
+                    {deleteIsLoading && deleteIsExecuted ? (
+                        <Spinner />
+                    ) : (
+                        <TrashIcon
+                            className="w-4 h-4 cursor-pointer"
+                            onClick={() => {
+                                callDelete()
+                            }}
+                        />
+                    )}
+                </Flex>
             </Flex>
-        </Flex>
+        </>
     )
 }
 

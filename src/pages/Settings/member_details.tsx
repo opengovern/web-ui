@@ -21,11 +21,11 @@ import Spinner from '../../components/Spinner'
 import DrawerPanel from '../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../api/api'
 
-interface MemberDetailsProps {
+interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
     close: () => void
 }
-const MemberDetails: React.FC<MemberDetailsProps> = ({ user, close }) => {
+const MemberDetails: React.FC<IMemberDetails> = ({ user, close }) => {
     const [role, setRole] = useState<string>(user?.roleName || 'viewer')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
         'viewer'
