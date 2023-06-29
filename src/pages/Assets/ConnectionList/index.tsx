@@ -4,7 +4,6 @@ import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Bold, Button, Grid, Text, Flex } from '@tremor/react'
 import { ReactComponent as AzureIcon } from '../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
-import { ReactComponent as PlusIcon } from '../../../assets/icons/elements-icons-plus-2.svg'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import DrawerPanel from '../../../components/DrawerPanel'
@@ -84,6 +83,7 @@ const columns: ColDef[] = [
 ]
 
 const tags = [
+    { label: 'All', value: 'All' },
     { label: 'AWS', value: 'AWS' },
     { label: 'Azure', value: 'Azure' },
 ]
@@ -173,9 +173,9 @@ export default function ConnectionList({
                 return `${conns.length} connections selected`
             }
         } else {
-            return `all ${selectedProvider.value} connections selected`
+            return `All ${selectedProvider.value} connections selected`
         }
-        return 'all connections are selected'
+        return 'All connections are selected'
     }
 
     const gridOptions: GridOptions<IConnection> = {
@@ -232,7 +232,7 @@ export default function ConnectionList({
             <div>
                 <Flex>
                     <Flex justifyContent="start" className="mb-4">
-                        <Text className="mr-5">Quick Select:</Text>
+                        {/* <Text className="mr-5">Quick Select:</Text>
                         {tags.map((tag) => (
                             <Button
                                 onClick={() => {
@@ -279,11 +279,37 @@ export default function ConnectionList({
                                     </Text>
                                 </Flex>
                             </Button>
-                        )}
+                        )} */}
+                        {tags.map((tag) => (
+                            <Button
+                                size="xs"
+                                variant={
+                                    selectedProvider === tag
+                                        ? 'primary'
+                                        : 'secondary'
+                                }
+                                onClick={() => {
+                                    if (selectedProvider === tag)
+                                        setSelectedProvider({
+                                            label: 'All',
+                                            value: '',
+                                        })
+                                    // else if (tag.value === 'All')
+                                    //     setSelectedProvider({
+                                    //         label: 'All',
+                                    //         value: 'All',
+                                    //     })
+                                    else setSelectedProvider(tag)
+                                }}
+                                className="mr-2 w-14"
+                            >
+                                {tag.label}
+                            </Button>
+                        ))}
                     </Flex>
                 </Flex>
                 <div className="mb-2">
-                    <Bold>{selectionText(gridRef.current?.api)}</Bold>
+                    <Text>{selectionText(gridRef.current?.api)}</Text>
                 </div>
                 <div className="ag-theme-alpine h-[80vh]">
                     <AgGridReact
