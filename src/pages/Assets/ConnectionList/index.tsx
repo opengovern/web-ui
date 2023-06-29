@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-import { Bold, Button, Grid, Text, Flex } from '@tremor/react'
+import { Bold, Button, Flex, Text } from '@tremor/react'
 import { ReactComponent as AzureIcon } from '../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/elements-icons-plus-2.svg'
@@ -48,6 +48,7 @@ const columns: ColDef[] = [
                 </div>
             )
         },
+        // checkboxSelection: true,
     },
     {
         field: 'providerConnectionName',
@@ -288,6 +289,7 @@ export default function ConnectionList({
                 <div className="ag-theme-alpine h-[80vh]">
                     <AgGridReact
                         ref={gridRef}
+                        rowMultiSelectWithClick
                         // domLayout="autoHeight"
                         gridOptions={gridOptions}
                     />
