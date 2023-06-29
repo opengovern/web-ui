@@ -14,7 +14,7 @@ export default function Workspaces() {
             <main className="w-full">
                 <Flex justifyContent="center" flexDirection="row">
                     <div className="max-w-6xl">
-                        <Flex flexDirection="row" className="mb-12">
+                        <Flex flexDirection="row" className="mb-6">
                             <Title>Your Workspaces</Title>
                             <Button
                                 variant="secondary"
