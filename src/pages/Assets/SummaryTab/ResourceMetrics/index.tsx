@@ -15,6 +15,7 @@ import MetricCard from '../../../../components/Cards/MetricCard'
 import { selectedResourceCategoryAtom } from '../../../../store'
 import { useInventoryApiV2ResourcesMetricList } from '../../../../api/inventory.gen'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
+import Spinner from '../../../../components/Spinner'
 
 interface IProps {
     provider: any
@@ -51,7 +52,8 @@ export default function ResourceMetrics({
         ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
         ...(pageSize && { pageSize }),
     }
-    const { response: metrics } = useInventoryApiV2ResourcesMetricList(query)
+    const { response: metrics, isLoading } =
+        useInventoryApiV2ResourcesMetricList(query)
     const percentage = (a?: number, b?: number): number => {
         return a && b ? ((a - b) / b) * 100 : 0
     }
@@ -87,6 +89,11 @@ export default function ResourceMetrics({
                 </SearchSelect>
             </div>
             <Grid>
+                {isLoading && (
+                    <div className="flex items-center justify-center">
+                        <Spinner />
+                    </div>
+                )}
                 <Swiper
                     gridContainerProps={{
                         numItemsSm: 2,
@@ -94,31 +101,35 @@ export default function ResourceMetrics({
                         className: 'gap-6',
                     }}
                 >
-                    {metrics?.resource_types?.map((metric) => (
-                        <MetricCard
-                            title={
-                                metric.resource_name
-                                    ? metric.resource_name
-                                    : String(metric.resource_type)
-                            }
-                            metric={String(
-                                numericDisplay(metric.count ? metric.count : 0)
-                            )}
-                            metricPrev={String(
-                                numericDisplay(
-                                    metric.old_count ? metric.old_count : 0
-                                )
-                            )}
-                            delta={`${Math.abs(
-                                percentage(metric.count, metric.old_count)
-                            ).toFixed(2)} %`}
-                            deltaType={
-                                percentage(metric.count, metric.old_count) > 0
-                                    ? 'moderateIncrease'
-                                    : 'moderateDecrease'
-                            }
-                        />
-                    ))}
+                    {!isLoading &&
+                        metrics?.resource_types?.map((metric) => (
+                            <MetricCard
+                                title={
+                                    metric.resource_name
+                                        ? metric.resource_name
+                                        : String(metric.resource_type)
+                                }
+                                metric={String(
+                                    numericDisplay(
+                                        metric.count ? metric.count : 0
+                                    )
+                                )}
+                                metricPrev={String(
+                                    numericDisplay(
+                                        metric.old_count ? metric.old_count : 0
+                                    )
+                                )}
+                                delta={`${Math.abs(
+                                    percentage(metric.count, metric.old_count)
+                                ).toFixed(2)} %`}
+                                deltaType={
+                                    percentage(metric.count, metric.old_count) >
+                                    0
+                                        ? 'moderateIncrease'
+                                        : 'moderateDecrease'
+                                }
+                            />
+                        ))}
                 </Swiper>
             </Grid>
         </div>

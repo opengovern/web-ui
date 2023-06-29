@@ -12,12 +12,14 @@ import {
 } from '@tremor/react'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import { useOnboardApiV1CatalogMetricsList } from '../../../../../api/onboard.gen'
+import Spinner from '../../../../../components/Spinner'
 
 type IProps = {
     accounts: any
+    loading: boolean
 }
 
-export default function Summary({ accounts }: IProps) {
+export default function Summary({ accounts, loading }: IProps) {
     const [topAccounts, setTopAccounts] = useState<any>([])
     useEffect(() => {
         setTopAccounts(accounts || [])
@@ -40,24 +42,53 @@ export default function Summary({ accounts }: IProps) {
                     </Metric>
                 </Card>
             </div>
-            <Card className="h-full">
+            <Card className="h-full overflow-y-scroll">
                 <Title>Top Accounts</Title>
                 <Grid numItemsMd={1} className="gap-x-10 mt-5">
-                    <div>
-                        <Title>Resource Count</Title>
-                        <List className="mt-2">
-                            {topAccounts.map((item: any) => (
-                                <ListItem key={item.providerConnectionName}>
-                                    <Text>{item.providerConnectionName}</Text>
-                                    <Text>
-                                        <Bold>
-                                            {numericDisplay(item.resourceCount)}
-                                        </Bold>{' '}
-                                    </Text>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </div>
+                    {loading && (
+                        <div className="flex justify-center items-center h-[10vh]">
+                            <Spinner />
+                        </div>
+                    )}
+                    {!loading && (
+                        <div>
+                            <Title>Resource Count</Title>
+                            <List className="mt-2">
+                                {topAccounts.map(
+                                    (item: {
+                                        providerConnectionName:
+                                            | boolean
+                                            | React.Key
+                                            | React.ReactElement<
+                                                  any,
+                                                  | string
+                                                  | React.JSXElementConstructor<any>
+                                              >
+                                            | Iterable<React.ReactNode>
+                                            | null
+                                            | undefined
+                                        resourceCount:
+                                            | string
+                                            | number
+                                            | undefined
+                                    }) => (
+                                        <ListItem>
+                                            <Text>
+                                                {item.providerConnectionName}
+                                            </Text>
+                                            <Text>
+                                                <Bold>
+                                                    {numericDisplay(
+                                                        item.resourceCount
+                                                    )}
+                                                </Bold>{' '}
+                                            </Text>
+                                        </ListItem>
+                                    )
+                                )}
+                            </List>
+                        </div>
+                    )}
                 </Grid>
             </Card>
         </Flex>
