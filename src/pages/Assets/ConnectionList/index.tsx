@@ -100,6 +100,8 @@ export default function ConnectionList({
 }: IConnectorList) {
     const gridRef = useRef<AgGridReact<IConnection>>(null)
 
+    const [isConnectionSelected, setIsConnectionSelected] = useState(false)
+
     const [selectedProvider, setSelectedProvider] = useState({
         label: 'All',
         value: '',
@@ -108,6 +110,7 @@ export default function ConnectionList({
         if (newValue.length) {
             if (newValue === 'All') {
                 api?.deselectAll()
+                setIsConnectionSelected(false)
                 setSelectedProvider({ label: 'All', value: '' })
                 return
             }
@@ -199,7 +202,7 @@ export default function ConnectionList({
                     selected.at(i)?.setSelected(false, false)
                 }
             }
-
+            setIsConnectionSelected(selected.length > 0)
             setSelectedProvider({ label: 'All', value: '' })
         },
         getRowHeight: (params) => 50,
@@ -207,6 +210,7 @@ export default function ConnectionList({
 
     useEffect(() => {
         updateSelectionByProvider(gridRef.current?.api, selectedProvider.value)
+        console.log('isConnectionSelected', isConnectionSelected)
     }, [selectedProvider])
 
     const handleClose = () => {
@@ -232,59 +236,12 @@ export default function ConnectionList({
             <div>
                 <Flex>
                     <Flex justifyContent="start" className="mb-4">
-                        {/* <Text className="mr-5">Quick Select:</Text>
-                        {tags.map((tag) => (
-                            <Button
-                                onClick={() => {
-                                    setSelectedProvider(tag)
-                                }}
-                                size="xs"
-                                className="mr-1"
-                                variant={
-                                    selectedProvider.value === tag.value
-                                        ? 'primary'
-                                        : 'secondary'
-                                }
-                            >
-                                <Flex>
-                                    <div className="mr-1">
-                                        {tag.label === 'AWS' ? (
-                                            <AWSIcon className="w-4 h-4" />
-                                        ) : (
-                                            <AzureIcon className="w-4 h-4" />
-                                        )}
-                                    </div>
-                                    <Text className="text-xs">{tag.label}</Text>
-                                </Flex>
-                            </Button>
-                        ))}
-                        {!!selectedProvider.value && (
-                            <Button
-                                onClick={() => {
-                                    setSelectedProvider({
-                                        label: 'All',
-                                        value: 'All',
-                                    })
-                                }}
-                                size="xs"
-                                className="mr-1"
-                                variant="secondary"
-                            >
-                                <Flex>
-                                    <div className="mr-1">
-                                        <PlusIcon className="w-4 h-4" />
-                                    </div>
-                                    <Text className="text-xs">
-                                        Clear Selected
-                                    </Text>
-                                </Flex>
-                            </Button>
-                        )} */}
                         {tags.map((tag) => (
                             <Button
                                 size="xs"
                                 variant={
-                                    selectedProvider === tag
+                                    selectedProvider.label === tag.label &&
+                                    !isConnectionSelected
                                         ? 'primary'
                                         : 'secondary'
                                 }
@@ -294,11 +251,6 @@ export default function ConnectionList({
                                             label: 'All',
                                             value: '',
                                         })
-                                    // else if (tag.value === 'All')
-                                    //     setSelectedProvider({
-                                    //         label: 'All',
-                                    //         value: 'All',
-                                    //     })
                                     else setSelectedProvider(tag)
                                 }}
                                 className="mr-2 w-14"

@@ -159,28 +159,26 @@ export default function Composition({
             <Text className="mt-8">Total count</Text>
             <Metric>{numericDisplay(composition?.total_count)}</Metric>
             <Divider />
-            <Text className="mt-8">
-                <Bold>Resource Allocation</Bold>
-            </Text>
-            <Text>{composition?.total_value_count} Asset</Text>
-            <div className="">
-                <div className="mt-6">
-                    <DonutChart
-                        data={compositionData(composition, selectedIndex)}
-                        showAnimation={false}
-                        category="value"
-                        index="name"
-                        // valueFormatter={valueFormatter}
-                    />
-                </div>
+            <div className="flex flex-row justify-between items-center">
                 <div>
-                    {/* <Flex className="mt-8" justifyContent="between"> */}
-                    {/*    <Text className="truncate"> */}
-                    {/*        <Bold>Stocks</Bold> */}
-                    {/*    </Text> */}
-                    {/*    <Text>Since transaction</Text> */}
-                    {/* </Flex> */}
-                    <List className="mt-4">
+                    <Text className="mt-8">
+                        <Bold>Resource Allocation</Bold>
+                    </Text>
+                    <Text>{composition?.total_value_count} Asset</Text>
+                    <div className="mt-6">
+                        <DonutChart
+                            data={compositionData(composition, selectedIndex)}
+                            showAnimation={false}
+                            category="value"
+                            index="name"
+                            className="w-64 h-64"
+                            // valueFormatter={valueFormatter}
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <List className="mt-4 w-[30vw]">
                         {selectedIndex === 0
                             ? nowDataList.map((item) => (
                                   <ListItem key={item.name}>

@@ -18,18 +18,20 @@ export default function SummaryMetrics({
     timeRange,
     setActiveSubPage,
 }: IProps) {
-    const { response: accounts } = useOnboardApiV1ConnectionsSummaryList({
-        connector: provider,
-        connectionId: connections,
-        startTime: dayjs(timeRange.from).unix(),
-        endTime: dayjs(timeRange.to).unix(),
-        pageSize: 10000,
-        pageNumber: 1,
-    })
-    const { response: services } = useInventoryApiV2ServicesSummaryList({
-        connector: provider,
-        connectionId: connections,
-    })
+    const { response: accounts, isLoading: accountIsLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            connector: provider,
+            connectionId: connections,
+            startTime: dayjs(timeRange.from).unix(),
+            endTime: dayjs(timeRange.to).unix(),
+            pageSize: 10000,
+            pageNumber: 1,
+        })
+    const { response: services, isLoading: servicesIsLoading } =
+        useInventoryApiV2ServicesSummaryList({
+            connector: provider,
+            connectionId: connections,
+        })
     // const { data: services, isLoading: serviceLodaing } = useTopServices(
     //     provider,
     //     connections
@@ -50,6 +52,7 @@ export default function SummaryMetrics({
                     // areaChartData={[{}]}
                     viewMore
                     onClick={() => setActiveSubPage('Accounts')}
+                    loading={accountIsLoading}
                 />
             </span>
             <span>
@@ -64,6 +67,7 @@ export default function SummaryMetrics({
                     // areaChartData={[{}]}
                     viewMore
                     onClick={() => setActiveSubPage('Services')}
+                    loading={servicesIsLoading}
                 />
             </span>
             <span>
@@ -80,6 +84,7 @@ export default function SummaryMetrics({
                     // areaChartData={[{}]}
                     viewMore
                     // onClick={() => setActiveSubPage('Resources')}
+                    loading={accountIsLoading}
                 />
             </span>
         </Grid>
