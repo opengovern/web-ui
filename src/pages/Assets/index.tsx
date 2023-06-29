@@ -11,6 +11,8 @@ import {
     TabPanels,
     Title,
     Bold,
+    Metric,
+    Text,
 } from '@tremor/react'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
@@ -39,7 +41,8 @@ const Assets: React.FC<any> = () => {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: connections } = useOnboardApiV1SourcesList()
+    const { response: connections, isLoading: connectionLoading } =
+        useOnboardApiV1SourcesList()
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
 
@@ -108,6 +111,16 @@ const Assets: React.FC<any> = () => {
         )
     }
 
+    const filterText = () => {
+        if (selectedConnections.connections.length > 0) {
+            return <Text>{selectedConnections.connections.length} Filters</Text>
+        }
+        if (selectedConnections.provider !== '') {
+            return <Text>{selectedConnections.provider}</Text>
+        }
+        return 'Filters'
+    }
+
     const breadcrubmsPages = [
         {
             name: 'Assets',
@@ -127,7 +140,7 @@ const Assets: React.FC<any> = () => {
                 alignItems="center"
             >
                 {activeSubPage === 'All' ? (
-                    <Title>Assets</Title>
+                    <Metric>Assets</Metric>
                 ) : (
                     <Breadcrumbs pages={breadcrubmsPages} />
                 )}
@@ -151,12 +164,7 @@ const Assets: React.FC<any> = () => {
                                 : FunnelIconOutline
                         }
                     >
-                        {selectedConnections.connections.length > 0 ||
-                        selectedConnections.provider !== '' ? (
-                            <Bold>Filters</Bold>
-                        ) : (
-                            'Filters'
-                        )}
+                        {filterText()}
                     </Button>
                     <ConnectionList
                         connections={connections || []}
@@ -166,28 +174,30 @@ const Assets: React.FC<any> = () => {
                     />
                 </div>
             </Flex>
-            {activeSubPage === 'All' && renderSubPageAll()}
-            {activeSubPage === 'Resource Metrics' && (
-                <ResourceMetricsDetails
-                    provider={selectedConnections.provider}
-                    connection={selectedConnections.connections}
-                    categories={categoryOptions}
-                    timeRange={activeTimeRange}
-                    pageSize={1000}
-                />
-            )}
-            {activeSubPage === 'Accounts' && (
-                <AccountsDetails
-                    selectedConnections={selectedConnections}
-                    timeRange={activeTimeRange}
-                />
-            )}
-            {activeSubPage === 'Services' && (
-                <ServicesDetails
-                    selectedConnections={selectedConnections}
-                    timeRange={activeTimeRange}
-                />
-            )}
+            <div className="mb-20">
+                {activeSubPage === 'All' && renderSubPageAll()}
+                {activeSubPage === 'Resource Metrics' && (
+                    <ResourceMetricsDetails
+                        provider={selectedConnections.provider}
+                        connection={selectedConnections.connections}
+                        categories={categoryOptions}
+                        timeRange={activeTimeRange}
+                        pageSize={1000}
+                    />
+                )}
+                {activeSubPage === 'Accounts' && (
+                    <AccountsDetails
+                        selectedConnections={selectedConnections}
+                        timeRange={activeTimeRange}
+                    />
+                )}
+                {activeSubPage === 'Services' && (
+                    <ServicesDetails
+                        selectedConnections={selectedConnections}
+                        timeRange={activeTimeRange}
+                    />
+                )}
+            </div>
         </LoggedInLayout>
     )
 }

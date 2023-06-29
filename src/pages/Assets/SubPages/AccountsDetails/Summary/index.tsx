@@ -40,7 +40,7 @@ export default function Summary({ accounts }: IProps) {
                     </Metric>
                 </Card>
             </div>
-            <Card>
+            <Card className="h-full">
                 <Title>Top Accounts</Title>
                 <Grid numItemsMd={1} className="gap-x-10 mt-5">
                     <div>
