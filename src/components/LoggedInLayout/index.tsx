@@ -3,6 +3,9 @@ import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
     ArrowTrendingUpIcon,
     Bars3Icon,
+    ChevronDoubleLeftIcon,
+    ChevronDoubleRightIcon,
+    ChevronDownIcon,
     Cog6ToothIcon,
     CommandLineIcon,
     CubeIcon,
@@ -13,7 +16,6 @@ import {
     ShieldCheckIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link, useParams } from 'react-router-dom'
 import { Flex, Title } from '@tremor/react'
@@ -74,6 +76,7 @@ export default function LoggedInLayout({
     const workspace = useParams<{ ws: string }>().ws
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const { user, logout } = useAuth0()
+    const [collapsed, setCollapsed] = useState(true)
 
     const sidebar = (
         <>
@@ -174,13 +177,20 @@ export default function LoggedInLayout({
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div className="hidden h-full min-w-80 w-80 lg:flex lg:flex-col">
+            <div
+                className="hidden h-full ease-in-out min-w-80 w-80 lg:flex lg:flex-col"
+                style={
+                    collapsed
+                        ? { width: 'fit-content' }
+                        : { transition: 'all 2s ease' }
+                }
+            >
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
                         <KaytuLogo />
                     </div>
-                    <nav className="flex flex-1 flex-col">
+                    <nav className="flex flex-1 flex-col justify-between">
                         <ul className="flex flex-1 flex-col gap-y-7">
                             <li>
                                 <ul className="-mx-2 space-y-1">
@@ -188,24 +198,44 @@ export default function LoggedInLayout({
                                         <li key={item.name}>
                                             <Link
                                                 to={`/${workspace}/${item.page}`}
-                                                className={classNames(
-                                                    item.page === currentPage
-                                                        ? 'bg-blue-900/50 text-gray-200'
-                                                        : 'text-gray-300 hover:bg-blue-900/50',
-                                                    'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                                )}
+                                                className={`
+                                                    ${
+                                                        item.page ===
+                                                        currentPage
+                                                            ? 'bg-blue-900/50 text-gray-200'
+                                                            : 'text-gray-300 hover:bg-blue-900/50'
+                                                    }
+                                                    ${
+                                                        collapsed
+                                                            ? 'justify-center items-center'
+                                                            : ''
+                                                    }
+                                                        gap-x-3 p-2 group flex rounded-md text-sm leading-6 font-semibold
+                                                    
+                                                `}
                                             >
                                                 <item.icon
                                                     className="h-6 w-6 shrink-0"
                                                     aria-hidden="true"
                                                 />
-                                                {item.name}
+                                                {!collapsed && item.name}
                                             </Link>
                                         </li>
                                     ))}
                                 </ul>
                             </li>
                         </ul>
+                        {collapsed ? (
+                            <ChevronDoubleRightIcon
+                                onClick={() => setCollapsed(false)}
+                                className="p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-blue-900/50 h-10 w-10 shrink-0"
+                            />
+                        ) : (
+                            <ChevronDoubleLeftIcon
+                                onClick={() => setCollapsed(true)}
+                                className="self-end p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-blue-900/50 h-10 w-10 shrink-0"
+                            />
+                        )}
                     </nav>
                 </div>
             </div>
