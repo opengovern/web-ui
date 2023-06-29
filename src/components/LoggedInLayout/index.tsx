@@ -16,7 +16,7 @@ import {
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link, useParams } from 'react-router-dom'
-import { Title } from '@tremor/react'
+import { Flex, Title } from '@tremor/react'
 import { ReactComponent as KaytuLogo } from '../../assets/icons/logo-dark-sqare-sm-glyph 2.svg'
 
 const navigation = [
@@ -174,7 +174,7 @@ export default function LoggedInLayout({
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+            <div className="hidden h-full min-w-80 w-80 lg:flex lg:flex-col">
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4">
                     <div className="flex h-16 shrink-0 items-center">
@@ -213,10 +213,10 @@ export default function LoggedInLayout({
     )
 
     return (
-        <div className="h-screen">
+        <Flex flexDirection="row" className="h-screen">
             {showSidebar && sidebar}
-            <div className={showSidebar ? 'lg:pl-72 h-full' : 'h-full'}>
-                <div className="fixed top-0 w-full z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+            <div className="w-full h-full relative">
+                <div className="px-12 absolute top-0 w-full z-40 flex h-16 shrink-0 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
                     <button
                         type="button"
                         className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
@@ -230,100 +230,121 @@ export default function LoggedInLayout({
                             aria-hidden="true"
                         />
                     </button>
+                    <Flex className="max-w-6xl">
+                        <div className="-m-2.5 p-2.5 text-gray-900">
+                            <Title>
+                                &#128075; Welcome back,{' '}
+                                {user?.name || user?.email || ''}
+                            </Title>
+                        </div>
+                        {/* Separator */}
+                        <div
+                            className="h-6 w-px bg-gray-900/10 dark:bg-white/20 lg:hidden"
+                            aria-hidden="true"
+                        />
 
-                    <div className="-m-2.5 p-2.5 text-gray-900">
-                        <Title>
-                            &#128075; Welcome back,{' '}
-                            {user?.name || user?.email || ''}
-                        </Title>
-                    </div>
-                    {/* Separator */}
-                    <div
-                        className="h-6 w-px bg-gray-900/10 dark:bg-white/20 lg:hidden"
-                        aria-hidden="true"
-                    />
-
-                    <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
-                        <div className="flex items-center gap-x-4 lg:gap-x-6">
-                            <button
-                                type="button"
-                                className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-                            >
-                                <span className="sr-only">Theme</span>
-                                <MoonIcon
-                                    className="h-6 w-6"
-                                    aria-hidden="true"
-                                />
-                            </button>
-                            <button
-                                type="button"
-                                className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-                            >
-                                <span className="sr-only">CLI</span>
-                                <CommandLineIcon
-                                    className="h-6 w-6"
-                                    aria-hidden="true"
-                                />
-                            </button>
-                            <button
-                                type="button"
-                                className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-                            >
-                                <span className="sr-only">Help</span>
-                                <QuestionMarkCircleIcon
-                                    className="h-6 w-6"
-                                    aria-hidden="true"
-                                />
-                            </button>
-
-                            {/* Separator */}
-                            <div
-                                className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-white/20"
-                                aria-hidden="true"
-                            />
-
-                            {/* Profile dropdown */}
-                            <Menu as="div" className="relative">
-                                <Menu.Button className="-m-1.5 flex items-center p-1.5">
-                                    <span className="sr-only">
-                                        Open user menu
-                                    </span>
-                                    {user?.picture && (
-                                        <img
-                                            className="h-8 w-8 rounded-full bg-gray-50"
-                                            src={user.picture}
-                                            alt=""
-                                        />
-                                    )}
-
-                                    <span className="hidden lg:flex lg:items-center">
-                                        <span
-                                            className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
-                                            aria-hidden="true"
-                                        >
-                                            {user?.name || user?.email || ''}
-                                        </span>
-                                        <ChevronDownIcon
-                                            className="ml-2 h-5 w-5 text-gray-400"
-                                            aria-hidden="true"
-                                        />
-                                    </span>
-                                </Menu.Button>
-                                <Transition
-                                    as={Fragment}
-                                    enter="transition ease-out duration-100"
-                                    enterFrom="transform opacity-0 scale-95"
-                                    enterTo="transform opacity-100 scale-100"
-                                    leave="transition ease-in duration-75"
-                                    leaveFrom="transform opacity-100 scale-100"
-                                    leaveTo="transform opacity-0 scale-95"
+                        <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
+                            <div className="flex items-center gap-x-4 lg:gap-x-6">
+                                <button
+                                    type="button"
+                                    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
                                 >
-                                    <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white dark:bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                                        {showSidebar && (
-                                            <Menu.Item key="Your profile">
+                                    <span className="sr-only">Theme</span>
+                                    <MoonIcon
+                                        className="h-6 w-6"
+                                        aria-hidden="true"
+                                    />
+                                </button>
+                                <button
+                                    type="button"
+                                    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                                >
+                                    <span className="sr-only">CLI</span>
+                                    <CommandLineIcon
+                                        className="h-6 w-6"
+                                        aria-hidden="true"
+                                    />
+                                </button>
+                                <button
+                                    type="button"
+                                    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                                >
+                                    <span className="sr-only">Help</span>
+                                    <QuestionMarkCircleIcon
+                                        className="h-6 w-6"
+                                        aria-hidden="true"
+                                    />
+                                </button>
+
+                                {/* Separator */}
+                                <div
+                                    className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-white/20"
+                                    aria-hidden="true"
+                                />
+
+                                {/* Profile dropdown */}
+                                <Menu as="div" className="relative">
+                                    <Menu.Button className="-m-1.5 flex items-center p-1.5">
+                                        <span className="sr-only">
+                                            Open user menu
+                                        </span>
+                                        {user?.picture && (
+                                            <img
+                                                className="h-8 w-8 min-w-8 rounded-full bg-gray-50"
+                                                src={user.picture}
+                                                alt=""
+                                            />
+                                        )}
+
+                                        <span className="hidden lg:flex lg:items-center">
+                                            <span
+                                                className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
+                                                aria-hidden="true"
+                                            >
+                                                {user?.name ||
+                                                    user?.email ||
+                                                    ''}
+                                            </span>
+                                            <ChevronDownIcon
+                                                className="ml-2 h-5 w-5 text-gray-400"
+                                                aria-hidden="true"
+                                            />
+                                        </span>
+                                    </Menu.Button>
+                                    <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-100"
+                                        enterFrom="transform opacity-0 scale-95"
+                                        enterTo="transform opacity-100 scale-100"
+                                        leave="transition ease-in duration-75"
+                                        leaveFrom="transform opacity-100 scale-100"
+                                        leaveTo="transform opacity-0 scale-95"
+                                    >
+                                        <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white dark:bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                                            {showSidebar && (
+                                                <Menu.Item key="Your profile">
+                                                    {({ active }) => (
+                                                        <Link
+                                                            to={`/${workspace}/settings/profile`}
+                                                            className={classNames(
+                                                                active
+                                                                    ? 'bg-gray-50'
+                                                                    : '',
+                                                                'block px-3 py-1 text-sm leading-6 text-gray-900'
+                                                            )}
+                                                        >
+                                                            Your profile
+                                                        </Link>
+                                                    )}
+                                                </Menu.Item>
+                                            )}
+                                            <Menu.Item key="Sign out">
                                                 {({ active }) => (
-                                                    <Link
-                                                        to={`/${workspace}/settings/profile`}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            logout()
+                                                        }}
                                                         className={classNames(
                                                             active
                                                                 ? 'bg-gray-50'
@@ -331,44 +352,26 @@ export default function LoggedInLayout({
                                                             'block px-3 py-1 text-sm leading-6 text-gray-900'
                                                         )}
                                                     >
-                                                        Your profile
-                                                    </Link>
+                                                        Sign out
+                                                    </button>
                                                 )}
                                             </Menu.Item>
-                                        )}
-                                        <Menu.Item key="Sign out">
-                                            {({ active }) => (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        logout()
-                                                    }}
-                                                    className={classNames(
-                                                        active
-                                                            ? 'bg-gray-50'
-                                                            : '',
-                                                        'block px-3 py-1 text-sm leading-6 text-gray-900'
-                                                    )}
-                                                >
-                                                    Sign out
-                                                </button>
-                                            )}
-                                        </Menu.Item>
-                                    </Menu.Items>
-                                </Transition>
-                            </Menu>
+                                        </Menu.Items>
+                                    </Transition>
+                                </Menu>
+                            </div>
                         </div>
-                    </div>
+                    </Flex>
                 </div>
 
                 {addContainer ? (
-                    <main className="flex justify-center items-start px-12 pt-20 pb-10 dark:bg-gray-900 h-full">
+                    <main className="flex justify-center items-start px-12 pt-20 pb-10 dark:bg-gray-900 h-full overflow-y-scroll">
                         <div className="max-w-6xl w-full">{children}</div>
                     </main>
                 ) : (
                     children
                 )}
             </div>
-        </div>
+        </Flex>
     )
 }
