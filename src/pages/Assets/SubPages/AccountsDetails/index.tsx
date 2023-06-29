@@ -23,7 +23,7 @@ interface IAccount {
     providerConnectionName: string
     providerConnectionID: string
     id: string
-    healthState: string
+    lifecycleState: string
     cost: string
     resourceCount: string
     onboardDate: string
@@ -75,8 +75,8 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'healthState',
-        headerName: 'Health',
+        field: 'lifecycleState',
+        headerName: 'State',
         sortable: true,
         filter: true,
         resizable: true,
@@ -131,15 +131,16 @@ export default function ServicesDetails({
             pageSize: 10000,
             pageNumber: 1,
         })
-    const { response: TopAccounts } = useOnboardApiV1ConnectionsSummaryList({
-        connector: selectedConnections?.provider,
-        connectionId: selectedConnections?.connections,
-        startTime: timeRange[0],
-        endTime: timeRange[1],
-        pageSize: 5,
-        pageNumber: 1,
-        sortBy: 'resource_count',
-    })
+    const { response: TopAccounts, isLoading: isLoadingTopAccount } =
+        useOnboardApiV1ConnectionsSummaryList({
+            connector: selectedConnections?.provider,
+            connectionId: selectedConnections?.connections,
+            startTime: timeRange[0],
+            endTime: timeRange[1],
+            pageSize: 5,
+            pageNumber: 1,
+            sortBy: 'resource_count',
+        })
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -160,7 +161,7 @@ export default function ServicesDetails({
             providerConnectionName: data.providerConnectionName || '',
             providerConnectionID: data.providerConnectionID || '',
             id: data.id || '',
-            healthState: data.healthState || '',
+            lifecycleState: data.lifecycleState || '',
             cost: priceDisplay(data.cost) || '',
             resourceCount: numberGroupedDisplay(data.resourceCount) || '',
             onboardDate: data.onboardDate || '',
@@ -184,7 +185,10 @@ export default function ServicesDetails({
     return (
         <main>
             <div className="mt-5">
-                <Summary accounts={TopAccounts?.connections} />
+                <Summary
+                    accounts={TopAccounts?.connections}
+                    loading={isLoadingTopAccount}
+                />
                 <div className="ag-theme-alpine mt-10">
                     <AgGridReact
                         ref={gridRef}
