@@ -8,7 +8,7 @@ import {
     TextInput,
     Title,
 } from '@tremor/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { useWorkspaceApiV1WorkspaceCreate } from '../../../api/workspace.gen'
 
@@ -17,12 +17,21 @@ interface ICreateWorkspace {
     onClose: any
 }
 
+const inputRegex = /^[a-zA-Z0-9-]+$/
 export default function CreateWorkspace({ open, onClose }: ICreateWorkspace) {
     const [name, setName] = useState('')
     const [tier, setTier] = useState('')
 
     const { isLoading, sendNow, isExecuted, error } =
         useWorkspaceApiV1WorkspaceCreate({ name, tier }, {}, false)
+
+    const inputValid = name.length === 0 || inputRegex.test(name)
+
+    useEffect(() => {
+        if (!isLoading && isExecuted) {
+            onClose()
+        }
+    }, [isLoading])
 
     return (
         <DrawerPanel open={open} onClose={onClose} title="Create Workspace">
@@ -39,14 +48,27 @@ export default function CreateWorkspace({ open, onClose }: ICreateWorkspace) {
                     </Text>
                     <Title>Required Info</Title>
                     <Divider />
-                    <Flex flexDirection="row">
-                        <Text>Name *</Text>
-                        <TextInput
-                            value={name}
-                            error={error}
-                            onChange={(e) => setName(e.target.value)}
+                    <Flex flexDirection="row" justifyContent="between">
+                        <Text className="w-2/5">Name *</Text>
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            justifyContent="start"
                             className="w-3/5"
-                        />
+                        >
+                            <TextInput
+                                value={name}
+                                error={!inputValid}
+                                errorMessage={
+                                    inputValid
+                                        ? ''
+                                        : 'only characters, numbers and - is allowed'
+                                }
+                                pattern="[a-zA-Z0-9]"
+                                onChange={(e) => setName(e.target.value)}
+                                className="w-full"
+                            />
+                        </Flex>
                     </Flex>
                     <Divider />
                     <Flex flexDirection="row">
@@ -56,9 +78,11 @@ export default function CreateWorkspace({ open, onClose }: ICreateWorkspace) {
                             className="w-3/5"
                             onChange={(e) => setTier(String(e))}
                         >
-                            <SelectItem value="1">1</SelectItem>
-                            <SelectItem value="2">2</SelectItem>
-                            <SelectItem value="3">3</SelectItem>
+                            <SelectItem value="FREE">FREE</SelectItem>
+                            <SelectItem value="TEAMS">TEAMS</SelectItem>
+                            <SelectItem value="ENTERPRISE">
+                                ENTERPRISE
+                            </SelectItem>
                         </Select>
                     </Flex>
                 </Flex>
@@ -68,7 +92,9 @@ export default function CreateWorkspace({ open, onClose }: ICreateWorkspace) {
                     </Button>
                     <Button
                         className="ml-3"
-                        disabled={name.length < 1 && tier.length < 1}
+                        disabled={
+                            !inputValid || name.length < 1 || tier.length < 1
+                        }
                         loading={isLoading && isExecuted}
                         onClick={() => sendNow()}
                     >

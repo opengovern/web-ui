@@ -18,6 +18,9 @@ export default function ConfirmModal({
     description,
 }: IConfirmModal) {
     const [loading, setLoading] = useState<boolean>(false)
+    if (!open && loading) {
+        setLoading(false)
+    }
     return (
         <Modal
             open={open}
@@ -64,6 +67,9 @@ export default function ConfirmModal({
                     onClick={() => {
                         setLoading(true)
                         onConfirm()
+                        if (onClose) {
+                            onClose()
+                        }
                     }}
                 >
                     Yes
