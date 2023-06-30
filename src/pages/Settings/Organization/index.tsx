@@ -70,11 +70,7 @@ const SettingsOrganization: React.FC<any> = () => {
         },
         {
             key: 'Country',
-            value: (
-                <>
-                    <p>{response?.organization?.country}</p>
-                </>
-            ),
+            value: <p>{response?.organization?.country}</p>,
         },
         {
             key: 'Contact Details',
