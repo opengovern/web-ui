@@ -72,7 +72,7 @@ const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
     }, [role])
 
     return (
-        <>
+        <Flex flexDirection="col" justifyContent="between" className="h-full">
             <InformationModal
                 title={error === undefined ? 'Successful' : 'Failed'}
                 description={
@@ -149,7 +149,8 @@ const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
                         </div>
                     </Flex>
                 </ListItem>
-
+            </List>
+            <Flex justifyContent="end" className="truncate space-x-4">
                 <Button
                     variant="secondary"
                     onClick={() => {
@@ -167,8 +168,8 @@ const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
                 >
                     Create API Key
                 </Button>
-            </List>
-        </>
+            </Flex>
+        </Flex>
     )
 }
 
