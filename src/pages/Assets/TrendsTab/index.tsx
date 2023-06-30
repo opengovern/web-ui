@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Grid } from '@tremor/react'
+import { Card, Flex, Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import GrowthTrend from './GrowthTrend'
 import CardWithList from '../../../components/Blocks/CardWithList'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import { useInventoryApiV2ServicesMetricList } from '../../../api/inventory.gen'
+import Spinner from '../../../components/Spinner'
 
 type IProps = {
     categories: any
@@ -20,7 +21,19 @@ export default function TrendsTab({
 }: IProps) {
     const [consumptionData, setConsumptionData] = useState({})
     const [growthData, setGrowthData] = useState({})
-    const { response: accountsConsumption } =
+    const {
+        response: accountsConsumption,
+        isLoading: loadingAccountsConsumption,
+    } = useOnboardApiV1ConnectionsSummaryList({
+        connector: provider,
+        connectionId: connections,
+        startTime: dayjs(timeRange.from).unix(),
+        endTime: dayjs(timeRange.to).unix(),
+        pageSize: 5,
+        pageNumber: 1,
+        sortBy: 'resource_count',
+    })
+    const { response: accountsGrowth, isLoading: loadingAccountsGrowth } =
         useOnboardApiV1ConnectionsSummaryList({
             connector: provider,
             connectionId: connections,
@@ -28,18 +41,21 @@ export default function TrendsTab({
             endTime: dayjs(timeRange.to).unix(),
             pageSize: 5,
             pageNumber: 1,
-            sortBy: 'resource_count',
+            sortBy: 'growth_rate',
         })
-    const { response: accountsGrowth } = useOnboardApiV1ConnectionsSummaryList({
+    const {
+        response: servicesConsumption,
+        isLoading: loadingServicesConsumption,
+    } = useInventoryApiV2ServicesMetricList({
         connector: provider,
         connectionId: connections,
-        startTime: dayjs(timeRange.from).unix(),
-        endTime: dayjs(timeRange.to).unix(),
+        startTime: String(dayjs(timeRange.from).unix()),
+        endTime: String(dayjs(timeRange.to).unix()),
         pageSize: 5,
         pageNumber: 1,
-        sortBy: 'growth_rate',
+        sortBy: 'count',
     })
-    const { response: servicesConsumption } =
+    const { response: servicesGrowth, isLoading: loadingServicesGrowth } =
         useInventoryApiV2ServicesMetricList({
             connector: provider,
             connectionId: connections,
@@ -47,17 +63,8 @@ export default function TrendsTab({
             endTime: String(dayjs(timeRange.to).unix()),
             pageSize: 5,
             pageNumber: 1,
-            sortBy: 'count',
+            sortBy: 'growth_rate',
         })
-    const { response: servicesGrowth } = useInventoryApiV2ServicesMetricList({
-        connector: provider,
-        connectionId: connections,
-        startTime: String(dayjs(timeRange.from).unix()),
-        endTime: String(dayjs(timeRange.to).unix()),
-        pageSize: 5,
-        pageNumber: 1,
-        sortBy: 'growth_rate',
-    })
     const consumptionAccountData = (data: any) => {
         const result: { name: any; value: any }[] = []
         if (!data) return result
@@ -155,6 +162,19 @@ export default function TrendsTab({
         accountsGrowth,
         servicesGrowth,
     ])
+
+    if (
+        loadingAccountsConsumption ||
+        loadingAccountsGrowth ||
+        loadingServicesConsumption ||
+        loadingServicesGrowth
+    ) {
+        return (
+            <Flex justifyContent="center" className="mt-56">
+                <Spinner />
+            </Flex>
+        )
+    }
 
     return (
         <div className="mt-5">

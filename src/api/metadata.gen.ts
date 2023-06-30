@@ -57,8 +57,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
@@ -70,6 +68,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListRegionsResourceCountCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
@@ -78,6 +77,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -123,70 +123,6 @@ interface IuseMetadataApiV1MetadataCreateState {
     isExecuted: boolean
     response?: void
     error?: any
-}
-
-export const MetadataApiV1MetadataCreate = (
-    req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseMetadataApiV1MetadataCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([req, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.metadata
-                .apiV1MetadataCreate(req, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([req, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([req, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useMetadataApiV1MetadataCreate = (
@@ -273,70 +209,6 @@ interface IuseMetadataApiV1MetadataDetailState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata
     error?: any
-}
-
-export const MetadataApiV1MetadataDetail = (
-    key: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseMetadataApiV1MetadataDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.metadata
-                .apiV1MetadataDetail(key, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([key, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([key, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useMetadataApiV1MetadataDetail = (

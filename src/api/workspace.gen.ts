@@ -57,8 +57,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
@@ -70,6 +68,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListRegionsResourceCountCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
@@ -78,6 +77,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -123,70 +123,6 @@ interface IuseWorkspaceApiV1WorkspaceCreateState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse
     error?: any
-}
-
-export const WorkspaceApiV1WorkspaceCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspaceCreate(request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useWorkspaceApiV1WorkspaceCreate = (
@@ -275,70 +211,6 @@ interface IuseWorkspaceApiV1WorkspaceDeleteState {
     error?: any
 }
 
-export const WorkspaceApiV1WorkspaceDelete = (
-    workspaceId: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceDeleteState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspaceDelete(workspaceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useWorkspaceApiV1WorkspaceDelete = (
     workspaceId: string,
     params: RequestParams = {},
@@ -423,72 +295,6 @@ interface IuseWorkspaceApiV1WorkspaceNameCreateState {
     isExecuted: boolean
     response?: void
     error?: any
-}
-
-export const WorkspaceApiV1WorkspaceNameCreate = (
-    workspaceId: string,
-    request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseWorkspaceApiV1WorkspaceNameCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspaceNameCreate(workspaceId, request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useWorkspaceApiV1WorkspaceNameCreate = (
@@ -584,72 +390,6 @@ interface IuseWorkspaceApiV1WorkspaceOrganizationCreateState {
     error?: any
 }
 
-export const WorkspaceApiV1WorkspaceOrganizationCreate = (
-    workspaceId: string,
-    request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseWorkspaceApiV1WorkspaceOrganizationCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspaceOrganizationCreate(workspaceId, request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     workspaceId: string,
     request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
@@ -741,72 +481,6 @@ interface IuseWorkspaceApiV1WorkspaceOwnerCreateState {
     isExecuted: boolean
     response?: void
     error?: any
-}
-
-export const WorkspaceApiV1WorkspaceOwnerCreate = (
-    workspaceId: string,
-    request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseWorkspaceApiV1WorkspaceOwnerCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspaceOwnerCreate(workspaceId, request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useWorkspaceApiV1WorkspaceOwnerCreate = (
@@ -902,71 +576,6 @@ interface IuseWorkspaceApiV1WorkspaceResumeCreateState {
     error?: any
 }
 
-export const WorkspaceApiV1WorkspaceResumeCreate = (
-    workspaceId: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseWorkspaceApiV1WorkspaceResumeCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspaceResumeCreate(workspaceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useWorkspaceApiV1WorkspaceResumeCreate = (
     workspaceId: string,
     params: RequestParams = {},
@@ -1054,71 +663,6 @@ interface IuseWorkspaceApiV1WorkspaceSuspendCreateState {
     error?: any
 }
 
-export const WorkspaceApiV1WorkspaceSuspendCreate = (
-    workspaceId: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseWorkspaceApiV1WorkspaceSuspendCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspaceSuspendCreate(workspaceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     workspaceId: string,
     params: RequestParams = {},
@@ -1204,72 +748,6 @@ interface IuseWorkspaceApiV1WorkspaceTierCreateState {
     isExecuted: boolean
     response?: void
     error?: any
-}
-
-export const WorkspaceApiV1WorkspaceTierCreate = (
-    workspaceId: string,
-    request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseWorkspaceApiV1WorkspaceTierCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, request, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspaceTierCreate(workspaceId, request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, request, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useWorkspaceApiV1WorkspaceTierCreate = (
@@ -1365,70 +843,6 @@ interface IuseWorkspaceApiV1WorkspaceCurrentListState {
     error?: any
 }
 
-export const WorkspaceApiV1WorkspaceCurrentList = (
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseWorkspaceApiV1WorkspaceCurrentListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspaceCurrentList(params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useWorkspaceApiV1WorkspaceCurrentList = (
     params: RequestParams = {},
     autoExecute = true
@@ -1515,69 +929,6 @@ interface IuseWorkspaceApiV1WorkspacesListState {
     error?: any
 }
 
-export const WorkspaceApiV1WorkspacesList = (
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspacesList(params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useWorkspaceApiV1WorkspacesList = (
     params: RequestParams = {},
     autoExecute = true
@@ -1661,72 +1012,6 @@ interface IuseWorkspaceApiV1WorkspacesDetailState {
     isExecuted: boolean
     response?: void
     error?: any
-}
-
-export const WorkspaceApiV1WorkspacesDetail = (
-    workspaceId: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesDetailState>(
-        {
-            isLoading: true,
-            isExecuted: false,
-        }
-    )
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspacesDetail(workspaceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useWorkspaceApiV1WorkspacesDetail = (
@@ -1817,71 +1102,6 @@ interface IuseWorkspaceApiV1WorkspacesByidDetailState {
     error?: any
 }
 
-export const WorkspaceApiV1WorkspacesByidDetail = (
-    workspaceId: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseWorkspaceApiV1WorkspacesByidDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspacesByidDetail(workspaceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useWorkspaceApiV1WorkspacesByidDetail = (
     workspaceId: string,
     params: RequestParams = {},
@@ -1967,74 +1187,6 @@ interface IuseWorkspaceApiV1WorkspacesLimitsDetailState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage
     error?: any
-}
-
-export const WorkspaceApiV1WorkspacesLimitsDetail = (
-    workspaceName: string,
-    query?: {
-        ignore_usage?: boolean
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseWorkspaceApiV1WorkspacesLimitsDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceName, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspacesLimitsDetail(workspaceName, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceName, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceName, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useWorkspaceApiV1WorkspacesLimitsDetail = (
@@ -2130,71 +1282,6 @@ interface IuseWorkspaceApiV1WorkspacesLimitsByidDetailState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits
     error?: any
-}
-
-export const WorkspaceApiV1WorkspacesLimitsByidDetail = (
-    workspaceId: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseWorkspaceApiV1WorkspacesLimitsByidDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.workspace
-                .apiV1WorkspacesLimitsByidDetail(workspaceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([workspaceId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (

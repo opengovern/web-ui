@@ -13,3 +13,4 @@ export const filterAtom = atom({
 })
 
 export const selectedResourceCategoryAtom = atom('All Categories')
+export const sideBarCollapsedAtom = atom(false)

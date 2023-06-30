@@ -57,8 +57,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
@@ -70,6 +68,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListRegionsResourceCountCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
@@ -78,6 +77,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -123,70 +123,6 @@ interface IuseInventoryApiV1LocationsDetailState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse[]
     error?: any
-}
-
-export const InventoryApiV1LocationsDetail = (
-    connector: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV1LocationsDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connector, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1LocationsDetail(connector, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([connector, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([connector, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV1LocationsDetail = (
@@ -275,70 +211,6 @@ interface IuseInventoryApiV1QueryListState {
     error?: any
 }
 
-export const InventoryApiV1QueryList = (
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV1QueryListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1QueryList(request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV1QueryList = (
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     params: RequestParams = {},
@@ -423,71 +295,6 @@ interface IuseInventoryApiV1QueryCreateState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse
     error?: any
-}
-
-export const InventoryApiV1QueryCreate = (
-    queryId: string,
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV1QueryCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([queryId, request, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1QueryCreate(queryId, request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([queryId, request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([queryId, request, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV1QueryCreate = (
@@ -577,70 +384,6 @@ interface IuseInventoryApiV1QueryCountListState {
     error?: any
 }
 
-export const InventoryApiV1QueryCountList = (
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV1QueryCountListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1QueryCountList(request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV1QueryCountList = (
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     params: RequestParams = {},
@@ -727,70 +470,6 @@ interface IuseInventoryApiV1ResourceCreateState {
     error?: any
 }
 
-export const InventoryApiV1ResourceCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV1ResourceCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1ResourceCreate(request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([request, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV1ResourceCreate = (
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
     params: RequestParams = {},
@@ -875,73 +554,6 @@ interface IuseInventoryApiV1ResourcesCreateState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse
     error?: any
-}
-
-export const InventoryApiV1ResourcesCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    query?: {
-        common?: 'true' | 'false' | 'all'
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV1ResourcesCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1ResourcesCreate(request, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([request, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV1ResourcesCreate = (
@@ -1031,74 +643,6 @@ interface IuseInventoryApiV1ResourcesAwsCreateState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse
     error?: any
-}
-
-export const InventoryApiV1ResourcesAwsCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    query?: {
-        common?: 'true' | 'false' | 'all'
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV1ResourcesAwsCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1ResourcesAwsCreate(request, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([request, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV1ResourcesAwsCreate = (
@@ -1191,74 +735,6 @@ interface IuseInventoryApiV1ResourcesAzureCreateState {
     error?: any
 }
 
-export const InventoryApiV1ResourcesAzureCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    query?: {
-        common?: 'true' | 'false' | 'all'
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV1ResourcesAzureCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1ResourcesAzureCreate(request, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([request, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV1ResourcesAzureCreate = (
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
     query?: {
@@ -1349,70 +825,6 @@ interface IuseInventoryApiV1ResourcesCountListState {
     error?: any
 }
 
-export const InventoryApiV1ResourcesCountList = (
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV1ResourcesCountListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1ResourcesCountList(params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV1ResourcesCountList = (
     params: RequestParams = {},
     autoExecute = true
@@ -1497,74 +909,6 @@ interface IuseInventoryApiV1ResourcesFiltersCreateState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse
     error?: any
-}
-
-export const InventoryApiV1ResourcesFiltersCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
-    query?: {
-        common?: 'true' | 'false' | 'all'
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV1ResourcesFiltersCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1ResourcesFiltersCreate(request, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([request, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV1ResourcesFiltersCreate = (
@@ -1653,85 +997,8 @@ export const useInventoryApiV1ResourcesFiltersCreate = (
 interface IuseInventoryApiV1ResourcesRegionsListState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse[]
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse
     error?: any
-}
-
-export const InventoryApiV1ResourcesRegionsList = (
-    query?: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        endTime?: string
-
-        startTime?: string
-
-        pageSize?: number
-
-        pageNumber?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV1ResourcesRegionsListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1ResourcesRegionsList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV1ResourcesRegionsList = (
@@ -1833,77 +1100,6 @@ interface IuseInventoryApiV1ResourcesTopRegionsListState {
     error?: any
 }
 
-export const InventoryApiV1ResourcesTopRegionsList = (
-    query: {
-        count: number
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV1ResourcesTopRegionsListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1ResourcesTopRegionsList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV1ResourcesTopRegionsList = (
     query: {
         count: number
@@ -1990,417 +1186,11 @@ export const useInventoryApiV1ResourcesTopRegionsList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseInventoryApiV2ConnectionsDataListState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: Record<
-        string,
-        GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData
-    >
-    error?: any
-}
-
-export const InventoryApiV2ConnectionsDataList = (
-    query: {
-        connectionId: string[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ConnectionsDataListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ConnectionsDataList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
-export const useInventoryApiV2ConnectionsDataList = (
-    query: {
-        connectionId: string[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ConnectionsDataListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ConnectionsDataList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseInventoryApiV2ConnectionsDataDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData
-    error?: any
-}
-
-export const InventoryApiV2ConnectionsDataDetail = (
-    connectionId: string,
-    query?: {
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ConnectionsDataDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ConnectionsDataDetail(connectionId, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([connectionId, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
-export const useInventoryApiV2ConnectionsDataDetail = (
-    connectionId: string,
-    query?: {
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ConnectionsDataDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ConnectionsDataDetail(connectionId, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (
-        JSON.stringify([connectionId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([connectionId, query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
 interface IuseInventoryApiV2CostCompositionListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
     error?: any
-}
-
-export const InventoryApiV2CostCompositionList = (
-    query?: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        top?: number
-
-        startTime?: string
-
-        endTime?: string
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2CostCompositionListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2CostCompositionList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV2CostCompositionList = (
@@ -2498,84 +1288,6 @@ interface IuseInventoryApiV2CostMetricListState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse
     error?: any
-}
-
-export const InventoryApiV2CostMetricList = (
-    query?: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        startTime?: string
-
-        endTime?: string
-
-        sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
-
-        pageSize?: number
-
-        pageNumber?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV2CostMetricListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2CostMetricList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV2CostMetricList = (
@@ -2678,80 +1390,6 @@ interface IuseInventoryApiV2CostTrendListState {
     error?: any
 }
 
-export const InventoryApiV2CostTrendList = (
-    query?: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        startTime?: string
-
-        endTime?: string
-
-        datapointCount?: string
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV2CostTrendListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2CostTrendList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV2CostTrendList = (
     query?: {
         connector?: ('' | 'AWS' | 'Azure')[]
@@ -2841,736 +1479,11 @@ export const useInventoryApiV2CostTrendList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseInventoryApiV2InsightsListState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: Record<
-        string,
-        GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[]
-    >
-    error?: any
-}
-
-export const InventoryApiV2InsightsList = (
-    query: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        insightId: string[]
-
-        time?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV2InsightsListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2InsightsList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
-export const useInventoryApiV2InsightsList = (
-    query: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        insightId: string[]
-
-        time?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV2InsightsListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2InsightsList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseInventoryApiV2InsightsDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[]
-    error?: any
-}
-
-export const InventoryApiV2InsightsDetail = (
-    insightId: string,
-    query?: {
-        connectionId?: string[]
-
-        time?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV2InsightsDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2InsightsDetail(insightId, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([insightId, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
-export const useInventoryApiV2InsightsDetail = (
-    insightId: string,
-    query?: {
-        connectionId?: string[]
-
-        time?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV2InsightsDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2InsightsDetail(insightId, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([insightId, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseInventoryApiV2InsightsTrendDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: Record<
-        string,
-        GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[]
-    >
-    error?: any
-}
-
-export const InventoryApiV2InsightsTrendDetail = (
-    insightId: string,
-    query?: {
-        connectionId?: string[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2InsightsTrendDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2InsightsTrendDetail(insightId, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([insightId, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
-export const useInventoryApiV2InsightsTrendDetail = (
-    insightId: string,
-    query?: {
-        connectionId?: string[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2InsightsTrendDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2InsightsTrendDetail(insightId, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([insightId, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseInventoryApiV2InsightsJobDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource
-    error?: any
-}
-
-export const InventoryApiV2InsightsJobDetail = (
-    jobId: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2InsightsJobDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([jobId, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2InsightsJobDetail(jobId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([jobId, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([jobId, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
-export const useInventoryApiV2InsightsJobDetail = (
-    jobId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2InsightsJobDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([jobId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2InsightsJobDetail(jobId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([jobId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([jobId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
 interface IuseInventoryApiV2MetadataResourcetypeListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse
     error?: any
-}
-
-export const InventoryApiV2MetadataResourcetypeList = (
-    query: {
-        connector: ('' | 'AWS' | 'Azure')[]
-
-        service?: string[]
-
-        tag?: string[]
-
-        pageSize?: number
-
-        pageNumber?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2MetadataResourcetypeListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2MetadataResourcetypeList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV2MetadataResourcetypeList = (
@@ -3670,71 +1583,6 @@ interface IuseInventoryApiV2MetadataResourcetypeDetailState {
     error?: any
 }
 
-export const InventoryApiV2MetadataResourcetypeDetail = (
-    resourceType: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2MetadataResourcetypeDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([resourceType, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2MetadataResourcetypeDetail(resourceType, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([resourceType, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([resourceType, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV2MetadataResourcetypeDetail = (
     resourceType: string,
     params: RequestParams = {},
@@ -3820,79 +1668,6 @@ interface IuseInventoryApiV2MetadataServicesListState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse
     error?: any
-}
-
-export const InventoryApiV2MetadataServicesList = (
-    query?: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        tag?: string[]
-
-        pageSize?: number
-
-        pageNumber?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2MetadataServicesListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2MetadataServicesList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV2MetadataServicesList = (
@@ -3990,71 +1765,6 @@ interface IuseInventoryApiV2MetadataServicesDetailState {
     error?: any
 }
 
-export const InventoryApiV2MetadataServicesDetail = (
-    serviceName: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2MetadataServicesDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([serviceName, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2MetadataServicesDetail(serviceName, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([serviceName, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([serviceName, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV2MetadataServicesDetail = (
     serviceName: string,
     params: RequestParams = {},
@@ -4140,82 +1850,6 @@ interface IuseInventoryApiV2ResourcesCompositionDetailState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse
     error?: any
-}
-
-export const InventoryApiV2ResourcesCompositionDetail = (
-    key: string,
-    query: {
-        top: number
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        endTime?: string
-
-        startTime?: string
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ResourcesCompositionDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ResourcesCompositionDetail(key, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([key, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([key, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV2ResourcesCompositionDetail = (
@@ -4314,91 +1948,6 @@ interface IuseInventoryApiV2ResourcesMetricListState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse
     error?: any
-}
-
-export const InventoryApiV2ResourcesMetricList = (
-    query?: {
-        tag?: string[]
-
-        servicename?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        endTime?: string
-
-        startTime?: string
-
-        minCount?: number
-
-        sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
-
-        pageSize?: number
-
-        pageNumber?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ResourcesMetricListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ResourcesMetricList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV2ResourcesMetricList = (
@@ -4508,78 +2057,6 @@ interface IuseInventoryApiV2ResourcesMetricDetailState {
     error?: any
 }
 
-export const InventoryApiV2ResourcesMetricDetail = (
-    resourceType: string,
-    query?: {
-        connectionId?: string[]
-
-        endTime?: string
-
-        startTime?: string
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ResourcesMetricDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([resourceType, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ResourcesMetricDetail(resourceType, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([resourceType, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([resourceType, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV2ResourcesMetricDetail = (
     resourceType: string,
     query?: {
@@ -4669,25 +2146,27 @@ export const useInventoryApiV2ResourcesMetricDetail = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseInventoryApiV2ResourcesTagListState {
+interface IuseInventoryApiV2ResourcesRegionsCompositionListState {
     isLoading: boolean
     isExecuted: boolean
-    response?: Record<string, string[]>
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListRegionsResourceCountCompositionResponse
     error?: any
 }
 
-export const InventoryApiV2ResourcesTagList = (
-    query?: {
-        connector?: string[]
+export const useInventoryApiV2ResourcesRegionsCompositionList = (
+    query: {
+        connector?: ('' | 'AWS' | 'Azure')[]
 
         connectionId?: string[]
 
-        minCount?: number
+        top: number
+
+        startTime?: number
 
         endTime?: number
     },
     params: RequestParams = {},
-    wait = false
+    autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -4700,14 +2179,13 @@ export const InventoryApiV2ResourcesTagList = (
         setWorkspace('keibi')
     }
 
-    const [state, setState] = useState<IuseInventoryApiV2ResourcesTagListState>(
-        {
+    const [state, setState] =
+        useState<IuseInventoryApiV2ResourcesRegionsCompositionListState>({
             isLoading: true,
             isExecuted: false,
-        }
-    )
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -4718,36 +2196,258 @@ export const InventoryApiV2ResourcesTagList = (
         })
         try {
             api.inventory
-                .apiV2ResourcesTagList(query, params)
+                .apiV2ResourcesRegionsCompositionList(query, params)
                 .then((resp) => {
                     setState({
                         ...state,
                         response: resp.data,
                         isLoading: false,
+                        isExecuted: true,
                     })
                 })
                 .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
                 })
         } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
         }
     }
 
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
-        if (!wait) {
+        if (autoExecute) {
             sendRequest()
         }
     }, [lastInput])
 
     const { response } = state
     const { isLoading } = state
+    const { isExecuted } = state
     const { error } = state
-    return { response, isLoading, error }
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2ResourcesRegionsSummaryListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse
+    error?: any
+}
+
+export const useInventoryApiV2ResourcesRegionsSummaryList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        startTime?: number
+
+        endTime?: number
+
+        sortBy?: 'resource_count' | 'growth' | 'growth_rate'
+
+        pageSize?: number
+
+        pageNumber?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2ResourcesRegionsSummaryListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2ResourcesRegionsSummaryList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2ResourcesRegionsTrendListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
+    error?: any
+}
+
+export const useInventoryApiV2ResourcesRegionsTrendList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        startTime?: number
+
+        endTime?: number
+
+        region?: string[]
+
+        datapointCount?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2ResourcesRegionsTrendListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2ResourcesRegionsTrendList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2ResourcesTagListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: Record<string, string[]>
+    error?: any
 }
 
 export const useInventoryApiV2ResourcesTagList = (
@@ -4846,80 +2546,6 @@ interface IuseInventoryApiV2ResourcesTagDetailState {
     error?: any
 }
 
-export const InventoryApiV2ResourcesTagDetail = (
-    key: string,
-    query?: {
-        connector?: string[]
-
-        connectionId?: string[]
-
-        minCount?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ResourcesTagDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ResourcesTagDetail(key, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([key, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([key, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV2ResourcesTagDetail = (
     key: string,
     query?: {
@@ -5014,85 +2640,6 @@ interface IuseInventoryApiV2ResourcesTrendListState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
     error?: any
-}
-
-export const InventoryApiV2ResourcesTrendList = (
-    query?: {
-        tag?: string[]
-
-        servicename?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        startTime?: string
-
-        endTime?: string
-
-        datapointCount?: string
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ResourcesTrendListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ResourcesTrendList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV2ResourcesTrendList = (
@@ -5194,87 +2741,6 @@ interface IuseInventoryApiV2ServicesMetricListState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse
     error?: any
-}
-
-export const InventoryApiV2ServicesMetricList = (
-    query?: {
-        tag?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        startTime?: string
-
-        endTime?: string
-
-        sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
-
-        pageSize?: number
-
-        pageNumber?: number
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ServicesMetricListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ServicesMetricList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV2ServicesMetricList = (
@@ -5380,78 +2846,6 @@ interface IuseInventoryApiV2ServicesMetricDetailState {
     error?: any
 }
 
-export const InventoryApiV2ServicesMetricDetail = (
-    serviceName: string,
-    query?: {
-        connectionId?: string[]
-
-        startTime?: string
-
-        endTime?: string
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ServicesMetricDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([serviceName, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ServicesMetricDetail(serviceName, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([serviceName, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([serviceName, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV2ServicesMetricDetail = (
     serviceName: string,
     query?: {
@@ -5546,85 +2940,6 @@ interface IuseInventoryApiV2ServicesSummaryListState {
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse
     error?: any
-}
-
-export const InventoryApiV2ServicesSummaryList = (
-    query?: {
-        connectionId?: string[]
-
-        connector?: string[]
-
-        tag?: string[]
-
-        endTime?: string
-
-        pageSize?: number
-
-        pageNumber?: number
-
-        sortBy?: 'servicecode' | 'resourcecount'
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ServicesSummaryListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ServicesSummaryList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV2ServicesSummaryList = (
@@ -5728,78 +3043,6 @@ interface IuseInventoryApiV2ServicesSummaryDetailState {
     error?: any
 }
 
-export const InventoryApiV2ServicesSummaryDetail = (
-    serviceName: string,
-    query: {
-        connectorId?: string[]
-
-        connector?: string[]
-
-        endTime: string
-    },
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ServicesSummaryDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([serviceName, query, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ServicesSummaryDetail(serviceName, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([serviceName, query, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([serviceName, query, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV2ServicesSummaryDetail = (
     serviceName: string,
     query: {
@@ -5896,69 +3139,6 @@ interface IuseInventoryApiV2ServicesTagListState {
     error?: any
 }
 
-export const InventoryApiV2ServicesTagList = (
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV2ServicesTagListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ServicesTagList(params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
-}
-
 export const useInventoryApiV2ServicesTagList = (
     params: RequestParams = {},
     autoExecute = true
@@ -6042,71 +3222,6 @@ interface IuseInventoryApiV2ServicesTagDetailState {
     isExecuted: boolean
     response?: string[]
     error?: any
-}
-
-export const InventoryApiV2ServicesTagDetail = (
-    key: string,
-    params: RequestParams = {},
-    wait = false
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2ServicesTagDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, params, wait])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2ServicesTagDetail(key, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([key, params, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([key, params, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return { response, isLoading, error }
 }
 
 export const useInventoryApiV2ServicesTagDetail = (

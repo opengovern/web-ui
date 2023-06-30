@@ -22,6 +22,7 @@ import { ArrowLongRightIcon } from '@heroicons/react/24/solid'
 import dayjs from 'dayjs'
 import { useInventoryApiV2ResourcesCompositionDetail } from '../../../api/inventory.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
+import Spinner from '../../Spinner'
 
 type IProps = {
     // key: string,
@@ -44,7 +45,7 @@ export default function Composition({
         ...(connectionId && { connectionId }),
         ...(time.to && { time: dayjs(time.to).unix() }),
     }
-    const { response: composition } =
+    const { response: composition, isLoading } =
         useInventoryApiV2ResourcesCompositionDetail('category', query)
 
     function compositionData(inputObject: any, oldData: number) {
@@ -146,6 +147,14 @@ export default function Composition({
 
     const nowDataList = nowCompositionList(composition)
     const prevDataList = prevCompositionList(composition)
+
+    if (isLoading) {
+        return (
+            <Flex justifyContent="center" className="mt-56">
+                <Spinner />
+            </Flex>
+        )
+    }
 
     return (
         <Card>

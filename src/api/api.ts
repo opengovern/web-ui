@@ -115,6 +115,10 @@ export interface DescriberResource {
     type?: string
 }
 
+export interface EchoHTTPError {
+    message?: any
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest {
     /** Name of the key */
     name?: string
@@ -924,10 +928,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup {
     description?: string
     /** @example 23 */
     id?: number
-    insights?: Record<
-        string,
-        GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
-    >
+    insights?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[]
     /** @example "https://kaytu.io/logo.png" */
     logoURL?: string
     /** @example "List clusters that have role-based access control (RBAC) disabled" */
@@ -1367,6 +1368,8 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiSource {
+    /** @example "123456789012" */
+    accountId?: string
     /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
     id?: string
     /** @example "2021-01-01T00:00:00Z" */
@@ -1504,48 +1507,6 @@ export enum GithubComKaytuIoKaytuEnginePkgInsightApiInsightJobStatus {
     InsightJobSucceeded = 'SUCCEEDED',
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgInsightEsInsightConnection {
-    connection_id?: string
-    original_id?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource {
-    /** AccountID */
-    account_id?: string
-    /** Description */
-    description?: string
-    /** ExecutedAt is when the query is executed */
-    executed_at?: number
-    /** IncludedConnections list of the connections ids of the resources included in this insight */
-    included_connections?: GithubComKaytuIoKaytuEnginePkgInsightEsInsightConnection[]
-    /** InsightID is the ID of insight which has been executed */
-    insight_id?: number
-    /** Internal hidden to user */
-    internal?: boolean
-    /** JobID is the ID of the job which produced this resource */
-    job_id?: number
-    /** Locations list of the locations of the resources included in this insight */
-    locations?: string[]
-    /** Provider */
-    provider?: SourceType
-    /** Query */
-    query?: string
-    /** ResourceType shows which collection of docs this resource belongs to */
-    resource_type?: GithubComKaytuIoKaytuEnginePkgInsightEsInsightResourceType
-    /** Result of query */
-    result?: number
-    s3_location?: string
-    /** SourceID */
-    source_id?: string
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgInsightEsInsightResourceType {
-    InsightResourceHistory = 'history',
-    InsightResourceLast = 'last',
-    InsightResourceProviderHistory = 'provider_history',
-    InsightResourceProviderLast = 'provider_last',
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAWSResource {
     attributes?: Record<string, string>
     location?: string
@@ -1600,16 +1561,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAzureResource {
     resourceType?: string
     /** Resource Type Name */
     resourceTypeName?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData {
-    connectionID?: string
-    cost?: number
-    count?: number
-    dailyCostAtEndTime?: number
-    dailyCostAtStartTime?: number
-    lastInventory?: string
-    oldCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionFull {
@@ -1734,6 +1685,16 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest {
     titleFilter?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListRegionsResourceCountCompositionResponse {
+    others?: GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
+    top_values?: Record<
+        string,
+        GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
+    >
+    total_count?: number
+    total_value_count?: number
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse {
     others?: GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
     top_values?: Record<
@@ -1791,15 +1752,23 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderRes
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse {
     /** Region */
     location?: string
-    /** Number of resources in the region */
+    /**
+     * Number of resources in the region
+     * @example 100
+     */
     resourceCount?: number
-    /** Change in number of resources in the region */
-    resourceCountChangePercent?: number
+    /** @example 50 */
+    resourceOldCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiPage {
     no?: number
     size?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse {
+    regions?: GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse[]
+    totalCount?: number
 }
 
 /** if you provide two values for same filter OR operation would be used if you provide value for two filters AND operation would be used */
@@ -2096,8 +2065,6 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     /** @example "johndoe@example.com" */
     email?: string
     healthReason?: string
-    /** @example "healthy" */
-    healthState?: SourceHealthStatus
     /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
     id?: string
     /** @example "2023-05-07T00:00:00Z" */
@@ -2121,16 +2088,15 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest {
     connectors?: string[]
-    health?: SourceHealthStatus
     state?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState {
-    ConnectionLifecycleStatePending = 'pending',
-    ConnectionLifecycleStateInitialDiscovery = 'initial-discovery',
-    ConnectionLifecycleStateEnabled = 'enabled',
-    ConnectionLifecycleStateDisabled = 'disabled',
-    ConnectionLifecycleStateDeleted = 'deleted',
+    ConnectionLifecycleStateNotOnboard = 'NOT_ONBOARD',
+    ConnectionLifecycleStateInProgress = 'IN_PROGRESS',
+    ConnectionLifecycleStateOnboard = 'ONBOARD',
+    ConnectionLifecycleStateUnhealthy = 'UNHEALTHY',
+    ConnectionLifecycleStateArchived = 'ARCHIVED',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnector {
@@ -2718,7 +2684,7 @@ export class Api<
         ) =>
             this.request<
                 GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-                any
+                EchoHTTPError
             >({
                 path: `/auth/api/v1/key/create`,
                 method: 'POST',
@@ -4053,6 +4019,7 @@ export class Api<
          * @name ApiV1ResourcesCountList
          * @summary Count resources
          * @request GET:/inventory/api/v1/resources/count
+         * @deprecated
          * @secure
          */
         apiV1ResourcesCountList: (params: RequestParams = {}) =>
@@ -4123,7 +4090,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse[],
+                GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
                 any
             >({
                 path: `/inventory/api/v1/resources/regions`,
@@ -4160,74 +4127,6 @@ export class Api<
                 any
             >({
                 path: `/inventory/api/v1/resources/top/regions`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags connection
-         * @name ApiV2ConnectionsDataList
-         * @summary Returns cost and resource count data of the specified accounts at the specified time - internal use api,  for full result use onboard api
-         * @request GET:/inventory/api/v2/connections/data
-         * @secure
-         */
-        apiV2ConnectionsDataList: (
-            query: {
-                /** Connection IDs */
-                connectionId: string[]
-                /** start time in unix seconds */
-                startTime?: number
-                /** end time in unix seconds */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                Record<
-                    string,
-                    GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData
-                >,
-                any
-            >({
-                path: `/inventory/api/v2/connections/data`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags connection
-         * @name ApiV2ConnectionsDataDetail
-         * @summary Returns cost and resource count data of the specified account at the specified time - internal use api,  for full result use onboard api
-         * @request GET:/inventory/api/v2/connections/data/{connectionId}
-         * @secure
-         */
-        apiV2ConnectionsDataDetail: (
-            connectionId: string,
-            query?: {
-                /** start time in unix seconds */
-                startTime?: number
-                /** end time in unix seconds */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionData,
-                any
-            >({
-                path: `/inventory/api/v2/connections/data/${connectionId}`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -4347,131 +4246,6 @@ export class Api<
                 query: query,
                 secure: true,
                 type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description List all insight results for the given insightIds - this mostly for internal usage, use compliance api for full api
-         *
-         * @tags insight
-         * @name ApiV2InsightsList
-         * @summary List insight results
-         * @request GET:/inventory/api/v2/insights
-         * @secure
-         */
-        apiV2InsightsList: (
-            query: {
-                /** filter insights by connector */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** filter the result by insight id */
-                insightId: string[]
-                /** unix seconds for the time to get the insight result for */
-                time?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                Record<
-                    string,
-                    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[]
-                >,
-                any
-            >({
-                path: `/inventory/api/v2/insights`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get insight results for the given insightIds - this mostly for internal usage, use compliance api for full api
-         *
-         * @tags insight
-         * @name ApiV2InsightsDetail
-         * @summary Get insight result by id
-         * @request GET:/inventory/api/v2/insights/{insightId}
-         * @secure
-         */
-        apiV2InsightsDetail: (
-            insightId: string,
-            query?: {
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** unix seconds for the time to get the insight result for */
-                time?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[],
-                any
-            >({
-                path: `/inventory/api/v2/insights/${insightId}`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get an insight trend data by id and time window - this mostly for internal usage, use compliance api for full api
-         *
-         * @tags insight
-         * @name ApiV2InsightsTrendDetail
-         * @summary Get insight trend data
-         * @request GET:/inventory/api/v2/insights/{insightId}/trend
-         * @secure
-         */
-        apiV2InsightsTrendDetail: (
-            insightId: string,
-            query?: {
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** unix seconds for the start of the time window to get the insight trend for */
-                startTime?: number
-                /** unix seconds for the end of the time window to get the insight trend for */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                Record<
-                    string,
-                    GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource[]
-                >,
-                any
-            >({
-                path: `/inventory/api/v2/insights/${insightId}/trend`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get insight result for the given JobId - this mostly for internal usage, use compliance api for full api
-         *
-         * @tags insight
-         * @name ApiV2InsightsJobDetail
-         * @summary Get insight result by Job ID
-         * @request GET:/inventory/api/v2/insights/job/{jobId}
-         * @secure
-         */
-        apiV2InsightsJobDetail: (jobId: string, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInsightEsInsightResource,
-                any
-            >({
-                path: `/inventory/api/v2/insights/job/${jobId}`,
-                method: 'GET',
-                secure: true,
                 format: 'json',
                 ...params,
             }),
@@ -4714,6 +4488,123 @@ export class Api<
             }),
 
         /**
+         * @description Returns list of top regions per given connector type and connection IDs
+         *
+         * @tags resource
+         * @name ApiV2ResourcesRegionsCompositionList
+         * @summary List resources regions composition
+         * @request GET:/inventory/api/v2/resources/regions/composition
+         * @secure
+         */
+        apiV2ResourcesRegionsCompositionList: (
+            query: {
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** How many top values to return default is 5 */
+                top: number
+                /** start time in unix seconds - default is now */
+                startTime?: number
+                /** end time in unix seconds - default is one week ago */
+                endTime?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListRegionsResourceCountCompositionResponse,
+                any
+            >({
+                path: `/inventory/api/v2/resources/regions/composition`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns list of regions resources summary
+         *
+         * @tags resource
+         * @name ApiV2ResourcesRegionsSummaryList
+         * @summary List Regions Summary
+         * @request GET:/inventory/api/v2/resources/regions/summary
+         * @secure
+         */
+        apiV2ResourcesRegionsSummaryList: (
+            query?: {
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** start time in unix seconds - default is now */
+                startTime?: number
+                /** end time in unix seconds - default is one week ago */
+                endTime?: number
+                /** column to sort by - default is resource_count */
+                sortBy?: 'resource_count' | 'growth' | 'growth_rate'
+                /** page size - default is 20 */
+                pageSize?: number
+                /** page number - default is 1 */
+                pageNumber?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
+                any
+            >({
+                path: `/inventory/api/v2/resources/regions/summary`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns list of regions resources summary
+         *
+         * @tags resource
+         * @name ApiV2ResourcesRegionsTrendList
+         * @summary Returns trend of resources count in given regions
+         * @request GET:/inventory/api/v2/resources/regions/trend
+         * @secure
+         */
+        apiV2ResourcesRegionsTrendList: (
+            query?: {
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** start time in unix seconds - default is now */
+                startTime?: number
+                /** end time in unix seconds - default is one week ago */
+                endTime?: number
+                /** Regions to filter by */
+                region?: string[]
+                /** Number of datapoints to return */
+                datapointCount?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[],
+                any
+            >({
+                path: `/inventory/api/v2/resources/regions/trend`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description This API allows users to retrieve a list of tag keys with their possible values for all resource types.
          *
          * @tags inventory
@@ -4869,6 +4760,7 @@ export class Api<
          * @name ApiV2ServicesMetricDetail
          * @summary Get service metrics
          * @request GET:/inventory/api/v2/services/metric/{serviceName}
+         * @secure
          */
         apiV2ServicesMetricDetail: (
             serviceName: string,
@@ -4889,6 +4781,7 @@ export class Api<
                 path: `/inventory/api/v2/services/metric/${serviceName}`,
                 method: 'GET',
                 query: query,
+                secure: true,
                 type: ContentType.Json,
                 format: 'json',
                 ...params,
@@ -5135,8 +5028,6 @@ export class Api<
                 connector: ('' | 'AWS' | 'Azure')[]
                 /** Connection IDs */
                 connectionId?: string[]
-                /** Source Healthstate */
-                healthState?: 'healthy' | 'unhealthy'
                 /** lifecycle state filter */
                 lifecycleState?: string
                 /** page size - default is 20 */
