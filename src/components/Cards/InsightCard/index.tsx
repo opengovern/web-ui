@@ -47,8 +47,15 @@ export default function InsightCard({ metric }: IInsightsCard) {
     return (
         <Card
             key={metric.id}
-            className="cursor-pointer h-full"
-            onClick={() => navigateToAssetsInsightsDetails(metric.id)}
+            className={`${
+                metric?.totalResultValue || metric?.oldTotalResultValue
+                    ? 'cursor-pointer'
+                    : 'bg-slate-50'
+            } h-full`}
+            onClick={() =>
+                (metric?.totalResultValue || metric?.oldTotalResultValue) &&
+                navigateToAssetsInsightsDetails(metric.id)
+            }
         >
             <Flex
                 flexDirection="col"
