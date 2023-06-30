@@ -211,7 +211,6 @@ export default function ConnectionList({
 
     useEffect(() => {
         updateSelectionByProvider(gridRef.current?.api, selectedProvider.value)
-        console.log('isConnectionSelected', isConnectionSelected)
     }, [selectedProvider])
 
     const handleClose = () => {

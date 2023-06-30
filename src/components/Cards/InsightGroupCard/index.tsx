@@ -111,11 +111,18 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                 .map((insight: any) => (
                                     <TableRow
                                         onClick={() =>
+                                            (insight?.totalResultValue ||
+                                                insight?.oldTotalResultValue) &&
                                             navigateToAssetsInsightsDetails(
                                                 insight.id
                                             )
                                         }
-                                        className="cursor-pointer"
+                                        className={`${
+                                            insight?.totalResultValue ||
+                                            insight?.oldTotalResultValue
+                                                ? 'cursor-pointer'
+                                                : 'bg-slate-50'
+                                        }`}
                                     >
                                         <TableCell className="px-0">
                                             <Text>{insight.shortTitle}</Text>
@@ -130,7 +137,9 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                                         : 'red'
                                                 }
                                             >
-                                                {insight.totalResultValue}
+                                                {numericDisplay(
+                                                    insight.totalResultValue
+                                                ) || 'N/A'}
                                             </Text>
                                         </TableCell>
                                     </TableRow>
@@ -149,11 +158,18 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                         .map((insight: any) => (
                                             <TableRow
                                                 onClick={() =>
+                                                    (insight?.totalResultValue ||
+                                                        insight?.oldTotalResultValue) &&
                                                     navigateToAssetsInsightsDetails(
                                                         insight.id
                                                     )
                                                 }
-                                                className="cursor-pointer"
+                                                className={`${
+                                                    insight?.totalResultValue ||
+                                                    insight?.oldTotalResultValue
+                                                        ? 'cursor-pointer'
+                                                        : 'bg-slate-50'
+                                                }`}
                                             >
                                                 <TableCell className="px-0">
                                                     <Text>
@@ -170,9 +186,9 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                                                 : 'red'
                                                         }
                                                     >
-                                                        {
+                                                        {numericDisplay(
                                                             insight.totalResultValue
-                                                        }
+                                                        ) || 'N/A'}
                                                     </Text>
                                                 </TableCell>
                                             </TableRow>

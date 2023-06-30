@@ -23,6 +23,7 @@ import MultipleAreaCharts from '../../../components/Charts/AreaCharts/MultipleAr
 import Downloader from './Downloader'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Breadcrumbs from '../../../components/Breadcrumbs'
+import Spinner from '../../../components/Spinner'
 
 const chartData = (inputData: any) => {
     const data = []
@@ -121,10 +122,8 @@ export default function InsightDetail() {
         String(id),
         query
     )
-    const { response: insightDetail } = useComplianceApiV1InsightDetail(
-        String(id),
-        query
-    )
+    const { response: insightDetail, isLoading: detailLoading } =
+        useComplianceApiV1InsightDetail(String(id), query)
 
     const columns =
         insightDetail?.result && insightDetail?.result[0]?.details
@@ -148,111 +147,117 @@ export default function InsightDetail() {
 
     return (
         <LoggedInLayout currentPage="insight">
-            <Flex flexDirection="col">
-                <Flex
-                    flexDirection="row"
-                    justifyContent="between"
-                    alignItems="center"
-                    className="mb-6"
-                >
-                    {/* <Title>{insightDetail?.shortTitle}</Title> */}
-                    <Breadcrumbs pages={breadcrubmsPages} />
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        selectPlaceholder="Selection"
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+            {detailLoading ? (
+                <Flex justifyContent="center" className="mt-56">
+                    <Spinner />
                 </Flex>
-                <Card>
-                    <Flex flexDirection="col">
-                        <Flex flexDirection="row">
-                            <Title>{insightDetail?.shortTitle}</Title>
-                            <Flex
-                                flexDirection="row"
-                                alignItems="end"
-                                className="w-fit"
-                            >
-                                <Title>
-                                    {insightDetail?.totalResultValue
-                                        ? numericDisplay(
-                                              insightDetail?.totalResultValue ||
-                                                  0
-                                          )
-                                        : 'N/A'}
-                                </Title>
-                                <Subtitle className="ml-1 mr-2">
-                                    {`from ${
-                                        insightDetail?.oldTotalResultValue
+            ) : (
+                <Flex flexDirection="col">
+                    <Flex
+                        flexDirection="row"
+                        justifyContent="between"
+                        alignItems="center"
+                        className="mb-6"
+                    >
+                        <Breadcrumbs pages={breadcrubmsPages} />
+                        <DateRangePicker
+                            className="max-w-md"
+                            value={activeTimeRange}
+                            onValueChange={setActiveTimeRange}
+                            selectPlaceholder="Selection"
+                            enableClear={false}
+                            maxDate={new Date()}
+                        />
+                    </Flex>
+                    <Card>
+                        <Flex flexDirection="col">
+                            <Flex flexDirection="row">
+                                <Title>{insightDetail?.shortTitle}</Title>
+                                <Flex
+                                    flexDirection="row"
+                                    alignItems="end"
+                                    className="w-fit"
+                                >
+                                    <Title>
+                                        {insightDetail?.totalResultValue
                                             ? numericDisplay(
-                                                  insightDetail?.oldTotalResultValue ||
+                                                  insightDetail?.totalResultValue ||
                                                       0
                                               )
-                                            : 'N/A'
-                                    }`}
-                                </Subtitle>
-                                <BadgeDelta
-                                    deltaType={
-                                        calculatePercent(insightDetail) > 0
-                                            ? 'moderateIncrease'
-                                            : 'moderateDecrease'
-                                    }
-                                    className={`opacity-${
-                                        calculatePercent(insightDetail) !== 0
-                                            ? 1
-                                            : 0
-                                    } cursor-pointer`}
-                                >
-                                    {`${
-                                        calculatePercent(insightDetail) > 0
-                                            ? Math.ceil(
-                                                  calculatePercent(
-                                                      insightDetail
+                                            : 'N/A'}
+                                    </Title>
+                                    <Subtitle className="ml-1 mr-2">
+                                        {`from ${
+                                            insightDetail?.oldTotalResultValue
+                                                ? numericDisplay(
+                                                      insightDetail?.oldTotalResultValue ||
+                                                          0
                                                   )
-                                              )
-                                            : -1 *
-                                              Math.floor(
-                                                  calculatePercent(
-                                                      insightDetail
+                                                : 'N/A'
+                                        }`}
+                                    </Subtitle>
+                                    <BadgeDelta
+                                        deltaType={
+                                            calculatePercent(insightDetail) > 0
+                                                ? 'moderateIncrease'
+                                                : 'moderateDecrease'
+                                        }
+                                        className={`opacity-${
+                                            calculatePercent(insightDetail) !==
+                                            0
+                                                ? 1
+                                                : 0
+                                        } cursor-pointer`}
+                                    >
+                                        {`${
+                                            calculatePercent(insightDetail) > 0
+                                                ? Math.ceil(
+                                                      calculatePercent(
+                                                          insightDetail
+                                                      )
                                                   )
-                                              )
-                                    }%`}
-                                </BadgeDelta>
+                                                : -1 *
+                                                  Math.floor(
+                                                      calculatePercent(
+                                                          insightDetail
+                                                      )
+                                                  )
+                                        }%`}
+                                    </BadgeDelta>
+                                </Flex>
                             </Flex>
+                            <Text className="flex self-start mt-2 mb-6">
+                                {insightDetail?.description}
+                            </Text>
                         </Flex>
-                        <Text className="flex self-start mt-2 mb-6">
-                            {insightDetail?.description}
-                        </Text>
+                        <MultipleAreaCharts
+                            className="mt-4 h-80"
+                            index="date"
+                            yAxisWidth={60}
+                            categories={['count']}
+                            data={chartData(insightTrend)}
+                            colors={['indigo']}
+                        />
+                    </Card>
+                    <Flex flexDirection="row" className="mt-6">
+                        <Title>Results</Title>
+                        <Downloader
+                            Headers={columns}
+                            Rows={rows?.rows ? rows.rows : []}
+                            Name={insightDetail?.shortTitle}
+                        />
                     </Flex>
-                    <MultipleAreaCharts
-                        className="mt-4 h-80"
-                        index="date"
-                        yAxisWidth={60}
-                        categories={['count']}
-                        data={chartData(insightTrend)}
-                        colors={['indigo']}
-                    />
-                </Card>
-                <Flex flexDirection="row" className="mt-6">
-                    <Title>Results</Title>
-                    <Downloader
-                        Headers={columns}
-                        Rows={rows?.rows ? rows.rows : []}
-                        Name={insightDetail?.shortTitle}
-                    />
+                    <div className="w-full mt-3 ag-theme-alpine">
+                        <AgGridReact
+                            ref={gridRef}
+                            domLayout="autoHeight"
+                            gridOptions={gridOptions}
+                            columnDefs={insightsHeadersToColumns(columns)}
+                            rowData={insightsResultToRows(rows)}
+                        />
+                    </div>
                 </Flex>
-                <div className="w-full mt-3 ag-theme-alpine">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                        columnDefs={insightsHeadersToColumns(columns)}
-                        rowData={insightsResultToRows(rows)}
-                    />
-                </div>
-            </Flex>
+            )}
         </LoggedInLayout>
     )
 }
