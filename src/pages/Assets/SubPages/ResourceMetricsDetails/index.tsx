@@ -88,6 +88,7 @@ export default function ResourceMetricsDetails({
         })
         setTableDdata(newData)
     }, [metrics])
+
     return (
         <main>
             {/* <Flex justifyContent="between"> */}
@@ -126,8 +127,8 @@ export default function ResourceMetricsDetails({
                         <TableHead>
                             <TableRow>
                                 <TableHeaderCell>Metric Name</TableHeaderCell>
-                                <TableHeaderCell>Count</TableHeaderCell>
                                 <TableHeaderCell>From</TableHeaderCell>
+                                <TableHeaderCell>Count</TableHeaderCell>
                                 <TableHeaderCell>Changes</TableHeaderCell>
                             </TableRow>
                         </TableHead>
@@ -136,21 +137,19 @@ export default function ResourceMetricsDetails({
                                 <TableRow key={item.metricName}>
                                     <TableCell>{item.metricName}</TableCell>
                                     <TableCell>
+                                        <Text>{numericDisplay(item.from)}</Text>
+                                    </TableCell>
+                                    <TableCell>
                                         <Text>
                                             {numericDisplay(item.count)}
                                         </Text>
                                     </TableCell>
                                     <TableCell>
-                                        <Text>{numericDisplay(item.from)}</Text>
-                                    </TableCell>
-                                    <TableCell>
                                         <BadgeDelta
                                             color="emerald"
-                                            deltaType="moderateIncrease"
+                                            deltaType={item.deltaType}
                                         >
-                                            {item.changes !== 0
-                                                ? `${item.changes} %`
-                                                : item.changes}
+                                            {`${item.changes} %`}
                                         </BadgeDelta>
                                     </TableCell>
                                 </TableRow>

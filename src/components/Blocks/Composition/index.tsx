@@ -82,12 +82,14 @@ export default function Composition({
 
     function nowCompositionList(inputObject: any) {
         const outputArray = []
+        let deltaType: DeltaType = 'unchanged'
         if (!inputObject) {
             return [
                 {
                     name: 'No data',
                     value: 0,
-                    delta: 0,
+                    delta: '0',
+                    deltaType,
                 },
             ]
         }
@@ -104,10 +106,19 @@ export default function Composition({
             } catch (e) {
                 delta = 0
             }
+
+            if (delta < 0) {
+                deltaType = 'moderateDecrease'
+            } else if (delta > 0) {
+                deltaType = 'moderateIncrease'
+            } else {
+                deltaType = 'unchanged'
+            }
             outputArray.push({
                 name: key,
                 value: inputObject.top_values[key].count,
                 delta: Math.abs(delta).toFixed(2),
+                deltaType,
             })
         }
         return outputArray
@@ -192,14 +203,7 @@ export default function Composition({
                                           </Text>
                                           {item.delta && (
                                               <BadgeDelta
-                                                  deltaType={
-                                                      // eslint-disable-next-line no-nested-ternary
-                                                      item.delta > 0
-                                                          ? 'moderateIncrease'
-                                                          : item.delta < 0
-                                                          ? 'moderateDecrease'
-                                                          : 'unchanged'
-                                                  }
+                                                  deltaType={item.deltaType}
                                                   size="xs"
                                               >
                                                   {item.delta} %
