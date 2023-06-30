@@ -11,9 +11,8 @@ import {
     Title,
 } from '@tremor/react'
 import { TrashIcon } from '@heroicons/react/24/outline'
-import { type } from 'os'
+import { PlusIcon } from '@heroicons/react/24/solid'
 import {
-    AuthApiV1KeyCreateCreate,
     useAuthApiV1KeyCreateCreate,
     useAuthApiV1KeyDeleteDelete,
     useAuthApiV1KeysList,
@@ -22,13 +21,13 @@ import {
 import Spinner from '../../../components/Spinner'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey } from '../../../api/api'
-import Modal from '../../../components/Modal'
 import InformationModal from '../../../components/Modal/InformationModal'
 import ConfirmModal from '../../../components/Modal/ConfirmModal'
 
 interface CreateAPIKeyProps {
     close: () => void
 }
+
 const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
     const [apiKeyName, setApiKeyName] = useState<string>('')
     const [role, setRole] = useState<string>('viewer')
@@ -177,6 +176,7 @@ interface APIKeyRecordProps {
     item: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
     refresh: () => void
 }
+
 const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const { response, isLoading } = useAuthApiV1UserDetail(
@@ -238,7 +238,9 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
                     <Text className="text-sm font-medium">
                         {fixRole(item.roleName || '')}
                     </Text>
-                    <Text className="text-xs">{item.maskedKey}</Text>
+                    <Text className="text-xs">
+                        {item.maskedKey?.replace('...', '*******')}
+                    </Text>
                 </Flex>
 
                 {isLoading ? (
@@ -317,6 +319,7 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
                         onClick={() => {
                             openCreateMenu()
                         }}
+                        icon={PlusIcon}
                     >
                         Create API Key
                     </Button>

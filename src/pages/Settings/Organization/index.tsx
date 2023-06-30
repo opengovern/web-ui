@@ -58,7 +58,9 @@ const SettingsOrganization: React.FC<any> = () => {
             key: 'Address',
             value: (
                 <>
-                    <p>Line1: {response?.organization?.addressLine1}</p>
+                    <p className="truncate">
+                        Line1: {response?.organization?.addressLine1}
+                    </p>
                     <p>Line2: {response?.organization?.addressLine2}</p>
                     <p>Line3: {response?.organization?.addressLine3}</p>
                     <p>City: {response?.organization?.city}</p>
@@ -71,7 +73,7 @@ const SettingsOrganization: React.FC<any> = () => {
         {
             key: 'Country',
             value: (
-                <Select value="1">
+                <Select disabled value="1">
                     <SelectItem value="1">
                         {response?.organization?.country}
                     </SelectItem>
@@ -82,7 +84,7 @@ const SettingsOrganization: React.FC<any> = () => {
             key: 'Contact Details',
             value: (
                 <>
-                    <p>{response?.organization?.contactPerson}</p>
+                    <p>Name: {response?.organization?.contactPerson}</p>
                     <p>Phone: {response?.organization?.contactPhone}</p>
                     <p>Email: {response?.organization?.contactEmail}</p>
                 </>
@@ -97,8 +99,12 @@ const SettingsOrganization: React.FC<any> = () => {
                 {items.map((item) => {
                     return (
                         <ListItem key="lb">
-                            <Flex justifyContent="start" flexDirection="row">
-                                <Text className="text-md my-5 w-1/2 text-gray-900">
+                            <Flex
+                                alignItems="start"
+                                flexDirection="row"
+                                className="py-2"
+                            >
+                                <Text className="text-md w-1/2 text-gray-900">
                                     {item.key}
                                 </Text>
                                 <Text className="text-md text-start w-1/2 text-gray-500">

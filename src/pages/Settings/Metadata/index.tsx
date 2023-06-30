@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-    Bold,
     Card,
     Flex,
     Grid,
@@ -11,14 +10,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import {
-    BuildingOfficeIcon,
-    HomeIcon,
-    UserIcon,
-} from '@heroicons/react/24/outline'
-import { Link, useParams } from 'react-router-dom'
-import dayjs from 'dayjs'
-import LoggedInLayout from '../../../components/LoggedInLayout'
+import { useParams } from 'react-router-dom'
 import {
     useWorkspaceApiV1WorkspaceCurrentList,
     useWorkspaceApiV1WorkspacesLimitsDetail,
@@ -134,7 +126,7 @@ const SettingsMetadata: React.FC<any> = () => {
                 <Title>Summary</Title>
                 <List className="mt-4">
                     {wsDetails.map((item) => (
-                        <ListItem key={item.title}>
+                        <ListItem key={item.title} className="my-1">
                             <Flex
                                 justifyContent="start"
                                 className="truncate space-x-4"

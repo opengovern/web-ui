@@ -390,8 +390,8 @@ export default function LoggedInLayout({
                     </Flex>
                 </div>
 
-                <main className="flex justify-center items-start px-12 pt-20 pb-12 dark:bg-gray-900 h-full overflow-y-scroll">
-                    <div className="max-w-6xl w-full">{children}</div>
+                <main className="flex justify-center items-start px-12 pt-20 pb-12 bg-gray-100 dark:bg-gray-900 h-full overflow-y-scroll">
+                    <div className="max-w-6xl w-full h-full">{children}</div>
                 </main>
             </div>
         </Flex>
