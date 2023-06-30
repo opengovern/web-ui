@@ -148,7 +148,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                     refreshList()
                 }}
             />
-            <Card>
+            <Card key={workspace.name}>
                 <Flex flexDirection="row" className="mb-6">
                     <Flex flexDirection="row" className="w-fit">
                         <Metric>{workspace.name}</Metric>

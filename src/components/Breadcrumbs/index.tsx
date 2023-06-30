@@ -25,8 +25,7 @@ export default function Breadcrumbs({ pages }: IProps) {
     }
     return (
         <nav className="flex" aria-label="Breadcrumb">
-            {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
-            <ol role="list" className="flex items-center space-x-4">
+            <ol className="flex items-center space-x-4">
                 <li>
                     <div>
                         <Button

@@ -4,6 +4,7 @@ import {
     AccordionHeader,
     BadgeDelta,
     Card,
+    Divider,
     Flex,
     Subtitle,
     Table,
@@ -36,25 +37,6 @@ const calculatePercent = (inputData: any) => {
     return 0
 }
 
-const insightRows = (insights: any) => {
-    const rows = []
-    if (insights) {
-        for (let i = 0; i < insights.length; i = +1) {
-            rows.push({
-                name: insights[i].shortTitle || '',
-                value: insights[i].totalResultValue || 0,
-                isPositive:
-                    insights[i].totalResultValue -
-                        insights[i].oldTotalResultValue >
-                    0,
-                num: i,
-                id: insights[i].id,
-            })
-        }
-    }
-    return rows
-}
-
 export default function InsightGroupCard({ metric }: IInsightGroupCard) {
     const navigate = useNavigate()
     const navigateToAssetsInsightsDetails = (id: any) => {
@@ -62,7 +44,7 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
     }
 
     return (
-        <Card key={metric}>
+        <Card key={metric.id}>
             <Flex
                 flexDirection="col"
                 alignItems="start"
@@ -116,9 +98,9 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {insightRows(metric.insights)
-                                .filter((insight) => insight.num < 2)
-                                .map((insight) => (
+                            {metric.insights
+                                .filter((insight: any, i: number) => i < 2)
+                                .map((insight: any) => (
                                     <TableRow
                                         onClick={() =>
                                             navigateToAssetsInsightsDetails(
@@ -128,17 +110,19 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                         className="cursor-pointer"
                                     >
                                         <TableCell className="px-0">
-                                            <Text>{insight.name}</Text>
+                                            <Text>{insight.shortTitle}</Text>
                                         </TableCell>
                                         <TableCell className="px-0 flex justify-end">
                                             <Text
                                                 color={
-                                                    insight.isPositive
+                                                    insight.totalResultValue -
+                                                        insight.oldTotalResultValue >
+                                                    0
                                                         ? 'green'
                                                         : 'red'
                                                 }
                                             >
-                                                {insight.value}
+                                                {insight.totalResultValue}
                                             </Text>
                                         </TableCell>
                                     </TableRow>
@@ -147,11 +131,14 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                     </Table>
                     <Accordion className="w-full border-0">
                         <AccordionBody className="p-0 w-full">
+                            <Divider className="p-0 m-0" />
                             <Table className="w-full">
                                 <TableBody>
-                                    {insightRows(metric.insights)
-                                        .filter((insight) => insight.num > 1)
-                                        .map((insight) => (
+                                    {metric.insights
+                                        .filter(
+                                            (insight: any, i: number) => i > 1
+                                        )
+                                        .map((insight: any) => (
                                             <TableRow
                                                 onClick={() =>
                                                     navigateToAssetsInsightsDetails(
@@ -161,17 +148,23 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                                 className="cursor-pointer"
                                             >
                                                 <TableCell className="px-0">
-                                                    <Text>{insight.name}</Text>
+                                                    <Text>
+                                                        {insight.shortTitle}
+                                                    </Text>
                                                 </TableCell>
                                                 <TableCell className="px-0 flex justify-end">
                                                     <Text
                                                         color={
-                                                            insight.isPositive
+                                                            insight.totalResultValue -
+                                                                insight.oldTotalResultValue >
+                                                            0
                                                                 ? 'green'
                                                                 : 'red'
                                                         }
                                                     >
-                                                        {insight.value}
+                                                        {
+                                                            insight.totalResultValue
+                                                        }
                                                     </Text>
                                                 </TableCell>
                                             </TableRow>
@@ -182,12 +175,16 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                         <AccordionHeader
                             color="blue"
                             className={`p-0 w-full pr-0.5 ${
-                                insightRows(metric.insights).length > 2
+                                metric.insights.length > 2
                                     ? 'opacity-100'
                                     : 'opacity-0 cursor-default'
                             }`}
                         >
-                            <Flex justifyContent="end">see more</Flex>
+                            <Flex justifyContent="end">
+                                <Text color="blue" className="-mr-2">
+                                    see more
+                                </Text>
+                            </Flex>
                         </AccordionHeader>
                     </Accordion>
                 </Flex>

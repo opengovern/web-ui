@@ -22,6 +22,7 @@ import {
 import InsightCard from '../../components/Cards/InsightCard'
 import { timeAtom } from '../../store'
 import InsightGroupCard from '../../components/Cards/InsightGroupCard'
+import Spinner from '../../components/Spinner'
 
 export default function Insights() {
     const [selectedCategory, setSelectedCategory] = useState('')
@@ -35,9 +36,10 @@ export default function Insights() {
             endTime: dayjs(activeTimeRange.to).unix(),
         }),
     }
-    const { response: insightList } = useComplianceApiV1InsightList(query)
-    const { response: insightGroup } = useComplianceApiV1InsightGroupList(query)
-    console.log(insightGroup)
+    const { response: insightList, isLoading: listLoading } =
+        useComplianceApiV1InsightList(query)
+    const { response: insightGroup, isLoading: groupLoading } =
+        useComplianceApiV1InsightGroupList(query)
 
     return (
         <LoggedInLayout currentPage="insight">
@@ -70,55 +72,62 @@ export default function Insights() {
                     />
                     <TabPanels>
                         <TabPanel>
-                            <Grid
-                                numItems={1}
-                                numItemsMd={2}
-                                numItemsLg={3}
-                                className="gap-3 w-100"
-                            >
-                                {insightList
-                                    ?.filter((insight) => {
-                                        if (selectedCategory.length)
-                                            return insight.tags?.category.includes(
-                                                selectedCategory
-                                            )
-                                        return insight
-                                    })
-                                    .map((insight) => (
-                                        <Col numColSpan={1}>
-                                            <InsightCard
-                                                metric={insight}
-                                                showTitle
-                                                showDetails
-                                                isClickable
-                                            />
-                                        </Col>
-                                    ))}
-                            </Grid>
+                            {listLoading ? (
+                                <Flex justifyContent="center" className="mt-56">
+                                    <Spinner />
+                                </Flex>
+                            ) : (
+                                <Grid
+                                    numItems={1}
+                                    numItemsMd={2}
+                                    numItemsLg={3}
+                                    className="gap-3 w-100"
+                                >
+                                    {insightList
+                                        ?.filter((insight) => {
+                                            if (selectedCategory.length)
+                                                return insight.tags?.category.includes(
+                                                    selectedCategory
+                                                )
+                                            return insight
+                                        })
+                                        .map((insight) => (
+                                            <Col numColSpan={1}>
+                                                <InsightCard metric={insight} />
+                                            </Col>
+                                        ))}
+                                </Grid>
+                            )}
                         </TabPanel>
                         <TabPanel>
-                            <Grid
-                                numItems={1}
-                                numItemsMd={2}
-                                numItemsLg={3}
-                                className="gap-3 w-100"
-                            >
-                                {insightGroup
-                                    ?.filter((insight) => {
-                                        if (selectedCategory.length)
-                                            return insight.tags?.category.includes(
-                                                selectedCategory
-                                            )
-                                        return insight
-                                    })
-                                    .map((insight) => (
-                                        <Col numColSpan={1}>
-                                            <InsightGroupCard
-                                                metric={insight}
-                                            />
-                                        </Col>
-                                    ))}
-                            </Grid>
+                            {groupLoading ? (
+                                <Flex justifyContent="center" className="mt-56">
+                                    <Spinner />
+                                </Flex>
+                            ) : (
+                                <Grid
+                                    numItems={1}
+                                    numItemsMd={2}
+                                    numItemsLg={3}
+                                    className="gap-3 w-100"
+                                >
+                                    {insightGroup
+                                        ?.filter((insight) => {
+                                            if (selectedCategory.length)
+                                                return insight.tags?.category.includes(
+                                                    selectedCategory
+                                                )
+                                            return insight
+                                        })
+                                        .map((insight) => (
+                                            <Col numColSpan={1}>
+                                                <InsightGroupCard
+                                                    metric={insight}
+                                                />
+                                            </Col>
+                                        ))}
+                                </Grid>
+                            )}
                         </TabPanel>
                     </TabPanels>
                 </TabGroup>

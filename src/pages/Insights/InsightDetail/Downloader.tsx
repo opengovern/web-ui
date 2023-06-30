@@ -14,7 +14,7 @@ export interface IProps {
 
 const Downloader = ({ Headers, Rows, Name }: IProps) => {
     const csvLink = useRef<{ link: { click: () => void } }>()
-    console.log(Headers)
+
     const CSVData = () => {
         const csv: any = { headers: [], data: [], fileName: Name }
         for (let i = 0; i < Headers.length; i += 1) {
@@ -42,11 +42,9 @@ const Downloader = ({ Headers, Rows, Name }: IProps) => {
         <Button
             variant="secondary"
             onClick={() => csvLink?.current?.link?.click()}
+            icon={ArrowDownOnSquareIcon}
         >
-            <Flex flexDirection="row">
-                <Icon icon={ArrowDownOnSquareIcon} />
-                <Text>Download</Text>
-            </Flex>
+            Download
             <CSVLink
                 {...CSVData()}
                 style={{ display: 'hidden' }}
