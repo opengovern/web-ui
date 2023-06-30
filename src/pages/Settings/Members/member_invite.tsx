@@ -7,26 +7,32 @@ import {
     Flex,
     List,
     ListItem,
+    Subtitle,
+    Table,
+    TableCell,
+    TableHead,
+    TableHeaderCell,
+    TableRow,
     Text,
+    TextInput,
     Title,
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { RadioGroup } from '@headlessui/react'
 import {
-    useAuthApiV1UserRoleBindingDelete,
-    useAuthApiV1UserRoleBindingUpdate,
+    useAuthApiV1UserInviteCreate,
     useAuthApiV1WorkspaceRoleBindingsList,
-} from '../../api/auth.gen'
-import Spinner from '../../components/Spinner'
-import DrawerPanel from '../../components/DrawerPanel'
-import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../api/api'
+} from '../../../api/auth.gen'
+import Spinner from '../../../components/Spinner'
+import DrawerPanel from '../../../components/DrawerPanel'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../../api/api'
 
-interface MemberDetailsProps {
-    user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
-    close: () => void
+interface MemberInviteProps {
+    close: (refresh: boolean) => void
 }
-const MemberDetails: React.FC<MemberDetailsProps> = ({ user, close }) => {
-    const [role, setRole] = useState<string>(user?.roleName || 'viewer')
+const MemberInvite: React.FC<MemberInviteProps> = ({ close }) => {
+    const [email, setEmail] = useState<string>('')
+    const [role, setRole] = useState<string>('viewer')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
         'viewer'
     )
@@ -34,25 +40,12 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ user, close }) => {
     const {
         isExecuted,
         isLoading,
-        sendNow: updateRole,
-    } = useAuthApiV1UserRoleBindingUpdate(
-        { userId: user?.userId || '', roleName: roleValue },
+        sendNow: createInvite,
+    } = useAuthApiV1UserInviteCreate(
+        { email: email || '', roleName: roleValue },
         {},
         false
     )
-
-    const {
-        isExecuted: deleteExecuted,
-        isLoading: deleteLoading,
-        sendNow: deleteRole,
-    } = useAuthApiV1UserRoleBindingDelete(
-        { userId: user?.userId || '' },
-        {},
-        false
-    )
-
-    const loading =
-        (isExecuted && isLoading) || (deleteExecuted && deleteLoading)
 
     useEffect(() => {
         if (role === 'viewer' || role === 'editor' || role === 'admin') {
@@ -61,37 +54,10 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ user, close }) => {
     }, [role])
 
     useEffect(() => {
-        if ((isExecuted && !isLoading) || (deleteExecuted && !deleteLoading)) {
-            close()
+        if (isExecuted && !isLoading) {
+            close(true)
         }
-    }, [isLoading, deleteLoading])
-
-    if (user === undefined) {
-        return <div />
-    }
-
-    const items = [
-        {
-            title: 'Email',
-            value: user.email,
-        },
-        {
-            title: 'Member Since',
-            value: new Date(
-                Date.parse(user.createdAt || Date.now().toString())
-            ).toLocaleDateString('en-US'),
-        },
-        {
-            title: 'Last Activity',
-            value: new Date(
-                Date.parse(user.lastActivity || Date.now().toString())
-            ).toLocaleDateString('en-US'),
-        },
-        {
-            title: 'Status',
-            value: <Badge>{user.status}</Badge>,
-        },
-    ]
+    }, [isLoading])
 
     const roleItems = [
         {
@@ -112,38 +78,37 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ user, close }) => {
     ]
 
     return (
-        <List className="mt-4 h-full">
-            <ListItem key="title" className="py-4">
+        <List className="mt-4">
+            <ListItem key="title">
                 <Flex justifyContent="start" className="truncate space-x-4">
-                    <Text className="font-medium text-gray-800">
-                        Member Info
-                    </Text>
+                    <Subtitle className="text-gray-800 py-2">
+                        New Member Info
+                    </Subtitle>
                 </Flex>
             </ListItem>
-            {items.map((item) => {
-                return (
-                    <ListItem key={item.title} className="py-4">
-                        <Flex
-                            justifyContent="start"
-                            className="truncate space-x-4"
-                        >
-                            <Text className="font-medium text-gray-500">
-                                {item.title}
-                            </Text>
-                        </Flex>
-                        <Text className="text-gray-900">{item.value}</Text>
-                    </ListItem>
-                )
-            })}
-            <ListItem key="item" className="py-4">
+            <ListItem key="email">
+                <Flex
+                    justifyContent="between"
+                    className="truncate space-x-4 py-2"
+                >
+                    <Text className="font-medium text-gray-800">Email*</Text>
+                    <TextInput
+                        className="font-medium w-1/2 text-gray-800"
+                        onChange={(e) => {
+                            setEmail(e.target.value)
+                        }}
+                    />
+                </Flex>
+            </ListItem>
+            <ListItem key="role">
                 <Flex
                     justifyContent="between"
                     alignItems="start"
                     className="truncate space-x-4"
                 >
-                    <Text className="font-medium text-gray-500">Role</Text>
+                    <Text className="font-medium text-gray-800">Role*</Text>
 
-                    <div className="space-y-5 sm:mt-0">
+                    <div className="space-y-5 sm:mt-0 w-1/2">
                         {roleItems.map((item) => {
                             return (
                                 <div className="relative flex items-start">
@@ -175,14 +140,18 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ user, close }) => {
             <ListItem key="buttons">
                 <Flex justifyContent="end" className="truncate space-x-4">
                     <Button
-                        loading={loading}
-                        onClick={() => deleteRole()}
+                        loading={isExecuted && isLoading}
+                        onClick={() => close(false)}
                         variant="secondary"
                     >
-                        Delete
+                        Cancel
                     </Button>
-                    <Button loading={loading} onClick={() => updateRole()}>
-                        Update Changes
+                    <Button
+                        loading={isExecuted && isLoading}
+                        disabled={email.length === 0}
+                        onClick={() => createInvite()}
+                    >
+                        Add
                     </Button>
                 </Flex>
             </ListItem>
@@ -190,4 +159,4 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ user, close }) => {
     )
 }
 
-export default MemberDetails
+export default MemberInvite

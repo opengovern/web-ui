@@ -10,9 +10,9 @@ import {
     Title,
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useAuthApiV1WorkspaceRoleBindingsList } from '../../api/auth.gen'
-import Spinner from '../../components/Spinner'
-import DrawerPanel from '../../components/DrawerPanel'
+import { useAuthApiV1WorkspaceRoleBindingsList } from '../../../api/auth.gen'
+import Spinner from '../../../components/Spinner'
+import DrawerPanel from '../../../components/DrawerPanel'
 import MemberDetails from './member_details'
 import MemberInvite from './member_invite'
 

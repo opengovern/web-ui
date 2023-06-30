@@ -59,7 +59,7 @@ export default function GrowthTrend({
             const temp: any = {}
             const day = dayjs(data[item].date).format('DD')
             const month = dayjs(data[item].date).format('MMM')
-            temp.count = data[item].count
+            temp['Resource Count'] = data[item].count
             temp.date = `${month} ${day}`
             result.push(temp)
         }
@@ -92,33 +92,35 @@ export default function GrowthTrend({
         <Card>
             <Flex justifyContent="between" alignItems="start">
                 <div className="flex justify-normal gap-x-2">
-                    <Title className="min-w-[7vw]">Growth Trend in </Title>
-                    <SearchSelect
-                        onValueChange={(e) => setSelectedResourceCategory(e)}
-                        value={selectedResourceCategory}
-                        placeholder="Source Selection"
-                        className="max-w-xs mb-6"
-                    >
-                        {categories.map((category) => (
-                            <SearchSelectItem
-                                key={category.label}
-                                value={category.value}
-                            >
-                                {category.value}
-                            </SearchSelectItem>
-                        ))}
-                    </SearchSelect>
+                    <Title className="min-w-[7vw] truncate">
+                        Growth Trend{' '}
+                    </Title>
+                    <BadgeDelta deltaType={growthDeltaType}>
+                        {numericDisplay(growthDelta)}
+                    </BadgeDelta>
                 </div>
-                <BadgeDelta deltaType={growthDeltaType} className="mt-2">
-                    {numericDisplay(growthDelta)}
-                </BadgeDelta>
+                <SearchSelect
+                    onValueChange={(e) => setSelectedResourceCategory(e)}
+                    value={selectedResourceCategory}
+                    placeholder="Source Selection"
+                    className="max-w-xs mb-6"
+                >
+                    {categories.map((category) => (
+                        <SearchSelectItem
+                            key={category.label}
+                            value={category.value}
+                        >
+                            {category.value}
+                        </SearchSelectItem>
+                    ))}
+                </SearchSelect>
             </Flex>
             <MultipleAreaCharts
-                title="Resource Count"
+                // title="Resource Count"
                 className="mt-4 h-80"
                 index="date"
                 yAxisWidth={60}
-                categories={['count']}
+                categories={['Resource Count']}
                 data={fixTime(data) || []}
                 colors={['indigo']}
             />

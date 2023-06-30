@@ -18,14 +18,14 @@ import {
 } from '@heroicons/react/24/outline'
 import { Link, useParams } from 'react-router-dom'
 import dayjs from 'dayjs'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
     useWorkspaceApiV1WorkspaceCurrentList,
     useWorkspaceApiV1WorkspacesLimitsDetail,
-} from '../../api/workspace.gen'
-import Spinner from '../../components/Spinner'
-import { numericDisplay } from '../../utilities/numericDisplay'
-import { useAuthApiV1UserDetail } from '../../api/auth.gen'
+} from '../../../api/workspace.gen'
+import Spinner from '../../../components/Spinner'
+import { numericDisplay } from '../../../utilities/numericDisplay'
+import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
 
 const SettingsMetadata: React.FC<any> = () => {
     const workspace = useParams<{ ws: string }>().ws
@@ -130,7 +130,7 @@ const SettingsMetadata: React.FC<any> = () => {
                     <ProgressBar value={resourcesPercentage} className="mt-2" />
                 </Card>
             </Grid>
-            <Card key="summary" className="top-10">
+            <Card key="summary" className="top-6">
                 <Title>Summary</Title>
                 <List className="mt-4">
                     {wsDetails.map((item) => (
