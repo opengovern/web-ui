@@ -7,10 +7,10 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { GridOptions } from 'ag-grid-community'
 import LoggedInLayout from '../../../components/LoggedInLayout'
@@ -22,6 +22,7 @@ import { timeAtom } from '../../../store'
 import MultipleAreaCharts from '../../../components/Charts/AreaCharts/MultipleAreaCharts'
 import Downloader from './Downloader'
 import { numericDisplay } from '../../../utilities/numericDisplay'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 
 const chartData = (inputData: any) => {
     const data = []
@@ -105,6 +106,7 @@ const gridOptions: GridOptions = {
 
 export default function InsightDetail() {
     const gridRef = useRef<AgGridReact>(null)
+    const navigate = useNavigate()
     const { id } = useParams()
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const query = {
@@ -133,16 +135,28 @@ export default function InsightDetail() {
         ? insightDetail?.result[0].details
         : undefined
 
+    const breadcrubmsPages = [
+        {
+            name: 'Assets',
+            path: () => {
+                navigate(-1)
+            },
+            current: false,
+        },
+        { name: insightDetail?.shortTitle, path: '', current: true },
+    ]
+
     return (
         <LoggedInLayout currentPage="insight">
             <Flex flexDirection="col">
                 <Flex
                     flexDirection="row"
-                    justifyContent="end"
+                    justifyContent="between"
                     alignItems="center"
                     className="mb-6"
                 >
                     {/* <Title>{insightDetail?.shortTitle}</Title> */}
+                    <Breadcrumbs pages={breadcrubmsPages} />
                     <DateRangePicker
                         className="max-w-md"
                         value={activeTimeRange}

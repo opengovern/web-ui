@@ -1,10 +1,10 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import { Button } from '@tremor/react'
+import { Button, Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 
 type IProps = {
     pages: {
-        name: string
+        name: any
         path: any
         current: boolean
     }[]
@@ -44,7 +44,7 @@ export default function Breadcrumbs({ pages }: IProps) {
                 </li>
                 {newPages().map((page) => (
                     <li key={page.name}>
-                        <div className="flex items-center">
+                        <Flex alignItems="center">
                             <ChevronRightIcon
                                 className="h-5 w-5 flex-shrink-0 text-gray-600"
                                 aria-hidden="true"
@@ -62,7 +62,7 @@ export default function Breadcrumbs({ pages }: IProps) {
                             >
                                 {page.name}
                             </Button>
-                        </div>
+                        </Flex>
                     </li>
                 ))}
             </ol>
