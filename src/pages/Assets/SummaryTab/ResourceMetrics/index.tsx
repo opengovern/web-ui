@@ -58,6 +58,16 @@ export default function ResourceMetrics({
         return a && b ? ((a - b) / b) * 100 : 0
     }
 
+    const deltaType = (delta: number) => {
+        if (delta > 0) {
+            return 'moderateIncrease'
+        }
+        if (delta < 0) {
+            return 'moderateDecrease'
+        }
+        return 'unchanged'
+    }
+
     return (
         <div>
             {/* <div className="h-80" /> */}
@@ -122,12 +132,9 @@ export default function ResourceMetrics({
                                 delta={`${Math.abs(
                                     percentage(metric.count, metric.old_count)
                                 ).toFixed(2)} %`}
-                                deltaType={
-                                    percentage(metric.count, metric.old_count) >
-                                    0
-                                        ? 'moderateIncrease'
-                                        : 'moderateDecrease'
-                                }
+                                deltaType={deltaType(
+                                    percentage(metric.count, metric.old_count)
+                                )}
                             />
                         ))}
                 </Swiper>

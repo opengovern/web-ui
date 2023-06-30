@@ -7,7 +7,7 @@ export const numericDisplay = (
     value: string | number | undefined,
     options?: Intl.NumberFormatOptions
 ) => {
-    if (value === undefined) {
+    if (!value) {
         return 0
     }
     const num = parseInt(value.toString(), 10)
@@ -19,7 +19,7 @@ export const floatDisplay = (
     value: string | number | undefined,
     options?: Intl.NumberFormatOptions
 ) => {
-    if (value === undefined) {
+    if (!value) {
         return 0
     }
     const num = parseFloat(value.toString())
