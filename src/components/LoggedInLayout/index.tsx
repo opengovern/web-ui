@@ -182,8 +182,15 @@ export default function LoggedInLayout({
                     flexDirection="col"
                     className="h-full w-full gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4"
                 >
-                    <Flex alignItems="center" className="h-16 shrink-0">
+                    <Flex
+                        alignItems="center"
+                        justifyContent="start"
+                        className="mt-2 h-16 shrink-0"
+                    >
                         <KaytuLogo />
+                        {!collapsed && (
+                            <Title className="text-slate-50">KAYTU</Title>
+                        )}
                     </Flex>
                     <nav className="w-full flex flex-1 flex-col justify-between items-center">
                         <ul className="-mx-2 space-y-1 w-full">
@@ -191,8 +198,7 @@ export default function LoggedInLayout({
                                 <li key={item.name}>
                                     <Link
                                         to={`/${workspace}/${item.page}`}
-                                        className={`
-                                                        p-2 group flex rounded-md text-sm leading-6 font-semibold   
+                                        className={`p-2 group flex rounded-md text-sm leading-6 font-semibold   
                                                     ${
                                                         item.page ===
                                                         currentPage
@@ -239,10 +245,10 @@ export default function LoggedInLayout({
     )
 
     return (
-        <Flex flexDirection="row" className="h-screen">
+        <Flex flexDirection="row" className="h-screen overflow-hidden">
             {showSidebar && sidebar}
-            <div className="w-full h-full relative">
-                <div className="px-12 absolute top-0 w-full z-40 flex h-16 shrink-0 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+            <div className="w-full h-full relative bg-blue-950">
+                <div className="px-12 absolute top-0 lg:top-2 w-full z-40 flex h-16 shrink-0 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm sm:gap-x-6 lg:rounded-tl-2xl">
                     <button
                         type="button"
                         className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
@@ -390,8 +396,10 @@ export default function LoggedInLayout({
                     </Flex>
                 </div>
 
-                <main className="flex justify-center items-start px-12 pt-20 pb-12 bg-gray-100 dark:bg-gray-900 h-full overflow-y-scroll">
-                    <div className="max-w-6xl w-full h-full">{children}</div>
+                <main className="flex justify-center items-start px-12 lg:mt-8 pt-16 pb-12 bg-gray-100 dark:bg-gray-900 h-full overflow-y-scroll">
+                    <div className="max-w-6xl w-full min-h-full">
+                        {children}
+                    </div>
                 </main>
             </div>
         </Flex>

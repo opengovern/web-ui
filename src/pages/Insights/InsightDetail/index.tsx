@@ -162,14 +162,22 @@ export default function InsightDetail() {
                                 className="w-fit"
                             >
                                 <Title>
-                                    {numericDisplay(
-                                        insightDetail?.totalResultValue || 0
-                                    )}
+                                    {insightDetail?.totalResultValue
+                                        ? numericDisplay(
+                                              insightDetail?.totalResultValue ||
+                                                  0
+                                          )
+                                        : 'N/A'}
                                 </Title>
                                 <Subtitle className="ml-1 mr-2">
-                                    {`from ${numericDisplay(
-                                        insightDetail?.oldTotalResultValue || 0
-                                    )}`}
+                                    {`from ${
+                                        insightDetail?.oldTotalResultValue
+                                            ? numericDisplay(
+                                                  insightDetail?.oldTotalResultValue ||
+                                                      0
+                                              )
+                                            : 'N/A'
+                                    }`}
                                 </Subtitle>
                                 <BadgeDelta
                                     deltaType={

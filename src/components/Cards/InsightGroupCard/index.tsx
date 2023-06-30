@@ -60,12 +60,20 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                             className="w-fit"
                         >
                             <Title className="mr-1">
-                                {numericDisplay(metric?.totalResultValue || 0)}
+                                {metric?.totalResultValue
+                                    ? numericDisplay(
+                                          metric?.totalResultValue || 0
+                                      )
+                                    : 'N/A'}
                             </Title>
                             <Subtitle>
-                                {`from ${numericDisplay(
-                                    metric?.oldTotalResultValue || 0
-                                )}`}
+                                {`from ${
+                                    metric?.oldTotalResultValue
+                                        ? numericDisplay(
+                                              metric?.oldTotalResultValue || 0
+                                          )
+                                        : 'N/A'
+                                }`}
                             </Subtitle>
                         </Flex>
                         <BadgeDelta

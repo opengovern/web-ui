@@ -75,13 +75,13 @@ const Settings: React.FC<any> = () => {
                         <Flex
                             flexDirection="col"
                             alignItems="start"
-                            className="grow h-full gap-y-5 overflow-y-auto overflow-x-hidden px-6"
+                            className="grow h-full gap-y-5 overflow-y-auto overflow-x-hidden pr-6"
                         >
                             <Metric className="text-gray-800">Settings</Metric>
                             <nav className="flex flex-1 flex-col w-52">
                                 <ul className="flex flex-col gap-y-7">
                                     <li>
-                                        <ul className="-mx-2 space-y-1.5">
+                                        <ul className=" space-y-1.5">
                                             {navigation.map((item) => (
                                                 <li key={item.name}>
                                                     {item.page === '' ? (
