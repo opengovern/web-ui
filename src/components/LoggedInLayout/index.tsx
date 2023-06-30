@@ -16,7 +16,9 @@ import {
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link, useParams } from 'react-router-dom'
 import { Flex, Title } from '@tremor/react'
+import { useAtom, useAtomValue } from 'jotai'
 import { ReactComponent as KaytuLogo } from '../../assets/icons/logo-dark-sqare-sm-glyph 2.svg'
+import { sideBarCollapsedAtom } from '../../store'
 
 const navigation = [
     // {
@@ -71,7 +73,7 @@ export default function LoggedInLayout({
     const workspace = useParams<{ ws: string }>().ws
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const { user, logout } = useAuth0()
-    const [collapsed, setCollapsed] = useState(false)
+    const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
 
     const sidebar = (
         <>
