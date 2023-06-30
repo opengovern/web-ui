@@ -18,12 +18,13 @@ import {
     useAuthApiV1KeyDeleteDelete,
     useAuthApiV1KeysList,
     useAuthApiV1UserDetail,
-} from '../../api/auth.gen'
-import Spinner from '../../components/Spinner'
-import DrawerPanel from '../../components/DrawerPanel'
-import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey } from '../../api/api'
-import Modal from '../../components/Modal'
-import InformationModal from '../../components/Modal/InformationModal'
+} from '../../../api/auth.gen'
+import Spinner from '../../../components/Spinner'
+import DrawerPanel from '../../../components/DrawerPanel'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey } from '../../../api/api'
+import Modal from '../../../components/Modal'
+import InformationModal from '../../../components/Modal/InformationModal'
+import ConfirmModal from '../../../components/Modal/ConfirmModal'
 
 interface CreateAPIKeyProps {
     close: () => void
@@ -177,6 +178,7 @@ interface APIKeyRecordProps {
     refresh: () => void
 }
 const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
+    const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const { response, isLoading } = useAuthApiV1UserDetail(
         item.creatorUserID || ''
     )
@@ -209,6 +211,12 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
 
     return (
         <>
+            <ConfirmModal
+                title={`Are you sure you want to delete key ${item.name}?`}
+                open={deleteConfirmation}
+                onConfirm={callDelete}
+                onClose={() => setDeleteConfirmation(false)}
+            />
             <InformationModal
                 title="Delete Failed"
                 description="Failed to delete API Key"
@@ -259,7 +267,7 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
                         <TrashIcon
                             className="w-4 h-4 cursor-pointer"
                             onClick={() => {
-                                callDelete()
+                                setDeleteConfirmation(true)
                             }}
                         />
                     )}

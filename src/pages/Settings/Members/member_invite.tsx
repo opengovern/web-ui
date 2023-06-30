@@ -22,10 +22,10 @@ import { RadioGroup } from '@headlessui/react'
 import {
     useAuthApiV1UserInviteCreate,
     useAuthApiV1WorkspaceRoleBindingsList,
-} from '../../api/auth.gen'
-import Spinner from '../../components/Spinner'
-import DrawerPanel from '../../components/DrawerPanel'
-import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../api/api'
+} from '../../../api/auth.gen'
+import Spinner from '../../../components/Spinner'
+import DrawerPanel from '../../../components/DrawerPanel'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../../api/api'
 
 interface MemberInviteProps {
     close: (refresh: boolean) => void

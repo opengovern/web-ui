@@ -16,11 +16,11 @@ import {
     useAuthApiV1UserRoleBindingDelete,
     useAuthApiV1UserRoleBindingUpdate,
     useAuthApiV1WorkspaceRoleBindingsList,
-} from '../../api/auth.gen'
-import Spinner from '../../components/Spinner'
-import DrawerPanel from '../../components/DrawerPanel'
-import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../api/api'
-import ConfirmModal from '../../components/Modal/ConfirmModal'
+} from '../../../api/auth.gen'
+import Spinner from '../../../components/Spinner'
+import DrawerPanel from '../../../components/DrawerPanel'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../../api/api'
+import ConfirmModal from '../../../components/Modal/ConfirmModal'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
