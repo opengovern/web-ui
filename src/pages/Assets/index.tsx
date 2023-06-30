@@ -13,6 +13,7 @@ import {
     Bold,
     Metric,
     Text,
+    DateRangePickerValue,
 } from '@tremor/react'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'

@@ -116,68 +116,6 @@ interface I%[6]sState {
 	error?: any
 }
 
-
-export const %[7]s = (%[2]s, wait: boolean = false) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<I%[6]sState>({
-            isLoading: true,
-			isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([%[5]s, wait])
-    )
-
-    const sendRequest = () => {
-		setState({
-			...state,
-			isLoading: true,
-			isExecuted: true,
-		})
-        try {
-            api.%[4]s
-                .%[1]s(%[5]s)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                    })
-                })
-                .catch((err) => {
-                    setState({ ...state, error: err, isLoading: false })
-                })
-        } catch (err) {
-            setState({ ...state, error: err, isLoading: false })
-        }
-    }
-
-    if (JSON.stringify([%[5]s, wait]) !== lastInput) {
-        setLastInput(JSON.stringify([%[5]s, wait]))
-    }
-
-    useEffect(() => {
-        if (!wait) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { error } = state
-    return {response, isLoading, error}
-}
-
 export const %[6]s = (%[2]s, autoExecute: boolean = true) => {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -263,7 +201,7 @@ export const %[6]s = (%[2]s, autoExecute: boolean = true) => {
 		imps = append(imps, k)
 	}
 	sort.Strings(imps)
-	
+
 	for _, k := range imps {
 		ims += k + "\n"
 	}
