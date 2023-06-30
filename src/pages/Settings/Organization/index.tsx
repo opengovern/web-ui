@@ -1,27 +1,7 @@
 import React from 'react'
-import {
-    Card,
-    Flex,
-    List,
-    ListItem,
-    Metric,
-    Select,
-    SelectItem,
-    Text,
-    Title,
-} from '@tremor/react'
-import {
-    BuildingOfficeIcon,
-    HomeIcon,
-    UserIcon,
-} from '@heroicons/react/24/outline'
-import { Link, useParams } from 'react-router-dom'
+import { Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
 import { useAuth0 } from '@auth0/auth0-react'
-import LoggedInLayout from '../../../components/LoggedInLayout'
-import {
-    useWorkspaceApiV1WorkspaceCurrentList,
-    useWorkspaceApiV1WorkspaceOrganizationCreate,
-} from '../../../api/workspace.gen'
+import { useWorkspaceApiV1WorkspaceCurrentList } from '../../../api/workspace.gen'
 import Spinner from '../../../components/Spinner'
 
 const SettingsOrganization: React.FC<any> = () => {
@@ -72,13 +52,7 @@ const SettingsOrganization: React.FC<any> = () => {
         },
         {
             key: 'Country',
-            value: (
-                <Select disabled value="1">
-                    <SelectItem value="1">
-                        {response?.organization?.country}
-                    </SelectItem>
-                </Select>
-            ),
+            value: <p>{response?.organization?.country}</p>,
         },
         {
             key: 'Contact Details',

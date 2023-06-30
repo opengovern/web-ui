@@ -9,19 +9,22 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { ArrowPathIcon, ArrowSmallRightIcon } from '@heroicons/react/24/solid'
 import {
     useWorkspaceApiV1WorkspaceDelete,
     useWorkspaceApiV1WorkspaceResumeCreate,
+    useWorkspaceApiV1WorkspacesByidDetail,
     useWorkspaceApiV1WorkspacesLimitsDetail,
     useWorkspaceApiV1WorkspaceSuspendCreate,
 } from '../../../api/workspace.gen'
+import ConfirmModal from '../../Modal/ConfirmModal'
 
 interface IWorkSpace {
     workspace: any
+    refreshList: () => void
 }
 
 const getBadgeColor = (status: string) => {
@@ -63,8 +66,11 @@ const showSuspend = (status: string) => {
     }
 }
 
-export default function WorkspaceCard({ workspace }: IWorkSpace) {
+export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
     const navigate = useNavigate()
+    const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
+    const [suspendConfirmation, setSuspendConfirmation] =
+        useState<boolean>(false)
     const { response: workspaceDetail } =
         useWorkspaceApiV1WorkspacesLimitsDetail(workspace.name)
     const {
@@ -123,66 +129,86 @@ export default function WorkspaceCard({ workspace }: IWorkSpace) {
     }
 
     return (
-        <Card key={workspace.name}>
-            <Flex flexDirection="row" className="mb-6">
-                <Flex flexDirection="row" className="w-fit">
-                    <Metric>{workspace.name}</Metric>
-                    <Badge
-                        size="md"
-                        color={getBadgeColor(workspace.status || '')}
-                        className="ml-2"
-                    >
-                        {workspace.status}
-                    </Badge>
-                </Flex>
-                <Flex flexDirection="row" className="w-fit">
-                    {showSuspend(workspace.status) && (
-                        <Button
-                            variant="light"
-                            className="pr-2 border-r-gray-600"
-                            loading={suspendLoading && eS}
-                            onClick={() => callSuspend()}
+        <>
+            <ConfirmModal
+                title={`Are you sure you want to delete workspace ${workspace.name}?`}
+                open={deleteConfirmation}
+                onConfirm={callDelete}
+                onClose={() => {
+                    setDeleteConfirmation(false)
+                    refreshList()
+                }}
+            />
+            <ConfirmModal
+                title={`Are you sure you want to suspend workspace ${workspace.name}?`}
+                open={suspendConfirmation}
+                onConfirm={callSuspend}
+                onClose={() => {
+                    setSuspendConfirmation(false)
+                    refreshList()
+                }}
+            />
+            <Card key={workspace.name}>
+                <Flex flexDirection="row" className="mb-6">
+                    <Flex flexDirection="row" className="w-fit">
+                        <Metric>{workspace.name}</Metric>
+                        <Badge
+                            size="md"
+                            color={getBadgeColor(workspace.status || '')}
+                            className="ml-2"
                         >
-                            Suspend
-                        </Button>
-                    )}
-                    {showDelete(workspace.status) && (
-                        <Button
-                            variant="light"
-                            className="pl-2"
-                            loading={deleteLoading && eD}
-                            onClick={() => callDelete()}
-                        >
-                            Delete
-                        </Button>
-                    )}
+                            {workspace.status}
+                        </Badge>
+                    </Flex>
+                    <Flex flexDirection="row" className="w-fit">
+                        {showSuspend(workspace.status) && (
+                            <Button
+                                variant="light"
+                                className="pr-2 border-r-gray-600"
+                                loading={suspendLoading && eS}
+                                onClick={() => setSuspendConfirmation(true)}
+                            >
+                                Suspend
+                            </Button>
+                        )}
+                        {showDelete(workspace.status) && (
+                            <Button
+                                variant="light"
+                                className="pl-2"
+                                loading={deleteLoading && eD}
+                                onClick={() => setDeleteConfirmation(true)}
+                            >
+                                Delete
+                            </Button>
+                        )}
+                    </Flex>
                 </Flex>
-            </Flex>
-            <Grid numItems={2} numItemsLg={4} className="gap-6 mb-6">
-                {Object.entries(details).map(([name, value]) => (
-                    <Col>
-                        <Card>
-                            <Flex flexDirection="col">
-                                <Title color="slate" className="mb-3">
-                                    {name}
-                                </Title>
-                                <Title>{value}</Title>
-                            </Flex>
-                        </Card>
-                    </Col>
-                ))}
-            </Grid>
-            <Flex flexDirection="row">
-                <Flex flexDirection="row" className="w-fit">
-                    <Text className="pr-2 border-r-gray-600">
-                        {workspace.version}
-                    </Text>
-                    <Text className="pl-2">
-                        {dayjs(workspace.createdAt).format('YYYY-MM-DD')}
-                    </Text>
+                <Grid numItems={2} numItemsLg={4} className="gap-6 mb-6">
+                    {Object.entries(details).map(([name, value]) => (
+                        <Col>
+                            <Card>
+                                <Flex flexDirection="col">
+                                    <Title color="slate" className="mb-3">
+                                        {name}
+                                    </Title>
+                                    <Title>{value}</Title>
+                                </Flex>
+                            </Card>
+                        </Col>
+                    ))}
+                </Grid>
+                <Flex flexDirection="row">
+                    <Flex flexDirection="row" className="w-fit">
+                        <Text className="pr-2 border-r-gray-600">
+                            {workspace.version}
+                        </Text>
+                        <Text className="pl-2">
+                            {dayjs(workspace.createdAt).format('YYYY-MM-DD')}
+                        </Text>
+                    </Flex>
+                    {getButton(workspace.status || '')}
                 </Flex>
-                {getButton(workspace.status || '')}
-            </Flex>
-        </Card>
+            </Card>
+        </>
     )
 }
