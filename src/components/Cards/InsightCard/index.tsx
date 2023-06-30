@@ -54,7 +54,7 @@ export default function InsightCard({
     }
     return (
         <Card
-            key={metric}
+            key={metric.id}
             className="cursor-pointer h-full"
             onClick={() =>
                 isClickable ? navigateToAssetsInsightsDetails(metric.id) : null

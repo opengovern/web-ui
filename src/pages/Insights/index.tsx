@@ -37,7 +37,6 @@ export default function Insights() {
     }
     const { response: insightList } = useComplianceApiV1InsightList(query)
     const { response: insightGroup } = useComplianceApiV1InsightGroupList(query)
-    console.log(insightGroup)
 
     return (
         <LoggedInLayout currentPage="insight">
