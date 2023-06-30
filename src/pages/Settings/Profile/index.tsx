@@ -7,7 +7,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import LoggedInLayout from '../../../components/LoggedInLayout'
 
 const SettingsProfile: React.FC<any> = () => {
     const { user } = useAuth0()

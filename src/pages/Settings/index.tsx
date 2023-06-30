@@ -7,11 +7,11 @@ import {
 } from '@heroicons/react/24/outline'
 import { Link, useParams } from 'react-router-dom'
 import LoggedInLayout from '../../components/LoggedInLayout'
-import SettingsMetadata from './metadata'
-import SettingsMembers from './members'
-import SettingsWorkspaceAPIKeys from './workspace_apikeys'
-import SettingsProfile from './profile'
-import SettingsOrganization from './organization'
+import SettingsMetadata from './Metadata'
+import SettingsMembers from './Members'
+import SettingsWorkspaceAPIKeys from './APIKeys'
+import SettingsProfile from './Profile'
+import SettingsOrganization from './Organization'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')

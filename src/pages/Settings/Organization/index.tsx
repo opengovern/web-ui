@@ -17,12 +17,12 @@ import {
 } from '@heroicons/react/24/outline'
 import { Link, useParams } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
     useWorkspaceApiV1WorkspaceCurrentList,
     useWorkspaceApiV1WorkspaceOrganizationCreate,
-} from '../../api/workspace.gen'
-import Spinner from '../../components/Spinner'
+} from '../../../api/workspace.gen'
+import Spinner from '../../../components/Spinner'
 
 const SettingsOrganization: React.FC<any> = () => {
     const { user } = useAuth0()
