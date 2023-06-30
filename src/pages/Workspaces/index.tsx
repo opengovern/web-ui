@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Col, Flex, Grid, Title } from '@tremor/react'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
@@ -8,8 +8,11 @@ import Spinner from '../../components/Spinner'
 
 export default function Workspaces() {
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: workspaces, isLoading, sendNow: refreshList } =
-        useWorkspaceApiV1WorkspacesList()
+    const {
+        response: workspaces,
+        isLoading,
+        sendNow: refreshList,
+    } = useWorkspaceApiV1WorkspacesList()
 
     return (
         <LoggedInLayout currentPage="assets" showSidebar={false}>
