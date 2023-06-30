@@ -1,14 +1,5 @@
 import React, { useState } from 'react'
-import {
-    Bold,
-    Button,
-    Card,
-    Flex,
-    List,
-    ListItem,
-    Text,
-    Title,
-} from '@tremor/react'
+import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useAuthApiV1WorkspaceRoleBindingsList } from '../../../api/auth.gen'
 import Spinner from '../../../components/Spinner'
@@ -104,7 +95,15 @@ const SettingsMembers: React.FC<any> = () => {
                 </div>
                 <List className="mt-4">
                     {response?.map((item) => (
-                        <ListItem key={item.userName}>
+                        <ListItem
+                            key={item.userName}
+                            onClick={() => {
+                                if (item.userId) {
+                                    userDetail(item.userId)
+                                }
+                            }}
+                            className="cursor-pointer"
+                        >
                             <Flex
                                 justifyContent="start"
                                 className="truncate space-x-4"
@@ -119,15 +118,7 @@ const SettingsMembers: React.FC<any> = () => {
                                 </div>
                             </Flex>
                             <Text>{fixRole(item.roleName || '')}</Text>
-                            <ChevronRightIcon
-                                cursor="pointer"
-                                onClick={() => {
-                                    if (item.userId) {
-                                        userDetail(item.userId)
-                                    }
-                                }}
-                                className="h-6 w-6 shrink-0"
-                            />
+                            <ChevronRightIcon className="h-6 w-6 shrink-0" />
                         </ListItem>
                     ))}
                 </List>

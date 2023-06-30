@@ -2,7 +2,7 @@ import React from 'react'
 import { Flex, Metric } from '@tremor/react'
 import {
     BuildingOfficeIcon,
-    HomeIcon,
+    FolderIcon,
     UserIcon,
 } from '@heroicons/react/24/outline'
 import { Link, useParams } from 'react-router-dom'
@@ -21,7 +21,7 @@ const navigation = [
     {
         name: 'Workspace',
         page: '',
-        icon: HomeIcon,
+        icon: FolderIcon,
     },
     {
         name: 'Metadata',
@@ -67,7 +67,7 @@ const Settings: React.FC<any> = () => {
     return (
         <LoggedInLayout currentPage="settings">
             <Flex flexDirection="row" className="h-full">
-                <aside className="h-full w-64 border-r border-gray-200">
+                <aside className="h-full w-64">
                     <Flex
                         flexDirection="row"
                         className="inset-y-0 h-full w-full"
@@ -87,7 +87,7 @@ const Settings: React.FC<any> = () => {
                                                     {item.page === '' ? (
                                                         <div
                                                             className={classNames(
-                                                                'text-gray-400 font-semibold group flex gap-x-3 p-1'
+                                                                'text-gray-500 font-semibold group flex gap-x-3 p-1'
                                                             )}
                                                         >
                                                             {item.icon && (
@@ -107,9 +107,9 @@ const Settings: React.FC<any> = () => {
                                                                     (!currentSubPage &&
                                                                         item.page ===
                                                                             'metadata')
-                                                                    ? 'bg-blue-100 rounded-lg'
-                                                                    : '',
-                                                                'text-gray-600 font-semibold group flex gap-x-3 py-2 px-10'
+                                                                    ? 'bg-blue-100 rounded-lg text-gray-800'
+                                                                    : 'text-gray-500',
+                                                                'font-medium group flex gap-x-3 py-2 px-10'
                                                             )}
                                                         >
                                                             {item.name}
@@ -125,6 +125,9 @@ const Settings: React.FC<any> = () => {
                     </Flex>
                 </aside>
                 <main className="w-full h-full pl-6">
+                    <Metric className="text-gray-800 mb-5 opacity-0">
+                        placeholder :D
+                    </Metric>
                     {navigation
                         .filter(
                             (item) =>
