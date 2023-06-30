@@ -1,7 +1,6 @@
 import React, { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
-    ArrowTrendingUpIcon,
     Bars3Icon,
     ChevronDoubleLeftIcon,
     ChevronDoubleRightIcon,
@@ -10,10 +9,8 @@ import {
     CommandLineIcon,
     CubeIcon,
     DocumentChartBarIcon,
-    HomeIcon,
     MoonIcon,
     QuestionMarkCircleIcon,
-    ShieldCheckIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { useAuth0 } from '@auth0/auth0-react'
@@ -64,19 +61,17 @@ type IProps = {
         | 'compliance'
         | 'settings'
     showSidebar?: boolean
-    addContainer?: boolean
 }
 
 export default function LoggedInLayout({
     children,
     currentPage,
     showSidebar = true,
-    addContainer = true,
 }: IProps) {
     const workspace = useParams<{ ws: string }>().ws
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const { user, logout } = useAuth0()
-    const [collapsed, setCollapsed] = useState(true)
+    const [collapsed, setCollapsed] = useState(false)
 
     const sidebar = (
         <>
@@ -178,27 +173,26 @@ export default function LoggedInLayout({
 
             {/* Static sidebar for desktop */}
             <div
-                className="hidden h-full ease-in-out min-w-80 w-80 lg:flex lg:flex-col"
-                style={
-                    collapsed
-                        ? { width: 'fit-content' }
-                        : { transition: 'all 2s ease' }
-                }
+                className={`hidden h-full ease-in-out ${
+                    collapsed ? 'w-fit' : 'min-w-80 w-80'
+                } lg:flex lg:flex-col`}
             >
                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4">
-                    <div className="flex h-16 shrink-0 items-center">
+                <Flex
+                    flexDirection="col"
+                    className="h-full w-full gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4"
+                >
+                    <Flex alignItems="center" className="h-16 shrink-0">
                         <KaytuLogo />
-                    </div>
-                    <nav className="flex flex-1 flex-col justify-between">
-                        <ul className="flex flex-1 flex-col gap-y-7">
-                            <li>
-                                <ul className="-mx-2 space-y-1">
-                                    {navigation.map((item) => (
-                                        <li key={item.name}>
-                                            <Link
-                                                to={`/${workspace}/${item.page}`}
-                                                className={`
+                    </Flex>
+                    <nav className="w-full flex flex-1 flex-col justify-between items-center">
+                        <ul className="-mx-2 space-y-1 w-full">
+                            {navigation.map((item) => (
+                                <li key={item.name}>
+                                    <Link
+                                        to={`/${workspace}/${item.page}`}
+                                        className={`
+                                                        p-2 group flex rounded-md text-sm leading-6 font-semibold   
                                                     ${
                                                         item.page ===
                                                         currentPage
@@ -207,37 +201,39 @@ export default function LoggedInLayout({
                                                     }
                                                     ${
                                                         collapsed
-                                                            ? 'justify-center items-center'
-                                                            : ''
+                                                            ? 'w-fit gap-x-0'
+                                                            : 'gap-x-3 '
                                                     }
-                                                        gap-x-3 p-2 group flex rounded-md text-sm leading-6 font-semibold
-                                                    
                                                 `}
-                                            >
-                                                <item.icon
-                                                    className="h-6 w-6 shrink-0"
-                                                    aria-hidden="true"
-                                                />
-                                                {!collapsed && item.name}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </li>
+                                    >
+                                        <item.icon
+                                            className={`${
+                                                collapsed
+                                                    ? 'h-8 w-8'
+                                                    : 'h-6 w-6'
+                                            } shrink-0`}
+                                            aria-hidden="true"
+                                        />
+                                        <Title className="text-inherit">
+                                            {!collapsed && item.name}
+                                        </Title>
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                         {collapsed ? (
                             <ChevronDoubleRightIcon
                                 onClick={() => setCollapsed(false)}
-                                className="p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-blue-900/50 h-10 w-10 shrink-0"
+                                className="p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-blue-900/50 h-8 w-8 shrink-0"
                             />
                         ) : (
                             <ChevronDoubleLeftIcon
                                 onClick={() => setCollapsed(true)}
-                                className="self-end p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-blue-900/50 h-10 w-10 shrink-0"
+                                className="self-end p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-blue-900/50 h-8 w-8 shrink-0"
                             />
                         )}
                     </nav>
-                </div>
+                </Flex>
             </div>
         </>
     )
@@ -394,8 +390,8 @@ export default function LoggedInLayout({
                     </Flex>
                 </div>
 
-                <main className="flex justify-center items-start px-12 pt-20 pb-10 dark:bg-gray-900 h-full overflow-y-scroll">
-                    <div className="max-w-6xl h-full w-full">{children}</div>
+                <main className="flex justify-center items-start px-12 pt-20 pb-12 dark:bg-gray-900 h-full overflow-y-scroll">
+                    <div className="max-w-6xl w-full">{children}</div>
                 </main>
             </div>
         </Flex>
