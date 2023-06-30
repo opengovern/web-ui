@@ -4,9 +4,6 @@ import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IInsightsCard {
     metric: any
-    showTitle?: boolean
-    showDetails?: boolean
-    isClickable?: boolean
 }
 
 const calculatePercent = (inputData: any) => {
@@ -42,12 +39,7 @@ const calculateTime = (inputData: any) => {
     return ''
 }
 
-export default function InsightCard({
-    metric,
-    showTitle = false,
-    showDetails = false,
-    isClickable = false,
-}: IInsightsCard) {
+export default function InsightCard({ metric }: IInsightsCard) {
     const navigate = useNavigate()
     const navigateToAssetsInsightsDetails = (id: any) => {
         navigate(`${id}`)
@@ -56,9 +48,7 @@ export default function InsightCard({
         <Card
             key={metric.id}
             className="cursor-pointer h-full"
-            onClick={() =>
-                isClickable ? navigateToAssetsInsightsDetails(metric.id) : null
-            }
+            onClick={() => navigateToAssetsInsightsDetails(metric.id)}
         >
             <Flex
                 flexDirection="col"
@@ -72,9 +62,7 @@ export default function InsightCard({
                     >
                         {metric?.connector}
                     </Title>
-                    {showTitle && (
-                        <Title className="my-2">{metric?.shortTitle}</Title>
-                    )}
+                    <Title className="my-2">{metric?.shortTitle}</Title>
                     <Flex flexDirection="row" className="mb-2">
                         <Flex
                             flexDirection="row"
@@ -107,7 +95,7 @@ export default function InsightCard({
                             }%`}
                         </BadgeDelta>
                     </Flex>
-                    {showDetails && <Text>{metric?.description}</Text>}
+                    <Text>{metric?.description}</Text>
                 </Flex>
                 <Text className="mt-2">
                     {calculateTime(metric?.query?.updatedAt)}

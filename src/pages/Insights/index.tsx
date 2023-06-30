@@ -93,12 +93,7 @@ export default function Insights() {
                                         })
                                         .map((insight) => (
                                             <Col numColSpan={1}>
-                                                <InsightCard
-                                                    metric={insight}
-                                                    showTitle
-                                                    showDetails
-                                                    isClickable
-                                                />
+                                                <InsightCard metric={insight} />
                                             </Col>
                                         ))}
                                 </Grid>

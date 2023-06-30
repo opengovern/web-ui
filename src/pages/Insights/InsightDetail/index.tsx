@@ -1,4 +1,12 @@
-import { Card, Col, DateRangePicker, Flex, Grid, Title } from '@tremor/react'
+import {
+    BadgeDelta,
+    Card,
+    DateRangePicker,
+    Flex,
+    Subtitle,
+    Text,
+    Title,
+} from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
@@ -11,10 +19,9 @@ import {
     useComplianceApiV1InsightTrendDetail,
 } from '../../../api/compliance.gen'
 import { timeAtom } from '../../../store'
-import InsightCard from '../../../components/Cards/InsightCard'
-import InsightDescriptionCard from '../../../components/Cards/InsightDescriptionCard'
 import MultipleAreaCharts from '../../../components/Charts/AreaCharts/MultipleAreaCharts'
 import Downloader from './Downloader'
+import { numericDisplay } from '../../../utilities/numericDisplay'
 
 const chartData = (inputData: any) => {
     const data = []
@@ -65,12 +72,28 @@ const insightsResultToRows = (details: any) => {
             const object = Object.fromEntries(
                 headers.map((key: any, index: any) => [
                     key,
-                    String(array[index]),
+                    array[index].isString
+                        ? array[index]
+                        : JSON.stringify(array[index]),
                 ])
             )
             return { id: i, ...object }
         }) || []
     )
+}
+
+const calculatePercent = (inputData: any) => {
+    if (
+        Number(inputData?.oldTotalResultValue) &&
+        Number(inputData?.totalResultValue)
+    ) {
+        return (
+            ((inputData.totalResultValue - inputData.oldTotalResultValue) /
+                inputData.oldTotalResultValue) *
+                100 || 0
+        )
+    }
+    return 0
 }
 
 const gridOptions: GridOptions = {
@@ -115,11 +138,11 @@ export default function InsightDetail() {
             <Flex flexDirection="col">
                 <Flex
                     flexDirection="row"
-                    justifyContent="between"
+                    justifyContent="end"
                     alignItems="center"
                     className="mb-6"
                 >
-                    <Title>{insightDetail?.shortTitle}</Title>
+                    {/* <Title>{insightDetail?.shortTitle}</Title> */}
                     <DateRangePicker
                         className="max-w-md"
                         value={activeTimeRange}
@@ -129,22 +152,59 @@ export default function InsightDetail() {
                         maxDate={new Date()}
                     />
                 </Flex>
-                <Grid
-                    numItems={1}
-                    numItemsSm={2}
-                    numItemsLg={3}
-                    className="w-full gap-3 mb-6"
-                >
-                    <Col numColSpan={1}>
-                        <InsightCard metric={insightDetail || {}} />
-                    </Col>
-                    <Col numColSpan={2}>
-                        <InsightDescriptionCard metric={insightDetail || {}} />
-                    </Col>
-                </Grid>
                 <Card>
+                    <Flex flexDirection="col">
+                        <Flex flexDirection="row">
+                            <Title>{insightDetail?.shortTitle}</Title>
+                            <Flex
+                                flexDirection="row"
+                                alignItems="end"
+                                className="w-fit"
+                            >
+                                <Title>
+                                    {numericDisplay(
+                                        insightDetail?.totalResultValue || 0
+                                    )}
+                                </Title>
+                                <Subtitle className="ml-1 mr-2">
+                                    {`from ${numericDisplay(
+                                        insightDetail?.oldTotalResultValue || 0
+                                    )}`}
+                                </Subtitle>
+                                <BadgeDelta
+                                    deltaType={
+                                        calculatePercent(insightDetail) > 0
+                                            ? 'moderateIncrease'
+                                            : 'moderateDecrease'
+                                    }
+                                    className={`opacity-${
+                                        calculatePercent(insightDetail) !== 0
+                                            ? 1
+                                            : 0
+                                    } cursor-pointer`}
+                                >
+                                    {`${
+                                        calculatePercent(insightDetail) > 0
+                                            ? Math.ceil(
+                                                  calculatePercent(
+                                                      insightDetail
+                                                  )
+                                              )
+                                            : -1 *
+                                              Math.floor(
+                                                  calculatePercent(
+                                                      insightDetail
+                                                  )
+                                              )
+                                    }%`}
+                                </BadgeDelta>
+                            </Flex>
+                        </Flex>
+                        <Text className="flex self-start mt-2 mb-6">
+                            {insightDetail?.description}
+                        </Text>
+                    </Flex>
                     <MultipleAreaCharts
-                        title={`${insightDetail?.shortTitle} count`}
                         className="mt-4 h-80"
                         index="date"
                         yAxisWidth={60}
