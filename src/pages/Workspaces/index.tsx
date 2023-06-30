@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Col, Flex, Grid, Title } from '@tremor/react'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
@@ -7,7 +7,8 @@ import CreateWorkspace from './CreateWorkspace'
 
 export default function Workspaces() {
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: workspaces } = useWorkspaceApiV1WorkspacesList()
+    const { response: workspaces, sendNow: refreshList } =
+        useWorkspaceApiV1WorkspacesList()
 
     return (
         <LoggedInLayout currentPage="assets" showSidebar={false}>
@@ -25,13 +26,19 @@ export default function Workspaces() {
                         </Flex>
                         <CreateWorkspace
                             open={openDrawer}
-                            onClose={() => setOpenDrawer(false)}
+                            onClose={() => {
+                                setOpenDrawer(false)
+                                refreshList()
+                            }}
                         />
                         <Grid numItems={1} className="gap-3">
                             {workspaces?.map((ws) => {
                                 return (
                                     <Col>
-                                        <WorkspaceCard workspace={ws} />
+                                        <WorkspaceCard
+                                            workspace={ws}
+                                            refreshList={refreshList}
+                                        />
                                     </Col>
                                 )
                             })}
