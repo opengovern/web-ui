@@ -71,11 +71,9 @@ const SettingsOrganization: React.FC<any> = () => {
         {
             key: 'Country',
             value: (
-                <Select value="1">
-                    <SelectItem value="1">
-                        {response?.organization?.country}
-                    </SelectItem>
-                </Select>
+                <>
+                    <p>{response?.organization?.country}</p>
+                </>
             ),
         },
         {
