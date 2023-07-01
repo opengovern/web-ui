@@ -10,8 +10,9 @@ import {
     TextInput,
     Title,
 } from '@tremor/react'
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { DocumentDuplicateIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { PlusIcon } from '@heroicons/react/24/solid'
+import clipboardCopy from 'clipboard-copy'
 import {
     useAuthApiV1KeyCreateCreate,
     useAuthApiV1KeyDeleteDelete,
@@ -23,6 +24,7 @@ import DrawerPanel from '../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey } from '../../../api/api'
 import InformationModal from '../../../components/Modal/InformationModal'
 import ConfirmModal from '../../../components/Modal/ConfirmModal'
+import Notification from '../../../components/Notification'
 
 interface CreateAPIKeyProps {
     close: () => void
@@ -76,12 +78,33 @@ const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
             <InformationModal
                 title={error === undefined ? 'Successful' : 'Failed'}
                 description={
-                    error === undefined
-                        ? `API Key Created, copy the key and keep it safe: ${response?.token}`
-                        : `Failed to create the API Key`
+                    error === undefined ? (
+                        <Flex flexDirection="col" justifyContent="start">
+                            API key created, copy the key and keep it safe:
+                            <Card className="w-full">
+                                <Flex
+                                    flexDirection="row"
+                                    justifyContent="between"
+                                >
+                                    <div className="w-full break-all">
+                                        {response?.token}
+                                    </div>
+                                    <DocumentDuplicateIcon
+                                        className="h-5 w-5 text-blue-600 cursor-pointer"
+                                        onClick={() =>
+                                            clipboardCopy(response?.token || '')
+                                        }
+                                    />
+                                </Flex>
+                            </Card>
+                        </Flex>
+                    ) : (
+                        `Failed to create the API Key`
+                    )
                 }
                 successful={error === undefined}
                 open={!isLoading && isExecuted}
+                okButton="Done"
                 onClose={() => {
                     close()
                 }}
@@ -150,7 +173,7 @@ const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
                     </Flex>
                 </ListItem>
             </List>
-            <Flex justifyContent="end" className="truncate space-x-4">
+            <Flex justifyContent="end" className="truncate p-1 space-x-4">
                 <Button
                     variant="secondary"
                     onClick={() => {
@@ -176,9 +199,14 @@ const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
 interface APIKeyRecordProps {
     item: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
     refresh: () => void
+    showNotification: (text: string) => void
 }
 
-const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
+const APIKeyRecord: React.FC<APIKeyRecordProps> = ({
+    item,
+    refresh,
+    showNotification,
+}) => {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const { response, isLoading } = useAuthApiV1UserDetail(
         item.creatorUserID || ''
@@ -206,6 +234,7 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
 
     useEffect(() => {
         if (!deleteIsLoading && deleteIsExecuted) {
+            showNotification('API Key successfully deleted')
             refresh()
         }
     }, [deleteIsLoading])
@@ -213,8 +242,11 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
     return (
         <>
             <ConfirmModal
-                title={`Are you sure you want to delete key ${item.name}?`}
+                title="Delete API Key"
+                description={`Are you sure you want to delete key ${item.name}?`}
                 open={deleteConfirmation}
+                yesButton="Delete"
+                noButton="Cancel"
                 onConfirm={callDelete}
                 onClose={() => setDeleteConfirmation(false)}
             />
@@ -283,6 +315,7 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({ item, refresh }) => {
 const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const { response, isLoading, sendNow } = useAuthApiV1KeysList()
+    const [notification, setNotification] = useState<string>('')
 
     if (isLoading) {
         return (
@@ -293,11 +326,14 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
     }
 
     const openCreateMenu = () => {
+        setNotification('')
         setDrawerOpen(true)
     }
 
     return (
         <>
+            {notification && <Notification text={notification} />}
+
             <DrawerPanel
                 open={drawerOpen}
                 title="Create new API Key"
@@ -341,6 +377,7 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
                         refresh={() => {
                             sendNow()
                         }}
+                        showNotification={setNotification}
                     />
                 ))}
             </Card>
