@@ -9,10 +9,15 @@ import ConfirmModal from '../../../components/Modal/ConfirmModal'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
+    notification: (text: string) => void
     close: () => void
 }
 
-const MemberDetails: React.FC<IMemberDetails> = ({ user, close }) => {
+const MemberDetails: React.FC<IMemberDetails> = ({
+    user,
+    close,
+    notification,
+}) => {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const [role, setRole] = useState<string>(user?.roleName || 'viewer')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
@@ -50,6 +55,11 @@ const MemberDetails: React.FC<IMemberDetails> = ({ user, close }) => {
 
     useEffect(() => {
         if ((isExecuted && !isLoading) || (deleteExecuted && !deleteLoading)) {
+            if (isExecuted) {
+                notification('User successfully updated')
+            } else {
+                notification('User successfully deleted')
+            }
             close()
         }
     }, [isLoading, deleteLoading])
@@ -102,8 +112,11 @@ const MemberDetails: React.FC<IMemberDetails> = ({ user, close }) => {
     return (
         <>
             <ConfirmModal
-                title={`Are you sure you want to delete ${user.userName}?`}
+                title="Delete user"
+                description={`Are you sure you want to delete ${user.userName}?`}
                 open={deleteConfirmation}
+                yesButton="Delete"
+                noButton="Cancel"
                 onConfirm={deleteRole}
                 onClose={() => setDeleteConfirmation(false)}
             />
@@ -185,8 +198,15 @@ const MemberDetails: React.FC<IMemberDetails> = ({ user, close }) => {
                 <Flex justifyContent="end" className="truncate space-x-4">
                     <Button
                         loading={loading}
-                        onClick={() => setDeleteConfirmation(true)}
+                        onClick={close}
                         variant="secondary"
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        loading={loading}
+                        onClick={() => setDeleteConfirmation(true)}
+                        color="red"
                     >
                         Delete
                     </Button>

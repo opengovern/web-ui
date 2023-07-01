@@ -66,7 +66,7 @@ const Settings: React.FC<any> = () => {
 
     return (
         <LoggedInLayout currentPage="settings">
-            <Flex flexDirection="row" className="h-full">
+            <Flex flexDirection="row" className="h-full" alignItems="start">
                 <aside className="h-full w-64">
                     <Flex
                         flexDirection="row"
@@ -125,9 +125,9 @@ const Settings: React.FC<any> = () => {
                     </Flex>
                 </aside>
                 <main className="w-full h-full pl-6">
-                    <Metric className="text-gray-800 mb-5 opacity-0">
+                    {/* <Metric className="text-gray-800 mb-1 opacity-0">
                         placeholder :D
-                    </Metric>
+                    </Metric> */}
                     {navigation
                         .filter(
                             (item) =>
