@@ -1,15 +1,16 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { Button } from '@tremor/react'
+import { Button, Flex } from '@tremor/react'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import Modal from '.'
 
 interface InformationModalProps {
     title: string
-    description: string
-    buttons?: string[]
+    description: string | JSX.Element
     open: boolean
     successful?: boolean
+    okButton?: string
     onClose?: () => void
 }
 const InformationModal: React.FC<InformationModalProps> = ({
@@ -18,7 +19,7 @@ const InformationModal: React.FC<InformationModalProps> = ({
     successful = true,
     title,
     description,
-    buttons = ['OK'],
+    okButton = 'OK',
 }) => {
     const closeHandler = () => {
         if (onClose) {
@@ -26,51 +27,56 @@ const InformationModal: React.FC<InformationModalProps> = ({
         }
     }
 
-    return (
-        <Modal open={open} onClose={closeHandler}>
-            <div>
-                <div
-                    className={`mx-auto flex h-12 w-12 items-center justify-center rounded-full ${
-                        successful ? 'bg-green-100' : 'bg-red-100'
-                    }`}
-                >
-                    {successful ? (
-                        <CheckIcon
-                            className="h-6 w-6 text-green-600"
-                            aria-hidden="true"
-                        />
-                    ) : (
-                        <ExclamationTriangleIcon
-                            className="h-6 w-6 text-red-600"
-                            aria-hidden="true"
-                        />
-                    )}
-                </div>
-                <div className="mt-3 text-center sm:mt-5">
-                    <Dialog.Title
-                        as="h3"
-                        className="text-base font-semibold leading-6 text-gray-900"
-                    >
-                        {title}
-                    </Dialog.Title>
+    const descriptionElem = () => {
+        if (description) {
+            if (typeof description === 'string') {
+                return (
                     <div className="mt-2">
                         <p className="text-sm text-gray-500">{description}</p>
                     </div>
-                </div>
-            </div>
-            <div className="mt-5 sm:mt-6">
-                {buttons.map((item, id) => {
-                    return (
-                        <Button
-                            variant={id === 0 ? 'primary' : 'secondary'}
-                            className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            onClick={() => closeHandler()}
-                        >
-                            {item}
-                        </Button>
-                    )
-                })}
-            </div>
+                )
+            }
+            return description
+        }
+        return undefined
+    }
+
+    return (
+        <Modal open={open} onClose={closeHandler}>
+            <Flex flexDirection="row" justifyContent="start">
+                {successful ? (
+                    <CheckCircleIcon className="w-5 h-5 text-green-600" />
+                ) : (
+                    <XCircleIcon className="w-5 h-5 text-red-600" />
+                )}
+                <Dialog.Title
+                    as="h3"
+                    className="ml-3 text-base font-medium leading-6 text-gray-900"
+                >
+                    {title}
+                </Dialog.Title>
+            </Flex>
+            <Flex
+                flexDirection="row"
+                justifyContent="start"
+                className="text-gray-600 font-normal mt-4"
+            >
+                {descriptionElem()}
+            </Flex>
+            <Flex
+                justifyContent="end"
+                alignItems="end"
+                flexDirection="row"
+                className="mt-5 sm:mt-6"
+            >
+                <Button
+                    variant="primary"
+                    className="ml-1"
+                    onClick={closeHandler}
+                >
+                    {okButton}
+                </Button>
+            </Flex>
         </Modal>
     )
 }

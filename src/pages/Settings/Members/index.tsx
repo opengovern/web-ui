@@ -6,10 +6,12 @@ import Spinner from '../../../components/Spinner'
 import DrawerPanel from '../../../components/DrawerPanel'
 import MemberDetails from './member_details'
 import MemberInvite from './member_invite'
+import Notification from '../../../components/Notification'
 
 const SettingsMembers: React.FC<any> = () => {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const [drawerParam, setDrawerParam] = useState<string>('')
+    const [notification, setNotification] = useState<string>('')
     const {
         response,
         isLoading,
@@ -24,11 +26,13 @@ const SettingsMembers: React.FC<any> = () => {
     }
 
     const userDetail = (userId: string) => {
+        setNotification('')
         setDrawerParam(userId)
         setDrawerOpen(true)
     }
 
     const openInviteMember = () => {
+        setNotification('')
         setDrawerParam('openInviteMember')
         setDrawerOpen(true)
     }
@@ -48,6 +52,7 @@ const SettingsMembers: React.FC<any> = () => {
 
     return (
         <>
+            {notification && <Notification text={notification} />}
             <DrawerPanel
                 open={drawerOpen}
                 title={
@@ -68,6 +73,7 @@ const SettingsMembers: React.FC<any> = () => {
                                 refreshRoleBindings()
                             }
                         }}
+                        notification={setNotification}
                     />
                 ) : (
                     <MemberDetails
@@ -78,6 +84,7 @@ const SettingsMembers: React.FC<any> = () => {
                             setDrawerOpen(false)
                             refreshRoleBindings()
                         }}
+                        notification={setNotification}
                     />
                 )}
             </DrawerPanel>

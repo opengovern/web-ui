@@ -120,9 +120,9 @@ const Settings: React.FC<any> = () => {
                     </Flex>
                 </Flex>
                 <main className="w-full h-full pl-6">
-                    <Metric className="text-gray-800 mb-5 opacity-0">
+                    {/* <Metric className="text-gray-800 mb-1 opacity-0">
                         placeholder :D
-                    </Metric>
+                    </Metric> */}
                     {navigation
                         .filter(
                             (item) =>
