@@ -66,64 +66,59 @@ const Settings: React.FC<any> = () => {
 
     return (
         <LoggedInLayout currentPage="settings">
-            <Flex flexDirection="row" className="h-full" alignItems="start">
-                <aside className="h-full w-64">
+            <Flex flexDirection="row" alignItems="start" className="h-full">
+                <Flex flexDirection="row" className="inset-y-0 h-full w-64">
                     <Flex
-                        flexDirection="row"
-                        className="inset-y-0 h-full w-full"
+                        flexDirection="col"
+                        alignItems="start"
+                        className="grow h-full gap-y-5 overflow-y-auto overflow-x-hidden pr-6"
                     >
-                        <Flex
-                            flexDirection="col"
-                            alignItems="start"
-                            className="grow h-full gap-y-5 overflow-y-auto overflow-x-hidden pr-6"
-                        >
-                            <Metric className="text-gray-800">Settings</Metric>
-                            <nav className="flex flex-1 flex-col w-52">
-                                <ul className="flex flex-col gap-y-7">
-                                    <li>
-                                        <ul className=" space-y-1.5">
-                                            {navigation.map((item) => (
-                                                <li key={item.name}>
-                                                    {item.page === '' ? (
-                                                        <div
-                                                            className={classNames(
-                                                                'text-gray-500 font-semibold group flex gap-x-3 p-1'
-                                                            )}
-                                                        >
-                                                            {item.icon && (
-                                                                <item.icon
-                                                                    className="h-6 w-6 shrink-0"
-                                                                    aria-hidden="true"
-                                                                />
-                                                            )}
-                                                            {item.name}
-                                                        </div>
-                                                    ) : (
-                                                        <Link
-                                                            to={`/${workspace}/settings/${item.page}`}
-                                                            className={classNames(
-                                                                item.page ===
-                                                                    currentSubPage ||
-                                                                    (!currentSubPage &&
-                                                                        item.page ===
-                                                                            'metadata')
-                                                                    ? 'bg-blue-100 rounded-lg text-gray-800'
-                                                                    : 'text-gray-500',
-                                                                'font-medium group flex gap-x-3 py-2 px-10'
-                                                            )}
-                                                        >
-                                                            {item.name}
-                                                        </Link>
-                                                    )}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </Flex>
+                        <Metric className="text-gray-800">Settings</Metric>
+                        <nav className="flex flex-1 flex-col w-52">
+                            <ul className="flex flex-col gap-y-7">
+                                <li>
+                                    <ul className=" space-y-1.5">
+                                        {navigation.map((item) => (
+                                            <li key={item.name}>
+                                                {item.page === '' ? (
+                                                    <div
+                                                        className={classNames(
+                                                            'text-gray-500 font-semibold group flex gap-x-3 p-1'
+                                                        )}
+                                                    >
+                                                        {item.icon && (
+                                                            <item.icon
+                                                                className="h-6 w-6 shrink-0"
+                                                                aria-hidden="true"
+                                                            />
+                                                        )}
+                                                        {item.name}
+                                                    </div>
+                                                ) : (
+                                                    <Link
+                                                        to={`/${workspace}/settings/${item.page}`}
+                                                        className={classNames(
+                                                            item.page ===
+                                                                currentSubPage ||
+                                                                (!currentSubPage &&
+                                                                    item.page ===
+                                                                        'metadata')
+                                                                ? 'bg-blue-100 rounded-lg text-gray-800'
+                                                                : 'text-gray-500',
+                                                            'font-medium group flex gap-x-3 py-2 px-10'
+                                                        )}
+                                                    >
+                                                        {item.name}
+                                                    </Link>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
                     </Flex>
-                </aside>
+                </Flex>
                 <main className="w-full h-full pl-6">
                     {/* <Metric className="text-gray-800 mb-1 opacity-0">
                         placeholder :D

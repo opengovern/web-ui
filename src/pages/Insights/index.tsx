@@ -3,6 +3,7 @@ import {
     DateRangePicker,
     Flex,
     Grid,
+    Metric,
     Tab,
     TabGroup,
     TabList,
@@ -50,7 +51,7 @@ export default function Insights() {
                     alignItems="center"
                     className="mb-6"
                 >
-                    <Title>Insights</Title>
+                    <Metric>Insights</Metric>
                     <DateRangePicker
                         className="max-w-md"
                         value={activeTimeRange}
