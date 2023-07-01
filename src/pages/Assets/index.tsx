@@ -104,6 +104,7 @@ const Assets: React.FC<any> = () => {
                                 connector={selectedConnections.provider}
                                 top={5}
                                 time={activeTimeRange}
+                                connections={selectedConnections.connections}
                             />{' '}
                             {/* Composition */}
                         </TabPanel>

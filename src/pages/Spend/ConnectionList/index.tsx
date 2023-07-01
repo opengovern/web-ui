@@ -4,7 +4,6 @@ import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Bold, Button, Grid, Text, Flex } from '@tremor/react'
 import { ReactComponent as AzureIcon } from '../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
-import { ReactComponent as PlusIcon } from '../../../assets/icons/elements-icons-plus-2.svg'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import DrawerPanel from '../../../components/DrawerPanel'
@@ -84,6 +83,7 @@ const columns: ColDef[] = [
 ]
 
 const tags = [
+    { label: 'All', value: 'All' },
     { label: 'AWS', value: 'AWS' },
     { label: 'Azure', value: 'Azure' },
 ]
@@ -100,6 +100,8 @@ export default function ConnectionList({
 }: IConnectorList) {
     const gridRef = useRef<AgGridReact<IConnection>>(null)
 
+    const [isConnectionSelected, setIsConnectionSelected] = useState(false)
+
     const [selectedProvider, setSelectedProvider] = useState({
         label: 'All',
         value: '',
@@ -108,6 +110,7 @@ export default function ConnectionList({
         if (newValue.length) {
             if (newValue === 'All') {
                 api?.deselectAll()
+                setIsConnectionSelected(false)
                 setSelectedProvider({ label: 'All', value: '' })
                 return
             }
@@ -173,9 +176,9 @@ export default function ConnectionList({
                 return `${conns.length} connections selected`
             }
         } else {
-            return `all ${selectedProvider.value} connections selected`
+            return `All ${selectedProvider.value} connections selected`
         }
-        return 'all connections are selected'
+        return 'All connections are selected'
     }
 
     const gridOptions: GridOptions<IConnection> = {
@@ -199,7 +202,7 @@ export default function ConnectionList({
                     selected.at(i)?.setSelected(false, false)
                 }
             }
-
+            setIsConnectionSelected(selected.length > 0)
             setSelectedProvider({ label: 'All', value: '' })
         },
         getRowHeight: (params) => 50,
@@ -207,6 +210,7 @@ export default function ConnectionList({
 
     useEffect(() => {
         updateSelectionByProvider(gridRef.current?.api, selectedProvider.value)
+        console.log('isConnectionSelected', isConnectionSelected)
     }, [selectedProvider])
 
     const handleClose = () => {
@@ -232,58 +236,32 @@ export default function ConnectionList({
             <div>
                 <Flex>
                     <Flex justifyContent="start" className="mb-4">
-                        <Text className="mr-5">Quick Select:</Text>
                         {tags.map((tag) => (
                             <Button
-                                onClick={() => {
-                                    setSelectedProvider(tag)
-                                }}
                                 size="xs"
-                                className="mr-1"
                                 variant={
-                                    selectedProvider.value === tag.value
+                                    selectedProvider.label === tag.label &&
+                                    !isConnectionSelected
                                         ? 'primary'
                                         : 'secondary'
                                 }
+                                onClick={() => {
+                                    if (selectedProvider === tag)
+                                        setSelectedProvider({
+                                            label: 'All',
+                                            value: '',
+                                        })
+                                    else setSelectedProvider(tag)
+                                }}
+                                className="mr-2 w-14"
                             >
-                                <Flex>
-                                    <div className="mr-1">
-                                        {tag.label === 'AWS' ? (
-                                            <AWSIcon className="w-4 h-4" />
-                                        ) : (
-                                            <AzureIcon className="w-4 h-4" />
-                                        )}
-                                    </div>
-                                    <Text className="text-xs">{tag.label}</Text>
-                                </Flex>
+                                {tag.label}
                             </Button>
                         ))}
-                        {!!selectedProvider.value && (
-                            <Button
-                                onClick={() => {
-                                    setSelectedProvider({
-                                        label: 'All',
-                                        value: 'All',
-                                    })
-                                }}
-                                size="xs"
-                                className="mr-1"
-                                variant="secondary"
-                            >
-                                <Flex>
-                                    <div className="mr-1">
-                                        <PlusIcon className="w-4 h-4" />
-                                    </div>
-                                    <Text className="text-xs">
-                                        Clear Selected
-                                    </Text>
-                                </Flex>
-                            </Button>
-                        )}
                     </Flex>
                 </Flex>
                 <div className="mb-2">
-                    <Bold>{selectionText(gridRef.current?.api)}</Bold>
+                    <Text>{selectionText(gridRef.current?.api)}</Text>
                 </div>
                 <div className="ag-theme-alpine h-[80vh]">
                     <AgGridReact

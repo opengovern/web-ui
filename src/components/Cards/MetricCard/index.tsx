@@ -1,11 +1,11 @@
 import { BadgeDelta, Card, DeltaType, Flex, Metric, Text } from '@tremor/react'
 
 type IProps = {
-    title: string
-    metric: string
-    metricPrev: string
-    deltaType: DeltaType
-    delta: string
+    title?: string
+    metric?: string
+    metricPrev?: string
+    deltaType?: DeltaType
+    delta?: any
 }
 
 export default function CMBCard({
@@ -19,16 +19,20 @@ export default function CMBCard({
     return (
         <Card key={title} {...props}>
             <Flex alignItems="start">
-                <Text className="truncate">{title}</Text>
-                <BadgeDelta deltaType={deltaType}>{delta}</BadgeDelta>
+                {title && <Text className="truncate">{title}</Text>}
+                {delta ? (
+                    <BadgeDelta deltaType={deltaType}>{delta} %</BadgeDelta>
+                ) : null}
             </Flex>
             <Flex
                 justifyContent="start"
                 alignItems="baseline"
                 className="truncate space-x-3"
             >
-                <Metric>{metric}</Metric>
-                <Text className="truncate">from {metricPrev}</Text>
+                {metric && <Metric>{metric}</Metric>}
+                {metricPrev && (
+                    <Text className="truncate">from {metricPrev}</Text>
+                )}
             </Flex>
         </Card>
     )

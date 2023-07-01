@@ -11,6 +11,7 @@ import {
     TabPanels,
     Title,
     Bold,
+    Metric,
 } from '@tremor/react'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
@@ -127,7 +128,7 @@ const Assets: React.FC<any> = () => {
                 alignItems="center"
             >
                 {activeSubPage === 'All' ? (
-                    <Title>Spend</Title>
+                    <Metric>Spend</Metric>
                 ) : (
                     <Breadcrumbs pages={breadcrubmsPages} />
                 )}
@@ -175,18 +176,18 @@ const Assets: React.FC<any> = () => {
                     pageSize={1000}
                 />
             )}
-            {activeSubPage === 'Accounts' && (
-                <AccountsDetails
-                    selectedConnections={selectedConnections}
-                    timeRange={activeTimeRange}
-                />
-            )}
-            {activeSubPage === 'Services' && (
-                <ServicesDetails
-                    selectedConnections={selectedConnections}
-                    timeRange={activeTimeRange}
-                />
-            )}
+            {/* {activeSubPage === 'Accounts' && ( */}
+            {/*    <AccountsDetails */}
+            {/*        selectedConnections={selectedConnections} */}
+            {/*        timeRange={activeTimeRange} */}
+            {/*    /> */}
+            {/* )} */}
+            {/* {activeSubPage === 'Services' && ( */}
+            {/*    <ServicesDetails */}
+            {/*        selectedConnections={selectedConnections} */}
+            {/*        timeRange={activeTimeRange} */}
+            {/*    /> */}
+            {/* )} */}
         </LoggedInLayout>
     )
 }
