@@ -33,11 +33,11 @@ const navigation = [
         page: 'insight',
         icon: DocumentChartBarIcon,
     },
-    // {
-    //     name: 'Spend',
-    //     page: 'spend',
-    //     icon: ArrowTrendingUpIcon,
-    // },
+    {
+        name: 'Spend',
+        page: 'spend',
+        icon: ArrowTrendingUpIcon,
+    },
     // {
     //     name: 'Compliance',
     //     page: 'compliance',

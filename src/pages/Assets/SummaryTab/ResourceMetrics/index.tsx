@@ -119,9 +119,9 @@ export default function ResourceMetrics({
                                         metric.old_count ? metric.old_count : 0
                                     )
                                 )}
-                                delta={`${Math.abs(
+                                delta={Math.abs(
                                     percentage(metric.count, metric.old_count)
-                                ).toFixed(2)} %`}
+                                ).toFixed(2)}
                                 deltaType={
                                     percentage(metric.count, metric.old_count) >
                                     0

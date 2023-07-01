@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Button,
     Text,
@@ -6,6 +6,9 @@ import {
     SearchSelect,
     SearchSelectItem,
     Title,
+    TabGroup,
+    TabList,
+    Tab,
 } from '@tremor/react'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
@@ -15,6 +18,7 @@ import { selectedResourceCategoryAtom } from '../../../../store'
 import { useInventoryApiV2CostMetricList } from '../../../../api/inventory.gen'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import Spinner from '../../../../components/Spinner'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 
 interface IProps {
     provider: any
@@ -39,6 +43,7 @@ export default function CostMetrics({
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const activeCategory =
         selectedResourceCategory === 'All Categories'
             ? ''
@@ -53,6 +58,17 @@ export default function CostMetrics({
     }
     const { response: metrics, isLoading } =
         useInventoryApiV2CostMetricList(query)
+
+    const { response: accounts, isLoading: isAccountsLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            connector: provider,
+            connectionId: connection,
+            startTime: timeRange[0],
+            endTime: timeRange[1],
+            pageSize: 10000,
+            pageNumber: 1,
+        })
+
     const percentage = (a?: number, b?: number): number => {
         return a && b ? ((a - b) / b) * 100 : 0
     }
@@ -62,7 +78,9 @@ export default function CostMetrics({
             {/* <div className="h-80" /> */}
             <div className="flex justify-between gap-x-2">
                 <div className="flex flex-row justify-start items-start">
-                    <Title>Cost metrics </Title>
+                    <Title>
+                        Cost {selectedIndex ? 'Accounts' : 'Services'} metrics{' '}
+                    </Title>
                     <Button
                         variant="light"
                         className="mt-1 ml-2"
@@ -71,21 +89,34 @@ export default function CostMetrics({
                         <Text color="blue">(see All)</Text>
                     </Button>
                 </div>
-                <SearchSelect
-                    onValueChange={(e) => setSelectedResourceCategory(e)}
-                    value={selectedResourceCategory}
-                    placeholder="Source Selection"
-                    className="max-w-xs mb-6"
-                >
-                    {categories.map((category) => (
-                        <SearchSelectItem
-                            key={category.label}
-                            value={category.value}
+                <div className="flex flex-row items-start">
+                    <SearchSelect
+                        onValueChange={(e) => setSelectedResourceCategory(e)}
+                        value={selectedResourceCategory}
+                        placeholder="Source Selection"
+                        className="max-w-xs mb-6"
+                    >
+                        {categories.map((category) => (
+                            <SearchSelectItem
+                                key={category.label}
+                                value={category.value}
+                            >
+                                {category.value}
+                            </SearchSelectItem>
+                        ))}
+                    </SearchSelect>
+                    <span className="ml-5">
+                        <TabGroup
+                            index={selectedIndex}
+                            onIndexChange={setSelectedIndex}
                         >
-                            {category.value}
-                        </SearchSelectItem>
-                    ))}
-                </SearchSelect>
+                            <TabList variant="solid">
+                                <Tab>Services</Tab>
+                                <Tab>Accounts</Tab>
+                            </TabList>
+                        </TabGroup>
+                    </span>
+                </div>
             </div>
             <Grid>
                 {isLoading && (
@@ -100,44 +131,63 @@ export default function CostMetrics({
                         className: 'gap-6',
                     }}
                 >
-                    {!isLoading &&
-                        metrics?.metrics?.map((metric) => (
-                            <MetricCard
-                                title={
-                                    metric.cost_dimension_name
-                                        ? metric.cost_dimension_name
-                                        : String(metric.cost_dimension_name)
-                                }
-                                metric={`$ ${String(
-                                    numericDisplay(
-                                        metric.total_cost
-                                            ? metric.total_cost
-                                            : 0
-                                    )
-                                )}`}
-                                metricPrev={String(
-                                    `$ ${numericDisplay(
-                                        metric.daily_cost_at_start_time
-                                            ? metric.daily_cost_at_start_time
-                                            : 0
-                                    )}`
-                                )}
-                                delta={`${Math.abs(
-                                    percentage(
-                                        metric.daily_cost_at_end_time,
-                                        metric.daily_cost_at_start_time
-                                    )
-                                ).toFixed(2)} %`}
-                                deltaType={
-                                    percentage(
-                                        metric.daily_cost_at_end_time,
-                                        metric.daily_cost_at_start_time
-                                    ) > 0
-                                        ? 'moderateIncrease'
-                                        : 'moderateDecrease'
-                                }
-                            />
-                        ))}
+                    {!selectedIndex
+                        ? !isLoading &&
+                          metrics?.metrics?.map((metric) => (
+                              <MetricCard
+                                  title={
+                                      metric.cost_dimension_name
+                                          ? metric.cost_dimension_name
+                                          : String(metric.cost_dimension_name)
+                                  }
+                                  metric={`$ ${String(
+                                      numericDisplay(
+                                          metric.total_cost
+                                              ? metric.total_cost
+                                              : 0
+                                      )
+                                  )}`}
+                                  delta={Math.abs(
+                                      percentage(
+                                          metric.daily_cost_at_end_time,
+                                          metric.daily_cost_at_start_time
+                                      )
+                                  ).toFixed(2)}
+                                  deltaType={
+                                      percentage(
+                                          metric.daily_cost_at_end_time,
+                                          metric.daily_cost_at_start_time
+                                      ) > 0
+                                          ? 'moderateIncrease'
+                                          : 'moderateDecrease'
+                                  }
+                              />
+                          ))
+                        : !isAccountsLoading &&
+                          accounts?.connections?.map((account) => (
+                              <MetricCard
+                                  title={account.credentialName}
+                                  metric={`$ ${String(
+                                      numericDisplay(
+                                          account.cost ? account.cost : 0
+                                      )
+                                  )}`}
+                                  delta={Math.abs(
+                                      percentage(
+                                          account.dailyCostAtEndTime,
+                                          account.dailyCostAtStartTime
+                                      )
+                                  )}
+                                  deltaType={
+                                      percentage(
+                                          account.dailyCostAtEndTime,
+                                          account.dailyCostAtStartTime
+                                      ) > 0
+                                          ? 'moderateIncrease'
+                                          : 'moderateDecrease'
+                                  }
+                              />
+                          ))}
                 </Swiper>
             </Grid>
         </div>

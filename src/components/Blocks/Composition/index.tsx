@@ -29,6 +29,8 @@ type IProps = {
     connector?: string
     connectionId?: string[]
     time?: any
+    data?: any
+    prevData?: any
 }
 export default function Composition({
     // key,
@@ -36,6 +38,8 @@ export default function Composition({
     connector,
     connectionId,
     time,
+    data,
+    prevData,
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const query = {
