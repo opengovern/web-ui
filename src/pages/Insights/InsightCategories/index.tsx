@@ -28,19 +28,22 @@ export default function InsightCategories({ onChange }: IInsightCategories) {
     }, [selectedCategory])
 
     const aaa: any = categories?.category || []
+    const allCategories = ['All', ...aaa]
+
+    const handleClick = (cat: string) => {
+        if (cat === 'All' || selectedCategory === cat) setSelectedCategory('')
+        else setSelectedCategory(cat)
+    }
+
     return (
         <Flex flexDirection="row" justifyContent="start" className="mb-6">
-            {categories?.category.map((category) => (
+            {allCategories.map((category) => (
                 <Button
                     size="xs"
                     variant={
                         selectedCategory === category ? 'primary' : 'secondary'
                     }
-                    onClick={() => {
-                        if (selectedCategory === category)
-                            setSelectedCategory('')
-                        else setSelectedCategory(category)
-                    }}
+                    onClick={() => handleClick(category)}
                     className="mr-2"
                 >
                     {category}

@@ -1,47 +1,59 @@
 import React, { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
+    ArrowTrendingUpIcon,
     Bars3Icon,
     ChevronDoubleLeftIcon,
     ChevronDoubleRightIcon,
     ChevronDownIcon,
     Cog6ToothIcon,
-    CommandLineIcon,
     CubeIcon,
     DocumentChartBarIcon,
-    MoonIcon,
-    QuestionMarkCircleIcon,
+    HomeIcon,
+    MagnifyingGlassIcon,
+    ServerStackIcon,
+    ShieldCheckIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link, useParams } from 'react-router-dom'
-import { Flex, Title } from '@tremor/react'
-import { useAtom, useAtomValue } from 'jotai'
+import { Flex, Text, Title } from '@tremor/react'
+import { useAtom } from 'jotai'
 import { ReactComponent as KaytuLogo } from '../../assets/icons/logo-dark-sqare-sm-glyph 2.svg'
 import { sideBarCollapsedAtom } from '../../store'
 
 const navigation = [
-    // {
-    //     name: 'Home',
-    //     page: 'home',
-    //     icon: HomeIcon,
-    // },
+    {
+        name: 'Home',
+        page: 'home',
+        icon: HomeIcon,
+    },
     { name: 'Assets', page: 'assets', icon: CubeIcon },
     {
         name: 'Insight',
         page: 'insight',
         icon: DocumentChartBarIcon,
     },
-    // {
-    //     name: 'Spend',
-    //     page: 'spend',
-    //     icon: ArrowTrendingUpIcon,
-    // },
-    // {
-    //     name: 'Compliance',
-    //     page: 'compliance',
-    //     icon: ShieldCheckIcon,
-    // },
+    {
+        name: 'Spend',
+        page: 'spend',
+        icon: ArrowTrendingUpIcon,
+    },
+    {
+        name: 'Compliance',
+        page: 'compliance',
+        icon: ShieldCheckIcon,
+    },
+    {
+        name: 'Finder',
+        page: 'finder',
+        icon: MagnifyingGlassIcon,
+    },
+    {
+        name: 'Integration',
+        page: 'integration',
+        icon: ServerStackIcon,
+    },
     {
         name: 'Settings',
         page: 'settings',
@@ -279,42 +291,42 @@ export default function LoggedInLayout({
 
                         <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
                             <div className="flex items-center gap-x-4 lg:gap-x-6">
-                                <button
-                                    type="button"
-                                    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-                                >
-                                    <span className="sr-only">Theme</span>
-                                    <MoonIcon
-                                        className="h-6 w-6"
-                                        aria-hidden="true"
-                                    />
-                                </button>
-                                <button
-                                    type="button"
-                                    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-                                >
-                                    <span className="sr-only">CLI</span>
-                                    <CommandLineIcon
-                                        className="h-6 w-6"
-                                        aria-hidden="true"
-                                    />
-                                </button>
-                                <button
-                                    type="button"
-                                    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-                                >
-                                    <span className="sr-only">Help</span>
-                                    <QuestionMarkCircleIcon
-                                        className="h-6 w-6"
-                                        aria-hidden="true"
-                                    />
-                                </button>
+                                {/* <button */}
+                                {/*    type="button" */}
+                                {/*    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500" */}
+                                {/* > */}
+                                {/*    <span className="sr-only">Theme</span> */}
+                                {/*    <MoonIcon */}
+                                {/*        className="h-6 w-6" */}
+                                {/*        aria-hidden="true" */}
+                                {/*    /> */}
+                                {/* </button> */}
+                                {/* <button */}
+                                {/*    type="button" */}
+                                {/*    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500" */}
+                                {/* > */}
+                                {/*    <span className="sr-only">CLI</span> */}
+                                {/*    <CommandLineIcon */}
+                                {/*        className="h-6 w-6" */}
+                                {/*        aria-hidden="true" */}
+                                {/*    /> */}
+                                {/* </button> */}
+                                {/* <button */}
+                                {/*    type="button" */}
+                                {/*    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500" */}
+                                {/* > */}
+                                {/*    <span className="sr-only">Help</span> */}
+                                {/*    <QuestionMarkCircleIcon */}
+                                {/*        className="h-6 w-6" */}
+                                {/*        aria-hidden="true" */}
+                                {/*    /> */}
+                                {/* </button> */}
 
                                 {/* Separator */}
-                                <div
-                                    className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-white/20"
-                                    aria-hidden="true"
-                                />
+                                {/* <div */}
+                                {/*    className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-white/20" */}
+                                {/*    aria-hidden="true" */}
+                                {/* /> */}
 
                                 {/* Profile dropdown */}
                                 <Menu as="div" className="relative">
@@ -398,11 +410,45 @@ export default function LoggedInLayout({
                     </Flex>
                 </div>
 
-                <main className="flex justify-center items-start px-12 lg:mt-8 pt-16 pb-12 bg-gray-100 dark:bg-gray-900 h-full overflow-y-scroll">
-                    <div className="max-w-6xl w-full min-h-full">
-                        {children}
-                    </div>
-                </main>
+                <Flex
+                    flexDirection="col"
+                    alignItems="center"
+                    className="lg:mt-8 pt-16 bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll"
+                >
+                    <Flex
+                        flexDirection="col"
+                        className="min-h-full h-fit relative"
+                    >
+                        <Flex justifyContent="center" className="px-12">
+                            <div className="max-w-6xl w-full pb-28">
+                                {children}
+                            </div>
+                        </Flex>
+                        <Flex
+                            justifyContent="center"
+                            className="absolute bottom-8 left-0 right-0 px-12 py-3 border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm"
+                        >
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="between"
+                                className="max-w-6xl w-full"
+                            >
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a href="#">
+                                    <Text>Terms of Use</Text>
+                                </a>
+                                <Text>
+                                    Copyright © 2023 Kaytu, Inc. All rights
+                                    reserved.
+                                </Text>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a href="#">
+                                    <Text>Service Status</Text>
+                                </a>
+                            </Flex>
+                        </Flex>
+                    </Flex>
+                </Flex>
             </div>
         </Flex>
     )

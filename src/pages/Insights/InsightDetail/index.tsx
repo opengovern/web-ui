@@ -114,9 +114,13 @@ export default function InsightDetail() {
         ...(activeTimeRange.from && {
             startTime: dayjs(activeTimeRange.from).unix(),
         }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix(),
-        }),
+        ...(activeTimeRange.to
+            ? {
+                  endTime: dayjs(activeTimeRange.to).unix(),
+              }
+            : {
+                  endTime: dayjs(activeTimeRange.from).unix(),
+              }),
     }
     const { response: insightTrend } = useComplianceApiV1InsightTrendDetail(
         String(id),
@@ -136,7 +140,7 @@ export default function InsightDetail() {
 
     const breadcrubmsPages = [
         {
-            name: 'Assets',
+            name: 'Insights',
             path: () => {
                 navigate(-1)
             },
@@ -164,7 +168,6 @@ export default function InsightDetail() {
                             className="max-w-md"
                             value={activeTimeRange}
                             onValueChange={setActiveTimeRange}
-                            selectPlaceholder="Selection"
                             enableClear={false}
                             maxDate={new Date()}
                         />
