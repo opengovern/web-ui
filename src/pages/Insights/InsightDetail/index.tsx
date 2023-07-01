@@ -136,7 +136,7 @@ export default function InsightDetail() {
 
     const breadcrubmsPages = [
         {
-            name: 'Assets',
+            name: 'Insights',
             path: () => {
                 navigate(-1)
             },
