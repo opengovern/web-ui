@@ -74,7 +74,7 @@ const insightsResultToRows = (details: any) => {
             const object = Object.fromEntries(
                 headers.map((key: any, index: any) => [
                     key,
-                    array[index].isString
+                    typeof array[index] === 'string'
                         ? array[index]
                         : JSON.stringify(array[index]),
                 ])
@@ -136,7 +136,7 @@ export default function InsightDetail() {
 
     const breadcrubmsPages = [
         {
-            name: 'Assets',
+            name: 'Insights',
             path: () => {
                 navigate(-1)
             },
