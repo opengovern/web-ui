@@ -42,7 +42,6 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
     const navigateToAssetsInsightsDetails = (id: any) => {
         navigate(`${id}`)
     }
-    console.log(metric)
 
     return (
         <Card key={metric.id}>

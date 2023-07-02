@@ -28,12 +28,12 @@ const navigation = [
         page: 'home',
         icon: HomeIcon,
     },
-    { name: 'Assets', page: 'assets', icon: CubeIcon },
     {
         name: 'Insight',
         page: 'insight',
         icon: DocumentChartBarIcon,
     },
+    { name: 'Assets', page: 'assets', icon: CubeIcon },
     {
         name: 'Spend',
         page: 'spend',
@@ -234,9 +234,9 @@ export default function LoggedInLayout({
                                             } shrink-0`}
                                             aria-hidden="true"
                                         />
-                                        <Title className="text-inherit">
+                                        <Text className="text-inherit">
                                             {!collapsed && item.name}
-                                        </Title>
+                                        </Text>
                                     </Link>
                                 </li>
                             ))}

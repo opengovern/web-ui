@@ -312,7 +312,7 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({
     )
 }
 
-const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
+export default function SettingsWorkspaceAPIKeys() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const { response, isLoading, sendNow } = useAuthApiV1KeysList()
     const [notification, setNotification] = useState<string>('')
@@ -384,5 +384,3 @@ const SettingsWorkspaceAPIKeys: React.FC<any> = () => {
         </>
     )
 }
-
-export default SettingsWorkspaceAPIKeys
