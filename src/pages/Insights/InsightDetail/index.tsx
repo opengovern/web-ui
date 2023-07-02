@@ -1,5 +1,6 @@
 import {
     BadgeDelta,
+    Callout,
     Card,
     DateRangePicker,
     Flex,
@@ -14,6 +15,7 @@ import React, { useRef } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
+import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
     useComplianceApiV1InsightDetail,
@@ -131,6 +133,57 @@ const gridOptions: GridOptions = {
     },
 }
 
+const generateBadge = (met: any) => {
+    if (!met?.totalResultValue && !met?.oldTotalResultValue) {
+        return (
+            <Callout
+                title="Time period is not covered by insight"
+                color="red"
+                icon={ExclamationCircleIcon}
+                className="ml-3 border-0 text-xs leading-5 w-96 drop-shadow-sm"
+            />
+        )
+    }
+    if (!met?.totalResultValue) {
+        return (
+            <Callout
+                title="End value is not available"
+                color="red"
+                icon={ExclamationCircleIcon}
+                className="ml-3 border-0 text-xs leading-5 w-96 drop-shadow-sm"
+            />
+        )
+    }
+    if (!met?.oldTotalResultValue) {
+        return (
+            <Callout
+                title="Prior value is not available"
+                color="red"
+                icon={ExclamationCircleIcon}
+                className="ml-3 border-0 text-xs leading-5 w-96 drop-shadow-sm"
+            />
+        )
+    }
+    return (
+        <BadgeDelta
+            deltaType={
+                calculatePercent(met) > 0
+                    ? 'moderateIncrease'
+                    : 'moderateDecrease'
+            }
+            className={`opacity-${
+                calculatePercent(met) !== 0 ? 1 : 0
+            } cursor-pointer my-2`}
+        >
+            {`${
+                calculatePercent(met) > 0
+                    ? Math.ceil(calculatePercent(met))
+                    : -1 * Math.floor(calculatePercent(met))
+            }%`}
+        </BadgeDelta>
+    )
+}
+
 export default function InsightDetail() {
     const gridRef = useRef<AgGridReact>(null)
     const navigate = useNavigate()
@@ -198,67 +251,40 @@ export default function InsightDetail() {
                             maxDate={new Date()}
                         />
                     </Flex>
-                    <Card>
-                        <Flex flexDirection="col">
-                            <Flex flexDirection="row">
-                                <Title>{insightDetail?.shortTitle}</Title>
-                                <Flex
-                                    flexDirection="row"
-                                    alignItems="end"
-                                    className="w-fit"
-                                >
-                                    <Title>
-                                        {insightDetail?.totalResultValue
-                                            ? numericDisplay(
-                                                  insightDetail?.totalResultValue ||
-                                                      0
-                                              )
-                                            : 'N/A'}
+                    <Flex flexDirection="col">
+                        <Flex flexDirection="row">
+                            <Title className="whitespace-nowrap">
+                                {insightDetail?.shortTitle}
+                            </Title>
+                            <Flex
+                                flexDirection="row"
+                                alignItems="end"
+                                justifyContent="end"
+                            >
+                                {!!insightDetail?.totalResultValue && (
+                                    <Title className="mr-1">
+                                        {numericDisplay(
+                                            insightDetail?.totalResultValue || 0
+                                        )}
                                     </Title>
-                                    <Subtitle className="ml-1 mr-2">
-                                        {`from ${
-                                            insightDetail?.oldTotalResultValue
-                                                ? numericDisplay(
-                                                      insightDetail?.oldTotalResultValue ||
-                                                          0
-                                                  )
-                                                : 'N/A'
-                                        }`}
+                                )}
+                                {!!insightDetail?.oldTotalResultValue && (
+                                    <Subtitle className="text-sm mb-0.5">
+                                        {`Prior value: ${numericDisplay(
+                                            insightDetail?.oldTotalResultValue ||
+                                                0
+                                        )}`}
                                     </Subtitle>
-                                    <BadgeDelta
-                                        deltaType={
-                                            calculatePercent(insightDetail) > 0
-                                                ? 'moderateIncrease'
-                                                : 'moderateDecrease'
-                                        }
-                                        className={`opacity-${
-                                            calculatePercent(insightDetail) !==
-                                            0
-                                                ? 1
-                                                : 0
-                                        } cursor-pointer`}
-                                    >
-                                        {`${
-                                            calculatePercent(insightDetail) > 0
-                                                ? Math.ceil(
-                                                      calculatePercent(
-                                                          insightDetail
-                                                      )
-                                                  )
-                                                : -1 *
-                                                  Math.floor(
-                                                      calculatePercent(
-                                                          insightDetail
-                                                      )
-                                                  )
-                                        }%`}
-                                    </BadgeDelta>
-                                </Flex>
+                                )}
                             </Flex>
-                            <Text className="flex self-start mt-2 mb-6">
-                                {insightDetail?.description}
-                            </Text>
+                            {generateBadge(insightDetail)}
                         </Flex>
+                        <Text className="flex self-start mt-2 mb-6">
+                            {insightDetail?.description}
+                        </Text>
+                    </Flex>
+                    <Card>
+                        <Title>Insight count</Title>
                         <MultipleAreaCharts
                             className="mt-4 h-80"
                             index="date"
@@ -266,6 +292,7 @@ export default function InsightDetail() {
                             categories={['count']}
                             data={chartData(insightTrend)}
                             colors={['indigo']}
+                            // curveType="natural"
                         />
                     </Card>
                     <Flex flexDirection="row" className="mt-6">
