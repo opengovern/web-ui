@@ -1,5 +1,14 @@
-import { BadgeDelta, Card, Flex, Subtitle, Text, Title } from '@tremor/react'
+import {
+    BadgeDelta,
+    Callout,
+    Card,
+    Flex,
+    Subtitle,
+    Text,
+    Title,
+} from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
+import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IInsightsCard {
@@ -39,6 +48,57 @@ const calculateTime = (inputData: any) => {
     return ''
 }
 
+const generateBadge = (met: any) => {
+    if (!met?.totalResultValue && !met?.oldTotalResultValue) {
+        return (
+            <Callout
+                title="Time period is not covered by insight"
+                color="red"
+                icon={ExclamationCircleIcon}
+                className="w-full border-0 text-xs leading-5 truncate max-w-full"
+            />
+        )
+    }
+    if (!met?.totalResultValue) {
+        return (
+            <Callout
+                title="End value is not available"
+                color="red"
+                icon={ExclamationCircleIcon}
+                className="border-0 text-xs leading-5 truncate max-w-full"
+            />
+        )
+    }
+    if (!met?.oldTotalResultValue) {
+        return (
+            <Callout
+                title="Prior value is not available"
+                color="red"
+                icon={ExclamationCircleIcon}
+                className="border-0 text-xs leading-5 truncate max-w-full"
+            />
+        )
+    }
+    return (
+        <BadgeDelta
+            deltaType={
+                calculatePercent(met) > 0
+                    ? 'moderateIncrease'
+                    : 'moderateDecrease'
+            }
+            className={`opacity-${
+                calculatePercent(met) !== 0 ? 1 : 0
+            } cursor-pointer my-2`}
+        >
+            {`${
+                calculatePercent(met) > 0
+                    ? Math.ceil(calculatePercent(met))
+                    : -1 * Math.floor(calculatePercent(met))
+            }%`}
+        </BadgeDelta>
+    )
+}
+
 export default function InsightCard({ metric }: IInsightsCard) {
     const navigate = useNavigate()
     const navigateToAssetsInsightsDetails = (id: any) => {
@@ -50,7 +110,7 @@ export default function InsightCard({ metric }: IInsightsCard) {
             className={`${
                 metric?.totalResultValue || metric?.oldTotalResultValue
                     ? 'cursor-pointer'
-                    : 'bg-slate-50'
+                    : ''
             } h-full`}
             onClick={() =>
                 (metric?.totalResultValue || metric?.oldTotalResultValue) &&
@@ -69,46 +129,31 @@ export default function InsightCard({ metric }: IInsightsCard) {
                     >
                         {metric?.connector}
                     </Title>
-                    <Title className="my-2">{metric?.shortTitle}</Title>
+                    <Title className="my-2 truncate max-w-full">
+                        {metric?.shortTitle}
+                    </Title>
                     <Flex flexDirection="row" className="mb-2">
                         <Flex
                             flexDirection="row"
                             alignItems="end"
                             className="w-fit"
                         >
-                            <Title className="mr-1">
-                                {metric?.totalResultValue
-                                    ? numericDisplay(
-                                          metric?.totalResultValue || 0
-                                      )
-                                    : 'N/A'}
-                            </Title>
-                            <Subtitle>
-                                {`from ${
-                                    metric?.oldTotalResultValue
-                                        ? numericDisplay(
-                                              metric?.oldTotalResultValue || 0
-                                          )
-                                        : 'N/A'
-                                }`}
-                            </Subtitle>
+                            {!!metric?.totalResultValue && (
+                                <Title className="mr-1">
+                                    {numericDisplay(
+                                        metric?.totalResultValue || 0
+                                    )}
+                                </Title>
+                            )}
+                            {!!metric?.oldTotalResultValue && (
+                                <Subtitle className="text-sm mb-0.5">
+                                    {`Prior value: ${numericDisplay(
+                                        metric?.oldTotalResultValue || 0
+                                    )}`}
+                                </Subtitle>
+                            )}
                         </Flex>
-                        <BadgeDelta
-                            deltaType={
-                                calculatePercent(metric) > 0
-                                    ? 'moderateIncrease'
-                                    : 'moderateDecrease'
-                            }
-                            className={`opacity-${
-                                calculatePercent(metric) !== 0 ? 1 : 0
-                            } cursor-pointer`}
-                        >
-                            {`${
-                                calculatePercent(metric) > 0
-                                    ? Math.ceil(calculatePercent(metric))
-                                    : -1 * Math.floor(calculatePercent(metric))
-                            }%`}
-                        </BadgeDelta>
+                        {generateBadge(metric)}
                     </Flex>
                     <Text>{metric?.description}</Text>
                 </Flex>

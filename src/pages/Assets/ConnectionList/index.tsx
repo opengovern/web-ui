@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Button, Flex, Text } from '@tremor/react'
@@ -181,6 +181,14 @@ export default function ConnectionList({
         return 'All connections are selected'
     }
 
+    const isRowSelectable = useMemo(() => {
+        return (rowNode: any) => {
+            return rowNode.data
+                ? rowNode.data.lifecycleState === 'ONBOARD'
+                : false
+        }
+    }, [])
+
     const gridOptions: GridOptions<IConnection> = {
         rowData: connections,
         columnDefs: columns,
@@ -206,6 +214,17 @@ export default function ConnectionList({
             setSelectedProvider({ label: 'All', value: '' })
         },
         getRowHeight: (params) => 50,
+        isRowSelectable: (rowNode: any) => {
+            return rowNode.data
+                ? rowNode.data.lifecycleState === 'ONBOARD'
+                : false
+        },
+        getRowStyle: (params: any) => {
+            if (params.data.lifecycleState !== 'ONBOARD') {
+                return { opacity: 0.4 }
+            }
+            return { opacity: 1 }
+        },
     }
 
     useEffect(() => {
