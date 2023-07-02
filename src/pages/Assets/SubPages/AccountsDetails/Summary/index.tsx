@@ -28,21 +28,23 @@ export default function Summary({ accounts, loading }: IProps) {
         useOnboardApiV1CatalogMetricsList()
     return (
         <Flex className="mt-10 h-[34vh]">
-            <div className="flex flex-col justify-between h-full mr-10 w-[20vw]">
-                <Card className="flex flex-col h-32 gap-y-2">
-                    <Text>Total Accounts</Text>
+            <div className="flex flex-col justify-start h-[33vh] gap-y-4 mr-4 w-[33vw]">
+                <Card className="flex flex-col gap-y-2 h-[16vh] justify-center">
+                    <Text className="font-medium">Total Accounts</Text>
                     <Metric>
                         {numericDisplay(topMetrics?.totalConnections)}
                     </Metric>
                 </Card>
-                <Card className="flex flex-col h-32 gap-y-2">
-                    <Text>Total Unhealthy Accounts</Text>
+                <Card className="flex flex-col gap-y-2 h-[16vh] justify-center">
+                    <Text className="font-medium">
+                        Total Unhealthy Accounts
+                    </Text>
                     <Metric>
                         {numericDisplay(topMetrics?.unhealthyConnections)}
                     </Metric>
                 </Card>
             </div>
-            <Card className="h-full overflow-y-scroll">
+            <Card className="h-[33vh]">
                 <Title>Top Accounts</Title>
                 <Grid numItemsMd={1} className="gap-x-10 mt-5">
                     {loading && (

@@ -57,6 +57,7 @@ export default function ServicesDetails({
             pageSize: 1000,
             pageNumber: 1,
             endTime: String(dayjs(timeRange.to).unix()),
+            sortBy: 'name',
         })
     const { response: TopServices } = useInventoryApiV2ServicesMetricList({
         connector: selectedConnections?.provider,
@@ -64,6 +65,7 @@ export default function ServicesDetails({
         pageSize: 5,
         pageNumber: 1,
         endTime: String(dayjs(timeRange.to).unix()),
+        sortBy: 'count',
     })
     const { response: TopFastestServices } =
         useInventoryApiV2ServicesMetricList({
