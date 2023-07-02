@@ -29,7 +29,7 @@ const navigation = [
         icon: HomeIcon,
     },
     {
-        name: 'Insight',
+        name: 'Insights',
         page: 'insight',
         icon: DocumentChartBarIcon,
     },
@@ -50,7 +50,7 @@ const navigation = [
         icon: MagnifyingGlassIcon,
     },
     {
-        name: 'Integration',
+        name: 'Integrations',
         page: 'integration',
         icon: CpuChipIcon,
     },
