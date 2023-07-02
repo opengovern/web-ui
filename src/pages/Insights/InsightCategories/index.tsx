@@ -22,7 +22,7 @@ interface IInsightCategories {
 
 export default function InsightCategories({ onChange }: IInsightCategories) {
     const { response: categories } = useComplianceApiV1MetadataTagInsightList()
-    const [selectedCategory, setSelectedCategory] = useState<string>('')
+    const [selectedCategory, setSelectedCategory] = useState<string>('All')
     useEffect(() => {
         onChange(selectedCategory)
     }, [selectedCategory])
@@ -31,7 +31,8 @@ export default function InsightCategories({ onChange }: IInsightCategories) {
     const allCategories = ['All', ...aaa]
 
     const handleClick = (cat: string) => {
-        if (cat === 'All' || selectedCategory === cat) setSelectedCategory('')
+        if (cat === 'All' || selectedCategory === cat)
+            setSelectedCategory('All')
         else setSelectedCategory(cat)
     }
 

@@ -84,8 +84,34 @@ export default function Insights() {
                                     className="gap-3 w-100"
                                 >
                                     {insightList
-                                        ?.filter((insight) => {
-                                            if (selectedCategory.length)
+                                        ?.sort((a, b) => {
+                                            if (
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                a.totalResultValue >
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                b.totalResultValue
+                                            ) {
+                                                return -1
+                                            }
+                                            if (
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                a.totalResultValue <
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                b.totalResultValue
+                                            ) {
+                                                return 1
+                                            }
+                                            return 0
+                                        })
+                                        .filter((insight) => {
+                                            if (
+                                                selectedCategory.length &&
+                                                selectedCategory !== 'All'
+                                            )
                                                 return insight.tags?.category.includes(
                                                     selectedCategory
                                                 )
@@ -113,7 +139,10 @@ export default function Insights() {
                                 >
                                     {insightGroup
                                         ?.filter((insight) => {
-                                            if (selectedCategory.length)
+                                            if (
+                                                selectedCategory.length &&
+                                                selectedCategory !== 'All'
+                                            )
                                                 return insight.tags?.category.includes(
                                                     selectedCategory
                                                 )
