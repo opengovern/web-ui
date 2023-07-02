@@ -9,7 +9,6 @@ import {
     TabList,
     TabPanel,
     TabPanels,
-    Title,
 } from '@tremor/react'
 import React, { useState } from 'react'
 import { useAtom } from 'jotai'
@@ -22,8 +21,8 @@ import {
 } from '../../api/compliance.gen'
 import InsightCard from '../../components/Cards/InsightCard'
 import { timeAtom } from '../../store'
-import InsightGroupCard from '../../components/Cards/InsightGroupCard'
 import Spinner from '../../components/Spinner'
+import InsightGroupCard from '../../components/Cards/InsightGroupCard'
 
 export default function Insights() {
     const [selectedCategory, setSelectedCategory] = useState('')

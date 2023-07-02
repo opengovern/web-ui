@@ -28,12 +28,12 @@ const navigation = [
         page: 'home',
         icon: HomeIcon,
     },
-    { name: 'Assets', page: 'assets', icon: CubeIcon },
     {
         name: 'Insight',
         page: 'insight',
         icon: DocumentChartBarIcon,
     },
+    { name: 'Assets', page: 'assets', icon: CubeIcon },
     {
         name: 'Spend',
         page: 'spend',
@@ -234,9 +234,9 @@ export default function LoggedInLayout({
                                             } shrink-0`}
                                             aria-hidden="true"
                                         />
-                                        <Title className="text-inherit">
+                                        <Text className="text-inherit">
                                             {!collapsed && item.name}
-                                        </Title>
+                                        </Text>
                                     </Link>
                                 </li>
                             ))}
@@ -280,7 +280,7 @@ export default function LoggedInLayout({
                         <div className="-m-2.5 p-2.5 text-gray-900">
                             <Title>
                                 &#128075; Welcome back,{' '}
-                                {user?.name || user?.email || ''}
+                                {user?.given_name || user?.email || ''}
                             </Title>
                         </div>
                         {/* Separator */}
@@ -413,39 +413,32 @@ export default function LoggedInLayout({
                 <Flex
                     flexDirection="col"
                     alignItems="center"
-                    className="lg:mt-8 pt-16 bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll"
+                    className="mt-16 bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll"
                 >
+                    <Flex justifyContent="center" className="px-12">
+                        <div className="max-w-6xl w-full py-8">{children}</div>
+                    </Flex>
                     <Flex
-                        flexDirection="col"
-                        className="min-h-full h-fit relative"
+                        justifyContent="center"
+                        className="px-12 mb-16 py-3 border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm"
                     >
-                        <Flex justifyContent="center" className="px-12">
-                            <div className="max-w-6xl w-full pb-28">
-                                {children}
-                            </div>
-                        </Flex>
                         <Flex
-                            justifyContent="center"
-                            className="absolute bottom-8 left-0 right-0 px-12 py-3 border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm"
+                            flexDirection="row"
+                            justifyContent="between"
+                            className="max-w-6xl w-full"
                         >
-                            <Flex
-                                flexDirection="row"
-                                justifyContent="between"
-                                className="max-w-6xl w-full"
-                            >
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a href="#">
-                                    <Text>Terms of Use</Text>
-                                </a>
-                                <Text>
-                                    Copyright © 2023 Kaytu, Inc. All rights
-                                    reserved.
-                                </Text>
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a href="#">
-                                    <Text>Service Status</Text>
-                                </a>
-                            </Flex>
+                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                            <a href="#">
+                                <Text>Terms of Use</Text>
+                            </a>
+                            <Text>
+                                Copyright © 2023 Kaytu, Inc. All rights
+                                reserved.
+                            </Text>
+                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                            <a href="#">
+                                <Text>Service Status</Text>
+                            </a>
                         </Flex>
                     </Flex>
                 </Flex>

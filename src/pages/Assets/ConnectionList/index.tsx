@@ -100,13 +100,12 @@ export default function ConnectionList({
     selectedConnectionsProps,
 }: IConnectorList) {
     const gridRef = useRef<AgGridReact<IConnection>>(null)
-
     const [isConnectionSelected, setIsConnectionSelected] = useState(false)
-
     const [selectedProvider, setSelectedProvider] = useState({
         label: 'All',
         value: '',
     })
+
     const updateSelectionByProvider = (api: any, newValue: any) => {
         if (newValue.length) {
             if (newValue === 'All') {
@@ -233,37 +232,39 @@ export default function ConnectionList({
             onClose={() => handleClose()}
             title="Connections"
         >
-            <div>
-                <Flex>
-                    <Flex justifyContent="start" className="mb-4">
-                        {tags.map((tag) => (
-                            <Button
-                                size="xs"
-                                variant={
-                                    selectedProvider.label === tag.label &&
-                                    !isConnectionSelected
-                                        ? 'primary'
-                                        : 'secondary'
-                                }
-                                onClick={() => {
-                                    if (selectedProvider === tag)
-                                        setSelectedProvider({
-                                            label: 'All',
-                                            value: '',
-                                        })
-                                    else setSelectedProvider(tag)
-                                }}
-                                className="mr-2 w-14"
-                            >
-                                {tag.label}
-                            </Button>
-                        ))}
-                    </Flex>
+            <Flex
+                flexDirection="col"
+                alignItems="start"
+                className="h-full w-full"
+            >
+                <Flex justifyContent="start" className="mb-4">
+                    {tags.map((tag) => (
+                        <Button
+                            size="xs"
+                            variant={
+                                selectedProvider.label === tag.label &&
+                                !isConnectionSelected
+                                    ? 'primary'
+                                    : 'secondary'
+                            }
+                            onClick={() => {
+                                if (selectedProvider === tag)
+                                    setSelectedProvider({
+                                        label: 'All',
+                                        value: '',
+                                    })
+                                else setSelectedProvider(tag)
+                            }}
+                            className="mr-2 w-14"
+                        >
+                            {tag.label}
+                        </Button>
+                    ))}
                 </Flex>
-                <div className="mb-2">
-                    <Text>{selectionText(gridRef.current?.api)}</Text>
-                </div>
-                <div className="ag-theme-alpine h-[80vh]">
+                <Text className="mb-2">
+                    {selectionText(gridRef.current?.api)}
+                </Text>
+                <div className="ag-theme-alpine h-full w-full">
                     <AgGridReact
                         ref={gridRef}
                         rowMultiSelectWithClick
@@ -271,7 +272,7 @@ export default function ConnectionList({
                         gridOptions={gridOptions}
                     />
                 </div>
-            </div>
+            </Flex>
         </DrawerPanel>
     )
 }
