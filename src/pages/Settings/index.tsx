@@ -66,7 +66,7 @@ const Settings: React.FC<any> = () => {
 
     return (
         <LoggedInLayout currentPage="settings">
-            <Flex flexDirection="row" alignItems="start" className="h-full">
+            <Flex flexDirection="row" alignItems="start" className="min-h-full">
                 <Flex flexDirection="row" className="inset-y-0 h-full w-64">
                     <Flex
                         flexDirection="col"
