@@ -1,6 +1,11 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
+import {
+    CellClickedEvent,
+    ColDef,
+    GridOptions,
+    ICellRendererParams,
+} from 'ag-grid-community'
 import { ReactComponent as AzureIcon } from '../../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
 import {
@@ -12,6 +17,9 @@ import Summary from './Summary'
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
+import DrawerPanel from '../../../../components/DrawerPanel'
+import { ConnectionDetails } from './ConnectionDetails'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../api/api'
 
 type IProps = {
     selectedConnections: any
@@ -121,6 +129,8 @@ export default function ServicesDetails({
     timeRange,
 }: IProps) {
     const gridRef = useRef<AgGridReact>(null)
+    const [drawerOpen, setDrawerOpen] = useState(false)
+    const [selectedAccountIndex, setSelectedAccountIndex] = useState(0)
 
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -151,6 +161,13 @@ export default function ServicesDetails({
         onGridReady: (params) => {
             if (isAccountsLoading) {
                 params.api.showLoadingOverlay()
+            }
+        },
+        onCellClicked(event: CellClickedEvent<any>) {
+            if (event.rowIndex !== null) {
+                // setSelectedAccount(selectedAcc)
+                setSelectedAccountIndex(event.rowIndex)
+                setDrawerOpen(true)
             }
         },
     }
@@ -198,6 +215,16 @@ export default function ServicesDetails({
                     />
                 </div>
             </div>
+            <DrawerPanel
+                open={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+                title="Connection Details"
+            >
+                <ConnectionDetails
+                    connection={accounts?.connections}
+                    index={selectedAccountIndex}
+                />
+            </DrawerPanel>
         </main>
     )
 }

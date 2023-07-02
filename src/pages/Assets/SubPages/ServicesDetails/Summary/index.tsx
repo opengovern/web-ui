@@ -153,80 +153,60 @@ export default function Summary({
         setTopFastest(TopFastestServices || [])
     }, [TopServices, TopFastestServices, TotalServices])
     return (
-        <Grid numItemsLg={3} className="gap-x-10 mt-5">
-            <Card key="Total Services" className="h-fit">
-                <Flex justifyContent="start" className="space-x-4">
-                    <Title className="truncate">Total Services</Title>
-                </Flex>
-                {/* <Text> */}
-                {/*    Last Inspection: <Bold>{item.date}</Bold> */}
-                {/* </Text> */}
-                <Metric className="mt-4 mb-3">
-                    {numericDisplay(TotalServices)}
-                </Metric>
-            </Card>
-            <Card key="TopXServices" className="h-fit">
-                <Flex justifyContent="start" className="space-x-4">
-                    <Title className="truncate">Top Services</Title>
-                </Flex>
-                {/* <Text> */}
-                {/*    Last Inspection: <Bold>{item.date}</Bold> */}
-                {/* </Text> */}
-                <Accordion className="mt-4">
-                    <AccordionHeader>
-                        <div className="space-y-2">
-                            <Text>Services</Text>
-                        </div>
-                    </AccordionHeader>
-                    <AccordionBody>
-                        <List className="mt-2">
-                            {topServices.map((thing: any) => (
-                                <ListItem key={thing.service_label}>
-                                    <Text>{thing.service_label}</Text>
-                                    <Text>
-                                        <Bold>
-                                            {numericDisplay(
-                                                thing.resource_count
-                                            )}
-                                        </Bold>{' '}
-                                    </Text>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </AccordionBody>
-                </Accordion>
-            </Card>
-            <Card key="TopXFastest" className="h-fit">
-                <Flex justifyContent="start" className="space-x-4">
-                    <Title className="truncate">Top Growing Services</Title>
-                </Flex>
-                {/* <Text> */}
-                {/*    Last Inspection: <Bold>{item.date}</Bold> */}
-                {/* </Text> */}
-                <Accordion className="mt-4">
-                    <AccordionHeader>
-                        <div className="space-y-2">
-                            <Text>Services</Text>
-                        </div>
-                    </AccordionHeader>
-                    <AccordionBody>
-                        <List className="mt-2">
-                            {topFastest.map((thing: any) => (
-                                <ListItem key={thing.service_label}>
-                                    <Text>{thing.service_label}</Text>
-                                    <Text>
-                                        <Bold>
-                                            {numericDisplay(
-                                                thing.resource_count
-                                            )}
-                                        </Bold>{' '}
-                                    </Text>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </AccordionBody>
-                </Accordion>
-            </Card>
-        </Grid>
+        <div className="gap-y-10 mt-[24px]">
+            {/* <Card key="Total Services" className="h-fit"> */}
+            {/*    <Flex justifyContent="start" className="space-x-4"> */}
+            {/*        <Title className="truncate">Total Services</Title> */}
+            {/*    </Flex> */}
+            {/*    <Metric className="mt-4 mb-3"> */}
+            {/*        {numericDisplay(TotalServices)} */}
+            {/*    </Metric> */}
+            {/* </Card> */}
+            <div className="flex flex-row justify-between">
+                <Metric>Services</Metric>
+                <div className="flex flex-row items-baseline">
+                    <Metric className="mr-2">
+                        {numericDisplay(TotalServices)}
+                    </Metric>
+                    <Text>Total Services</Text>
+                </div>
+            </div>
+            <div className="flex flex-row gap-x-10 mt-4">
+                <Card key="TopXServices" className="h-fit">
+                    <Flex justifyContent="start" className="space-x-4">
+                        <Title className="truncate">Top Services</Title>
+                    </Flex>
+                    <List className="mt-2 mb-2">
+                        {topServices.map((thing: any) => (
+                            <ListItem key={thing.service_label}>
+                                <Text>{thing.service_label}</Text>
+                                <Text>
+                                    <Bold>
+                                        {numericDisplay(thing.resource_count)}
+                                    </Bold>{' '}
+                                </Text>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Card>
+                <Card key="TopXFastest" className="h-fit">
+                    <Flex justifyContent="start" className="space-x-4">
+                        <Title className="truncate">Top Growing Services</Title>
+                    </Flex>
+                    <List className="mt-2 mb-2">
+                        {topFastest.map((thing: any) => (
+                            <ListItem key={thing.service_label}>
+                                <Text>{thing.service_label}</Text>
+                                <Text>
+                                    <Bold>
+                                        {numericDisplay(thing.resource_count)}
+                                    </Bold>{' '}
+                                </Text>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Card>
+            </div>
+        </div>
     )
 }
