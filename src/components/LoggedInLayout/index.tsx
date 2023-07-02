@@ -1,17 +1,17 @@
 import React, { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
-    ArrowTrendingUpIcon,
+    BanknotesIcon,
     Bars3Icon,
     ChevronDoubleLeftIcon,
     ChevronDoubleRightIcon,
     ChevronDownIcon,
     Cog6ToothIcon,
+    CpuChipIcon,
     CubeIcon,
     DocumentChartBarIcon,
     HomeIcon,
     MagnifyingGlassIcon,
-    ServerStackIcon,
     ShieldCheckIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -37,7 +37,7 @@ const navigation = [
     {
         name: 'Spend',
         page: 'spend',
-        icon: ArrowTrendingUpIcon,
+        icon: BanknotesIcon,
     },
     {
         name: 'Compliance',
@@ -52,7 +52,7 @@ const navigation = [
     {
         name: 'Integration',
         page: 'integration',
-        icon: ServerStackIcon,
+        icon: CpuChipIcon,
     },
     {
         name: 'Settings',
@@ -186,15 +186,10 @@ export default function LoggedInLayout({
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div
-                className={`hidden h-full ease-in-out ${
-                    collapsed ? 'w-fit' : 'min-w-80 w-80'
-                } lg:flex lg:flex-col`}
-            >
-                {/* Sidebar component, swap this element with another sidebar if you like */}
+            <div className="transition ease-in-out hidden h-full lg:flex lg:flex-col bg-blue-950 px-6 pb-4">
                 <Flex
                     flexDirection="col"
-                    className="h-full w-full gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4"
+                    className="h-full w-full gap-y-5 overflow-y-auto"
                 >
                     <Flex
                         alignItems="center"
@@ -203,7 +198,7 @@ export default function LoggedInLayout({
                     >
                         <KaytuLogo />
                         {!collapsed && (
-                            <Title className="text-slate-50">KAYTU</Title>
+                            <Title className="text-slate-50 w-48">KAYTU</Title>
                         )}
                     </Flex>
                     <nav className="w-full flex flex-1 flex-col justify-between items-center">
@@ -227,16 +222,14 @@ export default function LoggedInLayout({
                                                 `}
                                     >
                                         <item.icon
-                                            className={`${
-                                                collapsed
-                                                    ? 'h-8 w-8'
-                                                    : 'h-6 w-6'
-                                            } shrink-0`}
+                                            className="h-6 w-6 shrink-0"
                                             aria-hidden="true"
                                         />
-                                        <Text className="text-inherit">
-                                            {!collapsed && item.name}
-                                        </Text>
+                                        {!collapsed && (
+                                            <Text className="font-semibold text-inherit w-48">
+                                                {item.name}
+                                            </Text>
+                                        )}
                                     </Link>
                                 </li>
                             ))}
