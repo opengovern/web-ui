@@ -74,8 +74,8 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'healthState',
-        headerName: 'Health',
+        field: 'lifecycleState',
+        headerName: 'State',
         sortable: true,
         filter: true,
         resizable: true,
