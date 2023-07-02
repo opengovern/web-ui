@@ -16,8 +16,6 @@ export default function DrawerPanel({
     children,
     title,
 }: Iprops) {
-    // const [open, setOpen] = useState(true)
-
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="relative z-40" onClose={onClose}>

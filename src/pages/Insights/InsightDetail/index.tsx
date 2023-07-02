@@ -13,6 +13,7 @@ import dayjs from 'dayjs'
 import React, { useRef } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { GridOptions } from 'ag-grid-community'
+import 'ag-grid-enterprise'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
     useComplianceApiV1InsightDetail,
@@ -103,6 +104,32 @@ const gridOptions: GridOptions = {
     // rowSelection: 'multiple',
     animateRows: true,
     getRowHeight: (params: any) => 50,
+    sideBar: {
+        toolPanels: [
+            {
+                id: 'columns',
+                labelDefault: 'Columns',
+                labelKey: 'columns',
+                iconKey: 'columns',
+                toolPanel: 'agColumnsToolPanel',
+            },
+            {
+                id: 'filters',
+                labelDefault: 'Filters',
+                labelKey: 'filters',
+                iconKey: 'filter',
+                toolPanel: 'agFiltersToolPanel',
+            },
+            // {
+            //     id: 'customStats',
+            //     labelDefault: 'Custom Stats',
+            //     labelKey: 'customStats',
+            //     iconKey: 'custom-stats',
+            //     toolPanel: CustomStatsToolPanel,
+            // },
+        ],
+        defaultToolPanel: '',
+    },
 }
 
 export default function InsightDetail() {
