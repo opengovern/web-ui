@@ -27,6 +27,7 @@ import TrendsTab from './TrendsTab'
 import CompositionTab from './CompositionTab/indedx'
 import ResourceMetricsDetails from './SubPages/ResourceMetricsDetails'
 import AccountsDetails from './SubPages/AccountsDetails'
+import SingleAccountDetails from './SubPages/SingleAccountDetails'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ServicesDetails from './SubPages/ServicesDetails'
 
@@ -132,7 +133,6 @@ const Assets: React.FC<any> = () => {
         },
         { name: activeSubPage, path: '', current: true },
     ]
-
     return (
         <LoggedInLayout currentPage="assets">
             <Flex
@@ -186,12 +186,20 @@ const Assets: React.FC<any> = () => {
                         pageSize={1000}
                     />
                 )}
-                {activeSubPage === 'Accounts' && (
-                    <AccountsDetails
-                        selectedConnections={selectedConnections}
-                        timeRange={activeTimeRange}
-                    />
-                )}
+                {/* eslint-disable-next-line no-nested-ternary */}
+                {activeSubPage === 'Accounts' ? (
+                    selectedConnections.connections.length === 1 ? (
+                        <SingleAccountDetails
+                            selectedConnections={selectedConnections}
+                            timeRange={activeTimeRange}
+                        />
+                    ) : (
+                        <AccountsDetails
+                            selectedConnections={selectedConnections}
+                            timeRange={activeTimeRange}
+                        />
+                    )
+                ) : null}
                 {activeSubPage === 'Services' && (
                     <ServicesDetails
                         selectedConnections={selectedConnections}

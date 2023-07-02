@@ -47,7 +47,7 @@ export default function SummaryMetrics({
                 <SummaryCard
                     title="Accounts"
                     metric={String(numericDisplay(accounts?.connectionCount))}
-                    // metricPrev={MockData[0].metricPrev}
+                    metricPrev="922"
                     // delta={MockData[0].delta}
                     // deltaType={MockData[0].deltaType}
                     // areaChartData={[{}]}
@@ -62,7 +62,7 @@ export default function SummaryMetrics({
                 <SummaryCard
                     title="Services"
                     metric={String(numericDisplay(services?.totalCount))}
-                    // metricPrev={MockData[1].metricPrev}
+                    metricPrev="149"
                     // delta={MockData[1].delta}
                     // deltaType={MockData[1].deltaType}
                     // areaChartData={[{}]}
@@ -79,7 +79,7 @@ export default function SummaryMetrics({
                     metric={String(
                         numericDisplay(accounts?.totalResourceCount)
                     )}
-                    // metricPrev={MockData[2].metricPrev}
+                    metricPrev="4.34M"
                     // delta={MockData[2].delta}
                     // deltaType={MockData[2].deltaType}
                     // areaChartData={[{}]}
