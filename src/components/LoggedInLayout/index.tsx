@@ -8,10 +8,10 @@ import {
     ChevronDownIcon,
     Cog6ToothIcon,
     CpuChipIcon,
-    CubeIcon,
     DocumentChartBarIcon,
     HomeIcon,
     MagnifyingGlassIcon,
+    ServerStackIcon,
     ShieldCheckIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -33,7 +33,7 @@ const navigation = [
         page: 'insight',
         icon: DocumentChartBarIcon,
     },
-    { name: 'Assets', page: 'assets', icon: CubeIcon },
+    { name: 'Assets', page: 'assets', icon: ServerStackIcon },
     {
         name: 'Spend',
         page: 'spend',
