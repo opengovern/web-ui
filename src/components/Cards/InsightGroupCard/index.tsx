@@ -3,6 +3,7 @@ import {
     AccordionBody,
     AccordionHeader,
     BadgeDelta,
+    Callout,
     Card,
     Divider,
     Flex,
@@ -17,6 +18,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
+import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IInsightGroupCard {
@@ -35,6 +37,57 @@ const calculatePercent = (inputData: any) => {
         )
     }
     return 0
+}
+
+const generateBadge = (met: any) => {
+    if (!met?.totalResultValue && !met?.oldTotalResultValue) {
+        return (
+            <Callout
+                title="Time period is not covered by insight"
+                color="red"
+                icon={ExclamationCircleIcon}
+                className="w-full border-0 text-xs leading-5 truncate max-w-full"
+            />
+        )
+    }
+    if (!met?.totalResultValue) {
+        return (
+            <Callout
+                title="End value is not available"
+                color="red"
+                icon={ExclamationCircleIcon}
+                className="border-0 text-xs leading-5 truncate max-w-full"
+            />
+        )
+    }
+    if (!met?.oldTotalResultValue) {
+        return (
+            <Callout
+                title="Prior value is not available"
+                color="red"
+                icon={ExclamationCircleIcon}
+                className="border-0 text-xs leading-5 truncate max-w-full"
+            />
+        )
+    }
+    return (
+        <BadgeDelta
+            deltaType={
+                calculatePercent(met) > 0
+                    ? 'moderateIncrease'
+                    : 'moderateDecrease'
+            }
+            className={`opacity-${
+                calculatePercent(met) !== 0 ? 1 : 0
+            } cursor-pointer my-2`}
+        >
+            {`${
+                calculatePercent(met) > 0
+                    ? Math.ceil(calculatePercent(met))
+                    : -1 * Math.floor(calculatePercent(met))
+            }%`}
+        </BadgeDelta>
+    )
 }
 
 export default function InsightGroupCard({ metric }: IInsightGroupCard) {
@@ -59,42 +112,25 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                             alignItems="end"
                             className="w-fit"
                         >
-                            <Title className="mr-1">
-                                {metric?.totalResultValue
-                                    ? numericDisplay(
-                                          metric?.totalResultValue || 0
-                                      )
-                                    : 'N/A'}
-                            </Title>
-                            <Subtitle>
-                                {`from ${
-                                    metric?.oldTotalResultValue
-                                        ? numericDisplay(
-                                              metric?.oldTotalResultValue || 0
-                                          )
-                                        : 'N/A'
-                                }`}
-                            </Subtitle>
+                            {!!metric?.totalResultValue && (
+                                <Title className="mr-1">
+                                    {numericDisplay(
+                                        metric?.totalResultValue || 0
+                                    )}
+                                </Title>
+                            )}
+                            {!!metric?.oldTotalResultValue && (
+                                <Subtitle className="text-sm mb-0.5">
+                                    {`Prior value: ${numericDisplay(
+                                        metric?.oldTotalResultValue || 0
+                                    )}`}
+                                </Subtitle>
+                            )}
                         </Flex>
-                        <BadgeDelta
-                            deltaType={
-                                calculatePercent(metric) > 0
-                                    ? 'moderateIncrease'
-                                    : 'moderateDecrease'
-                            }
-                            className={`opacity-${
-                                calculatePercent(metric) !== 0 ? 1 : 0
-                            } cursor-pointer`}
-                        >
-                            {`${
-                                calculatePercent(metric) > 0
-                                    ? Math.ceil(calculatePercent(metric))
-                                    : -1 * Math.floor(calculatePercent(metric))
-                            }%`}
-                        </BadgeDelta>
+                        {generateBadge(metric)}
                     </Flex>
                     <Text>{metric?.description}</Text>
-                    <Table className="w-full mt-5">
+                    <Table className="w-full table-fixed mt-5">
                         <TableHead>
                             <TableRow>
                                 <TableHeaderCell className="px-0">
@@ -149,7 +185,7 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                     <Accordion className="w-full border-0">
                         <AccordionBody className="p-0 w-full">
                             <Divider className="p-0 m-0" />
-                            <Table className="w-full">
+                            <Table className="w-full table-fixed">
                                 <TableBody>
                                     {metric.insights
                                         .filter(
