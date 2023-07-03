@@ -11,6 +11,7 @@ import InsightDetail from '../pages/Insights/InsightDetail'
 import AccountsDetails from '../pages/Assets/Details/AccountsDetails'
 import Spend from '../pages/Spend'
 import ServicesDetails from '../pages/Assets/Details/ServicesDetails'
+import ResourceMetricsDetails from '../pages/Assets/Details/ResourceMetricsDetails'
 
 const routes = [
     {
@@ -60,6 +61,11 @@ const authRoutes = [
         key: 'services detail',
         path: '/:ws/assets/services-detail',
         component: ServicesDetails,
+    },
+    {
+        key: 'resource metrics',
+        path: '/:ws/assets/resource-metrics',
+        component: ResourceMetricsDetails,
     },
     {
         key: 'spend',

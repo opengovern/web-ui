@@ -53,10 +53,19 @@ export default function ResourceMetricsDetails() {
             ? ''
             : selectedResourceCategory
     const query = {
-        connector: selectedConnections?.provider,
-        connectionId: selectedConnections?.connections,
-        startTime: dayjs(activeTimeRange.from).unix(),
-        endTime: dayjs(activeTimeRange.to).unix(),
+        ...(selectedConnections.provider && {
+            connector: selectedConnections.provider,
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(activeCategory && { tag: [`category=${activeCategory}`] }),
+        ...(activeTimeRange.from && {
+            startTime: dayjs(activeTimeRange.from).unix(),
+        }),
+        ...(activeTimeRange.to && {
+            endTime: dayjs(activeTimeRange.to).unix(),
+        }),
         pageSize: 1000,
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
     }
@@ -138,25 +147,21 @@ export default function ResourceMetricsDetails() {
             <Card className="mt-10">
                 <Flex>
                     <Title>Resources Metrics</Title>
-                    <div className="flex flex-row">
-                        <SearchSelect
-                            onValueChange={(e) =>
-                                setSelectedResourceCategory(e)
-                            }
-                            value={selectedResourceCategory}
-                            placeholder="Source Selection"
-                            className="max-w-xs mb-6"
-                        >
-                            {categoryOptions.map((category) => (
-                                <SearchSelectItem
-                                    key={category.label}
-                                    value={category.value}
-                                >
-                                    {category.value}
-                                </SearchSelectItem>
-                            ))}
-                        </SearchSelect>
-                    </div>
+                    <SearchSelect
+                        onValueChange={(e) => setSelectedResourceCategory(e)}
+                        value={selectedResourceCategory}
+                        placeholder="Source Selection"
+                        className="max-w-xs mb-6"
+                    >
+                        {categoryOptions.map((category) => (
+                            <SearchSelectItem
+                                key={category.label}
+                                value={category.value}
+                            >
+                                {category.value}
+                            </SearchSelectItem>
+                        ))}
+                    </SearchSelect>
                 </Flex>
                 {tableData.length > 0 ? (
                     <Table className="mt-5">
