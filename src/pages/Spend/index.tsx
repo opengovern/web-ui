@@ -24,9 +24,7 @@ import SummaryTab from './SummaryTab'
 import TrendsTab from './TrendsTab'
 import CompositionTab from './CompositionTab/indedx'
 import CostMetricsDetails from './SubPages/CostMetricsDetails'
-import AccountsDetails from './SubPages/AccountsDetails'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import ServicesDetails from './SubPages/ServicesDetails'
 
 const Assets: React.FC<any> = () => {
     const [activeSubPage, setActiveSubPage] = useState<
@@ -176,18 +174,6 @@ const Assets: React.FC<any> = () => {
                     pageSize={1000}
                 />
             )}
-            {/* {activeSubPage === 'Accounts' && ( */}
-            {/*    <AccountsDetails */}
-            {/*        selectedConnections={selectedConnections} */}
-            {/*        timeRange={activeTimeRange} */}
-            {/*    /> */}
-            {/* )} */}
-            {/* {activeSubPage === 'Services' && ( */}
-            {/*    <ServicesDetails */}
-            {/*        selectedConnections={selectedConnections} */}
-            {/*        timeRange={activeTimeRange} */}
-            {/*    /> */}
-            {/* )} */}
         </LoggedInLayout>
     )
 }

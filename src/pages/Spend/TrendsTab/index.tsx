@@ -159,14 +159,22 @@ export default function TrendsTab({
     return (
         <div className="mt-5">
             {/* <div className="h-96" /> */}
-            <GrowthTrend categories={categories} timeRange={timeRange} />
+            <div className="mb-5">
+                <GrowthTrend categories={categories} timeRange={timeRange} />
+            </div>
+            <div className="mb-5">
+                <GrowthTrend categories={categories} timeRange={timeRange} />
+            </div>
+            <div className="mb-5">
+                <GrowthTrend categories={categories} timeRange={timeRange} />
+            </div>
             <Grid numItemsMd={2} className="mt-10 gap-6 flex justify-between">
                 <div className="w-full">
                     {/* Placeholder to set height */}
                     {/* <Card className="h-40" /> */}
                     <CardWithList
                         title="Top by Consumption"
-                        tabs={['Accounts', 'Services', 'Regions']}
+                        tabs={['Accounts']}
                         data={consumptionData}
                         // provider={selectedConnections.provider}
                         // connections={connections}
@@ -177,7 +185,7 @@ export default function TrendsTab({
                     {/* Placeholder to set height */}
                     <CardWithList
                         title="Top by Growth"
-                        tabs={['Accounts', 'Services', 'Regions']}
+                        tabs={['Services']}
                         data={growthData}
                         // provider={selectedConnections.provider}
                         // connections={connections}
