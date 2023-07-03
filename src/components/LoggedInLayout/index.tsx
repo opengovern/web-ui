@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, Menu, Popover, Transition } from '@headlessui/react'
 import {
     BanknotesIcon,
     Bars3Icon,
@@ -7,10 +7,12 @@ import {
     ChevronDoubleRightIcon,
     ChevronDownIcon,
     Cog6ToothIcon,
+    CommandLineIcon,
     CpuChipIcon,
     DocumentChartBarIcon,
     HomeIcon,
     MagnifyingGlassIcon,
+    MoonIcon,
     ServerStackIcon,
     ShieldCheckIcon,
     XMarkIcon,
@@ -21,6 +23,7 @@ import { Flex, Text, Title } from '@tremor/react'
 import { useAtom } from 'jotai'
 import { ReactComponent as KaytuLogo } from '../../assets/icons/logo-dark-sqare-sm-glyph 2.svg'
 import { sideBarCollapsedAtom } from '../../store'
+import CLIMenu from './CLIMenu'
 
 const navigation = [
     {
@@ -138,10 +141,7 @@ export default function LoggedInLayout({
                                             <span className="sr-only">
                                                 Close sidebar
                                             </span>
-                                            <XMarkIcon
-                                                className="h-6 w-6 text-white"
-                                                aria-hidden="true"
-                                            />
+                                            <XMarkIcon className="h-6 w-6 text-white" />
                                         </button>
                                     </div>
                                 </Transition.Child>
@@ -166,10 +166,7 @@ export default function LoggedInLayout({
                                                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                                                 )}
                                                             >
-                                                                <item.icon
-                                                                    className="h-6 w-6 shrink-0"
-                                                                    aria-hidden="true"
-                                                                />
+                                                                <item.icon className="h-6 w-6 shrink-0" />
                                                                 {item.name}
                                                             </Link>
                                                         </li>
@@ -221,10 +218,7 @@ export default function LoggedInLayout({
                                                     }
                                                 `}
                                     >
-                                        <item.icon
-                                            className="h-6 w-6 shrink-0"
-                                            aria-hidden="true"
-                                        />
+                                        <item.icon className="h-6 w-6 shrink-0" />
                                         {!collapsed && (
                                             <Text className="font-semibold text-inherit w-48">
                                                 {item.name}
@@ -251,6 +245,24 @@ export default function LoggedInLayout({
         </>
     )
 
+    const toggleTheme = () => {
+        if (localStorage.theme === 'dark') {
+            localStorage.theme = 'light'
+        } else {
+            localStorage.theme = 'dark'
+        }
+
+        if (
+            localStorage.theme === 'dark' ||
+            (!('theme' in localStorage) &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    }
+
     return (
         <Flex flexDirection="row" className="h-screen overflow-hidden">
             {showSidebar && sidebar}
@@ -262,10 +274,7 @@ export default function LoggedInLayout({
                         onClick={() => setSidebarOpen(true)}
                     >
                         <span className="sr-only">Open sidebar</span>
-                        <Bars3Icon
-                            className="h-6 w-6 dark:text-gray-300"
-                            aria-hidden="true"
-                        />
+                        <Bars3Icon className="h-6 w-6 dark:text-gray-300" />
                     </button>
                     <Flex className="max-w-6xl">
                         <div className="-m-2.5 p-2.5 text-gray-900">
@@ -275,50 +284,40 @@ export default function LoggedInLayout({
                             </Title>
                         </div>
                         {/* Separator */}
-                        <div
-                            className="h-6 w-px bg-gray-900/10 dark:bg-white/20 lg:hidden"
-                            aria-hidden="true"
-                        />
+                        <div className="h-6 w-px bg-gray-900/10 dark:bg-white/20 lg:hidden" />
 
                         <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
                             <div className="flex items-center gap-x-4 lg:gap-x-6">
-                                {/* <button */}
-                                {/*    type="button" */}
-                                {/*    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500" */}
-                                {/* > */}
-                                {/*    <span className="sr-only">Theme</span> */}
-                                {/*    <MoonIcon */}
-                                {/*        className="h-6 w-6" */}
-                                {/*        aria-hidden="true" */}
-                                {/*    /> */}
-                                {/* </button> */}
-                                {/* <button */}
-                                {/*    type="button" */}
-                                {/*    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500" */}
-                                {/* > */}
-                                {/*    <span className="sr-only">CLI</span> */}
-                                {/*    <CommandLineIcon */}
-                                {/*        className="h-6 w-6" */}
-                                {/*        aria-hidden="true" */}
-                                {/*    /> */}
-                                {/* </button> */}
-                                {/* <button */}
-                                {/*    type="button" */}
-                                {/*    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500" */}
-                                {/* > */}
-                                {/*    <span className="sr-only">Help</span> */}
-                                {/*    <QuestionMarkCircleIcon */}
-                                {/*        className="h-6 w-6" */}
-                                {/*        aria-hidden="true" */}
-                                {/*    /> */}
-                                {/* </button> */}
-
+                                <button
+                                    type="button"
+                                    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                                    onClick={toggleTheme}
+                                >
+                                    <span className="sr-only">Theme</span>
+                                    <MoonIcon className="h-6 w-6" />
+                                </button>
+                                <CLIMenu />
+                                {/* <button
+                                        type="button"
+                                        className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                                        onClick={}
+                                    >
+                                        <span className="sr-only">CLI</span>
+                                        <CommandLineIcon
+                                            className="h-6 w-6"
+                                        />
+                                    </button> */}
+                                {/* <button
+                                    type="button"
+                                    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                                >
+                                    <span className="sr-only">Help</span>
+                                    <QuestionMarkCircleIcon
+                                        className="h-6 w-6"
+                                    />
+                                </button> */}
                                 {/* Separator */}
-                                {/* <div */}
-                                {/*    className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-white/20" */}
-                                {/*    aria-hidden="true" */}
-                                {/* /> */}
-
+                                <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-white/20" />
                                 {/* Profile dropdown */}
                                 <Menu as="div" className="relative">
                                     <Menu.Button className="-m-1.5 flex items-center p-1.5">
@@ -334,18 +333,12 @@ export default function LoggedInLayout({
                                         )}
 
                                         <span className="hidden lg:flex lg:items-center">
-                                            <span
-                                                className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
-                                                aria-hidden="true"
-                                            >
+                                            <span className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100">
                                                 {user?.name ||
                                                     user?.email ||
                                                     ''}
                                             </span>
-                                            <ChevronDownIcon
-                                                className="ml-2 h-5 w-5 text-gray-400"
-                                                aria-hidden="true"
-                                            />
+                                            <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" />
                                         </span>
                                     </Menu.Button>
                                     <Transition

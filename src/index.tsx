@@ -8,6 +8,16 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { Auth0ProviderWithNavigate } from './auth0-provider-with-navigate'
 
+if (
+    localStorage.theme === 'dark' ||
+    (!('theme' in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+) {
+    document.documentElement.classList.add('dark')
+} else {
+    document.documentElement.classList.remove('dark')
+}
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
     <React.StrictMode>

@@ -64,7 +64,6 @@ export default function DrawerPanel({
                                                         icon={XMarkIcon}
                                                         color="blue"
                                                         className="h-8 w-8"
-                                                        aria-hidden="true"
                                                     />
                                                 </Button>
                                             </Flex>
