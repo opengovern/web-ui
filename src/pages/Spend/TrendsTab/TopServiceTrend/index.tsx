@@ -8,6 +8,7 @@ import {
     useInventoryApiV2CostMetricList,
     useInventoryApiV2ServicesCostTrendList,
 } from '../../../../api/inventory.gen'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../../api/api'
 
 type IProps = {
     categories: {
@@ -19,13 +20,8 @@ type IProps = {
     connector?: any
 }
 
-const trendDataAtom = atom<
-    {
-        AWS: number
-        Azure: number
-        date: string
-    }[]
->([])
+const trendDataAtom = atom<object[]>([])
+const serviceNamesAtom = atom<string[]>([])
 
 export default function TopServicesTrend({
     timeRange,
@@ -33,7 +29,8 @@ export default function TopServicesTrend({
     categories,
     connector,
 }: IProps) {
-    const [trendData, setTrendDataAtom] = useAtom(trendDataAtom)
+    const [serviceNames, setServiceNames] = useAtom(serviceNamesAtom)
+    const [trendData, setTrendData] = useAtom(trendDataAtom)
     const { response: metrics, isLoading } = useInventoryApiV2CostMetricList({
         ...(connector && { connector }),
         ...(timeRange.from && {
@@ -63,20 +60,33 @@ export default function TopServicesTrend({
     )
 
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    const fixTime = (data: any) => {
-        const result: any = []
-        // eslint-disable-next-line guard-for-in,no-restricted-syntax
-        if (data) {
+    const fixTime = (input: any) => {
+        const result: object[] = []
+        const services: string[] = []
+        if (input) {
             for (let i = 0; i < 5; i += 1) {
                 const temp: any = {}
-                const day = dayjs(data[i].date).format('DD')
-                const month = dayjs(data[i].date).format('MMM')
-                temp.count = data[i].count
-                temp.date = `${month} ${day}`
+                // eslint-disable-next-line guard-for-in,no-restricted-syntax
+                for (const item in input) {
+                    const name = input[item].serviceName
+                    // eslint-disable-next-line no-unused-expressions
+                    if (!services.includes(name)) {
+                        services.push(name)
+                    }
+                    const day = dayjs(input[item].costTrend[i].date).format(
+                        'DD'
+                    )
+                    const month = dayjs(input[item].costTrend[i].date).format(
+                        'MMM'
+                    )
+                    temp[name] = input[item].costTrend[i].count
+                    temp.date = `${month} ${day}`
+                }
                 result.push(temp)
             }
         }
-        setTrendDataAtom(result)
+        setServiceNames(services)
+        setTrendData(result)
         return result
     }
 
@@ -95,9 +105,9 @@ export default function TopServicesTrend({
                 className="mt-4 h-80"
                 index="date"
                 yAxisWidth={60}
-                categories={['count']}
+                categories={serviceNames}
                 data={trendData}
-                colors={['indigo']}
+                colors={['indigo', 'green', 'yellow', 'red', 'blue']}
                 showAnimation
             />
         </Card>
