@@ -1,7 +1,7 @@
 import { Grid } from '@tremor/react'
 import React from 'react'
 import dayjs from 'dayjs'
-import Composition from '../../../components/Blocks/Composition'
+import Composition from '../../../../components/Blocks/Composition'
 import { useInventoryApiV2ResourcesCompositionDetail } from '../../../api/inventory.gen'
 
 type IProps = {
