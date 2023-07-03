@@ -87,10 +87,7 @@ const Settings: React.FC<any> = () => {
                                                         )}
                                                     >
                                                         {item.icon && (
-                                                            <item.icon
-                                                                className="h-6 w-6 shrink-0"
-                                                                aria-hidden="true"
-                                                            />
+                                                            <item.icon className="h-6 w-6 shrink-0" />
                                                         )}
                                                         {item.name}
                                                     </div>

@@ -32,10 +32,7 @@ export default function Notification({ text }: INotification) {
                             <div className="p-4">
                                 <div className="flex items-start">
                                     <div className="flex-shrink-0">
-                                        <CheckCircleIcon
-                                            className="h-6 w-6 text-emerald-500"
-                                            aria-hidden="true"
-                                        />
+                                        <CheckCircleIcon className="h-6 w-6 text-emerald-500" />
                                     </div>
                                     <div className="ml-3 w-0 flex-1 pt-0.5">
                                         <p className="text-sm font-medium text-emerald-800">
@@ -53,10 +50,7 @@ export default function Notification({ text }: INotification) {
                                             <span className="sr-only">
                                                 Close
                                             </span>
-                                            <XMarkIcon
-                                                className="h-5 w-5"
-                                                aria-hidden="true"
-                                            />
+                                            <XMarkIcon className="h-5 w-5" />
                                         </button>
                                     </div>
                                 </div>
