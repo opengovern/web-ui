@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Assets from '../pages/Assets'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
@@ -9,124 +9,86 @@ import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
 import InsightDetail from '../pages/Insights/InsightDetail'
 
-interface NavigateToWorkspacePageProps {
-    page: string
-}
-
-const NavigateToWorkspacePage = ({ page }: NavigateToWorkspacePageProps) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const path = `/${workspace}${page}`
-    return <Navigate to={path} replace />
-}
-
-export const defaultRoutes = [
+const routes = [
     {
-        name: '',
+        key: 'url',
         path: '/',
-        component: <Navigate to="/demo" replace />,
+        element: <Navigate to="/workspaces" replace />,
     },
     {
-        name: 'Callback',
+        key: 'ws name',
+        path: '/:ws',
+        element: <Navigate to="assets" />,
+    },
+    {
+        key: 'callback',
         path: '/callback',
-        component: CallbackPage,
+        element: <CallbackPage />,
     },
     {
-        name: 'Insights',
-        path: '/insights',
-        // component: Insights,
+        key: 'logout',
+        path: '/logout',
+        element: <Logout />,
+    },
+    {
+        key: '*',
+        path: '*',
+        element: <NotFound error={404} />,
     },
 ]
 
-export const normalizeRoutes = (routes = defaultRoutes) => {
-    return routes.map((route) => {
-        if (
-            route?.path === '/' ||
-            /^workspaces.*/.test(route?.path) ||
-            route?.path === '/invitation' ||
-            route?.path === '/logout' ||
-            route?.path === '*'
-        ) {
-            return route
-        }
-        const pathWithWorkspaceParam = `:workspaceName${route.path}`
-        return {
-            ...route,
-            path: pathWithWorkspaceParam,
-        }
-    })
-}
-
-// const getRouteElement = (component) => {
-//     return (
-//         <Suspense key={component?.name} fallback={<Spinner />}>
-//             {component}
-//         </Suspense>
-//     )
-// }
+const authRoutes = [
+    {
+        key: 'workspaces',
+        path: '/workspaces',
+        component: Workspaces,
+    },
+    {
+        key: 'assets',
+        path: '/:ws/assets',
+        component: Assets,
+    },
+    {
+        key: 'insights',
+        path: '/:ws/insight',
+        component: Insights,
+    },
+    {
+        key: 'insight detail',
+        path: '/:ws/insight/:id',
+        component: InsightDetail,
+    },
+    {
+        key: 'settings',
+        path: '/:ws/settings',
+        component: Settings,
+    },
+    {
+        key: 'settings page',
+        path: '/:ws/settings/:settingsPage',
+        component: Settings,
+    },
+]
 
 export default function AppNavigator() {
-    // const [err, setErr] = useState(404)
-    // const routeElements =
-    //     err === 403 || err === 500 || err === 503 ? (
-    //         <Route key="*" path="*" element={<NotFound error={err} />} />
-    //     ) : (
-    //         normalizeRoutes(defaultRoutes).map(
-    //             ({ name, path, component }): JSX.Element => (
-    //                 <Route
-    //                     key={`${name}${path}`}
-    //                     path={path}
-    //                     element={getRouteElement(component)}
-    //                 />
-    //             )
-    //         )
-    //     )
-
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/workspaces" replace />} />
-            <Route path="/callback" element={<CallbackPage />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route
-                key="assets"
-                path="/:ws/assets"
-                element={<AuthenticationGuard component={Assets} />}
-            />
-            <Route
-                key="insights"
-                path="/:ws/insight"
-                element={<AuthenticationGuard component={Insights} />}
-            />
-            <Route
-                key="insight detail"
-                path="/:ws/insight/:id"
-                element={<AuthenticationGuard component={InsightDetail} />}
-            />
-            <Route
-                key="settings"
-                path="/:ws/settings"
-                element={<AuthenticationGuard component={Settings} />}
-            />
-            <Route
-                key="settings"
-                path="/:ws/settings/:settingsPage"
-                element={<AuthenticationGuard component={Settings} />}
-            />
-            <Route
-                key="workspaces"
-                path="/workspaces"
-                element={<AuthenticationGuard component={Workspaces} />}
-            />
-            <Route
-                key="workspaceHome"
-                path="/:ws"
-                element={<NavigateToWorkspacePage page="/assets" />}
-            />
-            <Route key="*" path="*" element={<NotFound error={404} />} />
-            {/* <Routes> */}
-            {/*    {routeElements} */}
-            {/*    <Route key="*" path="*" element={<NotFound error={404} />} /> */}
-            {/* </Routes> */}
+            {routes.map((route) => (
+                <Route
+                    key={route.key}
+                    path={route.path}
+                    element={route.element}
+                />
+            ))}
+            {authRoutes.map((route) => (
+                <Route
+                    key={route.key}
+                    path={route.path}
+                    element={
+                        <AuthenticationGuard component={route.component} />
+                    }
+                />
+            ))}
         </Routes>
     )
 }

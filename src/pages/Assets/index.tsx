@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useAtom } from 'jotai'
 import {
     Button,
@@ -25,10 +25,9 @@ import CompositionTab from './Tabs/CompositionTab/indedx'
 import ResourceMetricsDetails from './Details/ResourceMetricsDetails'
 import AccountsDetails from './Details/AccountsDetails'
 import SingleAccountDetails from './Details/SingleAccountDetails'
-import Breadcrumbs from '../../components/Breadcrumbs'
 import ServicesDetails from './Details/ServicesDetails'
 
-const Assets: React.FC<any> = () => {
+export default function Assets() {
     const [activeSubPage, setActiveSubPage] = useState<
         | 'All'
         | 'Resource Metrics'
@@ -40,6 +39,7 @@ const Assets: React.FC<any> = () => {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
+
     const { response: connections, isLoading: connectionLoading } =
         useOnboardApiV1SourcesList()
     const { response: inventoryCategories } =
@@ -73,16 +73,6 @@ const Assets: React.FC<any> = () => {
         return 'Filters'
     }
 
-    const breadcrubmsPages = [
-        {
-            name: 'Assets',
-            path: () => {
-                setActiveSubPage('All')
-            },
-            current: false,
-        },
-        { name: activeSubPage, path: '', current: true },
-    ]
     return (
         <LoggedInLayout currentPage="assets">
             <Flex
@@ -185,5 +175,3 @@ const Assets: React.FC<any> = () => {
         </LoggedInLayout>
     )
 }
-
-export default Assets
