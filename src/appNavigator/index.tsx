@@ -8,6 +8,7 @@ import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
 import InsightDetail from '../pages/Insights/InsightDetail'
+import Spend from '../pages/Spend'
 
 const routes = [
     {
@@ -47,6 +48,11 @@ const authRoutes = [
         key: 'assets',
         path: '/:ws/assets',
         component: Assets,
+    },
+    {
+        key: 'spend',
+        path: '/:ws/spend',
+        component: Spend,
     },
     {
         key: 'insights',
