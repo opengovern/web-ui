@@ -26,16 +26,14 @@ export default function SummaryTab({
                 timeRange={timeRange}
                 setActiveSubPage={setActiveSubPage}
             />
-            <div className="mt-10">
-                <ResourceMetrics
-                    provider={provider}
-                    connection={connections}
-                    categories={categories}
-                    timeRange={timeRange}
-                    pageSize={pageSize}
-                    setActiveSubPage={setActiveSubPage}
-                />
-            </div>
+            <ResourceMetrics
+                provider={provider}
+                connection={connections}
+                categories={categories}
+                timeRange={timeRange}
+                pageSize={pageSize}
+                setActiveSubPage={setActiveSubPage}
+            />
         </>
     )
 }

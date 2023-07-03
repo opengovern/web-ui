@@ -1,21 +1,20 @@
 import React from 'react'
 import {
     Button,
-    Text,
-    Grid,
+    Flex,
     SearchSelect,
     SearchSelectItem,
+    Text,
     Title,
 } from '@tremor/react'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
-import { useNavigate } from 'react-router-dom'
-import Swiper from '../../../../components/Swiper'
-import MetricCard from '../../../../components/Cards/MetricCard'
-import { selectedResourceCategoryAtom } from '../../../../store'
-import { useInventoryApiV2ResourcesMetricList } from '../../../../api/inventory.gen'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
-import Spinner from '../../../../components/Spinner'
+import Swiper from '../../../../../components/Swiper'
+import MetricCard from '../../../../../components/Cards/MetricCard'
+import { selectedResourceCategoryAtom } from '../../../../../store'
+import { useInventoryApiV2ResourcesMetricList } from '../../../../../api/inventory.gen'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import Spinner from '../../../../../components/Spinner'
 
 interface IProps {
     provider: any
@@ -71,22 +70,22 @@ export default function ResourceMetrics({
     return (
         <div>
             {/* <div className="h-80" /> */}
-            <div className="flex justify-between gap-x-2">
-                <div className="flex flex-row justify-start items-start">
+            <Flex className="gap-x-2 mb-6">
+                <Flex flexDirection="row" justifyContent="start">
                     <Title>Resource metrics </Title>
                     <Button
                         variant="light"
-                        className="mt-1 ml-2"
+                        className="ml-2"
                         onClick={() => setActiveSubPage('Resource Metrics')}
                     >
-                        <Text color="blue">(see All)</Text>
+                        <Text color="blue">(See all)</Text>
                     </Button>
-                </div>
+                </Flex>
                 <SearchSelect
                     onValueChange={(e) => setSelectedResourceCategory(e)}
                     value={selectedResourceCategory}
                     placeholder="Source Selection"
-                    className="max-w-xs mb-6"
+                    className="max-w-xs"
                 >
                     {categories.map((category) => (
                         <SearchSelectItem
@@ -97,48 +96,44 @@ export default function ResourceMetrics({
                         </SearchSelectItem>
                     ))}
                 </SearchSelect>
-            </div>
-            <Grid>
-                {isLoading && (
-                    <div className="flex items-center justify-center">
-                        <Spinner />
-                    </div>
-                )}
+            </Flex>
+            {isLoading ? (
+                <div className="flex items-center justify-center mt-48">
+                    <Spinner />
+                </div>
+            ) : (
                 <Swiper
                     gridContainerProps={{
                         numItemsSm: 2,
                         numItemsMd: 3,
-                        className: 'gap-6',
+                        className: 'gap-3',
                     }}
                 >
-                    {!isLoading &&
-                        metrics?.resource_types?.map((metric) => (
-                            <MetricCard
-                                title={
-                                    metric.resource_name
-                                        ? metric.resource_name
-                                        : String(metric.resource_type)
-                                }
-                                metric={String(
-                                    numericDisplay(
-                                        metric.count ? metric.count : 0
-                                    )
-                                )}
-                                metricPrev={String(
-                                    numericDisplay(
-                                        metric.old_count ? metric.old_count : 0
-                                    )
-                                )}
-                                delta={`${Math.abs(
-                                    percentage(metric.count, metric.old_count)
-                                ).toFixed(2)} %`}
-                                deltaType={deltaType(
-                                    percentage(metric.count, metric.old_count)
-                                )}
-                            />
-                        ))}
+                    {metrics?.resource_types?.map((metric) => (
+                        <MetricCard
+                            title={
+                                metric.resource_name
+                                    ? metric.resource_name
+                                    : String(metric.resource_type)
+                            }
+                            metric={String(
+                                numericDisplay(metric.count ? metric.count : 0)
+                            )}
+                            metricPrev={String(
+                                numericDisplay(
+                                    metric.old_count ? metric.old_count : 0
+                                )
+                            )}
+                            delta={`${Math.abs(
+                                percentage(metric.count, metric.old_count)
+                            ).toFixed(2)} %`}
+                            deltaType={deltaType(
+                                percentage(metric.count, metric.old_count)
+                            )}
+                        />
+                    ))}
                 </Swiper>
-            </Grid>
+            )}
         </div>
     )
 }

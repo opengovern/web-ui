@@ -8,7 +8,6 @@ import {
     Metric,
     Text,
 } from '@tremor/react'
-import { ArrowLongRightIcon } from '@heroicons/react/24/solid'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import React from 'react'
 import Spinner from '../../Spinner'
@@ -20,8 +19,6 @@ type IProps = {
     delta?: string
     deltaType?: DeltaType
     areaChartData?: any
-    className?: string
-    viewMore?: boolean
     onClick?: () => void
     loading?: boolean
 }
@@ -33,15 +30,17 @@ export default function SummaryCard({
     delta,
     deltaType,
     areaChartData,
-    className,
-    viewMore,
     onClick,
     loading = false,
 }: IProps) {
     return (
-        <Card key={title} className={className}>
+        <Card
+            key={title}
+            onClick={() => onClick || null}
+            className={onClick ? 'cursor-pointer' : ''}
+        >
             {loading ? (
-                <div className="flex justify-center items-center h-[10vh]">
+                <div className="flex justify-center items-center h-14">
                     <Spinner />
                 </div>
             ) : (
@@ -64,22 +63,15 @@ export default function SummaryCard({
                             {metricPrev && <Text>from {metricPrev}</Text>}
                         </div>
                         <div className="justify-self-end">
-                            {viewMore && (
-                                <Flex>
-                                    {onClick ? (
-                                        <Button
-                                            size="xs"
-                                            variant="light"
-                                            icon={ChevronRightIcon}
-                                            iconPosition="right"
-                                            onClick={onClick}
-                                        >
-                                            See more
-                                        </Button>
-                                    ) : (
-                                        <div className="text-sm text-blue-500 mt-4" />
-                                    )}
-                                </Flex>
+                            {onClick && (
+                                <Button
+                                    size="xs"
+                                    variant="light"
+                                    icon={ChevronRightIcon}
+                                    iconPosition="right"
+                                >
+                                    See more
+                                </Button>
                             )}
                         </div>
                     </Flex>

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { Card, Flex, Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import GrowthTrend from './GrowthTrend'
-import CardWithList from '../../../components/Blocks/CardWithList'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
-import { useInventoryApiV2ServicesMetricList } from '../../../api/inventory.gen'
-import Spinner from '../../../components/Spinner'
+import CardWithList from '../../../../components/Blocks/CardWithList'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { useInventoryApiV2ServicesMetricList } from '../../../../api/inventory.gen'
+import Spinner from '../../../../components/Spinner'
 
 type IProps = {
     categories: any
