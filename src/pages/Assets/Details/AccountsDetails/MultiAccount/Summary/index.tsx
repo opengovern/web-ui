@@ -10,9 +10,9 @@ import {
     Grid,
     Metric,
 } from '@tremor/react'
-import { numericDisplay } from '../../../../../utilities/numericDisplay'
-import { useOnboardApiV1CatalogMetricsList } from '../../../../../api/onboard.gen'
-import Spinner from '../../../../../components/Spinner'
+import { numericDisplay } from '../../../../../../utilities/numericDisplay'
+import { useOnboardApiV1CatalogMetricsList } from '../../../../../../api/onboard.gen'
+import Spinner from '../../../../../../components/Spinner'
 
 type IProps = {
     accounts: any

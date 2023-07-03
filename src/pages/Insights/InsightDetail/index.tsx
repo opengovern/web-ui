@@ -217,7 +217,7 @@ export default function InsightDetail() {
         ? insightDetail?.result[0].details
         : undefined
 
-    const breadcrubmsPages = [
+    const breadcrumbsPages = [
         {
             name: 'Insights',
             path: () => {
@@ -242,7 +242,7 @@ export default function InsightDetail() {
                         alignItems="center"
                         className="mb-6"
                     >
-                        <Breadcrumbs pages={breadcrubmsPages} />
+                        <Breadcrumbs pages={breadcrumbsPages} />
                         <DateRangePicker
                             className="max-w-md"
                             value={activeTimeRange}

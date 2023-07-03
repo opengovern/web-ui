@@ -1,5 +1,6 @@
 import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import { useInventoryApiV2ServicesSummaryList } from '../../../../../api/inventory.gen'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
@@ -9,14 +10,12 @@ interface IProps {
     provider: any
     connections: any
     timeRange: any
-    setActiveSubPage: (subPage: string) => void
 }
 
 export default function SummaryMetrics({
     provider,
     connections,
     timeRange,
-    setActiveSubPage,
 }: IProps) {
     const { response: accounts, isLoading: accountIsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -39,14 +38,14 @@ export default function SummaryMetrics({
                 title="Accounts"
                 metric={String(numericDisplay(accounts?.connectionCount))}
                 metricPrev="922"
-                onClick={() => setActiveSubPage('Accounts')}
+                url="accounts-detail"
                 loading={accountIsLoading}
             />
             <SummaryCard
                 title="Services"
                 metric={String(numericDisplay(services?.totalCount))}
                 metricPrev="149"
-                onClick={() => setActiveSubPage('Services')}
+                url="services-detail"
                 loading={servicesIsLoading}
             />
             <SummaryCard
