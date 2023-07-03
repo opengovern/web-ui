@@ -132,31 +132,31 @@ export default function TrendsTab({
                     timeRange={timeRange}
                 />
             </div>
-            <Grid numItemsMd={2} className="mt-10 gap-6 flex justify-between">
-                <div className="w-full">
-                    {/* Placeholder to set height */}
-                    {/* <Card className="h-40" /> */}
-                    <CardWithList
-                        title="Top by Consumption"
-                        tabs={['Accounts']}
-                        data={consumptionData}
-                        // provider={selectedConnections.provider}
-                        // connections={connections}
-                        // count={count}
-                    />
-                </div>
-                <div className="w-full">
-                    {/* Placeholder to set height */}
-                    <CardWithList
-                        title="Top by Growth"
-                        tabs={['Services']}
-                        data={growthData}
-                        // provider={selectedConnections.provider}
-                        // connections={connections}
-                        // count={count}
-                    />
-                </div>
-            </Grid>
+            {/* <Grid numItemsMd={2} className="mt-10 gap-6 flex justify-between"> */}
+            {/*    <div className="w-full"> */}
+            {/*        /!* Placeholder to set height *!/ */}
+            {/*        /!* <Card className="h-40" /> *!/ */}
+            {/*        <CardWithList */}
+            {/*            title="Top by Consumption" */}
+            {/*            tabs={['Accounts']} */}
+            {/*            data={consumptionData} */}
+            {/*            // provider={selectedConnections.provider} */}
+            {/*            // connections={connections} */}
+            {/*            // count={count} */}
+            {/*        /> */}
+            {/*    </div> */}
+            {/*    <div className="w-full"> */}
+            {/*        /!* Placeholder to set height *!/ */}
+            {/*        <CardWithList */}
+            {/*            title="Top by Growth" */}
+            {/*            tabs={['Services']} */}
+            {/*            data={growthData} */}
+            {/*            // provider={selectedConnections.provider} */}
+            {/*            // connections={connections} */}
+            {/*            // count={count} */}
+            {/*        /> */}
+            {/*    </div> */}
+            {/* </Grid> */}
         </div>
     )
 }

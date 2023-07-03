@@ -45,10 +45,7 @@ export default function Breadcrumbs({ pages }: IProps) {
                 {newPages().map((page) => (
                     <li key={page.name}>
                         <Flex alignItems="center">
-                            <ChevronRightIcon
-                                className="h-5 w-5 flex-shrink-0 text-gray-600"
-                                aria-hidden="true"
-                            />
+                            <ChevronRightIcon className="h-5 w-5 flex-shrink-0 text-gray-600" />
                             <Button
                                 onClick={page.href}
                                 variant="light"

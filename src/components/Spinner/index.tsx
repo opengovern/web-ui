@@ -14,7 +14,6 @@ const Spinner: React.FC<SpinnerProps> = ({
     return (
         <div className="flex w-100 h-100 justify-center items-center">
             <svg
-                aria-hidden="true"
                 className={`w-${width} h-${height} mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-${color}`}
                 viewBox="0 0 100 101"
                 fill="none"
