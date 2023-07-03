@@ -14,6 +14,8 @@ interface IConnection {
     providerConnectionID: string
     providerConnectionName: string
     healthState: string
+    onboardDate: string
+    lastInventory: string
 }
 
 interface IConnectorList {
@@ -66,6 +68,14 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
+        field: 'lifecycleState',
+        headerName: 'State',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
         field: 'id',
         headerName: 'Connection ID',
         sortable: true,
@@ -74,11 +84,21 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'lifecycleState',
-        headerName: 'State',
+        field: 'lastInventory',
+        headerName: 'Last Inventory',
         sortable: true,
         filter: true,
         resizable: true,
+        hide: true,
+        flex: 1,
+    },
+    {
+        field: 'onboardDate',
+        headerName: 'Onboard Date',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        hide: true,
         flex: 1,
     },
 ]
@@ -105,6 +125,8 @@ export default function ConnectionList({
         label: 'All',
         value: '',
     })
+
+    console.log('===', connections)
 
     const updateSelectionByProvider = (api: any, newValue: any) => {
         if (newValue.length) {
@@ -195,6 +217,32 @@ export default function ConnectionList({
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
+        sideBar: {
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                // {
+                //     id: 'customStats',
+                //     labelDefault: 'Custom Stats',
+                //     labelKey: 'customStats',
+                //     // toolPanel: CustomStatsToolPanel,
+                // },
+            ],
+            defaultToolPanel: '',
+        },
+
         onGridReady: (params) => {
             initializeSelectedConnections(params.api)
             setSelectedProvider({ ...selectedProvider })
