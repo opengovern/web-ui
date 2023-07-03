@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Card } from '@tremor/react'
-import AppNavigator from './appNavigator'
+import Router from './router'
 import Spinner from './components/Spinner'
 import { setAuthHeader, setWorkspace } from './api/ApiConfig'
 
@@ -36,7 +36,7 @@ function App() {
         )
     }
 
-    return <AppNavigator />
+    return <Router />
 }
 
 export default App

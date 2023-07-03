@@ -22,18 +22,8 @@ import ConnectionList from './ConnectionList'
 import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab/indedx'
-import ResourceMetricsDetails from './Details/ResourceMetricsDetails'
-import ServicesDetails from './Details/ServicesDetails'
 
 export default function Assets() {
-    const [activeSubPage, setActiveSubPage] = useState<
-        | 'All'
-        | 'Resource Metrics'
-        | 'Accounts'
-        | 'Services'
-        | 'Regions'
-        | 'Resources'
-    >('All')
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -122,7 +112,6 @@ export default function Assets() {
                             categories={categoryOptions}
                             timeRange={activeTimeRange}
                             pageSize={1000}
-                            setActiveSubPage={setActiveSubPage}
                         />
                     </TabPanel>
                     <TabPanel>
@@ -142,21 +131,6 @@ export default function Assets() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-            {activeSubPage === 'Resource Metrics' && (
-                <ResourceMetricsDetails
-                    provider={selectedConnections.provider}
-                    connection={selectedConnections.connections}
-                    categories={categoryOptions}
-                    timeRange={activeTimeRange}
-                    pageSize={1000}
-                />
-            )}
-            {activeSubPage === 'Services' && (
-                <ServicesDetails
-                    selectedConnections={selectedConnections}
-                    timeRange={activeTimeRange}
-                />
-            )}
         </LoggedInLayout>
     )
 }

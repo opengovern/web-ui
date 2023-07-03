@@ -8,6 +8,7 @@ import {
 } from '@tremor/react'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 import Swiper from '../../../../../components/Swiper'
 import MetricCard from '../../../../../components/Cards/MetricCard'
 import { selectedResourceCategoryAtom } from '../../../../../store'
@@ -24,7 +25,6 @@ interface IProps {
         value: string
     }[]
     pageSize: any
-    setActiveSubPage: (subPage: string) => void
 }
 
 export default function ResourceMetrics({
@@ -33,8 +33,9 @@ export default function ResourceMetrics({
     pageSize,
     categories,
     connection,
-    setActiveSubPage,
 }: IProps) {
+    const navigate = useNavigate()
+
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
@@ -68,14 +69,13 @@ export default function ResourceMetrics({
 
     return (
         <div>
-            {/* <div className="h-80" /> */}
             <Flex className="gap-x-2 mb-6">
                 <Flex flexDirection="row" justifyContent="start">
                     <Title>Resource metrics </Title>
                     <Button
                         variant="light"
                         className="ml-2"
-                        onClick={() => setActiveSubPage('Resource Metrics')}
+                        onClick={() => navigate('resource-metrics')}
                     >
                         <Text color="blue">(See all)</Text>
                     </Button>
