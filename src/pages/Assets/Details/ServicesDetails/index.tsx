@@ -4,16 +4,14 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions } from 'ag-grid-community'
 import dayjs from 'dayjs'
-import {
-    useInventoryApiV2ServicesSummaryList,
-    useInventoryApiV2ServicesMetricList,
-} from '../../../../api/inventory.gen'
+import { useAtom } from 'jotai'
+import { DateRangePicker, Flex } from '@tremor/react'
+import { useNavigate } from 'react-router-dom'
+import { useInventoryApiV2ServicesMetricList } from '../../../../api/inventory.gen'
 import Summary from './Summary'
-
-type IProps = {
-    selectedConnections: any
-    timeRange: any
-}
+import { filterAtom, timeAtom } from '../../../../store'
+import LoggedInLayout from '../../../../components/LoggedInLayout'
+import Breadcrumbs from '../../../../components/Breadcrumbs'
 
 const columns: ColDef[] = [
     {
@@ -42,44 +40,45 @@ const columns: ColDef[] = [
     },
 ]
 
-let flag = false
-let rowCount
-
-export default function ServicesDetails({
-    selectedConnections,
-    timeRange,
-}: IProps) {
+export default function ServicesDetails() {
+    const navigate = useNavigate()
     const gridRef = useRef<AgGridReact>(null)
+
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+
     const { response: serviceList, isLoading: isServiceListLoading } =
         useInventoryApiV2ServicesMetricList({
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             connector: selectedConnections?.provider,
             connectionId: selectedConnections?.connections,
             pageSize: 1000,
             pageNumber: 1,
-            endTime: String(dayjs(timeRange.to).unix()),
+            endTime: String(dayjs(activeTimeRange.to).unix()),
             sortBy: 'name',
         })
     const { response: TopServices } = useInventoryApiV2ServicesMetricList({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         connector: selectedConnections?.provider,
         connectionId: selectedConnections?.connections,
         pageSize: 5,
         pageNumber: 1,
-        endTime: String(dayjs(timeRange.to).unix()),
+        endTime: String(dayjs(activeTimeRange.to).unix()),
         sortBy: 'count',
     })
     const { response: TopFastestServices } =
         useInventoryApiV2ServicesMetricList({
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             connector: selectedConnections?.provider,
             connectionId: selectedConnections?.connections,
             pageSize: 5,
             pageNumber: 1,
-            endTime: String(dayjs(timeRange.to).unix()),
+            endTime: String(dayjs(activeTimeRange.to).unix()),
             sortBy: 'growth_rate',
         })
-    if (!flag && serviceList?.total_count) {
-        rowCount = serviceList?.total_count
-        flag = true
-    }
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -99,8 +98,34 @@ export default function ServicesDetails({
         newData.resource_count = data.resource_count
         return newData
     })
+
+    const breadcrumbsPages = [
+        {
+            name: 'Assets',
+            path: () => {
+                navigate(-1)
+            },
+            current: false,
+        },
+        { name: 'Services detail', path: '', current: true },
+    ]
+
     return (
-        <main>
+        <LoggedInLayout currentPage="assets">
+            <Flex
+                flexDirection="row"
+                justifyContent="between"
+                alignItems="center"
+            >
+                <Breadcrumbs pages={breadcrumbsPages} />
+                <DateRangePicker
+                    className="max-w-md"
+                    value={activeTimeRange}
+                    onValueChange={setActiveTimeRange}
+                    enableClear={false}
+                    maxDate={new Date()}
+                />
+            </Flex>
             <Summary
                 TopServices={TopServices?.services}
                 TopFastestServices={TopFastestServices?.services}
@@ -114,6 +139,6 @@ export default function ServicesDetails({
                     rowData={rowData}
                 />
             </div>
-        </main>
+        </LoggedInLayout>
     )
 }

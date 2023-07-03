@@ -125,7 +125,7 @@ export default function ResourceMetricsDetails() {
             },
             current: false,
         },
-        { name: 'Resource metric detail', path: '', current: true },
+        { name: 'Resource metrics', path: '', current: true },
     ]
 
     return (
