@@ -81,28 +81,68 @@ export default function Composition({
         oldData: number
     ) {
         const outputArray = []
-
-        if (
-            (!newInputObject && !oldInputObject) ||
-            (!newInputObject.top_values && !oldInputObject)
-        ) {
-            return [
-                {
-                    name: 'No data',
-                    value: 0,
-                },
-            ]
-        }
-        // iterate over top_values
-        if (oldData === 1) {
-            // eslint-disable-next-line guard-for-in,no-restricted-syntax
-            for (const key in oldInputObject.top_values) {
-                outputArray.push({
-                    name: key,
-                    value: oldInputObject.top_values[key],
-                })
+        try {
+            if (!newInputObject && !oldInputObject) {
+                return [
+                    {
+                        name: 'No data',
+                        value: 0,
+                    },
+                ]
             }
-        } else {
+            // iterate over top_values
+            if (oldData === 1) {
+                // eslint-disable-next-line guard-for-in,no-restricted-syntax
+                for (const key in oldInputObject.top_values) {
+                    outputArray.push({
+                        name: key,
+                        value: oldInputObject.top_values[key],
+                    })
+                }
+            } else {
+                // eslint-disable-next-line guard-for-in,no-restricted-syntax
+                for (const key in newInputObject.top_values) {
+                    outputArray.push({
+                        name: key,
+                        value: newInputObject.top_values[key],
+                    })
+                }
+            }
+
+            // add others key-value pair
+            // eslint-disable-next-line no-unused-expressions
+            oldData
+                ? outputArray.push({
+                      name: 'others',
+                      value: oldInputObject.others,
+                  })
+                : outputArray.push({
+                      name: 'others',
+                      value: newInputObject.others,
+                  })
+
+            return outputArray
+        } catch (e) {
+            console.log(e)
+        } finally {
+            // eslint-disable-next-line no-unsafe-finally
+            return outputArray
+        }
+    }
+
+    function compositionList(newInputObject: any) {
+        const outputArray = []
+        // let deltaType: DeltaType = 'unchanged'
+        try {
+            if (!newInputObject) {
+                return [
+                    {
+                        name: 'No data',
+                        value: 0,
+                    },
+                ]
+            }
+            // iterate over top_values
             // eslint-disable-next-line guard-for-in,no-restricted-syntax
             for (const key in newInputObject.top_values) {
                 outputArray.push({
@@ -110,47 +150,17 @@ export default function Composition({
                     value: newInputObject.top_values[key],
                 })
             }
-        }
-
-        // add others key-value pair
-        // eslint-disable-next-line no-unused-expressions
-        oldData
-            ? outputArray.push({
-                  name: 'others',
-                  value: oldInputObject.others,
-              })
-            : outputArray.push({
-                  name: 'others',
-                  value: newInputObject.others,
-              })
-
-        return outputArray
-    }
-
-    function compositionList(newInputObject: any) {
-        const outputArray = []
-        // let deltaType: DeltaType = 'unchanged'
-        if (!newInputObject) {
-            return [
-                {
-                    name: 'No data',
-                    value: 0,
-                },
-            ]
-        }
-        // iterate over top_values
-        // eslint-disable-next-line guard-for-in,no-restricted-syntax
-        for (const key in newInputObject.top_values) {
             outputArray.push({
-                name: key,
-                value: newInputObject.top_values[key],
+                name: 'others',
+                value: newInputObject.others,
             })
+            return outputArray
+        } catch (error) {
+            console.log(error)
+        } finally {
+            // eslint-disable-next-line no-unsafe-finally
+            return outputArray
         }
-        outputArray.push({
-            name: 'others',
-            value: newInputObject.others,
-        })
-        return outputArray
     }
 
     const nowDataList = compositionList(compositionOld)
