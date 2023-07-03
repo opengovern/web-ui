@@ -9,7 +9,7 @@ import {
     Text,
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import Spinner from '../../Spinner'
 
 type IProps = {
@@ -19,7 +19,7 @@ type IProps = {
     delta?: string
     deltaType?: DeltaType
     areaChartData?: any
-    onClick?: () => void
+    url?: any
     loading?: boolean
 }
 
@@ -30,14 +30,16 @@ export default function SummaryCard({
     delta,
     deltaType,
     areaChartData,
-    onClick,
+    url,
     loading = false,
 }: IProps) {
+    const navigate = useNavigate()
+
     return (
         <Card
             key={title}
-            onClick={() => onClick || null}
-            className={onClick ? 'cursor-pointer' : ''}
+            onClick={() => (url ? navigate(url) : null)}
+            className={url ? 'cursor-pointer' : ''}
         >
             {loading ? (
                 <div className="flex justify-center items-center h-14">
@@ -63,7 +65,7 @@ export default function SummaryCard({
                             {metricPrev && <Text>from {metricPrev}</Text>}
                         </div>
                         <div className="justify-self-end">
-                            {onClick && (
+                            {url && (
                                 <Button
                                     size="xs"
                                     variant="light"

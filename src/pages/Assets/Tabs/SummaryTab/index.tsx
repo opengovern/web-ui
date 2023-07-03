@@ -24,7 +24,6 @@ export default function SummaryTab({
                 provider={provider}
                 connections={connections}
                 timeRange={timeRange}
-                setActiveSubPage={setActiveSubPage}
             />
             <ResourceMetrics
                 provider={provider}

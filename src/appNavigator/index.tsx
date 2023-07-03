@@ -8,6 +8,7 @@ import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
 import InsightDetail from '../pages/Insights/InsightDetail'
+import AccountsDetails from '../pages/Assets/Details/AccountsDetails'
 
 const routes = [
     {
@@ -49,6 +50,11 @@ const authRoutes = [
         component: Assets,
     },
     {
+        key: 'accounts detail',
+        path: '/:ws/assets/accounts-detail',
+        component: AccountsDetails,
+    },
+    {
         key: 'insights',
         path: '/:ws/insight',
         component: Insights,
@@ -85,6 +91,8 @@ export default function AppNavigator() {
                     key={route.key}
                     path={route.path}
                     element={
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
                         <AuthenticationGuard component={route.component} />
                     }
                 />

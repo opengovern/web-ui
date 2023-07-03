@@ -1,230 +1,74 @@
-import React, { useRef, useState } from 'react'
-import { AgGridReact } from 'ag-grid-react'
-import {
-    CellClickedEvent,
-    ColDef,
-    GridOptions,
-    ICellRendererParams,
-} from 'ag-grid-community'
-import { ReactComponent as AzureIcon } from '../../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
-import { ReactComponent as AWSIcon } from '../../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
-import {
-    numberGroupedDisplay,
-    priceDisplay,
-} from '../../../../utilities/numericDisplay'
+import React from 'react'
+import { useAtom } from 'jotai'
+import dayjs from 'dayjs'
+import { DateRangePicker, Flex } from '@tremor/react'
+import { useNavigate } from 'react-router-dom'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import Summary from './Summary'
+import LoggedInLayout from '../../../../components/LoggedInLayout'
+import { filterAtom, timeAtom } from '../../../../store'
+import SingleAccount from './SingleAccount'
+import MultiAccount from './MultiAccount'
+import Breadcrumbs from '../../../../components/Breadcrumbs'
 
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-alpine.css'
-import DrawerPanel from '../../../../components/DrawerPanel'
-import { ConnectionDetails } from './ConnectionDetails'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../api/api'
+export default function AccountsDetails() {
+    const navigate = useNavigate()
 
-type IProps = {
-    selectedConnections: any
-    timeRange: any
-}
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
-interface IAccount {
-    connector: string
-    providerConnectionName: string
-    providerConnectionID: string
-    id: string
-    lifecycleState: string
-    cost: string
-    resourceCount: string
-    onboardDate: string
-    lastInventory: string
-}
-
-const columns: ColDef[] = [
-    {
-        field: 'providerIcon',
-        headerName: ' ',
-        width: 50,
-        sortable: false,
-        filter: false,
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams<IAccount>) => {
-            return (
-                <div className="flex justify-center items-center w-full h-full">
-                    {params.data?.connector === 'Azure' ? (
-                        <AzureIcon />
-                    ) : (
-                        <AWSIcon />
-                    )}
-                </div>
-            )
-        },
-    },
-    {
-        field: 'providerConnectionName',
-        headerName: 'Cloud Account Name',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'providerConnectionID',
-        headerName: 'Cloud Account ID',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'id',
-        headerName: 'Connection ID',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'lifecycleState',
-        headerName: 'State',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'cost',
-        headerName: 'Cost',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-        cellDataType: 'text',
-    },
-    {
-        field: 'resourceCount',
-        headerName: 'Resources',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'onboardDate',
-        headerName: 'Onboard Date',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'lastInventory',
-        headerName: 'Last Inventory Date',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-]
-export default function ServicesDetails({
-    selectedConnections,
-    timeRange,
-}: IProps) {
-    const gridRef = useRef<AgGridReact>(null)
-    const [drawerOpen, setDrawerOpen] = useState(false)
-    const [selectedAccountIndex, setSelectedAccountIndex] = useState(0)
-
-    const { response: accounts, isLoading: isAccountsLoading } =
+    const { response: topAccounts, isLoading: topAccountLoading } =
         useOnboardApiV1ConnectionsSummaryList({
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             connector: selectedConnections?.provider,
             connectionId: selectedConnections?.connections,
-            startTime: timeRange[0],
-            endTime: timeRange[1],
-            pageSize: 10000,
-            pageNumber: 1,
-        })
-    const { response: TopAccounts, isLoading: isLoadingTopAccount } =
-        useOnboardApiV1ConnectionsSummaryList({
-            connector: selectedConnections?.provider,
-            connectionId: selectedConnections?.connections,
-            startTime: timeRange[0],
-            endTime: timeRange[1],
+            startTime: dayjs(activeTimeRange.from).unix(),
+            endTime: dayjs(activeTimeRange.to).unix(),
             pageSize: 5,
             pageNumber: 1,
             sortBy: 'resource_count',
         })
 
-    const gridOptions: GridOptions = {
-        columnDefs: columns,
-        pagination: true,
-        rowSelection: 'multiple',
-        animateRows: true,
-        getRowHeight: (params) => 50,
-        onGridReady: (params) => {
-            if (isAccountsLoading) {
-                params.api.showLoadingOverlay()
-            }
+    const breadcrumbsPages = [
+        {
+            name: 'Assets',
+            path: () => {
+                navigate(-1)
+            },
+            current: false,
         },
-        onCellClicked(event: CellClickedEvent<any>) {
-            if (event.rowIndex !== null) {
-                // setSelectedAccount(selectedAcc)
-                setSelectedAccountIndex(event.rowIndex)
-                setDrawerOpen(true)
-            }
-        },
-    }
-
-    const conns = (accounts?.connections || []).map((data) => {
-        const newData: IAccount = {
-            connector: data.connector || '',
-            providerConnectionName: data.providerConnectionName || '',
-            providerConnectionID: data.providerConnectionID || '',
-            id: data.id || '',
-            lifecycleState: data.lifecycleState || '',
-            cost: priceDisplay(data.cost) || '',
-            resourceCount: numberGroupedDisplay(data.resourceCount) || '',
-            onboardDate: data.onboardDate || '',
-            lastInventory: data.lastInventory || '',
-        }
-
-        if (data.onboardDate) {
-            newData.onboardDate = new Date(
-                Date.parse(data.onboardDate)
-            ).toLocaleDateString('en-US')
-        }
-
-        if (data.lastInventory) {
-            newData.lastInventory = new Date(
-                Date.parse(data.lastInventory)
-            ).toLocaleDateString('en-US')
-        }
-        return newData
-    })
+        { name: 'Accounts Detail', path: '', current: true },
+    ]
 
     return (
-        <main>
-            <div className="mt-5">
-                <Summary
-                    accounts={TopAccounts?.connections}
-                    loading={isLoadingTopAccount}
-                />
-                <div className="ag-theme-alpine mt-10">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                        rowData={conns}
-                    />
-                </div>
-            </div>
-            <DrawerPanel
-                open={drawerOpen}
-                onClose={() => setDrawerOpen(false)}
-                title="Connection Details"
+        <LoggedInLayout currentPage="assets">
+            <Flex
+                flexDirection="row"
+                justifyContent="between"
+                alignItems="center"
             >
-                <ConnectionDetails
-                    connection={accounts?.connections}
-                    index={selectedAccountIndex}
+                <Breadcrumbs pages={breadcrumbsPages} />
+                <DateRangePicker
+                    className="max-w-md"
+                    value={activeTimeRange}
+                    onValueChange={setActiveTimeRange}
+                    enableClear={false}
+                    maxDate={new Date()}
                 />
-            </DrawerPanel>
-        </main>
+            </Flex>
+            {selectedConnections.connections.length === 1 ? (
+                <SingleAccount
+                    topAccounts={topAccounts}
+                    topAccountLoading={topAccountLoading}
+                />
+            ) : (
+                <MultiAccount
+                    topAccounts={topAccounts}
+                    topAccountLoading={topAccountLoading}
+                    selectedConnections={selectedConnections}
+                    activeTimeRange={activeTimeRange}
+                />
+            )}
+        </LoggedInLayout>
     )
 }

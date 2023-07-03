@@ -1,74 +1,60 @@
 import React, { useEffect, useState } from 'react'
 import { Bold, Card, List, ListItem, Metric, Text, Title } from '@tremor/react'
-import dayjs from 'dayjs'
-import {
-    useOnboardApiV1CatalogMetricsList,
-    useOnboardApiV1ConnectionsSummaryList,
-} from '../../../../api/onboard.gen'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
-import Spinner from '../../../../components/Spinner'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
+import { useOnboardApiV1CatalogMetricsList } from '../../../../../api/onboard.gen'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import Spinner from '../../../../../components/Spinner'
 
-type IProps = {
-    selectedConnections: any
-    timeRange: any
+interface ISingleAccount {
+    topAccounts: any
+    topAccountLoading: boolean
 }
-export default function SingleAccountDetails({
-    selectedConnections,
-    timeRange,
-}: IProps) {
+
+const RenderObject = ({ obj }: any) => {
+    return (
+        <List>
+            {Object.keys(obj).map((key) => {
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    return (
+                        <>
+                            {key !== '0' ? (
+                                <Text className="font-bold mt-10 mb-2">
+                                    {key}
+                                </Text>
+                            ) : null}
+                            <RenderObject obj={obj[key]} />
+                        </>
+                    )
+                }
+                return (
+                    <ListItem key={key} className="break-words">
+                        <Text>{key}</Text>
+                        <Bold>{String(obj[key])}</Bold>
+                    </ListItem>
+                )
+            })}
+        </List>
+    )
+}
+
+export default function SingleAccount({
+    topAccounts,
+    topAccountLoading,
+}: ISingleAccount) {
     const [connection, setConnection] =
         useState<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>({})
     const [metaData, setMetaData] = useState<any>()
+
     const { response: topMetrics, isLoading } =
         useOnboardApiV1CatalogMetricsList()
-    const { response: TopAccounts, isLoading: isLoadingTopAccount } =
-        useOnboardApiV1ConnectionsSummaryList({
-            connector: selectedConnections?.provider,
-            connectionId: selectedConnections?.connections,
-            startTime: timeRange[0],
-            endTime: timeRange[1],
-            pageSize: 5,
-            pageNumber: 1,
-            sortBy: 'resource_count',
-        })
+
     useEffect(() => {
         // eslint-disable-next-line array-callback-return
-        TopAccounts?.connections?.map((res) => {
+        topAccounts?.connections?.map((res: any) => {
             setConnection(res)
             setMetaData(res.metadata)
         })
-    }, [TopAccounts])
-
-    // eslint-disable-next-line react/no-unstable-nested-components
-    function RenderObject({ obj }: any) {
-        return (
-            <List>
-                {Object.keys(obj).map((key) => {
-                    if (typeof obj[key] === 'object' && obj[key] !== null) {
-                        return (
-                            <div>
-                                {key !== '0' ? (
-                                    <Text className="font-bold mt-10 mb-2">
-                                        {key}
-                                    </Text>
-                                ) : null}
-                                <RenderObject obj={obj[key]} />
-                            </div>
-                        )
-                    }
-                    return (
-                        <ListItem key={key} className="break-words">
-                            <Text>{key}</Text>
-                            <div>
-                                <Bold>{String(obj[key])}</Bold>
-                            </div>
-                        </ListItem>
-                    )
-                })}
-            </List>
-        )
-    }
+    }, [topAccounts])
 
     return (
         <main>
@@ -77,10 +63,10 @@ export default function SingleAccountDetails({
                 <div className="flex flex-row gap-x-[24px]">
                     <Card>
                         <Text className="font-medium">Resource Count</Text>
-                        {!isLoadingTopAccount ? (
+                        {!topAccountLoading ? (
                             <Metric>
                                 {numericDisplay(
-                                    TopAccounts?.totalResourceCount
+                                    topAccounts?.totalResourceCount
                                 )}
                             </Metric>
                         ) : (

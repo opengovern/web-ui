@@ -23,8 +23,6 @@ import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab/indedx'
 import ResourceMetricsDetails from './Details/ResourceMetricsDetails'
-import AccountsDetails from './Details/AccountsDetails'
-import SingleAccountDetails from './Details/SingleAccountDetails'
 import ServicesDetails from './Details/ServicesDetails'
 
 export default function Assets() {
@@ -40,8 +38,7 @@ export default function Assets() {
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
 
-    const { response: connections, isLoading: connectionLoading } =
-        useOnboardApiV1SourcesList()
+    const { response: connections } = useOnboardApiV1SourcesList()
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
 
@@ -154,18 +151,6 @@ export default function Assets() {
                     pageSize={1000}
                 />
             )}
-            {activeSubPage === 'Accounts' &&
-                (selectedConnections.connections.length === 1 ? (
-                    <SingleAccountDetails
-                        selectedConnections={selectedConnections}
-                        timeRange={activeTimeRange}
-                    />
-                ) : (
-                    <AccountsDetails
-                        selectedConnections={selectedConnections}
-                        timeRange={activeTimeRange}
-                    />
-                ))}
             {activeSubPage === 'Services' && (
                 <ServicesDetails
                     selectedConnections={selectedConnections}
