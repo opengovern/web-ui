@@ -1,6 +1,6 @@
 import { Grid } from '@tremor/react'
 import React from 'react'
-import Composition from '../../../components/Blocks/Composition'
+import Composition from '../../../../components/Blocks/Composition'
 
 type IProps = {
     connector: any

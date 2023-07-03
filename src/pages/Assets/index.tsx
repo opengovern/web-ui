@@ -1,19 +1,16 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useAtom } from 'jotai'
 import {
     Button,
     DateRangePicker,
     Flex,
+    Metric,
     Tab,
     TabGroup,
     TabList,
     TabPanel,
     TabPanels,
-    Title,
-    Bold,
-    Metric,
     Text,
-    DateRangePickerValue,
 } from '@tremor/react'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
@@ -22,16 +19,15 @@ import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import { useOnboardApiV1SourcesList } from '../../api/onboard.gen'
 import ConnectionList from './ConnectionList'
-import SummaryTab from './SummaryTab'
-import TrendsTab from './TrendsTab'
-import CompositionTab from './CompositionTab/indedx'
-import ResourceMetricsDetails from './SubPages/ResourceMetricsDetails'
-import AccountsDetails from './SubPages/AccountsDetails'
-import SingleAccountDetails from './SubPages/SingleAccountDetails'
-import Breadcrumbs from '../../components/Breadcrumbs'
-import ServicesDetails from './SubPages/ServicesDetails'
+import SummaryTab from './Tabs/SummaryTab'
+import TrendsTab from './Tabs/TrendsTab'
+import CompositionTab from './Tabs/CompositionTab/indedx'
+import ResourceMetricsDetails from './Details/ResourceMetricsDetails'
+import AccountsDetails from './Details/AccountsDetails'
+import SingleAccountDetails from './Details/SingleAccountDetails'
+import ServicesDetails from './Details/ServicesDetails'
 
-const Assets: React.FC<any> = () => {
+export default function Assets() {
     const [activeSubPage, setActiveSubPage] = useState<
         | 'All'
         | 'Resource Metrics'
@@ -43,6 +39,7 @@ const Assets: React.FC<any> = () => {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
+
     const { response: connections, isLoading: connectionLoading } =
         useOnboardApiV1SourcesList()
     const { response: inventoryCategories } =
@@ -66,53 +63,6 @@ const Assets: React.FC<any> = () => {
         } else setOpenDrawer(true)
     }
 
-    const renderSubPageAll = () => {
-        return (
-            <main>
-                <TabGroup className="mt-3">
-                    <TabList>
-                        <Tab>Summary</Tab>
-                        <Tab>Trends</Tab>
-                        <Tab>Composition</Tab>
-                    </TabList>
-                    <TabPanels>
-                        <TabPanel>
-                            <SummaryTab
-                                provider={selectedConnections.provider}
-                                connections={selectedConnections.connections}
-                                categories={categoryOptions}
-                                timeRange={activeTimeRange}
-                                pageSize={1000}
-                                setActiveSubPage={setActiveSubPage}
-                            />
-                        </TabPanel>
-                        <TabPanel>
-                            {/* Main section */}
-                            {/* <div className="h-96" /> */}
-                            <TrendsTab
-                                categories={categoryOptions}
-                                timeRange={activeTimeRange}
-                                connections={selectedConnections.connections}
-                                provider={selectedConnections.provider}
-                            />
-                        </TabPanel>
-                        <TabPanel>
-                            {/* KPI section */}
-                            {/* Placeholder to set height */}
-                            {/* <div className="h-28" /> */}
-                            <CompositionTab
-                                connector={selectedConnections.provider}
-                                top={5}
-                                time={activeTimeRange}
-                            />{' '}
-                            {/* Composition */}
-                        </TabPanel>
-                    </TabPanels>
-                </TabGroup>
-            </main>
-        )
-    }
-
     const filterText = () => {
         if (selectedConnections.connections.length > 0) {
             return <Text>{selectedConnections.connections.length} Filters</Text>
@@ -123,16 +73,6 @@ const Assets: React.FC<any> = () => {
         return 'Filters'
     }
 
-    const breadcrubmsPages = [
-        {
-            name: 'Assets',
-            path: () => {
-                setActiveSubPage('All')
-            },
-            current: false,
-        },
-        { name: activeSubPage, path: '', current: true },
-    ]
     return (
         <LoggedInLayout currentPage="assets">
             <Flex
@@ -140,12 +80,8 @@ const Assets: React.FC<any> = () => {
                 justifyContent="between"
                 alignItems="center"
             >
-                {activeSubPage === 'All' ? (
-                    <Metric>Assets</Metric>
-                ) : (
-                    <Breadcrumbs pages={breadcrubmsPages} />
-                )}
-                <div className="flex flex-row justify-start items-start">
+                <Metric>Assets</Metric>
+                <Flex flexDirection="row" justifyContent="end">
                     <DateRangePicker
                         className="max-w-md"
                         value={activeTimeRange}
@@ -173,42 +109,69 @@ const Assets: React.FC<any> = () => {
                         selectedConnectionsProps={selectedConnections}
                         onClose={(data: any) => handleDrawer(data)}
                     />
-                </div>
+                </Flex>
             </Flex>
-            <div className="mb-20">
-                {activeSubPage === 'All' && renderSubPageAll()}
-                {activeSubPage === 'Resource Metrics' && (
-                    <ResourceMetricsDetails
-                        provider={selectedConnections.provider}
-                        connection={selectedConnections.connections}
-                        categories={categoryOptions}
-                        timeRange={activeTimeRange}
-                        pageSize={1000}
-                    />
-                )}
-                {/* eslint-disable-next-line no-nested-ternary */}
-                {activeSubPage === 'Accounts' ? (
-                    selectedConnections.connections.length === 1 ? (
-                        <SingleAccountDetails
-                            selectedConnections={selectedConnections}
+            <TabGroup className="mt-3">
+                <TabList>
+                    <Tab>Summary</Tab>
+                    <Tab>Trends</Tab>
+                    <Tab>Composition</Tab>
+                </TabList>
+                <TabPanels>
+                    <TabPanel>
+                        <SummaryTab
+                            provider={selectedConnections.provider}
+                            connections={selectedConnections.connections}
+                            categories={categoryOptions}
                             timeRange={activeTimeRange}
+                            pageSize={1000}
+                            setActiveSubPage={setActiveSubPage}
                         />
-                    ) : (
-                        <AccountsDetails
-                            selectedConnections={selectedConnections}
+                    </TabPanel>
+                    <TabPanel>
+                        <TrendsTab
+                            categories={categoryOptions}
                             timeRange={activeTimeRange}
+                            connections={selectedConnections.connections}
+                            provider={selectedConnections.provider}
                         />
-                    )
-                ) : null}
-                {activeSubPage === 'Services' && (
-                    <ServicesDetails
+                    </TabPanel>
+                    <TabPanel>
+                        <CompositionTab
+                            connector={selectedConnections.provider}
+                            top={5}
+                            time={activeTimeRange}
+                        />
+                    </TabPanel>
+                </TabPanels>
+            </TabGroup>
+            {activeSubPage === 'Resource Metrics' && (
+                <ResourceMetricsDetails
+                    provider={selectedConnections.provider}
+                    connection={selectedConnections.connections}
+                    categories={categoryOptions}
+                    timeRange={activeTimeRange}
+                    pageSize={1000}
+                />
+            )}
+            {activeSubPage === 'Accounts' &&
+                (selectedConnections.connections.length === 1 ? (
+                    <SingleAccountDetails
                         selectedConnections={selectedConnections}
                         timeRange={activeTimeRange}
                     />
-                )}
-            </div>
+                ) : (
+                    <AccountsDetails
+                        selectedConnections={selectedConnections}
+                        timeRange={activeTimeRange}
+                    />
+                ))}
+            {activeSubPage === 'Services' && (
+                <ServicesDetails
+                    selectedConnections={selectedConnections}
+                    timeRange={activeTimeRange}
+                />
+            )}
         </LoggedInLayout>
     )
 }
-
-export default Assets

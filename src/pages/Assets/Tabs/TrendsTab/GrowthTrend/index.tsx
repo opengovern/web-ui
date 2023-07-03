@@ -10,9 +10,9 @@ import {
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import MultipleAreaCharts from '../../../../components/Charts/AreaCharts/MultipleAreaCharts'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
-import { useInventoryApiV2ResourcesTrendList } from '../../../../api/inventory.gen'
+import MultipleAreaCharts from '../../../../../components/Charts/AreaCharts/MultipleAreaCharts'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import { useInventoryApiV2ResourcesTrendList } from '../../../../../api/inventory.gen'
 
 type IProps = {
     categories: {
