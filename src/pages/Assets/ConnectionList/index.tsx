@@ -33,7 +33,7 @@ interface SelectionResult {
 const columns: ColDef[] = [
     {
         field: 'providerIcon',
-        headerName: ' ',
+        headerName: 'Provider',
         width: 50,
         sortable: false,
         filter: false,
@@ -53,7 +53,7 @@ const columns: ColDef[] = [
     },
     {
         field: 'providerConnectionName',
-        headerName: 'Cloud Account Name',
+        headerName: 'Name',
         sortable: true,
         filter: true,
         resizable: true,
@@ -61,7 +61,7 @@ const columns: ColDef[] = [
     },
     {
         field: 'providerConnectionID',
-        headerName: 'Cloud Account ID',
+        headerName: 'ID',
         sortable: true,
         filter: true,
         resizable: true,
@@ -77,10 +77,11 @@ const columns: ColDef[] = [
     },
     {
         field: 'id',
-        headerName: 'Connection ID',
+        headerName: 'Kaytu Connection ID',
         sortable: true,
         filter: true,
         resizable: true,
+        hide: true,
         flex: 1,
     },
     {
