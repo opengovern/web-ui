@@ -1,66 +1,85 @@
 import {
+    BadgeDelta,
     Card,
+    DateRangePicker,
+    DeltaType,
+    Flex,
+    SearchSelect,
+    SearchSelectItem,
     Table,
-    TableHead,
-    TableRow,
-    TableHeaderCell,
     TableBody,
     TableCell,
+    TableHead,
+    TableHeaderCell,
+    TableRow,
     Text,
     Title,
-    BadgeDelta,
-    SearchSelectItem,
-    SearchSelect,
-    Flex,
-    DeltaType,
 } from '@tremor/react'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import { selectedResourceCategoryAtom } from '../../../../store'
-import { useInventoryApiV2ResourcesMetricList } from '../../../../api/inventory.gen'
+import { useNavigate } from 'react-router-dom'
+import {
+    filterAtom,
+    selectedResourceCategoryAtom,
+    timeAtom,
+} from '../../../../store'
+import {
+    useInventoryApiV2ResourcesMetricList,
+    useInventoryApiV2ResourcesTagList,
+} from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
+import LoggedInLayout from '../../../../components/LoggedInLayout'
+import Breadcrumbs from '../../../../components/Breadcrumbs'
 
-interface IProps {
-    provider: any
-    timeRange: any
-    connection: any
-    categories: {
-        label: string
-        value: string
-    }[]
-    pageSize: any
-}
+export default function ResourceMetricsDetails() {
+    const navigate = useNavigate()
 
-export default function ResourceMetricsDetails({
-    provider,
-    timeRange,
-    pageSize,
-    categories,
-    connection,
-}: IProps) {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
-    const [tableData, setTableDdata] = useState<any>([])
+    const [tableData, setTableData] = useState<any>([])
+
+    const { response: inventoryCategories } =
+        useInventoryApiV2ResourcesTagList()
+
     const activeCategory =
         selectedResourceCategory === 'All Categories'
             ? ''
             : selectedResourceCategory
     const query = {
-        ...(provider && { connector: provider }),
-        ...(connection && { connectionId: connection }),
+        connector: selectedConnections?.provider,
+        connectionId: selectedConnections?.connections,
+        startTime: dayjs(activeTimeRange.from).unix(),
+        endTime: dayjs(activeTimeRange.to).unix(),
+        pageSize: 1000,
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-        ...(timeRange.from && { startTime: dayjs(timeRange.from).unix() }),
-        ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
-        ...(pageSize && { pageSize }),
     }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const { response: metrics } = useInventoryApiV2ResourcesMetricList(query)
+
+    const categoryOptions = useMemo(() => {
+        if (!inventoryCategories)
+            return [{ label: 'no data', value: 'no data' }]
+        return [{ label: 'All Categories', value: 'All Categories' }].concat(
+            inventoryCategories.category.map((categoryName) => ({
+                label: categoryName,
+                value: categoryName,
+            }))
+        )
+    }, [inventoryCategories])
+
     const percentage = (a?: number, b?: number): number => {
         return a && b ? ((a - b) / b) * 100 : 0
     }
+
     useEffect(() => {
         const newData: {
             metricName: string | undefined
@@ -86,19 +105,36 @@ export default function ResourceMetricsDetails({
                         : 'unchanged',
             })
         })
-        setTableDdata(newData)
+        setTableData(newData)
     }, [metrics])
 
+    const breadcrumbsPages = [
+        {
+            name: 'Assets',
+            path: () => {
+                navigate(-1)
+            },
+            current: false,
+        },
+        { name: 'Resource metric detail', path: '', current: true },
+    ]
+
     return (
-        <main>
-            {/* <Flex justifyContent="between"> */}
-            {/*    <TextInput */}
-            {/*        icon={MagnifyingGlassIcon} */}
-            {/*        placeholder="Search..." */}
-            {/*        className="max-w-xs" */}
-            {/*        disabled */}
-            {/*    /> */}
-            {/* </Flex> */}
+        <LoggedInLayout currentPage="assets">
+            <Flex
+                flexDirection="row"
+                justifyContent="between"
+                alignItems="center"
+            >
+                <Breadcrumbs pages={breadcrumbsPages} />
+                <DateRangePicker
+                    className="max-w-md"
+                    value={activeTimeRange}
+                    onValueChange={setActiveTimeRange}
+                    enableClear={false}
+                    maxDate={new Date()}
+                />
+            </Flex>
             <Card className="mt-10">
                 <Flex>
                     <Title>Resources Metrics</Title>
@@ -111,7 +147,7 @@ export default function ResourceMetricsDetails({
                             placeholder="Source Selection"
                             className="max-w-xs mb-6"
                         >
-                            {categories.map((category) => (
+                            {categoryOptions.map((category) => (
                                 <SearchSelectItem
                                     key={category.label}
                                     value={category.value}
@@ -162,6 +198,6 @@ export default function ResourceMetricsDetails({
                     </div>
                 )}
             </Card>
-        </main>
+        </LoggedInLayout>
     )
 }

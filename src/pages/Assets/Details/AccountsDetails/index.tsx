@@ -37,7 +37,7 @@ export default function AccountsDetails() {
             },
             current: false,
         },
-        { name: 'Accounts Detail', path: '', current: true },
+        { name: 'Accounts detail', path: '', current: true },
     ]
 
     return (

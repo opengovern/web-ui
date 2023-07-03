@@ -10,6 +10,7 @@ import Logout from '../pages/Logout'
 import InsightDetail from '../pages/Insights/InsightDetail'
 import AccountsDetails from '../pages/Assets/Details/AccountsDetails'
 import Spend from '../pages/Spend'
+import ServicesDetails from '../pages/Assets/Details/ServicesDetails'
 
 const routes = [
     {
@@ -56,6 +57,11 @@ const authRoutes = [
         component: AccountsDetails,
     },
     {
+        key: 'services detail',
+        path: '/:ws/assets/services-detail',
+        component: ServicesDetails,
+    },
+    {
         key: 'spend',
         path: '/:ws/spend',
         component: Spend,
@@ -82,7 +88,7 @@ const authRoutes = [
     },
 ]
 
-export default function AppNavigator() {
+export default function Router() {
     return (
         <Routes>
             {routes.map((route) => (

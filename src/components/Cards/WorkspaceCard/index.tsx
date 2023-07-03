@@ -16,11 +16,11 @@ import { ArrowPathIcon, ArrowSmallRightIcon } from '@heroicons/react/24/solid'
 import {
     useWorkspaceApiV1WorkspaceDelete,
     useWorkspaceApiV1WorkspaceResumeCreate,
-    useWorkspaceApiV1WorkspacesByidDetail,
     useWorkspaceApiV1WorkspacesLimitsDetail,
     useWorkspaceApiV1WorkspaceSuspendCreate,
 } from '../../../api/workspace.gen'
 import ConfirmModal from '../../Modal/ConfirmModal'
+import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IWorkSpace {
     workspace: any
@@ -91,8 +91,8 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
 
     const details = {
         Tier: workspace.tier,
-        Resources: workspaceDetail?.currentResources || 0,
-        Connections: workspaceDetail?.currentConnections || 0,
+        Resources: numericDisplay(workspaceDetail?.currentResources) || 0,
+        Connections: numericDisplay(workspaceDetail?.currentConnections) || 0,
         Users: workspaceDetail?.currentUsers || 0,
     }
 
@@ -188,9 +188,9 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                         <Col>
                             <Card>
                                 <Flex flexDirection="col">
-                                    <Title color="slate" className="mb-3">
+                                    <Text color="slate" className="mb-3">
                                         {name}
-                                    </Title>
+                                    </Text>
                                     <Title>{value}</Title>
                                 </Flex>
                             </Card>

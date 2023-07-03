@@ -142,15 +142,6 @@ export default function Assets() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-            {activeSubPage === 'Resource Metrics' && (
-                <ResourceMetricsDetails
-                    provider={selectedConnections.provider}
-                    connection={selectedConnections.connections}
-                    categories={categoryOptions}
-                    timeRange={activeTimeRange}
-                    pageSize={1000}
-                />
-            )}
             {activeSubPage === 'Services' && (
                 <ServicesDetails
                     selectedConnections={selectedConnections}
