@@ -127,8 +127,6 @@ export default function ConnectionList({
         value: '',
     })
 
-    console.log('===', connections)
-
     const updateSelectionByProvider = (api: any, newValue: any) => {
         if (newValue.length) {
             if (newValue === 'All') {
