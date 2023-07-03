@@ -156,7 +156,6 @@ const Swiper = ({
                 onClickNext={() => handlePageChange(1)}
                 onClickPrevious={() => handlePageChange(-1)}
                 currentPage={activeSlide}
-                setCurrentPage={setActiveSlider}
                 pageCount={Math.ceil(itemsCount / pageSize)}
             />
         )
