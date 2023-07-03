@@ -3,54 +3,52 @@ import {
     Card,
     SearchSelect,
     SearchSelectItem,
+    MultiSelect,
+    MultiSelectItem,
     Title,
     BadgeDelta,
     DeltaType,
     Flex,
+    Text,
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import MultipleAreaCharts from '../../../../components/Charts/AreaCharts/MultipleAreaCharts'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
-import { useInventoryApiV2ResourcesTrendList } from '../../../../api/inventory.gen'
+import { useInventoryApiV2CostTrendList } from '../../../../api/inventory.gen'
 
 type IProps = {
     categories: {
         label: string
         value: string
     }[]
-    provider?: any
     timeRange: any
     connections?: []
 }
 
-const selectedTrendResourceCategoryAtom = atom<string>('')
+const selectedTrendCostProviderAtom = atom<string>('')
 export default function GrowthTrend({
-    categories,
-    provider,
     timeRange,
     connections,
+    categories,
 }: IProps) {
     const [growthDeltaType, setGrowthDeltaType] =
         useState<DeltaType>('unchanged')
     const [growthDelta, setGrowthDelta] = useState(0)
-    const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
-        selectedTrendResourceCategoryAtom
+    const [selectedTrendCostProvider, setSelectedTrendCostProvider] = useAtom(
+        selectedTrendCostProviderAtom
     )
-    const activeCategory =
-        selectedResourceCategory === 'All Categories'
-            ? ''
-            : selectedResourceCategory
     const query = {
-        ...(provider && { connector: provider }),
-        ...(activeCategory && { tag: [`category=${activeCategory}`] }),
+        ...(selectedTrendCostProvider && {
+            connector: selectedTrendCostProvider,
+        }),
         ...(timeRange.from && {
             startTime: dayjs(timeRange.from).unix(),
         }),
         ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
         ...(connections && { connectionId: connections }),
     }
-    const { response: data } = useInventoryApiV2ResourcesTrendList(query)
+    const { response: data } = useInventoryApiV2CostTrendList(query)
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const fixTime = (data: any) => {
         const result: any = []
@@ -91,36 +89,45 @@ export default function GrowthTrend({
     return (
         <Card>
             <Flex justifyContent="between" alignItems="start">
-                <div className="flex justify-normal gap-x-2">
-                    <Title className="min-w-[7vw]">Growth Trend in </Title>
-                    <SearchSelect
-                        onValueChange={(e) => setSelectedResourceCategory(e)}
-                        value={selectedResourceCategory}
-                        placeholder="Source Selection"
-                        className="max-w-xs mb-6"
-                    >
-                        {categories.map((category) => (
-                            <SearchSelectItem
-                                key={category.label}
-                                value={category.value}
-                            >
-                                {category.value}
-                            </SearchSelectItem>
-                        ))}
-                    </SearchSelect>
+                <div className="flex justify-normal gap-x-2 items-center">
+                    <Title className="min-w-[7vw]">Overall Spend Trend </Title>
+                    <BadgeDelta deltaType={growthDeltaType}>
+                        {numericDisplay(growthDelta)}
+                    </BadgeDelta>
                 </div>
-                <BadgeDelta deltaType={growthDeltaType} className="mt-2">
-                    {numericDisplay(growthDelta)}
-                </BadgeDelta>
+                <div className="flex flex-row justify-normal gap-x-2 items-start">
+                    <div>
+                        <Text>
+                            <span className="text-gray-500">Provider: </span>
+                        </Text>
+                        <SearchSelect
+                            onValueChange={(e) =>
+                                setSelectedTrendCostProvider(e)
+                            }
+                            value={selectedTrendCostProvider}
+                            placeholder="Provider Selection"
+                            className="max-w-xs mb-6"
+                        >
+                            {categories.map((category) => (
+                                <SearchSelectItem
+                                    key={category.label}
+                                    value={category.value}
+                                >
+                                    {category.label}
+                                </SearchSelectItem>
+                            ))}
+                        </SearchSelect>
+                    </div>
+                </div>
             </Flex>
             <MultipleAreaCharts
-                title="Resource Count"
                 className="mt-4 h-80"
                 index="date"
                 yAxisWidth={60}
                 categories={['count']}
                 data={fixTime(data) || []}
                 colors={['indigo']}
+                showAnimation
             />
         </Card>
     )

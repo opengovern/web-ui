@@ -82,7 +82,10 @@ export default function Composition({
     ) {
         const outputArray = []
 
-        if (!newInputObject && !oldInputObject) {
+        if (
+            (!newInputObject && !oldInputObject) ||
+            (!newInputObject.top_values && !oldInputObject)
+        ) {
             return [
                 {
                     name: 'No data',
@@ -156,7 +159,7 @@ export default function Composition({
         setComposition(
             compositionData(compositionNew, compositionOld, selectedIndex)
         )
-    }, [selectedIndex])
+    }, [oldIsLoading, newIsLoading, selectedIndex])
 
     if (oldIsLoading || newIsLoading) {
         return (
@@ -198,14 +201,20 @@ export default function Composition({
                     </Text>
                     <Text>{compositionOld?.total_count} Asset</Text>
                     <div className="mt-6">
-                        <DonutChart
-                            data={composition}
-                            showAnimation
-                            category="value"
-                            index="name"
-                            className="w-64 h-64"
-                            // valueFormatter={valueFormatter}
-                        />
+                        {composition.lengths !== 0 ? (
+                            <DonutChart
+                                data={composition}
+                                showAnimation
+                                category="value"
+                                index="name"
+                                className="w-64 h-64"
+                                // valueFormatter={valueFormatter}
+                            />
+                        ) : (
+                            <Flex justifyContent="center" className="mt-56">
+                                <Spinner />
+                            </Flex>
+                        )}
                     </div>
                 </div>
 
@@ -219,9 +228,9 @@ export default function Composition({
                                           justifyContent="end"
                                           className="space-x-2"
                                       >
-                                          <Text>
+                                          <Bold>
                                               {numericDisplay(item.value)}
-                                          </Text>
+                                          </Bold>
                                           {/* {item.delta && ( */}
                                           {/*    <BadgeDelta */}
                                           {/*        deltaType={item.deltaType} */}

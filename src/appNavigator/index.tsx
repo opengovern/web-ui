@@ -124,6 +124,11 @@ export default function AppNavigator() {
                 element={<AuthenticationGuard component={Spend} />}
             />
             <Route
+                key="spend"
+                path="/:ws/spend/:spendPage"
+                element={<AuthenticationGuard component={Spend} />}
+            />
+            <Route
                 key="workspaceHome"
                 path="/:ws"
                 element={<NavigateToWorkspacePage page="/assets" />}
