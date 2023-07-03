@@ -14,6 +14,8 @@ interface IConnection {
     providerConnectionID: string
     providerConnectionName: string
     healthState: string
+    onboardDate: string
+    lastInventory: string
 }
 
 interface IConnectorList {
@@ -31,7 +33,7 @@ interface SelectionResult {
 const columns: ColDef[] = [
     {
         field: 'providerIcon',
-        headerName: ' ',
+        headerName: 'Provider',
         width: 50,
         sortable: false,
         filter: false,
@@ -51,7 +53,7 @@ const columns: ColDef[] = [
     },
     {
         field: 'providerConnectionName',
-        headerName: 'Cloud Account Name',
+        headerName: 'Name',
         sortable: true,
         filter: true,
         resizable: true,
@@ -59,15 +61,7 @@ const columns: ColDef[] = [
     },
     {
         field: 'providerConnectionID',
-        headerName: 'Cloud Account ID',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'id',
-        headerName: 'Connection ID',
+        headerName: 'ID',
         sortable: true,
         filter: true,
         resizable: true,
@@ -79,6 +73,33 @@ const columns: ColDef[] = [
         sortable: true,
         filter: true,
         resizable: true,
+        flex: 1,
+    },
+    {
+        field: 'id',
+        headerName: 'Kaytu Connection ID',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        hide: true,
+        flex: 1,
+    },
+    {
+        field: 'lastInventory',
+        headerName: 'Last Inventory',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        hide: true,
+        flex: 1,
+    },
+    {
+        field: 'onboardDate',
+        headerName: 'Onboard Date',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        hide: true,
         flex: 1,
     },
 ]
@@ -195,6 +216,32 @@ export default function ConnectionList({
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
+        sideBar: {
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                // {
+                //     id: 'customStats',
+                //     labelDefault: 'Custom Stats',
+                //     labelKey: 'customStats',
+                //     // toolPanel: CustomStatsToolPanel,
+                // },
+            ],
+            defaultToolPanel: '',
+        },
+
         onGridReady: (params) => {
             initializeSelectedConnections(params.api)
             setSelectedProvider({ ...selectedProvider })
