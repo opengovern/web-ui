@@ -27,15 +27,17 @@ export default function SummaryMetrics({
         ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
         ...(pageSize && { pageSize }),
     }
-    const { response: accounts } = useOnboardApiV1ConnectionsSummaryList({
-        connector: provider,
-        connectionId: connection,
-        startTime: dayjs(timeRange.from).unix(),
-        endTime: dayjs(timeRange.to).unix(),
-        pageSize: 10000,
-        pageNumber: 1,
-    })
-    const { response: metrics } = useInventoryApiV2CostMetricList(query)
+    const { response: accounts, isLoading: accountsLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            connector: provider,
+            connectionId: connection,
+            startTime: dayjs(timeRange.from).unix(),
+            endTime: dayjs(timeRange.to).unix(),
+            pageSize: 10000,
+            pageNumber: 1,
+        })
+    const { response: metrics, isLoading: metricLoading } =
+        useInventoryApiV2CostMetricList(query)
     // const { response: services } = useInventoryApiV2ServicesSummaryList({
     //     connector: provider,
     //     connectionId: connection,
@@ -60,6 +62,7 @@ export default function SummaryMetrics({
                     // areaChartData={[{}]}
                     // viewMore
                     // onClick={() => setActiveSubPage('Accounts')}
+                    loading={accountsLoading}
                 />
             </span>
             <span>
@@ -74,6 +77,7 @@ export default function SummaryMetrics({
                     // areaChartData={[{}]}
                     // viewMore
                     // onClick={() => setActiveSubPage('Services')}
+                    loading={metricLoading}
                 />
             </span>
             <span>
@@ -88,6 +92,7 @@ export default function SummaryMetrics({
                     // areaChartData={[{}]}
                     // viewMore
                     // onClick={() => setActiveSubPage('Resources')}
+                    loading={metricLoading}
                 />
             </span>
         </Grid>
