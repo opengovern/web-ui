@@ -51,9 +51,13 @@ const SettingsMetadata: React.FC<any> = () => {
     const maxConnections = response?.maxConnections || 1
     const maxResources = response?.maxResources || 1
 
-    const usersPercentage = Math.ceil(currentUsers / maxUsers)
-    const connectionsPercentage = Math.ceil(currentConnections / maxConnections)
-    const resourcesPercentage = Math.ceil(currentResources / maxResources)
+    const usersPercentage = Math.ceil((currentUsers / maxUsers) * 100.0)
+    const connectionsPercentage = Math.ceil(
+        (currentConnections / maxConnections) * 100.0
+    )
+    const resourcesPercentage = Math.ceil(
+        (currentResources / maxResources) * 100.0
+    )
 
     const wsDetails = [
         {

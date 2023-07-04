@@ -1,140 +1,15 @@
 import {
     Card,
-    AccordionList,
     Metric,
     Text,
     Flex,
-    ProgressBar,
-    Grid,
-    Icon,
     Title,
-    Divider,
     Bold,
-    Accordion,
-    AccordionBody,
-    AccordionHeader,
-    BarList,
-    Color,
     List,
     ListItem,
 } from '@tremor/react'
 import React, { useEffect, useState } from 'react'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
-
-const MockData = {
-    TopTotalResCount: [
-        {
-            name: 'gbs-pipeline-test15',
-            resourceCount: 43445,
-        },
-        {
-            name: 'TAA-BO-CPM_GEAC-Z-DevTest-Labs',
-            resourceCount: 35545,
-        },
-        {
-            name: 'gbs-pipeline-test17',
-            resourceCount: 34552,
-        },
-        {
-            name: 'Gurutestsub',
-            resourceCount: 30545,
-        },
-        {
-            name: 'testOleskandrk2',
-            resourceCount: 20545,
-        },
-    ],
-    TopResCount: [
-        {
-            name: 'gbs-pipeline-test15',
-            resourceCount: 43445,
-        },
-        {
-            name: 'TAA-BO-CPM_GEAC-Z-DevTest-Labs',
-            resourceCount: 35545,
-        },
-        {
-            name: 'gbs-pipeline-test17',
-            resourceCount: 34552,
-        },
-        {
-            name: 'Gurutestsub',
-            resourceCount: 30545,
-        },
-        {
-            name: 'testOleskandrk2',
-            resourceCount: 20545,
-        },
-    ],
-    totalAccountCount: 920,
-    totalUnhealthyCount: 10,
-}
-
-interface Data {
-    name: string
-    value: number
-}
-
-const item = {
-    total: {
-        title: 'Services',
-        value: 190,
-    },
-    TopXServices: [
-        {
-            title: 'Services',
-            value: 190,
-        },
-        {
-            title: 'Services',
-            value: 190,
-        },
-        {
-            title: 'Services',
-            value: 190,
-        },
-        {
-            title: 'Services',
-            value: 190,
-        },
-        {
-            title: 'Services',
-            value: 190,
-        },
-    ],
-    TopXFastest: [
-        {
-            title: 'Services',
-            value: 190,
-            change: 60,
-            type: 'moderateIncrease',
-        },
-        {
-            title: 'Services',
-            value: 190,
-            change: 60,
-            type: 'moderateIncrease',
-        },
-        {
-            title: 'Services',
-            value: 190,
-            change: 60,
-            type: 'moderateIncrease',
-        },
-        {
-            title: 'Services',
-            value: 190,
-            change: 60,
-            type: 'moderateIncrease',
-        },
-        {
-            title: 'Services',
-            value: 190,
-            change: 60,
-            type: 'moderateIncrease',
-        },
-    ],
-}
 
 type IProps = {
     TopServices: any
@@ -154,14 +29,6 @@ export default function Summary({
     }, [TopServices, TopFastestServices, TotalServices])
     return (
         <div className="gap-y-10 mt-[24px]">
-            {/* <Card key="Total Services" className="h-fit"> */}
-            {/*    <Flex justifyContent="start" className="space-x-4"> */}
-            {/*        <Title className="truncate">Total Services</Title> */}
-            {/*    </Flex> */}
-            {/*    <Metric className="mt-4 mb-3"> */}
-            {/*        {numericDisplay(TotalServices)} */}
-            {/*    </Metric> */}
-            {/* </Card> */}
             <div className="flex flex-row justify-between">
                 <Metric>Services</Metric>
                 <div className="flex flex-row items-baseline">

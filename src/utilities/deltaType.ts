@@ -14,5 +14,5 @@ export const badgeTypeByDelta = (oldValue?: number, newValue?: number) => {
 export const percentageByChange = (oldValue?: number, newValue?: number) => {
     const changes =
         (((newValue || 0) - (oldValue || 0)) / (oldValue || 0)) * 100.0
-    return floatDisplay(Math.abs(changes))
+    return Math.abs(changes).toFixed(1)
 }
