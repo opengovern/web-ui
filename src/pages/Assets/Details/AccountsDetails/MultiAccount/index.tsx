@@ -21,11 +21,16 @@ import DrawerPanel from '../../../../../components/DrawerPanel'
 import { ConnectionDetails } from './ConnectionDetails'
 import { ReactComponent as AzureIcon } from '../../../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+} from '../../../../../api/api'
 import { agGridDateComparator } from '../../../../../utilities/dateComparator'
 
 interface IMultiAccount {
-    topAccounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    topAccounts:
+        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | undefined
     topAccountLoading: boolean
     selectedConnections: any
     activeTimeRange: any
@@ -177,7 +182,7 @@ export default function MultiAccount({
             connectionId: selectedConnections?.connections,
             startTime: dayjs(activeTimeRange.from).unix(),
             endTime: dayjs(activeTimeRange.to).unix(),
-            pageSize: 1000,
+            pageSize: 10000,
             pageNumber: 1,
         })
 
