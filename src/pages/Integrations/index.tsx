@@ -1,4 +1,4 @@
-import { Grid, Metric } from '@tremor/react'
+import { Grid, Metric, Title } from '@tremor/react'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import {
     useOnboardApiV1CatalogMetricsList,
@@ -41,7 +41,8 @@ export default function Integrations() {
                     loading={metricsLoading}
                 />
             </Grid>
-            <Grid numItemsMd={2} numItemsLg={3} className="gap-3">
+            <Title>Connectors</Title>
+            <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6">
                 {connectors?.map((connector) => (
                     <ConnectorCard
                         connector={connector.name}
