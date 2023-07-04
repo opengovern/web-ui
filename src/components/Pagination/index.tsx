@@ -28,7 +28,7 @@ export default function Pagination({
                 previous
             </Button>
             <Text className="hidden md:flex">
-                page {currentPage} of {pageCount}
+                Page {currentPage} of {pageCount}
             </Text>
             <Button
                 disabled={currentPage >= pageCount}

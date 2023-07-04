@@ -54,7 +54,6 @@ export default function Summary({ accounts, loading }: IProps) {
                     )}
                     {!loading && (
                         <div>
-                            <Title>Resource Count</Title>
                             <List className="mt-2">
                                 {topAccounts.map(
                                     (item: {
