@@ -7,6 +7,7 @@ import { ReactComponent as AWSIcon } from '../../../assets/icons/elements-supple
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import DrawerPanel from '../../../components/DrawerPanel'
+import Spinner from '../../../components/Spinner'
 
 interface IConnection {
     id: string
@@ -22,6 +23,7 @@ interface IConnectorList {
     open: boolean
     onClose: any
     connections: any
+    loading: boolean
     selectedConnectionsProps: SelectionResult | undefined
 }
 
@@ -119,6 +121,7 @@ export default function ConnectionList({
     onClose,
     connections,
     selectedConnectionsProps,
+    loading,
 }: IConnectorList) {
     const gridRef = useRef<AgGridReact<IConnection>>(null)
     const [isConnectionSelected, setIsConnectionSelected] = useState(false)
@@ -298,47 +301,53 @@ export default function ConnectionList({
             onClose={() => handleClose()}
             title="Connections"
         >
-            <Flex
-                flexDirection="col"
-                alignItems="start"
-                className="h-full w-full"
-            >
-                <Flex justifyContent="start" className="mb-4">
-                    {tags.map((tag) => (
-                        <Button
-                            size="xs"
-                            variant={
-                                selectedProvider.label === tag.label &&
-                                !isConnectionSelected
-                                    ? 'primary'
-                                    : 'secondary'
-                            }
-                            onClick={() => {
-                                if (selectedProvider === tag)
-                                    setSelectedProvider({
-                                        label: 'All',
-                                        value: '',
-                                    })
-                                else setSelectedProvider(tag)
-                            }}
-                            className="mr-2 w-14"
-                        >
-                            {tag.label}
-                        </Button>
-                    ))}
+            {loading ? (
+                <Flex justifyContent="center" className="mt-56">
+                    <Spinner />
                 </Flex>
-                <Text className="mb-2">
-                    {selectionText(gridRef.current?.api)}
-                </Text>
-                <div className="ag-theme-alpine h-full w-full">
-                    <AgGridReact
-                        ref={gridRef}
-                        rowMultiSelectWithClick
-                        // domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                    />
-                </div>
-            </Flex>
+            ) : (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className="h-full w-full"
+                >
+                    <Flex justifyContent="start" className="mb-4">
+                        {tags.map((tag) => (
+                            <Button
+                                size="xs"
+                                variant={
+                                    selectedProvider.label === tag.label &&
+                                    !isConnectionSelected
+                                        ? 'primary'
+                                        : 'secondary'
+                                }
+                                onClick={() => {
+                                    if (selectedProvider === tag)
+                                        setSelectedProvider({
+                                            label: 'All',
+                                            value: '',
+                                        })
+                                    else setSelectedProvider(tag)
+                                }}
+                                className="mr-2 w-14"
+                            >
+                                {tag.label}
+                            </Button>
+                        ))}
+                    </Flex>
+                    <Text className="mb-2">
+                        {selectionText(gridRef.current?.api)}
+                    </Text>
+                    <div className="ag-theme-alpine h-full w-full">
+                        <AgGridReact
+                            ref={gridRef}
+                            rowMultiSelectWithClick
+                            // domLayout="autoHeight"
+                            gridOptions={gridOptions}
+                        />
+                    </div>
+                </Flex>
+            )}
         </DrawerPanel>
     )
 }
