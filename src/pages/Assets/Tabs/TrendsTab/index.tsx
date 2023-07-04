@@ -4,7 +4,10 @@ import dayjs from 'dayjs'
 import GrowthTrend from './GrowthTrend'
 import CardWithList from '../../../../components/Blocks/CardWithList'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import { useInventoryApiV2ServicesMetricList } from '../../../../api/inventory.gen'
+import {
+    useInventoryApiV2ServicesMetricList,
+    useInventoryApiV2ResourcesRegionsSummaryList,
+} from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
 
 type IProps = {
@@ -65,6 +68,26 @@ export default function TrendsTab({
             pageNumber: 1,
             sortBy: 'growth_rate',
         })
+    const { response: regionConsumption, isLoading: loadingRegionConsumption } =
+        useInventoryApiV2ResourcesRegionsSummaryList({
+            connector: provider,
+            connectionId: connections,
+            startTime: dayjs(timeRange.from).unix(),
+            endTime: dayjs(timeRange.to).unix(),
+            pageSize: 5,
+            pageNumber: 1,
+            sortBy: 'resource_count',
+        })
+    const { response: regionGrowth, isLoading: loadingRegionGrowth } =
+        useInventoryApiV2ResourcesRegionsSummaryList({
+            connector: provider,
+            connectionId: connections,
+            startTime: dayjs(timeRange.from).unix(),
+            endTime: dayjs(timeRange.to).unix(),
+            pageSize: 5,
+            pageNumber: 1,
+            sortBy: 'growth_rate',
+        })
     const consumptionAccountData = (data: any) => {
         const result: { name: any; value: any }[] = []
         if (!data) return result
@@ -91,6 +114,19 @@ export default function TrendsTab({
         }
         return result
     }
+    const consumptionRegionData = (data: any) => {
+        const result: { name: any; value: any }[] = []
+        if (!data) return result
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < data.length; i++) {
+            const element = data[i]
+            result.push({
+                name: element.location,
+                value: element.resourceCount,
+            })
+        }
+        return result
+    }
     const growthAccountData = (data: any) => {
         const result: { name: any; value: any }[] = []
         if (!data) return result
@@ -108,7 +144,7 @@ export default function TrendsTab({
             }
             result.push({
                 name: element.providerConnectionName,
-                value: growthRate,
+                value: `${growthRate.toFixed(2)} %`,
             })
         }
         return result
@@ -119,7 +155,7 @@ export default function TrendsTab({
         // eslint-disable-next-line no-plusplus
         for (let i = 0; i < data.length; i++) {
             const element = data[i]
-            let growthRate
+            let growthRate = 0
             try {
                 growthRate =
                     ((element.resource_count - element.old_resource_count) /
@@ -130,7 +166,29 @@ export default function TrendsTab({
             }
             result.push({
                 name: element.service_label,
-                value: growthRate,
+                value: `${growthRate.toFixed(2)} %`,
+            })
+        }
+        return result
+    }
+    const growthRegionData = (data: any) => {
+        const result: { name: any; value: any }[] = []
+        if (!data) return result
+        // eslint-disable-next-line no-plusplus
+        for (let i = 0; i < data.length; i++) {
+            const element = data[i]
+            let growthRate
+            try {
+                growthRate =
+                    ((element.resourceCount - element.resourceOldCount) /
+                        element.resourceOldCount) *
+                    100
+            } catch (e) {
+                growthRate = 0
+            }
+            result.push({
+                name: element.location,
+                value: `${growthRate.toFixed(2)} %`,
             })
         }
         return result
@@ -143,18 +201,22 @@ export default function TrendsTab({
         const ServicesData = consumptionServicesData(
             servicesConsumption?.services
         )
+        const RegionData = consumptionRegionData(regionConsumption?.regions)
         const gAccountData = growthAccountData(accountsGrowth?.connections)
         const GServicesData = growthServicesData(servicesGrowth?.services)
+        const GRegionData = growthRegionData(regionGrowth?.regions)
         // console.log('data', data)
         setConsumptionData({
             ...consumptionData,
             Accounts: AccountData,
             Services: ServicesData,
+            Regions: RegionData,
         })
         setGrowthData({
             ...growthData,
             Accounts: gAccountData,
             Services: GServicesData,
+            Regions: GRegionData,
         })
     }, [
         accountsConsumption,
@@ -167,7 +229,9 @@ export default function TrendsTab({
         loadingAccountsConsumption ||
         loadingAccountsGrowth ||
         loadingServicesConsumption ||
-        loadingServicesGrowth
+        loadingServicesGrowth ||
+        loadingRegionConsumption ||
+        loadingRegionGrowth
     ) {
         return (
             <Flex justifyContent="center" className="mt-56">
@@ -199,6 +263,7 @@ export default function TrendsTab({
                         title="Top by Growth"
                         tabs={['Accounts', 'Services', 'Regions']}
                         data={growthData}
+                        isPercentage
                         // provider={selectedConnections.provider}
                         // connections={connections}
                         // count={count}

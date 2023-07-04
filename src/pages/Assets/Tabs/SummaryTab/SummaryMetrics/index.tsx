@@ -37,21 +37,18 @@ export default function SummaryMetrics({
             <SummaryCard
                 title="Accounts"
                 metric={String(numericDisplay(accounts?.connectionCount))}
-                metricPrev="922"
                 url="accounts-detail"
                 loading={accountIsLoading}
             />
             <SummaryCard
                 title="Services"
                 metric={String(numericDisplay(services?.totalCount))}
-                metricPrev="149"
                 url="services-detail"
                 loading={servicesIsLoading}
             />
             <SummaryCard
                 title="Resources"
                 metric={String(numericDisplay(accounts?.totalResourceCount))}
-                metricPrev="4.34M"
                 loading={accountIsLoading}
             />
         </Grid>

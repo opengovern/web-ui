@@ -34,6 +34,7 @@ type IProps = {
     data?: any
     loading?: boolean
     listTitle?: string
+    isPercentage?: boolean
 }
 
 export default function CardWithList({
@@ -42,6 +43,7 @@ export default function CardWithList({
     data = {},
     loading = false,
     listTitle = '',
+    isPercentage = false,
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
 
@@ -63,7 +65,11 @@ export default function CardWithList({
                         <Text>{item.name}</Text>
                         {item.value && (
                             <Flex justifyContent="end" className="space-x-2">
-                                <Text>{numericDisplay(item.value)}</Text>
+                                {!isPercentage ? (
+                                    <Text>{numericDisplay(item.value)}</Text>
+                                ) : (
+                                    <Text>{item.value}</Text>
+                                )}
                             </Flex>
                         )}
                     </ListItem>
