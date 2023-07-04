@@ -25,7 +25,7 @@ export default function Pagination({
                 icon={ArrowLongLeftIcon}
                 onClick={onClickPrevious}
             >
-                previous
+                Previous
             </Button>
             <Text className="hidden md:flex">
                 Page {currentPage} of {pageCount}
@@ -37,7 +37,7 @@ export default function Pagination({
                 icon={ArrowLongRightIcon}
                 iconPosition="right"
             >
-                next
+                Next
             </Button>
         </Flex>
     )
