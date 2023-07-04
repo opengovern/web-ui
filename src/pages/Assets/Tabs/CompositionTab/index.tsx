@@ -1,7 +1,5 @@
 import {
     BadgeDelta,
-    Bold,
-    Button,
     Card,
     DeltaType,
     Divider,
@@ -16,31 +14,23 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useEffect, useState } from 'react'
-import { ChartPieIcon } from '@heroicons/react/24/outline'
-import { ArrowLongRightIcon } from '@heroicons/react/24/solid'
+import { useState } from 'react'
 import dayjs from 'dayjs'
-import { useInventoryApiV2ResourcesCompositionDetail } from '../../../api/inventory.gen'
-import { numericDisplay } from '../../../utilities/numericDisplay'
-import Spinner from '../../Spinner'
+import { useInventoryApiV2ResourcesCompositionDetail } from '../../../../api/inventory.gen'
+import { numericDisplay } from '../../../../utilities/numericDisplay'
+import Spinner from '../../../../components/Spinner'
 
 type IProps = {
-    // key: string,
     top: number
     connector?: string
     connectionId?: string[]
     time?: any
-    data?: any
-    prevData?: any
 }
-export default function Composition({
-    // key,
+export default function CompositionTab({
     top,
     connector,
     connectionId,
     time,
-    data,
-    prevData,
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const query = {
@@ -75,7 +65,6 @@ export default function Composition({
             })
         }
 
-        // add others key-value pair
         outputArray.push({
             name: 'others',
             value: oldData
@@ -126,8 +115,32 @@ export default function Composition({
                 deltaType,
             })
         }
+        let delta
+        try {
+            delta =
+                ((inputObject.others.count - inputObject.others.old_count) /
+                    inputObject.others.old_count) *
+                100
+        } catch (e) {
+            delta = 0
+        }
+
+        if (delta < 0) {
+            deltaType = 'moderateDecrease'
+        } else if (delta > 0) {
+            deltaType = 'moderateIncrease'
+        } else {
+            deltaType = 'unchanged'
+        }
+        outputArray.push({
+            name: 'Others',
+            value: inputObject.others.count,
+            delta: Math.abs(delta).toFixed(2),
+            deltaType,
+        })
         return outputArray
     }
+
     function prevCompositionList(inputObject: any) {
         const outputArray = []
         if (!inputObject) {
@@ -146,101 +159,84 @@ export default function Composition({
                 value: inputObject.top_values[key].old_count,
             })
         }
+        outputArray.push({
+            name: 'Others',
+            value: inputObject.others.old_count,
+        })
         return outputArray
     }
 
     const nowDataList = nowCompositionList(composition)
     const prevDataList = prevCompositionList(composition)
 
-    if (isLoading) {
-        return (
-            <Flex justifyContent="center" className="mt-56">
-                <Spinner />
-            </Flex>
-        )
-    }
-
-    return (
+    return isLoading ? (
+        <Flex justifyContent="center" className="mt-56">
+            <Spinner />
+        </Flex>
+    ) : (
         <Card>
-            <Flex
-                className="space-x-8"
-                justifyContent="between"
-                alignItems="center"
-            >
+            <Flex flexDirection="row">
                 <Title>Overview</Title>
-                <span>
-                    <TabGroup
-                        index={selectedIndex}
-                        onIndexChange={setSelectedIndex}
-                    >
-                        <TabList variant="solid">
-                            <Tab>Now</Tab>
-                            <Tab>Before</Tab>
-                        </TabList>
-                    </TabGroup>
-                </span>
+                <TabGroup
+                    index={selectedIndex}
+                    onIndexChange={setSelectedIndex}
+                    className="w-fit"
+                >
+                    <TabList variant="solid">
+                        <Tab>Now</Tab>
+                        <Tab>Before</Tab>
+                    </TabList>
+                </TabGroup>
             </Flex>
-            <Text className="mt-8">Total count</Text>
+            <Text className="mt-3">Total count</Text>
             <Metric>{numericDisplay(composition?.total_count)}</Metric>
             <Divider />
-            <div className="flex flex-row justify-between items-center">
+            <Flex flexDirection="row">
                 <div>
-                    <Text className="mt-8">
-                        <Bold>Resource Allocation</Bold>
-                    </Text>
+                    <Title>Resource Allocation</Title>
                     <Text>{composition?.total_value_count} Asset</Text>
-                    <div className="mt-6">
-                        <DonutChart
-                            data={compositionData(composition, selectedIndex)}
-                            showAnimation={false}
-                            category="value"
-                            index="name"
-                            className="w-64 h-64"
-                            // valueFormatter={valueFormatter}
-                        />
-                    </div>
+                    <DonutChart
+                        data={compositionData(composition, selectedIndex)}
+                        category="value"
+                        index="name"
+                        className="w-64 h-64 mt-6"
+                        // valueFormatter={valueFormatter}
+                    />
                 </div>
-
-                <div>
-                    <List className="mt-4 w-[30vw]">
-                        {selectedIndex === 0
-                            ? nowDataList.map((item) => (
-                                  <ListItem key={item.name}>
-                                      <Text>{item.name}</Text>
-                                      <Flex
-                                          justifyContent="end"
-                                          className="space-x-2"
-                                      >
-                                          <Text>
-                                              {numericDisplay(item.value)}
-                                          </Text>
-                                          {item.delta && (
-                                              <BadgeDelta
-                                                  deltaType={item.deltaType}
-                                                  size="xs"
-                                              >
-                                                  {item.delta} %
-                                              </BadgeDelta>
-                                          )}
-                                      </Flex>
-                                  </ListItem>
-                              ))
-                            : prevDataList.map((item) => (
-                                  <ListItem key={item.name}>
-                                      <Text>{item.name}</Text>
-                                      <Flex
-                                          justifyContent="end"
-                                          className="space-x-2"
-                                      >
-                                          <Text>
-                                              {numericDisplay(item.value)}
-                                          </Text>
-                                      </Flex>
-                                  </ListItem>
-                              ))}
-                    </List>
-                </div>
-            </div>
+                <List className="w-2/5">
+                    {selectedIndex === 0
+                        ? nowDataList.map((item) => (
+                              <ListItem key={item.name}>
+                                  <Text>{item.name}</Text>
+                                  <Flex
+                                      justifyContent="end"
+                                      className="space-x-2"
+                                  >
+                                      <Text>{numericDisplay(item.value)}</Text>
+                                      {item.delta && (
+                                          <BadgeDelta
+                                              deltaType={item.deltaType}
+                                              size="xs"
+                                          >
+                                              {item.delta} %
+                                          </BadgeDelta>
+                                      )}
+                                  </Flex>
+                              </ListItem>
+                          ))
+                        : prevDataList.map((item) => (
+                              <ListItem key={item.name}>
+                                  <Text>{item.name}</Text>
+                                  <Flex
+                                      justifyContent="end"
+                                      className="space-x-2"
+                                  >
+                                      <Text>{numericDisplay(item.value)}</Text>
+                                  </Flex>
+                              </ListItem>
+                          ))}
+                </List>
+            </Flex>
         </Card>
     )
 }

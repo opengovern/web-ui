@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import {
+    BadgeDelta,
     Card,
+    DeltaType,
+    Flex,
     SearchSelect,
     SearchSelectItem,
     Title,
-    BadgeDelta,
-    DeltaType,
-    Flex,
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -90,20 +90,18 @@ export default function GrowthTrend({
 
     return (
         <Card>
-            <Flex justifyContent="between" alignItems="start">
-                <div className="flex justify-normal gap-x-2">
-                    <Title className="min-w-[7vw] truncate">
-                        Growth Trend{' '}
-                    </Title>
+            <Flex flexDirection="row">
+                <Flex justifyContent="start" className="gap-x-2">
+                    <Title>Growth Trend </Title>
                     <BadgeDelta deltaType={growthDeltaType}>
                         {numericDisplay(growthDelta)}
                     </BadgeDelta>
-                </div>
+                </Flex>
                 <SearchSelect
                     onValueChange={(e) => setSelectedResourceCategory(e)}
                     value={selectedResourceCategory}
                     placeholder="Source Selection"
-                    className="max-w-xs mb-6"
+                    className="max-w-xs"
                 >
                     {categories.map((category) => (
                         <SearchSelectItem

@@ -36,7 +36,7 @@ const getBadgeColor = (status: string) => {
         case 'DELETED':
         case 'DELETING':
         case 'PROVISIONING_FAILED':
-            return 'red'
+            return 'rose'
         default:
             return 'slate'
     }

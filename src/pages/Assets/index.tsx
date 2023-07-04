@@ -21,7 +21,7 @@ import { useOnboardApiV1SourcesList } from '../../api/onboard.gen'
 import ConnectionList from './ConnectionList'
 import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
-import CompositionTab from './Tabs/CompositionTab/indedx'
+import CompositionTab from './Tabs/CompositionTab'
 
 export default function Assets() {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)

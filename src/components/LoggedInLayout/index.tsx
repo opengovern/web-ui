@@ -75,6 +75,7 @@ type IProps = {
         | 'insight'
         | 'assets'
         | 'spend'
+        | 'integration'
         | 'compliance'
         | 'settings'
     showSidebar?: boolean

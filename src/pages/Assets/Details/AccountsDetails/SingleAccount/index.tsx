@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Bold, Card, List, ListItem, Metric, Text, Title } from '@tremor/react'
+import {
+    Bold,
+    Card,
+    Col,
+    Flex,
+    Grid,
+    List,
+    ListItem,
+    Text,
+    Title,
+} from '@tremor/react'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
 import { useOnboardApiV1CatalogMetricsList } from '../../../../../api/onboard.gen'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import Spinner from '../../../../../components/Spinner'
+import SummaryCard from '../../../../../components/Cards/SummaryCard'
 
 interface ISingleAccount {
     topAccounts: any
@@ -58,53 +69,47 @@ export default function SingleAccount({
 
     return (
         <main>
-            <div className="mt-[24px] mb-[24px] flex flex-col gap-y-[24px]">
+            <Flex flexDirection="col" className="my-3 gap-y-3">
                 <Title>
                     {connection?.providerConnectionName ||
                         connection.providerConnectionID ||
                         connection.id ||
                         ''}
                 </Title>
-                <div className="flex flex-row gap-x-[24px]">
-                    <Card>
-                        <Text className="font-medium">Resource Count</Text>
-                        {!topAccountLoading ? (
-                            <Metric>
-                                {numericDisplay(
-                                    topAccounts?.totalResourceCount
-                                )}
-                            </Metric>
-                        ) : (
-                            <Spinner />
+                <Grid
+                    numItemsMd={2}
+                    numItemsLg={3}
+                    className="gap-3 mt-6 mb-10"
+                >
+                    <SummaryCard
+                        title="Resource Count"
+                        metric={String(
+                            numericDisplay(topAccounts?.totalResourceCount)
                         )}
-                    </Card>
-                    <Card>
-                        <Text className="font-medium">Total Accounts</Text>
-                        {!isLoading ? (
-                            <Metric>
-                                {numericDisplay(topMetrics?.totalConnections)}
-                            </Metric>
-                        ) : (
-                            <Spinner />
+                        url="accounts-detail"
+                        loading={topAccountLoading}
+                    />
+                    <SummaryCard
+                        title="Total Accounts"
+                        metric={String(
+                            numericDisplay(topMetrics?.totalConnections)
                         )}
-                    </Card>
-                    <Card>
-                        <Text className="font-medium">
-                            Total Unhealthy Accounts
-                        </Text>
-                        {!isLoading ? (
-                            <Metric>
-                                {numericDisplay(
-                                    topMetrics?.unhealthyConnections
-                                )}
-                            </Metric>
-                        ) : (
-                            <Spinner />
+                        url="accounts-detail"
+                        loading={isLoading}
+                    />
+                    <SummaryCard
+                        title="Total Unhealthy Accounts"
+                        metric={String(
+                            numericDisplay(topMetrics?.unhealthyConnections)
                         )}
-                    </Card>
-                </div>
-                <div className="flex -flex-row gap-x-[24px]">
-                    <Card className="w-[50vw]">
+                        url="accounts-detail"
+                        loading={isLoading}
+                    />
+                </Grid>
+            </Flex>
+            <Grid numItems={3} numItemsLg={5} className="gap-3">
+                <Col numColSpan={3}>
+                    <Card>
                         <Title>Main Data</Title>
                         <List className="mt-2">
                             <ListItem>
@@ -141,6 +146,8 @@ export default function SingleAccount({
                             </ListItem>
                         </List>
                     </Card>
+                </Col>
+                <Col numColSpan={3} numColSpanLg={3}>
                     <Card className="w-[40vw]">
                         <Title>Meta Data</Title>
                         {metaData ? (
@@ -149,8 +156,8 @@ export default function SingleAccount({
                             <Spinner />
                         )}
                     </Card>
-                </div>
-            </div>
+                </Col>
+            </Grid>
         </main>
     )
 }
