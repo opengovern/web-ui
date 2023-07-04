@@ -79,7 +79,7 @@ export default function CostMetrics({
             <div className="flex justify-between gap-x-2">
                 <div className="flex flex-row justify-start items-start">
                     <Title>
-                        Cost {selectedIndex ? 'Accounts' : 'Services'} metrics{' '}
+                        Cost {selectedIndex ? 'Accounts' : 'Services'} Metrics{' '}
                     </Title>
                     <Button
                         variant="light"

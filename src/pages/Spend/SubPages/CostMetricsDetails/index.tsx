@@ -307,7 +307,7 @@ export default function CostMetricsDetails({
             {/* </Flex> */}
             <Card className="mt-10">
                 <Flex>
-                    <Title>Resources Metrics</Title>
+                    <Title>Cost Metrics</Title>
                     <div className="flex flex-row">
                         <SearchSelect
                             onValueChange={(e) =>
