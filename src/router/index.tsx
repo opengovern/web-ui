@@ -12,6 +12,7 @@ import AccountsDetails from '../pages/Assets/Details/AccountsDetails'
 import Spend from '../pages/Spend'
 import ServicesDetails from '../pages/Assets/Details/ServicesDetails'
 import ResourceMetricsDetails from '../pages/Assets/Details/ResourceMetricsDetails'
+import Integrations from '../pages/Integrations'
 
 const routes = [
     {
@@ -81,6 +82,11 @@ const authRoutes = [
         key: 'insight detail',
         path: '/:ws/insight/:id',
         component: InsightDetail,
+    },
+    {
+        key: 'integrations',
+        path: '/:ws/integration',
+        component: Integrations,
     },
     {
         key: 'settings',

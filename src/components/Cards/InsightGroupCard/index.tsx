@@ -44,7 +44,7 @@ const generateBadge = (met: any) => {
         return (
             <Callout
                 title="Time period is not covered by insight"
-                color="red"
+                color="rose"
                 icon={ExclamationCircleIcon}
                 className="w-full border-0 text-xs leading-5 truncate max-w-full"
             />
@@ -54,7 +54,7 @@ const generateBadge = (met: any) => {
         return (
             <Callout
                 title="End value is not available"
-                color="red"
+                color="rose"
                 icon={ExclamationCircleIcon}
                 className="border-0 text-xs leading-5 truncate max-w-full"
             />
@@ -64,7 +64,7 @@ const generateBadge = (met: any) => {
         return (
             <Callout
                 title="Prior value is not available"
-                color="red"
+                color="rose"
                 icon={ExclamationCircleIcon}
                 className="border-0 text-xs leading-5 truncate max-w-full"
             />

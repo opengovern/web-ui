@@ -206,7 +206,7 @@ const MemberDetails: React.FC<IMemberDetails> = ({
                     <Button
                         loading={loading}
                         onClick={() => setDeleteConfirmation(true)}
-                        color="red"
+                        color="rose"
                     >
                         Delete
                     </Button>

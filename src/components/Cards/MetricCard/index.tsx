@@ -21,7 +21,7 @@ export default function CMBCard({
             <Flex alignItems="start">
                 {title && <Text className="truncate">{title}</Text>}
                 {delta ? (
-                    <BadgeDelta deltaType={deltaType}>{delta} %</BadgeDelta>
+                    <BadgeDelta deltaType={deltaType}>{delta}%</BadgeDelta>
                 ) : null}
             </Flex>
             <Flex

@@ -217,7 +217,7 @@ export default function TopServicesTrend({
                 yAxisWidth={60}
                 categories={accountNames}
                 data={trendData}
-                colors={['indigo', 'green', 'yellow', 'red', 'blue']}
+                colors={['indigo', 'green', 'yellow', 'rose', 'blue']}
                 showAnimation
             />
         </Card>
