@@ -66,18 +66,18 @@ const Settings: React.FC<any> = () => {
 
     return (
         <LoggedInLayout currentPage="settings">
-            <Flex flexDirection="row" alignItems="start" className="min-h-full">
-                <Flex flexDirection="row" className="inset-y-0 h-full w-64">
+            <Flex flexDirection="row" alignItems="start">
+                <Flex flexDirection="row" className="w-fit">
                     <Flex
                         flexDirection="col"
                         alignItems="start"
-                        className="grow h-full gap-y-5 overflow-y-auto overflow-x-hidden pr-6"
+                        className="gap-y-5"
                     >
                         <Metric className="text-gray-800">Settings</Metric>
-                        <nav className="flex flex-1 flex-col w-52">
+                        <nav className="flex flex-col w-56">
                             <ul className="flex flex-col gap-y-7">
                                 <li>
-                                    <ul className=" space-y-1.5">
+                                    <ul className="space-y-1.5">
                                         {navigation.map((item) => (
                                             <li key={item.name}>
                                                 {item.page === '' ? (
@@ -116,7 +116,7 @@ const Settings: React.FC<any> = () => {
                         </nav>
                     </Flex>
                 </Flex>
-                <main className="w-full h-full pl-6">
+                <main className="w-full pl-6">
                     {/* <Metric className="text-gray-800 mb-1 opacity-0">
                         placeholder :D
                     </Metric> */}
