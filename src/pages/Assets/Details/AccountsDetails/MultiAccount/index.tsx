@@ -6,8 +6,9 @@ import {
     ICellRendererParams,
 } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import { Flex } from '@tremor/react'
+import { Button, Flex } from '@tremor/react'
 import { useRef, useState } from 'react'
+import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import {
     numberGroupedDisplay,
@@ -20,9 +21,11 @@ import DrawerPanel from '../../../../../components/DrawerPanel'
 import { ConnectionDetails } from './ConnectionDetails'
 import { ReactComponent as AzureIcon } from '../../../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
+import { agGridDateComparator } from '../../../../../utilities/dateComparator'
 
 interface IMultiAccount {
-    topAccounts: any
+    topAccounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     topAccountLoading: boolean
     selectedConnections: any
     activeTimeRange: any
@@ -42,14 +45,18 @@ interface IAccount {
 
 const columns: ColDef[] = [
     {
-        field: 'providerIcon',
-        headerName: ' ',
+        field: 'connector',
+        headerName: 'Connector',
         width: 50,
-        sortable: false,
-        filter: false,
+        sortable: true,
+        filter: true,
         cellStyle: { padding: 0 },
         cellRenderer: (params: ICellRendererParams<IAccount>) => (
-            <Flex className="w-full h-full">
+            <Flex
+                justifyContent="center"
+                alignItems="center"
+                className="w-full h-full"
+            >
                 {params.data?.connector === 'Azure' ? (
                     <AzureIcon />
                 ) : (
@@ -60,7 +67,7 @@ const columns: ColDef[] = [
     },
     {
         field: 'providerConnectionName',
-        headerName: 'Cloud Account Name',
+        headerName: 'Name',
         sortable: true,
         filter: true,
         resizable: true,
@@ -68,15 +75,7 @@ const columns: ColDef[] = [
     },
     {
         field: 'providerConnectionID',
-        headerName: 'Cloud Account ID',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'id',
-        headerName: 'Connection ID',
+        headerName: 'ID',
         sortable: true,
         filter: true,
         resizable: true,
@@ -94,34 +93,68 @@ const columns: ColDef[] = [
         field: 'cost',
         headerName: 'Cost',
         sortable: true,
-        filter: true,
+        filter: 'agNumberColumnFilter',
         resizable: true,
         flex: 1,
         cellDataType: 'text',
+        valueFormatter: (param) => {
+            return priceDisplay(param.value) || ''
+        },
     },
     {
         field: 'resourceCount',
         headerName: 'Resources',
         sortable: true,
+        filter: 'agNumberColumnFilter',
+        resizable: true,
+        flex: 1,
+        cellDataType: 'number',
+        valueFormatter: (param) => {
+            return numberGroupedDisplay(param.value) || ''
+        },
+    },
+    {
+        field: 'lastInventory',
+        headerName: 'Last Inventory Date',
+        sortable: true,
+        filter: 'agDateColumnFilter',
+        filterParams: {
+            comparator: agGridDateComparator,
+        },
+        resizable: true,
+        flex: 1,
+        valueFormatter: (param) => {
+            if (param.value) {
+                return new Date(Date.parse(param.value)).toLocaleDateString(
+                    'en-US'
+                )
+            }
+            return ''
+        },
+    },
+    {
+        field: 'id',
+        headerName: 'Connection ID',
+        sortable: true,
         filter: true,
         resizable: true,
+        hide: true,
         flex: 1,
     },
     {
         field: 'onboardDate',
         headerName: 'Onboard Date',
         sortable: true,
-        filter: true,
+        filter: 'agDateColumnFilter',
+        filterParams: {
+            comparator: agGridDateComparator,
+        },
         resizable: true,
+        hide: true,
         flex: 1,
-    },
-    {
-        field: 'lastInventory',
-        headerName: 'Last Inventory Date',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
+        valueFormatter: (param) => {
+            return new Date(Date.parse(param.value)).toLocaleDateString('en-US')
+        },
     },
 ]
 
@@ -153,6 +186,32 @@ export default function MultiAccount({
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
+        suppressExcelExport: true,
+        sideBar: {
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                // {
+                //     id: 'customStats',
+                //     labelDefault: 'Custom Stats',
+                //     labelKey: 'customStats',
+                //     // toolPanel: CustomStatsToolPanel,
+                // },
+            ],
+            defaultToolPanel: '',
+        },
         getRowHeight: (params) => 50,
         onGridReady: (params) => {
             if (topAccountLoading) {
@@ -167,48 +226,29 @@ export default function MultiAccount({
         },
     }
 
-    const conns = (accounts?.connections || []).map((data) => {
-        const newData: IAccount = {
-            connector: data.connector || '',
-            providerConnectionName: data.providerConnectionName || '',
-            providerConnectionID: data.providerConnectionID || '',
-            id: data.id || '',
-            lifecycleState: data.lifecycleState || '',
-            cost: priceDisplay(data.cost) || '',
-            resourceCount: numberGroupedDisplay(data.resourceCount) || '',
-            onboardDate: data.onboardDate || '',
-            lastInventory: data.lastInventory || '',
-        }
-
-        if (data.onboardDate) {
-            newData.onboardDate = new Date(
-                Date.parse(data.onboardDate)
-            ).toLocaleDateString('en-US')
-        }
-
-        if (data.lastInventory) {
-            newData.lastInventory = new Date(
-                Date.parse(data.lastInventory)
-            ).toLocaleDateString('en-US')
-        }
-        return newData
-    })
-
     return (
         <>
-            <div className="mt-5">
-                <Summary
-                    accounts={topAccounts?.connections}
-                    loading={topAccountLoading}
+            <Summary accounts={topAccounts} loading={topAccountLoading} />
+            <div className="ag-theme-alpine mt-4">
+                <Flex
+                    justifyContent="end"
+                    className="w-100 mb-3"
+                    alignItems="end"
+                >
+                    <Button
+                        variant="secondary"
+                        onClick={() => gridRef?.current?.api.exportDataAsCsv()}
+                        icon={ArrowDownOnSquareIcon}
+                    >
+                        Download
+                    </Button>
+                </Flex>
+                <AgGridReact
+                    ref={gridRef}
+                    domLayout="autoHeight"
+                    gridOptions={gridOptions}
+                    rowData={accounts?.connections || []}
                 />
-                <div className="ag-theme-alpine mt-10">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                        rowData={conns}
-                    />
-                </div>
             </div>
             <DrawerPanel
                 open={drawerOpen}

@@ -32,11 +32,11 @@ interface SelectionResult {
 
 const columns: ColDef[] = [
     {
-        field: 'providerIcon',
-        headerName: 'Provider',
+        field: 'connector',
+        headerName: 'Connector',
         width: 50,
-        sortable: false,
-        filter: false,
+        sortable: true,
+        filter: true,
         cellStyle: { padding: 0 },
         cellRenderer: (params: ICellRendererParams<IConnection>) => {
             return (
