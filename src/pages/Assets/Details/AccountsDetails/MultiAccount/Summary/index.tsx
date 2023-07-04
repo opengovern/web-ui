@@ -16,7 +16,10 @@ import {
 import { numericDisplay } from '../../../../../../utilities/numericDisplay'
 import { useOnboardApiV1CatalogMetricsList } from '../../../../../../api/onboard.gen'
 import Spinner from '../../../../../../components/Spinner'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+} from '../../../../../../api/api'
 import { ReactComponent as AzureIcon } from '../../../../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
 import {
@@ -25,7 +28,9 @@ import {
 } from '../../../../../../utilities/deltaType'
 
 type IProps = {
-    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    accounts:
+        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | undefined
     loading: boolean
 }
 
@@ -34,7 +39,7 @@ export default function Summary({ accounts, loading }: IProps) {
         GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     >([])
     useEffect(() => {
-        setTopAccounts(accounts || [])
+        setTopAccounts(accounts?.connections || [])
     }, [accounts])
     const { response: topMetrics, isLoading } =
         useOnboardApiV1CatalogMetricsList()
@@ -48,13 +53,13 @@ export default function Summary({ accounts, loading }: IProps) {
                                 <Text className="truncate">Top Accounts</Text>
                                 <BadgeDelta
                                     deltaType={badgeTypeByDelta(
-                                        topMetrics?.totalConnections,
-                                        topMetrics?.totalConnections
+                                        accounts?.oldConnectionCount,
+                                        accounts?.connectionCount
                                     )}
                                 >
                                     {percentageByChange(
-                                        topMetrics?.totalConnections,
-                                        topMetrics?.totalConnections
+                                        accounts?.oldConnectionCount,
+                                        accounts?.connectionCount
                                     )}{' '}
                                     %
                                 </BadgeDelta>
@@ -64,9 +69,9 @@ export default function Summary({ accounts, loading }: IProps) {
                                 alignItems="baseline"
                                 className="truncate space-x-3"
                             >
-                                <Metric>{topMetrics?.totalConnections}</Metric>
+                                <Metric>{accounts?.connectionCount}</Metric>
                                 <Text className="truncate">
-                                    from {topMetrics?.totalConnections}
+                                    from {accounts?.oldConnectionCount}
                                 </Text>
                             </Flex>
                         </Card>
