@@ -12,6 +12,7 @@ import SettingsMembers from './Members'
 import SettingsWorkspaceAPIKeys from './APIKeys'
 import SettingsProfile from './Profile'
 import SettingsOrganization from './Organization'
+import SettingsQueries from './Queries'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -37,6 +38,11 @@ const navigation = [
         name: 'API Keys',
         page: 'apikeys',
         component: <SettingsWorkspaceAPIKeys />,
+    },
+    {
+        name: 'Queries',
+        page: 'queries',
+        component: <SettingsQueries />,
     },
     {
         name: 'Organization',
