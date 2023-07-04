@@ -98,7 +98,7 @@ export default function TopServicesTrend({
         <Card>
             <Flex justifyContent="between" alignItems="start">
                 <div className="flex justify-normal gap-x-2 items-center">
-                    <Title className="min-w-[7vw]">Top Services Trend </Title>
+                    <Title className="min-w-[7vw]">Top Services Trend</Title>
                 </div>
             </Flex>
             <MultipleAreaCharts

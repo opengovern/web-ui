@@ -1,12 +1,12 @@
 import {
-    Card,
-    Metric,
-    Text,
-    Flex,
-    Title,
     Bold,
+    Card,
+    Flex,
     List,
     ListItem,
+    Metric,
+    Text,
+    Title,
 } from '@tremor/react'
 import React, { useEffect, useState } from 'react'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
@@ -41,7 +41,7 @@ export default function Summary({
             <div className="flex flex-row gap-x-10 mt-4">
                 <Card key="TopXServices" className="h-fit">
                     <Flex justifyContent="start" className="space-x-4">
-                        <Title className="truncate">Top Services</Title>
+                        <Title className="truncate">Popular Services</Title>
                     </Flex>
                     <List className="mt-2 mb-2">
                         {topServices.map((thing: any) => (
@@ -58,7 +58,9 @@ export default function Summary({
                 </Card>
                 <Card key="TopXFastest" className="h-fit">
                     <Flex justifyContent="start" className="space-x-4">
-                        <Title className="truncate">Top Growing Services</Title>
+                        <Title className="truncate">
+                            Top Fast-Growing Services
+                        </Title>
                     </Flex>
                     <List className="mt-2 mb-2">
                         {topFastest.map((thing: any) => (
