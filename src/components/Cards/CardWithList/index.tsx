@@ -1,6 +1,5 @@
 import {
     Bold,
-    Button,
     Card,
     Flex,
     List,
@@ -11,18 +10,14 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { ArrowLongRightIcon } from '@heroicons/react/24/solid'
 import {
     JSXElementConstructor,
     Key,
     ReactElement,
     ReactNode,
-    useEffect,
     useState,
 } from 'react'
-import { useInventoryApiV1ResourcesTopRegionsList } from '../../../api/inventory.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
-import { REGIONS } from '../../../utilities/regions'
 import Spinner from '../../Spinner'
 
 type IProps = {
@@ -46,7 +41,6 @@ export default function CardWithList({
     isPercentage = false,
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
-
     // eslint-disable-next-line consistent-return
     const tabDetails = (tab: string) => {
         try {
@@ -81,7 +75,13 @@ export default function CardWithList({
         }
     }
 
-    const render = () => (
+    return loading ? (
+        <Card>
+            <Flex className="h-96">
+                <Spinner />
+            </Flex>
+        </Card>
+    ) : (
         <Card>
             <Flex alignItems="start">
                 <Title>{title}</Title>
@@ -89,7 +89,7 @@ export default function CardWithList({
             <TabGroup
                 index={selectedIndex}
                 onIndexChange={setSelectedIndex}
-                className="mt-6"
+                className="mt-3"
             >
                 <TabList>
                     {/* {formattedData && */}
@@ -99,22 +99,12 @@ export default function CardWithList({
                     ))}
                 </TabList>
             </TabGroup>
-            <List className="mt-4">
-                <Flex className="mt-8" justifyContent="between">
+            <List>
+                <Flex justifyContent="between">
                     <Bold>{listTitle}</Bold>
                 </Flex>
                 {tabDetails(tabs[selectedIndex])}
             </List>
         </Card>
-    )
-
-    return loading ? (
-        <Card>
-            <div className="flex items-center justify-center h-96">
-                <Spinner />
-            </div>
-        </Card>
-    ) : (
-        render()
     )
 }

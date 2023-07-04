@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Flex, Grid } from '@tremor/react'
+import { Flex, Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import GrowthTrend from './GrowthTrend'
-import CardWithList from '../../../../components/Blocks/CardWithList'
+import CardWithList from '../../../../components/Cards/CardWithList'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 import {
-    useInventoryApiV2ServicesMetricList,
     useInventoryApiV2ResourcesRegionsSummaryList,
+    useInventoryApiV2ServicesMetricList,
 } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
 
@@ -242,31 +242,21 @@ export default function TrendsTab({
 
     return (
         <div className="mt-5">
-            {/* <div className="h-96" /> */}
             <GrowthTrend categories={categories} timeRange={timeRange} />
-            <Grid numItemsMd={2} className="mt-10 gap-6 flex justify-between">
+            <Grid numItemsMd={2} className="mt-3 gap-3 flex justify-between">
                 <div className="w-full">
-                    {/* Placeholder to set height */}
-                    {/* <Card className="h-40" /> */}
                     <CardWithList
                         title="Top by Consumption"
                         tabs={['Accounts', 'Services', 'Regions']}
                         data={consumptionData}
-                        // provider={selectedConnections.provider}
-                        // connections={connections}
-                        // count={count}
                     />
                 </div>
                 <div className="w-full">
-                    {/* Placeholder to set height */}
                     <CardWithList
                         title="Top by Growth"
                         tabs={['Accounts', 'Services', 'Regions']}
                         data={growthData}
                         isPercentage
-                        // provider={selectedConnections.provider}
-                        // connections={connections}
-                        // count={count}
                     />
                 </div>
             </Grid>
