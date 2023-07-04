@@ -59,7 +59,12 @@ export default function SingleAccount({
     return (
         <main>
             <div className="mt-[24px] mb-[24px] flex flex-col gap-y-[24px]">
-                <Title>{connection?.credentialName}</Title>
+                <Title>
+                    {connection?.providerConnectionName ||
+                        connection.providerConnectionID ||
+                        connection.id ||
+                        ''}
+                </Title>
                 <div className="flex flex-row gap-x-[24px]">
                     <Card>
                         <Text className="font-medium">Resource Count</Text>

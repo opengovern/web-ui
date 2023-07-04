@@ -63,7 +63,7 @@ export default function AccountsDetails() {
                 />
             ) : (
                 <MultiAccount
-                    topAccounts={topAccounts}
+                    topAccounts={topAccounts?.connections || []}
                     topAccountLoading={topAccountLoading}
                     selectedConnections={selectedConnections}
                     activeTimeRange={activeTimeRange}
