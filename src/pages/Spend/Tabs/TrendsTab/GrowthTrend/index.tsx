@@ -11,10 +11,10 @@ import {
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import AreaCharts from '../../../../../components/Charts/AreaCharts'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
+import Chart from '../../../../../components/Charts'
 
 type IProps = {
     categories: {
@@ -124,13 +124,13 @@ export default function GrowthTrend({
                     <Spinner />
                 </div>
             ) : (
-                <AreaCharts
+                <Chart
                     className="mt-4 h-80"
                     index="date"
+                    type="line"
                     yAxisWidth={60}
                     categories={['count']}
                     data={fixTime(data) || []}
-                    colors={['indigo']}
                     showAnimation
                 />
             )}
