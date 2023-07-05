@@ -2,9 +2,7 @@ import React, { useEffect } from 'react'
 import { Card, Flex, Title } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import {
-    useInventoryApiV2CostTrendList,
-} from '../../../../../api/inventory.gen'
+import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
