@@ -30,10 +30,13 @@ export default function Assets() {
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1SourcesList()
-    const { response: inventoryCategories } =
+    const { response: inventoryCategories, isLoading: categoriesLoading } =
         useInventoryApiV2ResourcesTagList()
 
     const categoryOptions = useMemo(() => {
+        if (categoriesLoading) {
+            return [{ label: 'Loading', value: 'Loading' }]
+        }
         if (!inventoryCategories)
             return [{ label: 'no data', value: 'no data' }]
         return [{ label: 'All Categories', value: 'All Categories' }].concat(
