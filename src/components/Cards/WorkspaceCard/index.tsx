@@ -21,6 +21,7 @@ import {
 } from '../../../api/workspace.gen'
 import ConfirmModal from '../../Modal/ConfirmModal'
 import { numericDisplay } from '../../../utilities/numericDisplay'
+import Spinner from '../../Spinner'
 
 interface IWorkSpace {
     workspace: any
@@ -71,7 +72,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const [suspendConfirmation, setSuspendConfirmation] =
         useState<boolean>(false)
-    const { response: workspaceDetail } =
+    const { response: workspaceDetail, isLoading: workspaceLoading } =
         useWorkspaceApiV1WorkspacesLimitsDetail(workspace.name)
     const {
         isLoading: suspendLoading,
@@ -191,7 +192,9 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                                     <Text color="slate" className="mb-3">
                                         {name}
                                     </Text>
-                                    <Title>{value}</Title>
+                                    <Title>
+                                        {workspaceLoading ? <Spinner /> : value}
+                                    </Title>
                                 </Flex>
                             </Card>
                         </Col>
