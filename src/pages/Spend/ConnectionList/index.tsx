@@ -1,15 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-<<<<<<< HEAD
-import { Bold, Button, Grid, Text, Flex } from '@tremor/react'
+import { Button, Flex, Text } from '@tremor/react'
 import { ReactComponent as AzureIcon } from '../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../icons/elements-supplemental-provider-logo-aws-original.svg'
-=======
-import { Button, Flex, Text } from '@tremor/react'
-import { ReactComponent as AzureIcon } from '../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
-import { ReactComponent as AWSIcon } from '../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
->>>>>>> 22e80a68137c2eeed5134a7dd834ea3be29792b2
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import DrawerPanel from '../../../components/DrawerPanel'
