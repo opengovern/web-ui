@@ -4,6 +4,10 @@ import {
     Card,
     DateRangePicker,
     Flex,
+    SearchSelect,
+    SearchSelectItem,
+    Select,
+    SelectItem,
     Subtitle,
     Text,
     Title,
@@ -11,7 +15,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
@@ -189,6 +193,24 @@ export default function InsightDetail() {
     const navigate = useNavigate()
     const { id } = useParams()
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [detailsDate, setDetailsDate] = useState<string>('')
+
+    const start = () => {
+        if (detailsDate === '') {
+            return activeTimeRange.from || new Date()
+        }
+        const d = new Date(0)
+        d.setUTCSeconds(parseInt(detailsDate, 10) - 1)
+        return d
+    }
+    const end = () => {
+        if (detailsDate === '') {
+            return activeTimeRange.to || activeTimeRange.from || new Date()
+        }
+        const d = new Date(0)
+        d.setUTCSeconds(parseInt(detailsDate, 10) + 1)
+        return d
+    }
     const query = {
         ...(activeTimeRange.from && {
             startTime: dayjs(activeTimeRange.from).unix(),
@@ -201,12 +223,17 @@ export default function InsightDetail() {
                   endTime: dayjs(activeTimeRange.from).unix(),
               }),
     }
-    const { response: insightTrend } = useComplianceApiV1InsightTrendDetail(
-        String(id),
-        query
-    )
+    const { response: insightTrend, isLoading: trendLoading } =
+        useComplianceApiV1InsightTrendDetail(String(id), query)
+
+    const detailsQuery = {
+        ...(activeTimeRange.from && {
+            startTime: dayjs(start()).unix(),
+            endTime: dayjs(end()).unix(),
+        }),
+    }
     const { response: insightDetail, isLoading: detailLoading } =
-        useComplianceApiV1InsightDetail(String(id), query)
+        useComplianceApiV1InsightDetail(String(id), detailsQuery)
 
     const columns =
         insightDetail?.result && insightDetail?.result[0]?.details
@@ -228,9 +255,30 @@ export default function InsightDetail() {
         { name: insightDetail?.shortTitle, path: '', current: true },
     ]
 
+    const trendDates = () => {
+        return (
+            insightTrend?.map((item) => {
+                const dt = item.timestamp || 0
+                const d = new Date(0)
+                d.setUTCSeconds(dt)
+                return (
+                    <SelectItem value={dt.toString()}>
+                        {d.toLocaleString()}
+                    </SelectItem>
+                )
+            }) || []
+        )
+    }
+
+    useEffect(() => {
+        if (detailLoading) {
+            gridRef.current?.api.showLoadingOverlay()
+        }
+    }, [detailLoading])
+
     return (
         <LoggedInLayout currentPage="insight">
-            {detailLoading ? (
+            {trendLoading && detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
                 </Flex>
@@ -297,11 +345,24 @@ export default function InsightDetail() {
                     </Card>
                     <Flex flexDirection="row" className="mt-6">
                         <Title>Results</Title>
-                        <Downloader
-                            Headers={columns}
-                            Rows={rows?.rows ? rows.rows : []}
-                            Name={insightDetail?.shortTitle}
-                        />
+                        <Flex className="w-1/3">
+                            <Select
+                                className="mr-4"
+                                onValueChange={setDetailsDate}
+                                placeholder={
+                                    detailsDate === ''
+                                        ? 'Latest'
+                                        : end().toLocaleString()
+                                }
+                            >
+                                <>{trendDates()}</>
+                            </Select>
+                            <Downloader
+                                Headers={columns}
+                                Rows={rows?.rows ? rows.rows : []}
+                                Name={insightDetail?.shortTitle}
+                            />
+                        </Flex>
                     </Flex>
                     <div className="w-full mt-3 ag-theme-alpine">
                         <AgGridReact

@@ -77,13 +77,13 @@ const MemberDetails: React.FC<IMemberDetails> = ({
             title: 'Member Since',
             value: new Date(
                 Date.parse(user.createdAt || Date.now().toString())
-            ).toLocaleDateString('en-US'),
+            ).toLocaleDateString(),
         },
         {
             title: 'Last Activity',
             value: new Date(
                 Date.parse(user.lastActivity || Date.now().toString())
-            ).toLocaleDateString('en-US'),
+            ).toLocaleDateString(),
         },
         {
             title: 'Status',

@@ -84,7 +84,7 @@ const SettingsMetadata: React.FC<any> = () => {
             title: 'Creation Date',
             value: new Date(
                 Date.parse(currentWorkspace?.createdAt || Date.now().toString())
-            ).toLocaleDateString('en-US'),
+            ).toLocaleDateString(),
         },
         {
             title: 'Workspace Tier',
