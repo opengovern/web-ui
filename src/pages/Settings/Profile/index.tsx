@@ -53,7 +53,7 @@ const SettingsProfile: React.FC<any> = () => {
                                 Date.parse(
                                     user?.updated_at || Date.now().toString()
                                 )
-                            ).toLocaleDateString('en-US')}
+                            ).toLocaleDateString()}
                         </Text>
                     </Flex>
                 </ListItem>
@@ -67,7 +67,7 @@ const SettingsProfile: React.FC<any> = () => {
                                 Date.parse(
                                     user?.updated_at || Date.now().toString()
                                 )
-                            ).toLocaleDateString('en-US')}
+                            ).toLocaleDateString()}
                         </Text>
                     </Flex>
                 </ListItem>

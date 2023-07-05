@@ -127,7 +127,7 @@ export default function SingleAccount({
                                                 Date.parse(
                                                     connection?.onboardDate
                                                 )
-                                            ).toLocaleDateString('en-US')}
+                                            ).toLocaleDateString()}
                                     </Bold>
                                 </Text>
                             </ListItem>
@@ -140,7 +140,7 @@ export default function SingleAccount({
                                                 Date.parse(
                                                     connection?.lastInventory
                                                 )
-                                            ).toLocaleDateString('en-US')}
+                                            ).toLocaleDateString()}
                                     </Bold>
                                 </Text>
                             </ListItem>
