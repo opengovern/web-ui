@@ -26,13 +26,16 @@ import {
     useComplianceApiV1InsightTrendDetail,
 } from '../../../api/compliance.gen'
 import { timeAtom } from '../../../store'
-import AreaCharts from '../../../components/Charts/AreaCharts'
 import Downloader from './Downloader'
-import { numericDisplay } from '../../../utilities/numericDisplay'
+import {
+    numberGroupedDisplay,
+    numericDisplay,
+} from '../../../utilities/numericDisplay'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import Spinner from '../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
+import Chart from '../../../components/Charts'
 
 const chartData = (inputData: any) => {
     const data = []
@@ -301,17 +304,18 @@ export default function InsightDetail() {
                                 flexDirection="row"
                                 alignItems="end"
                                 justifyContent="end"
+                                className="m-3"
                             >
                                 {!!insightDetail?.totalResultValue && (
                                     <Title className="mr-1">
-                                        {numericDisplay(
+                                        {numberGroupedDisplay(
                                             insightDetail?.totalResultValue || 0
                                         )}
                                     </Title>
                                 )}
                                 {!!insightDetail?.oldTotalResultValue && (
                                     <Subtitle className="text-sm mb-0.5">
-                                        {`Prior value: ${numericDisplay(
+                                        {`From: ${numberGroupedDisplay(
                                             insightDetail?.oldTotalResultValue ||
                                                 0
                                         )}`}
@@ -326,13 +330,14 @@ export default function InsightDetail() {
                     </Flex>
                     <Card>
                         <Title>Insight count</Title>
-                        <AreaCharts
+                        <Chart
                             className="mt-4 h-80"
                             index="date"
+                            type="line"
                             yAxisWidth={60}
                             categories={['count']}
                             data={chartData(insightTrend)}
-                            colors={['indigo']}
+                            // colors={['indigo']}
                             // curveType="natural"
                         />
                     </Card>

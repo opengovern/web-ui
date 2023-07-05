@@ -10,9 +10,9 @@ import {
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import AreaCharts from '../../../../../components/Charts/AreaCharts'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2ResourcesTrendList } from '../../../../../api/inventory.gen'
+import Chart from '../../../../../components/Charts'
 
 type IProps = {
     categories: {
@@ -113,14 +113,14 @@ export default function GrowthTrend({
                     ))}
                 </SearchSelect>
             </Flex>
-            <AreaCharts
+            <Chart
                 // title="Resource Count"
                 className="mt-4 h-80"
                 index="date"
+                type="line"
                 yAxisWidth={60}
                 categories={['Resource Count']}
                 data={fixTime(data) || []}
-                colors={['indigo']}
             />
         </Card>
     )

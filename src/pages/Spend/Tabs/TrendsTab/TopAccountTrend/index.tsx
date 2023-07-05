@@ -2,10 +2,12 @@ import React, { useEffect } from 'react'
 import { Card, Flex, Title } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import AreaCharts from '../../../../../components/Charts/AreaCharts'
-import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
+import {
+    useInventoryApiV2CostTrendList,
+} from '../../../../../api/inventory.gen'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import Spinner from '../../../../../components/Spinner'
+import Chart from '../../../../../components/Charts'
 
 type IProps = {
     categories: {
@@ -208,13 +210,13 @@ export default function TopServicesTrend({
                 </div>
             </Flex>
             {trendData.length > 0 ? (
-                <AreaCharts
+                <Chart
                     className="mt-4 h-80"
                     index="date"
+                    type="area"
                     yAxisWidth={60}
                     categories={accountNames}
                     data={trendData}
-                    colors={['indigo', 'green', 'yellow', 'rose', 'blue']}
                     showAnimation
                 />
             ) : (
