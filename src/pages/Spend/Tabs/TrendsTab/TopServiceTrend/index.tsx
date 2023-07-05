@@ -9,6 +9,7 @@ import {
     useInventoryApiV2ServicesCostTrendList,
 } from '../../../../../api/inventory.gen'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../../../api/api'
+import Spinner from '../../../../../components/Spinner'
 
 type IProps = {
     categories: {
@@ -101,15 +102,21 @@ export default function TopServicesTrend({
                     <Title className="min-w-[7vw]">Top Services Trend</Title>
                 </div>
             </Flex>
-            <MultipleAreaCharts
-                className="mt-4 h-80"
-                index="date"
-                yAxisWidth={60}
-                categories={serviceNames}
-                data={trendData}
-                colors={['indigo', 'green', 'yellow', 'rose', 'blue']}
-                showAnimation
-            />
+            {trendData.length > 0 ? (
+                <MultipleAreaCharts
+                    className="mt-4 h-80"
+                    index="date"
+                    yAxisWidth={60}
+                    categories={serviceNames}
+                    data={trendData}
+                    colors={['indigo', 'green', 'yellow', 'rose', 'blue']}
+                    showAnimation
+                />
+            ) : (
+                <div className="flex items-center justify-center">
+                    <Spinner />
+                </div>
+            )}
         </Card>
     )
 }
