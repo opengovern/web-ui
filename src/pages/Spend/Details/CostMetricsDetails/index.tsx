@@ -16,35 +16,32 @@ import {
     TabGroup,
     TabList,
     Tab,
+    DateRangePicker,
 } from '@tremor/react'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import { selectedResourceCategoryAtom } from '../../../../store'
-import { useInventoryApiV2CostMetricList } from '../../../../api/inventory.gen'
+import { useNavigate } from 'react-router-dom'
+import {
+    filterAtom,
+    selectedResourceCategoryAtom,
+    timeAtom,
+} from '../../../../store'
+import {
+    useInventoryApiV2CostMetricList,
+    useInventoryApiV2ResourcesTagList,
+} from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import LoggedInLayout from '../../../../components/LoggedInLayout'
+import Breadcrumbs from '../../../../components/Breadcrumbs'
 
-interface IProps {
-    provider: any
-    timeRange: any
-    connection: any
-    categories: {
-        label: string
-        value: string
-    }[]
-    pageSize: any
-}
-
-export default function CostMetricsDetails({
-    provider,
-    timeRange,
-    pageSize,
-    categories,
-    connection,
-}: IProps) {
+export default function CostMetricsDetails() {
+    const navigate = useNavigate()
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
@@ -56,23 +53,46 @@ export default function CostMetricsDetails({
             ? ''
             : selectedResourceCategory
     const query = {
-        ...(provider && { connector: provider }),
-        ...(connection && { connectionId: connection }),
+        ...(selectedConnections.provider && {
+            connector: selectedConnections.provider,
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-        ...(timeRange.from && { startTime: dayjs(timeRange.from).unix() }),
-        ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
-        ...(pageSize && { pageSize }),
+        ...(activeTimeRange.from && {
+            startTime: dayjs(activeTimeRange.from).unix(),
+        }),
+        ...(activeTimeRange.to && {
+            endTime: dayjs(activeTimeRange.to).unix(),
+        }),
+        pageSize: 10000,
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const { response: metrics } = useInventoryApiV2CostMetricList(query)
+    const summaryQuery = {
+        pageNumber: 1,
+        ...(selectedConnections.provider && {
+            connector: selectedConnections.provider,
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(activeTimeRange.from && {
+            startTime: dayjs(activeTimeRange.from).unix(),
+        }),
+        ...(activeTimeRange.to && {
+            endTime: dayjs(activeTimeRange.to).unix(),
+        }),
+        pageSize: 10000,
+    }
     const { response: accounts, isLoading: isAccountsLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
-            connector: provider,
-            connectionId: connection,
-            startTime: timeRange[0],
-            endTime: timeRange[1],
-            pageSize: 10000,
-            pageNumber: 1,
-        })
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        useOnboardApiV1ConnectionsSummaryList(summaryQuery)
+    const { response: inventoryCategories } =
+        useInventoryApiV2ResourcesTagList()
     const percentage = (a?: number, b?: number): number => {
         return a && b ? ((a - b) / b) * 100 : 0
     }
@@ -141,6 +161,28 @@ export default function CostMetricsDetails({
         setAccTableDdata(newData)
         console.log('accounts', newData)
     }, [accounts])
+
+    const categoryOptions = useMemo(() => {
+        if (!inventoryCategories)
+            return [{ label: 'no data', value: 'no data' }]
+        return [{ label: 'All Categories', value: 'All Categories' }].concat(
+            inventoryCategories.category.map((categoryName) => ({
+                label: categoryName,
+                value: categoryName,
+            }))
+        )
+    }, [inventoryCategories])
+
+    const breadcrumbsPages = [
+        {
+            name: 'Spend',
+            path: () => {
+                navigate(-1)
+            },
+            current: false,
+        },
+        { name: 'Spend metrics', path: '', current: true },
+    ]
 
     const renderTable = (type: string | 'Service' | 'Account') => {
         return (
@@ -296,15 +338,21 @@ export default function CostMetricsDetails({
     }
 
     return (
-        <main>
-            {/* <Flex justifyContent="between"> */}
-            {/*    <TextInput */}
-            {/*        icon={MagnifyingGlassIcon} */}
-            {/*        placeholder="Search..." */}
-            {/*        className="max-w-xs" */}
-            {/*        disabled */}
-            {/*    /> */}
-            {/* </Flex> */}
+        <LoggedInLayout currentPage="spend">
+            <Flex
+                flexDirection="row"
+                justifyContent="between"
+                alignItems="center"
+            >
+                <Breadcrumbs pages={breadcrumbsPages} />
+                <DateRangePicker
+                    className="max-w-md"
+                    value={activeTimeRange}
+                    onValueChange={setActiveTimeRange}
+                    enableClear={false}
+                    maxDate={new Date()}
+                />
+            </Flex>
             <Card className="mt-10">
                 <Flex>
                     <Title>Cost Metrics</Title>
@@ -317,7 +365,7 @@ export default function CostMetricsDetails({
                             placeholder="Source Selection"
                             className="max-w-xs mb-6"
                         >
-                            {categories.map((category) => (
+                            {categoryOptions.map((category) => (
                                 <SearchSelectItem
                                     key={category.label}
                                     value={category.value}
@@ -360,6 +408,6 @@ export default function CostMetricsDetails({
                     </div>
                 )}
             </Card>
-        </main>
+        </LoggedInLayout>
     )
 }

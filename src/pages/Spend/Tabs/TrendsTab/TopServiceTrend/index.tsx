@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { Card, Title, Flex } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import MultipleAreaCharts from '../../../../components/Charts/AreaCharts/MultipleAreaCharts'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
+import MultipleAreaCharts from '../../../../../components/Charts/AreaCharts/MultipleAreaCharts'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import {
     useInventoryApiV2CostMetricList,
     useInventoryApiV2ServicesCostTrendList,
-} from '../../../../api/inventory.gen'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../../api/api'
+} from '../../../../../api/inventory.gen'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../../../api/api'
 
 type IProps = {
     categories: {
