@@ -53,7 +53,7 @@ export default function SummaryMetrics({
                 {/* <div className="h-28" /> */}
                 <SummaryCard
                     title="Accounts Total Cost"
-                    metric={`$ ${String(numericDisplay(accounts?.totalCost))}`}
+                    metric={`$ ${accounts?.totalCost?.toFixed(2)}`}
                     // metricPrev={MockData[0].metricPrev}
                     // delta={MockData[0].delta}
                     // deltaType={MockData[0].deltaType}
@@ -68,7 +68,7 @@ export default function SummaryMetrics({
                 {/* <div className="h-28" /> */}
                 <SummaryCard
                     title="Services"
-                    metric={String(numericDisplay(metrics?.total_count))}
+                    metric={String(metrics?.total_count)}
                     // metricPrev={MockData[1].metricPrev}
                     // delta={MockData[1].delta}
                     // deltaType={MockData[1].deltaType}
@@ -78,21 +78,21 @@ export default function SummaryMetrics({
                     loading={metricLoading}
                 />
             </span>
-            <span>
-                {/* Placeholder to set height */}
-                {/* <div className="h-28" /> */}
-                <SummaryCard
-                    title="Total Spend"
-                    metric={`$ ${String(numericDisplay(metrics?.total_cost))}`}
-                    // metricPrev={MockData[2].metricPrev}
-                    // delta={MockData[2].delta}
-                    // deltaType={MockData[2].deltaType}
-                    // areaChartData={[{}]}
-                    // viewMore
-                    // onClick={() => setActiveSubPage('Resources')}
-                    loading={metricLoading}
-                />
-            </span>
+            {/* <span> */}
+            {/*    /!* Placeholder to set height *!/ */}
+            {/*    /!* <div className="h-28" /> *!/ */}
+            {/*    <SummaryCard */}
+            {/*        title="Total Services Spend" */}
+            {/*        metric={`$ ${String(metrics?.total_cost)}`} */}
+            {/*        // metricPrev={MockData[2].metricPrev} */}
+            {/*        // delta={MockData[2].delta} */}
+            {/*        // deltaType={MockData[2].deltaType} */}
+            {/*        // areaChartData={[{}]} */}
+            {/*        // viewMore */}
+            {/*        // onClick={() => setActiveSubPage('Resources')} */}
+            {/*        loading={metricLoading} */}
+            {/*    /> */}
+            {/* </span> */}
         </Grid>
     )
 }
