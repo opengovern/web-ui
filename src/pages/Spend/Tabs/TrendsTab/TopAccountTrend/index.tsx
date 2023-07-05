@@ -1,15 +1,11 @@
 import React, { useEffect } from 'react'
-import { Card, Title, Flex } from '@tremor/react'
+import { Card, Flex, Title } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import AreaCharts from '../../../../components/Charts/AreaCharts'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
-import {
-    useInventoryApiV2CostMetricList,
-    useInventoryApiV2ServicesCostTrendList,
-    useInventoryApiV2CostTrendList,
-} from '../../../../api/inventory.gen'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import AreaCharts from '../../../../../components/Charts/AreaCharts'
+import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
+import Spinner from '../../../../../components/Spinner'
 
 type IProps = {
     categories: {
@@ -211,15 +207,21 @@ export default function TopServicesTrend({
                     <Title className="min-w-[7vw]">Top Accounts Trend </Title>
                 </div>
             </Flex>
-            <AreaCharts
-                className="mt-4 h-80"
-                index="date"
-                yAxisWidth={60}
-                categories={accountNames}
-                data={trendData}
-                colors={['indigo', 'green', 'yellow', 'rose', 'blue']}
-                showAnimation
-            />
+            {trendData.length > 0 ? (
+                <AreaCharts
+                    className="mt-4 h-80"
+                    index="date"
+                    yAxisWidth={60}
+                    categories={accountNames}
+                    data={trendData}
+                    colors={['indigo', 'green', 'yellow', 'rose', 'blue']}
+                    showAnimation
+                />
+            ) : (
+                <div className="flex items-center justify-center">
+                    <Spinner />
+                </div>
+            )}
         </Card>
     )
 }

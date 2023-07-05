@@ -130,9 +130,7 @@ const columns: ColDef[] = [
         flex: 1,
         valueFormatter: (param) => {
             if (param.value) {
-                return new Date(Date.parse(param.value)).toLocaleDateString(
-                    'en-US'
-                )
+                return new Date(Date.parse(param.value)).toLocaleDateString()
             }
             return ''
         },
@@ -158,7 +156,7 @@ const columns: ColDef[] = [
         hide: true,
         flex: 1,
         valueFormatter: (param) => {
-            return new Date(Date.parse(param.value)).toLocaleDateString('en-US')
+            return new Date(Date.parse(param.value)).toLocaleDateString()
         },
     },
 ]

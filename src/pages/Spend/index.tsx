@@ -4,14 +4,13 @@ import {
     Button,
     DateRangePicker,
     Flex,
+    Metric,
     Tab,
     TabGroup,
     TabList,
     TabPanel,
     TabPanels,
-    Title,
-    Bold,
-    Metric,
+    Text,
 } from '@tremor/react'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
@@ -20,25 +19,16 @@ import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import { useOnboardApiV1SourcesList } from '../../api/onboard.gen'
 import ConnectionList from './ConnectionList'
-import SummaryTab from './SummaryTab'
-import TrendsTab from './TrendsTab'
-import CompositionTab from './CompositionTab/indedx'
-import CostMetricsDetails from './SubPages/CostMetricsDetails'
-import Breadcrumbs from '../../components/Breadcrumbs'
+import SummaryTab from './Tabs/SummaryTab'
+import TrendsTab from './Tabs/TrendsTab'
+import CompositionTab from './Tabs/CompositionTab'
 
 const Assets: React.FC<any> = () => {
-    const [activeSubPage, setActiveSubPage] = useState<
-        | 'All'
-        | 'Cost Metrics'
-        | 'Accounts'
-        | 'Services'
-        | 'Regions'
-        | 'Resources'
-    >('All')
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: connections } = useOnboardApiV1SourcesList()
+    const { response: connections, isLoading: connectionsLoading } =
+        useOnboardApiV1SourcesList()
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
 
@@ -60,63 +50,15 @@ const Assets: React.FC<any> = () => {
         } else setOpenDrawer(true)
     }
 
-    const renderSubPageAll = () => {
-        return (
-            <main>
-                <TabGroup className="mt-3">
-                    <TabList>
-                        <Tab>Summary</Tab>
-                        <Tab>Trends</Tab>
-                        <Tab>Composition</Tab>
-                    </TabList>
-                    <TabPanels>
-                        <TabPanel>
-                            <SummaryTab
-                                provider={selectedConnections.provider}
-                                connections={selectedConnections.connections}
-                                categories={categoryOptions}
-                                timeRange={activeTimeRange}
-                                pageSize={1000}
-                                setActiveSubPage={setActiveSubPage}
-                            />
-                        </TabPanel>
-                        <TabPanel>
-                            {/* Main section */}
-                            {/* <div className="h-96" /> */}
-                            <TrendsTab
-                                categories={categoryOptions}
-                                timeRange={activeTimeRange}
-                                connections={selectedConnections.connections}
-                                provider={selectedConnections.provider}
-                            />
-                        </TabPanel>
-                        <TabPanel>
-                            {/* KPI section */}
-                            {/* Placeholder to set height */}
-                            {/* <div className="h-28" /> */}
-                            <CompositionTab
-                                connector={selectedConnections.provider}
-                                top={5}
-                                time={activeTimeRange}
-                            />{' '}
-                            {/* Composition */}
-                        </TabPanel>
-                    </TabPanels>
-                </TabGroup>
-            </main>
-        )
+    const filterText = () => {
+        if (selectedConnections.connections.length > 0) {
+            return <Text>{selectedConnections.connections.length} Filters</Text>
+        }
+        if (selectedConnections.provider !== '') {
+            return <Text>{selectedConnections.provider}</Text>
+        }
+        return 'Filters'
     }
-
-    const breadcrubmsPages = [
-        {
-            name: 'Spend',
-            path: () => {
-                setActiveSubPage('All')
-            },
-            current: false,
-        },
-        { name: activeSubPage, path: '', current: true },
-    ]
 
     return (
         <LoggedInLayout currentPage="spend">
@@ -125,18 +67,15 @@ const Assets: React.FC<any> = () => {
                 justifyContent="between"
                 alignItems="center"
             >
-                {activeSubPage === 'All' ? (
-                    <Metric>Spend</Metric>
-                ) : (
-                    <Breadcrumbs pages={breadcrubmsPages} />
-                )}
-                <div className="flex flex-row justify-start items-start">
+                <Metric>Spend</Metric>
+                <Flex flexDirection="row" justifyContent="end">
                     <DateRangePicker
                         className="max-w-md"
                         value={activeTimeRange}
                         onValueChange={setActiveTimeRange}
                         selectPlaceholder="Time Range"
                         enableClear={false}
+                        maxDate={new Date()}
                     />
                     <Button
                         variant="secondary"
@@ -149,31 +88,50 @@ const Assets: React.FC<any> = () => {
                                 : FunnelIconOutline
                         }
                     >
-                        {selectedConnections.connections.length > 0 ||
-                        selectedConnections.provider !== '' ? (
-                            <Bold>Filters</Bold>
-                        ) : (
-                            'Filters'
-                        )}
+                        {filterText()}
                     </Button>
                     <ConnectionList
                         connections={connections || []}
+                        loading={connectionsLoading}
                         open={openDrawer}
                         selectedConnectionsProps={selectedConnections}
                         onClose={(data: any) => handleDrawer(data)}
                     />
-                </div>
+                </Flex>
             </Flex>
-            {activeSubPage === 'All' && renderSubPageAll()}
-            {activeSubPage === 'Cost Metrics' && (
-                <CostMetricsDetails
-                    provider={selectedConnections.provider}
-                    connection={selectedConnections.connections}
-                    categories={categoryOptions}
-                    timeRange={activeTimeRange}
-                    pageSize={1000}
-                />
-            )}
+            <TabGroup className="mt-3">
+                <TabList>
+                    <Tab>Summary</Tab>
+                    <Tab>Trends</Tab>
+                    <Tab>Composition</Tab>
+                </TabList>
+                <TabPanels>
+                    <TabPanel>
+                        <SummaryTab
+                            provider={selectedConnections.provider}
+                            connections={selectedConnections.connections}
+                            categories={categoryOptions}
+                            timeRange={activeTimeRange}
+                            pageSize={1000}
+                        />
+                    </TabPanel>
+                    <TabPanel>
+                        <TrendsTab
+                            categories={categoryOptions}
+                            timeRange={activeTimeRange}
+                            connections={selectedConnections.connections}
+                            provider={selectedConnections.provider}
+                        />
+                    </TabPanel>
+                    <TabPanel>
+                        <CompositionTab
+                            connector={selectedConnections.provider}
+                            top={5}
+                            time={activeTimeRange}
+                        />
+                    </TabPanel>
+                </TabPanels>
+            </TabGroup>
         </LoggedInLayout>
     )
 }

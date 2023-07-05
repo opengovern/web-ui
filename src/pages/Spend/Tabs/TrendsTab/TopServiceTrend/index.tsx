@@ -2,11 +2,12 @@ import React, { useEffect } from 'react'
 import { Card, Title } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import AreaCharts from '../../../../components/Charts/AreaCharts'
+import AreaCharts from '../../../../../components/Charts/AreaCharts'
 import {
     useInventoryApiV2CostMetricList,
     useInventoryApiV2ServicesCostTrendList,
-} from '../../../../api/inventory.gen'
+} from '../../../../../api/inventory.gen'
+import Spinner from '../../../../../components/Spinner'
 
 type IProps = {
     categories: {
@@ -94,16 +95,23 @@ export default function TopServicesTrend({
 
     return (
         <Card>
+            <Title className="min-w-[7vw]"> Top Services Trend</Title>
             <Title className="min-w-[7vw]">Top Services Trend</Title>
-            <AreaCharts
-                className="mt-4 h-80"
-                index="date"
-                yAxisWidth={60}
-                categories={serviceNames}
-                data={trendData}
-                colors={['indigo', 'green', 'yellow', 'rose', 'blue']}
-                showAnimation
-            />
+            {trendData.length > 0 ? (
+                <AreaCharts
+                    className="mt-4 h-80"
+                    index="date"
+                    yAxisWidth={60}
+                    categories={serviceNames}
+                    data={trendData}
+                    colors={['indigo', 'green', 'yellow', 'rose', 'blue']}
+                    showAnimation
+                />
+            ) : (
+                <div className="flex items-center justify-center">
+                    <Spinner />
+                </div>
+            )}
         </Card>
     )
 }

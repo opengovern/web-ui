@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import {
-    Card,
-    SearchSelect,
-    SearchSelectItem,
-    MultiSelect,
-    MultiSelectItem,
-    Title,
     BadgeDelta,
+    Card,
     DeltaType,
     Flex,
+    SearchSelect,
+    SearchSelectItem,
     Text,
+    Title,
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import AreaCharts from '../../../../components/Charts/AreaCharts'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
-import { useInventoryApiV2CostTrendList } from '../../../../api/inventory.gen'
+import AreaCharts from '../../../../../components/Charts/AreaCharts'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
+import Spinner from '../../../../../components/Spinner'
 
 type IProps = {
     categories: {
@@ -48,7 +47,7 @@ export default function GrowthTrend({
         ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
         ...(connections && { connectionId: connections }),
     }
-    const { response: data } = useInventoryApiV2CostTrendList(query)
+    const { response: data, isLoading } = useInventoryApiV2CostTrendList(query)
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const fixTime = (data: any) => {
         const result: any = []
@@ -120,15 +119,21 @@ export default function GrowthTrend({
                     </div>
                 </div>
             </Flex>
-            <AreaCharts
-                className="mt-4 h-80"
-                index="date"
-                yAxisWidth={60}
-                categories={['count']}
-                data={fixTime(data) || []}
-                colors={['indigo']}
-                showAnimation
-            />
+            {isLoading ? (
+                <div className="flex items-center justify-center">
+                    <Spinner />
+                </div>
+            ) : (
+                <AreaCharts
+                    className="mt-4 h-80"
+                    index="date"
+                    yAxisWidth={60}
+                    categories={['count']}
+                    data={fixTime(data) || []}
+                    colors={['indigo']}
+                    showAnimation
+                />
+            )}
         </Card>
     )
 }

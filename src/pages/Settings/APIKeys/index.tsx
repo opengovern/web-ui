@@ -294,7 +294,7 @@ const APIKeyRecord: React.FC<APIKeyRecordProps> = ({
                     <Text className="text-base">
                         {new Date(
                             Date.parse(item.createdAt || Date.now().toString())
-                        ).toLocaleDateString('en-US')}
+                        ).toLocaleDateString()}
                     </Text>
                     {deleteIsLoading && deleteIsExecuted ? (
                         <Spinner />
