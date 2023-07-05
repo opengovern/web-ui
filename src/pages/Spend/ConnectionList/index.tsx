@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-import { Bold, Button, Grid, Text, Flex } from '@tremor/react'
+import { Button, Flex, Text } from '@tremor/react'
 import { ReactComponent as AzureIcon } from '../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import DrawerPanel from '../../../components/DrawerPanel'
+import Spinner from '../../../components/Spinner'
 
 interface IConnection {
     id: string
@@ -14,12 +15,15 @@ interface IConnection {
     providerConnectionID: string
     providerConnectionName: string
     healthState: string
+    onboardDate: string
+    lastInventory: string
 }
 
 interface IConnectorList {
     open: boolean
     onClose: any
     connections: any
+    loading: boolean
     selectedConnectionsProps: SelectionResult | undefined
 }
 
@@ -30,11 +34,11 @@ interface SelectionResult {
 
 const columns: ColDef[] = [
     {
-        field: 'providerIcon',
-        headerName: ' ',
+        field: 'connector',
+        headerName: 'Connector',
         width: 50,
-        sortable: false,
-        filter: false,
+        sortable: true,
+        filter: true,
         cellStyle: { padding: 0 },
         cellRenderer: (params: ICellRendererParams<IConnection>) => {
             return (
@@ -47,10 +51,11 @@ const columns: ColDef[] = [
                 </div>
             )
         },
+        // checkboxSelection: true,
     },
     {
         field: 'providerConnectionName',
-        headerName: 'Cloud Account Name',
+        headerName: 'Name',
         sortable: true,
         filter: true,
         resizable: true,
@@ -58,7 +63,15 @@ const columns: ColDef[] = [
     },
     {
         field: 'providerConnectionID',
-        headerName: 'Cloud Account ID',
+        headerName: 'ID',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
+        field: 'lifecycleState',
+        headerName: 'State',
         sortable: true,
         filter: true,
         resizable: true,
@@ -66,18 +79,29 @@ const columns: ColDef[] = [
     },
     {
         field: 'id',
-        headerName: 'Connection ID',
+        headerName: 'Kaytu Connection ID',
         sortable: true,
         filter: true,
         resizable: true,
+        hide: true,
         flex: 1,
     },
     {
-        field: 'healthState',
-        headerName: 'Health',
+        field: 'lastInventory',
+        headerName: 'Last Inventory',
         sortable: true,
         filter: true,
         resizable: true,
+        hide: true,
+        flex: 1,
+    },
+    {
+        field: 'onboardDate',
+        headerName: 'Onboard Date',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        hide: true,
         flex: 1,
     },
 ]
@@ -97,15 +121,15 @@ export default function ConnectionList({
     onClose,
     connections,
     selectedConnectionsProps,
+    loading,
 }: IConnectorList) {
     const gridRef = useRef<AgGridReact<IConnection>>(null)
-
     const [isConnectionSelected, setIsConnectionSelected] = useState(false)
-
     const [selectedProvider, setSelectedProvider] = useState({
         label: 'All',
         value: '',
     })
+
     const updateSelectionByProvider = (api: any, newValue: any) => {
         if (newValue.length) {
             if (newValue === 'All') {
@@ -181,12 +205,46 @@ export default function ConnectionList({
         return 'All connections are selected'
     }
 
+    const isRowSelectable = useMemo(() => {
+        return (rowNode: any) => {
+            return rowNode.data
+                ? rowNode.data.lifecycleState === 'ONBOARD'
+                : false
+        }
+    }, [])
+
     const gridOptions: GridOptions<IConnection> = {
         rowData: connections,
         columnDefs: columns,
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
+        sideBar: {
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                // {
+                //     id: 'customStats',
+                //     labelDefault: 'Custom Stats',
+                //     labelKey: 'customStats',
+                //     // toolPanel: CustomStatsToolPanel,
+                // },
+            ],
+            defaultToolPanel: '',
+        },
+
         onGridReady: (params) => {
             initializeSelectedConnections(params.api)
             setSelectedProvider({ ...selectedProvider })
@@ -206,11 +264,21 @@ export default function ConnectionList({
             setSelectedProvider({ label: 'All', value: '' })
         },
         getRowHeight: (params) => 50,
+        isRowSelectable: (rowNode: any) => {
+            return rowNode.data
+                ? rowNode.data.lifecycleState === 'ONBOARD'
+                : false
+        },
+        getRowStyle: (params: any) => {
+            if (params.data.lifecycleState !== 'ONBOARD') {
+                return { opacity: 0.4 }
+            }
+            return { opacity: 1 }
+        },
     }
 
     useEffect(() => {
         updateSelectionByProvider(gridRef.current?.api, selectedProvider.value)
-        console.log('isConnectionSelected', isConnectionSelected)
     }, [selectedProvider])
 
     const handleClose = () => {
@@ -233,8 +301,16 @@ export default function ConnectionList({
             onClose={() => handleClose()}
             title="Connections"
         >
-            <div>
-                <Flex>
+            {loading ? (
+                <Flex justifyContent="center" className="mt-56">
+                    <Spinner />
+                </Flex>
+            ) : (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className="h-full w-full"
+                >
                     <Flex justifyContent="start" className="mb-4">
                         {tags.map((tag) => (
                             <Button
@@ -259,18 +335,19 @@ export default function ConnectionList({
                             </Button>
                         ))}
                     </Flex>
+                    <Text className="mb-2">
+                        {selectionText(gridRef.current?.api)}
+                    </Text>
+                    <div className="ag-theme-alpine h-full w-full">
+                        <AgGridReact
+                            ref={gridRef}
+                            rowMultiSelectWithClick
+                            // domLayout="autoHeight"
+                            gridOptions={gridOptions}
+                        />
+                    </div>
                 </Flex>
-                <div className="mb-2">
-                    <Text>{selectionText(gridRef.current?.api)}</Text>
-                </div>
-                <div className="ag-theme-alpine h-[80vh]">
-                    <AgGridReact
-                        ref={gridRef}
-                        // domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                    />
-                </div>
-            </div>
+            )}
         </DrawerPanel>
     )
 }
