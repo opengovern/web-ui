@@ -63,7 +63,7 @@ const generateBadge = (met: any) => {
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title="Prior value is not available"
+                title="From is not available"
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="border-0 text-xs leading-5 truncate max-w-full"
@@ -121,7 +121,7 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                             )}
                             {!!metric?.oldTotalResultValue && (
                                 <Subtitle className="text-sm mb-0.5">
-                                    {`Prior value: ${numericDisplay(
+                                    {`from ${numericDisplay(
                                         metric?.oldTotalResultValue || 0
                                     )}`}
                                 </Subtitle>

@@ -9,10 +9,12 @@ import {
     TabList,
     TabPanel,
     TabPanels,
+    TextInput,
 } from '@tremor/react'
 import React, { useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import InsightCategories from './InsightCategories'
 import {
@@ -27,6 +29,7 @@ import InsightGroupCard from '../../components/Cards/InsightGroupCard'
 export default function Insights() {
     const [selectedCategory, setSelectedCategory] = useState('')
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [searchQuery, setSearchQuery] = useState('')
 
     const query = {
         ...(activeTimeRange.from && {
@@ -65,11 +68,23 @@ export default function Insights() {
                         <Tab>Insight list</Tab>
                         <Tab>Insight groups</Tab>
                     </TabList>
-                    <InsightCategories
-                        onChange={(category: string) =>
-                            setSelectedCategory(() => category)
-                        }
-                    />
+                    <Grid numItems={3} className="gap-3 mb-6">
+                        <Col numColSpan={2}>
+                            <InsightCategories
+                                onChange={(category: string) =>
+                                    setSelectedCategory(() => category)
+                                }
+                            />
+                        </Col>
+                        <Col>
+                            <TextInput
+                                icon={MagnifyingGlassIcon}
+                                placeholder="Search..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </Col>
+                    </Grid>
                     <TabPanels>
                         <TabPanel>
                             {listLoading ? (
@@ -84,6 +99,19 @@ export default function Insights() {
                                     className="gap-3 w-100"
                                 >
                                     {insightList
+                                        ?.filter(
+                                            (insight) =>
+                                                insight.shortTitle
+                                                    ?.toLowerCase()
+                                                    .includes(
+                                                        searchQuery.toLowerCase()
+                                                    ) ||
+                                                insight.longTitle
+                                                    ?.toLowerCase()
+                                                    .includes(
+                                                        searchQuery.toLowerCase()
+                                                    )
+                                        )
                                         ?.sort((a, b) => {
                                             if (
                                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -138,6 +166,19 @@ export default function Insights() {
                                     className="gap-3 w-100"
                                 >
                                     {insightGroup
+                                        ?.filter(
+                                            (insight) =>
+                                                insight.shortTitle
+                                                    ?.toLowerCase()
+                                                    .includes(
+                                                        searchQuery.toLowerCase()
+                                                    ) ||
+                                                insight.longTitle
+                                                    ?.toLowerCase()
+                                                    .includes(
+                                                        searchQuery.toLowerCase()
+                                                    )
+                                        )
                                         ?.filter((insight) => {
                                             if (
                                                 selectedCategory.length &&
