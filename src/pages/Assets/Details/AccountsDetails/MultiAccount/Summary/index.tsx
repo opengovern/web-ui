@@ -20,8 +20,8 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
 } from '../../../../../../api/api'
-import { ReactComponent as AzureIcon } from '../../../../../../assets/icons/elements-supplemental-provider-logo-azure-new.svg'
-import { ReactComponent as AWSIcon } from '../../../../../../assets/icons/elements-supplemental-provider-logo-aws-original.svg'
+import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
+import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import {
     badgeTypeByDelta,
     percentageByChange,
