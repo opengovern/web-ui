@@ -17,6 +17,7 @@ import {
     TabList,
     Tab,
     DateRangePicker,
+    Button,
 } from '@tremor/react'
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -25,6 +26,8 @@ import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
+import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
+import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 import {
     filterAtom,
     selectedResourceCategoryAtom,
@@ -36,9 +39,13 @@ import {
 } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import {
+    useOnboardApiV1ConnectionsSummaryList,
+    useOnboardApiV1SourcesList,
+} from '../../../../api/onboard.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
+import ConnectionList from '../../ConnectionList'
 
 interface ICostMetric {
     metricName: string
@@ -64,7 +71,7 @@ const columns: ColDef[] = [
         resizable: true,
         flex: 1,
         valueFormatter: (params) => {
-            return `$ ${numericDisplay(params.value)}`
+            return `$ ${params.value}`
         },
     },
     {
@@ -73,6 +80,7 @@ const columns: ColDef[] = [
         sortable: true,
         filter: true,
         resizable: true,
+        hide: true,
         flex: 1,
         valueFormatter: (params) => {
             return `$ ${numericDisplay(params.value)}`
@@ -84,6 +92,7 @@ const columns: ColDef[] = [
         sortable: true,
         filter: true,
         resizable: true,
+        hide: true,
         flex: 1,
         valueFormatter: (params) => {
             return `$ ${numericDisplay(params.value)}`
@@ -125,6 +134,7 @@ export default function CostMetricsDetails() {
     const [tableData, setTableDdata] = useState<any>([])
     const [accTableData, setAccTableDdata] = useState<any>([])
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const [openDrawer, setOpenDrawer] = useState(false)
     const activeCategory =
         selectedResourceCategory === 'All Categories'
             ? ''
@@ -170,6 +180,8 @@ export default function CostMetricsDetails() {
         useOnboardApiV1ConnectionsSummaryList(summaryQuery)
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
+    const { response: connections, isLoading: connectionsLoading } =
+        useOnboardApiV1SourcesList()
     const percentage = (a?: number, b?: number): number => {
         return a && b ? ((a - b) / b) * 100 : 0
     }
@@ -311,6 +323,21 @@ export default function CostMetricsDetails() {
             </div>
         )
     }
+    const filterText = () => {
+        if (selectedConnections.connections.length > 0) {
+            return <Text>{selectedConnections.connections.length} Filters</Text>
+        }
+        if (selectedConnections.provider !== '') {
+            return <Text>{selectedConnections.provider}</Text>
+        }
+        return 'Filters'
+    }
+    const handleDrawer = (data: any) => {
+        if (openDrawer) {
+            setSelectedConnections(data)
+            setOpenDrawer(false)
+        } else setOpenDrawer(true)
+    }
 
     return (
         <LoggedInLayout currentPage="spend">
@@ -326,6 +353,26 @@ export default function CostMetricsDetails() {
                     onValueChange={setActiveTimeRange}
                     enableClear={false}
                     maxDate={new Date()}
+                />
+                <Button
+                    variant="secondary"
+                    className="ml-2 h-9"
+                    onClick={() => setOpenDrawer(true)}
+                    icon={
+                        selectedConnections.connections.length > 0 ||
+                        selectedConnections.provider !== ''
+                            ? FunnelIconSolid
+                            : FunnelIconOutline
+                    }
+                >
+                    {filterText()}
+                </Button>
+                <ConnectionList
+                    connections={connections || []}
+                    loading={connectionsLoading}
+                    open={openDrawer}
+                    selectedConnectionsProps={selectedConnections}
+                    onClose={(data: any) => handleDrawer(data)}
                 />
             </Flex>
             <Card className="mt-10">
