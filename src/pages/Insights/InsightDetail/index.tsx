@@ -1,5 +1,6 @@
 import {
     BadgeDelta,
+    Button,
     Callout,
     Card,
     DateRangePicker,
@@ -193,19 +194,21 @@ export default function InsightDetail() {
 
     const start = () => {
         if (detailsDate === '') {
-            return activeTimeRange.from || new Date()
+            return dayjs(activeTimeRange.from || new Date())
         }
         const d = new Date(0)
         d.setUTCSeconds(parseInt(detailsDate, 10) - 1)
-        return d
+        return dayjs(d)
     }
     const end = () => {
         if (detailsDate === '') {
-            return activeTimeRange.to || activeTimeRange.from || new Date()
+            return dayjs(
+                activeTimeRange.to || activeTimeRange.from || new Date()
+            )
         }
         const d = new Date(0)
         d.setUTCSeconds(parseInt(detailsDate, 10) + 1)
-        return d
+        return dayjs(d)
     }
     const query = {
         ...(activeTimeRange.from && {
@@ -224,8 +227,8 @@ export default function InsightDetail() {
 
     const detailsQuery = {
         ...(activeTimeRange.from && {
-            startTime: dayjs(start()).unix(),
-            endTime: dayjs(end()).unix(),
+            startTime: start().unix(),
+            endTime: end().unix(),
         }),
     }
     const { response: insightDetail, isLoading: detailLoading } =
@@ -337,7 +340,6 @@ export default function InsightDetail() {
                             yAxisWidth={60}
                             categories={['count']}
                             data={chartData(insightTrend)}
-                            // colors={['indigo']}
                             // curveType="natural"
                         />
                     </Card>
@@ -350,7 +352,7 @@ export default function InsightDetail() {
                                 placeholder={
                                     detailsDate === ''
                                         ? 'Latest'
-                                        : end().toLocaleString()
+                                        : end().format('YYYY-MM-DD')
                                 }
                             >
                                 <>{trendDates()}</>
@@ -362,6 +364,36 @@ export default function InsightDetail() {
                             />
                         </Flex>
                     </Flex>
+                    {detailsDate !== '' && (
+                        <Flex
+                            flexDirection="row"
+                            className="bg-blue-50 mt-2 rounded-md pr-6"
+                        >
+                            <Callout
+                                title={`The available data for the result is exclusively limited to ${end().format(
+                                    'MMM DD, YYYY'
+                                )}.`}
+                                color="blue"
+                                icon={ExclamationCircleIcon}
+                                className="w-full text-xs leading-5 truncate max-w-full"
+                            >
+                                <Flex flexDirection="row">
+                                    <Text className="text-blue-800">
+                                        The following results present you with a
+                                        partial result based on the filter you
+                                        have selected.
+                                    </Text>
+                                </Flex>
+                            </Callout>
+                            <Button
+                                variant="secondary"
+                                onClick={() => setDetailsDate('')}
+                            >
+                                Show All
+                            </Button>
+                        </Flex>
+                    )}
+
                     <div className="w-full mt-3 ag-theme-alpine">
                         <AgGridReact
                             ref={gridRef}
