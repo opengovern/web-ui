@@ -31,7 +31,8 @@ const Assets: React.FC<any> = () => {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: connections } = useOnboardApiV1SourcesList()
+    const { response: connections, isLoading: connectionsLoading } =
+        useOnboardApiV1SourcesList()
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
 
@@ -106,6 +107,7 @@ const Assets: React.FC<any> = () => {
                     </Button>
                     <ConnectionList
                         connections={connections || []}
+                        loading={connectionsLoading}
                         open={openDrawer}
                         selectedConnectionsProps={selectedConnections}
                         onClose={(data: any) => handleDrawer(data)}

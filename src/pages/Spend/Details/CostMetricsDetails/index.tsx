@@ -19,10 +19,12 @@ import {
     DateRangePicker,
 } from '@tremor/react'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
+import { AgGridReact } from 'ag-grid-react'
+import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import {
     filterAtom,
     selectedResourceCategoryAtom,
@@ -38,8 +40,83 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.g
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 
+interface ICostMetric {
+    metricName: string
+    from: number
+    count: number
+    changes: number
+}
+
+const columns: ColDef[] = [
+    {
+        field: 'metricName',
+        headerName: 'Metric Name',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
+        field: 'aggregatedCost',
+        headerName: 'Aggregated Cost',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+        valueFormatter: (params) => {
+            return `$ ${numericDisplay(params.value)}`
+        },
+    },
+    {
+        field: 'from',
+        headerName: 'From',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+        valueFormatter: (params) => {
+            return `$ ${numericDisplay(params.value)}`
+        },
+    },
+    {
+        field: 'now',
+        headerName: 'Now',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+        valueFormatter: (params) => {
+            return `$ ${numericDisplay(params.value)}`
+        },
+    },
+    {
+        field: 'changes',
+        headerName: 'Change',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+        cellRenderer: (params: ICellRendererParams<ICostMetric>) => (
+            <Flex justifyContent="center" alignItems="center" className="mt-1">
+                <BadgeDelta
+                    deltaType={
+                        // eslint-disable-next-line no-nested-ternary
+                        params.value > 0
+                            ? 'moderateIncrease'
+                            : params.value < 0
+                            ? 'moderateDecrease'
+                            : 'unchanged'
+                    }
+                >
+                    {params.value}%
+                </BadgeDelta>
+            </Flex>
+        ),
+    },
+]
 export default function CostMetricsDetails() {
     const navigate = useNavigate()
+    const gridRef = useRef<AgGridReact>(null)
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
@@ -184,156 +261,54 @@ export default function CostMetricsDetails() {
         { name: 'Spend metrics', path: '', current: true },
     ]
 
+    const gridOptions: GridOptions = {
+        columnDefs: columns,
+        pagination: true,
+        rowSelection: 'multiple',
+        animateRows: true,
+        getRowHeight: (params) => 50,
+        onGridReady: (params) => {
+            if (tableData.length === 0) {
+                params.api.showLoadingOverlay()
+            }
+        },
+        sideBar: {
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                // {
+                //     id: 'customStats',
+                //     labelDefault: 'Custom Stats',
+                //     labelKey: 'customStats',
+                //     // toolPanel: CustomStatsToolPanel,
+                // },
+            ],
+            defaultToolPanel: '',
+        },
+    }
+
     const renderTable = (type: string | 'Service' | 'Account') => {
         return (
-            <Table className="mt-5">
-                <TableHead>
-                    <TableRow>
-                        <TableHeaderCell>{type} Name</TableHeaderCell>
-                        <TableHeaderCell>Aggregated Cost</TableHeaderCell>
-                        <TableHeaderCell>
-                            Beginning selected date
-                        </TableHeaderCell>
-                        <TableHeaderCell>End selected date</TableHeaderCell>
-                        <TableHeaderCell>Changes</TableHeaderCell>
-                    </TableRow>
-                </TableHead>
-                {type === 'Service' ? (
-                    <TableBody>
-                        {tableData.map(
-                            (item: {
-                                metricName:
-                                    | boolean
-                                    | React.Key
-                                    | React.ReactElement<
-                                          any,
-                                          | string
-                                          | React.JSXElementConstructor<any>
-                                      >
-                                    | Iterable<React.ReactNode>
-                                    | null
-                                    | undefined
-                                aggregatedCost: string | number | undefined
-                                from: string | number | undefined
-                                now: string | number | undefined
-                                deltaType: DeltaType
-                                changes:
-                                    | string
-                                    | number
-                                    | boolean
-                                    | React.ReactElement<
-                                          any,
-                                          | string
-                                          | React.JSXElementConstructor<any>
-                                      >
-                                    | Iterable<React.ReactNode>
-                                    | null
-                                    | undefined
-                            }) => (
-                                <TableRow>
-                                    <TableCell>{item.metricName}</TableCell>
-                                    <TableCell>
-                                        <Text>
-                                            {`$ ${numericDisplay(
-                                                item.aggregatedCost
-                                            )}`}
-                                        </Text>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Text>{`$ ${numericDisplay(
-                                            item.from
-                                        )}`}</Text>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Text>{`$ ${numericDisplay(
-                                            item.now
-                                        )}`}</Text>
-                                    </TableCell>
-                                    <TableCell>
-                                        <BadgeDelta deltaType={item.deltaType}>
-                                            {item.changes !== 0
-                                                ? `${item.changes} %`
-                                                : item.changes}
-                                        </BadgeDelta>
-                                    </TableCell>
-                                </TableRow>
-                            )
-                        )}
-                    </TableBody>
-                ) : (
-                    <TableBody>
-                        {accTableData.map(
-                            (item: {
-                                metricName:
-                                    | boolean
-                                    | React.Key
-                                    | React.ReactElement<
-                                          any,
-                                          | string
-                                          | React.JSXElementConstructor<any>
-                                      >
-                                    | Iterable<React.ReactNode>
-                                    | null
-                                    | undefined
-                                aggregatedCost: string | number | undefined
-                                from: string | number | undefined
-                                now: string | number | undefined
-                                deltaType: DeltaType
-                                changes:
-                                    | string
-                                    | number
-                                    | boolean
-                                    | React.ReactElement<
-                                          any,
-                                          | string
-                                          | React.JSXElementConstructor<any>
-                                      >
-                                    | Iterable<React.ReactNode>
-                                    | null
-                                    | undefined
-                            }) => (
-                                <TableRow>
-                                    <TableCell>{item.metricName}</TableCell>
-                                    <TableCell>
-                                        <Text>
-                                            {item.aggregatedCost
-                                                ? `$ ${numericDisplay(
-                                                      item.aggregatedCost
-                                                  )}`
-                                                : 'N/A'}
-                                        </Text>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Text>
-                                            {item.from
-                                                ? `$ ${numericDisplay(
-                                                      item.from
-                                                  )}`
-                                                : 'N/A'}
-                                        </Text>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Text>
-                                            {item.now
-                                                ? `$ ${numericDisplay(
-                                                      item.now
-                                                  )}`
-                                                : 'N/A'}
-                                        </Text>
-                                    </TableCell>
-                                    <TableCell>
-                                        <BadgeDelta deltaType={item.deltaType}>
-                                            {item.changes !== 0
-                                                ? `${item.changes} %`
-                                                : item.changes}
-                                        </BadgeDelta>
-                                    </TableCell>
-                                </TableRow>
-                            )
-                        )}
-                    </TableBody>
-                )}
-            </Table>
+            <div className="ag-theme-alpine mt-10">
+                <AgGridReact
+                    ref={gridRef}
+                    domLayout="autoHeight"
+                    gridOptions={gridOptions}
+                    rowData={type === 'Service' ? tableData : accTableData}
+                />
+            </div>
         )
     }
 

@@ -16,11 +16,12 @@ import {
     Title,
 } from '@tremor/react'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
-import { ColDef } from 'ag-grid-community'
+import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
+import { AgGridReact } from 'ag-grid-react'
 import {
     filterAtom,
     selectedResourceCategoryAtom,
@@ -34,6 +35,16 @@ import Spinner from '../../../../components/Spinner'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
+
+import 'ag-grid-community/styles/ag-grid.css'
+import 'ag-grid-community/styles/ag-theme-alpine.css'
+
+interface IResourceMetric {
+    metricName: string
+    from: number
+    count: number
+    changes: number
+}
 
 const columns: ColDef[] = [
     {
@@ -53,7 +64,7 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'Count',
+        field: 'count',
         headerName: 'Count',
         sortable: true,
         filter: true,
@@ -61,16 +72,33 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'Change',
+        field: 'changes',
         headerName: 'Change',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
+        cellRenderer: (params: ICellRendererParams<IResourceMetric>) => (
+            <Flex justifyContent="center" alignItems="center" className="mt-1">
+                <BadgeDelta
+                    deltaType={
+                        // eslint-disable-next-line no-nested-ternary
+                        params.value > 0
+                            ? 'moderateIncrease'
+                            : params.value < 0
+                            ? 'moderateDecrease'
+                            : 'unchanged'
+                    }
+                >
+                    {params.value}%
+                </BadgeDelta>
+            </Flex>
+        ),
     },
 ]
 export default function ResourceMetricsDetails() {
     const navigate = useNavigate()
+    const gridRef = useRef<AgGridReact>(null)
 
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
@@ -152,6 +180,44 @@ export default function ResourceMetricsDetails() {
         setTableData(newData)
     }, [metrics])
 
+    const gridOptions: GridOptions = {
+        columnDefs: columns,
+        pagination: true,
+        rowSelection: 'multiple',
+        animateRows: true,
+        getRowHeight: (params) => 50,
+        onGridReady: (params) => {
+            if (tableData.length === 0) {
+                params.api.showLoadingOverlay()
+            }
+        },
+        sideBar: {
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                // {
+                //     id: 'customStats',
+                //     labelDefault: 'Custom Stats',
+                //     labelKey: 'customStats',
+                //     // toolPanel: CustomStatsToolPanel,
+                // },
+            ],
+            defaultToolPanel: '',
+        },
+    }
+
     const breadcrumbsPages = [
         {
             name: 'Assets',
@@ -198,7 +264,7 @@ export default function ResourceMetricsDetails() {
                         ))}
                     </SearchSelect>
                 </Flex>
-                {tableData.length > 0 ? (
+                {/* tableData.length > 0 ? (
                     <Table className="mt-5">
                         <TableHead>
                             <TableRow>
@@ -236,7 +302,15 @@ export default function ResourceMetricsDetails() {
                     <div className="flex justify-center">
                         <Spinner />
                     </div>
-                )}
+                ) */}
+                <div className="ag-theme-alpine mt-10">
+                    <AgGridReact
+                        ref={gridRef}
+                        domLayout="autoHeight"
+                        gridOptions={gridOptions}
+                        rowData={tableData}
+                    />
+                </div>
             </Card>
         </LoggedInLayout>
     )
