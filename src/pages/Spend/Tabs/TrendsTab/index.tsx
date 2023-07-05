@@ -4,12 +4,12 @@ import dayjs from 'dayjs'
 import GrowthTrend from './GrowthTrend'
 import TopAccountTrend from './TopAccountTrend'
 import TopServiceTrend from './TopServiceTrend'
-import CardWithList from '../../../components/Cards/CardWithList'
+import CardWithList from '../../../../components/Cards/CardWithList'
 import {
     useInventoryApiV2ServicesMetricList,
     useInventoryApiV2ServicesCostTrendList,
     useInventoryApiV2CostTrendList,
-} from '../../../api/inventory.gen'
+} from '../../../../api/inventory.gen'
 
 type IProps = {
     categories: any
