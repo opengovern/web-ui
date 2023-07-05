@@ -21,7 +21,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { Link, useParams } from 'react-router-dom'
 import { Flex, Text, Title } from '@tremor/react'
 import { useAtom } from 'jotai'
-import { ReactComponent as KaytuLogo } from '../../assets/icons/logo-dark-sqare-sm-glyph 2.svg'
+import { ReactComponent as KaytuLogo } from '../../icons/logo-dark-sqare-sm-glyph 2.svg'
 import { sideBarCollapsedAtom } from '../../store'
 import CLIMenu from './CLIMenu'
 

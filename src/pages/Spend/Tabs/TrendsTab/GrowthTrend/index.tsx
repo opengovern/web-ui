@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import {
-    Card,
-    SearchSelect,
-    SearchSelectItem,
-    MultiSelect,
-    MultiSelectItem,
-    Title,
     BadgeDelta,
+    Card,
     DeltaType,
     Flex,
+    SearchSelect,
+    SearchSelectItem,
     Text,
+    Title,
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import MultipleAreaCharts from '../../../../../components/Charts/AreaCharts/MultipleAreaCharts'
+import AreaCharts from '../../../../../components/Charts/AreaCharts'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
@@ -126,7 +124,7 @@ export default function GrowthTrend({
                     <Spinner />
                 </div>
             ) : (
-                <MultipleAreaCharts
+                <AreaCharts
                     className="mt-4 h-80"
                     index="date"
                     yAxisWidth={60}

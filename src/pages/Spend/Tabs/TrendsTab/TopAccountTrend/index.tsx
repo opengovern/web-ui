@@ -1,14 +1,9 @@
 import React, { useEffect } from 'react'
-import { Card, Title, Flex } from '@tremor/react'
+import { Card, Flex, Title } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import MultipleAreaCharts from '../../../../../components/Charts/AreaCharts/MultipleAreaCharts'
-import { numericDisplay } from '../../../../../utilities/numericDisplay'
-import {
-    useInventoryApiV2CostMetricList,
-    useInventoryApiV2ServicesCostTrendList,
-    useInventoryApiV2CostTrendList,
-} from '../../../../../api/inventory.gen'
+import AreaCharts from '../../../../../components/Charts/AreaCharts'
+import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import Spinner from '../../../../../components/Spinner'
 
@@ -213,7 +208,7 @@ export default function TopServicesTrend({
                 </div>
             </Flex>
             {trendData.length > 0 ? (
-                <MultipleAreaCharts
+                <AreaCharts
                     className="mt-4 h-80"
                     index="date"
                     yAxisWidth={60}

@@ -18,7 +18,7 @@ export default function Pagination({
     currentPage,
 }: IpProps) {
     return (
-        <Flex className="border-t border-gray-200 pt-2">
+        <Flex className="border-t border-gray-200 pt-2 mt-3">
             <Button
                 disabled={currentPage === 1}
                 variant="light"

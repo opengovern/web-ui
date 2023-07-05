@@ -4,14 +4,12 @@ import {
     Button,
     DateRangePicker,
     Flex,
+    Metric,
     Tab,
     TabGroup,
     TabList,
     TabPanel,
     TabPanels,
-    Title,
-    Bold,
-    Metric,
     Text,
 } from '@tremor/react'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
@@ -24,8 +22,6 @@ import ConnectionList from './ConnectionList'
 import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
-import CostMetricsDetails from './Details/CostMetricsDetails'
-import Breadcrumbs from '../../components/Breadcrumbs'
 
 const Assets: React.FC<any> = () => {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
@@ -63,17 +59,6 @@ const Assets: React.FC<any> = () => {
         }
         return 'Filters'
     }
-
-    // const breadcrubmsPages = [
-    //     {
-    //         name: 'Spend',
-    //         path: () => {
-    //             setActiveSubPage('All')
-    //         },
-    //         current: false,
-    //     },
-    //     { name: activeSubPage, path: '', current: true },
-    // ]
 
     return (
         <LoggedInLayout currentPage="spend">
