@@ -95,7 +95,6 @@ export default function TopServicesTrend({
 
     return (
         <Card>
-            <Title className="min-w-[7vw]"> Top Services Trend</Title>
             <Title className="min-w-[7vw]">Top Services Trend</Title>
             {trendData.length > 0 ? (
                 <AreaCharts
