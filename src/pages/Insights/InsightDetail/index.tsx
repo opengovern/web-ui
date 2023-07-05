@@ -27,6 +27,8 @@ import Downloader from './Downloader'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import Spinner from '../../../components/Spinner'
+import InsightTablePanel from './InsightTablePanel'
+import { snakeCaseToLabel } from '../../../utilities/labelMaker'
 
 const chartData = (inputData: any) => {
     const data = []
@@ -42,16 +44,6 @@ const chartData = (inputData: any) => {
     }
     return data
 }
-
-const capitalizeFirstLetter = (string: string) =>
-    string.charAt(0).toUpperCase() + string.slice(1)
-
-const snakeCaseToLabel = (string: string) =>
-    capitalizeFirstLetter(
-        string
-            .toLowerCase()
-            .replace(/([-_][a-z])/g, (group) => group.replace('_', ' '))
-    )
 
 const insightsHeadersToColumns = (headers: any) => {
     if (headers && headers.length) {
@@ -103,9 +95,10 @@ const calculatePercent = (inputData: any) => {
 
 const gridOptions: GridOptions = {
     pagination: true,
-    // rowSelection: 'multiple',
     animateRows: true,
     getRowHeight: (params: any) => 50,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     sideBar: {
         toolPanels: [
             {
@@ -122,12 +115,12 @@ const gridOptions: GridOptions = {
                 iconKey: 'filter',
                 toolPanel: 'agFiltersToolPanel',
             },
-            // {
-            //     id: 'customStats',
-            //     labelDefault: 'Custom Stats',
-            //     labelKey: 'customStats',
-            //     // toolPanel: CustomStatsToolPanel,
-            // },
+            {
+                id: 'uniqueCount',
+                labelDefault: 'Unique Counts',
+                labelKey: 'uniqueCount',
+                toolPanel: InsightTablePanel,
+            },
         ],
         defaultToolPanel: '',
     },
