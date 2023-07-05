@@ -10,9 +10,10 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import { numericDisplay } from '../../../utilities/numericDisplay'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 
 interface IInsightsCard {
-    metric: any
+    metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
 }
 
 const calculatePercent = (inputData: any) => {
@@ -72,7 +73,7 @@ const generateBadge = (met: any) => {
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title="Prior value is not available"
+                title="From is not available"
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="border-0 text-xs leading-5 truncate max-w-full"
@@ -147,7 +148,7 @@ export default function InsightCard({ metric }: IInsightsCard) {
                             )}
                             {!!metric?.oldTotalResultValue && (
                                 <Subtitle className="text-sm mb-0.5">
-                                    {`Prior value: ${numericDisplay(
+                                    {`from ${numericDisplay(
                                         metric?.oldTotalResultValue || 0
                                     )}`}
                                 </Subtitle>
@@ -158,7 +159,7 @@ export default function InsightCard({ metric }: IInsightsCard) {
                     <Text>{metric?.description}</Text>
                 </Flex>
                 <Text className="mt-2">
-                    {calculateTime(metric?.query?.updatedAt)}
+                    {calculateTime(metric?.result?.at(0)?.executedAt || 0)}
                 </Text>
             </Flex>
         </Card>

@@ -157,7 +157,7 @@ const generateBadge = (met: any) => {
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title="Prior value is not available"
+                title="From is not available"
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="ml-3 border-0 text-xs leading-5 w-96 drop-shadow-sm"
@@ -244,7 +244,7 @@ export default function InsightDetail() {
         {
             name: 'Insights',
             path: () => {
-                navigate(-1)
+                navigate('./..')
             },
             current: false,
         },
