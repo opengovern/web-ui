@@ -76,7 +76,7 @@ const Assets: React.FC<any> = () => {
     // ]
 
     return (
-        <LoggedInLayout currentPage="assets">
+        <LoggedInLayout currentPage="spend">
             <Flex
                 flexDirection="row"
                 justifyContent="between"
