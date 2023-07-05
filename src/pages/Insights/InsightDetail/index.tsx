@@ -22,7 +22,7 @@ import {
     useComplianceApiV1InsightTrendDetail,
 } from '../../../api/compliance.gen'
 import { timeAtom } from '../../../store'
-import MultipleAreaCharts from '../../../components/Charts/AreaCharts/MultipleAreaCharts'
+import AreaCharts from '../../../components/Charts/AreaCharts'
 import Downloader from './Downloader'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Breadcrumbs from '../../../components/Breadcrumbs'
@@ -285,7 +285,7 @@ export default function InsightDetail() {
                     </Flex>
                     <Card>
                         <Title>Insight count</Title>
-                        <MultipleAreaCharts
+                        <AreaCharts
                             className="mt-4 h-80"
                             index="date"
                             yAxisWidth={60}

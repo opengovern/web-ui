@@ -4,7 +4,7 @@ type IProps = {
     title?: string
     description?: string
 }
-export default function MultipleAreaCharts({
+export default function AreaCharts({
     title,
     description,
     ...props

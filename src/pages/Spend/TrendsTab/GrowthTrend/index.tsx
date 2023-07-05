@@ -13,7 +13,7 @@ import {
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import MultipleAreaCharts from '../../../../components/Charts/AreaCharts/MultipleAreaCharts'
+import AreaCharts from '../../../../components/Charts/AreaCharts'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import { useInventoryApiV2CostTrendList } from '../../../../api/inventory.gen'
 
@@ -120,7 +120,7 @@ export default function GrowthTrend({
                     </div>
                 </div>
             </Flex>
-            <MultipleAreaCharts
+            <AreaCharts
                 className="mt-4 h-80"
                 index="date"
                 yAxisWidth={60}

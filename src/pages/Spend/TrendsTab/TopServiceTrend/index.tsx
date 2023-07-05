@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
-import { Card, Title, Flex } from '@tremor/react'
+import { Card, Title } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import MultipleAreaCharts from '../../../../components/Charts/AreaCharts/MultipleAreaCharts'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
+import AreaCharts from '../../../../components/Charts/AreaCharts'
 import {
     useInventoryApiV2CostMetricList,
     useInventoryApiV2ServicesCostTrendList,
 } from '../../../../api/inventory.gen'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../../api/api'
 
 type IProps = {
     categories: {
@@ -96,12 +94,8 @@ export default function TopServicesTrend({
 
     return (
         <Card>
-            <Flex justifyContent="between" alignItems="start">
-                <div className="flex justify-normal gap-x-2 items-center">
-                    <Title className="min-w-[7vw]">Top Services Trend</Title>
-                </div>
-            </Flex>
-            <MultipleAreaCharts
+            <Title className="min-w-[7vw]">Top Services Trend</Title>
+            <AreaCharts
                 className="mt-4 h-80"
                 index="date"
                 yAxisWidth={60}
