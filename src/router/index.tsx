@@ -13,6 +13,7 @@ import Spend from '../pages/Spend'
 import ServicesDetails from '../pages/Assets/Details/ServicesDetails'
 import ResourceMetricsDetails from '../pages/Assets/Details/ResourceMetricsDetails'
 import Integrations from '../pages/Integrations'
+import CostMetricsDetails from '../pages/Spend/Details/CostMetricsDetails'
 
 const routes = [
     {
@@ -72,6 +73,11 @@ const authRoutes = [
         key: 'spend',
         path: '/:ws/spend',
         component: Spend,
+    },
+    {
+        key: 'spend metrics',
+        path: '/:ws/spend/spend-metrics',
+        component: CostMetricsDetails,
     },
     {
         key: 'insights',

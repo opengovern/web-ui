@@ -20,6 +20,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
+import { ColDef } from 'ag-grid-community'
 import {
     filterAtom,
     selectedResourceCategoryAtom,
@@ -34,6 +35,40 @@ import { numericDisplay } from '../../../../utilities/numericDisplay'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 
+const columns: ColDef[] = [
+    {
+        field: 'metricName',
+        headerName: 'Metric Name',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
+        field: 'from',
+        headerName: 'From',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
+        field: 'Count',
+        headerName: 'Count',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
+        field: 'Change',
+        headerName: 'Change',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+]
 export default function ResourceMetricsDetails() {
     const navigate = useNavigate()
 

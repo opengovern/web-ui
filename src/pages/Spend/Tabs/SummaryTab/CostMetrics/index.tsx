@@ -12,13 +12,14 @@ import {
 } from '@tremor/react'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
-import Swiper from '../../../../components/Swiper'
-import MetricCard from '../../../../components/Cards/MetricCard'
-import { selectedResourceCategoryAtom } from '../../../../store'
-import { useInventoryApiV2CostMetricList } from '../../../../api/inventory.gen'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
-import Spinner from '../../../../components/Spinner'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { useNavigate } from 'react-router-dom'
+import Swiper from '../../../../../components/Swiper'
+import MetricCard from '../../../../../components/Cards/MetricCard'
+import { selectedResourceCategoryAtom } from '../../../../../store'
+import { useInventoryApiV2CostMetricList } from '../../../../../api/inventory.gen'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import Spinner from '../../../../../components/Spinner'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 
 interface IProps {
     provider: any
@@ -29,7 +30,6 @@ interface IProps {
         value: string
     }[]
     pageSize: any
-    setActiveSubPage: (subPage: string) => void
 }
 
 export default function CostMetrics({
@@ -38,8 +38,8 @@ export default function CostMetrics({
     pageSize,
     categories,
     connection,
-    setActiveSubPage,
 }: IProps) {
+    const navigate = useNavigate()
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
@@ -84,7 +84,7 @@ export default function CostMetrics({
                     <Button
                         variant="light"
                         className="mt-1 ml-2"
-                        onClick={() => setActiveSubPage('Cost Metrics')}
+                        onClick={() => navigate('spend-metrics')}
                     >
                         <Text color="blue">(see All)</Text>
                     </Button>

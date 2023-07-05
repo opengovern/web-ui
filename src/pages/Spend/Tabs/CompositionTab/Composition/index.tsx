@@ -20,9 +20,9 @@ import { useEffect, useState } from 'react'
 import { ChartPieIcon } from '@heroicons/react/24/outline'
 import { ArrowLongRightIcon } from '@heroicons/react/24/solid'
 import dayjs from 'dayjs'
-import { useInventoryApiV2CostCompositionList } from '../../../../api/inventory.gen'
-import Spinner from '../../../../components/Spinner'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
+import { useInventoryApiV2CostCompositionList } from '../../../../../api/inventory.gen'
+import Spinner from '../../../../../components/Spinner'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
 
 type IProps = {
     // key: string,

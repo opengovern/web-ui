@@ -8,7 +8,6 @@ type IProps = {
     categories: any
     timeRange: any
     pageSize: any
-    setActiveSubPage: Dispatch<any>
 }
 export default function SummaryTab({
     provider,
@@ -16,7 +15,6 @@ export default function SummaryTab({
     categories,
     timeRange,
     pageSize,
-    setActiveSubPage,
 }: IProps) {
     return (
         <>
@@ -25,7 +23,6 @@ export default function SummaryTab({
                 connection={connections}
                 timeRange={timeRange}
                 pageSize={pageSize}
-                setActiveSubPage={setActiveSubPage}
             />
             <div className="mt-10">
                 <CostMetrics
@@ -34,7 +31,6 @@ export default function SummaryTab({
                     categories={categories}
                     timeRange={timeRange}
                     pageSize={pageSize}
-                    setActiveSubPage={setActiveSubPage}
                 />
             </div>
         </>

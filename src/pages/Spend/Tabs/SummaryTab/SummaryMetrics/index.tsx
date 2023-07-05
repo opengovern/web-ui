@@ -1,16 +1,15 @@
 import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import { useInventoryApiV2CostMetricList } from '../../../../api/inventory.gen'
-import SummaryCard from '../../../../components/Cards/SummaryCard'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
+import { useInventoryApiV2CostMetricList } from '../../../../../api/inventory.gen'
+import SummaryCard from '../../../../../components/Cards/SummaryCard'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
 
 interface IProps {
     provider: any
     timeRange: any
     connection: any
     pageSize: any
-    setActiveSubPage: (subPage: string) => void
 }
 
 export default function SummaryMetrics({
@@ -18,7 +17,6 @@ export default function SummaryMetrics({
     timeRange,
     pageSize,
     connection,
-    setActiveSubPage,
 }: IProps) {
     const query = {
         ...(provider && { connector: provider }),
