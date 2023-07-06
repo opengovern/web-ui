@@ -33,7 +33,6 @@ export default function InsightTablePanel(props: IToolPanelParams) {
                 return undefined
             })
         })
-        console.log(uniqCount)
 
         const array = Array.from(uniqCount, ([name, value]) => {
             const v: UniqueCount = { name, value }
@@ -48,7 +47,6 @@ export default function InsightTablePanel(props: IToolPanelParams) {
         return () => api.removeEventListener('modelUpdated', updateTotals)
     }, [])
 
-    console.log('test')
     return (
         <Flex flexDirection="col" className="w-56 p-3">
             {lastState.map(({ name, value }) => {

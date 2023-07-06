@@ -129,6 +129,13 @@ export default function ResourceMetrics({
                             deltaType={deltaType(
                                 percentage(metric.count, metric.old_count)
                             )}
+                            onClick={() =>
+                                navigate(
+                                    `metrics/${encodeURIComponent(
+                                        metric.resource_type || ''
+                                    )}`
+                                )
+                            }
                         />
                     ))}
                 </Swiper>
