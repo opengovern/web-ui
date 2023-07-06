@@ -21,6 +21,8 @@ export interface DescribeComplianceReportJob {
      * @example "azure_cis_v1"
      */
     BenchmarkId?: string
+    /** @example false */
+    IsStack?: boolean
     /** @example 1619510400 */
     ReportCreatedAt?: number
     /**
@@ -81,6 +83,7 @@ export interface DescribeInsightJob {
     failureMessage?: string
     id?: number
     insightID?: number
+    isStack?: boolean
     scheduleUUID?: string
     sourceID?: string
     sourceType?: SourceType
@@ -872,6 +875,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsight {
     description?: string
     /** @example true */
     enabled?: boolean
+    /** Old Total Result Date */
+    firstOldResultDate?: string
     /**
      * Insight ID
      * @example 23
@@ -926,6 +931,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup {
     connectors?: SourceType[]
     /** @example "List clusters that have role-based access control (RBAC) disabled" */
     description?: string
+    /** @example "2023-04-21T08:53:09.928Z" */
+    firstOldResultDate?: string
     /** @example 23 */
     id?: number
     insights?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[]
@@ -1272,6 +1279,11 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest {
     stackId?: string
 }
 
+export enum GithubComKaytuIoKaytuEnginePkgDescribeApiEvaluationType {
+    EvaluationTypeInsight = 'INSIGHT',
+    EvaluationTypeBenchmark = 'BENCHMARK',
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings {
     /**
      * Benchmark IDs to filter
@@ -1396,6 +1408,11 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
     /** Stack evaluations history, including insight evaluations and compliance evaluations */
     evaluations?: GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluation[]
     /**
+     * Stack failure message
+     * @example "error message"
+     */
+    failureMessage?: string
+    /**
      * Stack resource types
      * @example ["[Microsoft.Compute/virtualMachines]"]
      */
@@ -1406,10 +1423,20 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
      */
     resources?: string[]
     /**
+     * Source type
+     * @example "Azure"
+     */
+    sourceType?: SourceType
+    /**
      * Stack unique identifier
      * @example "stack-twr32a5d-5as5-4ffe-b1cc-e32w1ast87s0"
      */
     stackId: string
+    /**
+     * Stack status. CREATED, EVALUATED, IN_PROGRESS, FAILED
+     * @example "CREATED"
+     */
+    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiStackStatus
     /** Stack tags */
     tags?: Record<string, string[]>
     /**
@@ -1448,15 +1475,33 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluation {
      * @example 1
      */
     jobId?: number
+    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluationStatus
     /**
      * BENCHMARK or INSIGHT
      * @example "BENCHMARK"
      */
-    type?: string
+    type?: GithubComKaytuIoKaytuEnginePkgDescribeApiEvaluationType
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluationStatus {
+    StackEvaluationStatusInProgress = 'IN_PROGRESS',
+    StackEvaluationStatusFailed = 'COMPLETED_WITH_FAILURE',
+    StackEvaluationStatusCompleted = 'COMPLETED',
 }
 
 export type GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest =
     object
+
+export enum GithubComKaytuIoKaytuEnginePkgDescribeApiStackStatus {
+    StackStatusPending = 'PENDING',
+    StackStatusStalled = 'STALLED',
+    StackStatusCreated = 'CREATED',
+    StackStatusDescribing = 'DESCRIBING',
+    StackStatusDescribed = 'DESCRIBED_RESOURCES',
+    StackStatusEvaluating = 'EVALUATING',
+    StackStatusCompleted = 'COMPLETED',
+    StackStatusFailed = 'FAILED',
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest {
     /**
@@ -2018,6 +2063,10 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyInsightJobInterval = 'insight_job_interval',
     MetadataKeyMetricsJobInterval = 'metrics_job_interval',
     MetadataKeyDataRetention = 'data_retention_duration',
+    MetadataKeyAWSComplianceGitURL = 'aws_compliance_git_url',
+    MetadataKeyAzureComplianceGitURL = 'azure_compliance_git_url',
+    MetadataKeyInsightsGitURL = 'insights_git_url',
+    MetadataKeyQueriesGitURL = 'queries_git_url',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredential {
@@ -2202,6 +2251,8 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest {
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiSourceConfigAWS {
     accessKey: string
     accountId?: string
+    assumeRoleName?: string
+    externalId?: string
     regions?: string[]
     secretKey: string
 }
@@ -3799,6 +3850,24 @@ export class Api<
                     ...params,
                 }
             ),
+
+        /**
+         * @description This API syncs queries with the git backend.
+         *
+         * @tags compliance
+         * @name ApiV1QueriesSyncList
+         * @summary Sync queries
+         * @request GET:/compliance/api/v1/queries/sync
+         * @secure
+         */
+        apiV1QueriesSyncList: (params: RequestParams = {}) =>
+            this.request<void, any>({
+                path: `/compliance/api/v1/queries/sync`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
     }
     inventory = {
         /**

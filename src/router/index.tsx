@@ -14,6 +14,7 @@ import ServicesDetails from '../pages/Assets/Details/ServicesDetails'
 import ResourceMetricsDetails from '../pages/Assets/Details/ResourceMetricsDetails'
 import Integrations from '../pages/Integrations'
 import CostMetricsDetails from '../pages/Spend/Details/CostMetricsDetails'
+import MetricDetails from '../pages/Assets/Details/MetricDetails'
 
 const routes = [
     {
@@ -68,6 +69,11 @@ const authRoutes = [
         key: 'resource metrics',
         path: '/:ws/assets/resource-metrics',
         component: ResourceMetricsDetails,
+    },
+    {
+        key: 'metric details',
+        path: '/:ws/assets/metrics/:metricid',
+        component: MetricDetails,
     },
     {
         key: 'spend',

@@ -53,7 +53,9 @@ const calculateTime = (inputData: any) => {
     return ''
 }
 
-const generateBadge = (met: any) => {
+const generateBadge = (
+    met: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
+) => {
     if (!met?.totalResultValue && !met?.oldTotalResultValue) {
         return (
             <Callout
@@ -77,7 +79,7 @@ const generateBadge = (met: any) => {
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title="From is not available"
+                title={`Data is availabe after ${met.firstOldResultDate}`}
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="border-0 text-xs leading-5 truncate max-w-full"

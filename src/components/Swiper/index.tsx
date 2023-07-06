@@ -29,7 +29,9 @@ const Swiper = ({
         )
 
         return Children.map(items, (child) => (
-            <Grid {...gridItemProps}>{child}</Grid>
+            <Grid className=" w-full" {...gridItemProps}>
+                {child}
+            </Grid>
         ))
     }
 
@@ -45,8 +47,8 @@ const Swiper = ({
     }
 
     return (
-        <Flex flexDirection="col" className="min-h-[265px]">
-            <Grid className="min-h-[265px]" {...gridContainerProps}>
+        <Flex flexDirection="col" className="min-h-[265px]  w-full">
+            <Grid className="min-h-[265px] w-full" {...gridContainerProps}>
                 {renderItems(activeSlide)}
             </Grid>
             <Pagination
