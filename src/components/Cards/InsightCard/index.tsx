@@ -11,6 +11,10 @@ import { useNavigate } from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
+import {
+    badgeTypeByDelta,
+    percentageByChange,
+} from '../../../utilities/deltaType'
 
 interface IInsightsCard {
     metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
@@ -82,20 +86,16 @@ const generateBadge = (met: any) => {
     }
     return (
         <BadgeDelta
-            deltaType={
-                calculatePercent(met) > 0
-                    ? 'moderateIncrease'
-                    : 'moderateDecrease'
-            }
-            className={`opacity-${
-                calculatePercent(met) !== 0 ? 1 : 0
-            } cursor-pointer my-2`}
+            deltaType={badgeTypeByDelta(
+                met.oldTotalResultValue,
+                met.totalResultValue
+            )}
+            className="cursor-pointer my-2"
         >
-            {`${
-                calculatePercent(met) > 0
-                    ? Math.ceil(calculatePercent(met))
-                    : -1 * Math.floor(calculatePercent(met))
-            }%`}
+            {`${percentageByChange(
+                met.oldTotalResultValue,
+                met.totalResultValue
+            )}%`}
         </BadgeDelta>
     )
 }

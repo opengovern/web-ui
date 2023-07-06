@@ -1,21 +1,23 @@
 import { IToolPanelParams } from 'ag-grid-community'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Flex, Text } from '@tremor/react'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+interface UniqueCount {
+    name: string
+    value: number
+}
+
 export default function InsightTablePanel(props: IToolPanelParams) {
+    const [lastState, setLastState] = useState<UniqueCount[]>([])
+
     const updateTotals = () => {
         const uniqCount = new Map<string, number>()
         const keyValue = new Map<string, Set<string>>()
 
-        // const uniqueCount: {} = {}
-        // eslint-disable-next-line react/destructuring-assignment
-        props.api.forEachNode((rowNode: any) => {
+        const { api } = props
+        api.forEachNode((rowNode: any) => {
             const { data } = rowNode
-            console.log(data)
-            // eslint-disable-next-line array-callback-return
             Object.entries(data).map(([name, value]) => {
                 const valueStr = value as string
                 const valueSet = keyValue.get(name)
@@ -28,28 +30,35 @@ export default function InsightTablePanel(props: IToolPanelParams) {
                 const currentSet = keyValue.get(name) || new Set<string>()
                 currentSet.add(valueStr)
                 keyValue.set(name, currentSet)
+                return undefined
             })
         })
         console.log(uniqCount)
-        return Object.fromEntries(uniqCount)
+
+        const array = Array.from(uniqCount, ([name, value]) => {
+            const v: UniqueCount = { name, value }
+            return v
+        })
+        setLastState(array)
     }
 
     useEffect(() => {
-        // eslint-disable-next-line react/destructuring-assignment
-        props.api.addEventListener('modelUpdated', updateTotals)
-        // eslint-disable-next-line react/destructuring-assignment
-        return () => props.api.removeEventListener('modelUpdated', updateTotals)
+        const { api } = props
+        api.addEventListener('modelUpdated', updateTotals)
+        return () => api.removeEventListener('modelUpdated', updateTotals)
     }, [])
 
     console.log('test')
     return (
         <Flex flexDirection="col" className="w-56 p-3">
-            {Object.entries(updateTotals()).map(([name, value]) => (
-                <Flex flexDirection="row">
-                    <Text>{snakeCaseToLabel(name)}</Text>
-                    <Text>{value}</Text>
-                </Flex>
-            ))}
+            {lastState.map(({ name, value }) => {
+                return (
+                    <Flex flexDirection="row">
+                        <Text>{snakeCaseToLabel(name)}</Text>
+                        <Text>{value}</Text>
+                    </Flex>
+                )
+            })}
         </Flex>
     )
 }
