@@ -171,7 +171,9 @@ const generateBadge = (
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title="From is not available"
+                title={`Data is availabe after ${dayjs(
+                    met.firstOldResultDate
+                ).format('MMM DD, YYYY')}`}
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="ml-3 border-0 text-xs leading-5 w-96 drop-shadow-sm"

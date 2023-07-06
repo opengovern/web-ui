@@ -9,6 +9,7 @@ import {
 } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import dayjs from 'dayjs'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import {
@@ -79,7 +80,9 @@ const generateBadge = (
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title={`Data is availabe after ${met.firstOldResultDate}`}
+                title={`Data is availabe after ${dayjs(
+                    met.firstOldResultDate
+                ).format('MMM DD, YYYY')}`}
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="border-0 text-xs leading-5 truncate max-w-full"
