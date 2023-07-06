@@ -371,7 +371,7 @@ export default function InsightDetail() {
                                             )}
                                             {!!insightDetail?.oldTotalResultValue && (
                                                 <Subtitle className="text-sm mb-0.5">
-                                                    {`From: ${numberGroupedDisplay(
+                                                    {`from ${numberGroupedDisplay(
                                                         insightDetail?.oldTotalResultValue ||
                                                             0
                                                     )}`}
