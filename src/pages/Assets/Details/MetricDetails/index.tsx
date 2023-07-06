@@ -210,7 +210,14 @@ export default function MetricDetails() {
             },
             current: false,
         },
-        { name: 'Resource metrics', path: '', current: true },
+        {
+            name: 'Metrics',
+            path: () => {
+                navigate(-1)
+            },
+            current: false,
+        },
+        { name: metricId, path: '', current: true },
     ]
 
     const handleDrawer = (data: any) => {
