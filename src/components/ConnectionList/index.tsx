@@ -2,19 +2,20 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Button, Flex, Text } from '@tremor/react'
-import { ReactComponent as AzureIcon } from '../../../icons/elements-supplemental-provider-logo-azure-new.svg'
-import { ReactComponent as AWSIcon } from '../../../icons/elements-supplemental-provider-logo-aws-original.svg'
+import { ReactComponent as AzureIcon } from '../../icons/elements-supplemental-provider-logo-azure-new.svg'
+import { ReactComponent as AWSIcon } from '../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
-import DrawerPanel from '../../../components/DrawerPanel'
-import Spinner from '../../../components/Spinner'
+import DrawerPanel from '../DrawerPanel'
+import Spinner from '../Spinner'
+import { useOnboardApiV1SourcesList } from '../../api/onboard.gen'
 
 interface IConnection {
     id: string
     connector: string
     providerConnectionID: string
     providerConnectionName: string
-    healthState: string
+    lifecycleState: string
     onboardDate: string
     lastInventory: string
 }

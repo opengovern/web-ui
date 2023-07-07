@@ -14,7 +14,7 @@ import Summary from './Summary'
 import { filterAtom, timeAtom } from '../../../../store'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
-import ConnectionList from '../../ConnectionList'
+import ConnectionList from '../../../../components/ConnectionList'
 import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
 
 const columns: ColDef[] = [

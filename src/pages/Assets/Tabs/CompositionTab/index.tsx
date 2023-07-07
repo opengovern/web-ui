@@ -5,6 +5,7 @@ import {
     Divider,
     DonutChart,
     Flex,
+    Grid,
     List,
     ListItem,
     Metric,
@@ -14,11 +15,12 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
+import { atom, useAtom } from 'jotai'
 import { useInventoryApiV2ResourcesCompositionDetail } from '../../../../api/inventory.gen'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
-import Spinner from '../../../../components/Spinner'
+import Composition from '../../../../components/Cards/Composition'
 
 type IProps = {
     top: number
@@ -26,13 +28,52 @@ type IProps = {
     connectionId?: string[]
     time?: any
 }
+
+interface listProps {
+    name: string
+    value: string
+    delta?: string
+    deltaType?: DeltaType
+}
+
+interface chartProps {
+    name: string
+    value: number
+}
+
+interface dataProps {
+    total: string
+    totalValueCount: string
+    chart: chartProps[]
+}
+
+const newCompositionDataAtom = atom<dataProps>({
+    total: '0',
+    totalValueCount: '0',
+    chart: [],
+})
+const oldCompositionDataAtom = atom<dataProps>({
+    total: '0',
+    totalValueCount: '0',
+    chart: [],
+})
+const newCompositionListAtom = atom<listProps[]>([])
+const oldCompositionListAtom = atom<listProps[]>([])
+
 export default function CompositionTab({
     top,
     connector,
     connectionId,
     time,
 }: IProps) {
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [newComposition, setNewComposition] = useAtom(newCompositionDataAtom)
+    const [oldComposition, setOldComposition] = useAtom(oldCompositionDataAtom)
+    const [newCompositionList, setNewCompositionList] = useAtom(
+        newCompositionListAtom
+    )
+    const [oldCompositionList, setOldCompositionList] = useAtom(
+        oldCompositionListAtom
+    )
     const query = {
         top,
         ...(connector && { connector }),
@@ -43,15 +84,15 @@ export default function CompositionTab({
         useInventoryApiV2ResourcesCompositionDetail('category', query)
 
     function compositionData(inputObject: any, oldData: number) {
+        const output: dataProps = {
+            total: '0',
+            totalValueCount: '0',
+            chart: [],
+        }
         const outputArray = []
 
         if (!inputObject) {
-            return [
-                {
-                    name: 'No data',
-                    value: 0,
-                },
-            ]
+            return output
         }
         // iterate over top_values
         // eslint-disable-next-line guard-for-in,no-restricted-syntax
@@ -71,7 +112,12 @@ export default function CompositionTab({
                 ? inputObject.others.old_count
                 : inputObject.others.count,
         })
-        return outputArray
+        output.chart = outputArray
+        output.total = String(numericDisplay(inputObject.total_count))
+        output.totalValueCount = String(
+            numericDisplay(inputObject.total_value_count)
+        )
+        return output
     }
 
     function nowCompositionList(inputObject: any) {
@@ -81,7 +127,7 @@ export default function CompositionTab({
             return [
                 {
                     name: 'No data',
-                    value: 0,
+                    value: '0',
                     delta: '0',
                     deltaType,
                 },
@@ -110,7 +156,9 @@ export default function CompositionTab({
             }
             outputArray.push({
                 name: key,
-                value: inputObject.top_values[key].count,
+                value: String(
+                    numericDisplay(inputObject.top_values[key].count)
+                ),
                 delta: Math.abs(delta).toFixed(2),
                 deltaType,
             })
@@ -134,7 +182,7 @@ export default function CompositionTab({
         }
         outputArray.push({
             name: 'Others',
-            value: inputObject.others.count,
+            value: String(numericDisplay(inputObject.others.count)),
             delta: Math.abs(delta).toFixed(2),
             deltaType,
         })
@@ -147,7 +195,7 @@ export default function CompositionTab({
             return [
                 {
                     name: 'No data',
-                    value: 0,
+                    value: '0',
                 },
             ]
         }
@@ -156,87 +204,42 @@ export default function CompositionTab({
         for (const key in inputObject.top_values) {
             outputArray.push({
                 name: key,
-                value: inputObject.top_values[key].old_count,
+                value: String(
+                    numericDisplay(inputObject.top_values[key].old_count)
+                ),
             })
         }
         outputArray.push({
             name: 'Others',
-            value: inputObject.others.old_count,
+            value: String(numericDisplay(inputObject.others.old_count)),
         })
         return outputArray
     }
 
-    const nowDataList = nowCompositionList(composition)
-    const prevDataList = prevCompositionList(composition)
+    useEffect(() => {
+        const nowDataList = nowCompositionList(composition)
+        const prevDataList = prevCompositionList(composition)
+        setNewComposition(compositionData(composition, 0))
+        setOldComposition(compositionData(composition, 1))
+        setNewCompositionList(nowDataList)
+        setOldCompositionList(prevDataList)
+    }, [composition])
 
-    return isLoading ? (
-        <Flex justifyContent="center" className="mt-56">
-            <Spinner />
-        </Flex>
-    ) : (
-        <Card>
-            <Flex flexDirection="row">
-                <Title>Overview</Title>
-                <TabGroup
-                    index={selectedIndex}
-                    onIndexChange={setSelectedIndex}
-                    className="w-fit"
-                >
-                    <TabList variant="solid">
-                        <Tab>Now</Tab>
-                        <Tab>Before</Tab>
-                    </TabList>
-                </TabGroup>
-            </Flex>
-            <Text className="mt-3">Total count</Text>
-            <Metric>{numericDisplay(composition?.total_count)}</Metric>
-            <Divider />
-            <Flex flexDirection="row">
-                <div>
-                    <Title>Resource Allocation</Title>
-                    <Text>{composition?.total_value_count} Asset</Text>
-                    <DonutChart
-                        data={compositionData(composition, selectedIndex)}
-                        category="value"
-                        index="name"
-                        className="w-64 h-64 mt-6"
-                        // valueFormatter={valueFormatter}
-                    />
-                </div>
-                <List className="w-2/5">
-                    {selectedIndex === 0
-                        ? nowDataList.map((item) => (
-                              <ListItem key={item.name}>
-                                  <Text>{item.name}</Text>
-                                  <Flex
-                                      justifyContent="end"
-                                      className="space-x-2"
-                                  >
-                                      <Text>{numericDisplay(item.value)}</Text>
-                                      {item.delta && (
-                                          <BadgeDelta
-                                              deltaType={item.deltaType}
-                                              size="xs"
-                                          >
-                                              {item.delta} %
-                                          </BadgeDelta>
-                                      )}
-                                  </Flex>
-                              </ListItem>
-                          ))
-                        : prevDataList.map((item) => (
-                              <ListItem key={item.name}>
-                                  <Text>{item.name}</Text>
-                                  <Flex
-                                      justifyContent="end"
-                                      className="space-x-2"
-                                  >
-                                      <Text>{numericDisplay(item.value)}</Text>
-                                  </Flex>
-                              </ListItem>
-                          ))}
-                </List>
-            </Flex>
-        </Card>
+    return (
+        <Grid numItemsMd={2} className="mt-5 gap-6 flex justify-between">
+            <div className="w-full">
+                {/* Placeholder to set height */}
+                {/* <div className="h-28" /> */}
+                {/* <Composition newData oldData isLoading newList oldList isCost /> */}
+                <Composition
+                    newData={newComposition}
+                    oldData={oldComposition}
+                    isLoading={isLoading}
+                    newList={newCompositionList}
+                    oldList={oldCompositionList}
+                />
+                {/* Composition */}
+            </div>
+        </Grid>
     )
 }

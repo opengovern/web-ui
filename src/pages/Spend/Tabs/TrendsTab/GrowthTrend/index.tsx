@@ -11,7 +11,10 @@ import {
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numericDisplay,
+} from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
@@ -128,10 +131,11 @@ export default function GrowthTrend({
                     className="mt-4 h-80"
                     index="date"
                     type="line"
-                    yAxisWidth={60}
+                    yAxisWidth={120}
                     categories={['count']}
                     data={fixTime(data) || []}
                     showAnimation
+                    valueFormatter={exactPriceDisplay}
                 />
             )}
         </Card>

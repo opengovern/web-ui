@@ -38,14 +38,17 @@ import {
     useInventoryApiV2ResourcesTagList,
 } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
+import {
+    numericDisplay,
+    exactPriceDisplay,
+} from '../../../../utilities/numericDisplay'
 import {
     useOnboardApiV1ConnectionsSummaryList,
     useOnboardApiV1SourcesList,
 } from '../../../../api/onboard.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
-import ConnectionList from '../../ConnectionList'
+import ConnectionList from '../../../../components/ConnectionList'
 
 interface ICostMetric {
     metricName: string
@@ -57,7 +60,7 @@ interface ICostMetric {
 const columns: ColDef[] = [
     {
         field: 'metricName',
-        headerName: 'Metric Name',
+        headerName: 'Service Name',
         sortable: true,
         filter: true,
         resizable: true,
@@ -71,7 +74,7 @@ const columns: ColDef[] = [
         resizable: true,
         flex: 1,
         valueFormatter: (params) => {
-            return `$ ${params.value}`
+            return exactPriceDisplay(params.value)
         },
     },
     {
@@ -83,7 +86,7 @@ const columns: ColDef[] = [
         hide: true,
         flex: 1,
         valueFormatter: (params) => {
-            return `$ ${numericDisplay(params.value)}`
+            return exactPriceDisplay(params.value)
         },
     },
     {
@@ -95,7 +98,7 @@ const columns: ColDef[] = [
         hide: true,
         flex: 1,
         valueFormatter: (params) => {
-            return `$ ${numericDisplay(params.value)}`
+            return exactPriceDisplay(params.value)
         },
     },
     {

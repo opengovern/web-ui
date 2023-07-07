@@ -34,7 +34,17 @@ export const numberGroupedDisplay = (value: string | number | undefined) => {
 }
 
 export const priceDisplay = (value: string | number | undefined) => {
-    return `${Math.ceil(parseFloat(value ? value.toString() : '0'))
+    return `$${Math.ceil(parseFloat(value ? value.toString() : '0'))
         .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}$`
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+}
+
+export const exactPriceDisplay = (
+    value: string | number | undefined,
+    decimalpoint = 2
+) => {
+    return `$ ${parseFloat(value ? value.toString() : '0')
+        .toFixed(decimalpoint)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 }
