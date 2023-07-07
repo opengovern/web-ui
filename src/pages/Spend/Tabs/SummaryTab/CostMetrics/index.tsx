@@ -128,7 +128,7 @@ export default function CostMetrics({
                     gridContainerProps={{
                         numItemsSm: 2,
                         numItemsMd: 3,
-                        className: 'gap-6',
+                        className: 'gap-6 w-full',
                     }}
                 >
                     {!selectedIndex
