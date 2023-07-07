@@ -1,22 +1,12 @@
-import { Button, Flex, Text } from '@tremor/react'
+import { Flex, Text } from '@tremor/react'
 import { useState } from 'react'
 import { CheckIcon } from '@heroicons/react/20/solid'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
+import ThirdStep from './ThirdStep'
 
 interface ISteps {
     close: any
-}
-
-const showStep = (s: number) => {
-    switch (s) {
-        case 1:
-            return <FirstStep />
-        case 2:
-            return <SecondStep />
-        default:
-            return <FirstStep />
-    }
 }
 
 const stepNavigation = (status: string) => {
@@ -98,42 +88,56 @@ export default function Steps({ close }: ISteps) {
         { name: 'Step 3', status: getStatus(stepNum, 3) },
         { name: 'Step 4', status: getStatus(stepNum, 4) },
     ]
+    const showStep = (s: number) => {
+        switch (s) {
+            case 1:
+                return (
+                    <FirstStep
+                        onPrevious={() => close}
+                        onNext={() => setStepNum(2)}
+                    />
+                )
+            case 2:
+                return (
+                    <SecondStep
+                        onPrevious={() => setStepNum(1)}
+                        onNext={() => setStepNum(3)}
+                    />
+                )
+            case 3:
+                return (
+                    <ThirdStep
+                        onPrevious={() => setStepNum(2)}
+                        onNext={() => setStepNum(4)}
+                    />
+                )
+            default:
+                return null
+        }
+    }
     return (
-        <Flex flexDirection="col" className="h-full">
-            <Flex flexDirection="col" justifyContent="start" alignItems="start">
-                <Text className="my-6">Organization from new AWS account</Text>
-                <nav className="w-full">
-                    <ol className="flex items-center justify-between">
-                        {steps.map((step, stepIdx) => (
-                            <li
-                                key={step.name}
-                                className={`${
-                                    stepIdx !== steps.length - 1 ? 'w-full' : ''
-                                } relative`}
-                            >
-                                {stepNavigation(step.status)}
-                            </li>
-                        ))}
-                    </ol>
-                </nav>
-                {showStep(stepNum)}
-            </Flex>
-            <Flex flexDirection="row" justifyContent="end">
-                <Button
-                    variant="secondary"
-                    onClick={() =>
-                        stepNum > 1 ? setStepNum(stepNum - 1) : close()
-                    }
-                >
-                    {stepNum === 1 ? 'Cancel' : 'Back'}
-                </Button>
-                <Button
-                    onClick={() => setStepNum(stepNum + 1)}
-                    className="ml-3"
-                >
-                    Next
-                </Button>
-            </Flex>
+        <Flex
+            flexDirection="col"
+            justifyContent="start"
+            alignItems="start"
+            className="h-full"
+        >
+            <Text className="my-6">Organization from new AWS account</Text>
+            <nav className="w-full">
+                <ol className="flex items-center justify-between">
+                    {steps.map((step, stepIdx) => (
+                        <li
+                            key={step.name}
+                            className={`${
+                                stepIdx !== steps.length - 1 ? 'w-full' : ''
+                            } relative`}
+                        >
+                            {stepNavigation(step.status)}
+                        </li>
+                    ))}
+                </ol>
+            </nav>
+            {showStep(stepNum)}
         </Flex>
     )
 }
