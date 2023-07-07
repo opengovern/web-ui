@@ -37,57 +37,19 @@ export default function SummaryMetrics({
         useInventoryApiV2CostMetricList(query)
 
     return (
-        <Grid numItemsMd={2} numItemsLg={3} className="gap-6 mt-6">
-            <span>
-                {/* Placeholder to set height */}
-                {/* <div className="h-28" /> */}
-                <SummaryCard
-                    title="Accounts Total Cost"
-                    // metric={exactPriceDisplay(accounts?.totalCost)}
-                    metric={`$ ${accounts?.totalCost?.toLocaleString('en-US', {
-                        minimumFractionDigits: 2,
-                    })}`}
-                    // metricPrev={MockData[0].metricPrev}
-                    // delta={MockData[0].delta}
-                    // deltaType={MockData[0].deltaType}
-                    // areaChartData={[{}]}
-                    // viewMore
-                    // onClick={() => setActiveSubPage('Accounts')}
-                    loading={accountsLoading}
-                />
-            </span>
-            <span>
-                {/* Placeholder to set height */}
-                {/* <div className="h-28" /> */}
-                <SummaryCard
-                    title="Services"
-                    metric={String(
-                        metrics?.total_count?.toLocaleString('en-US')
-                    )}
-                    // metricPrev={MockData[1].metricPrev}
-                    // delta={MockData[1].delta}
-                    // deltaType={MockData[1].deltaType}
-                    // areaChartData={[{}]}
-                    // viewMore
-                    // onClick={() => setActiveSubPage('Services')}
-                    loading={metricLoading}
-                />
-            </span>
-            {/* <span> */}
-            {/*    /!* Placeholder to set height *!/ */}
-            {/*    /!* <div className="h-28" /> *!/ */}
-            {/*    <SummaryCard */}
-            {/*        title="Total Services Spend" */}
-            {/*        metric={`$ ${String(metrics?.total_cost)}`} */}
-            {/*        // metricPrev={MockData[2].metricPrev} */}
-            {/*        // delta={MockData[2].delta} */}
-            {/*        // deltaType={MockData[2].deltaType} */}
-            {/*        // areaChartData={[{}]} */}
-            {/*        // viewMore */}
-            {/*        // onClick={() => setActiveSubPage('Resources')} */}
-            {/*        loading={metricLoading} */}
-            {/*    /> */}
-            {/* </span> */}
+        <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6 mb-10">
+            <SummaryCard
+                title="Accounts Total Cost"
+                metric={`$ ${accounts?.totalCost?.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                })}`}
+                loading={accountsLoading}
+            />
+            <SummaryCard
+                title="Services"
+                metric={String(metrics?.total_count?.toLocaleString('en-US'))}
+                loading={metricLoading}
+            />
         </Grid>
     )
 }

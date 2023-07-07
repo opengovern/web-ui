@@ -8,11 +8,11 @@ export const numericDisplay = (
     options?: Intl.NumberFormatOptions
 ) => {
     if (!value) {
-        return 0
+        return '0'
     }
     const num = parseInt(value.toString(), 10)
     const formatter = Intl.NumberFormat('en', { ...defaultOptions, ...options })
-    return num ? formatter.format(num) : 0
+    return num ? formatter.format(num) : '0'
 }
 
 export const floatDisplay = (
