@@ -3,7 +3,6 @@ import dayjs from 'dayjs'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import { useInventoryApiV2CostMetricList } from '../../../../../api/inventory.gen'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
-import { numericDisplay } from '../../../../../utilities/numericDisplay'
 
 interface IProps {
     provider: any
@@ -36,15 +35,6 @@ export default function SummaryMetrics({
         })
     const { response: metrics, isLoading: metricLoading } =
         useInventoryApiV2CostMetricList(query)
-    // const { response: services } = useInventoryApiV2ServicesSummaryList({
-    //     connector: provider,
-    //     connectionId: connection,
-    // })
-    // const { data: services, isLoading: serviceLodaing } = useTopServices(
-    //     provider,
-    //     connections
-    // )
-    // const lowerProvider = provider.toLowerCase()
 
     return (
         <Grid numItemsMd={2} numItemsLg={3} className="gap-6 mt-6">
@@ -53,7 +43,10 @@ export default function SummaryMetrics({
                 {/* <div className="h-28" /> */}
                 <SummaryCard
                     title="Accounts Total Cost"
-                    metric={`$ ${accounts?.totalCost?.toFixed(2)}`}
+                    // metric={exactPriceDisplay(accounts?.totalCost)}
+                    metric={`$ ${accounts?.totalCost?.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                    })}`}
                     // metricPrev={MockData[0].metricPrev}
                     // delta={MockData[0].delta}
                     // deltaType={MockData[0].deltaType}
@@ -68,7 +61,9 @@ export default function SummaryMetrics({
                 {/* <div className="h-28" /> */}
                 <SummaryCard
                     title="Services"
-                    metric={String(metrics?.total_count)}
+                    metric={String(
+                        metrics?.total_count?.toLocaleString('en-US')
+                    )}
                     // metricPrev={MockData[1].metricPrev}
                     // delta={MockData[1].delta}
                     // deltaType={MockData[1].deltaType}

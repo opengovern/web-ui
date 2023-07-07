@@ -126,6 +126,7 @@ const Assets: React.FC<any> = () => {
                     <TabPanel>
                         <CompositionTab
                             connector={selectedConnections.provider}
+                            connectionId={selectedConnections.connections}
                             top={5}
                             time={activeTimeRange}
                         />

@@ -6,6 +6,7 @@ import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
+import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
 
 type IProps = {
     categories: {
@@ -212,10 +213,11 @@ export default function TopServicesTrend({
                     className="mt-4 h-80"
                     index="date"
                     type="area"
-                    yAxisWidth={60}
+                    yAxisWidth={120}
                     categories={accountNames}
                     data={trendData}
                     showAnimation
+                    valueFormatter={exactPriceDisplay}
                 />
             ) : (
                 <div className="flex items-center justify-center">
