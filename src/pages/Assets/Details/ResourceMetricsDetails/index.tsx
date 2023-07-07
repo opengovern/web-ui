@@ -174,9 +174,7 @@ export default function ResourceMetricsDetails() {
         metrics?.resource_types?.map((res) => {
             const percent = percentage(res.count, res.old_count)
             newData.push({
-                metricName: res.resource_type
-                    ? res.resource_type
-                    : res.resource_type,
+                metricName: res.resource_name || res.resource_type,
                 count: res.count,
                 from: res.old_count,
                 changes: Math.ceil(Math.abs(percent)),

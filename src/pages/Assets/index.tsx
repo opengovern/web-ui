@@ -22,6 +22,7 @@ import ConnectionList from '../../components/ConnectionList'
 import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
+import SummaryMetrics from './Tabs/SummaryTab/SummaryMetrics'
 
 export default function Assets() {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
@@ -73,14 +74,14 @@ export default function Assets() {
             >
                 <Metric>Assets</Metric>
                 <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker
+                    {/* <DateRangePicker
                         className="max-w-md"
                         value={activeTimeRange}
                         onValueChange={setActiveTimeRange}
                         selectPlaceholder="Time Range"
                         enableClear={false}
                         maxDate={new Date()}
-                    />
+                    /> */}
                     <Button
                         variant="secondary"
                         className="ml-2 h-9"
@@ -103,6 +104,28 @@ export default function Assets() {
                     />
                 </Flex>
             </Flex>
+            <SummaryMetrics
+                provider={selectedConnections.provider}
+                connections={selectedConnections.connections}
+                timeRange={activeTimeRange}
+            />
+
+            <Flex
+                flexDirection="row"
+                justifyContent="end"
+                alignItems="end"
+                className="relative top-10 h-0"
+            >
+                <DateRangePicker
+                    className="max-w-md"
+                    value={activeTimeRange}
+                    onValueChange={setActiveTimeRange}
+                    selectPlaceholder="Time Range"
+                    enableClear={false}
+                    maxDate={new Date()}
+                />
+            </Flex>
+
             <TabGroup className="mt-3">
                 <TabList>
                     <Tab>Summary</Tab>
