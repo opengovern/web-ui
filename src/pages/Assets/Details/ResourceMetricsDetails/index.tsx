@@ -41,7 +41,7 @@ import Breadcrumbs from '../../../../components/Breadcrumbs'
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
-import ConnectionList from '../../ConnectionList'
+import ConnectionList from '../../../../components/ConnectionList'
 import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
 
 interface IResourceMetric {

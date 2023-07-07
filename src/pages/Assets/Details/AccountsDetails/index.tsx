@@ -14,7 +14,7 @@ import { filterAtom, timeAtom } from '../../../../store'
 import SingleAccount from './SingleAccount'
 import MultiAccount from './MultiAccount'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
-import ConnectionList from '../../ConnectionList'
+import ConnectionList from '../../../../components/ConnectionList'
 
 export default function AccountsDetails() {
     const navigate = useNavigate()

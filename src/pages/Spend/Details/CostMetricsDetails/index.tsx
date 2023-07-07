@@ -48,7 +48,7 @@ import {
 } from '../../../../api/onboard.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
-import ConnectionList from '../../ConnectionList'
+import ConnectionList from '../../../../components/ConnectionList'
 
 interface ICostMetric {
     metricName: string
