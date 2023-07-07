@@ -73,9 +73,7 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
-        valueFormatter: (params) => {
-            return exactPriceDisplay(params.value)
-        },
+        valueFormatter: (params) => exactPriceDisplay(params.value),
     },
     {
         field: 'from',
@@ -85,9 +83,7 @@ const columns: ColDef[] = [
         resizable: true,
         hide: true,
         flex: 1,
-        valueFormatter: (params) => {
-            return exactPriceDisplay(params.value)
-        },
+        valueFormatter: (params) => exactPriceDisplay(params.value),
     },
     {
         field: 'now',
@@ -97,9 +93,7 @@ const columns: ColDef[] = [
         resizable: true,
         hide: true,
         flex: 1,
-        valueFormatter: (params) => {
-            return exactPriceDisplay(params.value)
-        },
+        valueFormatter: (params) => exactPriceDisplay(params.value),
     },
     {
         field: 'changes',
@@ -251,7 +245,6 @@ export default function CostMetricsDetails() {
             })
         })
         setAccTableDdata(newData)
-        console.log('accounts', newData)
     }, [accounts])
 
     const categoryOptions = useMemo(() => {

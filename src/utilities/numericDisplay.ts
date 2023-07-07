@@ -39,12 +39,19 @@ export const priceDisplay = (value: string | number | undefined) => {
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 }
 
-export const exactPriceDisplay = (
-    value: string | number | undefined,
-    decimalpoint = 2
-) => {
+export const exactPriceDisplay = (value: string | number | undefined) => {
     return `$ ${parseFloat(value ? value.toString() : '0')
-        .toFixed(decimalpoint)
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+}
+
+export const numberDisplay = (
+    value: string | number | undefined,
+    decPoint = 2
+) => {
+    return `${parseFloat(value ? value.toString() : '0')
+        .toFixed(decPoint)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 }

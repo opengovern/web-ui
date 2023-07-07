@@ -35,7 +35,7 @@ import {
     useInventoryApiV2ResourcesTagList,
 } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 
@@ -67,6 +67,7 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
+        valueFormatter: (params) => numberDisplay(params.value, 0),
     },
     {
         field: 'count',
@@ -75,6 +76,7 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
+        valueFormatter: (params) => numberDisplay(params.value, 0),
     },
     {
         field: 'changes',
@@ -172,7 +174,9 @@ export default function ResourceMetricsDetails() {
         metrics?.resource_types?.map((res) => {
             const percent = percentage(res.count, res.old_count)
             newData.push({
-                metricName: res.resource_type,
+                metricName: res.resource_type
+                    ? res.resource_type
+                    : res.resource_type,
                 count: res.count,
                 from: res.old_count,
                 changes: Math.ceil(Math.abs(percent)),
