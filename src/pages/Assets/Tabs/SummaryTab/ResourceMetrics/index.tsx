@@ -1,5 +1,6 @@
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 import { selectedResourceCategoryAtom } from '../../../../../store'
 import { useInventoryApiV2ResourcesMetricList } from '../../../../../api/inventory.gen'
 import {
@@ -26,6 +27,7 @@ export default function ResourceMetrics({
     categories,
     connection,
 }: IProps) {
+    const navigate = useNavigate()
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
@@ -55,6 +57,13 @@ export default function ResourceMetrics({
                     displayedValue: numericDisplay(resourceType.count),
                     newValue: resourceType.count || 0,
                     oldValue: resourceType.old_count || 0,
+                    onClick: () => {
+                        navigate(
+                            `metrics/${encodeURIComponent(
+                                resourceType.resource_type || ''
+                            )}`
+                        )
+                    },
                 }
                 return v
             }) || []

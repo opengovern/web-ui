@@ -100,6 +100,7 @@ export default function CostMetrics({
             scopes={['Accounts', 'Services']}
             selectedScopeIdx={selectedScopeIdx}
             onScopeChange={setSelectedScopeIdx}
+            hideFrom
         />
     )
 }

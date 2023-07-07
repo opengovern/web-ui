@@ -39,6 +39,8 @@ interface IMetricsList {
     scopes?: string[]
     selectedScopeIdx?: number
     onScopeChange?: (scopeIdx: number) => void
+
+    hideFrom?: boolean
 }
 
 export default function MetricsList({
@@ -52,6 +54,7 @@ export default function MetricsList({
     scopes,
     selectedScopeIdx,
     onScopeChange,
+    hideFrom = false,
 }: IMetricsList) {
     const navigate = useNavigate()
     const percentage = (a?: number, b?: number): number => {
@@ -128,7 +131,7 @@ export default function MetricsList({
                             title={metric.name}
                             metric={metric.displayedValue}
                             metricPrev={
-                                metric.oldValue
+                                metric.oldValue && !hideFrom
                                     ? String(
                                           numericDisplay(metric.oldValue || 0)
                                       )
