@@ -24,15 +24,13 @@ export default function SummaryTab({
                 timeRange={timeRange}
                 pageSize={pageSize}
             />
-            <div className="mt-10">
-                <CostMetrics
-                    provider={provider}
-                    connection={connections}
-                    categories={categories}
-                    timeRange={timeRange}
-                    pageSize={pageSize}
-                />
-            </div>
+            <CostMetrics
+                provider={provider}
+                connection={connections}
+                categories={categories}
+                timeRange={timeRange}
+                pageSize={pageSize}
+            />
         </>
     )
 }
