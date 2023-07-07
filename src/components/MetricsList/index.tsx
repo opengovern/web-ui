@@ -120,7 +120,7 @@ export default function MetricsList({
                     gridContainerProps={{
                         numItemsSm: 2,
                         numItemsMd: 3,
-                        className: 'gap-3',
+                        className: 'gap-3 w-full',
                     }}
                 >
                     {metrics?.map((metric) => (
