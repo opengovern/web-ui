@@ -1,5 +1,6 @@
-import { Badge, BadgeDelta, Card, Flex, Icon, Text, Title } from '@tremor/react'
+import { Badge, Card, Flex, Icon, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
 import { ReactComponent as AWSIcon } from '../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import { ReactComponent as AzureIcon } from '../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import { numericDisplay } from '../../../utilities/numericDisplay'
@@ -10,7 +11,6 @@ interface IConnectorCard {
     status: any
     count: number | string | undefined
     description: string | undefined
-    url?: any
 }
 
 const getConnectorIcon = (connector: any) => {
@@ -32,13 +32,14 @@ export default function ConnectorCard({
     status,
     count,
     description,
-    url,
 }: IConnectorCard) {
+    const navigate = useNavigate()
+
     return (
         <Card
-            key="connector"
+            key={connector}
             className="cursor-pointer"
-            onClick={() => url || null}
+            onClick={() => navigate(`connector/${connector}`)}
         >
             <Flex flexDirection="row" className="mb-3">
                 {getConnectorIcon(connector)}

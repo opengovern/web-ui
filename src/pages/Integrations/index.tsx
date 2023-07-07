@@ -1,4 +1,4 @@
-import { Grid, Metric, Title } from '@tremor/react'
+import { Flex, Grid, Metric, Title } from '@tremor/react'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import {
     useOnboardApiV1CatalogMetricsList,
@@ -7,6 +7,7 @@ import {
 import SummaryCard from '../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../utilities/numericDisplay'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
+import Spinner from '../../components/Spinner'
 
 export default function Integrations() {
     const { response: topMetrics, isLoading: metricsLoading } =
@@ -14,7 +15,6 @@ export default function Integrations() {
     const { response: connectors, isLoading: connectorsLoading } =
         useOnboardApiV1ConnectorList()
 
-    console.log(connectors)
     return (
         <LoggedInLayout currentPage="integration">
             <Metric>Integrations</Metric>
@@ -42,17 +42,23 @@ export default function Integrations() {
                 />
             </Grid>
             <Title>Connectors</Title>
-            <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6">
-                {connectors?.map((connector) => (
-                    <ConnectorCard
-                        connector={connector.name}
-                        title={connector.label}
-                        status={connector.status}
-                        count={connector.connection_count}
-                        description={connector.description}
-                    />
-                ))}
-            </Grid>
+            {connectorsLoading ? (
+                <Flex className="mt-36">
+                    <Spinner />
+                </Flex>
+            ) : (
+                <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6">
+                    {connectors?.map((connector) => (
+                        <ConnectorCard
+                            connector={connector.name}
+                            title={connector.label}
+                            status={connector.status}
+                            count={connector.connection_count}
+                            description={connector.description}
+                        />
+                    ))}
+                </Grid>
+            )}
         </LoggedInLayout>
     )
 }
