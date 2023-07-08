@@ -1,11 +1,17 @@
 import { Button, Card, Flex, Title } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
+import {
+    ColDef,
+    GridOptions,
+    ICellRendererParams,
+    RowClickedEvent,
+} from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import { useRef, useState } from 'react'
 import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import DrawerPanel from '../../../../../../components/DrawerPanel'
 import Steps from './Steps'
+import OrgInfo from './OrgInfo'
 
 interface IOrganizations {
     organizations: any
@@ -104,13 +110,18 @@ const columns: ColDef[] = [
 export default function Organizations({ organizations }: IOrganizations) {
     const gridRef = useRef<AgGridReact>(null)
     const [open, setOpen] = useState(false)
-
+    const [openInfo, setOpenInfo] = useState(false)
+    const [orgData, setOrgData] = useState(null)
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
+        onRowClicked: (event: RowClickedEvent<any>) => {
+            setOrgData(event.data)
+            setOpenInfo(true)
+        },
         sideBar: {
             toolPanels: [
                 {
@@ -143,7 +154,6 @@ export default function Organizations({ organizations }: IOrganizations) {
                 </Flex>
                 <div className="ag-theme-alpine mt-6">
                     <AgGridReact
-                        // columnDefs={columns(organizations?.credentials)}
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
@@ -151,6 +161,16 @@ export default function Organizations({ organizations }: IOrganizations) {
                     />
                 </div>
             </Card>
+            <DrawerPanel
+                title="Organization"
+                open={openInfo}
+                onClose={() => {
+                    setOpenInfo(false)
+                    setOrgData(null)
+                }}
+            >
+                <OrgInfo data={orgData} />
+            </DrawerPanel>
             <DrawerPanel
                 title="New Organization"
                 open={open}

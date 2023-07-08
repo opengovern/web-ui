@@ -11,7 +11,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs'
 import SummaryCard from '../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { timeAtom } from '../../../store'
-import AWSPanels from './Panels/AWS'
+import AWSTabs from './AWS/Tabs'
 
 export default function ConnectorDetail() {
     const navigate = useNavigate()
@@ -85,10 +85,7 @@ export default function ConnectorDetail() {
                     />
                 </Grid>
                 {connector === 'AWS' ? (
-                    <AWSPanels
-                        accounts={accounts}
-                        organizations={credentials}
-                    />
+                    <AWSTabs accounts={accounts} organizations={credentials} />
                 ) : null}
             </Flex>
         </LoggedInLayout>

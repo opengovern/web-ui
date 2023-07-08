@@ -7,7 +7,7 @@ interface IAWS {
     organizations: any
 }
 
-export default function AWSPanels({ accounts, organizations }: IAWS) {
+export default function AWSTabs({ accounts, organizations }: IAWS) {
     return (
         <TabGroup>
             <TabList className="mb-3">
