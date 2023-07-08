@@ -127,8 +127,7 @@ export default function MetricDetails() {
         },
         undefined,
         {},
-        selectedConnections.provider === 'All' ||
-            selectedConnections.provider === ''
+        selectedConnections.provider === ''
     )
 
     const {
