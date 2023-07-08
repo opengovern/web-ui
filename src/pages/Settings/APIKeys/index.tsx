@@ -32,6 +32,7 @@ interface CreateAPIKeyProps {
 
 const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
     const [apiKeyName, setApiKeyName] = useState<string>('')
+    const [showCopied, setShowCopied] = useState<boolean>(false)
     const [role, setRole] = useState<string>('viewer')
     const [roleValue, setRoleValue] = useState<
         'admin' | 'editor' | 'viewer' | undefined
@@ -79,9 +80,20 @@ const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
                 title={error === undefined ? 'Successful' : 'Failed'}
                 description={
                     error === undefined ? (
-                        <Flex flexDirection="col" justifyContent="start">
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="start"
+                            alignItems="start"
+                        >
                             API key created, copy the key and keep it safe:
-                            <Card className="w-full">
+                            <Card
+                                className="w-full cursor-pointer"
+                                onClick={() => {
+                                    setShowCopied(true)
+                                    setTimeout(() => setShowCopied(false), 2000)
+                                    clipboardCopy(response?.token || '')
+                                }}
+                            >
                                 <Flex
                                     flexDirection="row"
                                     justifyContent="between"
@@ -89,12 +101,20 @@ const CreateAPIKey: React.FC<CreateAPIKeyProps> = ({ close }) => {
                                     <div className="w-full break-all">
                                         {response?.token}
                                     </div>
-                                    <DocumentDuplicateIcon
-                                        className="h-5 w-5 text-blue-600 cursor-pointer"
-                                        onClick={() =>
-                                            clipboardCopy(response?.token || '')
-                                        }
-                                    />
+                                    <Flex
+                                        flexDirection="col"
+                                        justifyContent="start"
+                                        className="h-5 w-5"
+                                    >
+                                        <DocumentDuplicateIcon className="h-5 w-5 text-blue-600 " />
+                                        <Text
+                                            className={`${
+                                                showCopied ? '' : 'hidden'
+                                            } absolute mt-6 bg-blue-600 text-white rounded-md p-1`}
+                                        >
+                                            Copied!
+                                        </Text>
+                                    </Flex>
                                 </Flex>
                             </Card>
                         </Flex>

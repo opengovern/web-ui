@@ -7,7 +7,11 @@ export const timeAtom = atom<DateRangePickerValue>({
     to: new Date(),
 })
 
-export const filterAtom = atom({
+interface IFilter {
+    provider: '' | 'AWS' | 'Azure'
+    connections: string[]
+}
+export const filterAtom = atom<IFilter>({
     provider: '',
     connections: [],
 })

@@ -52,6 +52,7 @@ function classNames(...classes: any) {
 
 export default function CLIMenu() {
     const [currentTab, setCurrentTab] = useState<number>(0)
+    const [showCopied, setShowCopied] = useState<boolean>(false)
 
     const getCurrentTab = () => {
         return tabs.at(currentTab)
@@ -73,7 +74,7 @@ export default function CLIMenu() {
                 leaveTo="opacity-0 translate-y-1"
             >
                 <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
-                    <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+                    <div className="w-screen max-w-md flex-auto overflow-hidden rounded-lg bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
                         <div>
                             <nav className="isolate flex divide-x divide-gray-200 rounded-lg shadow">
                                 {tabs.map((tab, tabIdx) => (
@@ -82,7 +83,7 @@ export default function CLIMenu() {
                                         justifyContent="center"
                                         className={classNames(
                                             currentTab === tabIdx
-                                                ? 'bg-blue-50 text-blue-800 fill-blue-800'
+                                                ? 'bg-blue-50 text-blue-800 fill-blue-600'
                                                 : 'bg-gray-50 text-gray-600 fill-gray-600 hover:text-gray-700',
                                             tabIdx === 0 ? 'rounded-l-lg' : '',
                                             tabIdx === tabs.length - 1
@@ -119,17 +120,33 @@ export default function CLIMenu() {
                             {getCurrentTab()?.commands && (
                                 <Card
                                     className="w-2/3 text-gray-800 font-mono cursor-pointer p-2.5"
-                                    onClick={() =>
+                                    onClick={() => {
+                                        setShowCopied(true)
+                                        setTimeout(() => {
+                                            setShowCopied(false)
+                                        }, 2000)
                                         clipboardCopy(
                                             getCurrentTab()?.clipboard || ''
                                         )
-                                    }
+                                    }}
                                 >
                                     <Flex flexDirection="row">
                                         <Text className="px-1.5 text-gray-800">
                                             {getCurrentTab()?.commands}
                                         </Text>
-                                        <DocumentDuplicateIcon className="h-5 w-5 text-blue-600 cursor-pointer" />
+                                        <Flex
+                                            flexDirection="col"
+                                            className="h-5 w-5"
+                                        >
+                                            <DocumentDuplicateIcon className="h-5 w-5 text-blue-600 cursor-pointer" />
+                                            <Text
+                                                className={`${
+                                                    showCopied ? '' : 'hidden'
+                                                } absolute -bottom-4 bg-blue-600 text-white rounded-md p-1`}
+                                            >
+                                                Copied!
+                                            </Text>
+                                        </Flex>
                                     </Flex>
                                 </Card>
                             )}

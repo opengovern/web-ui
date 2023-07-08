@@ -1,25 +1,11 @@
-import React, { useState } from 'react'
-import {
-    Button,
-    Text,
-    Grid,
-    SearchSelect,
-    SearchSelectItem,
-    Title,
-    TabGroup,
-    TabList,
-    Tab,
-} from '@tremor/react'
+import { useState } from 'react'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
-import { useNavigate } from 'react-router-dom'
-import Swiper from '../../../../../components/Swiper'
-import MetricCard from '../../../../../components/Cards/MetricCard'
 import { selectedResourceCategoryAtom } from '../../../../../store'
 import { useInventoryApiV2CostMetricList } from '../../../../../api/inventory.gen'
-import { numericDisplay } from '../../../../../utilities/numericDisplay'
-import Spinner from '../../../../../components/Spinner'
+import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
+import MetricsList, { IMetric } from '../../../../../components/MetricsList'
 
 interface IProps {
     provider: any
@@ -39,11 +25,10 @@ export default function CostMetrics({
     categories,
     connection,
 }: IProps) {
-    const navigate = useNavigate()
+    const [selectedScopeIdx, setSelectedScopeIdx] = useState<number>(0)
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
-    const [selectedIndex, setSelectedIndex] = useState(0)
     const activeCategory =
         selectedResourceCategory === 'All Categories'
             ? ''
@@ -56,140 +41,66 @@ export default function CostMetrics({
         ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
         ...(pageSize && { pageSize }),
     }
-    const { response: metrics, isLoading } =
+    const { response: serviceCostResponse, isLoading: serviceCostLoading } =
         useInventoryApiV2CostMetricList(query)
 
-    const { response: accounts, isLoading: isAccountsLoading } =
+    const { response: accountCostResponse, isLoading: accountCostLoading } =
         useOnboardApiV1ConnectionsSummaryList({
             connector: provider,
             connectionId: connection,
-            startTime: timeRange[0],
-            endTime: timeRange[1],
+            startTime: dayjs(timeRange.from).unix(),
+            endTime: dayjs(timeRange.to).unix(),
             pageSize: 10000,
             pageNumber: 1,
         })
 
-    const percentage = (a?: number, b?: number): number => {
-        return a && b ? ((a - b) / b) * 100 : 0
+    const metrics = () => {
+        const accountsMetrics = accountCostResponse?.connections?.map(
+            (conn) => {
+                const v: IMetric = {
+                    name:
+                        conn.providerConnectionName ||
+                        conn.providerConnectionID ||
+                        '',
+                    displayedValue: exactPriceDisplay(conn.cost || 0),
+                    newValue: conn.dailyCostAtEndTime || 0,
+                    oldValue: conn.dailyCostAtStartTime || 0,
+                }
+
+                return v
+            }
+        )
+
+        const servicesMetrics = serviceCostResponse?.metrics?.map((svc) => {
+            const v: IMetric = {
+                name: svc.cost_dimension_name || '',
+                displayedValue: exactPriceDisplay(svc.total_cost || 0),
+                newValue: svc.daily_cost_at_end_time || 0,
+                oldValue: svc.daily_cost_at_start_time || 0,
+            }
+
+            return v
+        })
+
+        if (selectedScopeIdx === 0) {
+            return accountsMetrics || []
+        }
+        return servicesMetrics || []
     }
 
     return (
-        <div>
-            {/* <div className="h-80" /> */}
-            <div className="flex justify-between gap-x-2">
-                <div className="flex flex-row justify-start items-start">
-                    <Title>
-                        Cost {selectedIndex ? 'Accounts' : 'Services'} Metrics{' '}
-                    </Title>
-                    <Button
-                        variant="light"
-                        className="mt-1 ml-2"
-                        onClick={() => navigate('spend-metrics')}
-                    >
-                        <Text color="blue">(see All)</Text>
-                    </Button>
-                </div>
-                <div className="flex flex-row items-start">
-                    <SearchSelect
-                        onValueChange={(e) => setSelectedResourceCategory(e)}
-                        value={selectedResourceCategory}
-                        placeholder="Source Selection"
-                        className="max-w-xs mb-6"
-                    >
-                        {categories.map((category) => (
-                            <SearchSelectItem
-                                key={category.label}
-                                value={category.value}
-                            >
-                                {category.value}
-                            </SearchSelectItem>
-                        ))}
-                    </SearchSelect>
-                    <span className="ml-5">
-                        <TabGroup
-                            index={selectedIndex}
-                            onIndexChange={setSelectedIndex}
-                        >
-                            <TabList variant="solid">
-                                <Tab>Services</Tab>
-                                <Tab>Accounts</Tab>
-                            </TabList>
-                        </TabGroup>
-                    </span>
-                </div>
-            </div>
-            <Grid>
-                {isLoading && (
-                    <div className="flex items-center justify-center">
-                        <Spinner />
-                    </div>
-                )}
-                <Swiper
-                    gridContainerProps={{
-                        numItemsSm: 2,
-                        numItemsMd: 3,
-                        className: 'gap-6',
-                    }}
-                >
-                    {!selectedIndex
-                        ? !isLoading &&
-                          metrics?.metrics?.map((metric) => (
-                              <MetricCard
-                                  title={
-                                      metric.cost_dimension_name
-                                          ? metric.cost_dimension_name
-                                          : String(metric.cost_dimension_name)
-                                  }
-                                  metric={`$ ${String(
-                                      numericDisplay(
-                                          metric.total_cost
-                                              ? metric.total_cost
-                                              : 0
-                                      )
-                                  )}`}
-                                  delta={Math.abs(
-                                      percentage(
-                                          metric.daily_cost_at_end_time,
-                                          metric.daily_cost_at_start_time
-                                      )
-                                  ).toFixed(2)}
-                                  deltaType={
-                                      percentage(
-                                          metric.daily_cost_at_end_time,
-                                          metric.daily_cost_at_start_time
-                                      ) > 0
-                                          ? 'moderateIncrease'
-                                          : 'moderateDecrease'
-                                  }
-                              />
-                          ))
-                        : !isAccountsLoading &&
-                          accounts?.connections?.map((account) => (
-                              <MetricCard
-                                  title={account.credentialName}
-                                  metric={`$ ${String(
-                                      numericDisplay(
-                                          account.cost ? account.cost : 0
-                                      )
-                                  )}`}
-                                  delta={Math.abs(
-                                      percentage(
-                                          account.dailyCostAtEndTime,
-                                          account.dailyCostAtStartTime
-                                      )
-                                  )}
-                                  deltaType={
-                                      percentage(
-                                          account.dailyCostAtEndTime,
-                                          account.dailyCostAtStartTime
-                                      ) > 0
-                                          ? 'moderateIncrease'
-                                          : 'moderateDecrease'
-                                  }
-                              />
-                          ))}
-                </Swiper>
-            </Grid>
-        </div>
+        <MetricsList
+            name="Cost"
+            seeMoreUrl="spend-metrics"
+            isLoading={accountCostLoading || serviceCostLoading}
+            metrics={metrics()}
+            categories={categories}
+            selectedCategory={selectedResourceCategory}
+            onChangeCategory={setSelectedResourceCategory}
+            scopes={['Accounts', 'Services']}
+            selectedScopeIdx={selectedScopeIdx}
+            onScopeChange={setSelectedScopeIdx}
+            hideFrom
+        />
     )
 }

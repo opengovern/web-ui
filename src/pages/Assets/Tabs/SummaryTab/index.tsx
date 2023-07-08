@@ -18,11 +18,11 @@ export default function SummaryTab({
 }: IProps) {
     return (
         <>
-            <SummaryMetrics
+            {/* <SummaryMetrics
                 provider={provider}
                 connections={connections}
                 timeRange={timeRange}
-            />
+            /> */}
             <ResourceMetrics
                 provider={provider}
                 connection={connections}

@@ -6,6 +6,7 @@ type IProps = {
     metricPrev?: string
     deltaType?: DeltaType
     delta?: any
+    onClick?: () => void
 }
 
 export default function CMBCard({
@@ -14,10 +15,16 @@ export default function CMBCard({
     deltaType,
     metricPrev,
     delta,
+    onClick,
     ...props
 }: IProps) {
     return (
-        <Card key={title} {...props}>
+        <Card
+            key={title}
+            {...props}
+            onClick={onClick}
+            className={onClick ? 'cursor-pointer' : ''}
+        >
             <Flex alignItems="start">
                 {title && <Text className="truncate">{title}</Text>}
                 {delta ? (

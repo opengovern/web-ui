@@ -1,5 +1,6 @@
 import {
     BadgeDelta,
+    Button,
     Card,
     DateRangePicker,
     DeltaType,
@@ -15,6 +16,8 @@ import {
     Text,
     Title,
 } from '@tremor/react'
+import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
+import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useAtom } from 'jotai'
@@ -32,12 +35,14 @@ import {
     useInventoryApiV2ResourcesTagList,
 } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
+import ConnectionList from '../../../../components/ConnectionList'
+import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
 
 interface IResourceMetric {
     metricName: string
@@ -62,6 +67,7 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
+        valueFormatter: (params) => numberDisplay(params.value, 0),
     },
     {
         field: 'count',
@@ -70,6 +76,7 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
+        valueFormatter: (params) => numberDisplay(params.value, 0),
     },
     {
         field: 'changes',
@@ -102,6 +109,9 @@ export default function ResourceMetricsDetails() {
 
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const [openDrawer, setOpenDrawer] = useState(false)
+    const { response: connections, isLoading: connectionsLoading } =
+        useOnboardApiV1SourcesList()
 
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
@@ -164,7 +174,7 @@ export default function ResourceMetricsDetails() {
         metrics?.resource_types?.map((res) => {
             const percent = percentage(res.count, res.old_count)
             newData.push({
-                metricName: res.resource_type,
+                metricName: res.resource_name || res.resource_type,
                 count: res.count,
                 from: res.old_count,
                 changes: Math.ceil(Math.abs(percent)),
@@ -183,6 +193,7 @@ export default function ResourceMetricsDetails() {
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
+        paginationPageSize: 25,
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
@@ -229,6 +240,23 @@ export default function ResourceMetricsDetails() {
         { name: 'Resource metrics', path: '', current: true },
     ]
 
+    const handleDrawer = (data: any) => {
+        if (openDrawer) {
+            setSelectedConnections(data)
+            setOpenDrawer(false)
+        } else setOpenDrawer(true)
+    }
+
+    const filterText = () => {
+        if (selectedConnections.connections.length > 0) {
+            return <Text>{selectedConnections.connections.length} Filters</Text>
+        }
+        if (selectedConnections.provider !== '') {
+            return <Text>{selectedConnections.provider}</Text>
+        }
+        return 'Filters'
+    }
+
     return (
         <LoggedInLayout currentPage="assets">
             <Flex
@@ -237,13 +265,36 @@ export default function ResourceMetricsDetails() {
                 alignItems="center"
             >
                 <Breadcrumbs pages={breadcrumbsPages} />
-                <DateRangePicker
-                    className="max-w-md"
-                    value={activeTimeRange}
-                    onValueChange={setActiveTimeRange}
-                    enableClear={false}
-                    maxDate={new Date()}
-                />
+
+                <Flex flexDirection="row" justifyContent="end">
+                    <DateRangePicker
+                        className="max-w-md"
+                        value={activeTimeRange}
+                        onValueChange={setActiveTimeRange}
+                        enableClear={false}
+                        maxDate={new Date()}
+                    />
+                    <Button
+                        variant="secondary"
+                        className="ml-2 h-9"
+                        onClick={() => setOpenDrawer(true)}
+                        icon={
+                            selectedConnections.connections.length > 0 ||
+                            selectedConnections.provider !== ''
+                                ? FunnelIconSolid
+                                : FunnelIconOutline
+                        }
+                    >
+                        {filterText()}
+                    </Button>
+                    <ConnectionList
+                        connections={connections || []}
+                        loading={connectionsLoading}
+                        open={openDrawer}
+                        selectedConnectionsProps={selectedConnections}
+                        onClose={(data: any) => handleDrawer(data)}
+                    />
+                </Flex>
             </Flex>
             <Card className="mt-10">
                 <Flex>
@@ -264,45 +315,7 @@ export default function ResourceMetricsDetails() {
                         ))}
                     </SearchSelect>
                 </Flex>
-                {/* tableData.length > 0 ? (
-                    <Table className="mt-5">
-                        <TableHead>
-                            <TableRow>
-                                <TableHeaderCell>Metric Name</TableHeaderCell>
-                                <TableHeaderCell>From</TableHeaderCell>
-                                <TableHeaderCell>Count</TableHeaderCell>
-                                <TableHeaderCell>Changes</TableHeaderCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {tableData.map((item: any) => (
-                                <TableRow key={item.metricName}>
-                                    <TableCell>{item.metricName}</TableCell>
-                                    <TableCell>
-                                        <Text>{numericDisplay(item.from)}</Text>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Text>
-                                            {numericDisplay(item.count)}
-                                        </Text>
-                                    </TableCell>
-                                    <TableCell>
-                                        <BadgeDelta
-                                            color="emerald"
-                                            deltaType={item.deltaType}
-                                        >
-                                            {`${item.changes} %`}
-                                        </BadgeDelta>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                ) : (
-                    <div className="flex justify-center">
-                        <Spinner />
-                    </div>
-                ) */}
+
                 <div className="ag-theme-alpine mt-10">
                     <AgGridReact
                         ref={gridRef}

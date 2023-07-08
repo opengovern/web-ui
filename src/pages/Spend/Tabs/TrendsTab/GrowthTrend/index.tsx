@@ -6,12 +6,17 @@ import {
     Flex,
     SearchSelect,
     SearchSelectItem,
+    Select,
+    SelectItem,
     Text,
     Title,
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numericDisplay,
+} from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
@@ -25,7 +30,6 @@ type IProps = {
     connections?: []
 }
 
-const selectedTrendCostProviderAtom = atom<string>('')
 export default function GrowthTrend({
     timeRange,
     connections,
@@ -34,9 +38,8 @@ export default function GrowthTrend({
     const [growthDeltaType, setGrowthDeltaType] =
         useState<DeltaType>('unchanged')
     const [growthDelta, setGrowthDelta] = useState(0)
-    const [selectedTrendCostProvider, setSelectedTrendCostProvider] = useAtom(
-        selectedTrendCostProviderAtom
-    )
+    const [selectedTrendCostProvider, setSelectedTrendCostProvider] =
+        useState<string>('')
     const query = {
         ...(selectedTrendCostProvider && {
             connector: selectedTrendCostProvider,
@@ -99,23 +102,26 @@ export default function GrowthTrend({
                         <Text>
                             <span className="text-gray-500">Provider: </span>
                         </Text>
-                        <SearchSelect
+                        <Select
                             onValueChange={(e) =>
                                 setSelectedTrendCostProvider(e)
                             }
-                            value={selectedTrendCostProvider}
-                            placeholder="Provider Selection"
+                            placeholder={
+                                selectedTrendCostProvider === ''
+                                    ? 'All'
+                                    : selectedTrendCostProvider
+                            }
                             className="max-w-xs mb-6"
                         >
                             {categories.map((category) => (
-                                <SearchSelectItem
+                                <SelectItem
                                     key={category.label}
                                     value={category.value}
                                 >
                                     {category.label}
-                                </SearchSelectItem>
+                                </SelectItem>
                             ))}
-                        </SearchSelect>
+                        </Select>
                     </div>
                 </div>
             </Flex>
@@ -128,10 +134,11 @@ export default function GrowthTrend({
                     className="mt-4 h-80"
                     index="date"
                     type="line"
-                    yAxisWidth={60}
+                    yAxisWidth={120}
                     categories={['count']}
                     data={fixTime(data) || []}
                     showAnimation
+                    valueFormatter={exactPriceDisplay}
                 />
             )}
         </Card>
