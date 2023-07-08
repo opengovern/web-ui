@@ -4,7 +4,6 @@ import dayjs from 'dayjs'
 import GrowthTrend from './GrowthTrend'
 import TopAccountTrend from './TopAccountTrend'
 import TopServiceTrend from './TopServiceTrend'
-import CardWithList from '../../../../components/Cards/CardWithList'
 import {
     useInventoryApiV2ServicesMetricList,
     useInventoryApiV2ServicesCostTrendList,
@@ -69,33 +68,6 @@ export default function TrendsTab({
         }
         return result
     }
-
-    // useEffect(() => {
-    //     const AccountData = consumptionAccountData(
-    //         accountsConsumption?.connections
-    //     )
-    //     const ServicesData = consumptionServicesData(
-    //         servicesConsumption?.services
-    //     )
-    //     const gAccountData = growthAccountData(accountsGrowth?.connections)
-    //     const GServicesData = growthServicesData(servicesGrowth?.services)
-    //     // console.log('data', data)
-    //     setConsumptionData({
-    //         ...consumptionData,
-    //         Accounts: AccountData,
-    //         Services: ServicesData,
-    //     })
-    //     setGrowthData({
-    //         ...growthData,
-    //         Accounts: gAccountData,
-    //         Services: GServicesData,
-    //     })
-    // }, [
-    //     accountsConsumption,
-    //     servicesConsumption,
-    //     accountsGrowth,
-    //     servicesGrowth,
-    // ])
 
     return (
         <div className="mt-5">
