@@ -6,6 +6,8 @@ import {
     UserIcon,
 } from '@heroicons/react/24/outline'
 import { Link, useParams } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
+import jwtDecode from 'jwt-decode'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import SettingsMetadata from './Metadata'
 import SettingsMembers from './Members'
@@ -13,6 +15,7 @@ import SettingsWorkspaceAPIKeys from './APIKeys'
 import SettingsProfile from './Profile'
 import SettingsOrganization from './Organization'
 import SettingsQueries from './Queries'
+import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -23,53 +26,79 @@ const navigation = [
         name: 'Workspace',
         page: '',
         icon: FolderIcon,
+        role: ['admin', 'editor', 'viewer'],
     },
     {
         name: 'Metadata',
         page: 'metadata',
         component: <SettingsMetadata />,
+        role: ['admin', 'editor', 'viewer'],
     },
     {
         name: 'Members',
         page: 'members',
         component: <SettingsMembers />,
+        role: ['admin'],
     },
     {
         name: 'API Keys',
         page: 'apikeys',
         component: <SettingsWorkspaceAPIKeys />,
+        role: ['admin'],
     },
     {
         name: 'Queries',
         page: 'queries',
         component: <SettingsQueries />,
+        role: ['admin'],
     },
     {
         name: 'Organization',
         page: '',
         icon: BuildingOfficeIcon,
+        role: ['admin', 'editor', 'viewer'],
     },
     {
         name: 'Organization Info',
         page: 'org',
         component: <SettingsOrganization />,
+        role: ['admin', 'editor', 'viewer'],
     },
     {
         name: 'Personal',
         page: '',
         icon: UserIcon,
+        role: ['admin', 'editor', 'viewer'],
     },
     {
         name: 'Profile',
         page: 'profile',
         component: <SettingsProfile />,
+        role: ['admin', 'editor', 'viewer'],
     },
 ]
 
 const Settings: React.FC<any> = () => {
+    const [role, setRole] = React.useState<
+        string | 'admin' | 'editor' | 'viewer'
+    >('viewer')
+    const { getAccessTokenSilently, user } = useAuth0()
+    const { response: workspaces, isLoading } =
+        useWorkspaceApiV1WorkspacesList()
     const workspace = useParams<{ ws: string }>().ws
     const currentSubPage = useParams<{ settingsPage: string }>().settingsPage
-
+    getAccessTokenSilently().then((e) => {
+        const decoded: any = jwtDecode(e)
+        workspaces?.forEach((w) => {
+            if (w.name === workspace) {
+                if (w.id) {
+                    setRole(
+                        decoded['https://app.kaytu.io/workspaceAccess'][w.id]
+                    )
+                }
+            }
+        })
+    })
     return (
         <LoggedInLayout currentPage="settings">
             <Flex flexDirection="row" alignItems="start">
@@ -84,38 +113,46 @@ const Settings: React.FC<any> = () => {
                             <ul className="flex flex-col gap-y-7">
                                 <li>
                                     <ul className="space-y-1.5">
-                                        {navigation.map((item) => (
-                                            <li key={item.name}>
-                                                {item.page === '' ? (
-                                                    <div
-                                                        className={classNames(
-                                                            'text-gray-500 font-semibold group flex gap-x-3 p-1'
-                                                        )}
-                                                    >
-                                                        {item.icon && (
-                                                            <item.icon className="h-6 w-6 shrink-0" />
-                                                        )}
-                                                        {item.name}
-                                                    </div>
-                                                ) : (
-                                                    <Link
-                                                        to={`/${workspace}/settings/${item.page}`}
-                                                        className={classNames(
-                                                            item.page ===
-                                                                currentSubPage ||
-                                                                (!currentSubPage &&
-                                                                    item.page ===
-                                                                        'metadata')
-                                                                ? 'bg-blue-100 rounded-lg text-gray-800'
-                                                                : 'text-gray-500',
-                                                            'font-medium group flex gap-x-3 py-2 px-10'
-                                                        )}
-                                                    >
-                                                        {item.name}
-                                                    </Link>
-                                                )}
-                                            </li>
-                                        ))}
+                                        {navigation.map((item) => {
+                                            if (
+                                                !item.role.includes(role) &&
+                                                item.role.length > 0
+                                            ) {
+                                                return null
+                                            }
+                                            return (
+                                                <li key={item.name}>
+                                                    {item.page === '' ? (
+                                                        <div
+                                                            className={classNames(
+                                                                'text-gray-500 font-semibold group flex gap-x-3 p-1'
+                                                            )}
+                                                        >
+                                                            {item.icon && (
+                                                                <item.icon className="h-6 w-6 shrink-0" />
+                                                            )}
+                                                            {item.name}
+                                                        </div>
+                                                    ) : (
+                                                        <Link
+                                                            to={`/${workspace}/settings/${item.page}`}
+                                                            className={classNames(
+                                                                item.page ===
+                                                                    currentSubPage ||
+                                                                    (!currentSubPage &&
+                                                                        item.page ===
+                                                                            'metadata')
+                                                                    ? 'bg-blue-100 rounded-lg text-gray-800'
+                                                                    : 'text-gray-500',
+                                                                'font-medium group flex gap-x-3 py-2 px-10'
+                                                            )}
+                                                        >
+                                                            {item.name}
+                                                        </Link>
+                                                    )}
+                                                </li>
+                                            )
+                                        })}
                                     </ul>
                                 </li>
                             </ul>

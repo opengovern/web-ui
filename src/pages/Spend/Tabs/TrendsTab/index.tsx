@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import GrowthTrend from './GrowthTrend'
 import TopAccountTrend from './TopAccountTrend'
 import TopServiceTrend from './TopServiceTrend'
-import CardWithList from '../../../../components/Cards/CardWithList'
+// import CardWithList from '../../../../components/Cards/CardWithList'
 import {
     useInventoryApiV2ServicesMetricList,
     useInventoryApiV2ServicesCostTrendList,
