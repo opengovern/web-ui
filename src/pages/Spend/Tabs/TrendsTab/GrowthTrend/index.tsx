@@ -6,6 +6,8 @@ import {
     Flex,
     SearchSelect,
     SearchSelectItem,
+    Select,
+    SelectItem,
     Text,
     Title,
 } from '@tremor/react'
@@ -28,7 +30,6 @@ type IProps = {
     connections?: []
 }
 
-const selectedTrendCostProviderAtom = atom<string>('')
 export default function GrowthTrend({
     timeRange,
     connections,
@@ -37,9 +38,8 @@ export default function GrowthTrend({
     const [growthDeltaType, setGrowthDeltaType] =
         useState<DeltaType>('unchanged')
     const [growthDelta, setGrowthDelta] = useState(0)
-    const [selectedTrendCostProvider, setSelectedTrendCostProvider] = useAtom(
-        selectedTrendCostProviderAtom
-    )
+    const [selectedTrendCostProvider, setSelectedTrendCostProvider] =
+        useState<string>('')
     const query = {
         ...(selectedTrendCostProvider && {
             connector: selectedTrendCostProvider,
@@ -102,23 +102,26 @@ export default function GrowthTrend({
                         <Text>
                             <span className="text-gray-500">Provider: </span>
                         </Text>
-                        <SearchSelect
+                        <Select
                             onValueChange={(e) =>
                                 setSelectedTrendCostProvider(e)
                             }
-                            value={selectedTrendCostProvider}
-                            placeholder="Provider Selection"
+                            placeholder={
+                                selectedTrendCostProvider === ''
+                                    ? 'All'
+                                    : selectedTrendCostProvider
+                            }
                             className="max-w-xs mb-6"
                         >
                             {categories.map((category) => (
-                                <SearchSelectItem
+                                <SelectItem
                                     key={category.label}
                                     value={category.value}
                                 >
                                     {category.label}
-                                </SearchSelectItem>
+                                </SelectItem>
                             ))}
-                        </SearchSelect>
+                        </Select>
                     </div>
                 </div>
             </Flex>

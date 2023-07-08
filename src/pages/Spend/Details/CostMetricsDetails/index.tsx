@@ -73,7 +73,7 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
-        valueFormatter: (params) => exactPriceDisplay(params.value),
+        valueFormatter: (params) => exactPriceDisplay(params.value, 2),
     },
     {
         field: 'from',
@@ -83,7 +83,7 @@ const columns: ColDef[] = [
         resizable: true,
         hide: true,
         flex: 1,
-        valueFormatter: (params) => exactPriceDisplay(params.value),
+        valueFormatter: (params) => exactPriceDisplay(params.value, 2),
     },
     {
         field: 'now',
@@ -93,7 +93,7 @@ const columns: ColDef[] = [
         resizable: true,
         hide: true,
         flex: 1,
-        valueFormatter: (params) => exactPriceDisplay(params.value),
+        valueFormatter: (params) => exactPriceDisplay(params.value, 2),
     },
     {
         field: 'changes',
@@ -230,7 +230,8 @@ export default function CostMetricsDetails() {
                 res.dailyCostAtStartTime
             )
             newData.push({
-                metricName: res.credentialName,
+                metricName:
+                    res.providerConnectionName || res.providerConnectionID,
                 aggregatedCost: res.cost,
                 from: res.dailyCostAtStartTime ? res.dailyCostAtStartTime : 0,
                 now: res.dailyCostAtEndTime ? res.dailyCostAtEndTime : 0,
@@ -272,6 +273,7 @@ export default function CostMetricsDetails() {
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
+        paginationPageSize: 25,
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
@@ -343,33 +345,35 @@ export default function CostMetricsDetails() {
                 alignItems="center"
             >
                 <Breadcrumbs pages={breadcrumbsPages} />
-                <DateRangePicker
-                    className="max-w-md"
-                    value={activeTimeRange}
-                    onValueChange={setActiveTimeRange}
-                    enableClear={false}
-                    maxDate={new Date()}
-                />
-                <Button
-                    variant="secondary"
-                    className="ml-2 h-9"
-                    onClick={() => setOpenDrawer(true)}
-                    icon={
-                        selectedConnections.connections.length > 0 ||
-                        selectedConnections.provider !== ''
-                            ? FunnelIconSolid
-                            : FunnelIconOutline
-                    }
-                >
-                    {filterText()}
-                </Button>
-                <ConnectionList
-                    connections={connections || []}
-                    loading={connectionsLoading}
-                    open={openDrawer}
-                    selectedConnectionsProps={selectedConnections}
-                    onClose={(data: any) => handleDrawer(data)}
-                />
+                <Flex flexDirection="row" justifyContent="end" alignItems="end">
+                    <DateRangePicker
+                        className="max-w-md"
+                        value={activeTimeRange}
+                        onValueChange={setActiveTimeRange}
+                        enableClear={false}
+                        maxDate={new Date()}
+                    />
+                    <Button
+                        variant="secondary"
+                        className="ml-2 h-9"
+                        onClick={() => setOpenDrawer(true)}
+                        icon={
+                            selectedConnections.connections.length > 0 ||
+                            selectedConnections.provider !== ''
+                                ? FunnelIconSolid
+                                : FunnelIconOutline
+                        }
+                    >
+                        {filterText()}
+                    </Button>
+                    <ConnectionList
+                        connections={connections || []}
+                        loading={connectionsLoading}
+                        open={openDrawer}
+                        selectedConnectionsProps={selectedConnections}
+                        onClose={(data: any) => handleDrawer(data)}
+                    />
+                </Flex>
             </Flex>
             <Card className="mt-10">
                 <Flex>

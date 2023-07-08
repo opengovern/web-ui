@@ -91,6 +91,7 @@ export default function ServicesDetails() {
         columnDefs: columns,
         pagination: true,
         rowSelection: 'multiple',
+        paginationPageSize: 25,
         animateRows: true,
         getRowHeight: (params) => 50,
         onGridReady: (params) => {

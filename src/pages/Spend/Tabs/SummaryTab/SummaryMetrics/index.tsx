@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import { useInventoryApiV2CostMetricList } from '../../../../../api/inventory.gen'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
+import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
 
 interface IProps {
     provider: any
@@ -40,9 +41,7 @@ export default function SummaryMetrics({
         <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6 mb-10">
             <SummaryCard
                 title="Accounts Total Cost"
-                metric={`$ ${accounts?.totalCost?.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                })}`}
+                metric={exactPriceDisplay(accounts?.totalCost)}
                 loading={accountsLoading}
             />
             <SummaryCard

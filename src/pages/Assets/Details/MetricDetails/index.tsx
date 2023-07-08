@@ -173,6 +173,7 @@ export default function MetricDetails() {
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
+        paginationPageSize: 25,
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
@@ -294,11 +295,6 @@ export default function MetricDetails() {
                 })
         }
     }
-
-    console.log(
-        selectedConnections.provider === 'All' ||
-            selectedConnections.provider === ''
-    )
 
     return (
         <LoggedInLayout currentPage="assets">

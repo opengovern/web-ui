@@ -114,7 +114,7 @@ const calculatePercent = (inputData: any) => {
 const gridOptions: GridOptions = {
     pagination: true,
     animateRows: true,
-    paginationPageSize: 50,
+    paginationPageSize: 25,
     getRowHeight: (params: any) => 50,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
