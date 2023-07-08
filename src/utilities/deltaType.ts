@@ -12,9 +12,9 @@ export const badgeTypeByDelta = (
     }
     if (changes > 0) {
         deltaType = 'moderateIncrease'
-        return deltaType
+    } else {
+        deltaType = 'moderateDecrease'
     }
-    deltaType = 'moderateDecrease'
     return deltaType
 }
 
