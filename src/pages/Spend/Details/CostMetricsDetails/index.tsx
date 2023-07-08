@@ -230,7 +230,8 @@ export default function CostMetricsDetails() {
                 res.dailyCostAtStartTime
             )
             newData.push({
-                metricName: res.credentialName,
+                metricName:
+                    res.providerConnectionName || res.providerConnectionID,
                 aggregatedCost: res.cost,
                 from: res.dailyCostAtStartTime ? res.dailyCostAtStartTime : 0,
                 now: res.dailyCostAtEndTime ? res.dailyCostAtEndTime : 0,
