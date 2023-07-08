@@ -1,13 +1,11 @@
-import dayjs from 'dayjs'
-import { Card, Title } from '@tremor/react'
+import { Card, Flex, Title } from '@tremor/react'
 import React, { useRef } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../../api/onboard.gen'
 
 interface IAccountList {
-    activeTimeRange: any
+    accounts: any
 }
 
 const columns: ColDef[] = [
@@ -20,12 +18,15 @@ const columns: ColDef[] = [
         cellStyle: { padding: 0 },
         cellRenderer: (params: ICellRendererParams) => {
             return (
-                <div className="flex justify-center items-center w-full h-full">
+                <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    className="w-full h-full"
+                >
                     <AWSIcon />
-                </div>
+                </Flex>
             )
         },
-        // checkboxSelection: true,
     },
     {
         field: 'providerConnectionName',
@@ -80,19 +81,8 @@ const columns: ColDef[] = [
     },
 ]
 
-export default function AccountList({ activeTimeRange }: IAccountList) {
+export default function AccountList({ accounts }: IAccountList) {
     const gridRef = useRef<AgGridReact>(null)
-    const { response: accounts, isLoading: isAccountsLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connector: 'AWS',
-            startTime: dayjs(activeTimeRange.from).unix(),
-            endTime: dayjs(activeTimeRange.to).unix(),
-            pageSize: 10000,
-            pageNumber: 1,
-        })
-    console.log(accounts)
 
     const gridOptions: GridOptions = {
         columnDefs: columns,

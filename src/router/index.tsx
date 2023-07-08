@@ -14,7 +14,7 @@ import ServicesDetails from '../pages/Assets/Details/ServicesDetails'
 import ResourceMetricsDetails from '../pages/Assets/Details/ResourceMetricsDetails'
 import Integrations from '../pages/Integrations'
 import CostMetricsDetails from '../pages/Spend/Details/CostMetricsDetails'
-import AWSConnectorDetail from '../pages/Integrations/ConnectorDetail/AWS'
+import ConnectorDetail from '../pages/Integrations/ConnectorDetail'
 
 const routes = [
     {
@@ -97,8 +97,8 @@ const authRoutes = [
     },
     {
         key: 'connector detail',
-        path: '/:ws/integration/connector/AWS',
-        component: AWSConnectorDetail,
+        path: '/:ws/integration/connector/:connector',
+        component: ConnectorDetail,
     },
     {
         key: 'settings',
