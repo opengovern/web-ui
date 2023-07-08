@@ -344,33 +344,35 @@ export default function CostMetricsDetails() {
                 alignItems="center"
             >
                 <Breadcrumbs pages={breadcrumbsPages} />
-                <DateRangePicker
-                    className="max-w-md"
-                    value={activeTimeRange}
-                    onValueChange={setActiveTimeRange}
-                    enableClear={false}
-                    maxDate={new Date()}
-                />
-                <Button
-                    variant="secondary"
-                    className="ml-2 h-9"
-                    onClick={() => setOpenDrawer(true)}
-                    icon={
-                        selectedConnections.connections.length > 0 ||
-                        selectedConnections.provider !== ''
-                            ? FunnelIconSolid
-                            : FunnelIconOutline
-                    }
-                >
-                    {filterText()}
-                </Button>
-                <ConnectionList
-                    connections={connections || []}
-                    loading={connectionsLoading}
-                    open={openDrawer}
-                    selectedConnectionsProps={selectedConnections}
-                    onClose={(data: any) => handleDrawer(data)}
-                />
+                <Flex flexDirection="row" justifyContent="end" alignItems="end">
+                    <DateRangePicker
+                        className="max-w-md"
+                        value={activeTimeRange}
+                        onValueChange={setActiveTimeRange}
+                        enableClear={false}
+                        maxDate={new Date()}
+                    />
+                    <Button
+                        variant="secondary"
+                        className="ml-2 h-9"
+                        onClick={() => setOpenDrawer(true)}
+                        icon={
+                            selectedConnections.connections.length > 0 ||
+                            selectedConnections.provider !== ''
+                                ? FunnelIconSolid
+                                : FunnelIconOutline
+                        }
+                    >
+                        {filterText()}
+                    </Button>
+                    <ConnectionList
+                        connections={connections || []}
+                        loading={connectionsLoading}
+                        open={openDrawer}
+                        selectedConnectionsProps={selectedConnections}
+                        onClose={(data: any) => handleDrawer(data)}
+                    />
+                </Flex>
             </Flex>
             <Card className="mt-10">
                 <Flex>
