@@ -12,6 +12,7 @@ import { timeAtom } from '../../../store'
 import AWSTabs from './AWS/Tabs'
 import AWSSummary from './AWS/Summary'
 import AzureSummary from './Azure/Summary'
+import AzureTabs from './Azure/Tabs'
 
 export default function ConnectorDetail() {
     const navigate = useNavigate()
@@ -70,12 +71,18 @@ export default function ConnectorDetail() {
                         />
                     </>
                 ) : (
-                    <AzureSummary
-                        account={accounts}
-                        accountLoading={isAccountsLoading}
-                        credential={credentials}
-                        credentialLoading={isCredentialLoading}
-                    />
+                    <>
+                        <AzureSummary
+                            principals={credentials}
+                            principalsLoading={isCredentialLoading}
+                            subscriptions={accounts}
+                            subscriptionsLoading={isAccountsLoading}
+                        />
+                        <AzureTabs
+                            principals={credentials}
+                            subscriptions={accounts}
+                        />
+                    </>
                 )}
             </Flex>
         </LoggedInLayout>
