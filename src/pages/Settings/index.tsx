@@ -110,7 +110,13 @@ const Settings: React.FC<any> = () => {
     }
 
     if (isLoading && tokenLoading) {
-        return <Spinner />
+        return (
+            <LoggedInLayout currentPage="settings">
+                <Flex justifyContent="center" className="mt-56">
+                    <Spinner />
+                </Flex>
+            </LoggedInLayout>
+        )
     }
 
     return (
