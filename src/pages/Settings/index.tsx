@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Flex, Metric } from '@tremor/react'
 import {
     BuildingOfficeIcon,
@@ -15,7 +15,11 @@ import SettingsWorkspaceAPIKeys from './APIKeys'
 import SettingsProfile from './Profile'
 import SettingsOrganization from './Organization'
 import SettingsQueries from './Queries'
-import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
+import {
+    useWorkspaceApiV1WorkspacesList,
+    useWorkspaceApiV1WorkspaceCurrentList,
+} from '../../api/workspace.gen'
+import Spinner from '../../components/Spinner'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -79,26 +83,36 @@ const navigation = [
 ]
 
 const Settings: React.FC<any> = () => {
-    const [role, setRole] = React.useState<
-        string | 'admin' | 'editor' | 'viewer'
-    >('viewer')
-    const { getAccessTokenSilently, user } = useAuth0()
-    const { response: workspaces, isLoading } =
-        useWorkspaceApiV1WorkspacesList()
+    const [decodedToken, SetDecodedToken] = useState()
+    const [tokenLoading, setTokenLoading] = useState(true)
+    const { getAccessTokenSilently } = useAuth0()
+    const { response: curWorkspace, isLoading } =
+        useWorkspaceApiV1WorkspaceCurrentList()
     const workspace = useParams<{ ws: string }>().ws
     const currentSubPage = useParams<{ settingsPage: string }>().settingsPage
-    getAccessTokenSilently().then((e) => {
-        const decoded: any = jwtDecode(e)
-        workspaces?.forEach((w) => {
-            if (w.name === workspace) {
-                if (w.id) {
-                    setRole(
-                        decoded['https://app.kaytu.io/workspaceAccess'][w.id]
-                    )
-                }
-            }
+
+    useEffect(() => {
+        getAccessTokenSilently().then((e) => {
+            const decoded: any = jwtDecode(e)
+            SetDecodedToken(decoded)
+            setTokenLoading(false)
         })
     })
+
+    const getRole = () => {
+        if (decodedToken) {
+            if (curWorkspace?.id)
+                return decodedToken['https://app.kaytu.io/workspaceAccess'][
+                    curWorkspace.id
+                ]
+        }
+        return 'viewer'
+    }
+
+    if (isLoading && tokenLoading) {
+        return <Spinner />
+    }
+
     return (
         <LoggedInLayout currentPage="settings">
             <Flex flexDirection="row" alignItems="start">
@@ -115,7 +129,9 @@ const Settings: React.FC<any> = () => {
                                     <ul className="space-y-1.5">
                                         {navigation.map((item) => {
                                             if (
-                                                !item.role.includes(role) &&
+                                                !item.role.includes(
+                                                    getRole()
+                                                ) &&
                                                 item.role.length > 0
                                             ) {
                                                 return null
