@@ -1,4 +1,4 @@
-import { Flex, Grid, Text, Title } from '@tremor/react'
+import { Flex, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -8,10 +8,10 @@ import {
     useOnboardApiV1CredentialList,
 } from '../../../api/onboard.gen'
 import Breadcrumbs from '../../../components/Breadcrumbs'
-import SummaryCard from '../../../components/Cards/SummaryCard'
-import { numericDisplay } from '../../../utilities/numericDisplay'
 import { timeAtom } from '../../../store'
 import AWSTabs from './AWS/Tabs'
+import AWSSummary from './AWS/Summary'
+import AzureSummary from './Azure/Summary'
 
 export default function ConnectorDetail() {
     const navigate = useNavigate()
@@ -35,6 +35,7 @@ export default function ConnectorDetail() {
             // @ts-ignore
             connector,
         })
+    console.log(accounts)
 
     const breadcrumbsPages = [
         {
@@ -55,38 +56,27 @@ export default function ConnectorDetail() {
                 </Flex>
                 <Title>Connector Name</Title>
                 <Text>Description</Text>
-                <Grid
-                    numItemsMd={2}
-                    numItemsLg={3}
-                    className="w-full gap-3 mt-6 mb-10"
-                >
-                    <SummaryCard
-                        title="Onboarded AWS Accounts"
-                        metric={String(
-                            numericDisplay(accounts?.connectionCount)
-                        )}
-                        loading={isAccountsLoading}
-                    />
-                    <SummaryCard
-                        title="Unhealthy Accounts"
-                        metric={String(
-                            numericDisplay(accounts?.totalUnhealthyCount)
-                        )}
-                        loading={isAccountsLoading}
-                    />
-                    <SummaryCard
-                        title="Organization Count"
-                        metric={String(
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            numericDisplay(credentials?.totalCredentialCount)
-                        )}
-                        loading={isCredentialLoading}
-                    />
-                </Grid>
                 {connector === 'AWS' ? (
-                    <AWSTabs accounts={accounts} organizations={credentials} />
-                ) : null}
+                    <>
+                        <AWSSummary
+                            account={accounts}
+                            accountLoading={isAccountsLoading}
+                            credential={credentials}
+                            credentialLoading={isCredentialLoading}
+                        />
+                        <AWSTabs
+                            accounts={accounts}
+                            organizations={credentials}
+                        />
+                    </>
+                ) : (
+                    <AzureSummary
+                        account={accounts}
+                        accountLoading={isAccountsLoading}
+                        credential={credentials}
+                        credentialLoading={isCredentialLoading}
+                    />
+                )}
             </Flex>
         </LoggedInLayout>
     )

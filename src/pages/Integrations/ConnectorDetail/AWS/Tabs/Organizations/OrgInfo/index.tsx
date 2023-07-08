@@ -6,7 +6,6 @@ interface IOrgInfo {
 }
 
 export default function OrgInfo({ data }: IOrgInfo) {
-    console.log(data)
     return (
         <Flex flexDirection="col" alignItems="start">
             <Title>Organization info</Title>
