@@ -187,6 +187,7 @@ export default function MultiAccount({
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
+        paginationPageSize: 25,
         rowSelection: 'multiple',
         animateRows: true,
         suppressExcelExport: true,

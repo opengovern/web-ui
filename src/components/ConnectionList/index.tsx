@@ -217,6 +217,7 @@ export default function ConnectionList({
     const gridOptions: GridOptions<IConnection> = {
         rowData: connections,
         columnDefs: columns,
+        paginationPageSize: 25,
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
