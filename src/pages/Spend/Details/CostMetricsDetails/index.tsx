@@ -73,7 +73,7 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
-        valueFormatter: (params) => exactPriceDisplay(params.value),
+        valueFormatter: (params) => exactPriceDisplay(params.value, 2),
     },
     {
         field: 'from',
@@ -83,7 +83,7 @@ const columns: ColDef[] = [
         resizable: true,
         hide: true,
         flex: 1,
-        valueFormatter: (params) => exactPriceDisplay(params.value),
+        valueFormatter: (params) => exactPriceDisplay(params.value, 2),
     },
     {
         field: 'now',
@@ -93,7 +93,7 @@ const columns: ColDef[] = [
         resizable: true,
         hide: true,
         flex: 1,
-        valueFormatter: (params) => exactPriceDisplay(params.value),
+        valueFormatter: (params) => exactPriceDisplay(params.value, 2),
     },
     {
         field: 'changes',

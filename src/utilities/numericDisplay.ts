@@ -39,9 +39,12 @@ export const priceDisplay = (value: string | number | undefined) => {
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 }
 
-export const exactPriceDisplay = (value: string | number | undefined) => {
+export const exactPriceDisplay = (
+    value: string | number | undefined,
+    decimals = 0
+) => {
     return `$ ${parseFloat(value ? value.toString() : '0')
-        .toFixed(2)
+        .toFixed(decimals)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
 }
