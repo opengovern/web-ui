@@ -15,6 +15,8 @@ import {
     useMetadataApiV1MetadataDetail,
 } from '../../../api/metadata.gen'
 
+import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
+
 const SettingsQueries: React.FC<any> = () => {
     const [updateInputs, setUpdateInputs] = useState<boolean>(false)
     const [newAWSComplianceGitURL, setNewAWSComplianceGitURL] =
@@ -85,6 +87,11 @@ const SettingsQueries: React.FC<any> = () => {
         {},
         false
     )
+    const {
+        isLoading: loadingSyncQueries,
+        isExecuted: executeSyncQueries,
+        sendNow: syncQueries,
+    } = useComplianceApiV1QueriesSyncList({}, false)
 
     if (
         loadingAwsComplianceGitURL ||
@@ -107,11 +114,16 @@ const SettingsQueries: React.FC<any> = () => {
         setNewQueriesGitURL(queriesGitURL?.value || '')
     }
 
-    const save = () => {
-        setAwsComplianceGitURL()
-        setAzureComplianceGitURL()
-        setInsightGitURL()
-        setQueriesGitURL()
+    const save = async () => {
+        const setUrls = [
+            setAwsComplianceGitURL(),
+            setAzureComplianceGitURL(),
+            setInsightGitURL(),
+            setQueriesGitURL(),
+        ]
+        await Promise.all(setUrls).then(() => {
+            syncQueries()
+        })
     }
 
     const saveLoading = () => {
@@ -120,7 +132,8 @@ const SettingsQueries: React.FC<any> = () => {
             (executeSetAzureComplianceGitURL &&
                 loadingSetAzureComplianceGitURL) ||
             (executeSetInsightGitURL && loadingSetInsightGitURL) ||
-            (executeSetQueriesGitURL && loadingSetQueriesGitURL)
+            (executeSetQueriesGitURL && loadingSetQueriesGitURL) ||
+            (executeSyncQueries && loadingSyncQueries)
         )
     }
 
@@ -142,6 +155,10 @@ const SettingsQueries: React.FC<any> = () => {
                         onChange={(e) =>
                             setNewAWSComplianceGitURL(e.target.value)
                         }
+                        disabled={
+                            executeSetAwsComplianceGitURL &&
+                            loadingSetAwsComplianceGitURL
+                        }
                     />
                 </ListItem>
                 <ListItem key="azure_compliance_git_url" className="my-1">
@@ -158,6 +175,10 @@ const SettingsQueries: React.FC<any> = () => {
                         onChange={(e) =>
                             setNewAzureComplianceGitURL(e.target.value)
                         }
+                        disabled={
+                            executeSetAzureComplianceGitURL &&
+                            loadingSetAzureComplianceGitURL
+                        }
                     />
                 </ListItem>
                 <ListItem key="insights_git_url" className="my-1">
@@ -172,6 +193,9 @@ const SettingsQueries: React.FC<any> = () => {
                         className="text-sm"
                         value={newInsightsGitURL}
                         onChange={(e) => setNewInsightsGitURL(e.target.value)}
+                        disabled={
+                            executeSetInsightGitURL && loadingSetInsightGitURL
+                        }
                     />
                 </ListItem>
                 <ListItem key="queries_git_url" className="my-1">
@@ -186,6 +210,9 @@ const SettingsQueries: React.FC<any> = () => {
                         className="text-sm"
                         value={newQueriesGitURL}
                         onChange={(e) => setNewQueriesGitURL(e.target.value)}
+                        disabled={
+                            executeSetQueriesGitURL && loadingSetQueriesGitURL
+                        }
                     />
                 </ListItem>
                 <ListItem key="queries_git_url" className="my-1">
