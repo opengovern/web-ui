@@ -120,10 +120,10 @@ export default function MetricDetails() {
     } = useInventoryApiV1ResourcesCreate(
         {
             filters: {
-                resourceType: metricId ? [metricId.toLowerCase()] : [],
+                resourceType: metricId ? [metricId] : [],
                 // sourceID: selectedConnections.connections,
             },
-            page: { no: 1, size: 10000 },
+            page: { no: 1, size: 100 },
         },
         undefined,
         {},
@@ -140,7 +140,7 @@ export default function MetricDetails() {
                 resourceType: metricId ? [metricId] : [],
                 sourceID: selectedConnections.connections,
             },
-            page: { no: 1, size: 10000 },
+            page: { no: 1, size: 100 },
         },
         undefined,
         {},
@@ -157,7 +157,7 @@ export default function MetricDetails() {
                 resourceType: metricId ? [metricId] : [],
                 sourceID: selectedConnections.connections,
             },
-            page: { no: 1, size: 10000 },
+            page: { no: 1, size: 100 },
         },
         undefined,
         {},
