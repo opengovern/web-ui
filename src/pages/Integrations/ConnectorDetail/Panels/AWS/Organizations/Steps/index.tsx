@@ -4,6 +4,7 @@ import { CheckIcon } from '@heroicons/react/20/solid'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
 import ThirdStep from './ThirdStep'
+import FinalStep from './FinalStep'
 
 interface ISteps {
     close: any
@@ -15,12 +16,12 @@ const stepNavigation = (status: string) => {
             return (
                 <>
                     <Flex className="absolute inset-0" aria-hidden="true">
-                        <div className="h-0.5 w-full bg-indigo-600" />
+                        <div className="h-0.5 w-full bg-blue-600" />
                     </Flex>
                     <Flex
                         alignItems="center"
                         justifyContent="center"
-                        className="relative h-8 w-8 rounded-full bg-indigo-600"
+                        className="relative h-8 w-8 rounded-full bg-blue-600"
                     >
                         <CheckIcon
                             className="h-5 w-5 text-white"
@@ -38,11 +39,11 @@ const stepNavigation = (status: string) => {
                     <Flex
                         alignItems="center"
                         justifyContent="center"
-                        className="relative h-8 w-8 rounded-full border-2 border-indigo-600 bg-white"
+                        className="relative h-8 w-8 rounded-full border-2 border-blue-600 bg-white"
                         aria-current="step"
                     >
                         <span
-                            className="h-2.5 w-2.5 rounded-full bg-indigo-600"
+                            className="h-2.5 w-2.5 rounded-full bg-blue-600"
                             aria-hidden="true"
                         />
                     </Flex>
@@ -82,6 +83,12 @@ const getStatus = (current: number, value: number) => {
 
 export default function Steps({ close }: ISteps) {
     const [stepNum, setStepNum] = useState(1)
+    const [data, setData] = useState({
+        accessKey: '',
+        secretKey: '',
+        roleName: '',
+        externalId: '',
+    })
     const steps = [
         { name: 'Step 1', status: getStatus(stepNum, 1) },
         { name: 'Step 2', status: getStatus(stepNum, 2) },
@@ -108,6 +115,17 @@ export default function Steps({ close }: ISteps) {
                 return (
                     <ThirdStep
                         onPrevious={() => setStepNum(2)}
+                        onNext={(info: any) => {
+                            setData(info)
+                            setStepNum(4)
+                        }}
+                    />
+                )
+            case 4:
+                return (
+                    <FinalStep
+                        data={data}
+                        onPrevious={() => setStepNum(3)}
                         onNext={() => setStepNum(4)}
                     />
                 )
