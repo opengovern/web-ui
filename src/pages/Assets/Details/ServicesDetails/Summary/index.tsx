@@ -8,32 +8,56 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import React, { useEffect, useState } from 'react'
+import { useAtom } from 'jotai'
+import dayjs from 'dayjs'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import { useInventoryApiV2ServicesMetricList } from '../../../../../api/inventory.gen'
+import { filterAtom, timeAtom } from '../../../../../store'
+import Spinner from '../../../../../components/Spinner'
 
 type IProps = {
-    TopServices: any
-    TopFastestServices: any
-    TotalServices: any
+    totalServices?: number
+    totalServicesLoading: boolean
 }
 export default function Summary({
-    TopServices,
-    TopFastestServices,
-    TotalServices,
+    totalServices,
+    totalServicesLoading,
 }: IProps) {
-    const [topServices, setTopServices] = useState([])
-    const [topFastest, setTopFastest] = useState([])
-    useEffect(() => {
-        setTopServices(TopServices || [])
-        setTopFastest(TopFastestServices || [])
-    }, [TopServices, TopFastestServices, TotalServices])
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+
+    const { response: topServices, isLoading: topServicesLoading } =
+        useInventoryApiV2ServicesMetricList({
+            connector: [selectedConnections?.provider],
+            connectionId: selectedConnections?.connections,
+            pageSize: 5,
+            pageNumber: 1,
+            endTime: String(dayjs(activeTimeRange.to).unix()),
+            sortBy: 'count',
+        })
+    const {
+        response: topFastestServices,
+        isLoading: topFastestServicesLoading,
+    } = useInventoryApiV2ServicesMetricList({
+        connector: [selectedConnections?.provider],
+        connectionId: selectedConnections?.connections,
+        pageSize: 5,
+        pageNumber: 1,
+        endTime: String(dayjs(activeTimeRange.to).unix()),
+        sortBy: 'growth_rate',
+    })
+
     return (
         <div className="gap-y-10 mt-[24px]">
             <div className="flex flex-row justify-between">
                 <Metric>Services</Metric>
                 <div className="flex flex-row items-baseline">
                     <Metric className="mr-2">
-                        {numericDisplay(TotalServices)}
+                        {totalServicesLoading ? (
+                            <Spinner />
+                        ) : (
+                            numericDisplay(totalServices)
+                        )}
                     </Metric>
                     <Text>Total Services</Text>
                 </div>
@@ -43,18 +67,24 @@ export default function Summary({
                     <Flex justifyContent="start" className="space-x-4">
                         <Title className="truncate">Popular Services</Title>
                     </Flex>
-                    <List className="mt-2 mb-2">
-                        {topServices.map((thing: any) => (
-                            <ListItem key={thing.service_label}>
-                                <Text>{thing.service_label}</Text>
-                                <Text>
-                                    <Bold>
-                                        {numericDisplay(thing.resource_count)}
-                                    </Bold>{' '}
-                                </Text>
-                            </ListItem>
-                        ))}
-                    </List>
+                    {topServicesLoading ? (
+                        <Spinner className="py-20" />
+                    ) : (
+                        <List className="mt-2 mb-2">
+                            {topServices?.services?.map((thing: any) => (
+                                <ListItem key={thing.service_label}>
+                                    <Text>{thing.service_label}</Text>
+                                    <Text>
+                                        <Bold>
+                                            {numericDisplay(
+                                                thing.resource_count
+                                            )}
+                                        </Bold>{' '}
+                                    </Text>
+                                </ListItem>
+                            ))}
+                        </List>
+                    )}
                 </Card>
                 <Card key="TopXFastest" className="h-fit">
                     <Flex justifyContent="start" className="space-x-4">
@@ -62,18 +92,24 @@ export default function Summary({
                             Top Fast-Growing Services
                         </Title>
                     </Flex>
-                    <List className="mt-2 mb-2">
-                        {topFastest.map((thing: any) => (
-                            <ListItem key={thing.service_label}>
-                                <Text>{thing.service_label}</Text>
-                                <Text>
-                                    <Bold>
-                                        {numericDisplay(thing.resource_count)}
-                                    </Bold>{' '}
-                                </Text>
-                            </ListItem>
-                        ))}
-                    </List>
+                    {topFastestServicesLoading ? (
+                        <Spinner className="py-20" />
+                    ) : (
+                        <List className="mt-2 mb-2">
+                            {topFastestServices?.services?.map((thing: any) => (
+                                <ListItem key={thing.service_label}>
+                                    <Text>{thing.service_label}</Text>
+                                    <Text>
+                                        <Bold>
+                                            {numericDisplay(
+                                                thing.resource_count
+                                            )}
+                                        </Bold>{' '}
+                                    </Text>
+                                </ListItem>
+                            ))}
+                        </List>
+                    )}
                 </Card>
             </div>
         </div>

@@ -1,33 +1,28 @@
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
-import { selectedResourceCategoryAtom } from '../../../../../store'
-import { useInventoryApiV2ResourcesMetricList } from '../../../../../api/inventory.gen'
+import { DateRangePickerValue } from '@tremor/react'
 import {
-    exactPriceDisplay,
-    numericDisplay,
-} from '../../../../../utilities/numericDisplay'
+    filterAtom,
+    selectedResourceCategoryAtom,
+    timeAtom,
+} from '../../../../../store'
+import { useInventoryApiV2ResourcesMetricList } from '../../../../../api/inventory.gen'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import MetricsList, { IMetric } from '../../../../../components/MetricsList'
 
 interface IProps {
-    provider: any
-    timeRange: any
-    connection: any
     categories: {
         label: string
         value: string
     }[]
-    pageSize: any
+    pageSize: number
 }
 
-export default function ResourceMetrics({
-    provider,
-    timeRange,
-    pageSize,
-    categories,
-    connection,
-}: IProps) {
+export default function ResourceMetrics({ pageSize, categories }: IProps) {
     const navigate = useNavigate()
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
@@ -36,11 +31,19 @@ export default function ResourceMetrics({
             ? ''
             : selectedResourceCategory
     const query = {
-        ...(provider && { connector: provider }),
-        ...(connection && { connectionId: connection }),
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-        ...(timeRange.from && { startTime: dayjs(timeRange.from).unix() }),
-        ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
+        ...(activeTimeRange.from && {
+            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        }),
+        ...(activeTimeRange.to && {
+            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        }),
         ...(pageSize && { pageSize }),
     }
     const { response: resourceMetricsResponse, isLoading } =

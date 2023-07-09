@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useAtom } from 'jotai'
 import {
     Button,
@@ -34,7 +34,7 @@ export default function Assets() {
     const { response: inventoryCategories, isLoading: categoriesLoading } =
         useInventoryApiV2ResourcesTagList()
 
-    const categoryOptions = useMemo(() => {
+    const categoryOptions = () => {
         if (categoriesLoading) {
             return [{ label: 'Loading', value: 'Loading' }]
         }
@@ -46,7 +46,7 @@ export default function Assets() {
                 value: categoryName,
             }))
         )
-    }, [inventoryCategories])
+    }
 
     const handleDrawer = (data: any) => {
         if (openDrawer) {
@@ -74,14 +74,6 @@ export default function Assets() {
             >
                 <Metric>Assets</Metric>
                 <Flex flexDirection="row" justifyContent="end">
-                    {/* <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        selectPlaceholder="Time Range"
-                        enableClear={false}
-                        maxDate={new Date()}
-                    /> */}
                     <Button
                         variant="secondary"
                         className="ml-2 h-9"
@@ -104,11 +96,7 @@ export default function Assets() {
                     />
                 </Flex>
             </Flex>
-            <SummaryMetrics
-                provider={selectedConnections.provider}
-                connections={selectedConnections.connections}
-                timeRange={activeTimeRange}
-            />
+            <SummaryMetrics />
 
             <Flex
                 flexDirection="row"
@@ -135,27 +123,15 @@ export default function Assets() {
                 <TabPanels>
                     <TabPanel>
                         <SummaryTab
-                            provider={selectedConnections.provider}
-                            connections={selectedConnections.connections}
-                            categories={categoryOptions}
-                            timeRange={activeTimeRange}
+                            categories={categoryOptions()}
                             pageSize={1000}
                         />
                     </TabPanel>
                     <TabPanel>
-                        <TrendsTab
-                            categories={categoryOptions}
-                            timeRange={activeTimeRange}
-                            connections={selectedConnections.connections}
-                            provider={selectedConnections.provider}
-                        />
+                        <TrendsTab categories={categoryOptions()} />
                     </TabPanel>
                     <TabPanel>
-                        <CompositionTab
-                            connector={selectedConnections.provider}
-                            top={5}
-                            time={activeTimeRange}
-                        />
+                        <CompositionTab top={5} />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
