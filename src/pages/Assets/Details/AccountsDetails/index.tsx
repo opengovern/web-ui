@@ -1,14 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAtom } from 'jotai'
-import dayjs from 'dayjs'
 import { Button, DateRangePicker, Flex, Text } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
-import {
-    useOnboardApiV1ConnectionsSummaryList,
-    useOnboardApiV1SourcesList,
-} from '../../../../api/onboard.gen'
+import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../../../store'
 import SingleAccount from './SingleAccount'
@@ -24,19 +20,6 @@ export default function AccountsDetails() {
     const [openDrawer, setOpenDrawer] = useState(false)
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1SourcesList()
-
-    const { response: topAccounts, isLoading: topAccountLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connector: selectedConnections?.provider,
-            connectionId: selectedConnections?.connections,
-            startTime: dayjs(activeTimeRange.from).unix(),
-            endTime: dayjs(activeTimeRange.to).unix(),
-            pageSize: 5,
-            pageNumber: 1,
-            sortBy: 'resource_count',
-        })
 
     const breadcrumbsPages = [
         {
@@ -106,17 +89,9 @@ export default function AccountsDetails() {
                 </Flex>
             </Flex>
             {selectedConnections.connections.length === 1 ? (
-                <SingleAccount
-                    topAccounts={topAccounts}
-                    topAccountLoading={topAccountLoading}
-                />
+                <SingleAccount />
             ) : (
-                <MultiAccount
-                    topAccounts={topAccounts}
-                    topAccountLoading={topAccountLoading}
-                    selectedConnections={selectedConnections}
-                    activeTimeRange={activeTimeRange}
-                />
+                <MultiAccount />
             )}
         </LoggedInLayout>
     )

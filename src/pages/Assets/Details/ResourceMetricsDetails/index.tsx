@@ -1,25 +1,17 @@
 import {
-    BadgeDelta,
     Button,
     Card,
     DateRangePicker,
-    DeltaType,
     Flex,
     SearchSelect,
     SearchSelectItem,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeaderCell,
-    TableRow,
     Text,
     Title,
 } from '@tremor/react'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
@@ -34,7 +26,6 @@ import {
     useInventoryApiV2ResourcesMetricList,
     useInventoryApiV2ResourcesTagList,
 } from '../../../../api/inventory.gen'
-import Spinner from '../../../../components/Spinner'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
@@ -43,25 +34,22 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
 import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
-
-interface IResourceMetric {
-    metricName: string
-    from: number
-    count: number
-    changes: number
-}
+import { badgeDelta } from '../../../../utilities/deltaType'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType } from '../../../../api/api'
 
 const columns: ColDef[] = [
     {
-        field: 'metricName',
+        field: 'resource_name',
         headerName: 'Metric Name',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
+        valueFormatter: (params) =>
+            params.data?.resource_name || params.data?.resource_type || '',
     },
     {
-        field: 'from',
+        field: 'old_count',
         headerName: 'From',
         sortable: true,
         filter: true,
@@ -85,20 +73,11 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
-        cellRenderer: (params: ICellRendererParams<IResourceMetric>) => (
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType>
+        ) => (
             <Flex justifyContent="center" alignItems="center" className="mt-1">
-                <BadgeDelta
-                    deltaType={
-                        // eslint-disable-next-line no-nested-ternary
-                        params.value > 0
-                            ? 'moderateIncrease'
-                            : params.value < 0
-                            ? 'moderateDecrease'
-                            : 'unchanged'
-                    }
-                >
-                    {params.value}%
-                </BadgeDelta>
+                {badgeDelta(params.data?.old_count, params.data?.count)}
             </Flex>
         ),
     },
@@ -109,17 +88,16 @@ export default function ResourceMetricsDetails() {
 
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
-    const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1SourcesList()
-
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
-    const [tableData, setTableData] = useState<any>([])
-
-    const { response: inventoryCategories } =
-        useInventoryApiV2ResourcesTagList()
+    const [openDrawer, setOpenDrawer] = useState(false)
+    const { response: connections, isLoading: connectionsLoading } =
+        useOnboardApiV1SourcesList()
+    const {
+        response: inventoryCategories,
+        isLoading: inventoryCategoriesLoading,
+    } = useInventoryApiV2ResourcesTagList()
 
     const activeCategory =
         selectedResourceCategory === 'All Categories'
@@ -127,68 +105,36 @@ export default function ResourceMetricsDetails() {
             : selectedResourceCategory
     const query = {
         ...(selectedConnections.provider && {
-            connector: selectedConnections.provider,
+            connector: [selectedConnections.provider],
         }),
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
         }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
         ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix(),
+            startTime: dayjs(activeTimeRange.from).unix().toString(),
         }),
         ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix(),
+            endTime: dayjs(activeTimeRange.to).unix().toString(),
         }),
         pageSize: 1000,
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const { response: metrics } = useInventoryApiV2ResourcesMetricList(query)
+    const { response: metrics, isLoading: metricsLoading } =
+        useInventoryApiV2ResourcesMetricList(query)
 
-    const categoryOptions = useMemo(() => {
-        if (!inventoryCategories)
-            return [{ label: 'no data', value: 'no data' }]
+    const categoryOptions = () => {
+        if (inventoryCategoriesLoading)
+            return [{ label: 'Loading', value: 'loading' }]
+
         return [{ label: 'All Categories', value: 'All Categories' }].concat(
-            inventoryCategories.category.map((categoryName) => ({
+            inventoryCategories?.category.map((categoryName) => ({
                 label: categoryName,
                 value: categoryName,
-            }))
+            })) || []
         )
-    }, [inventoryCategories])
-
-    const percentage = (a?: number, b?: number): number => {
-        return a && b ? ((a - b) / b) * 100 : 0
     }
-
-    useEffect(() => {
-        const newData: {
-            metricName: string | undefined
-            count: number | undefined
-            from: number | undefined
-            changes: number | string | undefined
-            deltaType: DeltaType
-        }[] = []
-        // eslint-disable-next-line array-callback-return
-        metrics?.resource_types?.map((res) => {
-            const percent = percentage(res.count, res.old_count)
-            newData.push({
-                metricName: res.resource_name || res.resource_type,
-                count: res.count,
-                from: res.old_count,
-                changes: Math.ceil(Math.abs(percent)),
-                deltaType:
-                    // eslint-disable-next-line no-nested-ternary
-                    percent > 0
-                        ? 'moderateIncrease'
-                        : percent < 0
-                        ? 'moderateDecrease'
-                        : 'unchanged',
-            })
-        })
-        setTableData(newData)
-    }, [metrics])
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -198,7 +144,7 @@ export default function ResourceMetricsDetails() {
         animateRows: true,
         getRowHeight: (params) => 50,
         onGridReady: (params) => {
-            if (tableData.length === 0) {
+            if (metricsLoading) {
                 params.api.showLoadingOverlay()
             }
         },
@@ -218,12 +164,6 @@ export default function ResourceMetricsDetails() {
                     iconKey: 'filter',
                     toolPanel: 'agFiltersToolPanel',
                 },
-                // {
-                //     id: 'customStats',
-                //     labelDefault: 'Custom Stats',
-                //     labelKey: 'customStats',
-                //     // toolPanel: CustomStatsToolPanel,
-                // },
             ],
             defaultToolPanel: '',
         },
@@ -302,10 +242,15 @@ export default function ResourceMetricsDetails() {
                     <SearchSelect
                         onValueChange={(e) => setSelectedResourceCategory(e)}
                         value={selectedResourceCategory}
-                        placeholder="Source Selection"
+                        placeholder={
+                            inventoryCategoriesLoading
+                                ? 'Loading'
+                                : 'Source Selection'
+                        }
+                        disabled={inventoryCategoriesLoading}
                         className="max-w-xs mb-6"
                     >
-                        {categoryOptions.map((category) => (
+                        {categoryOptions().map((category) => (
                             <SearchSelectItem
                                 key={category.label}
                                 value={category.value}
@@ -321,7 +266,7 @@ export default function ResourceMetricsDetails() {
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
-                        rowData={tableData}
+                        rowData={metrics?.resource_types}
                     />
                 </div>
             </Card>

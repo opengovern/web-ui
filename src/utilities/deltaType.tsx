@@ -1,5 +1,4 @@
-import { DeltaType } from '@tremor/react'
-import { floatDisplay } from './numericDisplay'
+import { DeltaType, BadgeDelta } from '@tremor/react'
 
 export const badgeTypeByDelta = (
     oldValue?: number,
@@ -22,4 +21,12 @@ export const percentageByChange = (oldValue?: number, newValue?: number) => {
     const changes =
         (((newValue || 0) - (oldValue || 0)) / (oldValue || 0)) * 100.0
     return Math.abs(changes).toFixed(1)
+}
+
+export const badgeDelta = (oldValue?: number, newValue?: number) => {
+    return (
+        <BadgeDelta deltaType={badgeTypeByDelta(oldValue, newValue)}>
+            {percentageByChange(oldValue, newValue)}%
+        </BadgeDelta>
+    )
 }

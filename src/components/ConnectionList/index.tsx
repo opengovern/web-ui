@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Button, Flex, Text } from '@tremor/react'
@@ -8,7 +8,6 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import DrawerPanel from '../DrawerPanel'
 import Spinner from '../Spinner'
-import { useOnboardApiV1SourcesList } from '../../api/onboard.gen'
 
 interface IConnection {
     id: string
@@ -52,7 +51,6 @@ const columns: ColDef[] = [
                 </div>
             )
         },
-        // checkboxSelection: true,
     },
     {
         field: 'providerConnectionName',
@@ -237,12 +235,6 @@ export default function ConnectionList({
                     iconKey: 'filter',
                     toolPanel: 'agFiltersToolPanel',
                 },
-                // {
-                //     id: 'customStats',
-                //     labelDefault: 'Custom Stats',
-                //     labelKey: 'customStats',
-                //     // toolPanel: CustomStatsToolPanel,
-                // },
             ],
             defaultToolPanel: '',
         },
@@ -344,7 +336,6 @@ export default function ConnectionList({
                         <AgGridReact
                             ref={gridRef}
                             rowMultiSelectWithClick
-                            // domLayout="autoHeight"
                             gridOptions={gridOptions}
                         />
                     </div>

@@ -73,7 +73,7 @@ export default function CompositionTab({
             totalValueCount: (compositionData?.total_count || 0).toString(),
             chart: recordToArray(compositionData?.top_values),
         }
-        v.chart.push({ name: 'others', value: compositionData?.others || 0 })
+        v.chart.push({ name: 'Others', value: compositionData?.others || 0 })
         return v
     }
 
@@ -89,7 +89,7 @@ export default function CompositionTab({
             }
         })
         v.push({
-            name: 'others',
+            name: 'Others',
             value: exactPriceDisplay(compositionData?.others),
         })
         return v

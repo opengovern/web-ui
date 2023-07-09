@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import {
     Card,
     Title,
@@ -11,77 +10,102 @@ import {
     Metric,
     BadgeDelta,
     Col,
-    Badge,
 } from '@tremor/react'
+import { useAtom } from 'jotai'
+import dayjs from 'dayjs'
 import { numericDisplay } from '../../../../../../utilities/numericDisplay'
-import { useOnboardApiV1CatalogMetricsList } from '../../../../../../api/onboard.gen'
-import Spinner from '../../../../../../components/Spinner'
 import {
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-} from '../../../../../../api/api'
+    useOnboardApiV1CatalogMetricsList,
+    useOnboardApiV1ConnectionsSummaryList,
+} from '../../../../../../api/onboard.gen'
+import Spinner from '../../../../../../components/Spinner'
 import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import {
     badgeTypeByDelta,
     percentageByChange,
 } from '../../../../../../utilities/deltaType'
+import { filterAtom, timeAtom } from '../../../../../../store'
 
-type IProps = {
-    accounts:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
-        | undefined
-    loading: boolean
-}
-
-export default function Summary({ accounts, loading }: IProps) {
-    const [topAccounts, setTopAccounts] = useState<
-        GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
-    >([])
-    useEffect(() => {
-        setTopAccounts(accounts?.connections || [])
-    }, [accounts])
-    const { response: topMetrics, isLoading } =
+export default function Summary() {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const { response: topMetrics, isLoading: metricsLoading } =
         useOnboardApiV1CatalogMetricsList()
+    const { response: topAccounts, isLoading: topAccountLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            connector: [selectedConnections?.provider],
+            connectionId: selectedConnections?.connections,
+            startTime: dayjs(activeTimeRange.from).unix(),
+            endTime: dayjs(activeTimeRange.to).unix(),
+            pageSize: 5,
+            pageNumber: 1,
+            sortBy: 'resource_count',
+        })
+
     return (
         <Flex className="mt-10">
             <Grid numItems={3} className="w-full gap-3">
                 <Col numColSpan={1}>
                     <Flex flexDirection="col" className="gap-y-3 h-full">
                         <Card className="flex flex-col gap-y-2  justify-center h-1/2">
-                            <Flex alignItems="start">
-                                <Text className="truncate">Top Accounts</Text>
-                                <BadgeDelta
-                                    deltaType={badgeTypeByDelta(
-                                        accounts?.oldConnectionCount,
-                                        accounts?.connectionCount
-                                    )}
+                            {topAccountLoading ? (
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    justifyContent="between"
                                 >
-                                    {percentageByChange(
-                                        accounts?.oldConnectionCount,
-                                        accounts?.connectionCount
-                                    )}{' '}
-                                    %
-                                </BadgeDelta>
-                            </Flex>
-                            <Flex
-                                justifyContent="start"
-                                alignItems="baseline"
-                                className="truncate space-x-3"
-                            >
-                                <Metric>{accounts?.connectionCount}</Metric>
-                                <Text className="truncate">
-                                    from {accounts?.oldConnectionCount}
-                                </Text>
-                            </Flex>
+                                    <Text className="truncate pt-6 pb-12">
+                                        Top Accounts
+                                    </Text>
+                                    <Spinner />
+                                </Flex>
+                            ) : (
+                                <>
+                                    <Flex alignItems="start">
+                                        <Text className="truncate">
+                                            Top Accounts
+                                        </Text>
+                                        <BadgeDelta
+                                            deltaType={badgeTypeByDelta(
+                                                topAccounts?.oldConnectionCount,
+                                                topAccounts?.connectionCount
+                                            )}
+                                        >
+                                            {percentageByChange(
+                                                topAccounts?.oldConnectionCount,
+                                                topAccounts?.connectionCount
+                                            )}{' '}
+                                            %
+                                        </BadgeDelta>
+                                    </Flex>
+                                    <Flex
+                                        justifyContent="start"
+                                        alignItems="baseline"
+                                        className="truncate space-x-3"
+                                    >
+                                        <Metric>
+                                            {topAccounts?.connectionCount}
+                                        </Metric>
+                                        <Text className="truncate">
+                                            from{' '}
+                                            {topAccounts?.oldConnectionCount}
+                                        </Text>
+                                    </Flex>
+                                </>
+                            )}
                         </Card>
                         <Card className="flex flex-col gap-y-2  justify-center h-1/2">
                             <Text className="font-medium">
                                 Total Unhealthy Accounts
                             </Text>
                             <Metric>
-                                {numericDisplay(
-                                    topMetrics?.unhealthyConnections
+                                {metricsLoading ? (
+                                    <Spinner />
+                                ) : (
+                                    numericDisplay(
+                                        topMetrics?.unhealthyConnections
+                                    )
                                 )}
                             </Metric>
                         </Card>
@@ -90,12 +114,11 @@ export default function Summary({ accounts, loading }: IProps) {
                 <Col numColSpan={2}>
                     <Card className="h-full">
                         <Title>Top Accounts</Title>
-                        {loading && (
+                        {topAccountLoading ? (
                             <div className="flex justify-center items-center h-full">
                                 <Spinner />
                             </div>
-                        )}
-                        {!loading && (
+                        ) : (
                             <div>
                                 <List className="mt-2">
                                     <ListItem>
@@ -106,7 +129,7 @@ export default function Summary({ accounts, loading }: IProps) {
                                             Resource Count
                                         </Text>
                                     </ListItem>
-                                    {topAccounts.map((item) => (
+                                    {topAccounts?.connections?.map((item) => (
                                         <ListItem className="p-1">
                                             <Flex justifyContent="start">
                                                 {item?.connector === 'Azure' ? (
