@@ -2,13 +2,19 @@ import { Button, Flex, Text } from '@tremor/react'
 import { useState } from 'react'
 import FromScratch from './FromScratch'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
+import FromExisting from './FromExisting'
 
 interface INewOrganization {
     open: boolean
     onClose: any
+    accounts: any
 }
 
-export default function NewOrganization({ open, onClose }: INewOrganization) {
+export default function NewOrganization({
+    open,
+    onClose,
+    accounts,
+}: INewOrganization) {
     const [option, setOption] = useState('')
     const [show, setShow] = useState('')
 
@@ -23,7 +29,17 @@ export default function NewOrganization({ open, onClose }: INewOrganization) {
                     }}
                 />
             )
-        if (tab === 'existing') return null
+        if (tab === 'existing')
+            return (
+                <FromExisting
+                    accounts={accounts}
+                    close={() => {
+                        onClose()
+                        setShow('')
+                        setOption('')
+                    }}
+                />
+            )
         return (
             <Flex flexDirection="col" className="h-full">
                 <Flex flexDirection="row" alignItems="start" className="mt-6">

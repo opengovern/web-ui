@@ -16,7 +16,10 @@ export default function AWSTabs({ accounts, organizations }: IAWS) {
             </TabList>
             <TabPanels>
                 <TabPanel>
-                    <Organizations organizations={organizations} />
+                    <Organizations
+                        accounts={accounts}
+                        organizations={organizations}
+                    />
                 </TabPanel>
                 <TabPanel>
                     <AccountList accounts={accounts} />

@@ -1,9 +1,9 @@
 import { Flex, Text } from '@tremor/react'
 import { useState } from 'react'
-import FirstStep from './Steps/FirstStep'
-import SecondStep from './Steps/SecondStep'
-import ThirdStep from './Steps/ThirdStep'
-import FinalStep from './Steps/FinalStep'
+import FirstStep from './FirstStep'
+import SecondStep from './SecondStep'
+import ThirdStep from './ThirdStep'
+import FinalStep from './FinalStep'
 import Steps from '../../../../../../../../components/Steps'
 
 interface ISteps {
@@ -18,7 +18,6 @@ export default function FromScratch({ close }: ISteps) {
         roleName: '',
         externalId: '',
     })
-    const steps = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
     const showStep = (s: number) => {
         switch (s) {
             case 1:
@@ -57,6 +56,7 @@ export default function FromScratch({ close }: ISteps) {
                 return null
         }
     }
+
     return (
         <Flex
             flexDirection="col"

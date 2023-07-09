@@ -15,6 +15,7 @@ import NewOrganization from './NewOrganization'
 
 interface IOrganizations {
     organizations: any
+    accounts: any
 }
 
 const columns: ColDef[] = [
@@ -107,7 +108,10 @@ const columns: ColDef[] = [
     },
 ]
 
-export default function Organizations({ organizations }: IOrganizations) {
+export default function Organizations({
+    organizations,
+    accounts,
+}: IOrganizations) {
     const gridRef = useRef<AgGridReact>(null)
     const [open, setOpen] = useState(false)
     const [openInfo, setOpenInfo] = useState(false)
@@ -171,7 +175,11 @@ export default function Organizations({ organizations }: IOrganizations) {
             >
                 <OrgInfo data={orgData} />
             </DrawerPanel>
-            <NewOrganization open={open} onClose={() => setOpen(false)} />
+            <NewOrganization
+                accounts={accounts}
+                open={open}
+                onClose={() => setOpen(false)}
+            />
         </>
     )
 }
