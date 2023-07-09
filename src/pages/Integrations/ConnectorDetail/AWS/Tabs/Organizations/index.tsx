@@ -10,8 +10,8 @@ import { AgGridReact } from 'ag-grid-react'
 import { useRef, useState } from 'react'
 import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import DrawerPanel from '../../../../../../components/DrawerPanel'
-import Steps from './Steps'
 import OrgInfo from './OrgInfo'
+import NewOrganization from './NewOrganization'
 
 interface IOrganizations {
     organizations: any
@@ -171,13 +171,7 @@ export default function Organizations({ organizations }: IOrganizations) {
             >
                 <OrgInfo data={orgData} />
             </DrawerPanel>
-            <DrawerPanel
-                title="New Organization"
-                open={open}
-                onClose={() => setOpen(false)}
-            >
-                <Steps close={() => setOpen(false)} />
-            </DrawerPanel>
+            <NewOrganization open={open} onClose={() => setOpen(false)} />
         </>
     )
 }
