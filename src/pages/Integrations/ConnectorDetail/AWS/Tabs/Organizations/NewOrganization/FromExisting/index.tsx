@@ -10,6 +10,7 @@ interface ISteps {
 
 export default function FromExisting({ close, accounts }: ISteps) {
     const [stepNum, setStepNum] = useState(1)
+    const [connection, setConnection] = useState({})
     const [data, setData] = useState({
         accessKey: '',
         secretKey: '',
@@ -23,7 +24,10 @@ export default function FromExisting({ close, accounts }: ISteps) {
                 return (
                     <FirstStep
                         onPrevious={() => close()}
-                        onNext={() => setStepNum(2)}
+                        onNext={(con: any) => {
+                            setStepNum(2)
+                            setConnection(con)
+                        }}
                         accounts={accounts}
                     />
                 )

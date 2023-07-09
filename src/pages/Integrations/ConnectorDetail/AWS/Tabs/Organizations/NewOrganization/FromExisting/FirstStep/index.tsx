@@ -1,6 +1,11 @@
 import { Bold, Button, Flex } from '@tremor/react'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-import React, { useRef } from 'react'
+import {
+    ColDef,
+    GridOptions,
+    ICellRendererParams,
+    RowClickedEvent,
+} from 'ag-grid-community'
+import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ReactComponent as AWSIcon } from '../../../../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 
@@ -86,6 +91,8 @@ const columns: ColDef[] = [
 export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
     const gridRef = useRef<AgGridReact>(null)
 
+    const [selectedConnection, setSelectedConnection] = useState<any>({})
+
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
@@ -93,6 +100,9 @@ export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
         animateRows: true,
         paginationPageSize: 10,
         getRowHeight: (params) => 50,
+        onRowClicked(event: RowClickedEvent<any>) {
+            setSelectedConnection(event.data)
+        },
         sideBar: {
             toolPanels: [
                 {
@@ -130,7 +140,11 @@ export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
                 <Button variant="secondary" onClick={() => onPrevious()}>
                     Cancel
                 </Button>
-                <Button onClick={() => onNext()} className="ml-3">
+                <Button
+                    onClick={() => onNext(selectedConnection)}
+                    disabled={!selectedConnection.id}
+                    className="ml-3"
+                >
                     Next
                 </Button>
             </Flex>
