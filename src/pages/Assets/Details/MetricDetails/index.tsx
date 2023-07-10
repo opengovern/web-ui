@@ -106,8 +106,7 @@ export default function MetricDetails() {
     ): GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem[] => {
         const out: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem[] =
             []
-        // eslint-disable-next-line no-restricted-syntax
-        for (const col of sortModel) {
+        sortModel.forEach((col) => {
             const item: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem =
                 {}
             item.direction = col.sort
@@ -132,7 +131,7 @@ export default function MetricDetails() {
                     break
             }
             out.push(item)
-        }
+        })
         return out
     }
 
@@ -142,7 +141,6 @@ export default function MetricDetails() {
             if (filterModel.location) {
                 const locs = filterModel.location
                 if (locs) {
-                    // eslint-disable-next-line no-restricted-syntax
                     out.push(locs.filter)
                 }
             }
