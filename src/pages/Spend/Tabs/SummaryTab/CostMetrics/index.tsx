@@ -1,30 +1,28 @@
 import { useState } from 'react'
 import { useAtom } from 'jotai/index'
 import dayjs from 'dayjs'
-import { selectedResourceCategoryAtom } from '../../../../../store'
+import {
+    filterAtom,
+    selectedResourceCategoryAtom,
+    timeAtom,
+} from '../../../../../store'
 import { useInventoryApiV2CostMetricList } from '../../../../../api/inventory.gen'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import MetricsList, { IMetric } from '../../../../../components/MetricsList'
 
 interface IProps {
-    provider: any
-    timeRange: any
-    connection: any
     categories: {
         label: string
         value: string
     }[]
-    pageSize: any
+    pageSize: number
 }
 
-export default function CostMetrics({
-    provider,
-    timeRange,
-    pageSize,
-    categories,
-    connection,
-}: IProps) {
+export default function CostMetrics({ pageSize, categories }: IProps) {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+
     const [selectedScopeIdx, setSelectedScopeIdx] = useState<number>(0)
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
@@ -34,11 +32,19 @@ export default function CostMetrics({
             ? ''
             : selectedResourceCategory
     const query = {
-        ...(provider && { connector: provider }),
-        ...(connection && { connectionId: connection }),
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-        ...(timeRange.from && { startTime: dayjs(timeRange.from).unix() }),
-        ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
+        ...(activeTimeRange.from && {
+            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        }),
+        ...(activeTimeRange.to && {
+            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        }),
         ...(pageSize && { pageSize }),
     }
     const { response: serviceCostResponse, isLoading: serviceCostLoading } =
@@ -46,10 +52,10 @@ export default function CostMetrics({
 
     const { response: accountCostResponse, isLoading: accountCostLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            connector: provider,
-            connectionId: connection,
-            startTime: dayjs(timeRange.from).unix(),
-            endTime: dayjs(timeRange.to).unix(),
+            connector: [selectedConnections.provider],
+            connectionId: selectedConnections.connections,
+            startTime: dayjs(activeTimeRange.from).unix(),
+            endTime: dayjs(activeTimeRange.to).unix(),
             pageSize: 10000,
             pageNumber: 1,
         })

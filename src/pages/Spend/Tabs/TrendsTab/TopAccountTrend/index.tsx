@@ -1,205 +1,90 @@
-import React, { useEffect } from 'react'
-import { Card, Flex, Title } from '@tremor/react'
-import { atom, useAtom } from 'jotai'
+import { Card, Divider, Flex, Text, Title } from '@tremor/react'
+import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
+import { filterAtom, timeAtom } from '../../../../../store'
+import { useInventoryApiV2CostTrendConnections } from './apiCostTrends'
 
-type IProps = {
-    categories: {
-        label: string
-        value: string
-    }[]
-    timeRange: any
-    connections?: any
-    connector?: any
-}
-
-const trendDataAtom = atom<object[]>([])
-const accountNamesAtom = atom<string[]>([])
-const rawDataAtom = atom<object[]>([])
-
-export default function TopServicesTrend({
-    timeRange,
-    connections,
-    categories,
-    connector,
-}: IProps) {
-    const [accountNames, setAccountNames] = useAtom(accountNamesAtom)
-    const [trendData, setTrendData] = useAtom(trendDataAtom)
-    const [rawData, setRawData] = useAtom(rawDataAtom)
-    const { response: TopAccounts, isLoading: isLoadingTopAccount } =
+export default function TopAccountsTrend() {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const { response: topAccounts, isLoading: isLoadingTopAccount } =
         useOnboardApiV1ConnectionsSummaryList({
-            // connector: connections?.provider,
-            // connectionId: connections?.connections,
-            ...(timeRange.from && {
-                startTime: dayjs(timeRange.from).unix(),
+            connector: [selectedConnections?.provider],
+            connectionId: selectedConnections?.connections,
+            ...(activeTimeRange.from && {
+                startTime: dayjs(activeTimeRange.from).unix(),
             }),
-            ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
+            ...(activeTimeRange.to && {
+                endTime: dayjs(activeTimeRange.to).unix(),
+            }),
             pageSize: 5,
             pageNumber: 1,
             sortBy: 'cost',
         })
 
-    const { response: acc1 } = useInventoryApiV2CostTrendList(
-        {
-            datapointCount: 5,
-            // ...(connector && { connector }),
-            ...(timeRange.from && {
-                startTime: dayjs(timeRange.from).unix(),
-            }),
-            ...(timeRange.to && {
-                endTime: dayjs(timeRange.to).unix(),
-            }),
-            ...(TopAccounts?.connections?.at(0) && {
-                connectionId: TopAccounts?.connections[0].id,
-            }),
-        },
-        {},
-        !isLoadingTopAccount
-    )
-    const { response: acc2 } = useInventoryApiV2CostTrendList(
-        {
-            datapointCount: 5,
-            // ...(connector && { connector }),
-            ...(timeRange.from && {
-                startTime: dayjs(timeRange.from).unix(),
-            }),
-            ...(timeRange.to && {
-                endTime: dayjs(timeRange.to).unix(),
-            }),
-            ...(TopAccounts?.connections?.at(1) && {
-                connectionId: TopAccounts?.connections[1].id,
-            }),
-        },
-        {},
-        !isLoadingTopAccount
-    )
-    const { response: acc3 } = useInventoryApiV2CostTrendList(
-        {
-            datapointCount: 5,
-            // ...(connector && { connector }),
-            ...(timeRange.from && {
-                startTime: dayjs(timeRange.from).unix(),
-            }),
-            ...(timeRange.to && {
-                endTime: dayjs(timeRange.to).unix(),
-            }),
-            ...(TopAccounts?.connections?.at(2) && {
-                connectionId: TopAccounts?.connections[2].id,
-            }),
-        },
-        {},
-        !isLoadingTopAccount
-    )
-    const { response: acc4 } = useInventoryApiV2CostTrendList(
-        {
-            datapointCount: 5,
-            // ...(connector && { connector }),
-            ...(timeRange.from && {
-                startTime: dayjs(timeRange.from).unix(),
-            }),
-            ...(timeRange.to && {
-                endTime: dayjs(timeRange.to).unix(),
-            }),
-            ...(TopAccounts?.connections?.at(3) && {
-                connectionId: TopAccounts?.connections[3].id,
-            }),
-        },
-        {},
-        !isLoadingTopAccount
-    )
-    const { response: acc5 } = useInventoryApiV2CostTrendList(
-        {
-            datapointCount: 5,
-            // ...(connector && { connector }),
-            ...(timeRange.from && {
-                startTime: dayjs(timeRange.from).unix(),
-            }),
-            ...(timeRange.to && {
-                endTime: dayjs(timeRange.to).unix(),
-            }),
-            ...(TopAccounts?.connections?.at(4) && {
-                connectionId: TopAccounts?.connections[4].id,
-            }),
-        },
-        {},
-        !isLoadingTopAccount
-    )
-    const fixData = (
-        data1: any,
-        data2: any,
-        data3: any,
-        data4: any,
-        data5: any
-    ) => {
-        const result: object[] = []
-        const names: string[] = []
-        if (TopAccounts?.connections) {
-            // eslint-disable-next-line array-callback-return
-            TopAccounts?.connections.map((item) => {
-                if (item.id) {
-                    names.push(item.id)
-                }
-            })
-            setAccountNames(names)
-        }
-        if (data1 && data2 && data3 && data4 && data5) {
-            // eslint-disable-next-line array-callback-return
-            for (let i = 0; i < 5; i += 1) {
-                const tmp: any = {}
-                if (data1.at(i)) {
-                    const day = dayjs(data1.at(i).date).format('DD')
-                    const month = dayjs(data1.at(i).date).format('MMM')
-                    const value = data1.at(i).count
-                    const name = names[0]
-                    tmp.date = `${day} ${month}`
-                    tmp[name] = value
-                }
-                if (data2.at(i)) {
-                    const day = dayjs(data2.at(i).date).format('DD')
-                    const month = dayjs(data2.at(i).date).format('MMM')
-                    const value = data2.at(i).count
-                    const name = names[1]
-                    tmp.date = `${day} ${month}`
-                    tmp[name] = value
-                }
-                if (data3.at(i)) {
-                    const day = dayjs(data3.at(i).date).format('DD')
-                    const month = dayjs(data3.at(i).date).format('MMM')
-                    const value = data3.at(i).count
-                    const name = names[2]
-                    tmp.date = `${day} ${month}`
-                    tmp[name] = value
-                }
-                if (data4.at(i)) {
-                    const day = dayjs(data4.at(i).date).format('DD')
-                    const month = dayjs(data4.at(i).date).format('MMM')
-                    const value = data4.at(i).count
-                    const name = names[3]
-                    tmp.date = `${day} ${month}`
-                    tmp[name] = value
-                }
-                if (data5.at(i)) {
-                    const day = dayjs(data5.at(i).date).format('DD')
-                    const month = dayjs(data5.at(i).date).format('MMM')
-                    const value = data5.at(i).count
-                    const name = names[4]
-                    tmp.date = `${day} ${month}`
-                    tmp[name] = value
-                }
-                result.push(tmp)
-            }
-            setTrendData(result)
-        }
-    }
+    const { response: accountsTrends, isLoading: accountsTrendsLoading } =
+        useInventoryApiV2CostTrendConnections(
+            topAccounts?.connections?.map((conn) => conn?.id || ''),
+            {
+                datapointCount: '5',
+                ...(selectedConnections.provider && {
+                    connector: [selectedConnections.provider],
+                }),
+                ...(activeTimeRange.from && {
+                    startTime: dayjs(activeTimeRange.from).unix().toString(),
+                }),
+                ...(activeTimeRange.to && {
+                    endTime: dayjs(activeTimeRange.to).unix().toString(),
+                }),
+            },
+            {},
+            !isLoadingTopAccount
+        )
 
-    useEffect(() => {
-        fixData(acc1, acc2, acc3, acc4, acc5)
-    }, [acc1, acc2, acc3, acc4, acc5])
+    const trendData = () => {
+        const dateMaps = new Map<
+            number,
+            { connectionId: string; value: number }[]
+        >()
+        accountsTrends?.forEach((connTrend) => {
+            connTrend.trend?.forEach((item) => {
+                const date = dayjs(item.date).unix()
+                const arr = dateMaps.get(date) || []
+                dateMaps.set(date, [
+                    ...arr,
+                    {
+                        connectionId: connTrend.connectionId,
+                        value: item.count || 0,
+                    },
+                ])
+            })
+        })
+
+        return Array.from(dateMaps)
+            .sort((a, b) => {
+                if (a[0] === b[0]) {
+                    return 0
+                }
+                return a[0] > b[0] ? 1 : -1
+            })
+            .map(([date, valueArray]) => {
+                const trendMap = new Map<string, string | number>()
+                trendMap.set('date', dayjs.unix(date).format('DD MMM'))
+                valueArray.forEach((item) => {
+                    const name =
+                        topAccounts?.connections?.find(
+                            (conn) => conn.id === item.connectionId
+                        )?.providerConnectionName || item.connectionId
+                    trendMap.set(name, item.value)
+                })
+                return Object.fromEntries(trendMap)
+            })
+            .flat()
+    }
 
     return (
         <Card>
@@ -208,21 +93,27 @@ export default function TopServicesTrend({
                     <Title className="min-w-[7vw]">Top Accounts Trend </Title>
                 </div>
             </Flex>
-            {trendData.length > 0 ? (
+            {accountsTrendsLoading ? (
+                <div className="flex items-center justify-center">
+                    <Spinner />
+                </div>
+            ) : (
                 <Chart
                     className="mt-4 h-80"
                     index="date"
                     type="area"
                     yAxisWidth={120}
-                    categories={accountNames}
-                    data={trendData}
+                    connectNulls
+                    categories={
+                        topAccounts?.connections?.map(
+                            (conn) => conn.providerConnectionName || ''
+                        ) || []
+                    }
+                    data={trendData()}
                     showAnimation
                     valueFormatter={exactPriceDisplay}
+                    showLegend={false}
                 />
-            ) : (
-                <div className="flex items-center justify-center">
-                    <Spinner />
-                </div>
             )}
         </Card>
     )

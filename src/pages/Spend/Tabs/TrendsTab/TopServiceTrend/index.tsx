@@ -9,67 +9,80 @@ import {
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
+import { filterAtom, timeAtom } from '../../../../../store'
 
 type IProps = {
     categories: {
         label: string
         value: string
     }[]
-    timeRange: any
-    connections?: []
-    connector?: any
 }
 
 const trendDataAtom = atom<object[]>([])
 const serviceNamesAtom = atom<string[]>([])
 
-export default function TopServicesTrend({
-    timeRange,
-    connections,
-    categories,
-    connector,
-}: IProps) {
+export default function TopServicesTrend({ categories }: IProps) {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+
     const [serviceNames, setServiceNames] = useAtom(serviceNamesAtom)
     const [trendData, setTrendData] = useAtom(trendDataAtom)
     const { response: metrics, isLoading } = useInventoryApiV2CostMetricList({
-        ...(connector && { connector }),
-        ...(timeRange.from && {
-            startTime: dayjs(timeRange.from).unix(),
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
         }),
-        ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
-        ...(connections && { connectionId: connections }),
+        ...(activeTimeRange.from && {
+            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        }),
+        ...(activeTimeRange.to && {
+            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
         pageSize: 5,
         sortBy: 'cost',
     })
 
-    const { response: data } = useInventoryApiV2ServicesCostTrendList(
-        {
-            services:
-                metrics?.metrics?.map((metric) => metric.cost_dimension_name) ||
-                [],
-            datapointCount: 5,
-            ...(connector && { connector }),
-            ...(timeRange.from && {
-                startTime: dayjs(timeRange.from).unix(),
-            }),
-            ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
-            ...(connections && { connectionId: connections }),
-        },
-        {},
-        !isLoading
-    )
+    const { response: data, isLoading: costTrendLoading } =
+        useInventoryApiV2ServicesCostTrendList(
+            {
+                services:
+                    metrics?.metrics?.map(
+                        (metric) => metric.cost_dimension_name || ''
+                    ) || [],
+                datapointCount: '5',
+                ...(selectedConnections.provider && {
+                    connector: [selectedConnections.provider],
+                }),
+                ...(activeTimeRange.from && {
+                    startTime: dayjs(activeTimeRange.from).unix().toString(),
+                }),
+                ...(activeTimeRange.to && {
+                    endTime: dayjs(activeTimeRange.to).unix().toString(),
+                }),
+                ...(selectedConnections.connections && {
+                    connectionId: selectedConnections.connections,
+                }),
+            },
+            {},
+            !isLoading
+        )
 
-    // eslint-disable-next-line @typescript-eslint/no-shadow
     const fixTime = (input: any) => {
         const result: object[] = []
+        if (data === undefined) {
+            return result
+        }
+
         const services: string[] = []
         if (input) {
             for (let i = 0; i < 5; i += 1) {
                 const temp: any = {}
-                // eslint-disable-next-line guard-for-in,no-restricted-syntax
-                for (const item in input) {
+                const keys = Object.keys(input)
+                for (let j = 1; j < keys.length; j += 1) {
+                    const item = keys[j]
                     const name = input[item].serviceName
-                    // eslint-disable-next-line no-unused-expressions
                     if (!services.includes(name)) {
                         services.push(name)
                     }
@@ -97,7 +110,7 @@ export default function TopServicesTrend({
     return (
         <Card>
             <Title className="min-w-[7vw]">Top Services Trend</Title>
-            {trendData.length > 0 ? (
+            {costTrendLoading ? (
                 <Chart
                     className="mt-4 h-80"
                     index="date"

@@ -108,28 +108,15 @@ const Assets: React.FC<any> = () => {
                 <TabPanels>
                     <TabPanel>
                         <SummaryTab
-                            provider={selectedConnections.provider}
-                            connections={selectedConnections.connections}
                             categories={categoryOptions}
-                            timeRange={activeTimeRange}
                             pageSize={1000}
                         />
                     </TabPanel>
                     <TabPanel>
-                        <TrendsTab
-                            categories={categoryOptions}
-                            timeRange={activeTimeRange}
-                            connections={selectedConnections.connections}
-                            provider={selectedConnections.provider}
-                        />
+                        <TrendsTab categories={categoryOptions} />
                     </TabPanel>
                     <TabPanel>
-                        <CompositionTab
-                            connector={selectedConnections.provider}
-                            connectionId={selectedConnections.connections}
-                            top={5}
-                            time={activeTimeRange}
-                        />
+                        <CompositionTab top={5} />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
