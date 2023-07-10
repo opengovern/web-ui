@@ -1,8 +1,14 @@
 import { Card, Flex, Title } from '@tremor/react'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
+import {
+    ColDef,
+    GridOptions,
+    ICellRendererParams,
+    RowClickedEvent,
+} from 'ag-grid-community'
 import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
+import AccountInfo from './AccountInfo'
 
 interface IAccountList {
     accounts: any
@@ -83,6 +89,8 @@ const columns: ColDef[] = [
 
 export default function AccountList({ accounts }: IAccountList) {
     const gridRef = useRef<AgGridReact>(null)
+    const [accData, setAccData] = useState(null)
+    const [openInfo, setOpenInfo] = useState(false)
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -90,6 +98,10 @@ export default function AccountList({ accounts }: IAccountList) {
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
+        onRowClicked: (event: RowClickedEvent<any>) => {
+            setAccData(event.data)
+            setOpenInfo(true)
+        },
         sideBar: {
             toolPanels: [
                 {
@@ -112,16 +124,23 @@ export default function AccountList({ accounts }: IAccountList) {
     }
 
     return (
-        <Card>
-            <Title>AWS Accounts</Title>
-            <div className="ag-theme-alpine mt-6">
-                <AgGridReact
-                    ref={gridRef}
-                    domLayout="autoHeight"
-                    gridOptions={gridOptions}
-                    rowData={accounts?.connections}
-                />
-            </div>
-        </Card>
+        <>
+            <Card>
+                <Title>AWS Accounts</Title>
+                <div className="ag-theme-alpine mt-6">
+                    <AgGridReact
+                        ref={gridRef}
+                        domLayout="autoHeight"
+                        gridOptions={gridOptions}
+                        rowData={accounts?.connections}
+                    />
+                </div>
+            </Card>
+            <AccountInfo
+                data={accData}
+                open={openInfo}
+                onClose={() => setOpenInfo(false)}
+            />
+        </>
     )
 }

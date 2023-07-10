@@ -19,7 +19,11 @@ interface IOrgInfo {
 }
 
 export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
-    const { response: credential } = useOnboardApiV1CredentialDetail(data.id)
+    const { response: credential } = useOnboardApiV1CredentialDetail(
+        data?.id,
+        {},
+        !!data && open
+    )
 
     const [key, setKey] = useState('')
     const [ekey, seteKey] = useState(false)
