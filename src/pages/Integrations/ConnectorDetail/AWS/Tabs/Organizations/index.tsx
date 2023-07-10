@@ -9,7 +9,6 @@ import {
 import { AgGridReact } from 'ag-grid-react'
 import { useRef, useState } from 'react'
 import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
-import DrawerPanel from '../../../../../../components/DrawerPanel'
 import OrganizationInfo from './OrganizationInfo'
 import NewOrganization from './NewOrganization'
 
@@ -165,15 +164,13 @@ export default function Organizations({
                     />
                 </div>
             </Card>
-            <DrawerPanel
-                title="Organization"
+            <OrganizationInfo
                 open={openInfo}
                 onClose={() => {
                     setOpenInfo(false)
                 }}
-            >
-                <OrganizationInfo data={orgData} />
-            </DrawerPanel>
+                data={orgData}
+            />
             <NewOrganization
                 accounts={accounts}
                 open={open}
