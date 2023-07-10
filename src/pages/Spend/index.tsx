@@ -10,10 +10,7 @@ import {
     TabList,
     TabPanel,
     TabPanels,
-    Text,
 } from '@tremor/react'
-import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
-import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
@@ -24,8 +21,6 @@ import CompositionTab from './Tabs/CompositionTab'
 
 const Assets: React.FC<any> = () => {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
-    const [openDrawer, setOpenDrawer] = useState(false)
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
 
@@ -39,23 +34,6 @@ const Assets: React.FC<any> = () => {
             }))
         )
     }, [inventoryCategories])
-
-    const handleDrawer = (data: any) => {
-        if (openDrawer) {
-            setSelectedConnections(data)
-            setOpenDrawer(false)
-        } else setOpenDrawer(true)
-    }
-
-    const filterText = () => {
-        if (selectedConnections.connections.length > 0) {
-            return <Text>{selectedConnections.connections.length} Filters</Text>
-        }
-        if (selectedConnections.provider !== '') {
-            return <Text>{selectedConnections.provider}</Text>
-        }
-        return 'Filters'
-    }
 
     return (
         <LoggedInLayout currentPage="spend">
@@ -74,24 +52,7 @@ const Assets: React.FC<any> = () => {
                         enableClear={false}
                         maxDate={new Date()}
                     />
-                    <Button
-                        variant="secondary"
-                        className="ml-2 h-9"
-                        onClick={() => setOpenDrawer(true)}
-                        icon={
-                            selectedConnections.connections.length > 0 ||
-                            selectedConnections.provider !== ''
-                                ? FunnelIconSolid
-                                : FunnelIconOutline
-                        }
-                    >
-                        {filterText()}
-                    </Button>
-                    <ConnectionList
-                        open={openDrawer}
-                        selectedConnectionsProps={selectedConnections}
-                        onClose={(data: any) => handleDrawer(data)}
-                    />
+                    <ConnectionList />
                 </Flex>
             </Flex>
             <TabGroup className="mt-3">

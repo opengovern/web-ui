@@ -4,6 +4,7 @@ import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Button, Flex, Text } from '@tremor/react'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
+import { useAtom } from 'jotai'
 import { ReactComponent as AzureIcon } from '../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import 'ag-grid-community/styles/ag-grid.css'
@@ -21,20 +22,6 @@ interface IConnection {
     lifecycleState: string
     onboardDate: string
     lastInventory: string
-}
-
-interface IConnectorList {
-    open: boolean
-    onClose: (arg0: {
-        provider: string
-        connections: (string | undefined)[] | undefined
-    }) => void
-    selectedConnectionsProps: SelectionResult | undefined
-}
-
-interface SelectionResult {
-    provider: string | undefined
-    connections: string[] | undefined
 }
 
 const columns: ColDef[] = [
@@ -116,14 +103,11 @@ const tags = [
     { label: 'Azure', value: 'Azure' },
 ]
 
-export default function ConnectionList({
-    open,
-    onClose,
-    selectedConnectionsProps,
-}: IConnectorList) {
+export default function ConnectionList() {
     const gridRef = useRef<AgGridReact<IConnection>>(null)
     const [isConnectionSelected, setIsConnectionSelected] = useState(false)
     const [openDrawer, setOpenDrawer] = useState(false)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [selectedProvider, setSelectedProvider] = useState({
         label: 'All',
         value: '',
@@ -153,30 +137,27 @@ export default function ConnectionList({
     }
 
     const initializeSelectedConnections = (api: any) => {
-        if (selectedConnectionsProps === undefined) {
+        if (selectedConnections === undefined) {
             return
         }
 
         if (
-            selectedConnectionsProps.provider !== undefined &&
-            selectedConnectionsProps.provider.length > 0
+            selectedConnections.provider !== undefined &&
+            selectedConnections.provider.length > 0
         ) {
             const selectedTag = tags.find(
-                (item) => item.value === selectedConnectionsProps.provider
+                (item) => item.value === selectedConnections.provider
             )
             if (selectedTag !== undefined) {
                 setSelectedProvider(selectedTag)
                 updateSelectionByProvider(api, selectedTag.value)
             } else {
-                console.error(
-                    "couldn't find tag",
-                    selectedConnectionsProps.provider
-                )
+                console.error("couldn't find tag", selectedConnections.provider)
             }
         } else {
             api?.forEachNode((node: any) => {
-                const item = selectedConnectionsProps.connections?.find(
-                    (data) => data === node.data?.id
+                const item = selectedConnections.connections?.find(
+                    (data: string) => data === node.data?.id
                 )
 
                 if (item) {
@@ -279,72 +260,113 @@ export default function ConnectionList({
         updateSelectionByProvider(gridRef.current?.api, selectedProvider.value)
     }, [selectedProvider])
 
-    const handleClose = () => {
+    const getProvider = (provider: string) => {
+        if (provider === 'AWS') {
+            return 'AWS'
+        }
+        if (provider === 'Azure') {
+            return 'Azure'
+        }
+        return ''
+    }
+
+    const getConnections = (): string[] => {
         const conns =
             selectedProvider.value === ''
                 ? gridRef.current?.api
                       .getSelectedNodes()
-                      .map((data) => data.data?.id)
+                      .map((data) => data.data?.id || '')
                 : []
+        return conns || []
+    }
 
-        onClose({
-            provider: selectedProvider.value,
-            connections: conns,
-        })
+    const handleClose = () => {
+        if (openDrawer) {
+            setSelectedConnections({
+                provider: getProvider(selectedProvider.value),
+                connections: getConnections(),
+            })
+            setOpenDrawer(false)
+        } else setOpenDrawer(true)
+    }
+
+    const filterText = () => {
+        if (selectedConnections.connections.length > 0) {
+            return <Text>{selectedConnections.connections.length} Filters</Text>
+        }
+        if (selectedConnections.provider !== '') {
+            return <Text>{selectedConnections.provider}</Text>
+        }
+        return 'Filters'
     }
 
     return (
-        <DrawerPanel
-            open={open}
-            onClose={() => handleClose()}
-            title="Connections"
-        >
-            {isLoading ? (
-                <Flex justifyContent="center" className="mt-56">
-                    <Spinner />
-                </Flex>
-            ) : (
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    className="h-full w-full"
-                >
-                    <Flex justifyContent="start" className="mb-4">
-                        {tags.map((tag) => (
-                            <Button
-                                size="xs"
-                                variant={
-                                    selectedProvider.label === tag.label &&
-                                    !isConnectionSelected
-                                        ? 'primary'
-                                        : 'secondary'
-                                }
-                                onClick={() => {
-                                    if (selectedProvider === tag)
-                                        setSelectedProvider({
-                                            label: 'All',
-                                            value: '',
-                                        })
-                                    else setSelectedProvider(tag)
-                                }}
-                                className="mr-2 w-14"
-                            >
-                                {tag.label}
-                            </Button>
-                        ))}
+        <>
+            <Button
+                variant="secondary"
+                className="ml-2 h-9"
+                onClick={() => setOpenDrawer(true)}
+                icon={
+                    selectedConnections.connections.length > 0 ||
+                    selectedConnections.provider !== ''
+                        ? FunnelIconSolid
+                        : FunnelIconOutline
+                }
+            >
+                {filterText()}
+            </Button>
+            <DrawerPanel
+                open={openDrawer}
+                onClose={() => handleClose()}
+                title="Connections"
+            >
+                {isLoading ? (
+                    <Flex justifyContent="center" className="mt-56">
+                        <Spinner />
                     </Flex>
-                    <Text className="mb-2">
-                        {selectionText(gridRef.current?.api)}
-                    </Text>
-                    <div className="ag-theme-alpine h-full w-full">
-                        <AgGridReact
-                            ref={gridRef}
-                            rowMultiSelectWithClick
-                            gridOptions={gridOptions}
-                        />
-                    </div>
-                </Flex>
-            )}
-        </DrawerPanel>
+                ) : (
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        className="h-full w-full"
+                    >
+                        <Flex justifyContent="start" className="mb-4">
+                            {tags.map((tag) => (
+                                <Button
+                                    size="xs"
+                                    variant={
+                                        selectedProvider.label === tag.label &&
+                                        !isConnectionSelected
+                                            ? 'primary'
+                                            : 'secondary'
+                                    }
+                                    onClick={() => {
+                                        if (selectedProvider === tag)
+                                            setSelectedProvider({
+                                                label: 'All',
+                                                value: '',
+                                            })
+                                        else setSelectedProvider(tag)
+                                    }}
+                                    className="mr-2 w-14"
+                                >
+                                    {tag.label}
+                                </Button>
+                            ))}
+                        </Flex>
+                        <Text className="mb-2">
+                            {selectionText(gridRef.current?.api)}
+                        </Text>
+                        <div className="ag-theme-alpine h-full w-full">
+                            <AgGridReact
+                                ref={gridRef}
+                                rowMultiSelectWithClick
+                                gridOptions={gridOptions}
+                            />
+                        </div>
+                    </Flex>
+                )}
+            </DrawerPanel>
+        </>
     )
 }

@@ -1,6 +1,4 @@
-import { BadgeDelta, Button, Card, Flex, Text, Title } from '@tremor/react'
-import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
-import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
+import { Card, Flex, Title } from '@tremor/react'
 
 import React, { useRef, useState } from 'react'
 import { useAtom } from 'jotai'
@@ -17,7 +15,6 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
 import { ReactComponent as AzureIcon } from '../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
-import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem,
@@ -94,7 +91,6 @@ export default function MetricDetails() {
     const gridRef = useRef<AgGridReact>(null)
 
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
-    const [openDrawer, setOpenDrawer] = useState(false)
 
     const getSort = (
         sortModel: {
@@ -242,23 +238,6 @@ export default function MetricDetails() {
         { name: metricId, path: '', current: true },
     ]
 
-    const handleDrawer = (data: any) => {
-        if (openDrawer) {
-            setSelectedConnections(data)
-            setOpenDrawer(false)
-        } else setOpenDrawer(true)
-    }
-
-    const filterText = () => {
-        if (selectedConnections.connections.length > 0) {
-            return <Text>{selectedConnections.connections.length} Filters</Text>
-        }
-        if (selectedConnections.provider !== '') {
-            return <Text>{selectedConnections.provider}</Text>
-        }
-        return 'Filters'
-    }
-
     return (
         <LoggedInLayout currentPage="assets">
             <Flex
@@ -269,24 +248,7 @@ export default function MetricDetails() {
                 <Breadcrumbs pages={breadcrumbsPages} />
 
                 <Flex flexDirection="row" justifyContent="end">
-                    <Button
-                        variant="secondary"
-                        className="ml-2 h-9"
-                        onClick={() => setOpenDrawer(true)}
-                        icon={
-                            selectedConnections.connections.length > 0 ||
-                            selectedConnections.provider !== ''
-                                ? FunnelIconSolid
-                                : FunnelIconOutline
-                        }
-                    >
-                        {filterText()}
-                    </Button>
-                    <ConnectionList
-                        open={openDrawer}
-                        selectedConnectionsProps={selectedConnections}
-                        onClose={(data: any) => handleDrawer(data)}
-                    />
+                    <ConnectionList />
                 </Flex>
             </Flex>
             <Card className="mt-10">
