@@ -17,7 +17,6 @@ import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
-import { useOnboardApiV1SourcesList } from '../../api/onboard.gen'
 import ConnectionList from '../../components/ConnectionList'
 import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
@@ -28,9 +27,6 @@ export default function Assets() {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
-
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1SourcesList()
     const { response: inventoryCategories, isLoading: categoriesLoading } =
         useInventoryApiV2ResourcesTagList()
 
@@ -88,8 +84,6 @@ export default function Assets() {
                         {filterText()}
                     </Button>
                     <ConnectionList
-                        connections={connections || []}
-                        loading={connectionsLoading}
                         open={openDrawer}
                         selectedConnectionsProps={selectedConnections}
                         onClose={(data: any) => handleDrawer(data)}

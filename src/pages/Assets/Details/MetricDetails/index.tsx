@@ -95,8 +95,6 @@ export default function MetricDetails() {
 
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1SourcesList()
 
     const getSort = (
         sortModel: {
@@ -285,8 +283,6 @@ export default function MetricDetails() {
                         {filterText()}
                     </Button>
                     <ConnectionList
-                        connections={connections || []}
-                        loading={connectionsLoading}
                         open={openDrawer}
                         selectedConnectionsProps={selectedConnections}
                         onClose={(data: any) => handleDrawer(data)}

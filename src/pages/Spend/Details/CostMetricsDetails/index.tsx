@@ -32,10 +32,7 @@ import {
 } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
-import {
-    useOnboardApiV1ConnectionsSummaryList,
-    useOnboardApiV1SourcesList,
-} from '../../../../api/onboard.gen'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import ConnectionList from '../../../../components/ConnectionList'
@@ -246,8 +243,6 @@ export default function CostMetricsDetails() {
 
     const { response: inventoryCategories, isLoading: categoriesLoading } =
         useInventoryApiV2ResourcesTagList()
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1SourcesList()
 
     const categoryOptions = useMemo(() => {
         if (!inventoryCategories)
@@ -353,8 +348,6 @@ export default function CostMetricsDetails() {
                         {filterText()}
                     </Button>
                     <ConnectionList
-                        connections={connections || []}
-                        loading={connectionsLoading}
                         open={openDrawer}
                         selectedConnectionsProps={selectedConnections}
                         onClose={(data: any) => handleDrawer(data)}
