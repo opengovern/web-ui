@@ -58,8 +58,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
@@ -558,9 +556,6 @@ interface IuseInventoryApiV1ResourcesCreateState {
 
 export const useInventoryApiV1ResourcesCreate = (
     request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    query?: {
-        common?: 'true' | 'false' | 'all'
-    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -580,7 +575,7 @@ export const useInventoryApiV1ResourcesCreate = (
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -591,7 +586,7 @@ export const useInventoryApiV1ResourcesCreate = (
         })
         try {
             api.inventory
-                .apiV1ResourcesCreate(request, query, params)
+                .apiV1ResourcesCreate(request, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -618,188 +613,8 @@ export const useInventoryApiV1ResourcesCreate = (
         }
     }
 
-    if (JSON.stringify([request, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseInventoryApiV1ResourcesAwsCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse
-    error?: any
-}
-
-export const useInventoryApiV1ResourcesAwsCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    query?: {
-        common?: 'true' | 'false' | 'all'
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV1ResourcesAwsCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1ResourcesAwsCreate(request, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([request, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseInventoryApiV1ResourcesAzureCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse
-    error?: any
-}
-
-export const useInventoryApiV1ResourcesAzureCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-    query?: {
-        common?: 'true' | 'false' | 'all'
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV1ResourcesAzureCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1ResourcesAzureCreate(request, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([request, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
