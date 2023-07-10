@@ -18,7 +18,10 @@ import ConnectionList from '../../../../components/ConnectionList'
 import { ReactComponent as AzureIcon } from '../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
-import { Api } from '../../../../api/api'
+import {
+    Api,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem,
+} from '../../../../api/api'
 import AxiosAPI, { setWorkspace } from '../../../../api/ApiConfig'
 
 const columns: ColDef[] = [
@@ -27,7 +30,7 @@ const columns: ColDef[] = [
         headerName: 'Connector',
         width: 50,
         sortable: true,
-        filter: true,
+        // filter: true,
         cellStyle: { padding: 0 },
         cellRenderer: (params: ICellRendererParams) => {
             return (
@@ -46,7 +49,7 @@ const columns: ColDef[] = [
         field: 'resourceName',
         headerName: 'Resource Name',
         sortable: true,
-        filter: true,
+        // filter: true,
         resizable: true,
         flex: 1,
     },
@@ -54,7 +57,7 @@ const columns: ColDef[] = [
         field: 'resourceID',
         headerName: 'Resource ID',
         sortable: true,
-        filter: true,
+        // filter: true,
         resizable: true,
         flex: 1,
     },
@@ -62,7 +65,7 @@ const columns: ColDef[] = [
         field: 'resourceTypeLabel',
         headerName: 'Resource Type',
         sortable: true,
-        filter: true,
+        // filter: true,
         resizable: true,
         flex: 1,
         valueFormatter: (params) => {
@@ -72,10 +75,19 @@ const columns: ColDef[] = [
         },
     },
     {
+        field: 'location',
+        headerName: 'Location',
+        sortable: true,
+        filter: 'agTextColumnFilter',
+        // filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
         field: 'providerConnectionName',
         headerName: 'Connection Name',
         sortable: true,
-        filter: true,
+        // filter: true,
         resizable: true,
         flex: 1,
     },
@@ -99,36 +111,88 @@ export default function MetricDetails() {
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1SourcesList()
 
+    const getSort = (
+        sortModel: {
+            colId: string
+            sort: 'asc' | 'desc'
+        }[]
+    ): GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem[] => {
+        const out: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem[] =
+            []
+        // eslint-disable-next-line no-restricted-syntax
+        for (const col of sortModel) {
+            const item: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem =
+                {}
+            item.direction = col.sort
+            switch (col.colId) {
+                case 'resourceID':
+                    item.field = 'resourceID'
+                    break
+                case 'connector':
+                    item.field = 'connector'
+                    break
+                case 'resourceType':
+                    item.field = 'resourceType'
+                    break
+                case 'resourceGroup':
+                    item.field = 'resourceGroup'
+                    break
+                case 'location':
+                    item.field = 'location'
+                    break
+                default:
+                    item.field = 'connectionID'
+                    break
+            }
+            out.push(item)
+        }
+        return out
+    }
+
+    const getLocFilter = (filterModel: any): string[] => {
+        const out: string[] = []
+        if (filterModel) {
+            if (filterModel.location) {
+                const locs = filterModel.location
+                if (locs) {
+                    // eslint-disable-next-line no-restricted-syntax
+                    out.push(locs.filter)
+                }
+            }
+        }
+        return out
+    }
+
     const datasource = {
         getRows(params: IServerSideGetRowsParams) {
-            let psize
-            if (params.request.endRow && params.request.startRow) {
-                psize = params.request.endRow - params.request.startRow
-            } else {
-                psize = 100
-            }
+            const { endRow, startRow, sortModel } = params.request
+            const psize = endRow && startRow ? endRow - startRow : 100
+            console.log('params', params)
             try {
                 api.inventory
                     .apiV1ResourcesCreate(
                         {
                             filters: {
                                 resourceType: metricId ? [metricId] : [],
-
                                 connectionID: selectedConnections.connections,
+                                location: getLocFilter(
+                                    params.request.filterModel
+                                ),
                             },
                             page: {
-                                no: Math.floor(psize / 100),
+                                no: Math.floor(endRow ? endRow / 100 : 1),
                                 size: psize,
                             },
+                            sorts: getSort(sortModel),
                         },
                         {}
                     )
                     .then((res) => {
                         if (res.data.resources && res.data.totalCount) {
-                            params.successCallback(
-                                res.data.resources,
-                                res.data.totalCount
-                            )
+                            params.success({
+                                rowData: res.data.resources,
+                                rowCount: res.data.totalCount,
+                            })
                         } else {
                             params.fail()
                         }
@@ -151,13 +215,10 @@ export default function MetricDetails() {
         rowSelection: 'multiple',
         animateRows: true,
         rowModelType: 'serverSide',
+        serverSideFilterOnServer: true,
         getRowHeight: (params) => 50,
         onGridReady: (params) => {
-            try {
-                params.api.setServerSideDatasource(datasource)
-            } catch (err) {
-                console.log(err)
-            }
+            params.api.setServerSideDatasource(datasource)
         },
         sideBar: {
             toolPanels: [
