@@ -62,19 +62,6 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'resourceTypeLabel',
-        headerName: 'Resource Type',
-        sortable: true,
-        // filter: true,
-        resizable: true,
-        flex: 1,
-        valueFormatter: (params) => {
-            return params.data?.resourceTypeLabel === ''
-                ? params.data?.resourceType
-                : ''
-        },
-    },
-    {
         field: 'location',
         headerName: 'Location',
         sortable: true,
