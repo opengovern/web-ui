@@ -8,6 +8,7 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import DrawerPanel from '../DrawerPanel'
 import Spinner from '../Spinner'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 
 interface IConnection {
     id: string
@@ -21,9 +22,10 @@ interface IConnection {
 
 interface IConnectorList {
     open: boolean
-    onClose: any
-    connections: any
-    loading: boolean
+    onClose: (arg0: {
+        provider: string
+        connections: (string | undefined)[] | undefined
+    }) => void
     selectedConnectionsProps: SelectionResult | undefined
 }
 
@@ -110,23 +112,21 @@ const tags = [
     { label: 'AWS', value: 'AWS' },
     { label: 'Azure', value: 'Azure' },
 ]
-const TagIcon = {
-    aws: <AWSIcon />,
-    azure: <AzureIcon />,
-}
 
 export default function ConnectionList({
     open,
     onClose,
-    connections,
     selectedConnectionsProps,
-    loading,
 }: IConnectorList) {
     const gridRef = useRef<AgGridReact<IConnection>>(null)
     const [isConnectionSelected, setIsConnectionSelected] = useState(false)
     const [selectedProvider, setSelectedProvider] = useState({
         label: 'All',
         value: '',
+    })
+
+    const { response, isLoading } = useOnboardApiV1ConnectionsSummaryList({
+        connector: [''],
     })
 
     const updateSelectionByProvider = (api: any, newValue: any) => {
@@ -212,8 +212,8 @@ export default function ConnectionList({
         }
     }, [])
 
-    const gridOptions: GridOptions<IConnection> = {
-        rowData: connections,
+    const gridOptions: GridOptions = {
+        rowData: response?.connections || [],
         columnDefs: columns,
         paginationPageSize: 25,
         pagination: true,
@@ -295,7 +295,7 @@ export default function ConnectionList({
             onClose={() => handleClose()}
             title="Connections"
         >
-            {loading ? (
+            {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
                 </Flex>

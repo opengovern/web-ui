@@ -4,7 +4,6 @@ import { Button, DateRangePicker, Flex, Text } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
-import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../../../store'
 import SingleAccount from './SingleAccount'
@@ -18,8 +17,6 @@ export default function AccountsDetails() {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1SourcesList()
 
     const breadcrumbsPages = [
         {
@@ -80,8 +77,6 @@ export default function AccountsDetails() {
                         {filterText()}
                     </Button>
                     <ConnectionList
-                        connections={connections || []}
-                        loading={connectionsLoading}
                         open={openDrawer}
                         selectedConnectionsProps={selectedConnections}
                         onClose={(data: any) => handleDrawer(data)}
