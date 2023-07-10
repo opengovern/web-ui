@@ -2,107 +2,93 @@ import { BadgeDelta, Button, Card, Flex, Text, Title } from '@tremor/react'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useAtom } from 'jotai'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
+import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { filterAtom } from '../../../../store'
-import {
-    useInventoryApiV1ResourcesAwsCreate,
-    useInventoryApiV1ResourcesAzureCreate,
-    useInventoryApiV1ResourcesCreate,
-} from '../../../../api/inventory.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
+import 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
+import { ReactComponent as AzureIcon } from '../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
+import { ReactComponent as AWSIcon } from '../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType } from '../../../../api/api'
-
-interface IResourceMetric {
-    metricName: string
-    from: number
-    count: number
-    changes: number
-}
-
-interface IResource {
-    attributes?: Record<string, string>
-    /** The Region of the resource */
-    location?: string
-    /** Provider Connection Id */
-    providerConnectionID?: string
-    /** Provider Connection Name */
-    providerConnectionName?: string
-    /** Resource Category */
-    resourceCategory?: string
-    /** Resource Group */
-    resourceGroup?: string
-    /** Resource Id */
-    resourceID?: string
-    /** Resource Name */
-    resourceName?: string
-    /** Resource Type */
-    resourceType?: string
-    /** Resource Type Name */
-    resourceTypeName?: string
-    /** Resource Provider */
-    provider?: GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType
-}
+import { Api } from '../../../../api/api'
+import AxiosAPI, { setWorkspace } from '../../../../api/ApiConfig'
 
 const columns: ColDef[] = [
     {
-        field: 'metricName',
-        headerName: 'Metric Name',
+        field: 'connector',
+        headerName: 'Connector',
+        width: 50,
+        sortable: true,
+        filter: true,
+        cellStyle: { padding: 0 },
+        cellRenderer: (params: ICellRendererParams) => {
+            return (
+                <div className="flex justify-center items-center w-full h-full">
+                    {params.data?.connector === 'Azure' ? (
+                        <AzureIcon />
+                    ) : (
+                        <AWSIcon />
+                    )}
+                </div>
+            )
+        },
+        // checkboxSelection: true,
+    },
+    {
+        field: 'resourceName',
+        headerName: 'Resource Name',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
     },
     {
-        field: 'from',
-        headerName: 'From',
+        field: 'resourceID',
+        headerName: 'Resource ID',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
     },
     {
-        field: 'count',
-        headerName: 'Count',
+        field: 'resourceTypeLabel',
+        headerName: 'Resource Type',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
+        valueFormatter: (params) => {
+            return params.data?.resourceTypeLabel === ''
+                ? params.data?.resourceType
+                : ''
+        },
     },
     {
-        field: 'changes',
-        headerName: 'Change',
+        field: 'providerConnectionName',
+        headerName: 'Connection Name',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
-        cellRenderer: (params: ICellRendererParams<IResourceMetric>) => (
-            <Flex justifyContent="center" alignItems="center" className="mt-1">
-                <BadgeDelta
-                    deltaType={
-                        // eslint-disable-next-line no-nested-ternary
-                        params.value > 0
-                            ? 'moderateIncrease'
-                            : params.value < 0
-                            ? 'moderateDecrease'
-                            : 'unchanged'
-                    }
-                >
-                    {params.value}%
-                </BadgeDelta>
-            </Flex>
-        ),
     },
 ]
 export default function MetricDetails() {
+    const api = new Api()
+    api.instance = AxiosAPI
+    const workspace = useParams<{ ws: string }>().ws
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
     const metricId = useParams<{ metricid: string }>().metricid
 
     const navigate = useNavigate()
@@ -113,61 +99,50 @@ export default function MetricDetails() {
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1SourcesList()
 
-    const {
-        response: resourcesAll,
-        isLoading: isLoadingAll,
-        isExecuted: isExecutedAll,
-    } = useInventoryApiV1ResourcesCreate(
-        {
-            filters: {
-                resourceType: metricId ? [metricId] : [],
-                // sourceID: selectedConnections.connections,
-            },
-            page: { no: 1, size: 100 },
-        },
-        undefined,
-        {},
-        selectedConnections.provider === ''
-    )
+    const datasource = {
+        getRows(params: IServerSideGetRowsParams) {
+            let psize
+            if (params.request.endRow && params.request.startRow) {
+                psize = params.request.endRow - params.request.startRow
+            } else {
+                psize = 100
+            }
+            try {
+                api.inventory
+                    .apiV1ResourcesCreate(
+                        {
+                            filters: {
+                                resourceType: metricId ? [metricId] : [],
 
-    const {
-        response: resourcesAWS,
-        isLoading: isLoadingAWS,
-        isExecuted: isExecutedAWS,
-    } = useInventoryApiV1ResourcesAwsCreate(
-        {
-            filters: {
-                resourceType: metricId ? [metricId] : [],
-                sourceID: selectedConnections.connections,
-            },
-            page: { no: 1, size: 100 },
+                                connectionID: selectedConnections.connections,
+                            },
+                            page: {
+                                no: Math.floor(psize / 100),
+                                size: psize,
+                            },
+                        },
+                        {}
+                    )
+                    .then((res) => {
+                        if (res.data.resources && res.data.totalCount) {
+                            params.successCallback(
+                                res.data.resources,
+                                res.data.totalCount
+                            )
+                        } else {
+                            params.fail()
+                        }
+                    })
+                    .catch((err) => {
+                        // console.log(err)
+                        params.fail()
+                    })
+            } catch (err) {
+                // console.log(err)
+                params.fail()
+            }
         },
-        undefined,
-        {},
-        selectedConnections.provider === 'AWS'
-    )
-
-    const {
-        response: resourcesAzure,
-        isLoading: isLoadingAzure,
-        isExecuted: isExecutedAzure,
-    } = useInventoryApiV1ResourcesAzureCreate(
-        {
-            filters: {
-                resourceType: metricId ? [metricId] : [],
-                sourceID: selectedConnections.connections,
-            },
-            page: { no: 1, size: 100 },
-        },
-        undefined,
-        {},
-        selectedConnections.provider === 'Azure'
-    )
-
-    const isLoading =
-        (isExecutedAWS && isLoadingAWS) ||
-        (isExecutedAll && isLoadingAll) ||
-        (isExecutedAzure && isLoadingAzure)
+    }
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -175,10 +150,13 @@ export default function MetricDetails() {
         paginationPageSize: 25,
         rowSelection: 'multiple',
         animateRows: true,
+        rowModelType: 'serverSide',
         getRowHeight: (params) => 50,
         onGridReady: (params) => {
-            if (isLoading) {
-                gridRef.current?.api.showLoadingOverlay()
+            try {
+                params.api.setServerSideDatasource(datasource)
+            } catch (err) {
+                console.log(err)
             }
         },
         sideBar: {
@@ -237,64 +215,6 @@ export default function MetricDetails() {
         return 'Filters'
     }
 
-    const response = () => {
-        switch (selectedConnections.provider) {
-            case 'AWS':
-                return resourcesAWS?.resources?.map((item) => {
-                    const v: IResource = {
-                        attributes: item.attributes,
-                        location: item.location,
-                        providerConnectionID: item.providerConnectionID,
-                        providerConnectionName: item.providerConnectionName,
-                        resourceCategory: item.resourceCategory,
-                        resourceGroup: '',
-                        resourceID: item.resourceID,
-                        resourceName: item.resourceName,
-                        resourceType: item.resourceType,
-                        resourceTypeName: item.resourceTypeName,
-                        provider:
-                            GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType.SourceCloudAWS,
-                    }
-                    return v
-                })
-            case 'Azure':
-                return resourcesAzure?.resources?.map((item) => {
-                    const v: IResource = {
-                        attributes: item.attributes,
-                        location: item.location,
-                        providerConnectionID: item.providerConnectionID,
-                        providerConnectionName: item.providerConnectionName,
-                        resourceCategory: item.resourceCategory,
-                        resourceGroup: item.resourceGroup,
-                        resourceID: item.resourceID,
-                        resourceName: item.resourceName,
-                        resourceType: item.resourceType,
-                        resourceTypeName: item.resourceTypeName,
-                        provider:
-                            GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType.SourceCloudAzure,
-                    }
-                    return v
-                })
-            default:
-                return resourcesAll?.resources?.map((item) => {
-                    const v: IResource = {
-                        attributes: item.attributes,
-                        location: item.location,
-                        providerConnectionID: item.providerConnectionID,
-                        providerConnectionName: item.providerConnectionName,
-                        resourceCategory: item.resourceCategory,
-                        resourceGroup: '',
-                        resourceID: item.resourceID,
-                        resourceName: item.resourceName,
-                        resourceType: item.resourceType,
-                        resourceTypeName: item.resourceTypeName,
-                        provider: item.provider,
-                    }
-                    return v
-                })
-        }
-    }
-
     return (
         <LoggedInLayout currentPage="assets">
             <Flex
@@ -337,7 +257,6 @@ export default function MetricDetails() {
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
-                        rowData={response()}
                     />
                 </div>
             </Card>

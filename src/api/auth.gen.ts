@@ -58,8 +58,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
