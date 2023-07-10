@@ -2,12 +2,12 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import Subscriptions from './Subscriptions'
 import Principals from './Principals'
 
-interface IAWS {
+interface IAzure {
     principals: any
     subscriptions: any
 }
 
-export default function AzureTabs({ principals, subscriptions }: IAWS) {
+export default function AzureTabs({ principals, subscriptions }: IAzure) {
     return (
         <TabGroup>
             <TabList className="mb-3">

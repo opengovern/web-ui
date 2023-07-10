@@ -300,6 +300,7 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                 </Flex>
                 <Flex justifyContent="end" className="my-6">
                     <Button variant="secondary">Delete</Button>
+                    <Button className="ml-3">Discover New Accounts</Button>
                 </Flex>
             </Flex>
         </DrawerPanel>

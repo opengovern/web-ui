@@ -9,6 +9,7 @@ import {
     RowClickedEvent,
 } from 'ag-grid-community'
 import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
+import PrincipalInfo from './PrincipalInfo'
 
 interface IPrincipals {
     principals: any
@@ -106,10 +107,11 @@ const columns: ColDef[] = [
 
 export default function Principals({ principals }: IPrincipals) {
     const gridRef = useRef<AgGridReact>(null)
-    console.log(principals)
+
     const [open, setOpen] = useState(false)
     const [openInfo, setOpenInfo] = useState(false)
-    const [orgData, setOrgData] = useState(null)
+    const [priData, setPriData] = useState(null)
+
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
@@ -117,7 +119,7 @@ export default function Principals({ principals }: IPrincipals) {
         animateRows: true,
         getRowHeight: (params) => 50,
         onRowClicked: (event: RowClickedEvent<any>) => {
-            setOrgData(event.data)
+            setPriData(event.data)
             setOpenInfo(true)
         },
         sideBar: {
@@ -142,21 +144,28 @@ export default function Principals({ principals }: IPrincipals) {
     }
 
     return (
-        <Card>
-            <Flex flexDirection="row">
-                <Title>Service Principals</Title>
-                <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                    Add New SPN
-                </Button>
-            </Flex>
-            <div className="ag-theme-alpine mt-6">
-                <AgGridReact
-                    ref={gridRef}
-                    domLayout="autoHeight"
-                    gridOptions={gridOptions}
-                    rowData={principals?.credentials || []}
-                />
-            </div>
-        </Card>
+        <>
+            <Card>
+                <Flex flexDirection="row">
+                    <Title>Service Principals</Title>
+                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
+                        Add New SPN
+                    </Button>
+                </Flex>
+                <div className="ag-theme-alpine mt-6">
+                    <AgGridReact
+                        ref={gridRef}
+                        domLayout="autoHeight"
+                        gridOptions={gridOptions}
+                        rowData={principals?.credentials || []}
+                    />
+                </div>
+            </Card>
+            <PrincipalInfo
+                data={priData}
+                open={openInfo}
+                onClose={() => setOpenInfo(false)}
+            />
+        </>
     )
 }
