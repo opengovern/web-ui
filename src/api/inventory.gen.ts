@@ -97,6 +97,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
