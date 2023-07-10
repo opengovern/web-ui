@@ -1,15 +1,14 @@
 import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
 import Composition from '../../../../components/Cards/Composition'
 import { useInventoryApiV2CostCompositionList } from '../../../../api/inventory.gen'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse } from '../../../../api/api'
+import { filterAtom, timeAtom } from '../../../../store'
 
 type IProps = {
-    connector: any
-    connectionId: any
-    time: any
-    top: any
+    top: number
 }
 
 interface chartProps {
@@ -23,30 +22,47 @@ interface dataProps {
     chart: chartProps[]
 }
 
-export default function CompositionTab({
-    connector,
-    time,
-    top,
-    connectionId,
-}: IProps) {
+export default function CompositionTab({ top }: IProps) {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+
     const { response: compositionOld, isLoading: oldIsLoading } =
         useInventoryApiV2CostCompositionList({
             top,
-            ...(connector && { connector }),
-            ...(connectionId && { connectionId }),
-            ...(time.from && { endTime: dayjs(time.from).unix() }),
-            ...(time.from && {
-                startTime: dayjs(time.from).subtract(1, 'day').unix(),
+            ...(selectedConnections.provider && {
+                connector: [selectedConnections.provider],
+            }),
+            ...(selectedConnections.connections && {
+                connectionId: selectedConnections.connections,
+            }),
+            ...(activeTimeRange.from && {
+                endTime: dayjs(activeTimeRange.from).unix().toString(),
+            }),
+            ...(activeTimeRange.from && {
+                startTime: dayjs(activeTimeRange.from)
+                    .subtract(1, 'day')
+                    .unix()
+                    .toString(),
             }),
         })
+
     const { response: compositionNew, isLoading: newIsLoading } =
         useInventoryApiV2CostCompositionList({
             top,
-            ...(connector && { connector }),
-            ...(connectionId && { connectionId }),
-            ...(time.to && { endTime: dayjs(time.to).unix() }),
-            ...(time.to && {
-                startTime: dayjs(time.to).subtract(1, 'day').unix(),
+            ...(selectedConnections.provider && {
+                connector: [selectedConnections.provider],
+            }),
+            ...(selectedConnections.connections && {
+                connectionId: selectedConnections.connections,
+            }),
+            ...(activeTimeRange.to && {
+                endTime: dayjs(activeTimeRange.to).unix().toString(),
+            }),
+            ...(activeTimeRange.to && {
+                startTime: dayjs(activeTimeRange.to)
+                    .subtract(1, 'day')
+                    .unix()
+                    .toString(),
             }),
         })
 

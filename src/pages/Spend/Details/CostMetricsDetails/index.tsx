@@ -370,8 +370,13 @@ export default function CostMetricsDetails() {
                                 setSelectedResourceCategory(e)
                             }
                             value={selectedResourceCategory}
-                            placeholder="Source Selection"
+                            placeholder={
+                                categoriesLoading
+                                    ? 'Loading'
+                                    : 'Source Selection'
+                            }
                             className="max-w-xs mb-6"
+                            disabled={categoriesLoading}
                         >
                             {categoryOptions.map((category) => (
                                 <SearchSelectItem
