@@ -1,10 +1,6 @@
-import { useState } from 'react'
 import { useAtom } from 'jotai'
-import { Button, DateRangePicker, Flex, Text } from '@tremor/react'
+import { DateRangePicker, Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
-import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
-import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
-import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../../../store'
 import SingleAccount from './SingleAccount'
@@ -17,9 +13,6 @@ export default function AccountsDetails() {
 
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
-    const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1SourcesList()
 
     const breadcrumbsPages = [
         {
@@ -31,23 +24,6 @@ export default function AccountsDetails() {
         },
         { name: 'Accounts detail', path: '', current: true },
     ]
-
-    const handleDrawer = (data: any) => {
-        if (openDrawer) {
-            setSelectedConnections(data)
-            setOpenDrawer(false)
-        } else setOpenDrawer(true)
-    }
-
-    const filterText = () => {
-        if (selectedConnections.connections.length > 0) {
-            return <Text>{selectedConnections.connections.length} Filters</Text>
-        }
-        if (selectedConnections.provider !== '') {
-            return <Text>{selectedConnections.provider}</Text>
-        }
-        return 'Filters'
-    }
 
     return (
         <LoggedInLayout currentPage="assets">
@@ -66,26 +42,7 @@ export default function AccountsDetails() {
                         enableClear={false}
                         maxDate={new Date()}
                     />
-                    <Button
-                        variant="secondary"
-                        className="ml-2 h-9"
-                        onClick={() => setOpenDrawer(true)}
-                        icon={
-                            selectedConnections.connections.length > 0 ||
-                            selectedConnections.provider !== ''
-                                ? FunnelIconSolid
-                                : FunnelIconOutline
-                        }
-                    >
-                        {filterText()}
-                    </Button>
-                    <ConnectionList
-                        connections={connections || []}
-                        loading={connectionsLoading}
-                        open={openDrawer}
-                        selectedConnectionsProps={selectedConnections}
-                        onClose={(data: any) => handleDrawer(data)}
-                    />
+                    <ConnectionList />
                 </Flex>
             </Flex>
             {selectedConnections.connections.length === 1 ? (

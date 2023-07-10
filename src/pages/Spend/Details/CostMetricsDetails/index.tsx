@@ -1,6 +1,5 @@
 import {
     Card,
-    Text,
     Title,
     BadgeDelta,
     SearchSelectItem,
@@ -10,7 +9,6 @@ import {
     TabList,
     Tab,
     DateRangePicker,
-    Button,
 } from '@tremor/react'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -19,8 +17,6 @@ import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
-import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 import {
     filterAtom,
     selectedResourceCategoryAtom,
@@ -32,10 +28,7 @@ import {
 } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
-import {
-    useOnboardApiV1ConnectionsSummaryList,
-    useOnboardApiV1SourcesList,
-} from '../../../../api/onboard.gen'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import ConnectionList from '../../../../components/ConnectionList'
@@ -201,7 +194,6 @@ export default function CostMetricsDetails() {
         selectedResourceCategoryAtom
     )
     const [selectedIndex, setSelectedIndex] = useState(0)
-    const [openDrawer, setOpenDrawer] = useState(false)
     const activeCategory =
         selectedResourceCategory === 'All Categories'
             ? ''
@@ -246,8 +238,6 @@ export default function CostMetricsDetails() {
 
     const { response: inventoryCategories, isLoading: categoriesLoading } =
         useInventoryApiV2ResourcesTagList()
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1SourcesList()
 
     const categoryOptions = useMemo(() => {
         if (!inventoryCategories)
@@ -307,22 +297,6 @@ export default function CostMetricsDetails() {
         },
     }
 
-    const filterText = () => {
-        if (selectedConnections.connections.length > 0) {
-            return <Text>{selectedConnections.connections.length} Filters</Text>
-        }
-        if (selectedConnections.provider !== '') {
-            return <Text>{selectedConnections.provider}</Text>
-        }
-        return 'Filters'
-    }
-    const handleDrawer = (data: any) => {
-        if (openDrawer) {
-            setSelectedConnections(data)
-            setOpenDrawer(false)
-        } else setOpenDrawer(true)
-    }
-
     return (
         <LoggedInLayout currentPage="spend">
             <Flex
@@ -339,26 +313,7 @@ export default function CostMetricsDetails() {
                         enableClear={false}
                         maxDate={new Date()}
                     />
-                    <Button
-                        variant="secondary"
-                        className="ml-2 h-9"
-                        onClick={() => setOpenDrawer(true)}
-                        icon={
-                            selectedConnections.connections.length > 0 ||
-                            selectedConnections.provider !== ''
-                                ? FunnelIconSolid
-                                : FunnelIconOutline
-                        }
-                    >
-                        {filterText()}
-                    </Button>
-                    <ConnectionList
-                        connections={connections || []}
-                        loading={connectionsLoading}
-                        open={openDrawer}
-                        selectedConnectionsProps={selectedConnections}
-                        onClose={(data: any) => handleDrawer(data)}
-                    />
+                    <ConnectionList />
                 </Flex>
             </Flex>
             <Card className="mt-10">

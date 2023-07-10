@@ -1,17 +1,13 @@
 import {
-    Button,
     Card,
     DateRangePicker,
     Flex,
     SearchSelect,
     SearchSelectItem,
-    Text,
     Title,
 } from '@tremor/react'
-import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
-import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
@@ -33,7 +29,6 @@ import Breadcrumbs from '../../../../components/Breadcrumbs'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
-import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
 import { badgeDelta } from '../../../../utilities/deltaType'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType } from '../../../../api/api'
 
@@ -91,9 +86,6 @@ export default function ResourceMetricsDetails() {
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
-    const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1SourcesList()
     const {
         response: inventoryCategories,
         isLoading: inventoryCategoriesLoading,
@@ -180,23 +172,6 @@ export default function ResourceMetricsDetails() {
         { name: 'Resource metrics', path: '', current: true },
     ]
 
-    const handleDrawer = (data: any) => {
-        if (openDrawer) {
-            setSelectedConnections(data)
-            setOpenDrawer(false)
-        } else setOpenDrawer(true)
-    }
-
-    const filterText = () => {
-        if (selectedConnections.connections.length > 0) {
-            return <Text>{selectedConnections.connections.length} Filters</Text>
-        }
-        if (selectedConnections.provider !== '') {
-            return <Text>{selectedConnections.provider}</Text>
-        }
-        return 'Filters'
-    }
-
     return (
         <LoggedInLayout currentPage="assets">
             <Flex
@@ -214,26 +189,7 @@ export default function ResourceMetricsDetails() {
                         enableClear={false}
                         maxDate={new Date()}
                     />
-                    <Button
-                        variant="secondary"
-                        className="ml-2 h-9"
-                        onClick={() => setOpenDrawer(true)}
-                        icon={
-                            selectedConnections.connections.length > 0 ||
-                            selectedConnections.provider !== ''
-                                ? FunnelIconSolid
-                                : FunnelIconOutline
-                        }
-                    >
-                        {filterText()}
-                    </Button>
-                    <ConnectionList
-                        connections={connections || []}
-                        loading={connectionsLoading}
-                        open={openDrawer}
-                        selectedConnectionsProps={selectedConnections}
-                        onClose={(data: any) => handleDrawer(data)}
-                    />
+                    <ConnectionList />
                 </Flex>
             </Flex>
             <Card className="mt-10">
