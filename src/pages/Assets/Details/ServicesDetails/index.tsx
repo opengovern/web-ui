@@ -15,7 +15,6 @@ import { filterAtom, timeAtom } from '../../../../store'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import ConnectionList from '../../../../components/ConnectionList'
-import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
 
 const columns: ColDef[] = [
     {
@@ -48,8 +47,6 @@ export default function ServicesDetails() {
     const navigate = useNavigate()
     const gridRef = useRef<AgGridReact>(null)
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1SourcesList()
 
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
@@ -141,8 +138,6 @@ export default function ServicesDetails() {
                         {filterText()}
                     </Button>
                     <ConnectionList
-                        connections={connections || []}
-                        loading={connectionsLoading}
                         open={openDrawer}
                         selectedConnectionsProps={selectedConnections}
                         onClose={(data: any) => handleDrawer(data)}

@@ -18,7 +18,6 @@ import Breadcrumbs from '../../../../components/Breadcrumbs'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
-import { useOnboardApiV1SourcesList } from '../../../../api/onboard.gen'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType } from '../../../../api/api'
 
 interface IResourceMetric {
@@ -110,8 +109,6 @@ export default function MetricDetails() {
 
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1SourcesList()
 
     const {
         response: resourcesAll,
@@ -319,8 +316,6 @@ export default function MetricDetails() {
                         {filterText()}
                     </Button>
                     <ConnectionList
-                        connections={connections || []}
-                        loading={connectionsLoading}
                         open={openDrawer}
                         selectedConnectionsProps={selectedConnections}
                         onClose={(data: any) => handleDrawer(data)}
