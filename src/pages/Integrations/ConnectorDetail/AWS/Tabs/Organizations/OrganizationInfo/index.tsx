@@ -15,7 +15,7 @@ interface IOrgInfo {
     data: any
 }
 
-export default function OrgInfo({ data }: IOrgInfo) {
+export default function OrganizationInfo({ data }: IOrgInfo) {
     const { response: credential } = useOnboardApiV1CredentialDetail(data.id)
     const [key, setKey] = useState('')
     const [ekey, seteKey] = useState(false)
