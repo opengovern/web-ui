@@ -46,11 +46,7 @@ export default function FromScratch({ close }: ISteps) {
                 )
             case 4:
                 return (
-                    <FinalStep
-                        data={data}
-                        onPrevious={() => setStepNum(3)}
-                        onNext={() => setStepNum(4)}
-                    />
+                    <FinalStep data={data} onPrevious={() => setStepNum(3)} />
                 )
             default:
                 return null

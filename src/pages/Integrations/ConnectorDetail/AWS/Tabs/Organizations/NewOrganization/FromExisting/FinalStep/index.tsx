@@ -3,28 +3,20 @@ import { Bold, Button, Divider, Flex, Text } from '@tremor/react'
 interface IStep {
     onPrevious: any
     data: any
+    connection: any
 }
 
-export default function FinalStep({ onPrevious, data }: IStep) {
+export default function FinalStep({ onPrevious, data, connection }: IStep) {
+    console.log(connection)
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
-                <Bold className="my-6">AWS Account information</Bold>
+                <Bold className="my-6">Finalizing the organization</Bold>
                 <Text className="mb-6">
                     Check everything before submitting your organization. Please
                     note that organization onboarding progress will take a few
                     minutes.
                 </Text>
-                <Flex flexDirection="row">
-                    <Text>Access Key</Text>
-                    <Text className="text-black">{data.accessKey}</Text>
-                </Flex>
-                <Divider />
-                <Flex flexDirection="row">
-                    <Text>Secret Key</Text>
-                    <Text className="text-black">{data.secretKey}</Text>
-                </Flex>
-                <Divider />
                 <Flex flexDirection="row">
                     <Text>Role Name</Text>
                     <Text className="text-black">{data.roleName}</Text>
