@@ -7,7 +7,6 @@ interface IStep {
 }
 
 export default function FinalStep({ onPrevious, data, connection }: IStep) {
-    console.log(connection)
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">

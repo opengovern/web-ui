@@ -170,7 +170,6 @@ export default function Organizations({
                 open={openInfo}
                 onClose={() => {
                     setOpenInfo(false)
-                    setOrgData(null)
                 }}
             >
                 <OrgInfo data={orgData} />

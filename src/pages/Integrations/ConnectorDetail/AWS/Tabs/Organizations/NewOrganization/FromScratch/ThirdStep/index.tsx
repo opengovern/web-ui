@@ -23,9 +23,7 @@ export default function ThirdStep({ onNext, onPrevious }: IStep) {
                     <TextInput
                         className="w-2/3"
                         value={accessKey}
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        onInput={(e) => setAccessKey(e.target.value)}
+                        onChange={(e) => setAccessKey(e.target.value)}
                     />
                 </Flex>
                 <Divider />
@@ -34,9 +32,7 @@ export default function ThirdStep({ onNext, onPrevious }: IStep) {
                     <TextInput
                         className="w-2/3"
                         value={secretKey}
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        onInput={(e) => setSecretKey(e.target.value)}
+                        onChange={(e) => setSecretKey(e.target.value)}
                     />
                 </Flex>
                 <Divider />
@@ -45,9 +41,7 @@ export default function ThirdStep({ onNext, onPrevious }: IStep) {
                     <TextInput
                         className="w-2/3"
                         value={roleName}
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        onInput={(e) => setRoleName(e.target.value)}
+                        onChange={(e) => setRoleName(e.target.value)}
                     />
                 </Flex>
                 <Divider />
@@ -56,9 +50,7 @@ export default function ThirdStep({ onNext, onPrevious }: IStep) {
                     <TextInput
                         className="w-2/3"
                         value={externalId}
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        onInput={(e) => setExternalId(e.target.value)}
+                        onChange={(e) => setExternalId(e.target.value)}
                     />
                 </Flex>
             </Flex>
