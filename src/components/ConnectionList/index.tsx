@@ -279,7 +279,7 @@ export default function ConnectionList() {
                 connections: getConnections(),
             })
             setOpenDrawer(false)
-        } else setOpenDrawer(true)
+        }
     }
 
     const filterText = () => {
