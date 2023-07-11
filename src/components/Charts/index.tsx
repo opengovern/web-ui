@@ -1,6 +1,8 @@
 import {
     AreaChart,
     Color,
+    Flex,
+    Legend,
     LineChart,
     LineChartProps,
     Text,
@@ -10,6 +12,7 @@ import {
 type IProps = {
     title?: string
     description?: string
+    lines?: string[] | JSX.Element[]
     type: 'area' | 'line'
 }
 
@@ -17,6 +20,7 @@ export default function Chart({
     title,
     description,
     type,
+    lines,
     ...props
 }: LineChartProps & IProps) {
     const colors: Color[] = ['indigo', 'green', 'yellow', 'rose', 'blue']
@@ -35,7 +39,34 @@ export default function Chart({
         <>
             <Title>{title}</Title>
             <Text>{description}</Text>
-            {buildChart()}
+            <Flex flexDirection="row" alignItems="start">
+                {buildChart()}
+                {lines &&
+                    (typeof lines === 'string' ? (
+                        <Legend
+                            categories={lines}
+                            colors={colors}
+                            className="w-1/4"
+                        />
+                    ) : (
+                        <Flex flexDirection="col" className="w-1/4">
+                            {lines.map((item, index) => {
+                                return (
+                                    <Flex
+                                        flexDirection="row"
+                                        alignItems="start"
+                                        justifyContent="start"
+                                    >
+                                        <span
+                                            className={`h-2 w-2 mt-2 bg-${colors[index]}-500 rounded-full`}
+                                        />
+                                        {item}
+                                    </Flex>
+                                )
+                            })}
+                        </Flex>
+                    ))}
+            </Flex>
         </>
     )
 }

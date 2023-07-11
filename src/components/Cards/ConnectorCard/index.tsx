@@ -13,7 +13,7 @@ interface IConnectorCard {
     description: string | undefined
 }
 
-const getConnectorIcon = (connector: any) => {
+export const getConnectorIcon = (connector: any) => {
     if (connector === 'AWS')
         return <Icon icon={AWSIcon} size="md" variant="shadow" color="orange" />
     return <Icon icon={AzureIcon} size="md" variant="shadow" color="blue" />

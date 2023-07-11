@@ -58,8 +58,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
@@ -98,8 +96,8 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
@@ -763,7 +761,7 @@ export const useOnboardApiV1ConnectorDetail = (
 interface IuseOnboardApiV1CredentialListState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse
     error?: any
 }
 
@@ -771,7 +769,9 @@ export const useOnboardApiV1CredentialList = (
     query?: {
         connector?: '' | 'AWS' | 'Azure'
 
-        health?: 'healthy' | 'unhealthy' | 'initial_discovery'
+        health?: 'healthy' | 'unhealthy'
+
+        credentialType?: 'manual' | 'auto-generated'
 
         pageSize?: number
 
@@ -1555,13 +1555,15 @@ export const useOnboardApiV1CredentialHealthcheckDetail = (
 interface IuseOnboardApiV1CredentialSourcesListListState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse
     error?: any
 }
 
 export const useOnboardApiV1CredentialSourcesListList = (
     query?: {
         connector?: '' | 'AWS' | 'Azure'
+
+        credentialType?: 'manual' | 'auto-generated'
 
         pageSize?: number
 
@@ -2407,95 +2409,6 @@ export const useOnboardApiV1SourcesList = (
 
     if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1SourcesCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
-    error?: any
-}
-
-export const useOnboardApiV1SourcesCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
-    query?: {
-        type?: 'aws' | 'azure'
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseOnboardApiV1SourcesCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1SourcesCreate(request, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([request, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, query, params, autoExecute]))
     }
 
     useEffect(() => {

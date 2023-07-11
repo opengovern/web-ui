@@ -1,58 +1,66 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     BadgeDelta,
     Card,
     DeltaType,
     Flex,
-    SearchSelect,
-    SearchSelectItem,
+    Select,
+    SelectItem,
     Text,
     Title,
 } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
-import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numericDisplay,
+} from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
+import { filterAtom, timeAtom } from '../../../../../store'
+import { KaytuProvider, StringToProvider } from '../../../../../types/provider'
 
 type IProps = {
     categories: {
         label: string
         value: string
     }[]
-    timeRange: any
-    connections?: []
 }
 
-const selectedTrendCostProviderAtom = atom<string>('')
-export default function GrowthTrend({
-    timeRange,
-    connections,
-    categories,
-}: IProps) {
+export default function GrowthTrend({ categories }: IProps) {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+
     const [growthDeltaType, setGrowthDeltaType] =
         useState<DeltaType>('unchanged')
     const [growthDelta, setGrowthDelta] = useState(0)
-    const [selectedTrendCostProvider, setSelectedTrendCostProvider] = useAtom(
-        selectedTrendCostProviderAtom
-    )
+    const [selectedTrendCostProvider, setSelectedTrendCostProvider] =
+        useState<KaytuProvider>('')
     const query = {
         ...(selectedTrendCostProvider && {
-            connector: selectedTrendCostProvider,
+            connector: [selectedTrendCostProvider],
         }),
-        ...(timeRange.from && {
-            startTime: dayjs(timeRange.from).unix(),
+        ...(activeTimeRange.from && {
+            startTime: dayjs(activeTimeRange.from).unix().toString(),
         }),
-        ...(timeRange.to && { endTime: dayjs(timeRange.to).unix() }),
-        ...(connections && { connectionId: connections }),
+        ...(activeTimeRange.to && {
+            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
     }
-    const { response: data, isLoading } = useInventoryApiV2CostTrendList(query)
-    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const { response: costTrend, isLoading } =
+        useInventoryApiV2CostTrendList(query)
     const fixTime = (data: any) => {
         const result: any = []
-        // eslint-disable-next-line guard-for-in,no-restricted-syntax
-        for (const item in data) {
+        if (data === undefined) {
+            return result
+        }
+        const keys = Object.keys(data)
+        for (let j = 1; j < keys.length; j += 1) {
+            const item = keys[j]
             const temp: any = {}
             const day = dayjs(data[item].date).format('DD')
             const month = dayjs(data[item].date).format('MMM')
@@ -62,7 +70,6 @@ export default function GrowthTrend({
         }
         return result
     }
-    // eslint-disable-next-line @typescript-eslint/no-shadow
     const findDeltaType = (data: any) => {
         if (data && data.length > 1) {
             const first = data[0].count
@@ -81,9 +88,9 @@ export default function GrowthTrend({
     }
 
     useEffect(() => {
-        fixTime(data)
-        findDeltaType(data)
-    }, [data])
+        fixTime(costTrend)
+        findDeltaType(costTrend)
+    }, [costTrend])
 
     return (
         <Card>
@@ -99,23 +106,28 @@ export default function GrowthTrend({
                         <Text>
                             <span className="text-gray-500">Provider: </span>
                         </Text>
-                        <SearchSelect
+                        <Select
                             onValueChange={(e) =>
-                                setSelectedTrendCostProvider(e)
+                                setSelectedTrendCostProvider(
+                                    StringToProvider(e)
+                                )
                             }
-                            value={selectedTrendCostProvider}
-                            placeholder="Provider Selection"
+                            placeholder={
+                                selectedTrendCostProvider === ''
+                                    ? 'All'
+                                    : selectedTrendCostProvider
+                            }
                             className="max-w-xs mb-6"
                         >
                             {categories.map((category) => (
-                                <SearchSelectItem
+                                <SelectItem
                                     key={category.label}
                                     value={category.value}
                                 >
                                     {category.label}
-                                </SearchSelectItem>
+                                </SelectItem>
                             ))}
-                        </SearchSelect>
+                        </Select>
                     </div>
                 </div>
             </Flex>
@@ -128,10 +140,11 @@ export default function GrowthTrend({
                     className="mt-4 h-80"
                     index="date"
                     type="line"
-                    yAxisWidth={60}
+                    yAxisWidth={120}
                     categories={['count']}
-                    data={fixTime(data) || []}
+                    data={fixTime(costTrend) || []}
                     showAnimation
+                    valueFormatter={exactPriceDisplay}
                 />
             )}
         </Card>

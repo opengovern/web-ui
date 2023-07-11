@@ -1,9 +1,13 @@
 import {
     BadgeDelta,
+    Button,
     Callout,
     Card,
+    Col,
     DateRangePicker,
     Flex,
+    Grid,
+    Icon,
     SearchSelect,
     SearchSelectItem,
     Select,
@@ -36,6 +40,13 @@ import Spinner from '../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
 import Chart from '../../../components/Charts'
+import {
+    badgeTypeByDelta,
+    percentageByChange,
+} from '../../../utilities/deltaType'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
+import { ReactComponent as AWSIcon } from '../../../icons/elements-supplemental-provider-logo-aws-original.svg'
+import { ReactComponent as AzureIcon } from '../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 
 const chartData = (inputData: any) => {
     const data = []
@@ -103,6 +114,7 @@ const calculatePercent = (inputData: any) => {
 const gridOptions: GridOptions = {
     pagination: true,
     animateRows: true,
+    paginationPageSize: 25,
     getRowHeight: (params: any) => 50,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -133,7 +145,9 @@ const gridOptions: GridOptions = {
     },
 }
 
-const generateBadge = (met: any) => {
+const generateBadge = (
+    met: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight | undefined
+) => {
     if (!met?.totalResultValue && !met?.oldTotalResultValue) {
         return (
             <Callout
@@ -157,7 +171,9 @@ const generateBadge = (met: any) => {
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title="Prior value is not available"
+                title={`Data is availabe after ${dayjs(
+                    met.firstOldResultDate
+                ).format('MMM DD, YYYY')}`}
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="ml-3 border-0 text-xs leading-5 w-96 drop-shadow-sm"
@@ -166,20 +182,16 @@ const generateBadge = (met: any) => {
     }
     return (
         <BadgeDelta
-            deltaType={
-                calculatePercent(met) > 0
-                    ? 'moderateIncrease'
-                    : 'moderateDecrease'
-            }
-            className={`opacity-${
-                calculatePercent(met) !== 0 ? 1 : 0
-            } cursor-pointer my-2`}
+            deltaType={badgeTypeByDelta(
+                met.oldTotalResultValue,
+                met.totalResultValue
+            )}
+            className="cursor-pointer my-2"
         >
-            {`${
-                calculatePercent(met) > 0
-                    ? Math.ceil(calculatePercent(met))
-                    : -1 * Math.floor(calculatePercent(met))
-            }%`}
+            {`${percentageByChange(
+                met.oldTotalResultValue,
+                met.totalResultValue
+            )}%`}
         </BadgeDelta>
     )
 }
@@ -193,19 +205,21 @@ export default function InsightDetail() {
 
     const start = () => {
         if (detailsDate === '') {
-            return activeTimeRange.from || new Date()
+            return dayjs(activeTimeRange.from || new Date())
         }
         const d = new Date(0)
         d.setUTCSeconds(parseInt(detailsDate, 10) - 1)
-        return d
+        return dayjs(d)
     }
     const end = () => {
         if (detailsDate === '') {
-            return activeTimeRange.to || activeTimeRange.from || new Date()
+            return dayjs(
+                activeTimeRange.to || activeTimeRange.from || new Date()
+            )
         }
         const d = new Date(0)
         d.setUTCSeconds(parseInt(detailsDate, 10) + 1)
-        return d
+        return dayjs(d)
     }
     const query = {
         ...(activeTimeRange.from && {
@@ -224,8 +238,8 @@ export default function InsightDetail() {
 
     const detailsQuery = {
         ...(activeTimeRange.from && {
-            startTime: dayjs(start()).unix(),
-            endTime: dayjs(end()).unix(),
+            startTime: start().unix(),
+            endTime: end().unix(),
         }),
     }
     const { response: insightDetail, isLoading: detailLoading } =
@@ -244,7 +258,7 @@ export default function InsightDetail() {
         {
             name: 'Insights',
             path: () => {
-                navigate(-1)
+                navigate('./..')
             },
             current: false,
         },
@@ -264,6 +278,19 @@ export default function InsightDetail() {
                 )
             }) || []
         )
+    }
+
+    const getConnectorIcon = (connector: any) => {
+        if (connector === 'AWS')
+            return (
+                <Icon
+                    icon={AWSIcon}
+                    size="xl"
+                    variant="shadow"
+                    color="orange"
+                />
+            )
+        return <Icon icon={AzureIcon} size="xl" variant="shadow" color="blue" />
     }
 
     useEffect(() => {
@@ -297,36 +324,65 @@ export default function InsightDetail() {
                     </Flex>
                     <Flex flexDirection="col">
                         <Flex flexDirection="row">
-                            <Title className="whitespace-nowrap">
-                                {insightDetail?.shortTitle}
-                            </Title>
-                            <Flex
-                                flexDirection="row"
-                                alignItems="end"
-                                justifyContent="end"
-                                className="m-3"
-                            >
-                                {!!insightDetail?.totalResultValue && (
-                                    <Title className="mr-1">
-                                        {numberGroupedDisplay(
-                                            insightDetail?.totalResultValue || 0
+                            {detailLoading ? (
+                                <Spinner className="my-6" />
+                            ) : (
+                                <Flex
+                                    flexDirection="row"
+                                    justifyContent="between"
+                                    alignItems="start"
+                                    className="mb-4"
+                                >
+                                    <Flex
+                                        flexDirection="row"
+                                        justifyContent="start"
+                                        // className="w-2/3"
+                                    >
+                                        {getConnectorIcon(
+                                            insightDetail?.connector
                                         )}
-                                    </Title>
-                                )}
-                                {!!insightDetail?.oldTotalResultValue && (
-                                    <Subtitle className="text-sm mb-0.5">
-                                        {`From: ${numberGroupedDisplay(
-                                            insightDetail?.oldTotalResultValue ||
-                                                0
-                                        )}`}
-                                    </Subtitle>
-                                )}
-                            </Flex>
-                            {generateBadge(insightDetail)}
+                                        <Flex
+                                            flexDirection="col"
+                                            alignItems="start"
+                                            className="ml-3"
+                                        >
+                                            <Title className="whitespace-nowrap">
+                                                {insightDetail?.shortTitle}
+                                            </Title>
+                                            <Text>
+                                                {insightDetail?.description}
+                                            </Text>
+                                        </Flex>
+                                    </Flex>
+                                    <Flex flexDirection="row">
+                                        <Flex
+                                            flexDirection="row"
+                                            alignItems="end"
+                                            justifyContent="end"
+                                            className="m-3"
+                                        >
+                                            {!!insightDetail?.totalResultValue && (
+                                                <Title className="mr-1">
+                                                    {numberGroupedDisplay(
+                                                        insightDetail?.totalResultValue ||
+                                                            0
+                                                    )}
+                                                </Title>
+                                            )}
+                                            {!!insightDetail?.oldTotalResultValue && (
+                                                <Subtitle className="text-sm mb-0.5">
+                                                    {`from ${numberGroupedDisplay(
+                                                        insightDetail?.oldTotalResultValue ||
+                                                            0
+                                                    )}`}
+                                                </Subtitle>
+                                            )}
+                                        </Flex>
+                                        {generateBadge(insightDetail)}
+                                    </Flex>
+                                </Flex>
+                            )}
                         </Flex>
-                        <Text className="flex self-start mt-2 mb-6">
-                            {insightDetail?.description}
-                        </Text>
                     </Flex>
                     <Card>
                         <Title>Insight count</Title>
@@ -337,7 +393,6 @@ export default function InsightDetail() {
                             yAxisWidth={60}
                             categories={['count']}
                             data={chartData(insightTrend)}
-                            // colors={['indigo']}
                             // curveType="natural"
                         />
                     </Card>
@@ -350,7 +405,7 @@ export default function InsightDetail() {
                                 placeholder={
                                     detailsDate === ''
                                         ? 'Latest'
-                                        : end().toLocaleString()
+                                        : end().format('YYYY-MM-DD')
                                 }
                             >
                                 <>{trendDates()}</>
@@ -362,6 +417,36 @@ export default function InsightDetail() {
                             />
                         </Flex>
                     </Flex>
+                    {detailsDate !== '' && (
+                        <Flex
+                            flexDirection="row"
+                            className="bg-blue-50 mt-2 rounded-md pr-6"
+                        >
+                            <Callout
+                                title={`The available data for the result is exclusively limited to ${end().format(
+                                    'MMM DD, YYYY'
+                                )}.`}
+                                color="blue"
+                                icon={ExclamationCircleIcon}
+                                className="w-full text-xs leading-5 truncate max-w-full"
+                            >
+                                <Flex flexDirection="row">
+                                    <Text className="text-blue-800">
+                                        The following results present you with a
+                                        partial result based on the filter you
+                                        have selected.
+                                    </Text>
+                                </Flex>
+                            </Callout>
+                            <Button
+                                variant="secondary"
+                                onClick={() => setDetailsDate('')}
+                            >
+                                Show All
+                            </Button>
+                        </Flex>
+                    )}
+
                     <div className="w-full mt-3 ag-theme-alpine">
                         <AgGridReact
                             ref={gridRef}

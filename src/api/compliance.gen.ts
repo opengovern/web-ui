@@ -58,8 +58,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
@@ -98,8 +96,8 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
@@ -2645,6 +2643,93 @@ export const useComplianceApiV1QueriesDetail = (
 
     if (JSON.stringify([queryId, params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([queryId, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseComplianceApiV1QueriesSyncListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: void
+    error?: any
+}
+
+export const useComplianceApiV1QueriesSyncList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseComplianceApiV1QueriesSyncListState>(
+        {
+            isLoading: true,
+            isExecuted: false,
+        }
+    )
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.compliance
+                .apiV1QueriesSyncList(params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {

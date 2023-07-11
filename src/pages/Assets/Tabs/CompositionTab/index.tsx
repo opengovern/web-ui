@@ -1,242 +1,154 @@
-import {
-    BadgeDelta,
-    Card,
-    DeltaType,
-    Divider,
-    DonutChart,
-    Flex,
-    List,
-    ListItem,
-    Metric,
-    Tab,
-    TabGroup,
-    TabList,
-    Text,
-    Title,
-} from '@tremor/react'
-import { useState } from 'react'
+import { Flex, Grid } from '@tremor/react'
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
 import { useInventoryApiV2ResourcesCompositionDetail } from '../../../../api/inventory.gen'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
-import Spinner from '../../../../components/Spinner'
+import Composition from '../../../../components/Cards/Composition'
+import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+} from '../../../../api/api'
+import {
+    badgeTypeByDelta,
+    percentageByChange,
+} from '../../../../utilities/deltaType'
+import { filterAtom, timeAtom } from '../../../../store'
 
 type IProps = {
     top: number
-    connector?: string
-    connectionId?: string[]
-    time?: any
 }
-export default function CompositionTab({
-    top,
-    connector,
-    connectionId,
-    time,
-}: IProps) {
-    const [selectedIndex, setSelectedIndex] = useState(0)
+
+interface chartProps {
+    name: string
+    value: number
+}
+
+interface dataProps {
+    total: string
+    totalValueCount: string
+    chart: chartProps[]
+}
+
+export default function CompositionTab({ top }: IProps) {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const query = {
         top,
-        ...(connector && { connector }),
-        ...(connectionId && { connectionId }),
-        ...(time.to && { time: dayjs(time.to).unix() }),
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(activeTimeRange.to && { time: dayjs(activeTimeRange.to).unix() }),
     }
     const { response: composition, isLoading } =
         useInventoryApiV2ResourcesCompositionDetail('category', query)
 
-    function compositionData(inputObject: any, oldData: number) {
-        const outputArray = []
-
-        if (!inputObject) {
-            return [
-                {
-                    name: 'No data',
-                    value: 0,
-                },
-            ]
+    const recordToArray = (
+        record?: Record<
+            string,
+            GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
+        >,
+        old = 0
+    ) => {
+        if (record === undefined) {
+            return []
         }
-        // iterate over top_values
-        // eslint-disable-next-line guard-for-in,no-restricted-syntax
-        for (const key in inputObject.top_values) {
-            outputArray.push({
+
+        return Object.keys(record).map((key) => {
+            return {
                 name: key,
                 value:
-                    oldData === 1
-                        ? inputObject.top_values[key].old_count
-                        : inputObject.top_values[key].count,
-            })
-        }
-
-        outputArray.push({
-            name: 'others',
-            value: oldData
-                ? inputObject.others.old_count
-                : inputObject.others.count,
-        })
-        return outputArray
-    }
-
-    function nowCompositionList(inputObject: any) {
-        const outputArray = []
-        let deltaType: DeltaType = 'unchanged'
-        if (!inputObject) {
-            return [
-                {
-                    name: 'No data',
-                    value: 0,
-                    delta: '0',
-                    deltaType,
-                },
-            ]
-        }
-        // iterate over top_values
-        // eslint-disable-next-line guard-for-in,no-restricted-syntax
-        for (const key in inputObject.top_values) {
-            let delta
-            try {
-                delta =
-                    ((inputObject.top_values[key].count -
-                        inputObject.top_values[key].old_count) /
-                        inputObject.top_values[key].old_count) *
-                    100
-            } catch (e) {
-                delta = 0
+                    old === 1
+                        ? record[key].old_count || 0
+                        : record[key].count || 0,
             }
+        })
+    }
 
-            if (delta < 0) {
-                deltaType = 'moderateDecrease'
-            } else if (delta > 0) {
-                deltaType = 'moderateIncrease'
-            } else {
-                deltaType = 'unchanged'
+    const compositionCart = (
+        compositionData:
+            | GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse
+            | undefined,
+        old = 0
+    ) => {
+        const v: dataProps = {
+            total: numericDisplay(compositionData?.total_count),
+            totalValueCount: numericDisplay(compositionData?.total_value_count),
+            chart: recordToArray(compositionData?.top_values, old),
+        }
+        v.chart.push({
+            name: 'Others',
+            value:
+                (old === 0
+                    ? compositionData?.others?.count
+                    : compositionData?.others?.old_count) || 0,
+        })
+        return v
+    }
+
+    const compositionList = (
+        compositionData:
+            | GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse
+            | undefined,
+        old = 0
+    ) => {
+        if (compositionData?.top_values === undefined) {
+            return []
+        }
+        const record = compositionData?.top_values
+        let v
+        if (old === 1) {
+            v = Object.keys(record).map((key) => {
+                return {
+                    name: key,
+                    value: record[key].old_count || 0,
+                }
+            })
+        }
+        v = Object.keys(record).map((key) => {
+            return {
+                name: key,
+                value: numericDisplay(record[key].count || 0),
+                delta: `${percentageByChange(
+                    record[key].old_count,
+                    record[key].count
+                )}`,
+                deltaType: badgeTypeByDelta(
+                    record[key].old_count,
+                    record[key].count
+                ),
             }
-            outputArray.push({
-                name: key,
-                value: inputObject.top_values[key].count,
-                delta: Math.abs(delta).toFixed(2),
-                deltaType,
-            })
-        }
-        let delta
-        try {
-            delta =
-                ((inputObject.others.count - inputObject.others.old_count) /
-                    inputObject.others.old_count) *
-                100
-        } catch (e) {
-            delta = 0
-        }
-
-        if (delta < 0) {
-            deltaType = 'moderateDecrease'
-        } else if (delta > 0) {
-            deltaType = 'moderateIncrease'
-        } else {
-            deltaType = 'unchanged'
-        }
-        outputArray.push({
-            name: 'Others',
-            value: inputObject.others.count,
-            delta: Math.abs(delta).toFixed(2),
-            deltaType,
         })
-        return outputArray
+        v.push({
+            name: 'Others',
+            value: numericDisplay(
+                old === 0
+                    ? compositionData?.others?.count
+                    : compositionData?.others?.old_count
+            ),
+            delta: `${percentageByChange(
+                compositionData?.others?.old_count,
+                compositionData?.others?.count
+            )}`,
+            deltaType: badgeTypeByDelta(
+                compositionData?.others?.old_count,
+                compositionData?.others?.count
+            ),
+        })
+        return v
     }
 
-    function prevCompositionList(inputObject: any) {
-        const outputArray = []
-        if (!inputObject) {
-            return [
-                {
-                    name: 'No data',
-                    value: 0,
-                },
-            ]
-        }
-        // iterate over top_values
-        // eslint-disable-next-line guard-for-in,no-restricted-syntax
-        for (const key in inputObject.top_values) {
-            outputArray.push({
-                name: key,
-                value: inputObject.top_values[key].old_count,
-            })
-        }
-        outputArray.push({
-            name: 'Others',
-            value: inputObject.others.old_count,
-        })
-        return outputArray
-    }
-
-    const nowDataList = nowCompositionList(composition)
-    const prevDataList = prevCompositionList(composition)
-
-    return isLoading ? (
-        <Flex justifyContent="center" className="mt-56">
-            <Spinner />
+    return (
+        <Flex justifyContent="between" className="mt-5 w-full">
+            <Composition
+                newData={compositionCart(composition, 0)}
+                oldData={compositionCart(composition, 1)}
+                isLoading={isLoading}
+                newList={compositionList(composition, 0)}
+                oldList={compositionList(composition, 1)}
+            />
         </Flex>
-    ) : (
-        <Card>
-            <Flex flexDirection="row">
-                <Title>Overview</Title>
-                <TabGroup
-                    index={selectedIndex}
-                    onIndexChange={setSelectedIndex}
-                    className="w-fit"
-                >
-                    <TabList variant="solid">
-                        <Tab>Now</Tab>
-                        <Tab>Before</Tab>
-                    </TabList>
-                </TabGroup>
-            </Flex>
-            <Text className="mt-3">Total count</Text>
-            <Metric>{numericDisplay(composition?.total_count)}</Metric>
-            <Divider />
-            <Flex flexDirection="row">
-                <div>
-                    <Title>Resource Allocation</Title>
-                    <Text>{composition?.total_value_count} Asset</Text>
-                    <DonutChart
-                        data={compositionData(composition, selectedIndex)}
-                        category="value"
-                        index="name"
-                        className="w-64 h-64 mt-6"
-                        // valueFormatter={valueFormatter}
-                    />
-                </div>
-                <List className="w-2/5">
-                    {selectedIndex === 0
-                        ? nowDataList.map((item) => (
-                              <ListItem key={item.name}>
-                                  <Text>{item.name}</Text>
-                                  <Flex
-                                      justifyContent="end"
-                                      className="space-x-2"
-                                  >
-                                      <Text>{numericDisplay(item.value)}</Text>
-                                      {item.delta && (
-                                          <BadgeDelta
-                                              deltaType={item.deltaType}
-                                              size="xs"
-                                          >
-                                              {item.delta} %
-                                          </BadgeDelta>
-                                      )}
-                                  </Flex>
-                              </ListItem>
-                          ))
-                        : prevDataList.map((item) => (
-                              <ListItem key={item.name}>
-                                  <Text>{item.name}</Text>
-                                  <Flex
-                                      justifyContent="end"
-                                      className="space-x-2"
-                                  >
-                                      <Text>{numericDisplay(item.value)}</Text>
-                                  </Flex>
-                              </ListItem>
-                          ))}
-                </List>
-            </Flex>
-        </Card>
     )
 }

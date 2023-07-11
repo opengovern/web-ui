@@ -31,7 +31,7 @@ func main() {
 		content = content[:idxStart] + content[idxStart+idxEnd+2:]
 	}
 
-	r, err := regexp.Compile(`([\w\d]+):\s+\(([\w\n\|\[\]\(\)\?\'\d\s:,=\{\}]+)\)\s+=>[\s\n]+this.request<([\w\s\,\<\>\[\]\d]+),\s+([\w\<\>\[\]\d]+)>`)
+	r, err := regexp.Compile(`([\w\d]+):\s+\(([\w\n\|\[\]\(\)\-\?\'\d\s:,=\{\}]+)\)\s+=>[\s\n]+this.request<([\w\s\,\<\>\[\]\d]+),\s+([\w\<\>\[\]\d\n\s]+)>`)
 	if err != nil {
 		panic(err)
 	}

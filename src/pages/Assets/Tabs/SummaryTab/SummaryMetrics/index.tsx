@@ -1,35 +1,29 @@
 import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
-import { useNavigate } from 'react-router-dom'
+import { useAtom } from 'jotai'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import { useInventoryApiV2ServicesSummaryList } from '../../../../../api/inventory.gen'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import { filterAtom, timeAtom } from '../../../../../store'
 
-interface IProps {
-    provider: any
-    connections: any
-    timeRange: any
-}
+export default function SummaryMetrics() {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
-export default function SummaryMetrics({
-    provider,
-    connections,
-    timeRange,
-}: IProps) {
     const { response: accounts, isLoading: accountIsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            connector: provider,
-            connectionId: connections,
-            startTime: dayjs(timeRange.from).unix(),
-            endTime: dayjs(timeRange.to).unix(),
+            connector: [selectedConnections.provider],
+            connectionId: selectedConnections.connections,
+            startTime: dayjs(activeTimeRange.from).unix(),
+            endTime: dayjs(activeTimeRange.to).unix(),
             pageSize: 10000,
             pageNumber: 1,
         })
     const { response: services, isLoading: servicesIsLoading } =
         useInventoryApiV2ServicesSummaryList({
-            connector: provider,
-            connectionId: connections,
+            connector: [selectedConnections.provider],
+            connectionId: selectedConnections.connections,
         })
 
     return (

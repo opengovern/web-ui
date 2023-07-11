@@ -9,6 +9,7 @@ import { AgGridReact } from 'ag-grid-react'
 import { Button, Flex } from '@tremor/react'
 import { useRef, useState } from 'react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
+import { useAtom } from 'jotai'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import {
     numberGroupedDisplay,
@@ -21,32 +22,9 @@ import DrawerPanel from '../../../../../components/DrawerPanel'
 import { ConnectionDetails } from './ConnectionDetails'
 import { ReactComponent as AzureIcon } from '../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import { ReactComponent as AWSIcon } from '../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
-import {
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-} from '../../../../../api/api'
 import { agGridDateComparator } from '../../../../../utilities/dateComparator'
-
-interface IMultiAccount {
-    topAccounts:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
-        | undefined
-    topAccountLoading: boolean
-    selectedConnections: any
-    activeTimeRange: any
-}
-
-interface IAccount {
-    connector: string
-    providerConnectionName: string
-    providerConnectionID: string
-    id: string
-    lifecycleState: string
-    cost: string
-    resourceCount: string
-    onboardDate: string
-    lastInventory: string
-}
+import { filterAtom, timeAtom } from '../../../../../store'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
 
 const columns: ColDef[] = [
     {
@@ -56,7 +34,9 @@ const columns: ColDef[] = [
         sortable: true,
         filter: true,
         cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams<IAccount>) => (
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+        ) => (
             <Flex
                 justifyContent="center"
                 alignItems="center"
@@ -161,22 +141,17 @@ const columns: ColDef[] = [
     },
 ]
 
-export default function MultiAccount({
-    topAccounts,
-    topAccountLoading,
-    selectedConnections,
-    activeTimeRange,
-}: IMultiAccount) {
+export default function MultiAccount() {
     const gridRef = useRef<AgGridReact>(null)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [selectedAccountIndex, setSelectedAccountIndex] = useState(0)
 
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connector: selectedConnections?.provider,
+            connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
             startTime: dayjs(activeTimeRange.from).unix(),
             endTime: dayjs(activeTimeRange.to).unix(),
@@ -187,6 +162,7 @@ export default function MultiAccount({
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
+        paginationPageSize: 25,
         rowSelection: 'multiple',
         animateRows: true,
         suppressExcelExport: true,
@@ -206,19 +182,13 @@ export default function MultiAccount({
                     iconKey: 'filter',
                     toolPanel: 'agFiltersToolPanel',
                 },
-                // {
-                //     id: 'customStats',
-                //     labelDefault: 'Custom Stats',
-                //     labelKey: 'customStats',
-                //     // toolPanel: CustomStatsToolPanel,
-                // },
             ],
             defaultToolPanel: '',
         },
         getRowHeight: (params) => 50,
-        onGridReady: (params) => {
-            if (topAccountLoading) {
-                params.api.showLoadingOverlay()
+        onGridReady: () => {
+            if (isAccountsLoading) {
+                gridRef.current?.api.showLoadingOverlay()
             }
         },
         onCellClicked(event: CellClickedEvent<any>) {
@@ -231,7 +201,7 @@ export default function MultiAccount({
 
     return (
         <>
-            <Summary accounts={topAccounts} loading={topAccountLoading} />
+            <Summary />
             <div className="ag-theme-alpine mt-4">
                 <Flex
                     justifyContent="end"
@@ -259,7 +229,7 @@ export default function MultiAccount({
                 title="Connection Details"
             >
                 <ConnectionDetails
-                    connection={accounts?.connections}
+                    connection={accounts?.connections || []}
                     index={selectedAccountIndex}
                 />
             </DrawerPanel>

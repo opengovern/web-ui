@@ -17,7 +17,10 @@ import {
     ReactNode,
     useState,
 } from 'react'
-import { numericDisplay } from '../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numericDisplay,
+} from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 
 type IProps = {
@@ -30,6 +33,18 @@ type IProps = {
     loading?: boolean
     listTitle?: string
     isPercentage?: boolean
+    valueIsPrice?: boolean
+}
+
+type Item = {
+    name:
+        | boolean
+        | Key
+        | ReactElement<any, string | JSXElementConstructor<any>>
+        | Iterable<ReactNode>
+        | null
+        | undefined
+    value: string | number | undefined
 }
 
 export default function CardWithList({
@@ -39,36 +54,32 @@ export default function CardWithList({
     loading = false,
     listTitle = '',
     isPercentage = false,
+    valueIsPrice = false,
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const value = (item: Item) => {
+        if (isPercentage) {
+            return item.value
+        }
+        if (valueIsPrice) {
+            return exactPriceDisplay(item.value)
+        }
+        return numericDisplay(item.value)
+    }
+
     // eslint-disable-next-line consistent-return
     const tabDetails = (tab: string) => {
         try {
-            return data[tab].map(
-                (item: {
-                    name:
-                        | boolean
-                        | Key
-                        | ReactElement<any, string | JSXElementConstructor<any>>
-                        | Iterable<ReactNode>
-                        | null
-                        | undefined
-                    value: string | number | undefined
-                }) => (
-                    <ListItem>
-                        <Text>{item.name}</Text>
-                        {item.value && (
-                            <Flex justifyContent="end" className="space-x-2">
-                                {!isPercentage ? (
-                                    <Text>{numericDisplay(item.value)}</Text>
-                                ) : (
-                                    <Text>{item.value}</Text>
-                                )}
-                            </Flex>
-                        )}
-                    </ListItem>
-                )
-            )
+            return data[tab]?.map((item: Item) => (
+                <ListItem>
+                    <Text>{item.name}</Text>
+                    {item.value && (
+                        <Flex justifyContent="end" className="space-x-2">
+                            {value(item)}
+                        </Flex>
+                    )}
+                </ListItem>
+            ))
         } catch (e) {
             console.log(e)
             return null

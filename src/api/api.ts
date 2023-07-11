@@ -21,6 +21,8 @@ export interface DescribeComplianceReportJob {
      * @example "azure_cis_v1"
      */
     BenchmarkId?: string
+    /** @example false */
+    IsStack?: boolean
     /** @example 1619510400 */
     ReportCreatedAt?: number
     /**
@@ -81,6 +83,7 @@ export interface DescribeInsightJob {
     failureMessage?: string
     id?: number
     insightID?: number
+    isStack?: boolean
     scheduleUUID?: string
     sourceID?: string
     sourceType?: SourceType
@@ -872,6 +875,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsight {
     description?: string
     /** @example true */
     enabled?: boolean
+    /** Old Total Result Date */
+    firstOldResultDate?: string
     /**
      * Insight ID
      * @example 23
@@ -926,6 +931,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup {
     connectors?: SourceType[]
     /** @example "List clusters that have role-based access control (RBAC) disabled" */
     description?: string
+    /** @example "2023-04-21T08:53:09.928Z" */
+    firstOldResultDate?: string
     /** @example 23 */
     id?: number
     insights?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[]
@@ -1272,6 +1279,11 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest {
     stackId?: string
 }
 
+export enum GithubComKaytuIoKaytuEnginePkgDescribeApiEvaluationType {
+    EvaluationTypeInsight = 'INSIGHT',
+    EvaluationTypeBenchmark = 'BENCHMARK',
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings {
     /**
      * Benchmark IDs to filter
@@ -1396,6 +1408,11 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
     /** Stack evaluations history, including insight evaluations and compliance evaluations */
     evaluations?: GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluation[]
     /**
+     * Stack failure message
+     * @example "error message"
+     */
+    failureMessage?: string
+    /**
      * Stack resource types
      * @example ["[Microsoft.Compute/virtualMachines]"]
      */
@@ -1406,10 +1423,20 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
      */
     resources?: string[]
     /**
+     * Source type
+     * @example "Azure"
+     */
+    sourceType?: SourceType
+    /**
      * Stack unique identifier
      * @example "stack-twr32a5d-5as5-4ffe-b1cc-e32w1ast87s0"
      */
     stackId: string
+    /**
+     * Stack status. CREATED, EVALUATED, IN_PROGRESS, FAILED
+     * @example "CREATED"
+     */
+    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiStackStatus
     /** Stack tags */
     tags?: Record<string, string[]>
     /**
@@ -1448,15 +1475,34 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluation {
      * @example 1
      */
     jobId?: number
+    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluationStatus
     /**
      * BENCHMARK or INSIGHT
      * @example "BENCHMARK"
      */
-    type?: string
+    type?: GithubComKaytuIoKaytuEnginePkgDescribeApiEvaluationType
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluationStatus {
+    StackEvaluationStatusInProgress = 'IN_PROGRESS',
+    StackEvaluationStatusFailed = 'COMPLETED_WITH_FAILURE',
+    StackEvaluationStatusCompleted = 'COMPLETED',
 }
 
 export type GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest =
     object
+
+export enum GithubComKaytuIoKaytuEnginePkgDescribeApiStackStatus {
+    StackStatusPending = 'PENDING',
+    StackStatusStalled = 'STALLED',
+    StackStatusCreated = 'CREATED',
+    StackStatusDescribing = 'DESCRIBING',
+    StackStatusDescribed = 'DESCRIBED_RESOURCES',
+    StackStatusEvaluating = 'EVALUATING',
+    StackStatusFailed = 'FAILED',
+    StackStatusCompleted = 'COMPLETED',
+    StackStatusCompletedWithFailure = 'COMPLETED_WITH_FAILURE',
+}
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest {
     /**
@@ -1507,60 +1553,26 @@ export enum GithubComKaytuIoKaytuEnginePkgInsightApiInsightJobStatus {
     InsightJobSucceeded = 'SUCCEEDED',
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAWSResource {
-    attributes?: Record<string, string>
-    location?: string
-    providerConnectionID?: string
-    providerConnectionName?: string
-    resourceCategory?: string
-    resourceID?: string
-    resourceName?: string
-    resourceType?: string
-    resourceTypeName?: string
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAllResource {
     attributes?: Record<string, string>
-    /** The Region of the resource */
-    location?: string
+    /** Kaytu Connection Id of the resource */
+    connectionID?: string
     /** Resource Provider */
-    provider?: GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType
-    /** Provider Connection Id */
-    providerConnectionID?: string
-    /** Provider Connection Name */
-    providerConnectionName?: string
-    /** Resource Category */
-    resourceCategory?: string
-    /** Resource Id */
-    resourceID?: string
-    /** Resource Name */
-    resourceName?: string
-    /** Resource Type */
-    resourceType?: string
-    /** Resource Type Name */
-    resourceTypeName?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAzureResource {
-    attributes?: Record<string, string>
+    connector?: SourceType
     /** The Region of the resource */
     location?: string
     /** Provider Connection Id */
     providerConnectionID?: string
     /** Provider Connection Name */
     providerConnectionName?: string
-    /** Resource Category */
-    resourceCategory?: string
-    /** Resource Group */
-    resourceGroup?: string
     /** Resource Id */
     resourceID?: string
     /** Resource Name */
     resourceName?: string
     /** Resource Type */
     resourceType?: string
-    /** Resource Type Name */
-    resourceTypeName?: string
+    /** Resource Type Label */
+    resourceTypeLabel?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionFull {
@@ -1595,31 +1607,15 @@ export enum GithubComKaytuIoKaytuEnginePkgInventoryApiDirectionType {
 /** if you provide two values for same filter OR operation would be used if you provide value for two filters AND operation would be used */
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiFilters {
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
-    category?: string[]
+    connectionID?: string[]
+    /** if you dont need to use this filter, leave them empty. (e.g. []) */
+    connectors?: SourceType[]
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
     location?: string[]
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
     resourceType?: string[]
     /** if you dont need to use this filter, leave them empty. (e.g. []) */
     service?: string[]
-    /** if you dont need to use this filter, leave them empty. (e.g. []) */
-    sourceID?: string[]
-    /** if you dont need to use this filter, leave them empty. (e.g. {}) */
-    tags?: Record<string, string>
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse {
-    /** A list of AWS resources with details */
-    resources?: GithubComKaytuIoKaytuEnginePkgInventoryApiAWSResource[]
-    /** Number of returned resources */
-    totalCount?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse {
-    /** A list of Azure resources with details */
-    resources?: GithubComKaytuIoKaytuEnginePkgInventoryApiAzureResource[]
-    /** Number of returned resources */
-    totalCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest {
@@ -1680,7 +1676,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest {
     /** Labels */
     labels?: string[]
     /** Specifies the Provider */
-    providerFilter?: GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType
+    providerFilter?: SourceType
     /** Specifies the Title */
     titleFilter?: string
 }
@@ -1814,8 +1810,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem {
     direction?: 'asc' | 'desc'
     field?:
         | 'resourceID'
-        | 'resourceName'
-        | 'provider'
+        | 'connector'
         | 'resourceType'
         | 'resourceGroup'
         | 'location'
@@ -1960,17 +1955,11 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem {
 
 export enum GithubComKaytuIoKaytuEnginePkgInventoryApiSortFieldType {
     SortFieldResourceID = 'resourceID',
-    SortFieldName = 'resourceName',
-    SortFieldSourceType = 'provider',
+    SortFieldConnector = 'connector',
     SortFieldResourceType = 'resourceType',
     SortFieldResourceGroup = 'resourceGroup',
     SortFieldLocation = 'location',
-    SortFieldSourceID = 'connectionID',
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgInventoryApiSourceType {
-    SourceCloudAWS = 'AWS',
-    SourceCloudAzure = 'Azure',
+    SortFieldConnectionID = 'connectionID',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest {
@@ -2018,6 +2007,10 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyInsightJobInterval = 'insight_job_interval',
     MetadataKeyMetricsJobInterval = 'metrics_job_interval',
     MetadataKeyDataRetention = 'data_retention_duration',
+    MetadataKeyAWSComplianceGitURL = 'aws_compliance_git_url',
+    MetadataKeyAzureComplianceGitURL = 'azure_compliance_git_url',
+    MetadataKeyInsightsGitURL = 'insights_git_url',
+    MetadataKeyQueriesGitURL = 'queries_git_url',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredential {
@@ -2025,10 +2018,28 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredential {
     secretKey?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
+    accessKey: string
+    accountId?: string
+    assumeRoleName?: string
+    externalId?: string
+    regions?: string[]
+    secretKey: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential {
     clientID?: string
     clientSecret?: string
     tenantID?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredentialConfig {
+    clientId: string
+    clientSecret: string
+    objectId: string
+    secretId: string
+    subscriptionId?: string
+    tenantId: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics {
@@ -2148,6 +2159,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
+    config?: any
     connections?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     connectorType?: SourceType
     credentialType?: SourceCredentialType
@@ -2162,10 +2174,6 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
     onboardDate?: string
     total_connections?: number
     unhealthy_connections?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest {
-    source_ids?: string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse {
@@ -2186,33 +2194,22 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryRe
     totalUnhealthyCount?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse {
+    credentials?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    totalCredentialCount?: number
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest {
-    config?: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceConfigAWS
+    config?: GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig
     description?: string
     email?: string
     name?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest {
-    config?: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceConfigAzure
+    config?: GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredentialConfig
     description?: string
     name?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgOnboardApiSourceConfigAWS {
-    accessKey: string
-    accountId?: string
-    regions?: string[]
-    secretKey: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgOnboardApiSourceConfigAzure {
-    clientId: string
-    clientSecret: string
-    objectId: string
-    secretId: string
-    subscriptionId?: string
-    tenantId: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest {
@@ -3799,6 +3796,24 @@ export class Api<
                     ...params,
                 }
             ),
+
+        /**
+         * @description This API syncs queries with the git backend.
+         *
+         * @tags compliance
+         * @name ApiV1QueriesSyncList
+         * @summary Sync queries
+         * @request GET:/compliance/api/v1/queries/sync
+         * @secure
+         */
+        apiV1QueriesSyncList: (params: RequestParams = {}) =>
+            this.request<void, any>({
+                path: `/compliance/api/v1/queries/sync`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
     }
     inventory = {
         /**
@@ -3920,7 +3935,7 @@ export class Api<
             }),
 
         /**
-         * @description Getting all cloud providers resources by filters. In order to get the results in CSV format, Accepts header must be filled with `text/csv` value. Note that csv output doesn't process pagination and returns first 5000 records. If sort by is empty, result will be sorted by the first column in ascending order.
+         * @description Getting all cloud providers resources by filters
          *
          * @tags resource
          * @name ApiV1ResourcesCreate
@@ -3930,10 +3945,6 @@ export class Api<
          */
         apiV1ResourcesCreate: (
             request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-            query?: {
-                /** Common filter */
-                common?: 'true' | 'false' | 'all'
-            },
             params: RequestParams = {}
         ) =>
             this.request<
@@ -3942,69 +3953,6 @@ export class Api<
             >({
                 path: `/inventory/api/v1/resources`,
                 method: 'POST',
-                query: query,
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Getting AWS resources by filters. In order to get the results in CSV format, Accepts header must be filled with `text/csv` value. Note that csv output doesn't process pagination and returns first 5000 records. If sort by is empty, result will be sorted by the first column in ascending order.
-         *
-         * @tags resource
-         * @name ApiV1ResourcesAwsCreate
-         * @summary Get AWS resources
-         * @request POST:/inventory/api/v1/resources/aws
-         * @secure
-         */
-        apiV1ResourcesAwsCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-            query?: {
-                /** Common filter */
-                common?: 'true' | 'false' | 'all'
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiGetAWSResourceResponse,
-                any
-            >({
-                path: `/inventory/api/v1/resources/aws`,
-                method: 'POST',
-                query: query,
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Getting Azure resources by filters. In order to get the results in CSV format, Accepts header must be filled with `text/csv` value. Note that csv output doesn't process pagination and returns first 5000 records. If sort by is empty, result will be sorted by the first column in ascending order.
-         *
-         * @tags resource
-         * @name ApiV1ResourcesAzureCreate
-         * @summary Get Azure resources
-         * @request POST:/inventory/api/v1/resources/azure
-         * @secure
-         */
-        apiV1ResourcesAzureCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
-            query?: {
-                /** Common filter */
-                common?: 'true' | 'false' | 'all'
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiGetAzureResourceResponse,
-                any
-            >({
-                path: `/inventory/api/v1/resources/azure`,
-                method: 'POST',
-                query: query,
                 body: request,
                 secure: true,
                 type: ContentType.Json,
@@ -5193,7 +5141,12 @@ export class Api<
                 /** filter by connector type */
                 connector?: '' | 'AWS' | 'Azure'
                 /** filter by health status */
-                health?: 'healthy' | 'unhealthy' | 'initial_discovery'
+                health?: 'healthy' | 'unhealthy'
+                /**
+                 * filter by credential type
+                 * @default "manual"
+                 */
+                credentialType?: 'manual' | 'auto-generated'
                 /**
                  * page size
                  * @default 50
@@ -5208,7 +5161,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[],
+                GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
                 any
             >({
                 path: `/onboard/api/v1/credential`,
@@ -5409,6 +5362,8 @@ export class Api<
             query?: {
                 /** filter by connector type */
                 connector?: '' | 'AWS' | 'Azure'
+                /** filter by credential type */
+                credentialType?: 'manual' | 'auto-generated'
                 /**
                  * page size
                  * @default 50
@@ -5423,7 +5378,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[],
+                GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
                 any
             >({
                 path: `/onboard/api/v1/credential/sources/list`,
@@ -5640,37 +5595,6 @@ export class Api<
                 method: 'GET',
                 query: query,
                 secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Returning a list of sources including both AWS and Azure unless filtered by Type.
-         *
-         * @tags onboard
-         * @name ApiV1SourcesCreate
-         * @summary Get filtered sources
-         * @request POST:/onboard/api/v1/sources
-         * @secure
-         */
-        apiV1SourcesCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgOnboardApiGetSourcesRequest,
-            query?: {
-                /** Type */
-                type?: 'aws' | 'azure'
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[],
-                any
-            >({
-                path: `/onboard/api/v1/sources`,
-                method: 'POST',
-                query: query,
-                body: request,
-                secure: true,
-                type: ContentType.Json,
                 format: 'json',
                 ...params,
             }),

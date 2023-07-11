@@ -9,10 +9,16 @@ import {
 } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import dayjs from 'dayjs'
 import { numericDisplay } from '../../../utilities/numericDisplay'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
+import {
+    badgeTypeByDelta,
+    percentageByChange,
+} from '../../../utilities/deltaType'
 
 interface IInsightsCard {
-    metric: any
+    metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
 }
 
 const calculatePercent = (inputData: any) => {
@@ -48,7 +54,9 @@ const calculateTime = (inputData: any) => {
     return ''
 }
 
-const generateBadge = (met: any) => {
+const generateBadge = (
+    met: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
+) => {
     if (!met?.totalResultValue && !met?.oldTotalResultValue) {
         return (
             <Callout
@@ -72,7 +80,9 @@ const generateBadge = (met: any) => {
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title="Prior value is not available"
+                title={`Data is availabe after ${dayjs(
+                    met.firstOldResultDate
+                ).format('MMM DD, YYYY')}`}
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="border-0 text-xs leading-5 truncate max-w-full"
@@ -81,20 +91,16 @@ const generateBadge = (met: any) => {
     }
     return (
         <BadgeDelta
-            deltaType={
-                calculatePercent(met) > 0
-                    ? 'moderateIncrease'
-                    : 'moderateDecrease'
-            }
-            className={`opacity-${
-                calculatePercent(met) !== 0 ? 1 : 0
-            } cursor-pointer my-2`}
+            deltaType={badgeTypeByDelta(
+                met.oldTotalResultValue,
+                met.totalResultValue
+            )}
+            className="cursor-pointer my-2"
         >
-            {`${
-                calculatePercent(met) > 0
-                    ? Math.ceil(calculatePercent(met))
-                    : -1 * Math.floor(calculatePercent(met))
-            }%`}
+            {`${percentageByChange(
+                met.oldTotalResultValue,
+                met.totalResultValue
+            )}%`}
         </BadgeDelta>
     )
 }
@@ -147,7 +153,7 @@ export default function InsightCard({ metric }: IInsightsCard) {
                             )}
                             {!!metric?.oldTotalResultValue && (
                                 <Subtitle className="text-sm mb-0.5">
-                                    {`Prior value: ${numericDisplay(
+                                    {`from ${numericDisplay(
                                         metric?.oldTotalResultValue || 0
                                     )}`}
                                 </Subtitle>
@@ -158,7 +164,7 @@ export default function InsightCard({ metric }: IInsightsCard) {
                     <Text>{metric?.description}</Text>
                 </Flex>
                 <Text className="mt-2">
-                    {calculateTime(metric?.query?.updatedAt)}
+                    {calculateTime(metric?.result?.at(0)?.executedAt || 0)}
                 </Text>
             </Flex>
         </Card>

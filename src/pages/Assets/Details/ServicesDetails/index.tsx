@@ -12,6 +12,7 @@ import Summary from './Summary'
 import { filterAtom, timeAtom } from '../../../../store'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
+import ConnectionList from '../../../../components/ConnectionList'
 
 const columns: ColDef[] = [
     {
@@ -49,41 +50,19 @@ export default function ServicesDetails() {
 
     const { response: serviceList, isLoading: isServiceListLoading } =
         useInventoryApiV2ServicesMetricList({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connector: selectedConnections?.provider,
+            connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
             pageSize: 1000,
             pageNumber: 1,
             endTime: String(dayjs(activeTimeRange.to).unix()),
             sortBy: 'name',
         })
-    const { response: TopServices } = useInventoryApiV2ServicesMetricList({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        connector: selectedConnections?.provider,
-        connectionId: selectedConnections?.connections,
-        pageSize: 5,
-        pageNumber: 1,
-        endTime: String(dayjs(activeTimeRange.to).unix()),
-        sortBy: 'count',
-    })
-    const { response: TopFastestServices } =
-        useInventoryApiV2ServicesMetricList({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connector: selectedConnections?.provider,
-            connectionId: selectedConnections?.connections,
-            pageSize: 5,
-            pageNumber: 1,
-            endTime: String(dayjs(activeTimeRange.to).unix()),
-            sortBy: 'growth_rate',
-        })
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
         rowSelection: 'multiple',
+        paginationPageSize: 25,
         animateRows: true,
         getRowHeight: (params) => 50,
         onGridReady: (params) => {
@@ -118,18 +97,20 @@ export default function ServicesDetails() {
                 alignItems="center"
             >
                 <Breadcrumbs pages={breadcrumbsPages} />
-                <DateRangePicker
-                    className="max-w-md"
-                    value={activeTimeRange}
-                    onValueChange={setActiveTimeRange}
-                    enableClear={false}
-                    maxDate={new Date()}
-                />
+                <Flex flexDirection="row" justifyContent="end">
+                    <DateRangePicker
+                        className="max-w-md"
+                        value={activeTimeRange}
+                        onValueChange={setActiveTimeRange}
+                        enableClear={false}
+                        maxDate={new Date()}
+                    />
+                    <ConnectionList />
+                </Flex>
             </Flex>
             <Summary
-                TopServices={TopServices?.services}
-                TopFastestServices={TopFastestServices?.services}
-                TotalServices={serviceList?.total_services}
+                totalServices={serviceList?.total_services}
+                totalServicesLoading={isServiceListLoading}
             />
             <div className="ag-theme-alpine mt-10">
                 <AgGridReact

@@ -1,105 +1,145 @@
-import React, { useEffect, useState } from 'react'
 import { Card, Grid } from '@tremor/react'
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
 import GrowthTrend from './GrowthTrend'
 import TopAccountTrend from './TopAccountTrend'
 import TopServiceTrend from './TopServiceTrend'
-import CardWithList from '../../../../components/Cards/CardWithList'
 import {
-    useInventoryApiV2ServicesMetricList,
-    useInventoryApiV2ServicesCostTrendList,
+    useInventoryApiV2CostMetricList,
     useInventoryApiV2CostTrendList,
 } from '../../../../api/inventory.gen'
+import { filterAtom, timeAtom } from '../../../../store'
+import CardWithList from '../../../../components/Cards/CardWithList'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 
 type IProps = {
-    categories: any
-    timeRange: any
-    connections: any
-    provider: any
+    categories: {
+        label: string
+        value: string
+    }[]
 }
-export default function TrendsTab({
-    categories,
-    timeRange,
-    connections,
-    provider,
-}: IProps) {
-    const [consumptionData, setConsumptionData] = useState({})
-    const [growthData, setGrowthData] = useState({})
+export default function TrendsTab({ categories }: IProps) {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
-    const { response: accountTrend, isLoading: accountTrendLoading } =
-        useInventoryApiV2CostTrendList({
-            ...(provider && { provider }),
-            ...(timeRange.from && { endTime: dayjs(timeRange.from).unix() }),
-            ...(timeRange.to && { startTime: dayjs(timeRange.to).unix() }),
-            ...(connections && { connectionId: connections }),
+    const { response: topAccounts, isLoading: isLoadingTopAccount } =
+        useOnboardApiV1ConnectionsSummaryList({
+            connector: [selectedConnections?.provider],
+            connectionId: selectedConnections?.connections,
+            ...(activeTimeRange.from && {
+                startTime: dayjs(activeTimeRange.from).unix(),
+            }),
+            ...(activeTimeRange.to && {
+                endTime: dayjs(activeTimeRange.to).unix(),
+            }),
+            pageSize: 5,
+            pageNumber: 1,
+            sortBy: 'cost',
         })
 
-    const consumptionAccountData = (data: any) => {
-        const result: { name: any; value: any }[] = []
-        if (!data) return result
-        // eslint-disable-next-line no-plusplus
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i]
-            result.push({
-                name: element.providerConnectionName,
-                value: element.resourceCount,
-            })
+    const {
+        response: topGrowthAccounts,
+        isLoading: isLoadingTopGrowthAccounts,
+    } = useOnboardApiV1ConnectionsSummaryList({
+        connector: [selectedConnections?.provider],
+        connectionId: selectedConnections?.connections,
+        ...(activeTimeRange.from && {
+            startTime: dayjs(activeTimeRange.from).unix(),
+        }),
+        ...(activeTimeRange.to && {
+            endTime: dayjs(activeTimeRange.to).unix(),
+        }),
+        pageSize: 5,
+        pageNumber: 1,
+        sortBy: 'cost_growth',
+    })
+
+    const { response: topServices, isLoading: isLoadingTopServices } =
+        useInventoryApiV2CostMetricList({
+            ...(selectedConnections.provider && {
+                connector: [selectedConnections.provider],
+            }),
+            ...(activeTimeRange.from && {
+                startTime: dayjs(activeTimeRange.from).unix().toString(),
+            }),
+            ...(activeTimeRange.to && {
+                endTime: dayjs(activeTimeRange.to).unix().toString(),
+            }),
+            ...(selectedConnections.connections && {
+                connectionId: selectedConnections.connections,
+            }),
+            pageSize: 5,
+            sortBy: 'cost',
+        })
+
+    const {
+        response: topGrowingServices,
+        isLoading: isLoadingTopGrowingServices,
+    } = useInventoryApiV2CostMetricList({
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(activeTimeRange.from && {
+            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        }),
+        ...(activeTimeRange.to && {
+            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        pageSize: 5,
+        sortBy: 'growth',
+    })
+
+    const growthData = () => {
+        const AccountData =
+            topGrowthAccounts?.connections?.map((item) => {
+                return {
+                    name: item.providerConnectionName,
+                    value: item.cost,
+                }
+            }) || []
+
+        const ServiceData =
+            topGrowingServices?.metrics?.map((item) => {
+                return {
+                    name: item.cost_dimension_name,
+                    value: item.total_cost,
+                }
+            }) || []
+
+        return {
+            Accounts: AccountData,
+            Services: ServiceData,
         }
-        return result
-    }
-    const growthServicesData = (data: any) => {
-        const result: { name: any; value: any }[] = []
-        if (!data) return result
-        // eslint-disable-next-line no-plusplus
-        for (let i = 0; i < data.length; i++) {
-            const element = data[i]
-            let growthRate
-            try {
-                growthRate =
-                    ((element.resource_count - element.old_resource_count) /
-                        element.old_resource_count) *
-                    100
-            } catch (e) {
-                growthRate = 0
-            }
-            result.push({
-                name: element.service_label,
-                value: growthRate,
-            })
-        }
-        return result
     }
 
-    // useEffect(() => {
-    //     const AccountData = consumptionAccountData(
-    //         accountsConsumption?.connections
-    //     )
-    //     const ServicesData = consumptionServicesData(
-    //         servicesConsumption?.services
-    //     )
-    //     const gAccountData = growthAccountData(accountsGrowth?.connections)
-    //     const GServicesData = growthServicesData(servicesGrowth?.services)
-    //     // console.log('data', data)
-    //     setConsumptionData({
-    //         ...consumptionData,
-    //         Accounts: AccountData,
-    //         Services: ServicesData,
-    //     })
-    //     setGrowthData({
-    //         ...growthData,
-    //         Accounts: gAccountData,
-    //         Services: GServicesData,
-    //     })
-    // }, [
-    //     accountsConsumption,
-    //     servicesConsumption,
-    //     accountsGrowth,
-    //     servicesGrowth,
-    // ])
+    const consumptionData = () => {
+        const AccountData =
+            topAccounts?.connections?.map((item) => {
+                return {
+                    name: item.providerConnectionName,
+                    value: item.cost,
+                }
+            }) || []
+
+        const ServiceData =
+            topServices?.metrics?.map((item) => {
+                return {
+                    name: item.cost_dimension_name,
+                    value: item.total_cost,
+                }
+            }) || []
+
+        return {
+            Accounts: AccountData,
+            Services: ServiceData,
+        }
+    }
 
     return (
         <div className="mt-5">
-            {/* <div className="h-96" /> */}
             <div className="mb-5">
                 <GrowthTrend
                     categories={[
@@ -116,47 +156,37 @@ export default function TrendsTab({
                             value: '',
                         },
                     ]}
-                    timeRange={timeRange}
-                    connections={connections}
                 />
             </div>
             <div className="mb-5">
-                <TopAccountTrend
-                    categories={categories}
-                    timeRange={timeRange}
-                />
+                <TopAccountTrend />
             </div>
             <div className="mb-5">
-                <TopServiceTrend
-                    categories={categories}
-                    timeRange={timeRange}
-                />
+                <TopServiceTrend categories={categories} />
             </div>
-            {/* <Grid numItemsMd={2} className="mt-10 gap-6 flex justify-between"> */}
-            {/*    <div className="w-full"> */}
-            {/*        /!* Placeholder to set height *!/ */}
-            {/*        /!* <Card className="h-40" /> *!/ */}
-            {/*        <CardWithList */}
-            {/*            title="Top by Consumption" */}
-            {/*            tabs={['Accounts']} */}
-            {/*            data={consumptionData} */}
-            {/*            // provider={selectedConnections.provider} */}
-            {/*            // connections={connections} */}
-            {/*            // count={count} */}
-            {/*        /> */}
-            {/*    </div> */}
-            {/*    <div className="w-full"> */}
-            {/*        /!* Placeholder to set height *!/ */}
-            {/*        <CardWithList */}
-            {/*            title="Top by Growth" */}
-            {/*            tabs={['Services']} */}
-            {/*            data={growthData} */}
-            {/*            // provider={selectedConnections.provider} */}
-            {/*            // connections={connections} */}
-            {/*            // count={count} */}
-            {/*        /> */}
-            {/*    </div> */}
-            {/* </Grid> */}
+            <Grid numItemsMd={2} className="mt-10 gap-6 flex justify-between">
+                <div className="w-full">
+                    <CardWithList
+                        title="Top by Consumption"
+                        tabs={['Accounts', 'Services']}
+                        data={consumptionData()}
+                        loading={isLoadingTopAccount || isLoadingTopServices}
+                        valueIsPrice
+                    />
+                </div>
+                <div className="w-full">
+                    <CardWithList
+                        title="Top by Growth"
+                        tabs={['Accounts', 'Services']}
+                        data={growthData()}
+                        loading={
+                            isLoadingTopGrowthAccounts ||
+                            isLoadingTopGrowingServices
+                        }
+                        valueIsPrice
+                    />
+                </div>
+            </Grid>
         </div>
     )
 }

@@ -19,6 +19,7 @@ import {
 } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import dayjs from 'dayjs'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IInsightGroupCard {
@@ -63,7 +64,9 @@ const generateBadge = (met: any) => {
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title="Prior value is not available"
+                title={`Data is availabe after ${dayjs(
+                    met.firstOldResultDate
+                ).format('MMM DD, YYYY')}`}
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="border-0 text-xs leading-5 truncate max-w-full"
@@ -121,7 +124,7 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                             )}
                             {!!metric?.oldTotalResultValue && (
                                 <Subtitle className="text-sm mb-0.5">
-                                    {`Prior value: ${numericDisplay(
+                                    {`from ${numericDisplay(
                                         metric?.oldTotalResultValue || 0
                                     )}`}
                                 </Subtitle>

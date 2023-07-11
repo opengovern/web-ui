@@ -24,7 +24,7 @@ export default function InsightCategories({ onChange }: IInsightCategories) {
     }
 
     return (
-        <Flex flexDirection="row" justifyContent="start" className="mb-6">
+        <Flex flexDirection="row" justifyContent="start">
             {allCategories.map((category) => (
                 <Button
                     size="xs"
