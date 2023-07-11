@@ -10,6 +10,7 @@ import {
 } from 'ag-grid-community'
 import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import PrincipalInfo from './PrincipalInfo'
+import NewPrincipal from './NewPrincipal'
 
 interface IPrincipals {
     principals: any
@@ -166,6 +167,7 @@ export default function Principals({ principals }: IPrincipals) {
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
             />
+            <NewPrincipal open={open} onClose={() => setOpen(false)} />
         </>
     )
 }
