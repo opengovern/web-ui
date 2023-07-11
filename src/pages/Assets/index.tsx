@@ -29,12 +29,20 @@ export default function Assets() {
         }
         if (!inventoryCategories)
             return [{ label: 'no data', value: 'no data' }]
-        return [{ label: 'All Categories', value: 'All Categories' }].concat(
-            inventoryCategories.category.map((categoryName) => ({
+        // return [{ label: 'All Categories', value: 'All Categories' }].concat(
+        //     inventoryCategories.category.map((categoryName) => ({
+        //         label: categoryName,
+        //         value: categoryName,
+        //     }))
+        // )
+        const output: { label: string; value: string }[] = []
+        inventoryCategories.category.map((categoryName) =>
+            output.push({
                 label: categoryName,
                 value: categoryName,
-            }))
+            })
         )
+        return output
     }
 
     return (

@@ -4,6 +4,8 @@ import {
     Flex,
     SearchSelect,
     SearchSelectItem,
+    MultiSelect,
+    MultiSelectItem,
     Title,
 } from '@tremor/react'
 import { useAtom } from 'jotai'
@@ -24,17 +26,19 @@ type IProps = {
 export default function GrowthTrend({ categories }: IProps) {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
-    const [selectedResourceCategory, setSelectedResourceCategory] =
-        useState<string>('')
-    const activeCategory =
-        selectedResourceCategory === 'All Categories'
-            ? ''
-            : selectedResourceCategory
+    const [selectedResourceCategory, setSelectedResourceCategory] = useState<
+        string[]
+    >([])
+    const activeCategory: string[] = selectedResourceCategory.map(
+        (item) => `category=${item}`
+    )
     const query = {
         ...(selectedConnections.provider && {
             connector: [selectedConnections.provider],
         }),
-        ...(activeCategory && { tag: [`category=${activeCategory}`] }),
+        ...(activeCategory.length > 0 && {
+            tag: activeCategory,
+        }),
         ...(activeTimeRange.from && {
             startTime: dayjs(activeTimeRange.from).unix().toString(),
         }),
@@ -72,22 +76,24 @@ export default function GrowthTrend({ categories }: IProps) {
                             )?.count
                         )}
                 </Flex>
-                <SearchSelect
-                    onValueChange={(e) => setSelectedResourceCategory(e)}
+                <MultiSelect
+                    onValueChange={(e) => {
+                        setSelectedResourceCategory(e)
+                    }}
                     value={selectedResourceCategory}
                     placeholder="Source Selection"
                     className="max-w-xs"
                     disabled={isLoading}
                 >
                     {categories.map((category) => (
-                        <SearchSelectItem
+                        <MultiSelectItem
                             key={category.label}
                             value={category.value}
                         >
                             {category.value}
-                        </SearchSelectItem>
+                        </MultiSelectItem>
                     ))}
-                </SearchSelect>
+                </MultiSelect>
             </Flex>
             {isLoading ? (
                 <Spinner className="h-80" />
