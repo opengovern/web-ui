@@ -1,18 +1,19 @@
 import { Bold, Button, Divider, Flex, Text } from '@tremor/react'
 
 interface IStep {
-    onNext: any
     onPrevious: any
     data: any
 }
 
-export default function FinalStep({ onNext, onPrevious, data }: IStep) {
+export default function FinalStep({ onPrevious, data }: IStep) {
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
                 <Bold className="my-6">AWS Account information</Bold>
                 <Text className="mb-6">
-                    Check everything before submit your organization
+                    Check everything before submitting your organization. Please
+                    note that organization onboarding progress will take a few
+                    minutes.
                 </Text>
                 <Flex flexDirection="row">
                     <Text>Access Key</Text>
@@ -38,9 +39,7 @@ export default function FinalStep({ onNext, onPrevious, data }: IStep) {
                 <Button variant="secondary" onClick={() => onPrevious()}>
                     Back
                 </Button>
-                <Button onClick={() => onNext()} className="ml-3">
-                    Submit
-                </Button>
+                <Button className="ml-3">Submit</Button>
             </Flex>
         </Flex>
     )

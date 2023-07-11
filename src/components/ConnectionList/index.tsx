@@ -215,7 +215,6 @@ export default function ConnectionList() {
             ],
             defaultToolPanel: '',
         },
-
         onGridReady: (params) => {
             initializeSelectedConnections(params.api)
             setSelectedProvider({ ...selectedProvider })

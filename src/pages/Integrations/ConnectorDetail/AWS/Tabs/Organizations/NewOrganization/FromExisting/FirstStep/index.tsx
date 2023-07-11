@@ -1,25 +1,23 @@
-import { Button, Card, Flex, Title } from '@tremor/react'
-import { PlusIcon } from '@heroicons/react/24/solid'
+import { Bold, Button, Flex } from '@tremor/react'
 import {
     ColDef,
     GridOptions,
     ICellRendererParams,
     RowClickedEvent,
 } from 'ag-grid-community'
+import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { useRef, useState } from 'react'
-import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
-import OrganizationInfo from './OrganizationInfo'
-import NewOrganization from './NewOrganization'
+import { ReactComponent as AWSIcon } from '../../../../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 
-interface IOrganizations {
-    organizations: any
+interface IStep {
+    onNext: any
+    onPrevious: any
     accounts: any
 }
 
 const columns: ColDef[] = [
     {
-        field: 'connectortype',
+        field: 'connector',
         headerName: 'Connector',
         width: 50,
         sortable: true,
@@ -38,7 +36,7 @@ const columns: ColDef[] = [
         },
     },
     {
-        field: 'name',
+        field: 'providerConnectionName',
         headerName: 'Name',
         sortable: true,
         filter: true,
@@ -46,32 +44,24 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'credentialType',
-        headerName: 'Credential Type',
+        field: 'providerConnectionID',
+        headerName: 'ID',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
     },
     {
-        field: 'enabled',
-        headerName: 'Enabled',
+        field: 'lifecycleState',
+        headerName: 'State',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
     },
     {
-        field: 'healthStatus',
-        headerName: 'Health Status',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'healthReason',
-        headerName: 'Health Reason',
+        field: 'id',
+        headerName: 'Kaytu Connection ID',
         sortable: true,
         filter: true,
         resizable: true,
@@ -79,8 +69,8 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'total_connections',
-        headerName: 'Total Connections',
+        field: 'lastInventory',
+        headerName: 'Last Inventory',
         sortable: true,
         filter: true,
         resizable: true,
@@ -88,17 +78,8 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'enabled_connections',
-        headerName: 'Enabled Connections',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'unhealthy_connections',
-        headerName: 'Unhealthy Connections',
+        field: 'onboardDate',
+        headerName: 'Onboard Date',
         sortable: true,
         filter: true,
         resizable: true,
@@ -107,23 +88,20 @@ const columns: ColDef[] = [
     },
 ]
 
-export default function Organizations({
-    organizations,
-    accounts,
-}: IOrganizations) {
+export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
     const gridRef = useRef<AgGridReact>(null)
-    const [open, setOpen] = useState(false)
-    const [openInfo, setOpenInfo] = useState(false)
-    const [orgData, setOrgData] = useState(null)
+
+    const [selectedConnection, setSelectedConnection] = useState<any>({})
+
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
+        paginationPageSize: 10,
         getRowHeight: (params) => 50,
-        onRowClicked: (event: RowClickedEvent<any>) => {
-            setOrgData(event.data)
-            setOpenInfo(true)
+        onRowClicked(event: RowClickedEvent<any>) {
+            setSelectedConnection(event.data)
         },
         sideBar: {
             toolPanels: [
@@ -145,37 +123,31 @@ export default function Organizations({
             defaultToolPanel: '',
         },
     }
-
     return (
-        <>
-            <Card>
-                <Flex flexDirection="row">
-                    <Title>Organizations</Title>
-                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                        Create New Organization
-                    </Button>
-                </Flex>
-                <div className="ag-theme-alpine mt-6">
+        <Flex flexDirection="col" className="h-full ">
+            <Flex flexDirection="col" alignItems="start">
+                <Bold className="my-6">Select AWS Account</Bold>
+                <div className="ag-theme-alpine w-full">
                     <AgGridReact
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
-                        rowData={organizations?.credentials || []}
+                        rowData={accounts?.connections}
                     />
                 </div>
-            </Card>
-            <OrganizationInfo
-                open={openInfo}
-                onClose={() => {
-                    setOpenInfo(false)
-                }}
-                data={orgData}
-            />
-            <NewOrganization
-                accounts={accounts}
-                open={open}
-                onClose={() => setOpen(false)}
-            />
-        </>
+            </Flex>
+            <Flex flexDirection="row" justifyContent="end">
+                <Button variant="secondary" onClick={() => onPrevious()}>
+                    Cancel
+                </Button>
+                <Button
+                    onClick={() => onNext(selectedConnection)}
+                    disabled={!selectedConnection.id}
+                    className="ml-3"
+                >
+                    Next
+                </Button>
+            </Flex>
+        </Flex>
     )
 }
