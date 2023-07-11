@@ -11,7 +11,7 @@ import {
     TabPanels,
     TextInput,
 } from '@tremor/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
@@ -30,6 +30,7 @@ export default function Insights() {
     const [selectedCategory, setSelectedCategory] = useState('')
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [searchQuery, setSearchQuery] = useState('')
+    const [selectedTab, setSelectedTab] = useState(1)
 
     const query = {
         ...(activeTimeRange.from && {
@@ -65,12 +66,17 @@ export default function Insights() {
                 </Flex>
                 <TabGroup>
                     <TabList className="mb-6">
-                        <Tab>Insight list</Tab>
-                        <Tab>Insight groups</Tab>
+                        <Tab onClick={() => setSelectedTab(1)}>
+                            Insight list
+                        </Tab>
+                        <Tab onClick={() => setSelectedTab(2)}>
+                            Insight groups
+                        </Tab>
                     </TabList>
                     <Grid numItems={3} className="gap-3 mb-6">
                         <Col numColSpan={2}>
                             <InsightCategories
+                                selected={selectedTab}
                                 onChange={(category: string) =>
                                     setSelectedCategory(() => category)
                                 }

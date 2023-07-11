@@ -164,7 +164,7 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                         }`}
                                     >
                                         <TableCell className="px-0">
-                                            <Text>{insight.shortTitle}</Text>
+                                            {insight.shortTitle}
                                         </TableCell>
                                         <TableCell className="px-0 flex justify-end">
                                             <Text
@@ -210,10 +210,8 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                                         : 'bg-slate-50'
                                                 }`}
                                             >
-                                                <TableCell className="px-0">
-                                                    <Text>
-                                                        {insight.shortTitle}
-                                                    </Text>
+                                                <TableCell className="px-0 truncate w-3/4">
+                                                    {insight.shortTitle}
                                                 </TableCell>
                                                 <TableCell className="px-0 flex justify-end">
                                                     <Text
