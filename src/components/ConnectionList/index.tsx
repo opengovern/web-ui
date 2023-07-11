@@ -189,14 +189,6 @@ export default function ConnectionList() {
         return 'All connections are selected'
     }
 
-    const isRowSelectable = useMemo(() => {
-        return (rowNode: any) => {
-            return rowNode.data
-                ? rowNode.data.lifecycleState === 'ONBOARD'
-                : false
-        }
-    }, [])
-
     const gridOptions: GridOptions = {
         rowData: response?.connections || [],
         columnDefs: columns,
@@ -287,7 +279,7 @@ export default function ConnectionList() {
                 connections: getConnections(),
             })
             setOpenDrawer(false)
-        } else setOpenDrawer(true)
+        }
     }
 
     const filterText = () => {
@@ -335,8 +327,7 @@ export default function ConnectionList() {
                                 <Button
                                     size="xs"
                                     variant={
-                                        selectedProvider.label === tag.label &&
-                                        !isConnectionSelected
+                                        selectedProvider.label === tag.label
                                             ? 'primary'
                                             : 'secondary'
                                     }
@@ -360,7 +351,6 @@ export default function ConnectionList() {
                         <div className="ag-theme-alpine h-full w-full">
                             <AgGridReact
                                 ref={gridRef}
-                                rowMultiSelectWithClick
                                 gridOptions={gridOptions}
                             />
                         </div>
