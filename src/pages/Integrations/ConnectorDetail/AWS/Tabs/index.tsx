@@ -1,10 +1,14 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import Organizations from './Organizations'
 import AccountList from './AccountList'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+} from '../../../../../api/api'
 
 interface IAWS {
-    accounts: any
-    organizations: any
+    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
 export default function AWSTabs({ accounts, organizations }: IAWS) {
@@ -22,7 +26,10 @@ export default function AWSTabs({ accounts, organizations }: IAWS) {
                     />
                 </TabPanel>
                 <TabPanel>
-                    <AccountList accounts={accounts} />
+                    <AccountList
+                        accounts={accounts}
+                        organizations={organizations}
+                    />
                 </TabPanel>
             </TabPanels>
         </TabGroup>
