@@ -1,4 +1,3 @@
-import React from 'react'
 import {
     Card,
     Flex,
@@ -19,29 +18,20 @@ import Spinner from '../../../components/Spinner'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
 
-const SettingsMetadata: React.FC<any> = () => {
+export default function SettingsMetadata() {
     const workspace = useParams<{ ws: string }>().ws
+
     const { response, isLoading } = useWorkspaceApiV1WorkspacesLimitsDetail(
         workspace || ''
     )
-
     const { response: currentWorkspace, isLoading: loadingCurrentWS } =
         useWorkspaceApiV1WorkspaceCurrentList()
-
     const { response: ownerResp, isLoading: ownerIsLoading } =
         useAuthApiV1UserDetail(
             currentWorkspace?.ownerId || '',
             {},
             !loadingCurrentWS
         )
-
-    if (isLoading || loadingCurrentWS || ownerIsLoading) {
-        return (
-            <Flex justifyContent="center" className="mt-56">
-                <Spinner />
-            </Flex>
-        )
-    }
 
     const currentUsers = response?.currentUsers || 0
     const currentConnections = response?.currentConnections || 0
@@ -92,13 +82,17 @@ const SettingsMetadata: React.FC<any> = () => {
         },
     ]
 
-    return (
+    return isLoading || loadingCurrentWS || ownerIsLoading ? (
+        <Flex justifyContent="center" className="mt-56">
+            <Spinner />
+        </Flex>
+    ) : (
         <>
-            <Grid numItemsSm={2} numItemsLg={3} className="gap-6">
+            <Grid numItemsSm={2} numItemsLg={3} className="gap-3">
                 <Card key="activeUsers">
                     <Text>Active users</Text>
                     <Metric>{numericDisplay(currentUsers)}</Metric>
-                    <Flex className="mt-4">
+                    <Flex className="mt-3">
                         <Text className="truncate">{`${usersPercentage}%`}</Text>
                         <Text>{numericDisplay(maxUsers)} Allowed</Text>
                     </Flex>
@@ -107,7 +101,7 @@ const SettingsMetadata: React.FC<any> = () => {
                 <Card key="connections">
                     <Text>Connections</Text>
                     <Metric>{numericDisplay(currentConnections)}</Metric>
-                    <Flex className="mt-4">
+                    <Flex className="mt-3">
                         <Text className="truncate">{`${connectionsPercentage}%`}</Text>
                         <Text>{numericDisplay(maxConnections)} Allowed</Text>
                     </Flex>
@@ -119,28 +113,21 @@ const SettingsMetadata: React.FC<any> = () => {
                 <Card key="activeUsers">
                     <Text>Resources</Text>
                     <Metric>{numericDisplay(currentResources)}</Metric>
-                    <Flex className="mt-4">
+                    <Flex className="mt-3">
                         <Text className="truncate">{`${resourcesPercentage}%`}</Text>
                         <Text>{numericDisplay(maxResources)} Allowed</Text>
                     </Flex>
                     <ProgressBar value={resourcesPercentage} className="mt-2" />
                 </Card>
             </Grid>
-            <Card key="summary" className="top-6">
+            <Card key="summary" className="mt-3">
                 <Title>Summary</Title>
-                <List className="mt-4">
+                <List className="mt-3">
                     {wsDetails.map((item) => (
                         <ListItem key={item.title} className="my-1">
-                            <Flex
-                                justifyContent="start"
-                                className="truncate space-x-4"
-                            >
-                                <div className="truncate">
-                                    <Text className="truncate text-sm">
-                                        {item.title}
-                                    </Text>
-                                </div>
-                            </Flex>
+                            <Text className="truncate text-sm">
+                                {item.title}
+                            </Text>
                             <Text className="text-sm">{item.value}</Text>
                         </ListItem>
                     ))}
@@ -149,5 +136,3 @@ const SettingsMetadata: React.FC<any> = () => {
         </>
     )
 }
-
-export default SettingsMetadata

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Badge, Button, Flex, List, ListItem, Text } from '@tremor/react'
 import {
     useAuthApiV1UserRoleBindingDelete,
     useAuthApiV1UserRoleBindingUpdate,
-} from '../../../api/auth.gen'
-import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../../api/api'
-import ConfirmModal from '../../../components/Modal/ConfirmModal'
+} from '../../../../api/auth.gen'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../../../api/api'
+import ConfirmModal from '../../../../components/Modal/ConfirmModal'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
@@ -13,11 +13,11 @@ interface IMemberDetails {
     close: () => void
 }
 
-const MemberDetails: React.FC<IMemberDetails> = ({
+export default function MemberDetails({
     user,
     close,
     notification,
-}) => {
+}: IMemberDetails) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const [role, setRole] = useState<string>(user?.roleName || 'viewer')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
@@ -218,5 +218,3 @@ const MemberDetails: React.FC<IMemberDetails> = ({
         </>
     )
 }
-
-export default MemberDetails

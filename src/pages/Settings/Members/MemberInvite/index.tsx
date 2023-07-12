@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Button,
     Flex,
@@ -8,14 +8,17 @@ import {
     Text,
     TextInput,
 } from '@tremor/react'
-import { useAuthApiV1UserInviteCreate } from '../../../api/auth.gen'
+import { useAuthApiV1UserInviteCreate } from '../../../../api/auth.gen'
 
 interface MemberInviteProps {
     close: (refresh: boolean) => void
     notification: (text: string) => void
 }
 
-const MemberInvite: React.FC<MemberInviteProps> = ({ close, notification }) => {
+export default function MemberInvite({
+    close,
+    notification,
+}: MemberInviteProps) {
     const [email, setEmail] = useState<string>('')
     const [role, setRole] = useState<string>('viewer')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
@@ -146,5 +149,3 @@ const MemberInvite: React.FC<MemberInviteProps> = ({ close, notification }) => {
         </Flex>
     )
 }
-
-export default MemberInvite

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
     Button,
     Card,
@@ -17,7 +17,7 @@ import {
 
 import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
 
-const SettingsQueries: React.FC<any> = () => {
+export default function SettingsQueries() {
     const [updateInputs, setUpdateInputs] = useState<boolean>(false)
     const [newAWSComplianceGitURL, setNewAWSComplianceGitURL] =
         useState<string>('')
@@ -38,7 +38,6 @@ const SettingsQueries: React.FC<any> = () => {
         useMetadataApiV1MetadataDetail('insights_git_url')
     const { response: queriesGitURL, isLoading: loadingQueriesGitURL } =
         useMetadataApiV1MetadataDetail('queries_git_url')
-
     const {
         isLoading: loadingSetAwsComplianceGitURL,
         isExecuted: executeSetAwsComplianceGitURL,
@@ -93,19 +92,6 @@ const SettingsQueries: React.FC<any> = () => {
         sendNow: syncQueries,
     } = useComplianceApiV1QueriesSyncList({}, false)
 
-    if (
-        loadingAwsComplianceGitURL ||
-        loadingAzureComplianceGitURL ||
-        loadingInsightGitURL ||
-        loadingQueriesGitURL
-    ) {
-        return (
-            <Flex justifyContent="center" className="mt-56">
-                <Spinner />
-            </Flex>
-        )
-    }
-
     if (!updateInputs) {
         setUpdateInputs(true)
         setNewAWSComplianceGitURL(awsComplianceGitURL?.value || '')
@@ -137,7 +123,14 @@ const SettingsQueries: React.FC<any> = () => {
         )
     }
 
-    return (
+    return loadingAwsComplianceGitURL ||
+        loadingAzureComplianceGitURL ||
+        loadingInsightGitURL ||
+        loadingQueriesGitURL ? (
+        <Flex justifyContent="center" className="mt-56">
+            <Spinner />
+        </Flex>
+    ) : (
         <Card key="summary" className="top-6">
             <Title>Queries</Title>
             <List className="mt-4">
@@ -226,5 +219,3 @@ const SettingsQueries: React.FC<any> = () => {
         </Card>
     )
 }
-
-export default SettingsQueries

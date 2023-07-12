@@ -72,6 +72,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const [suspendConfirmation, setSuspendConfirmation] =
         useState<boolean>(false)
+
     const { response: workspaceDetail, isLoading: workspaceLoading } =
         useWorkspaceApiV1WorkspacesLimitsDetail(workspace.name)
     const {
