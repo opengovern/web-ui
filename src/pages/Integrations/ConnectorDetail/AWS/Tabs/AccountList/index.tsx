@@ -8,6 +8,7 @@ import {
     RowClickedEvent,
 } from 'ag-grid-community'
 import { PlusIcon } from '@heroicons/react/24/solid'
+import dayjs from 'dayjs'
 import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import AccountInfo from './AccountInfo'
 import NewAWSAccount from './NewAWSAccount'
@@ -82,6 +83,9 @@ const columns: ColDef[] = [
         resizable: true,
         hide: true,
         flex: 1,
+        valueFormatter: (param) => {
+            return dayjs(param.value).format('MMM DD, YYYY HH:mm:ss')
+        },
     },
     {
         field: 'onboardDate',
@@ -91,6 +95,9 @@ const columns: ColDef[] = [
         resizable: true,
         hide: true,
         flex: 1,
+        valueFormatter: (param) => {
+            return dayjs(param.value).format('MMM DD, YYYY HH:mm:ss')
+        },
     },
 ]
 

@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Bold, Button, Divider, Flex, Text, TextInput } from '@tremor/react'
 
 interface IStep {
-    onNext: any
-    onPrevious: any
+    onNext: (roleName: string, externalID: string) => void
+    onPrevious: () => void
 }
 
 export default function SecondStep({ onNext, onPrevious }: IStep) {
@@ -40,7 +40,8 @@ export default function SecondStep({ onNext, onPrevious }: IStep) {
                     Back
                 </Button>
                 <Button
-                    onClick={() => onNext({ roleName, externalId })}
+                    onClick={() => onNext(roleName, externalId)}
+                    disabled={roleName === '' || externalId === ''}
                     className="ml-3"
                 >
                     Next

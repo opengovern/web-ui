@@ -5,12 +5,16 @@ import SecondStep from './SecondStep'
 import ThirdStep from './ThirdStep'
 import FinalStep from './FinalStep'
 import Steps from '../../../../../../../../components/Steps'
+import { useOnboardApiV1CredentialCreate } from '../../../../../../../../api/onboard.gen'
+import Spinner from '../../../../../../../../components/Spinner'
+import { getErrorMessage } from '../../../../../../../../types/apierror'
+import { SourceType } from '../../../../../../../../api/api'
 
 interface ISteps {
-    close: any
+    onClose: () => void
 }
 
-export default function FromScratch({ close }: ISteps) {
+export default function FromScratch({ onClose }: ISteps) {
     const [stepNum, setStepNum] = useState(1)
     const [data, setData] = useState({
         accessKey: '',
@@ -18,12 +22,43 @@ export default function FromScratch({ close }: ISteps) {
         roleName: '',
         externalId: '',
     })
+
+    const close = () => {
+        setStepNum(1)
+        setData({
+            accessKey: '',
+            secretKey: '',
+            roleName: '',
+            externalId: '',
+        })
+        onClose()
+    }
+
+    const { error, isLoading, isExecuted, sendNow } =
+        useOnboardApiV1CredentialCreate(
+            {
+                source_type: SourceType.CloudAWS,
+                config: {
+                    accessKey: data.accessKey,
+                    secretKey: data.secretKey,
+                    assumeRoleName: data.roleName,
+                    externalId: data.externalId,
+                },
+            },
+            {},
+            false
+        )
+
+    if (isLoading && isExecuted) {
+        return <Spinner />
+    }
+
     const showStep = (s: number) => {
         switch (s) {
             case 1:
                 return (
                     <FirstStep
-                        onPrevious={() => close()}
+                        onPrevious={close}
                         onNext={() => setStepNum(2)}
                     />
                 )
@@ -38,15 +73,36 @@ export default function FromScratch({ close }: ISteps) {
                 return (
                     <ThirdStep
                         onPrevious={() => setStepNum(2)}
-                        onNext={(info: any) => {
-                            setData(info)
+                        onNext={(
+                            accessKey,
+                            secretKey,
+                            roleName,
+                            externalId
+                        ) => {
+                            setData({
+                                accessKey,
+                                secretKey,
+                                roleName,
+                                externalId,
+                            })
                             setStepNum(4)
                         }}
                     />
                 )
             case 4:
                 return (
-                    <FinalStep data={data} onPrevious={() => setStepNum(3)} />
+                    <FinalStep
+                        accessKeyParam={data.accessKey}
+                        secretKey={data.secretKey}
+                        roleName={data.roleName}
+                        externalId={data.externalId}
+                        onPrevious={() => setStepNum(3)}
+                        error={getErrorMessage(error)}
+                        isLoading={isExecuted && isLoading}
+                        onSubmit={() => {
+                            sendNow()
+                        }}
+                    />
                 )
             default:
                 return null
