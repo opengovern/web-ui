@@ -60,7 +60,7 @@ export default function Spend() {
                 <TabList>
                     <Tab>Summary</Tab>
                     <Tab>Trends</Tab>
-                    <Tab>Composition</Tab>
+                    <Tab>Breakdown</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
