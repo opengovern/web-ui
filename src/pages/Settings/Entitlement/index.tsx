@@ -19,7 +19,7 @@ import Spinner from '../../../components/Spinner'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
 
-export default function SettingsMetadata() {
+export default function SettingsEntitlement() {
     const workspace = useParams<{ ws: string }>().ws
 
     const { response, isLoading } = useWorkspaceApiV1WorkspacesLimitsDetail(

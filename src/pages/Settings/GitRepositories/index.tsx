@@ -132,7 +132,7 @@ export default function SettingsGitRepositories() {
         </Flex>
     ) : (
         <Card key="summary" className="top-6">
-            <Title>Queries</Title>
+            <Title>Git Repositories</Title>
             <List className="mt-4">
                 <ListItem key="aws_compliance_git_url" className="my-1">
                     <Flex justifyContent="start" className="truncate space-x-4">
