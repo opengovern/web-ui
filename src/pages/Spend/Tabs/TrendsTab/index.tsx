@@ -1,14 +1,11 @@
-import { Card, Grid } from '@tremor/react'
+import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import GrowthTrend from './GrowthTrend'
 import TopAccountTrend from './TopAccountTrend'
 import TopServiceTrend from './TopServiceTrend'
-import {
-    useInventoryApiV2CostMetricList,
-    useInventoryApiV2CostTrendList,
-} from '../../../../api/inventory.gen'
-import { filterAtom, timeAtom } from '../../../../store'
+import { useInventoryApiV2CostMetricList } from '../../../../api/inventory.gen'
+import { filterAtom, spendTimeAtom } from '../../../../store'
 import CardWithList from '../../../../components/Cards/CardWithList'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 
@@ -19,7 +16,7 @@ type IProps = {
     }[]
 }
 export default function TrendsTab({ categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const { response: topAccounts, isLoading: isLoadingTopAccount } =

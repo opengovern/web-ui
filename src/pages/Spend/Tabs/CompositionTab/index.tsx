@@ -5,7 +5,7 @@ import Composition from '../../../../components/Cards/Composition'
 import { useInventoryApiV2CostCompositionList } from '../../../../api/inventory.gen'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse } from '../../../../api/api'
-import { filterAtom, timeAtom } from '../../../../store'
+import { filterAtom, spendTimeAtom } from '../../../../store'
 
 type IProps = {
     top: number
@@ -23,7 +23,7 @@ interface dataProps {
 }
 
 export default function CompositionTab({ top }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const { response: compositionOld, isLoading: oldIsLoading } =

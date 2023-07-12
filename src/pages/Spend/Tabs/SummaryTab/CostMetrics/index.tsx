@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import {
     filterAtom,
     selectedResourceCategoryAtom,
-    timeAtom,
+    spendTimeAtom,
 } from '../../../../../store'
 import { useInventoryApiV2CostMetricList } from '../../../../../api/inventory.gen'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
@@ -20,7 +20,7 @@ interface IProps {
 }
 
 export default function CostMetrics({ pageSize, categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const [selectedScopeIdx, setSelectedScopeIdx] = useState<number>(0)

@@ -1,7 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import {
     DateRangePicker,
-    DateRangePickerValue,
     Flex,
     Metric,
     Tab,
@@ -10,20 +9,17 @@ import {
     TabPanel,
     TabPanels,
 } from '@tremor/react'
-import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
 import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
+import { spendTimeAtom } from '../../store'
 
 export default function Spend() {
-    const [activeTimeRange, setActiveTimeRange] =
-        useState<DateRangePickerValue>({
-            from: dayjs().subtract(1, 'month').toDate(),
-            to: new Date(),
-        })
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
 
