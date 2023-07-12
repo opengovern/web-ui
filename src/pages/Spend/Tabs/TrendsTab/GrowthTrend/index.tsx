@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react'
-import { BadgeDelta, Card, DeltaType, Flex, Title } from '@tremor/react'
+import {
+    BadgeDelta,
+    Card,
+    DeltaType,
+    Flex,
+    Subtitle,
+    Title,
+} from '@tremor/react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import {
@@ -10,6 +17,19 @@ import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
 import { filterAtom, timeAtom } from '../../../../../store'
+
+const getConnections = (con: any) => {
+    if (con.provider.length) {
+        return con.provider
+    }
+    if (con.connections.length === 1) {
+        return con.connections[0]
+    }
+    if (con.connections.length) {
+        return `${con.connections.length} accounts`
+    }
+    return 'all accounts'
+}
 
 export default function GrowthTrend() {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
@@ -85,17 +105,24 @@ export default function GrowthTrend() {
             {isLoading ? (
                 <Spinner className="h-80" />
             ) : (
-                <Chart
-                    className="mt-3"
-                    index="date"
-                    type="line"
-                    showLegend={false}
-                    yAxisWidth={120}
-                    categories={['count']}
-                    data={fixTime(costTrend) || []}
-                    showAnimation
-                    valueFormatter={exactPriceDisplay}
-                />
+                <>
+                    <Flex justifyContent="end">
+                        <Subtitle>
+                            {getConnections(selectedConnections)}
+                        </Subtitle>
+                    </Flex>
+                    <Chart
+                        className="mt-3"
+                        index="date"
+                        type="line"
+                        yAxisWidth={120}
+                        categories={['count']}
+                        showLegend={false}
+                        data={fixTime(costTrend) || []}
+                        showAnimation
+                        valueFormatter={exactPriceDisplay}
+                    />
+                </>
             )}
         </Card>
     )
