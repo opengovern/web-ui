@@ -137,22 +137,7 @@ export default function TrendsTab({ categories }: IProps) {
 
     return (
         <>
-            <GrowthTrend
-                categories={[
-                    {
-                        label: 'AWS',
-                        value: 'AWS',
-                    },
-                    {
-                        label: 'Azure',
-                        value: 'Azure',
-                    },
-                    {
-                        label: 'All',
-                        value: '',
-                    },
-                ]}
-            />
+            <GrowthTrend />
             <TopAccountTrend />
             <TopServiceTrend categories={categories} />
             <Grid numItemsMd={2} className="gap-3">
