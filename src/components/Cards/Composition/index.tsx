@@ -15,11 +15,11 @@ import {
     Title,
 } from '@tremor/react'
 import { useState } from 'react'
-import {
-    numericDisplay,
-    exactPriceDisplay,
-} from '../../../utilities/numericDisplay'
+import { useAtom } from 'jotai'
+import dayjs from 'dayjs'
+import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
+import { timeAtom } from '../../../store'
 
 interface listProps {
     name: string
@@ -56,6 +56,7 @@ export default function Composition({
     isCost = false,
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
 
     const compositionData = (
         newObject: dataProps | undefined,
@@ -98,8 +99,10 @@ export default function Composition({
                     className="w-fit"
                 >
                     <TabList variant="solid">
-                        <Tab>Now</Tab>
-                        <Tab>Before</Tab>
+                        <Tab>{dayjs(activeTimeRange.to).format('MMM DD')}</Tab>
+                        <Tab>
+                            {dayjs(activeTimeRange.from).format('MMM DD')}
+                        </Tab>
                     </TabList>
                 </TabGroup>
             </Flex>
