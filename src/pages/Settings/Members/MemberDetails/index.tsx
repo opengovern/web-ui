@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Badge, Button, Flex, List, ListItem, Text } from '@tremor/react'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import dayjs from 'dayjs'
 import {
     useAuthApiV1UserRoleBindingDelete,
     useAuthApiV1UserRoleBindingUpdate,
@@ -76,15 +77,15 @@ export default function MemberDetails({
         },
         {
             title: 'Member Since',
-            value: new Date(
-                Date.parse(user.createdAt || Date.now().toString())
-            ).toLocaleDateString(),
+            value: dayjs(user.createdAt || Date.now().toString()).format(
+                'MMM DD, YYYY'
+            ),
         },
         {
             title: 'Last Activity',
-            value: new Date(
-                Date.parse(user.lastActivity || Date.now().toString())
-            ).toLocaleDateString(),
+            value: dayjs(user.lastActivity || Date.now().toString()).format(
+                'MMM DD, YYYY'
+            ),
         },
         {
             title: 'Status',

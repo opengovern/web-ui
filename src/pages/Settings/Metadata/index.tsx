@@ -10,6 +10,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useParams } from 'react-router-dom'
+import dayjs from 'dayjs'
 import {
     useWorkspaceApiV1WorkspaceCurrentList,
     useWorkspaceApiV1WorkspacesLimitsDetail,
@@ -72,9 +73,9 @@ export default function SettingsMetadata() {
         },
         {
             title: 'Creation Date',
-            value: new Date(
-                Date.parse(currentWorkspace?.createdAt || Date.now().toString())
-            ).toLocaleDateString(),
+            value: dayjs(
+                currentWorkspace?.createdAt || Date.now().toString()
+            ).format('MMM DD, YYYY'),
         },
         {
             title: 'Workspace Tier',
