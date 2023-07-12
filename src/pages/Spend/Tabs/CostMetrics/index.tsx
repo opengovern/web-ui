@@ -5,11 +5,11 @@ import {
     filterAtom,
     selectedResourceCategoryAtom,
     spendTimeAtom,
-} from '../../../../../store'
-import { useInventoryApiV2CostMetricList } from '../../../../../api/inventory.gen'
-import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
-import MetricsList, { IMetric } from '../../../../../components/MetricsList'
+} from '../../../../store'
+import { useInventoryApiV2CostMetricList } from '../../../../api/inventory.gen'
+import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import MetricsList, { IMetric } from '../../../../components/MetricsList'
 
 interface IProps {
     categories: {

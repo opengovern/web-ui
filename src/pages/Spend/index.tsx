@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import {
     DateRangePicker,
     Flex,
@@ -13,10 +13,11 @@ import { useAtom } from 'jotai'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
-import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
 import { spendTimeAtom } from '../../store'
+import SummaryMetrics from './SummaryMetrics'
+import CostMetrics from './Tabs/CostMetrics'
 
 export default function Spend() {
     const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
@@ -54,6 +55,7 @@ export default function Spend() {
                     <ConnectionList />
                 </Flex>
             </Flex>
+            <SummaryMetrics pageSize={1000} />
             <TabGroup className="mt-3">
                 <TabList>
                     <Tab>Summary</Tab>
@@ -62,7 +64,7 @@ export default function Spend() {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <SummaryTab
+                        <CostMetrics
                             categories={categoryOptions}
                             pageSize={1000}
                         />

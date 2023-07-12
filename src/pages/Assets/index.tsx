@@ -13,10 +13,10 @@ import LoggedInLayout from '../../components/LoggedInLayout'
 import { timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
-import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
-import SummaryMetrics from './Tabs/SummaryTab/SummaryMetrics'
+import SummaryMetrics from './SummaryMetrics'
+import ResourceMetrics from './Tabs/ResourceMetrics'
 
 export default function Assets() {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
@@ -29,12 +29,6 @@ export default function Assets() {
         }
         if (!inventoryCategories)
             return [{ label: 'no data', value: 'no data' }]
-        // return [{ label: 'All Categories', value: 'All Categories' }].concat(
-        //     inventoryCategories.category.map((categoryName) => ({
-        //         label: categoryName,
-        //         value: categoryName,
-        //     }))
-        // )
         const output: { label: string; value: string }[] = []
         inventoryCategories.category.map((categoryName) =>
             output.push({
@@ -47,34 +41,21 @@ export default function Assets() {
 
     return (
         <LoggedInLayout currentPage="assets">
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                alignItems="center"
-            >
+            <Flex justifyContent="between" alignItems="center">
                 <Metric>Assets</Metric>
-                <Flex flexDirection="row" justifyContent="end">
+                <Flex justifyContent="end">
+                    <DateRangePicker
+                        className="max-w-md"
+                        value={activeTimeRange}
+                        onValueChange={setActiveTimeRange}
+                        selectPlaceholder="Time Range"
+                        enableClear={false}
+                        maxDate={new Date()}
+                    />
                     <ConnectionList />
                 </Flex>
             </Flex>
             <SummaryMetrics />
-
-            <Flex
-                flexDirection="row"
-                justifyContent="end"
-                alignItems="end"
-                className="relative top-10 h-0"
-            >
-                <DateRangePicker
-                    className="max-w-md"
-                    value={activeTimeRange}
-                    onValueChange={setActiveTimeRange}
-                    selectPlaceholder="Time Range"
-                    enableClear={false}
-                    maxDate={new Date()}
-                />
-            </Flex>
-
             <TabGroup className="mt-3">
                 <TabList>
                     <Tab>Summary</Tab>
@@ -83,7 +64,7 @@ export default function Assets() {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <SummaryTab
+                        <ResourceMetrics
                             categories={categoryOptions()}
                             pageSize={1000}
                         />

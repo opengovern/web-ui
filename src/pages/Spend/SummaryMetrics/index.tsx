@@ -1,11 +1,11 @@
 import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
-import { useInventoryApiV2CostMetricList } from '../../../../../api/inventory.gen'
-import SummaryCard from '../../../../../components/Cards/SummaryCard'
-import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
-import { filterAtom, spendTimeAtom } from '../../../../../store'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import { useInventoryApiV2CostMetricList } from '../../../api/inventory.gen'
+import SummaryCard from '../../../components/Cards/SummaryCard'
+import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import { filterAtom, spendTimeAtom } from '../../../store'
 
 interface IProps {
     pageSize: number
