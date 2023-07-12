@@ -1,4 +1,3 @@
-import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import Composition from '../../../../components/Cards/Composition'
@@ -112,17 +111,13 @@ export default function CompositionTab({ top }: IProps) {
     }
 
     return (
-        <Grid numItemsMd={2} className="mt-5 gap-6 flex justify-between">
-            <div className="w-full">
-                <Composition
-                    newData={compositionChart(compositionNew)}
-                    oldData={compositionChart(compositionOld)}
-                    isLoading={oldIsLoading || newIsLoading}
-                    newList={compositionList(compositionNew)}
-                    oldList={compositionList(compositionOld)}
-                    isCost
-                />
-            </div>
-        </Grid>
+        <Composition
+            newData={compositionChart(compositionNew)}
+            oldData={compositionChart(compositionOld)}
+            isLoading={oldIsLoading || newIsLoading}
+            newList={compositionList(compositionNew)}
+            oldList={compositionList(compositionOld)}
+            isCost
+        />
     )
 }

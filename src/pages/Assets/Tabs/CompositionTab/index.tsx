@@ -1,4 +1,3 @@
-import { Flex, Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { useInventoryApiV2ResourcesCompositionDetail } from '../../../../api/inventory.gen'
@@ -141,14 +140,12 @@ export default function CompositionTab({ top }: IProps) {
     }
 
     return (
-        <Flex justifyContent="between" className="mt-5 w-full">
-            <Composition
-                newData={compositionCart(composition, 0)}
-                oldData={compositionCart(composition, 1)}
-                isLoading={isLoading}
-                newList={compositionList(composition, 0)}
-                oldList={compositionList(composition, 1)}
-            />
-        </Flex>
+        <Composition
+            newData={compositionCart(composition, 0)}
+            oldData={compositionCart(composition, 1)}
+            isLoading={isLoading}
+            newList={compositionList(composition, 0)}
+            oldList={compositionList(composition, 1)}
+        />
     )
 }

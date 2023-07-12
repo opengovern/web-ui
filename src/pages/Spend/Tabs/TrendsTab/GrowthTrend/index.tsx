@@ -9,7 +9,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { atom, useAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import {
     exactPriceDisplay,
@@ -93,51 +93,43 @@ export default function GrowthTrend({ categories }: IProps) {
     }, [costTrend])
 
     return (
-        <Card>
+        <Card className="mb-3">
             <Flex justifyContent="between" alignItems="start">
-                <div className="flex justify-normal gap-x-2 items-center">
-                    <Title className="min-w-[7vw]">Overall Spend Trend </Title>
+                <Flex justifyContent="start" className="gap-x-2">
+                    <Title>Overall Spend Trend </Title>
                     <BadgeDelta deltaType={growthDeltaType}>
                         {numericDisplay(growthDelta)}
                     </BadgeDelta>
-                </div>
-                <div className="flex flex-row justify-normal gap-x-2 items-start">
-                    <div>
-                        <Text>
-                            <span className="text-gray-500">Provider: </span>
-                        </Text>
-                        <Select
-                            onValueChange={(e) =>
-                                setSelectedTrendCostProvider(
-                                    StringToProvider(e)
-                                )
-                            }
-                            placeholder={
-                                selectedTrendCostProvider === ''
-                                    ? 'All'
-                                    : selectedTrendCostProvider
-                            }
-                            className="max-w-xs mb-6"
-                        >
-                            {categories.map((category) => (
-                                <SelectItem
-                                    key={category.label}
-                                    value={category.value}
-                                >
-                                    {category.label}
-                                </SelectItem>
-                            ))}
-                        </Select>
-                    </div>
-                </div>
+                </Flex>
+                <Flex justifyContent="end" className="gap-x-2">
+                    <Text>Provider:</Text>
+                    <Select
+                        onValueChange={(e) =>
+                            setSelectedTrendCostProvider(StringToProvider(e))
+                        }
+                        placeholder={
+                            selectedTrendCostProvider === ''
+                                ? 'All'
+                                : selectedTrendCostProvider
+                        }
+                        className="w-36"
+                    >
+                        {categories.map((category) => (
+                            <SelectItem
+                                key={category.label}
+                                value={category.value}
+                            >
+                                {category.label}
+                            </SelectItem>
+                        ))}
+                    </Select>
+                </Flex>
             </Flex>
             {isLoading ? (
-                <div className="flex items-center justify-center">
-                    <Spinner />
-                </div>
+                <Spinner className="h-80" />
             ) : (
                 <Chart
-                    className="mt-4 h-80"
+                    className="mt-3"
                     index="date"
                     type="line"
                     yAxisWidth={120}

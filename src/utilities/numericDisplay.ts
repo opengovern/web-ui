@@ -43,7 +43,7 @@ export const exactPriceDisplay = (
     value: string | number | undefined,
     decimals = 0
 ) => {
-    return `$ ${parseFloat(value ? value.toString() : '0')
+    return `$${parseFloat(value ? value.toString() : '0')
         .toFixed(decimals)
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`

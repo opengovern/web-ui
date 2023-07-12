@@ -136,54 +136,44 @@ export default function TrendsTab({ categories }: IProps) {
     }
 
     return (
-        <div className="mt-5">
-            <div className="mb-5">
-                <GrowthTrend
-                    categories={[
-                        {
-                            label: 'AWS',
-                            value: 'AWS',
-                        },
-                        {
-                            label: 'Azure',
-                            value: 'Azure',
-                        },
-                        {
-                            label: 'All',
-                            value: '',
-                        },
-                    ]}
+        <>
+            <GrowthTrend
+                categories={[
+                    {
+                        label: 'AWS',
+                        value: 'AWS',
+                    },
+                    {
+                        label: 'Azure',
+                        value: 'Azure',
+                    },
+                    {
+                        label: 'All',
+                        value: '',
+                    },
+                ]}
+            />
+            <TopAccountTrend />
+            <TopServiceTrend categories={categories} />
+            <Grid numItemsMd={2} className="gap-3">
+                <CardWithList
+                    title="Top by Consumption"
+                    tabs={['Accounts', 'Services']}
+                    data={consumptionData()}
+                    loading={isLoadingTopAccount || isLoadingTopServices}
+                    valueIsPrice
                 />
-            </div>
-            <div className="mb-5">
-                <TopAccountTrend />
-            </div>
-            <div className="mb-5">
-                <TopServiceTrend categories={categories} />
-            </div>
-            <Grid numItemsMd={2} className="mt-10 gap-6 flex justify-between">
-                <div className="w-full">
-                    <CardWithList
-                        title="Top by Consumption"
-                        tabs={['Accounts', 'Services']}
-                        data={consumptionData()}
-                        loading={isLoadingTopAccount || isLoadingTopServices}
-                        valueIsPrice
-                    />
-                </div>
-                <div className="w-full">
-                    <CardWithList
-                        title="Top by Growth"
-                        tabs={['Accounts', 'Services']}
-                        data={growthData()}
-                        loading={
-                            isLoadingTopGrowthAccounts ||
-                            isLoadingTopGrowingServices
-                        }
-                        valueIsPrice
-                    />
-                </div>
+                <CardWithList
+                    title="Top by Growth"
+                    tabs={['Accounts', 'Services']}
+                    data={growthData()}
+                    loading={
+                        isLoadingTopGrowthAccounts ||
+                        isLoadingTopGrowingServices
+                    }
+                    valueIsPrice
+                />
             </Grid>
-        </div>
+        </>
     )
 }
