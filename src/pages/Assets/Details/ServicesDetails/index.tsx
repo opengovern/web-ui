@@ -148,7 +148,7 @@ export default function ServicesDetails() {
                 totalServices={serviceList?.total_services}
                 totalServicesLoading={isServiceListLoading}
             />
-            <div className="ag-theme-alpine mt-10">
+            <div className="ag-theme-alpine mt-3">
                 <AgGridReact
                     ref={gridRef}
                     domLayout="autoHeight"

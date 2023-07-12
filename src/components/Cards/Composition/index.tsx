@@ -49,8 +49,6 @@ type IProps = {
     oldList?: listProps[]
 }
 
-const param = window.location.pathname.split('/')[2]
-
 export default function Composition({
     newData,
     oldData,
@@ -61,7 +59,8 @@ export default function Composition({
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    console.log(newList)
+    const param = window.location.pathname.split('/')[2]
+
     const compositionData = (
         newObject: dataProps | undefined,
         oldObject: dataProps | undefined,
@@ -165,7 +164,7 @@ export default function Composition({
                               </ListItem>
                           ))
                         : oldList?.map((item) => (
-                              <ListItem key={item.name}>
+                              <ListItem key={item.name} className="my-2">
                                   {/* {item.percent && ( */}
                                   {/*    <Text>%{item.percent.toFixed(2)}</Text> */}
                                   {/* )} */}
