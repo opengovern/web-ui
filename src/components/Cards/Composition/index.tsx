@@ -22,6 +22,7 @@ import Spinner from '../../Spinner'
 import { timeAtom } from '../../../store'
 
 interface listProps {
+    percent?: number
     name: string
     value: string
     delta?: string
@@ -60,7 +61,7 @@ export default function Composition({
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-
+    console.log(newList)
     const compositionData = (
         newObject: dataProps | undefined,
         oldObject: dataProps | undefined,
@@ -118,8 +119,8 @@ export default function Composition({
                 {selectedIndex === 0 ? newData?.total : oldData?.total}
             </Metric>
             <Divider />
-            <Flex flexDirection="row">
-                <div>
+            <Flex flexDirection="row" alignItems="start">
+                <Flex flexDirection="col" alignItems="start" className="w-1/7">
                     <Title>Allocation</Title>
                     <Text>
                         {selectedIndex === 0
@@ -127,22 +128,25 @@ export default function Composition({
                             : oldData?.totalValueCount}{' '}
                         Asset
                     </Text>
-                    <DonutChart
-                        data={compositionData(newData, oldData, selectedIndex)}
-                        category="value"
-                        index="name"
-                        className="w-64 h-64 mt-6"
-                        valueFormatter={
-                            isCost
-                                ? exactPriceDisplay
-                                : (v) => v.toLocaleString('en-US')
-                        }
-                    />
-                </div>
+                </Flex>
+                <DonutChart
+                    data={compositionData(newData, oldData, selectedIndex)}
+                    category="value"
+                    index="name"
+                    className="w-64 h-64"
+                    valueFormatter={
+                        isCost
+                            ? exactPriceDisplay
+                            : (v) => v.toLocaleString('en-US')
+                    }
+                />
                 <List className="w-2/5">
                     {selectedIndex === 0
                         ? newList?.map((item) => (
                               <ListItem key={item.name}>
+                                  {/* {item.percent && ( */}
+                                  {/*    <Text>%{item.percent.toFixed(2)}</Text> */}
+                                  {/* )} */}
                                   <Text>{item.name}</Text>
                                   <Flex
                                       justifyContent="end"
@@ -162,6 +166,9 @@ export default function Composition({
                           ))
                         : oldList?.map((item) => (
                               <ListItem key={item.name}>
+                                  {/* {item.percent && ( */}
+                                  {/*    <Text>%{item.percent.toFixed(2)}</Text> */}
+                                  {/* )} */}
                                   <Text>{item.name}</Text>
                                   <Flex
                                       justifyContent="end"

@@ -13,6 +13,7 @@ type IProps = {
 interface chartProps {
     name: string
     value: number
+    normalVal?: number | undefined
 }
 
 interface dataProps {
@@ -101,11 +102,21 @@ export default function CompositionTab({ top }: IProps) {
             return {
                 name: item.name,
                 value: exactPriceDisplay(item.value),
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                percent: (item.value / compositionData?.total_count) * 100 || 0,
             }
         })
         v.push({
             name: 'Others',
             value: exactPriceDisplay(compositionData?.others),
+            percent:
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                (compositionData?.others / compositionData?.total_count) *
+                    100 || 0,
         })
         return v
     }

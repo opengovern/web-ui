@@ -113,11 +113,17 @@ export default function CompositionTab({ top }: IProps) {
                 delta: `${percentageByChange(
                     record[key].old_count,
                     record[key].count
-                )}`,
+                )}%`,
                 deltaType: badgeTypeByDelta(
                     record[key].old_count,
                     record[key].count
                 ),
+                percent:
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    // eslint-disable-next-line no-unsafe-optional-chaining
+                    (record[key].count / compositionData?.total_count) * 100 ||
+                    0,
             }
         })
         v.push({
@@ -130,11 +136,17 @@ export default function CompositionTab({ top }: IProps) {
             delta: `${percentageByChange(
                 compositionData?.others?.old_count,
                 compositionData?.others?.count
-            )}`,
+            )}&`,
             deltaType: badgeTypeByDelta(
                 compositionData?.others?.old_count,
                 compositionData?.others?.count
             ),
+            percent:
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                (compositionData?.others / compositionData?.total_count) *
+                    100 || 0,
         })
         return v
     }
