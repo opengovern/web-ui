@@ -2,10 +2,10 @@ import React, { useRef } from 'react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef, GridOptions } from 'ag-grid-community'
+import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { DateRangePicker, Flex } from '@tremor/react'
+import { BadgeDelta, DateRangePicker, Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { useInventoryApiV2ServicesMetricList } from '../../../../api/inventory.gen'
 import Summary from './Summary'
@@ -13,6 +13,10 @@ import { filterAtom, timeAtom } from '../../../../store'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import ConnectionList from '../../../../components/ConnectionList'
+import {
+    badgeTypeByDelta,
+    percentageByChange,
+} from '../../../../utilities/deltaType'
 
 const columns: ColDef[] = [
     {
@@ -39,6 +43,30 @@ const columns: ColDef[] = [
         resizable: true,
         flex: 1,
     },
+    {
+        headerName: 'Growth',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+        cellRenderer: (params: ICellRendererParams) => {
+            return (
+                <Flex className="h-full w-full">
+                    <BadgeDelta
+                        deltaType={badgeTypeByDelta(
+                            params?.data.old_resource_count,
+                            params?.data.resource_count
+                        )}
+                    >
+                        {`${percentageByChange(
+                            params?.data.old_resource_count,
+                            params?.data.resource_count
+                        )}%`}
+                    </BadgeDelta>
+                </Flex>
+            )
+        },
+    },
 ]
 
 export default function ServicesDetails() {
@@ -57,7 +85,7 @@ export default function ServicesDetails() {
             endTime: String(dayjs(activeTimeRange.to).unix()),
             sortBy: 'name',
         })
-
+    console.log(serviceList)
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
