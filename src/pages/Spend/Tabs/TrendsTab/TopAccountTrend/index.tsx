@@ -73,7 +73,7 @@ export default function TopAccountsTrend() {
             })
             .map(([date, valueArray]) => {
                 const trendMap = new Map<string, string | number>()
-                trendMap.set('date', dayjs.unix(date).format('DD MMM'))
+                trendMap.set('date', dayjs.unix(date).format('MMM DD, YYYY'))
                 valueArray.forEach((item) => {
                     const name =
                         topAccounts?.connections?.find(

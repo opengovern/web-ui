@@ -66,7 +66,7 @@ const generateBadge = (
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title={`Data is availabe after ${dayjs(
+                title={`Data is available after ${dayjs(
                     met.firstOldResultDate
                 ).format('MMM DD, YYYY')}`}
                 color="rose"

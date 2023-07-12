@@ -81,7 +81,7 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                         <Text>Last health check</Text>
                         <Text className="text-black">
                             {dayjs(data?.lastHealthCheckTime).format(
-                                'YYYY-MM-DD'
+                                'MMM DD, YYYY'
                             )}
                         </Text>
                     </Flex>
