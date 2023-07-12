@@ -1,8 +1,7 @@
-import React, { useMemo, useState } from 'react'
-import { useAtom } from 'jotai'
+import { useMemo, useState } from 'react'
 import {
-    Button,
     DateRangePicker,
+    DateRangePickerValue,
     Flex,
     Metric,
     Tab,
@@ -11,16 +10,20 @@ import {
     TabPanel,
     TabPanels,
 } from '@tremor/react'
+import dayjs from 'dayjs'
 import LoggedInLayout from '../../components/LoggedInLayout'
-import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
 import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
 
-const Assets: React.FC<any> = () => {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+export default function Spend() {
+    const [activeTimeRange, setActiveTimeRange] =
+        useState<DateRangePickerValue>({
+            from: dayjs().subtract(1, 'month').toDate(),
+            to: new Date(),
+        })
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
 
@@ -79,5 +82,3 @@ const Assets: React.FC<any> = () => {
         </LoggedInLayout>
     )
 }
-
-export default Assets
