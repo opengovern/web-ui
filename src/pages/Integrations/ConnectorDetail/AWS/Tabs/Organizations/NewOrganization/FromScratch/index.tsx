@@ -7,10 +7,10 @@ import FinalStep from './FinalStep'
 import Steps from '../../../../../../../../components/Steps'
 
 interface ISteps {
-    close: any
+    onClose: () => void
 }
 
-export default function FromScratch({ close }: ISteps) {
+export default function FromScratch({ onClose }: ISteps) {
     const [stepNum, setStepNum] = useState(1)
     const [data, setData] = useState({
         accessKey: '',
@@ -18,12 +18,23 @@ export default function FromScratch({ close }: ISteps) {
         roleName: '',
         externalId: '',
     })
+
+    const close = () => {
+        setStepNum(1)
+        setData({
+            accessKey: '',
+            secretKey: '',
+            roleName: '',
+            externalId: '',
+        })
+        onClose()
+    }
     const showStep = (s: number) => {
         switch (s) {
             case 1:
                 return (
                     <FirstStep
-                        onPrevious={() => close()}
+                        onPrevious={close}
                         onNext={() => setStepNum(2)}
                     />
                 )
@@ -38,15 +49,34 @@ export default function FromScratch({ close }: ISteps) {
                 return (
                     <ThirdStep
                         onPrevious={() => setStepNum(2)}
-                        onNext={(info: any) => {
-                            setData(info)
+                        onNext={(
+                            accessKey,
+                            secretKey,
+                            roleName,
+                            externalId
+                        ) => {
+                            setData({
+                                accessKey,
+                                secretKey,
+                                roleName,
+                                externalId,
+                            })
                             setStepNum(4)
                         }}
                     />
                 )
             case 4:
                 return (
-                    <FinalStep data={data} onPrevious={() => setStepNum(3)} />
+                    <FinalStep
+                        accessKeyParam={data.accessKey}
+                        secretKey={data.secretKey}
+                        roleName={data.roleName}
+                        externalId={data.externalId}
+                        onPrevious={() => setStepNum(3)}
+                        onSubmit={() => {
+                            // TODO
+                        }}
+                    />
                 )
             default:
                 return null

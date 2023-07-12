@@ -3,11 +3,12 @@ import { useState } from 'react'
 import FromScratch from './FromScratch'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import FromExisting from './FromExisting'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
 
 interface INewOrganization {
     open: boolean
-    onClose: any
-    accounts: any
+    onClose: () => void
+    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
 }
 
 export default function NewOrganization({
@@ -18,28 +19,16 @@ export default function NewOrganization({
     const [option, setOption] = useState('')
     const [show, setShow] = useState('')
 
+    const close = () => {
+        setOption('')
+        setShow('')
+        onClose()
+    }
+
     const render = (tab: string) => {
-        if (tab === 'scratch')
-            return (
-                <FromScratch
-                    close={() => {
-                        onClose()
-                        setShow('')
-                        setOption('')
-                    }}
-                />
-            )
+        if (tab === 'scratch') return <FromScratch onClose={close} />
         if (tab === 'existing')
-            return (
-                <FromExisting
-                    accounts={accounts}
-                    close={() => {
-                        onClose()
-                        setShow('')
-                        setOption('')
-                    }}
-                />
-            )
+            return <FromExisting accounts={accounts} onClose={close} />
         return (
             <Flex flexDirection="col" className="h-full">
                 <Flex flexDirection="row" alignItems="start" className="mt-6">
@@ -71,7 +60,7 @@ export default function NewOrganization({
                     </Flex>
                 </Flex>
                 <Flex flexDirection="row" justifyContent="end">
-                    <Button variant="secondary" onClick={() => onClose()}>
+                    <Button variant="secondary" onClick={close}>
                         Cancel
                     </Button>
                     <Button className="ml-3" onClick={() => setShow(option)}>
@@ -83,11 +72,7 @@ export default function NewOrganization({
     }
 
     return (
-        <DrawerPanel
-            title="New Organization"
-            open={open}
-            onClose={() => onClose()}
-        >
+        <DrawerPanel title="New Organization" open={open} onClose={close}>
             {render(show)}
         </DrawerPanel>
     )

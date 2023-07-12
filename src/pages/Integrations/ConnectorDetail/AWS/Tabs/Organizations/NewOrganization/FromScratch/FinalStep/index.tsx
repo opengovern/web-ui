@@ -1,11 +1,22 @@
 import { Bold, Button, Divider, Flex, Text } from '@tremor/react'
 
 interface IStep {
-    onPrevious: any
-    data: any
+    onPrevious: () => void
+    onSubmit: () => void
+    accessKeyParam: string
+    secretKey: string
+    roleName: string
+    externalId: string
 }
 
-export default function FinalStep({ onPrevious, data }: IStep) {
+export default function FinalStep({
+    onSubmit,
+    onPrevious,
+    accessKeyParam,
+    secretKey,
+    roleName,
+    externalId,
+}: IStep) {
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
@@ -17,29 +28,31 @@ export default function FinalStep({ onPrevious, data }: IStep) {
                 </Text>
                 <Flex flexDirection="row">
                     <Text>Access Key</Text>
-                    <Text className="text-black">{data.accessKey}</Text>
+                    <Text className="text-black">{accessKeyParam}</Text>
                 </Flex>
                 <Divider />
                 <Flex flexDirection="row">
                     <Text>Secret Key</Text>
-                    <Text className="text-black">{data.secretKey}</Text>
+                    <Text className="text-black">{secretKey}</Text>
                 </Flex>
                 <Divider />
                 <Flex flexDirection="row">
                     <Text>Role Name</Text>
-                    <Text className="text-black">{data.roleName}</Text>
+                    <Text className="text-black">{roleName}</Text>
                 </Flex>
                 <Divider />
                 <Flex flexDirection="row">
                     <Text>External ID</Text>
-                    <Text className="text-black">{data.externalId}</Text>
+                    <Text className="text-black">{externalId}</Text>
                 </Flex>
             </Flex>
             <Flex flexDirection="row" justifyContent="end">
-                <Button variant="secondary" onClick={() => onPrevious()}>
+                <Button variant="secondary" onClick={onPrevious}>
                     Back
                 </Button>
-                <Button className="ml-3">Submit</Button>
+                <Button className="ml-3" onClick={onSubmit}>
+                    Submit
+                </Button>
             </Flex>
         </Flex>
     )

@@ -4,29 +4,45 @@ import Steps from '../../../../../../../../components/Steps'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
 import FinalStep from './FinalStep'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../../api/api'
 
 interface ISteps {
-    close: any
-    accounts: any
+    onClose: () => void
+    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
 }
 
-export default function FromExisting({ close, accounts }: ISteps) {
+interface IData {
+    roleName: string
+    externalID: string
+}
+
+export default function FromExisting({ onClose, accounts }: ISteps) {
     const [stepNum, setStepNum] = useState(1)
-    const [connection, setConnection] = useState({})
-    const [data, setData] = useState({
+    const [connectionID, setConnectionID] = useState<string>('')
+    const [data, setData] = useState<IData>({
         roleName: '',
-        externalId: '',
+        externalID: '',
     })
+
+    const close = () => {
+        setStepNum(1)
+        setConnectionID('')
+        setData({
+            roleName: '',
+            externalID: '',
+        })
+        onClose()
+    }
 
     const showStep = (s: number) => {
         switch (s) {
             case 1:
                 return (
                     <FirstStep
-                        onPrevious={() => close()}
-                        onNext={(con: any) => {
+                        onPrevious={close}
+                        onNext={(connID) => {
                             setStepNum(2)
-                            setConnection(con)
+                            setConnectionID(connID)
                         }}
                         accounts={accounts}
                     />
@@ -34,8 +50,11 @@ export default function FromExisting({ close, accounts }: ISteps) {
             case 2:
                 return (
                     <SecondStep
-                        onNext={(d: any) => {
-                            setData(d)
+                        onNext={(roleName, externalID) => {
+                            setData({
+                                roleName,
+                                externalID,
+                            })
                             setStepNum(3)
                         }}
                         onPrevious={() => setStepNum(1)}
@@ -45,8 +64,11 @@ export default function FromExisting({ close, accounts }: ISteps) {
                 return (
                     <FinalStep
                         onPrevious={() => setStepNum(1)}
-                        data={data}
-                        connection={connection}
+                        onSubmit={() => {
+                            // TODO
+                        }}
+                        externalId={data.externalID}
+                        roleName={data.roleName}
                     />
                 )
             default:

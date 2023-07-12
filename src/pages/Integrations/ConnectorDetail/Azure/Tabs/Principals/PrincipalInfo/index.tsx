@@ -18,16 +18,11 @@ interface IPriInfo {
 }
 
 export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
-    // const { response: credential } = useOnboardApiV1CredentialDetail(
-    //     data?.id,
-    //     {},
-    //     !!data && open
-    // )
     const [id, setId] = useState('')
     const [eid, seteId] = useState(false)
     const [value, setValue] = useState('')
     const [evalue, seteValue] = useState(false)
-    // console.log(credential)
+
     return (
         <DrawerPanel
             title="Service Principal"
@@ -111,16 +106,12 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                         ) : (
                             <Flex justifyContent="end">
                                 <Text className="text-black">
-                                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                    {/* @ts-ignore */}
                                     {data?.metadata.secret_id}
                                 </Text>
                                 <Button
                                     variant="light"
                                     className="ml-3"
                                     onClick={() => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
                                         setId(data?.metadata.secret_id)
                                         seteId(true)
                                     }}
