@@ -47,6 +47,9 @@ type IProps = {
     newList?: listProps[]
     oldList?: listProps[]
 }
+
+const param = window.location.pathname.split('/')[2]
+
 export default function Composition({
     newData,
     oldData,
@@ -93,18 +96,22 @@ export default function Composition({
         <Card>
             <Flex flexDirection="row">
                 <Title>Overview</Title>
-                <TabGroup
-                    index={selectedIndex}
-                    onIndexChange={setSelectedIndex}
-                    className="w-fit"
-                >
-                    <TabList variant="solid">
-                        <Tab>{dayjs(activeTimeRange.to).format('MMM DD')}</Tab>
-                        <Tab>
-                            {dayjs(activeTimeRange.from).format('MMM DD')}
-                        </Tab>
-                    </TabList>
-                </TabGroup>
+                {param !== 'spend' && (
+                    <TabGroup
+                        index={selectedIndex}
+                        onIndexChange={setSelectedIndex}
+                        className="w-fit"
+                    >
+                        <TabList variant="solid">
+                            <Tab>
+                                {dayjs(activeTimeRange.to).format('MMM DD')}
+                            </Tab>
+                            <Tab>
+                                {dayjs(activeTimeRange.from).format('MMM DD')}
+                            </Tab>
+                        </TabList>
+                    </TabGroup>
+                )}
             </Flex>
             <Text className="mt-3">Total</Text>
             <Metric>
