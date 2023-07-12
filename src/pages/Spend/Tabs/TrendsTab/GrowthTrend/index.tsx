@@ -89,6 +89,7 @@ export default function GrowthTrend() {
                     className="mt-3"
                     index="date"
                     type="line"
+                    showLegend={false}
                     yAxisWidth={120}
                     categories={['count']}
                     data={fixTime(costTrend) || []}

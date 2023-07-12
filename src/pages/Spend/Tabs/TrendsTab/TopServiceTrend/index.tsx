@@ -116,6 +116,7 @@ export default function TopServicesTrend({ categories }: IProps) {
                     index="date"
                     type="area"
                     yAxisWidth={120}
+                    showLegend={false}
                     categories={serviceNames}
                     data={trendData}
                     showAnimation
