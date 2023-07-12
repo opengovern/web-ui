@@ -3,7 +3,14 @@ import { Bold, Button, Divider, Flex, Text, TextInput } from '@tremor/react'
 
 interface IStep {
     error: string
-    onNext: (appId: string, tenId: string, secId: string) => void
+    onNext: (
+        appId: string,
+        tenId: string,
+        secId: string,
+        objectId: string,
+        clientSecret: string,
+        subscriptionId: string
+    ) => void
     onPrevious: () => void
 }
 
@@ -11,6 +18,9 @@ export default function SecondStep({ error, onNext, onPrevious }: IStep) {
     const [appId, setAppId] = useState('')
     const [tenId, setTenId] = useState('')
     const [secId, setSecId] = useState('')
+    const [objectId, setObjectId] = useState('')
+    const [clientSecret, setClientSecret] = useState('')
+    const [subscriptionId, setSubscriptionId] = useState('')
 
     return (
         <Flex flexDirection="col" className="h-full">
@@ -45,6 +55,33 @@ export default function SecondStep({ error, onNext, onPrevious }: IStep) {
                         onChange={(e) => setSecId(e.target.value)}
                     />
                 </Flex>
+                <Divider />
+                <Flex flexDirection="row">
+                    <Text>Object ID</Text>
+                    <TextInput
+                        className="w-2/3"
+                        value={objectId}
+                        onChange={(e) => setObjectId(e.target.value)}
+                    />
+                </Flex>
+                <Divider />
+                <Flex flexDirection="row">
+                    <Text>Client Secret</Text>
+                    <TextInput
+                        className="w-2/3"
+                        value={clientSecret}
+                        onChange={(e) => setClientSecret(e.target.value)}
+                    />
+                </Flex>
+                <Divider />
+                <Flex flexDirection="row">
+                    <Text>Subscription ID</Text>
+                    <TextInput
+                        className="w-2/3"
+                        value={subscriptionId}
+                        onChange={(e) => setSubscriptionId(e.target.value)}
+                    />
+                </Flex>
                 <Flex flexDirection="row">
                     <Text className="text-red-600 pt-4">{error}</Text>
                 </Flex>
@@ -55,7 +92,16 @@ export default function SecondStep({ error, onNext, onPrevious }: IStep) {
                 </Button>
                 <Button
                     disabled={!(appId.length && tenId.length && secId.length)}
-                    onClick={() => onNext(appId, tenId, secId)}
+                    onClick={() =>
+                        onNext(
+                            appId,
+                            tenId,
+                            secId,
+                            objectId,
+                            clientSecret,
+                            subscriptionId
+                        )
+                    }
                     className="ml-3"
                 >
                     Next

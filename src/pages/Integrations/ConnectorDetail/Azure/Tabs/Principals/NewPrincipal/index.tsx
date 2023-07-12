@@ -20,6 +20,9 @@ export default function NewPrincipal({ open, onClose }: INewPrinciple) {
         tenId: '',
         secId: '',
         appId: '',
+        objectId: '',
+        clientSecret: '',
+        subscriptionId: '',
     })
 
     const {
@@ -34,6 +37,9 @@ export default function NewPrincipal({ open, onClose }: INewPrinciple) {
                 clientId: data.appId,
                 secretId: data.secId,
                 tenantId: data.appId,
+                objectId: data.objectId,
+                clientSecret: data.clientSecret,
+                subscriptionId: data.subscriptionId,
             },
             source_type: SourceType.CloudAzure,
         },
@@ -76,11 +82,21 @@ export default function NewPrincipal({ open, onClose }: INewPrinciple) {
                     <SecondStep
                         onPrevious={() => setStepNum(1)}
                         error={getErrorMessage(error)}
-                        onNext={(appId, tenId, secId) => {
+                        onNext={(
+                            appId,
+                            tenId,
+                            secId,
+                            objectId,
+                            clientSecret,
+                            subscriptionId
+                        ) => {
                             setData({
                                 appId,
                                 tenId,
                                 secId,
+                                objectId,
+                                clientSecret,
+                                subscriptionId,
                             })
                             setStepNum(3)
                         }}
