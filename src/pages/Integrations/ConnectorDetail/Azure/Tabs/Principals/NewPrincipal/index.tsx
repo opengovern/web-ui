@@ -9,7 +9,7 @@ import FinalStep from './FinalStep'
 
 interface INewPrinciple {
     open: boolean
-    onClose: any
+    onClose: () => void
 }
 
 export default function NewPrincipal({ open, onClose }: INewPrinciple) {
@@ -29,19 +29,24 @@ export default function NewPrincipal({ open, onClose }: INewPrinciple) {
         source_type: SourceType.CloudAzure,
     })
 
+    const close = () => {
+        setStepNum(1)
+        onClose()
+    }
+
     const showStep = (s: number) => {
         switch (s) {
             case 1:
                 return (
                     <FirstStep
-                        onPrevious={() => onClose()}
+                        onPrevious={close}
                         onNext={() => setStepNum(2)}
                     />
                 )
             case 2:
                 return (
                     <SecondStep
-                        onPrevious={() => onClose()}
+                        onPrevious={() => setStepNum(1)}
                         onNext={(a: any) => {
                             setData(a)
                             sendNow()
@@ -50,17 +55,13 @@ export default function NewPrincipal({ open, onClose }: INewPrinciple) {
                     />
                 )
             case 3:
-                return <FinalStep data={principal} onNext={() => onClose()} />
+                return <FinalStep data={principal} onNext={close} />
             default:
                 return null
         }
     }
     return (
-        <DrawerPanel
-            title="New Setvice Principle"
-            open={open}
-            onClose={() => onClose()}
-        >
+        <DrawerPanel title="New Setvice Principle" open={open} onClose={close}>
             <Steps steps={3} currentStep={stepNum} />
             {showStep(stepNum)}
         </DrawerPanel>

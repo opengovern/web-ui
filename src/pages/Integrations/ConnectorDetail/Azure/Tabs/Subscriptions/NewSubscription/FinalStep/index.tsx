@@ -1,40 +1,15 @@
-import React, { useRef, useState } from 'react'
+import { Bold, Button, Flex } from '@tremor/react'
+import { ColDef, GridOptions } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-import { Button, Card, Flex, Title } from '@tremor/react'
-import { PlusIcon } from '@heroicons/react/24/outline'
-import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
-import NewAzureSubscription from './NewSubscription'
-import {
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-} from '../../../../../../api/api'
+import { useRef } from 'react'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../../api/api'
 
-interface ISubscriptions {
+interface IStep {
+    onNext: () => void
     subscriptions: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
-    spns: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
 const columns: ColDef[] = [
-    {
-        field: 'connector',
-        headerName: 'Connector',
-        width: 50,
-        sortable: true,
-        filter: true,
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="w-full h-full"
-                >
-                    <AzureIcon />
-                </Flex>
-            )
-        },
-    },
     {
         field: 'providerConnectionName',
         headerName: 'Name',
@@ -88,15 +63,15 @@ const columns: ColDef[] = [
     },
 ]
 
-export default function Subscriptions({ subscriptions, spns }: ISubscriptions) {
-    const [open, setOpen] = useState(false)
+export default function FinalStep({ onNext, subscriptions }: IStep) {
     const gridRef = useRef<AgGridReact>(null)
-    console.log(subscriptions)
+
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
+        paginationPageSize: 10,
         getRowHeight: (params) => 50,
         sideBar: {
             toolPanels: [
@@ -118,28 +93,24 @@ export default function Subscriptions({ subscriptions, spns }: ISubscriptions) {
             defaultToolPanel: '',
         },
     }
-
     return (
-        <Card>
-            <Flex flexDirection="row">
-                <Title>Azure Subscriptions</Title>
-                <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                    Create New Azure Subscription
+        <Flex flexDirection="col" className="h-full">
+            <Flex flexDirection="col" alignItems="start">
+                <Bold className="my-6">Discovered Azure Subscription</Bold>
+                <div className="ag-theme-alpine w-full">
+                    <AgGridReact
+                        ref={gridRef}
+                        domLayout="autoHeight"
+                        gridOptions={gridOptions}
+                        rowData={subscriptions}
+                    />
+                </div>
+            </Flex>
+            <Flex flexDirection="row" justifyContent="end">
+                <Button onClick={() => onNext()} className="ml-3">
+                    Done
                 </Button>
             </Flex>
-            <div className="ag-theme-alpine mt-6">
-                <AgGridReact
-                    ref={gridRef}
-                    domLayout="autoHeight"
-                    gridOptions={gridOptions}
-                    rowData={subscriptions}
-                />
-            </div>
-            <NewAzureSubscription
-                spns={spns}
-                open={open}
-                onClose={() => setOpen(false)}
-            />
-        </Card>
+        </Flex>
     )
 }

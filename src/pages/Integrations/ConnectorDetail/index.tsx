@@ -13,6 +13,7 @@ import AWSTabs from './AWS/Tabs'
 import AWSSummary from './AWS/Summary'
 import AzureSummary from './Azure/Summary'
 import AzureTabs from './Azure/Tabs'
+import { StringToProvider } from '../../../types/provider'
 
 export default function ConnectorDetail() {
     const navigate = useNavigate()
@@ -22,9 +23,7 @@ export default function ConnectorDetail() {
 
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connector,
+            connector: [StringToProvider(connector || '')],
             startTime: dayjs(activeTimeRange.from).unix(),
             endTime: dayjs(activeTimeRange.to).unix(),
             pageSize: 10000,
@@ -32,9 +31,7 @@ export default function ConnectorDetail() {
         })
     const { response: credentials, isLoading: isCredentialLoading } =
         useOnboardApiV1CredentialList({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connector,
+            connector: StringToProvider(connector || ''),
         })
     console.log(accounts)
 
@@ -55,32 +52,32 @@ export default function ConnectorDetail() {
                 <Flex flexDirection="row" className="mb-6">
                     <Breadcrumbs pages={breadcrumbsPages} />
                 </Flex>
-                <Title>Connector Name</Title>
+                <Title>{connector}</Title>
                 <Text>Description</Text>
                 {connector === 'AWS' ? (
                     <>
                         <AWSSummary
-                            account={accounts}
+                            accountsSummary={accounts}
                             accountLoading={isAccountsLoading}
                             credential={credentials}
                             credentialLoading={isCredentialLoading}
                         />
                         <AWSTabs
-                            accounts={accounts}
-                            organizations={credentials}
+                            accounts={accounts?.connections || []}
+                            organizations={credentials?.credentials || []}
                         />
                     </>
                 ) : (
                     <>
                         <AzureSummary
-                            principals={credentials}
+                            principalsSummary={credentials}
                             principalsLoading={isCredentialLoading}
-                            subscriptions={accounts}
+                            subscriptionsSummary={accounts}
                             subscriptionsLoading={isAccountsLoading}
                         />
                         <AzureTabs
-                            principals={credentials}
-                            subscriptions={accounts}
+                            principals={credentials?.credentials || []}
+                            subscriptions={accounts?.connections || []}
                         />
                     </>
                 )}

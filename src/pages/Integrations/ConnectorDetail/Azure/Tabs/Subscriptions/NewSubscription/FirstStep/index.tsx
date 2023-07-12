@@ -1,42 +1,16 @@
-import { Button, Card, Flex, Title } from '@tremor/react'
-import { PlusIcon } from '@heroicons/react/24/solid'
+import { Bold, Button, Flex } from '@tremor/react'
+import { ColDef, GridOptions, RowClickedEvent } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import { useRef, useState } from 'react'
-import {
-    ColDef,
-    GridOptions,
-    ICellRendererParams,
-    RowClickedEvent,
-} from 'ag-grid-community'
-import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
-import PrincipalInfo from './PrincipalInfo'
-import NewPrincipal from './NewPrincipal'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../../api/api'
 
-interface IPrincipals {
-    principals: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+interface IStep {
+    onNext: (selectedSPNID: string) => void
+    onPrevious: () => void
+    spns: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
 const columns: ColDef[] = [
-    {
-        field: 'connectortype',
-        headerName: 'Connector',
-        width: 50,
-        sortable: true,
-        filter: true,
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="w-full h-full"
-                >
-                    <AzureIcon />
-                </Flex>
-            )
-        },
-    },
     {
         field: 'name',
         headerName: 'Name',
@@ -107,22 +81,23 @@ const columns: ColDef[] = [
     },
 ]
 
-export default function Principals({ principals }: IPrincipals) {
+export default function FirstStep({ onNext, onPrevious, spns }: IStep) {
     const gridRef = useRef<AgGridReact>(null)
+    const [goingToNext, setGoingToNext] = useState<boolean>(false)
 
-    const [open, setOpen] = useState(false)
-    const [openInfo, setOpenInfo] = useState(false)
-    const [priData, setPriData] = useState(null)
+    const [selectedSPN, setSelectedSPN] = useState<string>('')
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
+        paginationPageSize: 10,
         getRowHeight: (params) => 50,
-        onRowClicked: (event: RowClickedEvent<any>) => {
-            setPriData(event.data)
-            setOpenInfo(true)
+        onRowClicked(
+            event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
+        ) {
+            setSelectedSPN(event.data?.id || '')
         },
         sideBar: {
             toolPanels: [
@@ -144,31 +119,35 @@ export default function Principals({ principals }: IPrincipals) {
             defaultToolPanel: '',
         },
     }
-
     return (
-        <>
-            <Card>
-                <Flex flexDirection="row">
-                    <Title>Service Principals</Title>
-                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                        Add New SPN
-                    </Button>
-                </Flex>
-                <div className="ag-theme-alpine mt-6">
+        <Flex flexDirection="col" className="h-full">
+            <Flex flexDirection="col" alignItems="start">
+                <Bold className="my-6">Select SPN</Bold>
+                <div className="ag-theme-alpine w-full">
                     <AgGridReact
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
-                        rowData={principals}
+                        rowData={spns}
                     />
                 </div>
-            </Card>
-            <PrincipalInfo
-                data={priData}
-                open={openInfo}
-                onClose={() => setOpenInfo(false)}
-            />
-            <NewPrincipal open={open} onClose={() => setOpen(false)} />
-        </>
+            </Flex>
+            <Flex flexDirection="row" justifyContent="end">
+                <Button variant="secondary" onClick={() => onPrevious()}>
+                    Cancel
+                </Button>
+                <Button
+                    onClick={() => {
+                        setGoingToNext(true)
+                        onNext(selectedSPN)
+                    }}
+                    loading={goingToNext}
+                    disabled={selectedSPN === ''}
+                    className="ml-3"
+                >
+                    Next
+                </Button>
+            </Flex>
+        </Flex>
     )
 }
