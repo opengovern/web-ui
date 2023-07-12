@@ -108,7 +108,7 @@ export default function TopServicesTrend({ categories }: IProps) {
     }, [data])
 
     return (
-        <Card className="mb-3">
+        <Card>
             <Title>Top Services Trend</Title>
             {!costTrendLoading ? (
                 <Chart
