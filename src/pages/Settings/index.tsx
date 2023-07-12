@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Flex, Metric } from '@tremor/react'
 import {
     BuildingOfficeIcon,
@@ -14,11 +14,8 @@ import SettingsMembers from './Members'
 import SettingsWorkspaceAPIKeys from './APIKeys'
 import SettingsProfile from './Profile'
 import SettingsOrganization from './Organization'
-import SettingsQueries from './Queries'
-import {
-    useWorkspaceApiV1WorkspacesList,
-    useWorkspaceApiV1WorkspaceCurrentList,
-} from '../../api/workspace.gen'
+import SettingsGitRepositories from './GitRepositories'
+import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
 
 function classNames(...classes: string[]) {
@@ -51,9 +48,9 @@ const navigation = [
         role: ['admin'],
     },
     {
-        name: 'Queries',
-        page: 'queries',
-        component: <SettingsQueries />,
+        name: 'Git Repositories',
+        page: 'gitrepositories',
+        component: <SettingsGitRepositories />,
         role: ['admin'],
     },
     {
@@ -82,7 +79,7 @@ const navigation = [
     },
 ]
 
-const Settings: React.FC<any> = () => {
+export default function Settings() {
     const [decodedToken, SetDecodedToken] = useState()
     const [tokenLoading, setTokenLoading] = useState(true)
     const { getAccessTokenSilently } = useAuth0()
@@ -182,9 +179,9 @@ const Settings: React.FC<any> = () => {
                     </Flex>
                 </Flex>
                 <main className="w-full pl-6">
-                    {/* <Metric className="text-gray-800 mb-1 opacity-0">
-                        placeholder :D
-                    </Metric> */}
+                    <Metric className="text-gray-800 mb-1 opacity-0">
+                        Settings
+                    </Metric>
                     {navigation
                         .filter(
                             (item) =>
@@ -197,5 +194,3 @@ const Settings: React.FC<any> = () => {
         </LoggedInLayout>
     )
 }
-
-export default Settings

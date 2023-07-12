@@ -17,7 +17,7 @@ import {
 
 import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
 
-export default function SettingsQueries() {
+export default function SettingsGitRepositories() {
     const [updateInputs, setUpdateInputs] = useState<boolean>(false)
     const [newAWSComplianceGitURL, setNewAWSComplianceGitURL] =
         useState<string>('')
