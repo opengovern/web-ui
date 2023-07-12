@@ -5,6 +5,8 @@ interface IStep {
     onSubmit: () => void
     roleName: string
     externalId: string
+    isLoading: boolean
+    error: string
 }
 
 export default function FinalStep({
@@ -12,6 +14,8 @@ export default function FinalStep({
     onSubmit,
     roleName,
     externalId,
+    isLoading,
+    error,
 }: IStep) {
     return (
         <Flex flexDirection="col" className="h-full">
@@ -31,12 +35,19 @@ export default function FinalStep({
                     <Text>External ID</Text>
                     <Text className="text-black">{externalId}</Text>
                 </Flex>
+                <Flex flexDirection="row">
+                    <Text>{error}</Text>
+                </Flex>
             </Flex>
             <Flex flexDirection="row" justifyContent="end">
                 <Button variant="secondary" onClick={onPrevious}>
                     Back
                 </Button>
-                <Button className="ml-3" onSubmit={onSubmit}>
+                <Button
+                    className="ml-3"
+                    loading={isLoading}
+                    onSubmit={onSubmit}
+                >
                     Submit
                 </Button>
             </Flex>

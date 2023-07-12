@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Flex, Text } from '@tremor/react'
 import Steps from '../../../../../../../../components/Steps'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
 import FinalStep from './FinalStep'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../../api/api'
+import { useOnboardApiV1CredentialUpdate } from '../../../../../../../../api/onboard.gen'
+import Spinner from '../../../../../../../../components/Spinner'
+import { getErrorMessage } from '../../../../../../../../types/apierror'
 
 interface ISteps {
     onClose: () => void
@@ -18,7 +21,7 @@ interface IData {
 
 export default function FromExisting({ onClose, accounts }: ISteps) {
     const [stepNum, setStepNum] = useState(1)
-    const [connectionID, setConnectionID] = useState<string>('')
+    const [credentialID, setCredentialID] = useState<string>('')
     const [data, setData] = useState<IData>({
         roleName: '',
         externalID: '',
@@ -26,12 +29,35 @@ export default function FromExisting({ onClose, accounts }: ISteps) {
 
     const close = () => {
         setStepNum(1)
-        setConnectionID('')
+        setCredentialID('')
         setData({
             roleName: '',
             externalID: '',
         })
         onClose()
+    }
+
+    const { error, isLoading, isExecuted, sendNow } =
+        useOnboardApiV1CredentialUpdate(
+            credentialID,
+            {
+                config: {
+                    assumeRoleName: data.roleName,
+                    externalId: data.externalID,
+                },
+            },
+            {},
+            false
+        )
+
+    useEffect(() => {
+        if (isExecuted && !isLoading && !error) {
+            close()
+        }
+    }, [isLoading])
+
+    if (isLoading && isExecuted) {
+        return <Spinner />
     }
 
     const showStep = (s: number) => {
@@ -40,9 +66,9 @@ export default function FromExisting({ onClose, accounts }: ISteps) {
                 return (
                     <FirstStep
                         onPrevious={close}
-                        onNext={(connID) => {
+                        onNext={(credID) => {
                             setStepNum(2)
-                            setConnectionID(connID)
+                            setCredentialID(credID)
                         }}
                         accounts={accounts}
                     />
@@ -65,8 +91,10 @@ export default function FromExisting({ onClose, accounts }: ISteps) {
                     <FinalStep
                         onPrevious={() => setStepNum(1)}
                         onSubmit={() => {
-                            // TODO
+                            sendNow()
                         }}
+                        isLoading={isLoading && isExecuted}
+                        error={getErrorMessage(error)}
                         externalId={data.externalID}
                         roleName={data.roleName}
                     />

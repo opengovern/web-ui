@@ -41,6 +41,7 @@ export default function SecondStep({ onNext, onPrevious }: IStep) {
                 </Button>
                 <Button
                     onClick={() => onNext(roleName, externalId)}
+                    disabled={roleName === '' || externalId === ''}
                     className="ml-3"
                 >
                     Next

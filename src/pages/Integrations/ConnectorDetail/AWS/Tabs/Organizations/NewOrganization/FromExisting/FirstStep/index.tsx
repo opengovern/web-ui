@@ -92,7 +92,7 @@ const columns: ColDef[] = [
 export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
     const gridRef = useRef<AgGridReact>(null)
 
-    const [selectedConnectionID, setSelectedConnectionID] = useState<string>('')
+    const [selectedCredentialID, setSelectedCredentialID] = useState<string>('')
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -104,7 +104,7 @@ export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
         onRowClicked(
             event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
         ) {
-            setSelectedConnectionID(event.data?.id || '')
+            setSelectedCredentialID(event.data?.credentialID || '')
         },
         sideBar: {
             toolPanels: [
@@ -144,8 +144,8 @@ export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
                     Cancel
                 </Button>
                 <Button
-                    onClick={() => onNext(selectedConnectionID)}
-                    disabled={selectedConnectionID === ''}
+                    onClick={() => onNext(selectedCredentialID)}
+                    disabled={selectedCredentialID === ''}
                     className="ml-3"
                 >
                     Next

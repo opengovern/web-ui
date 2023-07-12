@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { Bold, Button, Divider, Flex, Text, TextInput } from '@tremor/react'
 
 interface IStep {
-    onNext: any
-    onPrevious: any
+    error: string
+    onNext: (appId: string, tenId: string, secId: string) => void
+    onPrevious: () => void
 }
 
-export default function SecondStep({ onNext, onPrevious }: IStep) {
+export default function SecondStep({ error, onNext, onPrevious }: IStep) {
     const [appId, setAppId] = useState('')
     const [tenId, setTenId] = useState('')
     const [secId, setSecId] = useState('')
@@ -44,6 +45,9 @@ export default function SecondStep({ onNext, onPrevious }: IStep) {
                         onChange={(e) => setSecId(e.target.value)}
                     />
                 </Flex>
+                <Flex flexDirection="row">
+                    <Text className="text-red-600 pt-4">{error}</Text>
+                </Flex>
             </Flex>
             <Flex flexDirection="row" justifyContent="end">
                 <Button variant="secondary" onClick={() => onPrevious()}>
@@ -51,7 +55,7 @@ export default function SecondStep({ onNext, onPrevious }: IStep) {
                 </Button>
                 <Button
                     disabled={!(appId.length && tenId.length && secId.length)}
-                    onClick={() => onNext({ appId, tenId, secId })}
+                    onClick={() => onNext(appId, tenId, secId)}
                     className="ml-3"
                 >
                     Next

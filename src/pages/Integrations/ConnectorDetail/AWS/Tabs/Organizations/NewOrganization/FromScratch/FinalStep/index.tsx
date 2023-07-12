@@ -7,6 +7,8 @@ interface IStep {
     secretKey: string
     roleName: string
     externalId: string
+    error: string
+    isLoading: boolean
 }
 
 export default function FinalStep({
@@ -16,6 +18,8 @@ export default function FinalStep({
     secretKey,
     roleName,
     externalId,
+    error,
+    isLoading,
 }: IStep) {
     return (
         <Flex flexDirection="col" className="h-full">
@@ -45,12 +49,15 @@ export default function FinalStep({
                     <Text>External ID</Text>
                     <Text className="text-black">{externalId}</Text>
                 </Flex>
+                <Flex flexDirection="row">
+                    <Text className="text-red-600 pt-4">{error}</Text>
+                </Flex>
             </Flex>
             <Flex flexDirection="row" justifyContent="end">
                 <Button variant="secondary" onClick={onPrevious}>
                     Back
                 </Button>
-                <Button className="ml-3" onClick={onSubmit}>
+                <Button className="ml-3" loading={isLoading} onClick={onSubmit}>
                     Submit
                 </Button>
             </Flex>

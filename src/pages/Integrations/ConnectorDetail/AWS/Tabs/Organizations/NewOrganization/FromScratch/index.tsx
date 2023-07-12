@@ -5,6 +5,10 @@ import SecondStep from './SecondStep'
 import ThirdStep from './ThirdStep'
 import FinalStep from './FinalStep'
 import Steps from '../../../../../../../../components/Steps'
+import { useOnboardApiV1CredentialCreate } from '../../../../../../../../api/onboard.gen'
+import Spinner from '../../../../../../../../components/Spinner'
+import { getErrorMessage } from '../../../../../../../../types/apierror'
+import { SourceType } from '../../../../../../../../api/api'
 
 interface ISteps {
     onClose: () => void
@@ -29,6 +33,26 @@ export default function FromScratch({ onClose }: ISteps) {
         })
         onClose()
     }
+
+    const { error, isLoading, isExecuted, sendNow } =
+        useOnboardApiV1CredentialCreate(
+            {
+                source_type: SourceType.CloudAWS,
+                config: {
+                    accessKey: data.accessKey,
+                    secretKey: data.secretKey,
+                    assumeRoleName: data.roleName,
+                    externalId: data.externalId,
+                },
+            },
+            {},
+            false
+        )
+
+    if (isLoading && isExecuted) {
+        return <Spinner />
+    }
+
     const showStep = (s: number) => {
         switch (s) {
             case 1:
@@ -73,8 +97,10 @@ export default function FromScratch({ onClose }: ISteps) {
                         roleName={data.roleName}
                         externalId={data.externalId}
                         onPrevious={() => setStepNum(3)}
+                        error={getErrorMessage(error)}
+                        isLoading={isExecuted && isLoading}
                         onSubmit={() => {
-                            // TODO
+                            sendNow()
                         }}
                     />
                 )
