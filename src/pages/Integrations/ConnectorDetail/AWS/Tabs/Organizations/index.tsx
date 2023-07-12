@@ -11,10 +11,14 @@ import { useRef, useState } from 'react'
 import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import OrganizationInfo from './OrganizationInfo'
 import NewOrganization from './NewOrganization'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+} from '../../../../../../api/api'
 
 interface IOrganizations {
-    organizations: any
-    accounts: any
+    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
 const columns: ColDef[] = [
@@ -160,7 +164,7 @@ export default function Organizations({
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
-                        rowData={organizations?.credentials || []}
+                        rowData={organizations}
                     />
                 </div>
             </Card>

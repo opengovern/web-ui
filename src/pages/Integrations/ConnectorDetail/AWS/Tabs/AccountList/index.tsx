@@ -1,4 +1,4 @@
-import { Card, Flex, Title } from '@tremor/react'
+import { Button, Card, Flex, Title } from '@tremor/react'
 import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import {
@@ -7,11 +7,18 @@ import {
     ICellRendererParams,
     RowClickedEvent,
 } from 'ag-grid-community'
+import { PlusIcon } from '@heroicons/react/24/solid'
 import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import AccountInfo from './AccountInfo'
+import NewAWSAccount from './NewAWSAccount'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+} from '../../../../../../api/api'
 
 interface IAccountList {
-    accounts: any
+    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
 const columns: ColDef[] = [
@@ -87,10 +94,11 @@ const columns: ColDef[] = [
     },
 ]
 
-export default function AccountList({ accounts }: IAccountList) {
+export default function AccountList({ accounts, organizations }: IAccountList) {
     const gridRef = useRef<AgGridReact>(null)
     const [accData, setAccData] = useState(null)
     const [openInfo, setOpenInfo] = useState(false)
+    const [open, setOpen] = useState(false)
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -126,13 +134,18 @@ export default function AccountList({ accounts }: IAccountList) {
     return (
         <>
             <Card>
-                <Title>AWS Accounts</Title>
+                <Flex flexDirection="row">
+                    <Title>AWS Accounts</Title>
+                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
+                        Create New AWS Account
+                    </Button>
+                </Flex>
                 <div className="ag-theme-alpine mt-6">
                     <AgGridReact
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
-                        rowData={accounts?.connections}
+                        rowData={accounts}
                     />
                 </div>
             </Card>
@@ -140,6 +153,12 @@ export default function AccountList({ accounts }: IAccountList) {
                 data={accData}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
+            />
+            <NewAWSAccount
+                accounts={accounts}
+                organizations={organizations}
+                open={open}
+                onClose={() => setOpen(false)}
             />
         </>
     )

@@ -43,7 +43,9 @@ export default function ConnectorCard({
         >
             <Flex flexDirection="row" className="mb-3">
                 {getConnectorIcon(connector)}
-                <Badge color={getBadgeColor(status)}>{status}</Badge>
+                <Badge color={getBadgeColor(status)}>
+                    {status === 'enabled' ? 'Active' : 'Deactive'}
+                </Badge>
             </Flex>
             <Flex flexDirection="row" className="mb-1">
                 <Title>{title}</Title>

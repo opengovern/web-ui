@@ -14,7 +14,7 @@ import DrawerPanel from '../../../../../../../components/DrawerPanel'
 interface IPriInfo {
     data: any
     open: boolean
-    onClose: any
+    onClose: () => void
 }
 
 export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
