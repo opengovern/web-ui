@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Badge, Button, Flex, List, ListItem, Text } from '@tremor/react'
+import { TrashIcon } from '@heroicons/react/24/outline'
 import {
     useAuthApiV1UserRoleBindingDelete,
     useAuthApiV1UserRoleBindingUpdate,
@@ -198,15 +199,10 @@ export default function MemberDetails({
                 <Flex justifyContent="end" className="truncate space-x-4">
                     <Button
                         loading={loading}
-                        onClick={close}
-                        variant="secondary"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        loading={loading}
                         onClick={() => setDeleteConfirmation(true)}
+                        variant="secondary"
                         color="rose"
+                        icon={TrashIcon}
                     >
                         Delete
                     </Button>
