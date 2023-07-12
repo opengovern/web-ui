@@ -4,15 +4,23 @@ import { useComplianceApiV1MetadataTagInsightList } from '../../../api/complianc
 
 interface IInsightCategories {
     onChange: any
+    selected: any
 }
 
-export default function InsightCategories({ onChange }: IInsightCategories) {
+export default function InsightCategories({
+    onChange,
+    selected,
+}: IInsightCategories) {
     const { response: categories } = useComplianceApiV1MetadataTagInsightList()
     const [selectedCategory, setSelectedCategory] = useState<string>('All')
 
     useEffect(() => {
         onChange(selectedCategory)
     }, [selectedCategory])
+
+    useEffect(() => {
+        setSelectedCategory('All')
+    }, [selected])
 
     const aaa: any = categories?.category || []
     const allCategories = ['All', ...aaa]

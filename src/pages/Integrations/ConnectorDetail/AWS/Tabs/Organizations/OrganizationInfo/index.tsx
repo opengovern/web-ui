@@ -54,7 +54,7 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                 <Flex>
                     <Text>Onboard date</Text>
                     <Text className="text-black">
-                        {dayjs(data?.onboardDate).format('YYYY-MM-DD')}
+                        {dayjs(data?.onboardDate).format('MMM DD, YYYY')}
                     </Text>
                 </Flex>
                 <Divider />
@@ -75,7 +75,7 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                     <Text>Last health check</Text>
                     <Text className="text-black">
                         {dayjs(credential?.lastHealthCheckTime).format(
-                            'YYYY-MM-DD'
+                            'MMM DD, YYYY'
                         )}
                     </Text>
                 </Flex>

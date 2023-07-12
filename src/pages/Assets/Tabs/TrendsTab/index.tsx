@@ -186,25 +186,21 @@ export default function TrendsTab({ categories }: IProps) {
     }
 
     return (
-        <div className="mt-5">
-            <GrowthTrend categories={categories} />
-            <Grid numItemsMd={2} className="mt-3 gap-3 flex justify-between">
-                <div className="w-full">
-                    <CardWithList
-                        title="Top by Consumption"
-                        tabs={['Accounts', 'Services', 'Regions']}
-                        data={consumptionData()}
-                    />
-                </div>
-                <div className="w-full">
-                    <CardWithList
-                        title="Top by Growth"
-                        tabs={['Accounts', 'Services', 'Regions']}
-                        data={growthData()}
-                        isPercentage
-                    />
-                </div>
+        <>
+            <Grid numItems={1} numItemsMd={2} className="mb-3 gap-3">
+                <CardWithList
+                    title="Top by Consumption"
+                    tabs={['Accounts', 'Services', 'Regions']}
+                    data={consumptionData()}
+                />
+                <CardWithList
+                    title="Top by Growth"
+                    tabs={['Accounts', 'Services', 'Regions']}
+                    data={growthData()}
+                    isPercentage
+                />
             </Grid>
-        </div>
+            <GrowthTrend categories={categories} />
+        </>
     )
 }

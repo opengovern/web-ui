@@ -7,6 +7,11 @@ export const timeAtom = atom<DateRangePickerValue>({
     to: new Date(),
 })
 
+export const spendTimeAtom = atom<DateRangePickerValue>({
+    from: dayjs().subtract(1, 'month').toDate(),
+    to: new Date(),
+})
+
 interface IFilter {
     provider: '' | 'AWS' | 'Azure'
     connections: string[]

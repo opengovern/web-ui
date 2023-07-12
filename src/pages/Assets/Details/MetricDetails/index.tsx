@@ -1,6 +1,5 @@
 import { Card, Flex, Title } from '@tremor/react'
-
-import React, { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useAtom } from 'jotai'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
@@ -31,13 +30,13 @@ const columns: ColDef[] = [
         cellStyle: { padding: 0 },
         cellRenderer: (params: ICellRendererParams) => {
             return (
-                <div className="flex justify-center items-center w-full h-full">
+                <Flex justifyContent="center" className="w-full h-full">
                     {params.data?.connector === 'Azure' ? (
                         <AzureIcon />
                     ) : (
                         <AWSIcon />
                     )}
-                </div>
+                </Flex>
             )
         },
         // checkboxSelection: true,

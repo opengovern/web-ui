@@ -6,10 +6,10 @@ import {
     filterAtom,
     selectedResourceCategoryAtom,
     timeAtom,
-} from '../../../../../store'
-import { useInventoryApiV2ResourcesMetricList } from '../../../../../api/inventory.gen'
-import { numericDisplay } from '../../../../../utilities/numericDisplay'
-import MetricsList, { IMetric } from '../../../../../components/MetricsList'
+} from '../../../../store'
+import { useInventoryApiV2ResourcesMetricList } from '../../../../api/inventory.gen'
+import { numericDisplay } from '../../../../utilities/numericDisplay'
+import MetricsList, { IMetric } from '../../../../components/MetricsList'
 
 interface IProps {
     categories: {

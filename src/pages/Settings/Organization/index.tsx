@@ -1,20 +1,9 @@
-import React from 'react'
 import { Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
-import { useAuth0 } from '@auth0/auth0-react'
 import { useWorkspaceApiV1WorkspaceCurrentList } from '../../../api/workspace.gen'
 import Spinner from '../../../components/Spinner'
 
-const SettingsOrganization: React.FC<any> = () => {
-    const { user } = useAuth0()
+export default function SettingsOrganization() {
     const { response, isLoading } = useWorkspaceApiV1WorkspaceCurrentList()
-
-    if (isLoading) {
-        return (
-            <Flex justifyContent="center" className="mt-56">
-                <Spinner />
-            </Flex>
-        )
-    }
 
     let link = response?.organization?.url || ''
     if (!link.startsWith('http')) {
@@ -65,14 +54,17 @@ const SettingsOrganization: React.FC<any> = () => {
             ),
         },
     ]
-    return (
-        <Card className="flex-1 flex-grow">
+    return isLoading ? (
+        <Flex justifyContent="center" className="mt-56">
+            <Spinner />
+        </Flex>
+    ) : (
+        <Card>
             <Title>Organization Info</Title>
-
             <List className="mt-4">
                 {items.map((item) => {
                     return (
-                        <ListItem key="lb">
+                        <ListItem key={item.key}>
                             <Flex
                                 alignItems="start"
                                 flexDirection="row"
@@ -92,5 +84,3 @@ const SettingsOrganization: React.FC<any> = () => {
         </Card>
     )
 }
-
-export default SettingsOrganization

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Col, Flex, Grid, Title } from '@tremor/react'
+import { Button, Flex, Grid, Title } from '@tremor/react'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
@@ -42,12 +42,10 @@ export default function Workspaces() {
                         <Grid numItems={1} className="gap-3">
                             {workspaces?.map((ws) => {
                                 return (
-                                    <Col>
-                                        <WorkspaceCard
-                                            workspace={ws}
-                                            refreshList={refreshList}
-                                        />
-                                    </Col>
+                                    <WorkspaceCard
+                                        workspace={ws}
+                                        refreshList={refreshList}
+                                    />
                                 )
                             })}
                         </Grid>

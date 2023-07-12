@@ -1,7 +1,5 @@
-import React, { useMemo, useState } from 'react'
-import { useAtom } from 'jotai'
+import React, { useMemo } from 'react'
 import {
-    Button,
     DateRangePicker,
     Flex,
     Metric,
@@ -11,16 +9,18 @@ import {
     TabPanel,
     TabPanels,
 } from '@tremor/react'
+import { useAtom } from 'jotai'
 import LoggedInLayout from '../../components/LoggedInLayout'
-import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
-import SummaryTab from './Tabs/SummaryTab'
 import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
+import { spendTimeAtom } from '../../store'
+import SummaryMetrics from './SummaryMetrics'
+import CostMetrics from './Tabs/CostMetrics'
 
-const Assets: React.FC<any> = () => {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+export default function Spend() {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
 
@@ -55,15 +55,16 @@ const Assets: React.FC<any> = () => {
                     <ConnectionList />
                 </Flex>
             </Flex>
+            <SummaryMetrics pageSize={1000} />
             <TabGroup className="mt-3">
                 <TabList>
                     <Tab>Summary</Tab>
                     <Tab>Trends</Tab>
-                    <Tab>Composition</Tab>
+                    <Tab>Breakdown</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <SummaryTab
+                        <CostMetrics
                             categories={categoryOptions}
                             pageSize={1000}
                         />
@@ -79,5 +80,3 @@ const Assets: React.FC<any> = () => {
         </LoggedInLayout>
     )
 }
-
-export default Assets

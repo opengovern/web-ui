@@ -1,15 +1,15 @@
 import {
-    Card,
-    Title,
+    BadgeDelta,
     Bold,
-    Text,
-    List,
-    ListItem,
+    Card,
+    Col,
     Flex,
     Grid,
+    List,
+    ListItem,
     Metric,
-    BadgeDelta,
-    Col,
+    Text,
+    Title,
 } from '@tremor/react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -48,60 +48,50 @@ export default function Summary() {
             <Grid numItems={3} className="w-full gap-3">
                 <Col numColSpan={1}>
                     <Flex flexDirection="col" className="gap-y-3 h-full">
-                        <Card className="flex flex-col gap-y-2  justify-center h-1/2">
-                            {topAccountLoading ? (
-                                <Flex
-                                    flexDirection="col"
-                                    alignItems="start"
-                                    justifyContent="between"
-                                >
-                                    <Text className="truncate pt-6 pb-12">
-                                        Top Accounts
-                                    </Text>
-                                    <Spinner />
-                                </Flex>
-                            ) : (
-                                <>
-                                    <Flex alignItems="start">
-                                        <Text className="truncate">
-                                            Top Accounts
-                                        </Text>
-                                        <BadgeDelta
-                                            deltaType={badgeTypeByDelta(
-                                                topAccounts?.oldConnectionCount,
-                                                topAccounts?.connectionCount
-                                            )}
-                                        >
-                                            {percentageByChange(
-                                                topAccounts?.oldConnectionCount,
-                                                topAccounts?.connectionCount
-                                            )}{' '}
-                                            %
-                                        </BadgeDelta>
-                                    </Flex>
-                                    <Flex
-                                        justifyContent="start"
-                                        alignItems="baseline"
-                                        className="truncate space-x-3"
+                        <Card className="gap-y-2 h-1/2">
+                            <Flex>
+                                <Text className="font-medium">
+                                    Total Accounts
+                                </Text>
+                                {!topAccountLoading && (
+                                    <BadgeDelta
+                                        deltaType={badgeTypeByDelta(
+                                            topAccounts?.oldConnectionCount,
+                                            topAccounts?.connectionCount
+                                        )}
                                     >
-                                        <Metric>
-                                            {topAccounts?.connectionCount}
-                                        </Metric>
-                                        <Text className="truncate">
-                                            from{' '}
-                                            {topAccounts?.oldConnectionCount}
-                                        </Text>
-                                    </Flex>
-                                </>
+                                        {percentageByChange(
+                                            topAccounts?.oldConnectionCount,
+                                            topAccounts?.connectionCount
+                                        )}
+                                        %
+                                    </BadgeDelta>
+                                )}
+                            </Flex>
+                            {topAccountLoading ? (
+                                <Spinner className="my-6" />
+                            ) : (
+                                <Flex
+                                    justifyContent="start"
+                                    alignItems="baseline"
+                                    className="truncate space-x-1"
+                                >
+                                    <Metric>
+                                        {topAccounts?.connectionCount}
+                                    </Metric>
+                                    <Text className="truncate">
+                                        from {topAccounts?.oldConnectionCount}
+                                    </Text>
+                                </Flex>
                             )}
                         </Card>
-                        <Card className="flex flex-col gap-y-2  justify-center h-1/2">
+                        <Card className="gap-y-2 h-1/2">
                             <Text className="font-medium">
                                 Total Unhealthy Accounts
                             </Text>
-                            <Metric>
+                            <Metric className="mt-1">
                                 {metricsLoading ? (
-                                    <Spinner />
+                                    <Spinner className="my-6" />
                                 ) : (
                                     numericDisplay(
                                         topMetrics?.unhealthyConnections

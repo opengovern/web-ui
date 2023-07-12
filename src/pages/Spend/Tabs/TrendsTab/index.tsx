@@ -1,14 +1,11 @@
-import { Card, Grid } from '@tremor/react'
+import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import GrowthTrend from './GrowthTrend'
 import TopAccountTrend from './TopAccountTrend'
 import TopServiceTrend from './TopServiceTrend'
-import {
-    useInventoryApiV2CostMetricList,
-    useInventoryApiV2CostTrendList,
-} from '../../../../api/inventory.gen'
-import { filterAtom, timeAtom } from '../../../../store'
+import { useInventoryApiV2CostMetricList } from '../../../../api/inventory.gen'
+import { filterAtom, spendTimeAtom } from '../../../../store'
 import CardWithList from '../../../../components/Cards/CardWithList'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 
@@ -19,7 +16,7 @@ type IProps = {
     }[]
 }
 export default function TrendsTab({ categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const { response: topAccounts, isLoading: isLoadingTopAccount } =
@@ -139,54 +136,29 @@ export default function TrendsTab({ categories }: IProps) {
     }
 
     return (
-        <div className="mt-5">
-            <div className="mb-5">
-                <GrowthTrend
-                    categories={[
-                        {
-                            label: 'AWS',
-                            value: 'AWS',
-                        },
-                        {
-                            label: 'Azure',
-                            value: 'Azure',
-                        },
-                        {
-                            label: 'All',
-                            value: '',
-                        },
-                    ]}
+        <>
+            <Grid numItems={1} numItemsMd={2} className="gap-3 mb-3">
+                <CardWithList
+                    title="Top by Consumption"
+                    tabs={['Accounts', 'Services']}
+                    data={consumptionData()}
+                    loading={isLoadingTopAccount || isLoadingTopServices}
+                    valueIsPrice
                 />
-            </div>
-            <div className="mb-5">
-                <TopAccountTrend />
-            </div>
-            <div className="mb-5">
-                <TopServiceTrend categories={categories} />
-            </div>
-            <Grid numItemsMd={2} className="mt-10 gap-6 flex justify-between">
-                <div className="w-full">
-                    <CardWithList
-                        title="Top by Consumption"
-                        tabs={['Accounts', 'Services']}
-                        data={consumptionData()}
-                        loading={isLoadingTopAccount || isLoadingTopServices}
-                        valueIsPrice
-                    />
-                </div>
-                <div className="w-full">
-                    <CardWithList
-                        title="Top by Growth"
-                        tabs={['Accounts', 'Services']}
-                        data={growthData()}
-                        loading={
-                            isLoadingTopGrowthAccounts ||
-                            isLoadingTopGrowingServices
-                        }
-                        valueIsPrice
-                    />
-                </div>
+                <CardWithList
+                    title="Top by Growth"
+                    tabs={['Accounts', 'Services']}
+                    data={growthData()}
+                    loading={
+                        isLoadingTopGrowthAccounts ||
+                        isLoadingTopGrowingServices
+                    }
+                    valueIsPrice
+                />
             </Grid>
-        </div>
+            <GrowthTrend />
+            <TopAccountTrend />
+            <TopServiceTrend categories={categories} />
+        </>
     )
 }

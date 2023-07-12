@@ -1,18 +1,28 @@
 import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
-import { useInventoryApiV2CostMetricList } from '../../../../../api/inventory.gen'
-import SummaryCard from '../../../../../components/Cards/SummaryCard'
-import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
-import { filterAtom, timeAtom } from '../../../../../store'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import { useInventoryApiV2CostMetricList } from '../../../api/inventory.gen'
+import SummaryCard from '../../../components/Cards/SummaryCard'
+import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import { filterAtom, spendTimeAtom } from '../../../store'
 
 interface IProps {
     pageSize: number
 }
 
+const getConnections = (con: any) => {
+    if (con.provider.length) {
+        return con.provider
+    }
+    if (con.connections.length) {
+        return `${con.connections.length} accounts`
+    }
+    return 'all accounts'
+}
+
 export default function SummaryMetrics({ pageSize }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const query = {
@@ -30,6 +40,7 @@ export default function SummaryMetrics({ pageSize }: IProps) {
         }),
         ...(pageSize && { pageSize }),
     }
+    console.log(selectedConnections)
     const { response: accounts, isLoading: accountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
             connector: [selectedConnections.provider],
@@ -45,7 +56,7 @@ export default function SummaryMetrics({ pageSize }: IProps) {
     return (
         <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6 mb-10">
             <SummaryCard
-                title="Accounts Total Cost"
+                title={`Spend across ${getConnections(selectedConnections)}`}
                 metric={exactPriceDisplay(accounts?.totalCost)}
                 loading={accountsLoading}
             />

@@ -56,7 +56,7 @@ const chartData = (inputData: any) => {
                 count: inputData[i].value,
                 date: dayjs
                     .unix(inputData[i].timestamp)
-                    .format('MMM DD - HH:mm'),
+                    .format('MMM DD, YYYY - HH:mm'),
             })
         }
     }
@@ -171,7 +171,7 @@ const generateBadge = (
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title={`Data is availabe after ${dayjs(
+                title={`Data is available after ${dayjs(
                     met.firstOldResultDate
                 ).format('MMM DD, YYYY')}`}
                 color="rose"
@@ -405,7 +405,7 @@ export default function InsightDetail() {
                                 placeholder={
                                     detailsDate === ''
                                         ? 'Latest'
-                                        : end().format('YYYY-MM-DD')
+                                        : end().format('MMM DD, YYYY')
                                 }
                             >
                                 <>{trendDates()}</>

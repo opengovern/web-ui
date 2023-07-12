@@ -1,13 +1,11 @@
-import React from 'react'
 import { Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
 import { useAuth0 } from '@auth0/auth0-react'
 
-const SettingsProfile: React.FC<any> = () => {
+export default function SettingsProfile() {
     const { user } = useAuth0()
     return (
-        <Card className="flex-1 flex-grow">
+        <Card>
             <Title>Profile</Title>
-
             {user?.picture && (
                 <img
                     className="my-3 rounded-lg"
@@ -15,9 +13,8 @@ const SettingsProfile: React.FC<any> = () => {
                     alt={user.name}
                 />
             )}
-
             <List className="mt-4">
-                <ListItem key="lb">
+                <ListItem>
                     <Flex>
                         <Text className="w-1/2 text-md text-gray-900 font-bold my-5">
                             First Name
@@ -25,7 +22,7 @@ const SettingsProfile: React.FC<any> = () => {
                         <Text className="w-1/2 text-md">{user?.name}</Text>
                     </Flex>
                 </ListItem>
-                <ListItem key="lb">
+                <ListItem>
                     <Flex>
                         <Text className="w-1/2 text-md text-gray-900 font-bold my-5">
                             Last Name
@@ -35,15 +32,15 @@ const SettingsProfile: React.FC<any> = () => {
                         </Text>
                     </Flex>
                 </ListItem>
-                <ListItem key="lb">
-                    <Flex justifyContent="between">
+                <ListItem>
+                    <Flex>
                         <Text className="w-1/2 text-md text-gray-900 font-bold my-5">
                             Email
                         </Text>
                         <Text className="w-1/2 text-md">{user?.email}</Text>
                     </Flex>
                 </ListItem>
-                <ListItem key="lb">
+                <ListItem>
                     <Flex>
                         <Text className="w-1/2 text-md text-gray-900 font-bold my-5">
                             Member Since
@@ -57,7 +54,7 @@ const SettingsProfile: React.FC<any> = () => {
                         </Text>
                     </Flex>
                 </ListItem>
-                <ListItem key="lb">
+                <ListItem>
                     <Flex>
                         <Text className="w-1/2 text-md text-gray-900 font-bold my-5">
                             Last Login
@@ -75,5 +72,3 @@ const SettingsProfile: React.FC<any> = () => {
         </Card>
     )
 }
-
-export default SettingsProfile

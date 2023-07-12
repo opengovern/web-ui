@@ -33,7 +33,6 @@ export default function AccountsDetails() {
                 alignItems="center"
             >
                 <Breadcrumbs pages={breadcrumbsPages} />
-
                 <Flex flexDirection="row" justifyContent="end">
                     <DateRangePicker
                         className="max-w-md"

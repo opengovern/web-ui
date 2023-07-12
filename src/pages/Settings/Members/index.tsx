@@ -1,56 +1,53 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useAuthApiV1WorkspaceRoleBindingsList } from '../../../api/auth.gen'
 import Spinner from '../../../components/Spinner'
 import DrawerPanel from '../../../components/DrawerPanel'
-import MemberDetails from './member_details'
-import MemberInvite from './member_invite'
+import MemberDetails from './MemberDetails'
+import MemberInvite from './MemberInvite'
 import Notification from '../../../components/Notification'
 
-const SettingsMembers: React.FC<any> = () => {
+const fixRole = (role: string) => {
+    switch (role) {
+        case 'admin':
+            return 'Admin'
+        case 'editor':
+            return 'Editor'
+        case 'viewer':
+            return 'Viewer'
+        default:
+            return role
+    }
+}
+
+export default function SettingsMembers() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const [drawerParam, setDrawerParam] = useState<string>('')
     const [notification, setNotification] = useState<string>('')
+
     const {
         response,
         isLoading,
         sendNow: refreshRoleBindings,
     } = useAuthApiV1WorkspaceRoleBindingsList()
-    if (isLoading) {
-        return (
-            <Flex justifyContent="center" className="mt-56">
-                <Spinner />
-            </Flex>
-        )
-    }
 
     const userDetail = (userId: string) => {
         setNotification('')
         setDrawerParam(userId)
         setDrawerOpen(true)
     }
-
     const openInviteMember = () => {
         setNotification('')
         setDrawerParam('openInviteMember')
         setDrawerOpen(true)
     }
 
-    const fixRole = (role: string) => {
-        switch (role) {
-            case 'admin':
-                return 'Admin'
-            case 'editor':
-                return 'Editor'
-            case 'viewer':
-                return 'Viewer'
-            default:
-                return role
-        }
-    }
-
-    return (
+    return isLoading ? (
+        <Flex justifyContent="center" className="mt-56">
+            <Spinner />
+        </Flex>
+    ) : (
         <>
             {notification && <Notification text={notification} />}
             <DrawerPanel
@@ -89,7 +86,7 @@ const SettingsMembers: React.FC<any> = () => {
                 )}
             </DrawerPanel>
             <Card key="summary">
-                <div className="flex">
+                <Flex>
                     <Title className="flex-auto">All members</Title>
                     <Button
                         className="float-right"
@@ -99,7 +96,7 @@ const SettingsMembers: React.FC<any> = () => {
                     >
                         Invite member
                     </Button>
-                </div>
+                </Flex>
                 <List className="mt-4">
                     {response?.map((item) => (
                         <ListItem
@@ -133,5 +130,3 @@ const SettingsMembers: React.FC<any> = () => {
         </>
     )
 }
-
-export default SettingsMembers

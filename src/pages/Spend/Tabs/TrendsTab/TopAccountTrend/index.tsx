@@ -1,4 +1,4 @@
-import { Card, Divider, Flex, Text, Title } from '@tremor/react'
+import { Card, Title } from '@tremor/react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
@@ -73,7 +73,7 @@ export default function TopAccountsTrend() {
             })
             .map(([date, valueArray]) => {
                 const trendMap = new Map<string, string | number>()
-                trendMap.set('date', dayjs.unix(date).format('DD MMM'))
+                trendMap.set('date', dayjs.unix(date).format('MMM DD, YYYY'))
                 valueArray.forEach((item) => {
                     const name =
                         topAccounts?.connections?.find(
@@ -87,19 +87,13 @@ export default function TopAccountsTrend() {
     }
 
     return (
-        <Card>
-            <Flex justifyContent="between" alignItems="start">
-                <div className="flex justify-normal gap-x-2 items-center">
-                    <Title className="min-w-[7vw]">Top Accounts Trend </Title>
-                </div>
-            </Flex>
+        <Card className="mb-3">
+            <Title>Top Accounts Trend</Title>
             {accountsTrendsLoading ? (
-                <div className="flex items-center justify-center">
-                    <Spinner />
-                </div>
+                <Spinner className="h-80" />
             ) : (
                 <Chart
-                    className="mt-4 h-80"
+                    className="mt-3"
                     index="date"
                     type="area"
                     yAxisWidth={120}

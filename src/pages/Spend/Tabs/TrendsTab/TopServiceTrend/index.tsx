@@ -109,22 +109,21 @@ export default function TopServicesTrend({ categories }: IProps) {
 
     return (
         <Card>
-            <Title className="min-w-[7vw]">Top Services Trend</Title>
-            {costTrendLoading ? (
+            <Title>Top Services Trend</Title>
+            {!costTrendLoading ? (
                 <Chart
-                    className="mt-4 h-80"
+                    className="mt-3"
                     index="date"
                     type="area"
                     yAxisWidth={120}
+                    showLegend={false}
                     categories={serviceNames}
                     data={trendData}
                     showAnimation
                     valueFormatter={exactPriceDisplay}
                 />
             ) : (
-                <div className="flex items-center justify-center">
-                    <Spinner />
-                </div>
+                <Spinner className="h-80" />
             )}
         </Card>
     )
