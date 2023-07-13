@@ -28,8 +28,8 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
     GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
@@ -46,15 +46,12 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
     GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
     GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
@@ -2382,7 +2379,7 @@ interface IuseScheduleApiV1StacksInsightDetailState {
 export const useScheduleApiV1StacksInsightDetail = (
     stackId: string,
     query: {
-        insightId: string
+        insightId: number
 
         startTime?: number
 
@@ -2466,15 +2463,22 @@ export const useScheduleApiV1StacksInsightDetail = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseScheduleApiV1StacksBenchmarkTriggerCreateState {
+interface IuseScheduleApiV1StacksInsightsDetailState {
     isLoading: boolean
     isExecuted: boolean
-    response?: DescribeComplianceReportJob[]
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[]
     error?: any
 }
 
-export const useScheduleApiV1StacksBenchmarkTriggerCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
+export const useScheduleApiV1StacksInsightsDetail = (
+    stackId: string,
+    query?: {
+        insightIds?: number[]
+
+        startTime?: number
+
+        endTime?: number
+    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -2490,12 +2494,12 @@ export const useScheduleApiV1StacksBenchmarkTriggerCreate = (
     }
 
     const [state, setState] =
-        useState<IuseScheduleApiV1StacksBenchmarkTriggerCreateState>({
+        useState<IuseScheduleApiV1StacksInsightsDetailState>({
             isLoading: true,
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([stackId, query, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -2506,7 +2510,7 @@ export const useScheduleApiV1StacksBenchmarkTriggerCreate = (
         })
         try {
             api.schedule
-                .apiV1StacksBenchmarkTriggerCreate(request, params)
+                .apiV1StacksInsightsDetail(stackId, query, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2533,8 +2537,8 @@ export const useScheduleApiV1StacksBenchmarkTriggerCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([stackId, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([stackId, query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2562,13 +2566,11 @@ interface IuseScheduleApiV1StacksCreateCreateState {
 
 export const useScheduleApiV1StacksCreateCreate = (
     data: {
-        terrafromFile?: File
+        terraformFile: File
 
         tag?: string
 
-        resources?: string[]
-
-        config?: string
+        config: string
     },
     params: RequestParams = {},
     autoExecute = true
@@ -2630,180 +2632,6 @@ export const useScheduleApiV1StacksCreateCreate = (
 
     if (JSON.stringify([data, params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([data, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseScheduleApiV1StacksDescriberTriggerCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useScheduleApiV1StacksDescriberTriggerCreate = (
-    req: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseScheduleApiV1StacksDescriberTriggerCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([req, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.schedule
-                .apiV1StacksDescriberTriggerCreate(req, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([req, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([req, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseScheduleApiV1StacksInsightTriggerCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob[]
-    error?: any
-}
-
-export const useScheduleApiV1StacksInsightTriggerCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseScheduleApiV1StacksInsightTriggerCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.schedule
-                .apiV1StacksInsightTriggerCreate(request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
