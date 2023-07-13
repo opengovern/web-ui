@@ -106,7 +106,7 @@ export default function Spend() {
             >
                 <Metric>Spend</Metric>
                 <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker />
+                    <DateRangePicker isSpend />
                     <ConnectionList />
                 </Flex>
             </Flex>

@@ -309,7 +309,7 @@ export default function CostMetricsDetails() {
             >
                 <Breadcrumbs pages={breadcrumbsPages} />
                 <Flex flexDirection="row" justifyContent="end" alignItems="end">
-                    <DateRangePicker />
+                    <DateRangePicker isSpend />
                     <ConnectionList />
                 </Flex>
             </Flex>
