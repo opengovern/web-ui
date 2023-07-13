@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import {
     DateRangePicker,
     Flex,
@@ -10,19 +10,67 @@ import {
     TabPanels,
 } from '@tremor/react'
 import { useAtom } from 'jotai'
+import dayjs from 'dayjs'
 import LoggedInLayout from '../../components/LoggedInLayout'
-import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
+import {
+    useInventoryApiV2CostMetricList,
+    useInventoryApiV2ResourcesTagList,
+} from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
 import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
-import { spendTimeAtom } from '../../store'
+import {
+    filterAtom,
+    selectedResourceCategoryAtom,
+    spendTimeAtom,
+} from '../../store'
 import SummaryMetrics from './SummaryMetrics'
 import CostMetrics from './Tabs/CostMetrics'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 
 export default function Spend() {
+    const [index, setIndex] = useState<number>(0)
     const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
+    const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
+        selectedResourceCategoryAtom
+    )
+    const activeCategory =
+        selectedResourceCategory === 'All Categories'
+            ? ''
+            : selectedResourceCategory
+    const query = {
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(activeCategory && { tag: [`category=${activeCategory}`] }),
+        ...(activeTimeRange.from && {
+            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        }),
+        ...(activeTimeRange.to && {
+            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        }),
+        pageSize: 5000,
+        pageNumber: 1,
+    }
+    const { response: serviceCostResponse, isLoading: serviceCostLoading } =
+        useInventoryApiV2CostMetricList(query)
+
+    const { response: accountCostResponse, isLoading: accountCostLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            connector: [selectedConnections.provider],
+            connectionId: selectedConnections.connections,
+            startTime: dayjs(activeTimeRange.from).unix(),
+            endTime: dayjs(activeTimeRange.to).unix(),
+            pageSize: 5000,
+            pageNumber: 1,
+            sortBy: 'cost',
+        })
 
     const categoryOptions = useMemo(() => {
         if (!inventoryCategories)
@@ -34,6 +82,18 @@ export default function Spend() {
             }))
         )
     }, [inventoryCategories])
+
+    const [trendsTab, setTrendsTab] = useState<React.ReactNode>()
+    const [compositionTab, setCompositionTab] = useState<React.ReactNode>()
+
+    useEffect(() => {
+        if (index === 1 && trendsTab === undefined) {
+            setTrendsTab(<TrendsTab categories={categoryOptions} />)
+        }
+        if (index === 2 && compositionTab === undefined) {
+            setCompositionTab(<CompositionTab top={5} />)
+        }
+    }, [index])
 
     return (
         <LoggedInLayout currentPage="spend">
@@ -55,8 +115,13 @@ export default function Spend() {
                     <ConnectionList />
                 </Flex>
             </Flex>
-            <SummaryMetrics pageSize={1000} />
-            <TabGroup className="mt-3">
+            <SummaryMetrics
+                accountCostResponse={accountCostResponse}
+                serviceCostResponse={serviceCostResponse}
+                accountCostLoading={accountCostLoading}
+                serviceCostLoading={serviceCostLoading}
+            />
+            <TabGroup className="mt-3" index={index} onIndexChange={setIndex}>
                 <TabList>
                     <Tab>Summary</Tab>
                     <Tab>Trends</Tab>
@@ -66,15 +131,14 @@ export default function Spend() {
                     <TabPanel>
                         <CostMetrics
                             categories={categoryOptions}
-                            pageSize={1000}
+                            accountCostResponse={accountCostResponse}
+                            serviceCostResponse={serviceCostResponse}
+                            accountCostLoading={accountCostLoading}
+                            serviceCostLoading={serviceCostLoading}
                         />
                     </TabPanel>
-                    <TabPanel>
-                        <TrendsTab categories={categoryOptions} />
-                    </TabPanel>
-                    <TabPanel>
-                        <CompositionTab top={5} />
-                    </TabPanel>
+                    <TabPanel>{trendsTab}</TabPanel>
+                    <TabPanel>{compositionTab}</TabPanel>
                 </TabPanels>
             </TabGroup>
         </LoggedInLayout>
