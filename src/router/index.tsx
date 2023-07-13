@@ -16,6 +16,7 @@ import Integrations from '../pages/Integrations'
 import CostMetricsDetails from '../pages/Spend/Details/CostMetricsDetails'
 import ConnectorDetail from '../pages/Integrations/ConnectorDetail'
 import MetricDetails from '../pages/Assets/Details/MetricDetails'
+import Compliance from '../pages/Compliance'
 
 const routes = [
     {
@@ -115,6 +116,11 @@ const authRoutes = [
         key: 'settings page',
         path: '/:ws/settings/:settingsPage',
         component: Settings,
+    },
+    {
+        key: 'compliance',
+        path: '/:ws/compliance',
+        component: Compliance,
     },
 ]
 
