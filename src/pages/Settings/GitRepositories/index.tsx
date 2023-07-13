@@ -92,6 +92,19 @@ export default function SettingsGitRepositories() {
         sendNow: syncQueries,
     } = useComplianceApiV1QueriesSyncList({}, false)
 
+    if (
+        loadingAwsComplianceGitURL ||
+        loadingAzureComplianceGitURL ||
+        loadingInsightGitURL ||
+        loadingQueriesGitURL
+    ) {
+        return (
+            <Flex justifyContent="center" className="mt-56">
+                <Spinner />
+            </Flex>
+        )
+    }
+
     if (!updateInputs) {
         setUpdateInputs(true)
         setNewAWSComplianceGitURL(awsComplianceGitURL?.value || '')
@@ -123,16 +136,17 @@ export default function SettingsGitRepositories() {
         )
     }
 
-    return loadingAwsComplianceGitURL ||
-        loadingAzureComplianceGitURL ||
-        loadingInsightGitURL ||
-        loadingQueriesGitURL ? (
-        <Flex justifyContent="center" className="mt-56">
-            <Spinner />
-        </Flex>
-    ) : (
+    return (
         <Card key="summary" className="top-6">
             <Title>Git Repositories</Title>
+            <Flex justifyContent="start" className="truncate space-x-4">
+                <div className="truncate">
+                    <Text className="truncate text-sm">
+                        At the present time, for git repositories to function,
+                        they need to be public and accessible over https://.
+                    </Text>
+                </div>
+            </Flex>
             <List className="mt-4">
                 <ListItem key="aws_compliance_git_url" className="my-1">
                     <Flex justifyContent="start" className="truncate space-x-4">
@@ -147,6 +161,12 @@ export default function SettingsGitRepositories() {
                         value={newAWSComplianceGitURL}
                         onChange={(e) =>
                             setNewAWSComplianceGitURL(e.target.value)
+                        }
+                        icon={
+                            executeSetAwsComplianceGitURL &&
+                            loadingSetAwsComplianceGitURL
+                                ? Spinner
+                                : undefined
                         }
                         disabled={
                             executeSetAwsComplianceGitURL &&
@@ -168,6 +188,12 @@ export default function SettingsGitRepositories() {
                         onChange={(e) =>
                             setNewAzureComplianceGitURL(e.target.value)
                         }
+                        icon={
+                            executeSetAzureComplianceGitURL &&
+                            loadingSetAzureComplianceGitURL
+                                ? Spinner
+                                : undefined
+                        }
                         disabled={
                             executeSetAzureComplianceGitURL &&
                             loadingSetAzureComplianceGitURL
@@ -186,6 +212,11 @@ export default function SettingsGitRepositories() {
                         className="text-sm"
                         value={newInsightsGitURL}
                         onChange={(e) => setNewInsightsGitURL(e.target.value)}
+                        icon={
+                            executeSetInsightGitURL && loadingSetInsightGitURL
+                                ? Spinner
+                                : undefined
+                        }
                         disabled={
                             executeSetInsightGitURL && loadingSetInsightGitURL
                         }
@@ -203,6 +234,11 @@ export default function SettingsGitRepositories() {
                         className="text-sm"
                         value={newQueriesGitURL}
                         onChange={(e) => setNewQueriesGitURL(e.target.value)}
+                        icon={
+                            executeSetQueriesGitURL && loadingSetQueriesGitURL
+                                ? Spinner
+                                : undefined
+                        }
                         disabled={
                             executeSetQueriesGitURL && loadingSetQueriesGitURL
                         }

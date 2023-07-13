@@ -103,7 +103,9 @@ const columns: ColDef[] = [
 
 export default function AccountList({ accounts, organizations }: IAccountList) {
     const gridRef = useRef<AgGridReact>(null)
-    const [accData, setAccData] = useState(null)
+    const [accData, setAccData] = useState<
+        GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
+    >(undefined)
     const [openInfo, setOpenInfo] = useState(false)
     const [open, setOpen] = useState(false)
 
@@ -113,7 +115,9 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
-        onRowClicked: (event: RowClickedEvent<any>) => {
+        onRowClicked: (
+            event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+        ) => {
             setAccData(event.data)
             setOpenInfo(true)
         },

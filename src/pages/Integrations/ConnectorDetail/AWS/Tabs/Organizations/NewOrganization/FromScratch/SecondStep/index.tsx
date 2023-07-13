@@ -3,8 +3,8 @@ import clipboardCopy from 'clipboard-copy'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 
 interface IStep {
-    onNext: any
-    onPrevious: any
+    onNext: () => void
+    onPrevious: () => void
 }
 
 export default function SecondStep({ onNext, onPrevious }: IStep) {

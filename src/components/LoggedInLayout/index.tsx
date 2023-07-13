@@ -59,7 +59,7 @@ const navigation = [
     },
     {
         name: 'Settings',
-        page: 'settings',
+        page: 'settings/entitlement',
         icon: Cog6ToothIcon,
     },
 ]

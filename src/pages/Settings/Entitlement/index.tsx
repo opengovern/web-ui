@@ -18,6 +18,7 @@ import {
 import Spinner from '../../../components/Spinner'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
+import { useInventoryApiV2ResourcesMetricDetail } from '../../../api/inventory.gen'
 
 export default function SettingsEntitlement() {
     const workspace = useParams<{ ws: string }>().ws
@@ -34,6 +35,11 @@ export default function SettingsEntitlement() {
             !loadingCurrentWS
         )
 
+    const { response: metricsResp, isLoading: metricsLoading } =
+        useInventoryApiV2ResourcesMetricDetail('AWS::EC2::Instance')
+
+    const noOfHosts = metricsResp?.count || 0
+
     const currentUsers = response?.currentUsers || 0
     const currentConnections = response?.currentConnections || 0
     const currentResources = response?.currentResources || 0
@@ -41,6 +47,7 @@ export default function SettingsEntitlement() {
     const maxUsers = response?.maxUsers || 1
     const maxConnections = response?.maxConnections || 1
     const maxResources = response?.maxResources || 1
+    const maxHosts = 100000
 
     const usersPercentage = Math.ceil((currentUsers / maxUsers) * 100.0)
     const connectionsPercentage = Math.ceil(
@@ -49,6 +56,7 @@ export default function SettingsEntitlement() {
     const resourcesPercentage = Math.ceil(
         (currentResources / maxResources) * 100.0
     )
+    const hostsPercentage = Math.ceil((noOfHosts / maxHosts) * 100.0)
 
     const wsDetails = [
         {
@@ -83,13 +91,13 @@ export default function SettingsEntitlement() {
         },
     ]
 
-    return isLoading || loadingCurrentWS || ownerIsLoading ? (
+    return isLoading || loadingCurrentWS || ownerIsLoading || metricsLoading ? (
         <Flex justifyContent="center" className="mt-56">
             <Spinner />
         </Flex>
     ) : (
         <>
-            <Grid numItemsSm={2} numItemsLg={3} className="gap-3">
+            <Grid numItemsSm={2} numItemsLg={4} className="gap-3">
                 <Card key="activeUsers">
                     <Text>Active users</Text>
                     <Metric>{numericDisplay(currentUsers)}</Metric>
@@ -111,7 +119,7 @@ export default function SettingsEntitlement() {
                         className="mt-2"
                     />
                 </Card>
-                <Card key="activeUsers">
+                <Card key="resources">
                     <Text>Resources</Text>
                     <Metric>{numericDisplay(currentResources)}</Metric>
                     <Flex className="mt-3">
@@ -119,6 +127,15 @@ export default function SettingsEntitlement() {
                         <Text>{numericDisplay(maxResources)} Allowed</Text>
                     </Flex>
                     <ProgressBar value={resourcesPercentage} className="mt-2" />
+                </Card>
+                <Card key="hosts">
+                    <Text>Hosts</Text>
+                    <Metric>{numericDisplay(noOfHosts)}</Metric>
+                    <Flex className="mt-3">
+                        <Text className="truncate">{`${hostsPercentage}%`}</Text>
+                        <Text>{numericDisplay(maxHosts)} Allowed</Text>
+                    </Flex>
+                    <ProgressBar value={hostsPercentage} className="mt-2" />
                 </Card>
             </Grid>
             <Card key="summary" className="mt-3">

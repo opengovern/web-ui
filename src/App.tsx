@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Card } from '@tremor/react'
 import Router from './router'
@@ -11,22 +11,25 @@ function App() {
     const [token, setToken] = useState<string>('')
     const [accessTokenLoading, setAccessTokenLoading] = useState<boolean>(false)
 
-    if (isAuthenticated && token === '') {
-        if (!accessTokenLoading) {
-            setAccessTokenLoading(true)
+    useEffect(() => {
+        if (isAuthenticated && token === '') {
+            if (!accessTokenLoading) {
+                setAccessTokenLoading(true)
 
-            getAccessTokenSilently()
-                .then((accessToken) => {
-                    setToken(accessToken)
-                    setAuthHeader(accessToken)
-                    setAccessTokenLoading(false)
-                })
-                .catch((err) => {
-                    console.error(err)
-                    setAccessTokenLoading(false)
-                })
+                console.log('temp')
+                getAccessTokenSilently()
+                    .then((accessToken) => {
+                        setToken(accessToken)
+                        setAuthHeader(accessToken)
+                        setAccessTokenLoading(false)
+                    })
+                    .catch((err) => {
+                        console.error(err)
+                        setAccessTokenLoading(false)
+                    })
+            }
         }
-    }
+    }, [isAuthenticated])
 
     if (isLoading || accessTokenLoading) {
         return (

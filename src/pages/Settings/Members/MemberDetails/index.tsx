@@ -78,13 +78,13 @@ export default function MemberDetails({
         {
             title: 'Member Since',
             value: dayjs(user.createdAt || Date.now().toString()).format(
-                'MMM DD, YYYY'
+                'MMM DD, YYYY HH:mm:ss Z'
             ),
         },
         {
             title: 'Last Activity',
             value: dayjs(user.lastActivity || Date.now().toString()).format(
-                'MMM DD, YYYY'
+                'MMM DD, YYYY HH:mm:ss Z'
             ),
         },
         {
@@ -110,6 +110,8 @@ export default function MemberDetails({
             description: 'Member can only view the data',
         },
     ]
+
+    console.log(user)
 
     return (
         <>
@@ -203,9 +205,8 @@ export default function MemberDetails({
                         onClick={() => setDeleteConfirmation(true)}
                         variant="secondary"
                         color="rose"
-                        icon={TrashIcon}
                     >
-                        Delete
+                        <TrashIcon className="h-5 w-5" color="rose" />
                     </Button>
                     <Button loading={loading} onClick={() => updateRole()}>
                         Update Changes

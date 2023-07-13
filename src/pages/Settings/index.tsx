@@ -94,7 +94,7 @@ export default function Settings() {
             SetDecodedToken(decoded)
             setTokenLoading(false)
         })
-    })
+    }, [])
 
     const getRole = () => {
         if (decodedToken) {

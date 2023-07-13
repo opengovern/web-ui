@@ -118,14 +118,18 @@ export default function Organizations({
     const gridRef = useRef<AgGridReact>(null)
     const [open, setOpen] = useState(false)
     const [openInfo, setOpenInfo] = useState(false)
-    const [orgData, setOrgData] = useState(null)
+    const [orgData, setOrgData] = useState<
+        GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
+    >(undefined)
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
-        onRowClicked: (event: RowClickedEvent<any>) => {
+        onRowClicked: (
+            event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
+        ) => {
             setOrgData(event.data)
             setOpenInfo(true)
         },
