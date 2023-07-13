@@ -217,8 +217,8 @@ export default function InsightDetail() {
     const end = () => {
         if (detailsDate === '') {
             return dayjs(
-                activeTimeRange.start.toDate(getLocalTimeZone()) ||
-                    activeTimeRange.end.toDate(getLocalTimeZone()) ||
+                activeTimeRange.end.toDate(getLocalTimeZone()) ||
+                    activeTimeRange.start.toDate(getLocalTimeZone()) ||
                     new Date()
             )
         }
