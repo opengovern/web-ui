@@ -33,7 +33,6 @@ export default function ConnectorDetail() {
         useOnboardApiV1CredentialList({
             connector: StringToProvider(connector || ''),
         })
-    console.log(accounts)
 
     const breadcrumbsPages = [
         {
