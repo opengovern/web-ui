@@ -632,25 +632,14 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment 
     sourceId?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend {
-    resultTrend?: GithubComKaytuIoKaytuEnginePkgComplianceApiResultDatapoint[]
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary {
     /** Checks summary */
     checks?: TypesSeverityResult
-    /** Compliancy trend data points */
-    compliancyTrend?: GithubComKaytuIoKaytuEnginePkgComplianceApiDatapoint[]
     /**
      * Cloud providers
      * @example ["[Azure]"]
      */
     connectors?: SourceType[]
-    /**
-     * Coverage
-     * @example 100
-     */
-    coverage?: number
     /**
      * Benchmark description
      * @example "The CIS Microsoft Azure Foundations Security Benchmark provides prescriptive guidance for establishing a secure baseline configuration for Microsoft Azure."
@@ -662,20 +651,10 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary {
      */
     enabled?: boolean
     /**
-     * Number of failed resources
-     * @example 1
-     */
-    failedResources?: number
-    /**
      * Benchmark ID
      * @example "azure_cis_v140"
      */
     id?: string
-    /**
-     * Number of passed resources
-     * @example 24
-     */
-    passedResources?: number
     /** Compliance result summary */
     result?: TypesComplianceResultSummary
     /** Tags */
@@ -685,6 +664,10 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary {
      * @example "Azure CIS v1.4.0"
      */
     title?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend {
+    resultTrend?: GithubComKaytuIoKaytuEnginePkgComplianceApiResultDatapoint[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree {
@@ -720,13 +703,6 @@ export enum GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReportJobStatus
     ComplianceReportJobInProgress = 'IN_PROGRESS',
     ComplianceReportJobCompletedWithFailure = 'COMPLETED_WITH_FAILURE',
     ComplianceReportJobCompleted = 'COMPLETED',
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiDatapoint {
-    /** Time */
-    time?: number
-    /** Value */
-    value?: number
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgComplianceApiDirectionType {
@@ -807,10 +783,9 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingSortItem {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse {
-    benchmarkSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary[]
-    failedResources?: number
-    passedResources?: number
-    totalAssets?: number
+    benchmarkSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary[]
+    totalChecks?: TypesSeverityResult
+    totalResult?: TypesComplianceResultSummary
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse {
@@ -1273,12 +1248,6 @@ export enum GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSourceJobStatus {
     DescribeSourceJobCompleted = 'COMPLETED',
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest {
-    config?: any
-    /** @example "stack-twr32a5d-5as5-4ffe-b1cc-e32w1ast87s0" */
-    stackId?: string
-}
-
 export enum GithubComKaytuIoKaytuEnginePkgDescribeApiEvaluationType {
     EvaluationTypeInsight = 'INSIGHT',
     EvaluationTypeBenchmark = 'BENCHMARK',
@@ -1446,19 +1415,6 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
     updatedAt?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest {
-    /**
-     * Benchmarks to add to the stack
-     * @example ["[azure_cis_v140"," azure_cis_v140_1"," azure_cis_v140_1_1]"]
-     */
-    benchmarks: string[]
-    /**
-     * Stack unique identifier
-     * @example "stack-twr32a5d-5as5-4ffe-b1cc-e32w1ast87s0"
-     */
-    stackId: string
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluation {
     /**
      * Evaluation creation date
@@ -1488,9 +1444,6 @@ export enum GithubComKaytuIoKaytuEnginePkgDescribeApiStackEvaluationStatus {
     StackEvaluationStatusFailed = 'COMPLETED_WITH_FAILURE',
     StackEvaluationStatusCompleted = 'COMPLETED',
 }
-
-export type GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest =
-    object
 
 export enum GithubComKaytuIoKaytuEnginePkgDescribeApiStackStatus {
     StackStatusPending = 'PENDING',
@@ -3173,93 +3126,6 @@ export class Api<
             }),
 
         /**
-         * @description This API enables users to retrieve a summary of a benchmark and its associated checks and results. Users can use this API to obtain an overview of the benchmark, including its name, description, and other relevant information, as well as the checks and their corresponding results.
-         *
-         * @tags compliance
-         * @name ApiV1BenchmarkSummaryDetail
-         * @summary Get benchmark summary
-         * @request GET:/compliance/api/v1/benchmark/{benchmark_id}/summary
-         * @secure
-         */
-        apiV1BenchmarkSummaryDetail: (
-            benchmarkId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
-                any
-            >({
-                path: `/compliance/api/v1/benchmark/${benchmarkId}/summary`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API allows users to retrieve datapoints of compliance severities over a specified time period, enabling users to keep track of and monitor changes in compliance.
-         *
-         * @tags compliance
-         * @name ApiV1BenchmarkSummaryResultTrendDetail
-         * @summary Get compliance result trend
-         * @request GET:/compliance/api/v1/benchmark/{benchmark_id}/summary/result/trend
-         * @secure
-         */
-        apiV1BenchmarkSummaryResultTrendDetail: (
-            benchmarkId: string,
-            query: {
-                /** Start time */
-                start: number
-                /** End time */
-                end: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
-                any
-            >({
-                path: `/compliance/api/v1/benchmark/${benchmarkId}/summary/result/trend`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API retrieves the benchmark tree, including all of its child benchmarks. Users can use this API to obtain a comprehensive overview of the benchmarks within a particular category or hierarchy.
-         *
-         * @tags compliance
-         * @name ApiV1BenchmarkTreeDetail
-         * @summary Get benchmark tree
-         * @request GET:/compliance/api/v1/benchmark/{benchmark_id}/tree
-         * @secure
-         */
-        apiV1BenchmarkTreeDetail: (
-            benchmarkId: string,
-            query: {
-                /** Status */
-                status: ('passed' | 'failed' | 'unknown')[]
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
-                any
-            >({
-                path: `/compliance/api/v1/benchmark/${benchmarkId}/tree`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description This API returns a comprehensive list of all available benchmarks. Users can use this API to obtain an overview of the entire set of benchmarks and their corresponding details, such as their names, descriptions, and IDs.
          *
          * @tags compliance
@@ -3332,6 +3198,98 @@ export class Api<
             }),
 
         /**
+         * @description This API enables users to retrieve a summary of a benchmark and its associated checks and results. Users can use this API to obtain an overview of the benchmark, including its name, description, and other relevant information, as well as the checks and their corresponding results.
+         *
+         * @tags compliance
+         * @name ApiV1BenchmarksSummaryDetail
+         * @summary Get benchmark summary
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/summary
+         * @secure
+         */
+        apiV1BenchmarksSummaryDetail: (
+            benchmarkId: string,
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
+                any
+            >({
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/summary`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description This API allows users to retrieve datapoints of compliance severities over a specified time period, enabling users to keep track of and monitor changes in compliance.
+         *
+         * @tags compliance
+         * @name ApiV1BenchmarksSummaryResultTrendDetail
+         * @summary Get compliance result trend
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/summary/result/trend
+         * @secure
+         */
+        apiV1BenchmarksSummaryResultTrendDetail: (
+            benchmarkId: string,
+            query: {
+                /** Start time */
+                start: number
+                /** End time */
+                end: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
+                any
+            >({
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/summary/result/trend`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description This API retrieves the benchmark tree, including all of its child benchmarks. Users can use this API to obtain a comprehensive overview of the benchmarks within a particular category or hierarchy.
+         *
+         * @tags compliance
+         * @name ApiV1BenchmarksTreeDetail
+         * @summary Get benchmark tree
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/tree
+         * @secure
+         */
+        apiV1BenchmarksTreeDetail: (
+            benchmarkId: string,
+            query: {
+                /** Status */
+                status: ('passed' | 'failed' | 'unknown')[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+                any
+            >({
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/tree`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description This API enables users to retrieve policy details by specifying the policy ID. Users can use this API to obtain specific details about a particular policy, such as its title, description, and other relevant information.
          *
          * @tags compliance
@@ -3368,11 +3326,9 @@ export class Api<
          * @secure
          */
         apiV1BenchmarksSummaryList: (
-            query: {
-                /** Start Time */
-                start: number
-                /** End Time */
-                end: number
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
             },
             params: RequestParams = {}
         ) =>
@@ -4373,6 +4329,8 @@ export class Api<
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Connection IDs to filter by */
                 connectionId?: string[]
+                /** ResourceType */
+                resourceType?: string[]
                 /** timestamp for resource count in epoch seconds */
                 endTime?: string
                 /** timestamp for resource count change comparison in epoch seconds */
@@ -6181,7 +6139,7 @@ export class Api<
             stackId: string,
             query: {
                 /** InsightID */
-                insightId: string
+                insightId: number
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -6203,22 +6161,33 @@ export class Api<
             }),
 
         /**
-         * @description Trigger defined benchmarks for a stack and save in the history
+         * @description Get all Insights results with the given filters
          *
          * @tags stack
-         * @name ApiV1StacksBenchmarkTriggerCreate
-         * @summary Trigger Stack benchmark
-         * @request POST:/schedule/api/v1/stacks/benchmark/trigger
+         * @name ApiV1StacksInsightsDetail
+         * @summary List Stack Insights
+         * @request GET:/schedule/api/v1/stacks/{stackId}/insights
          * @secure
          */
-        apiV1StacksBenchmarkTriggerCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
+        apiV1StacksInsightsDetail: (
+            stackId: string,
+            query?: {
+                /** Insight IDs to filter with. If empty, then all insights are returned */
+                insightIds?: number[]
+                /** unix seconds for the start time of the trend */
+                startTime?: number
+                /** unix seconds for the end time of the trend */
+                endTime?: number
+            },
             params: RequestParams = {}
         ) =>
-            this.request<DescribeComplianceReportJob[], any>({
-                path: `/schedule/api/v1/stacks/benchmark/trigger`,
-                method: 'POST',
-                body: request,
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[],
+                any
+            >({
+                path: `/schedule/api/v1/stacks/${stackId}/insights`,
+                method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -6240,13 +6209,11 @@ export class Api<
                  * File to upload
                  * @format binary
                  */
-                terrafromFile?: File
+                terraformFile: File
                 /** Tags Map[string][]string */
                 tag?: string
-                /** Additional Resources */
-                resources?: string[]
                 /** Config json structure */
-                config?: string
+                config: string
             },
             params: RequestParams = {}
         ) =>
@@ -6256,54 +6223,6 @@ export class Api<
                 body: data,
                 secure: true,
                 type: ContentType.FormData,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Describe stack resources. This is needed before triggering insights and benchmarks Config structure for azure: {tenantId: string, objectId: string, secretId: string, clientId: string, clientSecret:string} Config structure for aws: {accessKey: string, secretKey: string}
-         *
-         * @tags stack
-         * @name ApiV1StacksDescriberTriggerCreate
-         * @summary Trigger Stack Describer
-         * @request POST:/schedule/api/v1/stacks/describer/trigger
-         * @secure
-         */
-        apiV1StacksDescriberTriggerCreate: (
-            req: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/schedule/api/v1/stacks/describer/trigger`,
-                method: 'POST',
-                body: req,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * @description Trigger an insight evaluation to run immediately on a stack with given details
-         *
-         * @tags describe
-         * @name ApiV1StacksInsightTriggerCreate
-         * @summary Trigger stack insight evaluation
-         * @request POST:/schedule/api/v1/stacks/insight/trigger
-         * @secure
-         */
-        apiV1StacksInsightTriggerCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob[],
-                any
-            >({
-                path: `/schedule/api/v1/stacks/insight/trigger`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
                 format: 'json',
                 ...params,
             }),

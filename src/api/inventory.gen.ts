@@ -28,8 +28,8 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
     GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
@@ -46,15 +46,12 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
     GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeStackRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
     GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackBenchmarkRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStackInsightRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
@@ -1774,6 +1771,8 @@ export const useInventoryApiV2ResourcesMetricList = (
         connector?: ('' | 'AWS' | 'Azure')[]
 
         connectionId?: string[]
+
+        resourceType?: string[]
 
         endTime?: string
 
