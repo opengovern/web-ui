@@ -1,64 +1,39 @@
 import { useState } from 'react'
 import { useAtom } from 'jotai/index'
-import dayjs from 'dayjs'
-import {
-    filterAtom,
-    selectedResourceCategoryAtom,
-    spendTimeAtom,
-} from '../../../../store'
-import { useInventoryApiV2CostMetricList } from '../../../../api/inventory.gen'
+import { selectedResourceCategoryAtom } from '../../../../store'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 import MetricsList, { IMetric } from '../../../../components/MetricsList'
+import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+} from '../../../../api/api'
 
 interface IProps {
+    accountCostResponse:
+        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | undefined
+    serviceCostResponse:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse
+        | undefined
+    accountCostLoading: boolean
+    serviceCostLoading: boolean
     categories: {
         label: string
         value: string
     }[]
-    pageSize: number
 }
 
-export default function CostMetrics({ pageSize, categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
-
+export default function CostMetrics({
+    accountCostResponse,
+    serviceCostResponse,
+    accountCostLoading,
+    serviceCostLoading,
+    categories,
+}: IProps) {
     const [selectedScopeIdx, setSelectedScopeIdx] = useState<number>(0)
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
-    const activeCategory =
-        selectedResourceCategory === 'All Categories'
-            ? ''
-            : selectedResourceCategory
-    const query = {
-        ...(selectedConnections.provider && {
-            connector: [selectedConnections.provider],
-        }),
-        ...(selectedConnections.connections && {
-            connectionId: selectedConnections.connections,
-        }),
-        ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix().toString(),
-        }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix().toString(),
-        }),
-        ...(pageSize && { pageSize }),
-    }
-    const { response: serviceCostResponse, isLoading: serviceCostLoading } =
-        useInventoryApiV2CostMetricList(query)
-
-    const { response: accountCostResponse, isLoading: accountCostLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
-            connector: [selectedConnections.provider],
-            connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.from).unix(),
-            endTime: dayjs(activeTimeRange.to).unix(),
-            pageSize: 10000,
-            pageNumber: 1,
-        })
 
     const metrics = () => {
         const accountsMetrics = accountCostResponse?.connections?.map(
@@ -98,7 +73,9 @@ export default function CostMetrics({ pageSize, categories }: IProps) {
         <MetricsList
             name="Cost"
             seeMoreUrl="spend-metrics"
-            isLoading={accountCostLoading || serviceCostLoading}
+            isLoading={
+                selectedScopeIdx === 0 ? accountCostLoading : serviceCostLoading
+            }
             metrics={metrics()}
             categories={categories}
             selectedCategory={selectedResourceCategory}
