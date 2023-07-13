@@ -1,10 +1,14 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import Subscriptions from './Subscriptions'
 import Principals from './Principals'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+} from '../../../../../api/api'
 
 interface IAzure {
-    principals: any
-    subscriptions: any
+    principals: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    subscriptions: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
 }
 
 export default function AzureTabs({ principals, subscriptions }: IAzure) {
@@ -19,7 +23,10 @@ export default function AzureTabs({ principals, subscriptions }: IAzure) {
                     <Principals principals={principals} />
                 </TabPanel>
                 <TabPanel>
-                    <Subscriptions subscriptions={subscriptions} />
+                    <Subscriptions
+                        subscriptions={subscriptions}
+                        spns={principals}
+                    />
                 </TabPanel>
             </TabPanels>
         </TabGroup>

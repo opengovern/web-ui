@@ -283,10 +283,10 @@ export default function ConnectionList() {
 
     const filterText = () => {
         if (selectedConnections.connections.length > 0) {
-            return <Text>{selectedConnections.connections.length} Filters</Text>
+            return `${selectedConnections.connections.length} Filters`
         }
         if (selectedConnections.provider !== '') {
-            return <Text>{selectedConnections.provider}</Text>
+            return selectedConnections.provider
         }
         return 'Filters'
     }

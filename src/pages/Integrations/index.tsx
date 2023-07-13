@@ -20,21 +20,21 @@ export default function Integrations() {
             <Metric>Integrations</Metric>
             <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6 mb-10">
                 <SummaryCard
-                    title="Total Accounts"
+                    title="Total Connections"
                     metric={String(
                         numericDisplay(topMetrics?.totalConnections)
                     )}
                     loading={metricsLoading}
                 />
                 <SummaryCard
-                    title="Total Accounts"
+                    title="Active Connections"
                     metric={String(
-                        numericDisplay(topMetrics?.healthyConnections)
+                        numericDisplay(topMetrics?.connectionsEnabled)
                     )}
                     loading={metricsLoading}
                 />
                 <SummaryCard
-                    title="Total Unhealthy Accounts"
+                    title="Total Unhealthy Connections"
                     metric={String(
                         numericDisplay(topMetrics?.unhealthyConnections)
                     )}

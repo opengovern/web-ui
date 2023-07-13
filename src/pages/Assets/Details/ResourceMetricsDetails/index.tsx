@@ -5,10 +5,6 @@ import {
     SearchSelectItem,
     Title,
 } from '@tremor/react'
-import { DateRangePicker } from '@react-spectrum/datepicker'
-import { Provider } from '@react-spectrum/provider'
-import { theme } from '@react-spectrum/theme-default'
-import { today, getLocalTimeZone } from '@internationalized/date'
 import { useRef } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -27,7 +23,7 @@ import {
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
-
+import DateRangePicker from '../../../../components/DateRangePicker'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
@@ -186,13 +182,7 @@ export default function ResourceMetricsDetails() {
                 <Breadcrumbs pages={breadcrumbsPages} />
 
                 <Flex flexDirection="row" justifyContent="end">
-                    <Provider theme={theme}>
-                        <DateRangePicker
-                            value={activeTimeRange}
-                            onChange={setActiveTimeRange}
-                            maxValue={today(getLocalTimeZone())}
-                        />
-                    </Provider>
+                    <DateRangePicker />
                     <ConnectionList />
                 </Flex>
             </Flex>

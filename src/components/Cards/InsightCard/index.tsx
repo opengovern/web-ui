@@ -21,20 +21,6 @@ interface IInsightsCard {
     metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
 }
 
-const calculatePercent = (inputData: any) => {
-    if (
-        Number(inputData.oldTotalResultValue) &&
-        Number(inputData.totalResultValue)
-    ) {
-        return (
-            ((inputData.totalResultValue - inputData.oldTotalResultValue) /
-                inputData.oldTotalResultValue) *
-                100 || 0
-        )
-    }
-    return 0
-}
-
 const calculateTime = (inputData: any) => {
     if (inputData) {
         const date = Date.parse(inputData) / 1000
@@ -80,7 +66,7 @@ const generateBadge = (
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title={`Data is availabe after ${dayjs(
+                title={`Data is available after ${dayjs(
                     met.firstOldResultDate
                 ).format('MMM DD, YYYY')}`}
                 color="rose"

@@ -2,21 +2,22 @@ import React, { useRef } from 'react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef, GridOptions } from 'ag-grid-community'
+import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { Flex } from '@tremor/react'
-import { DateRangePicker } from '@react-spectrum/datepicker'
-import { Provider } from '@react-spectrum/provider'
-import { theme } from '@react-spectrum/theme-default'
-import { today, getLocalTimeZone } from '@internationalized/date'
+import { BadgeDelta, Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { useInventoryApiV2ServicesMetricList } from '../../../../api/inventory.gen'
 import Summary from './Summary'
 import { filterAtom, timeAtom } from '../../../../store'
+import DateRangePicker from '../../../../components/DateRangePicker'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import ConnectionList from '../../../../components/ConnectionList'
+import {
+    badgeTypeByDelta,
+    percentageByChange,
+} from '../../../../utilities/deltaType'
 
 const columns: ColDef[] = [
     {
@@ -33,7 +34,7 @@ const columns: ColDef[] = [
         sortable: true,
         filter: true,
         resizable: true,
-        flex: 1,
+        flex: 2,
     },
     {
         field: 'resource_count',
@@ -42,6 +43,38 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
+    },
+    {
+        field: 'old_resource_count',
+        headerName: 'Old Resource Count',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
+        headerName: 'Growth',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+        cellRenderer: (params: ICellRendererParams) => {
+            return (
+                <Flex className="h-full w-full">
+                    <BadgeDelta
+                        deltaType={badgeTypeByDelta(
+                            params?.data.old_resource_count,
+                            params?.data.resource_count
+                        )}
+                    >
+                        {`${percentageByChange(
+                            params?.data.old_resource_count,
+                            params?.data.resource_count
+                        )}%`}
+                    </BadgeDelta>
+                </Flex>
+            )
+        },
     },
 ]
 
@@ -61,7 +94,7 @@ export default function ServicesDetails() {
             endTime: String(dayjs(activeTimeRange.end.toString()).unix()),
             sortBy: 'name',
         })
-
+    console.log(serviceList)
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
@@ -102,13 +135,7 @@ export default function ServicesDetails() {
             >
                 <Breadcrumbs pages={breadcrumbsPages} />
                 <Flex flexDirection="row" justifyContent="end">
-                    <Provider theme={theme}>
-                        <DateRangePicker
-                            value={activeTimeRange}
-                            onChange={setActiveTimeRange}
-                            maxValue={today(getLocalTimeZone())}
-                        />
-                    </Provider>
+                    <DateRangePicker />
                     <ConnectionList />
                 </Flex>
             </Flex>
@@ -116,7 +143,7 @@ export default function ServicesDetails() {
                 totalServices={serviceList?.total_services}
                 totalServicesLoading={isServiceListLoading}
             />
-            <div className="ag-theme-alpine mt-10">
+            <div className="ag-theme-alpine mt-3">
                 <AgGridReact
                     ref={gridRef}
                     domLayout="autoHeight"

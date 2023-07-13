@@ -1,4 +1,3 @@
-import { Flex, Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { useInventoryApiV2ResourcesCompositionDetail } from '../../../../api/inventory.gen'
@@ -40,8 +39,8 @@ export default function CompositionTab({ top }: IProps) {
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
         }),
-        ...(activeTimeRange.start && {
-            time: dayjs(activeTimeRange.start.toString()).unix(),
+        ...(activeTimeRange.end && {
+            time: dayjs(activeTimeRange.end.toString()).unix(),
         }),
     }
     const { response: composition, isLoading } =
@@ -116,11 +115,17 @@ export default function CompositionTab({ top }: IProps) {
                 delta: `${percentageByChange(
                     record[key].old_count,
                     record[key].count
-                )}`,
+                )}%`,
                 deltaType: badgeTypeByDelta(
                     record[key].old_count,
                     record[key].count
                 ),
+                percent:
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    // eslint-disable-next-line no-unsafe-optional-chaining
+                    (record[key].count / compositionData?.total_count) * 100 ||
+                    0,
             }
         })
         v.push({
@@ -133,24 +138,28 @@ export default function CompositionTab({ top }: IProps) {
             delta: `${percentageByChange(
                 compositionData?.others?.old_count,
                 compositionData?.others?.count
-            )}`,
+            )}&`,
             deltaType: badgeTypeByDelta(
                 compositionData?.others?.old_count,
                 compositionData?.others?.count
             ),
+            percent:
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                (compositionData?.others / compositionData?.total_count) *
+                    100 || 0,
         })
         return v
     }
 
     return (
-        <Flex justifyContent="between" className="mt-5 w-full">
-            <Composition
-                newData={compositionCart(composition, 0)}
-                oldData={compositionCart(composition, 1)}
-                isLoading={isLoading}
-                newList={compositionList(composition, 0)}
-                oldList={compositionList(composition, 1)}
-            />
-        </Flex>
+        <Composition
+            newData={compositionCart(composition, 0)}
+            oldData={compositionCart(composition, 1)}
+            isLoading={isLoading}
+            newList={compositionList(composition, 0)}
+            oldList={compositionList(composition, 1)}
+        />
     )
 }

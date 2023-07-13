@@ -9,7 +9,7 @@ import {
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
-import { filterAtom, timeAtom } from '../../../../../store'
+import { filterAtom, spendTimeAtom } from '../../../../../store'
 
 type IProps = {
     categories: {
@@ -22,7 +22,7 @@ const trendDataAtom = atom<object[]>([])
 const serviceNamesAtom = atom<string[]>([])
 
 export default function TopServicesTrend({ categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const [serviceNames, setServiceNames] = useAtom(serviceNamesAtom)
@@ -115,22 +115,21 @@ export default function TopServicesTrend({ categories }: IProps) {
 
     return (
         <Card>
-            <Title className="min-w-[7vw]">Top Services Trend</Title>
-            {costTrendLoading ? (
+            <Title>Top Services Trend</Title>
+            {!costTrendLoading ? (
                 <Chart
-                    className="mt-4 h-80"
+                    className="mt-3"
                     index="date"
                     type="area"
                     yAxisWidth={120}
+                    showLegend={false}
                     categories={serviceNames}
                     data={trendData}
                     showAnimation
                     valueFormatter={exactPriceDisplay}
                 />
             ) : (
-                <div className="flex items-center justify-center">
-                    <Spinner />
-                </div>
+                <Spinner className="h-80" />
             )}
         </Card>
     )

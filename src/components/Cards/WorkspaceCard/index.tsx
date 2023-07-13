@@ -72,6 +72,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const [suspendConfirmation, setSuspendConfirmation] =
         useState<boolean>(false)
+
     const { response: workspaceDetail, isLoading: workspaceLoading } =
         useWorkspaceApiV1WorkspacesLimitsDetail(workspace.name)
     const {
@@ -206,7 +207,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                             {workspace.version}
                         </Text>
                         <Text className="pl-2">
-                            {dayjs(workspace.createdAt).format('YYYY-MM-DD')}
+                            {dayjs(workspace.createdAt).format('MMM DD, YYYY')}
                         </Text>
                     </Flex>
                     {getButton(workspace.status || '')}

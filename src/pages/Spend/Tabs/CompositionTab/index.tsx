@@ -1,11 +1,10 @@
-import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import Composition from '../../../../components/Cards/Composition'
 import { useInventoryApiV2CostCompositionList } from '../../../../api/inventory.gen'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse } from '../../../../api/api'
-import { filterAtom, timeAtom } from '../../../../store'
+import { filterAtom, spendTimeAtom } from '../../../../store'
 
 type IProps = {
     top: number
@@ -14,6 +13,7 @@ type IProps = {
 interface chartProps {
     name: string
     value: number
+    normalVal?: number | undefined
 }
 
 interface dataProps {
@@ -23,7 +23,7 @@ interface dataProps {
 }
 
 export default function CompositionTab({ top }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const { response: compositionOld, isLoading: oldIsLoading } =
@@ -106,27 +106,33 @@ export default function CompositionTab({ top }: IProps) {
             return {
                 name: item.name,
                 value: exactPriceDisplay(item.value),
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                percent: (item.value / compositionData?.total_count) * 100 || 0,
             }
         })
         v.push({
             name: 'Others',
             value: exactPriceDisplay(compositionData?.others),
+            percent:
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                (compositionData?.others / compositionData?.total_count) *
+                    100 || 0,
         })
         return v
     }
 
     return (
-        <Grid numItemsMd={2} className="mt-5 gap-6 flex justify-between">
-            <div className="w-full">
-                <Composition
-                    newData={compositionChart(compositionNew)}
-                    oldData={compositionChart(compositionOld)}
-                    isLoading={oldIsLoading || newIsLoading}
-                    newList={compositionList(compositionNew)}
-                    oldList={compositionList(compositionOld)}
-                    isCost
-                />
-            </div>
-        </Grid>
+        <Composition
+            newData={compositionChart(compositionNew)}
+            oldData={compositionChart(compositionOld)}
+            isLoading={oldIsLoading || newIsLoading}
+            newList={compositionList(compositionNew)}
+            oldList={compositionList(compositionOld)}
+            isCost
+        />
     )
 }

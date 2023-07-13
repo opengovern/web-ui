@@ -101,10 +101,9 @@ export default function GrowthTrend({ categories }: IProps) {
                 <Spinner className="h-80" />
             ) : (
                 <Chart
-                    className="mt-4 h-80"
+                    className="mt-3"
                     index="date"
                     type="line"
-                    yAxisWidth={60}
                     categories={['Resource Count']}
                     data={trendData()}
                 />

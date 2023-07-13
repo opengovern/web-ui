@@ -202,20 +202,16 @@ export default function MultiAccount() {
     return (
         <>
             <Summary />
-            <div className="ag-theme-alpine mt-4">
-                <Flex
-                    justifyContent="end"
-                    className="w-100 mb-3"
-                    alignItems="end"
+            <Flex justifyContent="end" className="mb-3 mt-6" alignItems="end">
+                <Button
+                    variant="secondary"
+                    onClick={() => gridRef?.current?.api.exportDataAsCsv()}
+                    icon={ArrowDownOnSquareIcon}
                 >
-                    <Button
-                        variant="secondary"
-                        onClick={() => gridRef?.current?.api.exportDataAsCsv()}
-                        icon={ArrowDownOnSquareIcon}
-                    >
-                        Download
-                    </Button>
-                </Flex>
+                    Download
+                </Button>
+            </Flex>
+            <div className="ag-theme-alpine mt-4">
                 <AgGridReact
                     ref={gridRef}
                     domLayout="autoHeight"

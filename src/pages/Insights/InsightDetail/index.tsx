@@ -23,9 +23,6 @@ import { AgGridReact } from 'ag-grid-react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
-import { DateRangePicker } from '@react-spectrum/datepicker'
-import { Provider } from '@react-spectrum/provider'
-import { theme } from '@react-spectrum/theme-default'
 import { today, getLocalTimeZone } from '@internationalized/date'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
@@ -39,6 +36,7 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import Breadcrumbs from '../../../components/Breadcrumbs'
+import DateRangePicker from '../../../components/DateRangePicker'
 import Spinner from '../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
@@ -59,7 +57,7 @@ const chartData = (inputData: any) => {
                 count: inputData[i].value,
                 date: dayjs
                     .unix(inputData[i].timestamp)
-                    .format('MMM DD - HH:mm'),
+                    .format('MMM DD, YYYY - HH:mm'),
             })
         }
     }
@@ -174,7 +172,7 @@ const generateBadge = (
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title={`Data is availabe after ${dayjs(
+                title={`Data is available after ${dayjs(
                     met.firstOldResultDate
                 ).format('MMM DD, YYYY')}`}
                 color="rose"
@@ -209,7 +207,7 @@ export default function InsightDetail() {
     const start = () => {
         if (detailsDate === '') {
             return dayjs(
-                activeTimeRange.end.toDate(getLocalTimeZone()) || new Date()
+                activeTimeRange.start.toDate(getLocalTimeZone()) || new Date()
             )
         }
         const d = new Date(0)
@@ -321,13 +319,7 @@ export default function InsightDetail() {
                         className="mb-6"
                     >
                         <Breadcrumbs pages={breadcrumbsPages} />
-                        <Provider theme={theme}>
-                            <DateRangePicker
-                                value={activeTimeRange}
-                                onChange={setActiveTimeRange}
-                                maxValue={today(getLocalTimeZone())}
-                            />
-                        </Provider>
+                        <DateRangePicker />
                     </Flex>
                     <Flex flexDirection="col">
                         <Flex flexDirection="row">
@@ -412,7 +404,7 @@ export default function InsightDetail() {
                                 placeholder={
                                     detailsDate === ''
                                         ? 'Latest'
-                                        : end().format('YYYY-MM-DD')
+                                        : end().format('MMM DD, YYYY')
                                 }
                             >
                                 <>{trendDates()}</>

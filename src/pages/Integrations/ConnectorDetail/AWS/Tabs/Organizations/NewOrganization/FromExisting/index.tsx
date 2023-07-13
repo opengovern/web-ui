@@ -1,32 +1,74 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Flex, Text } from '@tremor/react'
 import Steps from '../../../../../../../../components/Steps'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
 import FinalStep from './FinalStep'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../../api/api'
+import { useOnboardApiV1CredentialUpdate } from '../../../../../../../../api/onboard.gen'
+import Spinner from '../../../../../../../../components/Spinner'
+import { getErrorMessage } from '../../../../../../../../types/apierror'
 
 interface ISteps {
-    close: any
-    accounts: any
+    onClose: () => void
+    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
 }
 
-export default function FromExisting({ close, accounts }: ISteps) {
+interface IData {
+    roleName: string
+    externalID: string
+}
+
+export default function FromExisting({ onClose, accounts }: ISteps) {
     const [stepNum, setStepNum] = useState(1)
-    const [connection, setConnection] = useState({})
-    const [data, setData] = useState({
+    const [credentialID, setCredentialID] = useState<string>('')
+    const [data, setData] = useState<IData>({
         roleName: '',
-        externalId: '',
+        externalID: '',
     })
+
+    const close = () => {
+        setStepNum(1)
+        setCredentialID('')
+        setData({
+            roleName: '',
+            externalID: '',
+        })
+        onClose()
+    }
+
+    const { error, isLoading, isExecuted, sendNow } =
+        useOnboardApiV1CredentialUpdate(
+            credentialID,
+            {
+                config: {
+                    assumeRoleName: data.roleName,
+                    externalId: data.externalID,
+                },
+            },
+            {},
+            false
+        )
+
+    useEffect(() => {
+        if (isExecuted && !isLoading && !error) {
+            close()
+        }
+    }, [isLoading])
+
+    if (isLoading && isExecuted) {
+        return <Spinner />
+    }
 
     const showStep = (s: number) => {
         switch (s) {
             case 1:
                 return (
                     <FirstStep
-                        onPrevious={() => close()}
-                        onNext={(con: any) => {
+                        onPrevious={close}
+                        onNext={(credID) => {
                             setStepNum(2)
-                            setConnection(con)
+                            setCredentialID(credID)
                         }}
                         accounts={accounts}
                     />
@@ -34,8 +76,11 @@ export default function FromExisting({ close, accounts }: ISteps) {
             case 2:
                 return (
                     <SecondStep
-                        onNext={(d: any) => {
-                            setData(d)
+                        onNext={(roleName, externalID) => {
+                            setData({
+                                roleName,
+                                externalID,
+                            })
                             setStepNum(3)
                         }}
                         onPrevious={() => setStepNum(1)}
@@ -45,8 +90,13 @@ export default function FromExisting({ close, accounts }: ISteps) {
                 return (
                     <FinalStep
                         onPrevious={() => setStepNum(1)}
-                        data={data}
-                        connection={connection}
+                        onSubmit={() => {
+                            sendNow()
+                        }}
+                        isLoading={isLoading && isExecuted}
+                        error={getErrorMessage(error)}
+                        externalId={data.externalID}
+                        roleName={data.roleName}
                     />
                 )
             default:

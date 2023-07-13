@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import Steps from '../../../../../../../components/Steps'
 import FirstStep from './FirstStep'
@@ -6,10 +6,12 @@ import SecondStep from './SecondStep'
 import { useOnboardApiV1CredentialCreate } from '../../../../../../../api/onboard.gen'
 import { SourceType } from '../../../../../../../api/api'
 import FinalStep from './FinalStep'
+import Spinner from '../../../../../../../components/Spinner'
+import { getErrorMessage } from '../../../../../../../types/apierror'
 
 interface INewPrinciple {
     open: boolean
-    onClose: any
+    onClose: () => void
 }
 
 export default function NewPrincipal({ open, onClose }: INewPrinciple) {
@@ -18,49 +20,96 @@ export default function NewPrincipal({ open, onClose }: INewPrinciple) {
         tenId: '',
         secId: '',
         appId: '',
+        objectId: '',
+        clientSecret: '',
+        subscriptionId: '',
     })
 
-    const { response: principal, sendNow } = useOnboardApiV1CredentialCreate({
-        config: {
-            clientId: data.appId,
-            secretId: data.secId,
-            tenantId: data.appId,
+    const {
+        response: principal,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow,
+    } = useOnboardApiV1CredentialCreate(
+        {
+            config: {
+                clientId: data.appId,
+                secretId: data.secId,
+                tenantId: data.appId,
+                objectId: data.objectId,
+                clientSecret: data.clientSecret,
+                subscriptionId: data.subscriptionId,
+            },
+            source_type: SourceType.CloudAzure,
         },
-        source_type: SourceType.CloudAzure,
-    })
+        {},
+        false
+    )
+
+    const close = () => {
+        setStepNum(1)
+        onClose()
+    }
+
+    useEffect(() => {
+        if (isExecuted && !isLoading && error) {
+            setStepNum(2)
+        }
+    }, [isLoading])
+
+    useEffect(() => {
+        if (stepNum === 3) {
+            sendNow()
+        }
+    }, [stepNum])
 
     const showStep = (s: number) => {
+        if (isLoading && isExecuted) {
+            return <Spinner />
+        }
+
         switch (s) {
             case 1:
                 return (
                     <FirstStep
-                        onPrevious={() => onClose()}
+                        onPrevious={close}
                         onNext={() => setStepNum(2)}
                     />
                 )
             case 2:
                 return (
                     <SecondStep
-                        onPrevious={() => onClose()}
-                        onNext={(a: any) => {
-                            setData(a)
-                            sendNow()
+                        onPrevious={() => setStepNum(1)}
+                        error={getErrorMessage(error)}
+                        onNext={(
+                            appId,
+                            tenId,
+                            secId,
+                            objectId,
+                            clientSecret,
+                            subscriptionId
+                        ) => {
+                            setData({
+                                appId,
+                                tenId,
+                                secId,
+                                objectId,
+                                clientSecret,
+                                subscriptionId,
+                            })
                             setStepNum(3)
                         }}
                     />
                 )
             case 3:
-                return <FinalStep data={principal} onNext={() => onClose()} />
+                return <FinalStep data={principal} onNext={close} />
             default:
                 return null
         }
     }
     return (
-        <DrawerPanel
-            title="New Setvice Principle"
-            open={open}
-            onClose={() => onClose()}
-        >
+        <DrawerPanel title="New Setvice Principle" open={open} onClose={close}>
             <Steps steps={3} currentStep={stepNum} />
             {showStep(stepNum)}
         </DrawerPanel>

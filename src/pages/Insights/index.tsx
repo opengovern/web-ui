@@ -10,11 +10,7 @@ import {
     TabPanels,
     TextInput,
 } from '@tremor/react'
-import { DateRangePicker } from '@react-spectrum/datepicker'
-import { Provider } from '@react-spectrum/provider'
-import { theme } from '@react-spectrum/theme-default'
-import { today, getLocalTimeZone } from '@internationalized/date'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
@@ -25,6 +21,7 @@ import {
     useComplianceApiV1InsightList,
 } from '../../api/compliance.gen'
 import InsightCard from '../../components/Cards/InsightCard'
+import DateRangePicker from '../../components/DateRangePicker'
 import { timeAtom } from '../../store'
 import Spinner from '../../components/Spinner'
 import InsightGroupCard from '../../components/Cards/InsightGroupCard'
@@ -33,6 +30,7 @@ export default function Insights() {
     const [selectedCategory, setSelectedCategory] = useState('')
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const [searchQuery, setSearchQuery] = useState('')
+    const [selectedTab, setSelectedTab] = useState(1)
 
     const query = {
         ...(activeTimeRange.start && {
@@ -57,22 +55,21 @@ export default function Insights() {
                     className="mb-6"
                 >
                     <Metric>Insights</Metric>
-                    <Provider theme={theme}>
-                        <DateRangePicker
-                            value={activeTimeRange}
-                            onChange={setActiveTimeRange}
-                            maxValue={today(getLocalTimeZone())}
-                        />
-                    </Provider>
+                    <DateRangePicker />
                 </Flex>
                 <TabGroup>
                     <TabList className="mb-6">
-                        <Tab>Insight list</Tab>
-                        <Tab>Insight groups</Tab>
+                        <Tab onClick={() => setSelectedTab(1)}>
+                            Insight list
+                        </Tab>
+                        <Tab onClick={() => setSelectedTab(2)}>
+                            Insight groups
+                        </Tab>
                     </TabList>
                     <Grid numItems={3} className="gap-3 mb-6">
                         <Col numColSpan={2}>
                             <InsightCategories
+                                selected={selectedTab}
                                 onChange={(category: string) =>
                                     setSelectedCategory(() => category)
                                 }

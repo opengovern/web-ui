@@ -1,7 +1,9 @@
 import {
+    BadgeDelta,
     Bold,
     Card,
     Flex,
+    Grid,
     List,
     ListItem,
     Metric,
@@ -14,6 +16,10 @@ import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2ServicesMetricList } from '../../../../../api/inventory.gen'
 import { filterAtom, timeAtom } from '../../../../../store'
 import Spinner from '../../../../../components/Spinner'
+import {
+    badgeTypeByDelta,
+    percentageByChange,
+} from '../../../../../utilities/deltaType'
 
 type IProps = {
     totalServices?: number
@@ -46,12 +52,13 @@ export default function Summary({
         endTime: String(dayjs(activeTimeRange.end.toString()).unix()),
         sortBy: 'growth_rate',
     })
+    console.log(topFastestServices)
 
     return (
-        <div className="gap-y-10 mt-[24px]">
-            <div className="flex flex-row justify-between">
+        <Flex flexDirection="col" className="mt-6">
+            <Flex>
                 <Metric>Services</Metric>
-                <div className="flex flex-row items-baseline">
+                <Flex justifyContent="end" alignItems="end">
                     <Metric className="mr-2">
                         {totalServicesLoading ? (
                             <Spinner />
@@ -60,58 +67,67 @@ export default function Summary({
                         )}
                     </Metric>
                     <Text>Total Services</Text>
-                </div>
-            </div>
-            <div className="flex flex-row gap-x-10 mt-4">
+                </Flex>
+            </Flex>
+            <Grid numItems={1} numItemsMd={2} className="w-full gap-3 mt-3">
                 <Card key="TopXServices" className="h-fit">
                     <Flex justifyContent="start" className="space-x-4">
                         <Title className="truncate">Popular Services</Title>
                     </Flex>
                     {topServicesLoading ? (
-                        <Spinner className="py-20" />
+                        <Spinner className="py-24" />
                     ) : (
-                        <List className="mt-2 mb-2">
+                        <List className="mt-2 h-full">
                             {topServices?.services?.map((thing: any) => (
-                                <ListItem key={thing.service_label}>
+                                <ListItem
+                                    key={thing.service_label}
+                                    className="py-3"
+                                >
                                     <Text>{thing.service_label}</Text>
-                                    <Text>
-                                        <Bold>
-                                            {numericDisplay(
-                                                thing.resource_count
-                                            )}
-                                        </Bold>{' '}
-                                    </Text>
+                                    <Bold>
+                                        {numericDisplay(thing.resource_count)}
+                                    </Bold>
                                 </ListItem>
                             ))}
                         </List>
                     )}
                 </Card>
                 <Card key="TopXFastest" className="h-fit">
-                    <Flex justifyContent="start" className="space-x-4">
-                        <Title className="truncate">
-                            Top Fast-Growing Services
-                        </Title>
-                    </Flex>
+                    <Title className="truncate">
+                        Top Fast-Growing Services
+                    </Title>
                     {topFastestServicesLoading ? (
-                        <Spinner className="py-20" />
+                        <Spinner className="py-24" />
                     ) : (
-                        <List className="mt-2 mb-2">
+                        <List className="mt-2 h-full">
                             {topFastestServices?.services?.map((thing: any) => (
                                 <ListItem key={thing.service_label}>
                                     <Text>{thing.service_label}</Text>
-                                    <Text>
+                                    <Flex justifyContent="end">
                                         <Bold>
                                             {numericDisplay(
                                                 thing.resource_count
                                             )}
-                                        </Bold>{' '}
-                                    </Text>
+                                        </Bold>
+                                        <BadgeDelta
+                                            className="ml-3"
+                                            deltaType={badgeTypeByDelta(
+                                                thing.old_resource_count,
+                                                thing.resource_count
+                                            )}
+                                        >
+                                            {`${percentageByChange(
+                                                thing.old_resource_count,
+                                                thing.resource_count
+                                            )}%`}
+                                        </BadgeDelta>
+                                    </Flex>
                                 </ListItem>
                             ))}
                         </List>
                     )}
                 </Card>
-            </div>
-        </div>
+            </Grid>
+        </Flex>
     )
 }

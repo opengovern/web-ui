@@ -11,6 +11,14 @@ export const timeAtom = atom<{
     end: parseDate(dayjs().format('YYYY-MM-DD')),
 })
 
+export const spendTimeAtom = atom<{
+    start: CalendarDate
+    end: CalendarDate
+}>({
+    start: parseDate(dayjs().subtract(1, 'month').format('YYYY-MM-DD')),
+    end: parseDate(dayjs().format('YYYY-MM-DD')),
+})
+
 interface IFilter {
     provider: '' | 'AWS' | 'Azure'
     connections: string[]

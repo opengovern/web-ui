@@ -4,12 +4,10 @@ import {
     Card,
     DeltaType,
     Flex,
-    Select,
-    SelectItem,
-    Text,
+    Subtitle,
     Title,
 } from '@tremor/react'
-import { atom, useAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import {
     exactPriceDisplay,
@@ -18,28 +16,32 @@ import {
 import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
-import { filterAtom, timeAtom } from '../../../../../store'
-import { KaytuProvider, StringToProvider } from '../../../../../types/provider'
+import { filterAtom, spendTimeAtom } from '../../../../../store'
 
-type IProps = {
-    categories: {
-        label: string
-        value: string
-    }[]
+const getConnections = (con: any) => {
+    if (con.provider.length) {
+        return con.provider
+    }
+    if (con.connections.length === 1) {
+        return con.connections[0]
+    }
+    if (con.connections.length) {
+        return `${con.connections.length} accounts`
+    }
+    return 'all accounts'
 }
 
-export default function GrowthTrend({ categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+export default function GrowthTrend() {
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const [growthDeltaType, setGrowthDeltaType] =
         useState<DeltaType>('unchanged')
     const [growthDelta, setGrowthDelta] = useState(0)
-    const [selectedTrendCostProvider, setSelectedTrendCostProvider] =
-        useState<KaytuProvider>('')
+
     const query = {
-        ...(selectedTrendCostProvider && {
-            connector: [selectedTrendCostProvider],
+        ...(selectedConnections.provider.length && {
+            connector: [selectedConnections.provider],
         }),
         ...(activeTimeRange.start && {
             startTime: dayjs(activeTimeRange.start.toString())
@@ -95,59 +97,34 @@ export default function GrowthTrend({ categories }: IProps) {
     }, [costTrend])
 
     return (
-        <Card>
-            <Flex justifyContent="between" alignItems="start">
-                <div className="flex justify-normal gap-x-2 items-center">
-                    <Title className="min-w-[7vw]">Overall Spend Trend </Title>
-                    <BadgeDelta deltaType={growthDeltaType}>
-                        {numericDisplay(growthDelta)}
-                    </BadgeDelta>
-                </div>
-                <div className="flex flex-row justify-normal gap-x-2 items-start">
-                    <div>
-                        <Text>
-                            <span className="text-gray-500">Provider: </span>
-                        </Text>
-                        <Select
-                            onValueChange={(e) =>
-                                setSelectedTrendCostProvider(
-                                    StringToProvider(e)
-                                )
-                            }
-                            placeholder={
-                                selectedTrendCostProvider === ''
-                                    ? 'All'
-                                    : selectedTrendCostProvider
-                            }
-                            className="max-w-xs mb-6"
-                        >
-                            {categories.map((category) => (
-                                <SelectItem
-                                    key={category.label}
-                                    value={category.value}
-                                >
-                                    {category.label}
-                                </SelectItem>
-                            ))}
-                        </Select>
-                    </div>
-                </div>
+        <Card className="mb-3">
+            <Flex justifyContent="start" className="gap-x-2">
+                <Title>Overall Spend Trend </Title>
+                <BadgeDelta deltaType={growthDeltaType}>
+                    {numericDisplay(growthDelta)}
+                </BadgeDelta>
             </Flex>
             {isLoading ? (
-                <div className="flex items-center justify-center">
-                    <Spinner />
-                </div>
+                <Spinner className="h-80" />
             ) : (
-                <Chart
-                    className="mt-4 h-80"
-                    index="date"
-                    type="line"
-                    yAxisWidth={120}
-                    categories={['count']}
-                    data={fixTime(costTrend) || []}
-                    showAnimation
-                    valueFormatter={exactPriceDisplay}
-                />
+                <>
+                    <Flex justifyContent="end">
+                        <Subtitle>
+                            {getConnections(selectedConnections)}
+                        </Subtitle>
+                    </Flex>
+                    <Chart
+                        className="mt-3"
+                        index="date"
+                        type="line"
+                        yAxisWidth={120}
+                        categories={['count']}
+                        showLegend={false}
+                        data={fixTime(costTrend) || []}
+                        showAnimation
+                        valueFormatter={exactPriceDisplay}
+                    />
+                </>
             )}
         </Card>
     )

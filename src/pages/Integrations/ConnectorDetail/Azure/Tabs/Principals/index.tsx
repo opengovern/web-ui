@@ -11,9 +11,10 @@ import {
 import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import PrincipalInfo from './PrincipalInfo'
 import NewPrincipal from './NewPrincipal'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../api/api'
 
 interface IPrincipals {
-    principals: any
+    principals: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
 const columns: ColDef[] = [
@@ -158,7 +159,7 @@ export default function Principals({ principals }: IPrincipals) {
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
-                        rowData={principals?.credentials || []}
+                        rowData={principals}
                     />
                 </div>
             </Card>

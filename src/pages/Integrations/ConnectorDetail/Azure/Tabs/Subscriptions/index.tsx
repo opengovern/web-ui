@@ -1,11 +1,18 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-import { Card, Flex, Title } from '@tremor/react'
+import { Button, Card, Flex, Title } from '@tremor/react'
+import { PlusIcon } from '@heroicons/react/24/outline'
 import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
+import NewAzureSubscription from './NewSubscription'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+} from '../../../../../../api/api'
 
 interface ISubscriptions {
-    subscriptions: any
+    subscriptions: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    spns: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
 const columns: ColDef[] = [
@@ -81,7 +88,8 @@ const columns: ColDef[] = [
     },
 ]
 
-export default function Subscriptions({ subscriptions }: ISubscriptions) {
+export default function Subscriptions({ subscriptions, spns }: ISubscriptions) {
+    const [open, setOpen] = useState(false)
     const gridRef = useRef<AgGridReact>(null)
     console.log(subscriptions)
     const gridOptions: GridOptions = {
@@ -113,15 +121,25 @@ export default function Subscriptions({ subscriptions }: ISubscriptions) {
 
     return (
         <Card>
-            <Title>Azure Subscriptions</Title>
+            <Flex flexDirection="row">
+                <Title>Azure Subscriptions</Title>
+                <Button icon={PlusIcon} onClick={() => setOpen(true)}>
+                    Create New Azure Subscription
+                </Button>
+            </Flex>
             <div className="ag-theme-alpine mt-6">
                 <AgGridReact
                     ref={gridRef}
                     domLayout="autoHeight"
                     gridOptions={gridOptions}
-                    rowData={subscriptions?.connections}
+                    rowData={subscriptions}
                 />
             </div>
+            <NewAzureSubscription
+                spns={spns}
+                open={open}
+                onClose={() => setOpen(false)}
+            />
         </Card>
     )
 }

@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Badge, Button, Flex, List, ListItem, Text } from '@tremor/react'
+import { TrashIcon } from '@heroicons/react/24/outline'
+import dayjs from 'dayjs'
 import {
     useAuthApiV1UserRoleBindingDelete,
     useAuthApiV1UserRoleBindingUpdate,
-} from '../../../api/auth.gen'
-import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../../api/api'
-import ConfirmModal from '../../../components/Modal/ConfirmModal'
+} from '../../../../api/auth.gen'
+import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../../../api/api'
+import ConfirmModal from '../../../../components/Modal/ConfirmModal'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
@@ -13,11 +15,11 @@ interface IMemberDetails {
     close: () => void
 }
 
-const MemberDetails: React.FC<IMemberDetails> = ({
+export default function MemberDetails({
     user,
     close,
     notification,
-}) => {
+}: IMemberDetails) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const [role, setRole] = useState<string>(user?.roleName || 'viewer')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
@@ -75,15 +77,15 @@ const MemberDetails: React.FC<IMemberDetails> = ({
         },
         {
             title: 'Member Since',
-            value: new Date(
-                Date.parse(user.createdAt || Date.now().toString())
-            ).toLocaleDateString(),
+            value: dayjs(user.createdAt || Date.now().toString()).format(
+                'MMM DD, YYYY'
+            ),
         },
         {
             title: 'Last Activity',
-            value: new Date(
-                Date.parse(user.lastActivity || Date.now().toString())
-            ).toLocaleDateString(),
+            value: dayjs(user.lastActivity || Date.now().toString()).format(
+                'MMM DD, YYYY'
+            ),
         },
         {
             title: 'Status',
@@ -198,15 +200,10 @@ const MemberDetails: React.FC<IMemberDetails> = ({
                 <Flex justifyContent="end" className="truncate space-x-4">
                     <Button
                         loading={loading}
-                        onClick={close}
-                        variant="secondary"
-                    >
-                        Cancel
-                    </Button>
-                    <Button
-                        loading={loading}
                         onClick={() => setDeleteConfirmation(true)}
+                        variant="secondary"
                         color="rose"
+                        icon={TrashIcon}
                     >
                         Delete
                     </Button>
@@ -218,5 +215,3 @@ const MemberDetails: React.FC<IMemberDetails> = ({
         </>
     )
 }
-
-export default MemberDetails

@@ -15,13 +15,14 @@ import {
     Title,
 } from '@tremor/react'
 import { useState } from 'react'
-import {
-    numericDisplay,
-    exactPriceDisplay,
-} from '../../../utilities/numericDisplay'
+import { useAtom } from 'jotai'
+import dayjs from 'dayjs'
+import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
+import { timeAtom } from '../../../store'
 
 interface listProps {
+    percent?: number
     name: string
     value: string
     delta?: string
@@ -47,6 +48,7 @@ type IProps = {
     newList?: listProps[]
     oldList?: listProps[]
 }
+
 export default function Composition({
     newData,
     oldData,
@@ -56,6 +58,8 @@ export default function Composition({
     isCost = false,
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const param = window.location.pathname.split('/')[2]
 
     const compositionData = (
         newObject: dataProps | undefined,
@@ -92,24 +96,34 @@ export default function Composition({
         <Card>
             <Flex flexDirection="row">
                 <Title>Overview</Title>
-                <TabGroup
-                    index={selectedIndex}
-                    onIndexChange={setSelectedIndex}
-                    className="w-fit"
-                >
-                    <TabList variant="solid">
-                        <Tab>Now</Tab>
-                        <Tab>Before</Tab>
-                    </TabList>
-                </TabGroup>
+                {param !== 'spend' && (
+                    <TabGroup
+                        index={selectedIndex}
+                        onIndexChange={setSelectedIndex}
+                        className="w-fit"
+                    >
+                        <TabList variant="solid">
+                            <Tab>
+                                {dayjs(activeTimeRange.end.toString()).format(
+                                    'MMM DD'
+                                )}
+                            </Tab>
+                            <Tab>
+                                {dayjs(activeTimeRange.start.toString()).format(
+                                    'MMM DD'
+                                )}
+                            </Tab>
+                        </TabList>
+                    </TabGroup>
+                )}
             </Flex>
             <Text className="mt-3">Total</Text>
             <Metric>
                 {selectedIndex === 0 ? newData?.total : oldData?.total}
             </Metric>
             <Divider />
-            <Flex flexDirection="row">
-                <div>
+            <Flex flexDirection="row" alignItems="start">
+                <Flex flexDirection="col" alignItems="start" className="w-1/7">
                     <Title>Allocation</Title>
                     <Text>
                         {selectedIndex === 0
@@ -117,22 +131,25 @@ export default function Composition({
                             : oldData?.totalValueCount}{' '}
                         Asset
                     </Text>
-                    <DonutChart
-                        data={compositionData(newData, oldData, selectedIndex)}
-                        category="value"
-                        index="name"
-                        className="w-64 h-64 mt-6"
-                        valueFormatter={
-                            isCost
-                                ? exactPriceDisplay
-                                : (v) => v.toLocaleString('en-US')
-                        }
-                    />
-                </div>
+                </Flex>
+                <DonutChart
+                    data={compositionData(newData, oldData, selectedIndex)}
+                    category="value"
+                    index="name"
+                    className="w-64 h-64"
+                    valueFormatter={
+                        isCost
+                            ? exactPriceDisplay
+                            : (v) => v.toLocaleString('en-US')
+                    }
+                />
                 <List className="w-2/5">
                     {selectedIndex === 0
                         ? newList?.map((item) => (
                               <ListItem key={item.name}>
+                                  {/* {item.percent && ( */}
+                                  {/*    <Text>%{item.percent.toFixed(2)}</Text> */}
+                                  {/* )} */}
                                   <Text>{item.name}</Text>
                                   <Flex
                                       justifyContent="end"
@@ -151,7 +168,10 @@ export default function Composition({
                               </ListItem>
                           ))
                         : oldList?.map((item) => (
-                              <ListItem key={item.name}>
+                              <ListItem key={item.name} className="my-2">
+                                  {/* {item.percent && ( */}
+                                  {/*    <Text>%{item.percent.toFixed(2)}</Text> */}
+                                  {/* )} */}
                                   <Text>{item.name}</Text>
                                   <Flex
                                       justifyContent="end"

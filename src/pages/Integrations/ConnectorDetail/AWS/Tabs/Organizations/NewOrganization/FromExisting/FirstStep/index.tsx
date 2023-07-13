@@ -8,11 +8,12 @@ import {
 import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ReactComponent as AWSIcon } from '../../../../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../../../api/api'
 
 interface IStep {
-    onNext: any
-    onPrevious: any
-    accounts: any
+    onNext: (connectionID: string) => void
+    onPrevious: () => void
+    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
 }
 
 const columns: ColDef[] = [
@@ -91,7 +92,7 @@ const columns: ColDef[] = [
 export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
     const gridRef = useRef<AgGridReact>(null)
 
-    const [selectedConnection, setSelectedConnection] = useState<any>({})
+    const [selectedCredentialID, setSelectedCredentialID] = useState<string>('')
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -100,8 +101,10 @@ export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
         animateRows: true,
         paginationPageSize: 10,
         getRowHeight: (params) => 50,
-        onRowClicked(event: RowClickedEvent<any>) {
-            setSelectedConnection(event.data)
+        onRowClicked(
+            event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+        ) {
+            setSelectedCredentialID(event.data?.credentialID || '')
         },
         sideBar: {
             toolPanels: [
@@ -132,7 +135,7 @@ export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
-                        rowData={accounts?.connections}
+                        rowData={accounts}
                     />
                 </div>
             </Flex>
@@ -141,8 +144,8 @@ export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
                     Cancel
                 </Button>
                 <Button
-                    onClick={() => onNext(selectedConnection)}
-                    disabled={!selectedConnection.id}
+                    onClick={() => onNext(selectedCredentialID)}
+                    disabled={selectedCredentialID === ''}
                     className="ml-3"
                 >
                     Next
