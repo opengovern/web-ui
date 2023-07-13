@@ -17,6 +17,7 @@ import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
+import { badgeDelta } from '../../../../../utilities/deltaType'
 
 const getConnections = (con: any) => {
     if (con.provider.length) {
@@ -68,7 +69,8 @@ export default function GrowthTrend() {
             const temp: any = {}
             const day = dayjs(data[item].date).format('DD')
             const month = dayjs(data[item].date).format('MMM')
-            temp.count = data[item].count
+            const title = getConnections(selectedConnections)
+            temp[title] = data[item].count
             temp.date = `${month} ${day}`
             result.push(temp)
         }
@@ -96,35 +98,42 @@ export default function GrowthTrend() {
         findDeltaType(costTrend)
     }, [costTrend])
 
+    const sortedTrend = () => {
+        return costTrend?.sort((a, b) => {
+            const au = dayjs(a.date).unix()
+            const bu = dayjs(b.date).unix()
+            if (au === bu) {
+                return 0
+            }
+            return au > bu ? 1 : -1
+        })
+    }
+
     return (
         <Card className="mb-3">
             <Flex justifyContent="start" className="gap-x-2">
                 <Title>Overall Spend Trend </Title>
-                <BadgeDelta deltaType={growthDeltaType}>
-                    {numericDisplay(growthDelta)}
-                </BadgeDelta>
+                {costTrend &&
+                    costTrend.length > 0 &&
+                    badgeDelta(
+                        sortedTrend()?.at(costTrend.length - 1)?.count,
+                        sortedTrend()?.at(0)?.count
+                    )}
             </Flex>
             {isLoading ? (
                 <Spinner className="h-80" />
             ) : (
-                <>
-                    <Flex justifyContent="end">
-                        <Subtitle>
-                            {getConnections(selectedConnections)}
-                        </Subtitle>
-                    </Flex>
-                    <Chart
-                        className="mt-3"
-                        index="date"
-                        type="line"
-                        yAxisWidth={120}
-                        categories={['count']}
-                        showLegend={false}
-                        data={fixTime(costTrend) || []}
-                        showAnimation
-                        valueFormatter={exactPriceDisplay}
-                    />
-                </>
+                <Chart
+                    className="mt-3"
+                    index="date"
+                    type="line"
+                    yAxisWidth={120}
+                    categories={[getConnections(selectedConnections)]}
+                    showLegend={false}
+                    data={fixTime(sortedTrend()) || []}
+                    showAnimation
+                    valueFormatter={exactPriceDisplay}
+                />
             )}
         </Card>
     )
