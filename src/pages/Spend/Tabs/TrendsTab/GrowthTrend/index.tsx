@@ -16,7 +16,7 @@ import {
 import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
-import { filterAtom, timeAtom } from '../../../../../store'
+import { filterAtom, spendTimeAtom } from '../../../../../store'
 
 const getConnections = (con: any) => {
     if (con.provider.length) {
@@ -32,7 +32,7 @@ const getConnections = (con: any) => {
 }
 
 export default function GrowthTrend() {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const [growthDeltaType, setGrowthDeltaType] =

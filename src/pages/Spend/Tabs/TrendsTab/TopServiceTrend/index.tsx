@@ -9,7 +9,7 @@ import {
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
-import { filterAtom, timeAtom } from '../../../../../store'
+import { filterAtom, spendTimeAtom } from '../../../../../store'
 
 type IProps = {
     categories: {
@@ -22,7 +22,7 @@ const trendDataAtom = atom<object[]>([])
 const serviceNamesAtom = atom<string[]>([])
 
 export default function TopServicesTrend({ categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const [serviceNames, setServiceNames] = useAtom(serviceNamesAtom)

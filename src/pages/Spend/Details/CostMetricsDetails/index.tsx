@@ -20,7 +20,7 @@ import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import {
     filterAtom,
     selectedResourceCategoryAtom,
-    timeAtom,
+    spendTimeAtom,
 } from '../../../../store'
 import {
     useInventoryApiV2CostMetricList,
@@ -188,7 +188,7 @@ const columnsAccounts: ColDef[] = [
 export default function CostMetricsDetails() {
     const navigate = useNavigate()
     const gridRef = useRef<AgGridReact>(null)
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom

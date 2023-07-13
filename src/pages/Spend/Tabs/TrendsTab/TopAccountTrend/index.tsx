@@ -5,11 +5,11 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboar
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
-import { filterAtom, timeAtom } from '../../../../../store'
+import { filterAtom, spendTimeAtom } from '../../../../../store'
 import { useInventoryApiV2CostTrendConnections } from './apiCostTrends'
 
 export default function TopAccountsTrend() {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
     const { response: topAccounts, isLoading: isLoadingTopAccount } =
         useOnboardApiV1ConnectionsSummaryList({
