@@ -1,6 +1,5 @@
 import {
     Col,
-    DateRangePicker,
     Flex,
     Grid,
     Metric,
@@ -22,6 +21,7 @@ import {
     useComplianceApiV1InsightList,
 } from '../../api/compliance.gen'
 import InsightCard from '../../components/Cards/InsightCard'
+import DateRangePicker from '../../components/DateRangePicker'
 import { timeAtom } from '../../store'
 import Spinner from '../../components/Spinner'
 import InsightGroupCard from '../../components/Cards/InsightGroupCard'
@@ -33,11 +33,11 @@ export default function Insights() {
     const [selectedTab, setSelectedTab] = useState(1)
 
     const query = {
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix(),
+        ...(activeTimeRange.start && {
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
         }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix(),
+        ...(activeTimeRange.end && {
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
         }),
     }
     const { response: insightList, isLoading: listLoading } =
@@ -55,14 +55,7 @@ export default function Insights() {
                     className="mb-6"
                 >
                     <Metric>Insights</Metric>
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        selectPlaceholder="Selection"
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <DateRangePicker />
                 </Flex>
                 <TabGroup>
                     <TabList className="mb-6">

@@ -4,7 +4,6 @@ import {
     Callout,
     Card,
     Col,
-    DateRangePicker,
     Flex,
     Grid,
     Icon,
@@ -24,6 +23,7 @@ import { AgGridReact } from 'ag-grid-react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import { today, getLocalTimeZone } from '@internationalized/date'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
     useComplianceApiV1InsightDetail,
@@ -36,6 +36,7 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import Breadcrumbs from '../../../components/Breadcrumbs'
+import DateRangePicker from '../../../components/DateRangePicker'
 import Spinner from '../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
@@ -205,7 +206,9 @@ export default function InsightDetail() {
 
     const start = () => {
         if (detailsDate === '') {
-            return dayjs(activeTimeRange.from || new Date())
+            return dayjs(
+                activeTimeRange.start.toDate(getLocalTimeZone()) || new Date()
+            )
         }
         const d = new Date(0)
         d.setUTCSeconds(parseInt(detailsDate, 10) - 1)
@@ -214,7 +217,9 @@ export default function InsightDetail() {
     const end = () => {
         if (detailsDate === '') {
             return dayjs(
-                activeTimeRange.to || activeTimeRange.from || new Date()
+                activeTimeRange.end.toDate(getLocalTimeZone()) ||
+                    activeTimeRange.start.toDate(getLocalTimeZone()) ||
+                    new Date()
             )
         }
         const d = new Date(0)
@@ -222,22 +227,22 @@ export default function InsightDetail() {
         return dayjs(d)
     }
     const query = {
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix(),
+        ...(activeTimeRange.start && {
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
         }),
-        ...(activeTimeRange.to
+        ...(activeTimeRange.end
             ? {
-                  endTime: dayjs(activeTimeRange.to).unix(),
+                  endTime: dayjs(activeTimeRange.end.toString()).unix(),
               }
             : {
-                  endTime: dayjs(activeTimeRange.from).unix(),
+                  endTime: dayjs(activeTimeRange.start.toString()).unix(),
               }),
     }
     const { response: insightTrend, isLoading: trendLoading } =
         useComplianceApiV1InsightTrendDetail(String(id), query)
 
     const detailsQuery = {
-        ...(activeTimeRange.from && {
+        ...(activeTimeRange.start && {
             startTime: start().unix(),
             endTime: end().unix(),
         }),
@@ -314,13 +319,7 @@ export default function InsightDetail() {
                         className="mb-6"
                     >
                         <Breadcrumbs pages={breadcrumbsPages} />
-                        <DateRangePicker
-                            className="max-w-md"
-                            value={activeTimeRange}
-                            onValueChange={setActiveTimeRange}
-                            enableClear={false}
-                            maxDate={new Date()}
-                        />
+                        <DateRangePicker />
                     </Flex>
                     <Flex flexDirection="col">
                         <Flex flexDirection="row">

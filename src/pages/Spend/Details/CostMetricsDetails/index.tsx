@@ -8,9 +8,7 @@ import {
     TabGroup,
     TabList,
     Tab,
-    DateRangePicker,
 } from '@tremor/react'
-
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -27,6 +25,7 @@ import {
     useInventoryApiV2ResourcesTagList,
 } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
+import DateRangePicker from '../../../../components/DateRangePicker'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
@@ -210,11 +209,15 @@ export default function CostMetricsDetails() {
                 connectionId: selectedConnections.connections,
             }),
             ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-            ...(activeTimeRange.from && {
-                startTime: dayjs(activeTimeRange.from).unix().toString(),
+            ...(activeTimeRange.start && {
+                startTime: dayjs(activeTimeRange.start.toString())
+                    .unix()
+                    .toString(),
             }),
-            ...(activeTimeRange.to && {
-                endTime: dayjs(activeTimeRange.to).unix().toString(),
+            ...(activeTimeRange.end && {
+                endTime: dayjs(activeTimeRange.end.toString())
+                    .unix()
+                    .toString(),
             }),
             pageSize: 10000,
             pageNumber: 1,
@@ -226,11 +229,11 @@ export default function CostMetricsDetails() {
             ...(selectedConnections.connections && {
                 connectionId: selectedConnections.connections,
             }),
-            ...(activeTimeRange.from && {
-                startTime: dayjs(activeTimeRange.from).unix(),
+            ...(activeTimeRange.start && {
+                startTime: dayjs(activeTimeRange.start.toString()).unix(),
             }),
-            ...(activeTimeRange.to && {
-                endTime: dayjs(activeTimeRange.to).unix(),
+            ...(activeTimeRange.end && {
+                endTime: dayjs(activeTimeRange.end.toString()).unix(),
             }),
             pageSize: 10000,
             pageNumber: 1,
@@ -306,13 +309,7 @@ export default function CostMetricsDetails() {
             >
                 <Breadcrumbs pages={breadcrumbsPages} />
                 <Flex flexDirection="row" justifyContent="end" alignItems="end">
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <DateRangePicker isSpend />
                     <ConnectionList />
                 </Flex>
             </Flex>

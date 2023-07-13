@@ -1,12 +1,10 @@
 import {
     Card,
-    DateRangePicker,
     Flex,
     SearchSelect,
     SearchSelectItem,
     Title,
 } from '@tremor/react'
-
 import { useRef } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -25,7 +23,7 @@ import {
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
-
+import DateRangePicker from '../../../../components/DateRangePicker'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
@@ -103,11 +101,13 @@ export default function ResourceMetricsDetails() {
             connectionId: selectedConnections.connections,
         }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        ...(activeTimeRange.start && {
+            startTime: dayjs(activeTimeRange.start.toString())
+                .unix()
+                .toString(),
         }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        ...(activeTimeRange.end && {
+            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
         }),
         pageSize: 1000,
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
@@ -182,13 +182,7 @@ export default function ResourceMetricsDetails() {
                 <Breadcrumbs pages={breadcrumbsPages} />
 
                 <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <DateRangePicker />
                     <ConnectionList />
                 </Flex>
             </Flex>

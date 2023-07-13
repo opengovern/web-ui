@@ -23,11 +23,11 @@ export default function TrendsTab({ categories }: IProps) {
         useOnboardApiV1ConnectionsSummaryList({
             connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
-            ...(activeTimeRange.from && {
-                startTime: dayjs(activeTimeRange.from).unix(),
+            ...(activeTimeRange.start && {
+                startTime: dayjs(activeTimeRange.start.toString()).unix(),
             }),
-            ...(activeTimeRange.to && {
-                endTime: dayjs(activeTimeRange.to).unix(),
+            ...(activeTimeRange.end && {
+                endTime: dayjs(activeTimeRange.end.toString()).unix(),
             }),
             pageSize: 5,
             pageNumber: 1,
@@ -40,11 +40,11 @@ export default function TrendsTab({ categories }: IProps) {
     } = useOnboardApiV1ConnectionsSummaryList({
         connector: [selectedConnections?.provider],
         connectionId: selectedConnections?.connections,
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix(),
+        ...(activeTimeRange.start && {
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
         }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix(),
+        ...(activeTimeRange.end && {
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
         }),
         pageSize: 5,
         pageNumber: 1,
@@ -56,11 +56,15 @@ export default function TrendsTab({ categories }: IProps) {
             ...(selectedConnections.provider && {
                 connector: [selectedConnections.provider],
             }),
-            ...(activeTimeRange.from && {
-                startTime: dayjs(activeTimeRange.from).unix().toString(),
+            ...(activeTimeRange.start && {
+                startTime: dayjs(activeTimeRange.start.toString())
+                    .unix()
+                    .toString(),
             }),
-            ...(activeTimeRange.to && {
-                endTime: dayjs(activeTimeRange.to).unix().toString(),
+            ...(activeTimeRange.end && {
+                endTime: dayjs(activeTimeRange.end.toString())
+                    .unix()
+                    .toString(),
             }),
             ...(selectedConnections.connections && {
                 connectionId: selectedConnections.connections,
@@ -76,11 +80,13 @@ export default function TrendsTab({ categories }: IProps) {
         ...(selectedConnections.provider && {
             connector: [selectedConnections.provider],
         }),
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        ...(activeTimeRange.start && {
+            startTime: dayjs(activeTimeRange.start.toString())
+                .unix()
+                .toString(),
         }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        ...(activeTimeRange.end && {
+            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
         }),
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,

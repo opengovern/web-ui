@@ -104,10 +104,14 @@ export default function Composition({
                     >
                         <TabList variant="solid">
                             <Tab>
-                                {dayjs(activeTimeRange.to).format('MMM DD')}
+                                {dayjs(activeTimeRange.end.toString()).format(
+                                    'MMM DD'
+                                )}
                             </Tab>
                             <Tab>
-                                {dayjs(activeTimeRange.from).format('MMM DD')}
+                                {dayjs(activeTimeRange.start.toString()).format(
+                                    'MMM DD'
+                                )}
                             </Tab>
                         </TabList>
                     </TabGroup>

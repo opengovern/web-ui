@@ -33,8 +33,8 @@ export default function SingleAccount() {
         useOnboardApiV1ConnectionsSummaryList({
             connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
-            startTime: dayjs(activeTimeRange.from).unix(),
-            endTime: dayjs(activeTimeRange.to).unix(),
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
             pageSize: 1,
             pageNumber: 1,
             sortBy: 'resource_count',

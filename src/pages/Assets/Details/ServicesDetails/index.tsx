@@ -5,11 +5,12 @@ import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { BadgeDelta, DateRangePicker, Flex } from '@tremor/react'
+import { BadgeDelta, Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { useInventoryApiV2ServicesMetricList } from '../../../../api/inventory.gen'
 import Summary from './Summary'
 import { filterAtom, timeAtom } from '../../../../store'
+import DateRangePicker from '../../../../components/DateRangePicker'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import ConnectionList from '../../../../components/ConnectionList'
@@ -90,7 +91,7 @@ export default function ServicesDetails() {
             connectionId: selectedConnections?.connections,
             pageSize: 1000,
             pageNumber: 1,
-            endTime: String(dayjs(activeTimeRange.to).unix()),
+            endTime: String(dayjs(activeTimeRange.end.toString()).unix()),
             sortBy: 'name',
         })
     console.log(serviceList)
@@ -134,13 +135,7 @@ export default function ServicesDetails() {
             >
                 <Breadcrumbs pages={breadcrumbsPages} />
                 <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <DateRangePicker />
                     <ConnectionList />
                 </Flex>
             </Flex>

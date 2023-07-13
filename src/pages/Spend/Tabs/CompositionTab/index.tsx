@@ -35,11 +35,13 @@ export default function CompositionTab({ top }: IProps) {
             ...(selectedConnections.connections && {
                 connectionId: selectedConnections.connections,
             }),
-            ...(activeTimeRange.from && {
-                endTime: dayjs(activeTimeRange.from).unix().toString(),
+            ...(activeTimeRange.start && {
+                endTime: dayjs(activeTimeRange.start.toString())
+                    .unix()
+                    .toString(),
             }),
-            ...(activeTimeRange.from && {
-                startTime: dayjs(activeTimeRange.from)
+            ...(activeTimeRange.start && {
+                startTime: dayjs(activeTimeRange.start.toString())
                     .subtract(1, 'day')
                     .unix()
                     .toString(),
@@ -55,11 +57,13 @@ export default function CompositionTab({ top }: IProps) {
             ...(selectedConnections.connections && {
                 connectionId: selectedConnections.connections,
             }),
-            ...(activeTimeRange.to && {
-                endTime: dayjs(activeTimeRange.to).unix().toString(),
+            ...(activeTimeRange.end && {
+                endTime: dayjs(activeTimeRange.end.toString())
+                    .unix()
+                    .toString(),
             }),
-            ...(activeTimeRange.to && {
-                startTime: dayjs(activeTimeRange.to)
+            ...(activeTimeRange.end && {
+                startTime: dayjs(activeTimeRange.end.toString())
                     .subtract(1, 'day')
                     .unix()
                     .toString(),

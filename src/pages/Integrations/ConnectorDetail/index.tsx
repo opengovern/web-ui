@@ -24,8 +24,8 @@ export default function ConnectorDetail() {
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
             connector: [StringToProvider(connector || '')],
-            startTime: dayjs(activeTimeRange.from).unix(),
-            endTime: dayjs(activeTimeRange.to).unix(),
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
             pageSize: 10000,
             pageNumber: 1,
         })

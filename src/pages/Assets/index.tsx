@@ -1,6 +1,4 @@
-import { useAtom } from 'jotai'
 import {
-    DateRangePicker,
     Flex,
     Metric,
     Tab,
@@ -9,8 +7,8 @@ import {
     TabPanel,
     TabPanels,
 } from '@tremor/react'
+import DateRangePicker from '../../components/DateRangePicker'
 import LoggedInLayout from '../../components/LoggedInLayout'
-import { timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
 import TrendsTab from './Tabs/TrendsTab'
@@ -19,7 +17,6 @@ import SummaryMetrics from './SummaryMetrics'
 import ResourceMetrics from './Tabs/ResourceMetrics'
 
 export default function Assets() {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
     const { response: inventoryCategories, isLoading: categoriesLoading } =
         useInventoryApiV2ResourcesTagList()
 
@@ -44,14 +41,7 @@ export default function Assets() {
             <Flex justifyContent="between" alignItems="center">
                 <Metric>Assets</Metric>
                 <Flex justifyContent="end">
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        selectPlaceholder="Time Range"
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <DateRangePicker />
                     <ConnectionList />
                 </Flex>
             </Flex>

@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import {
-    DateRangePicker,
     Flex,
     Metric,
     Tab,
@@ -11,6 +10,7 @@ import {
 } from '@tremor/react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
+import DateRangePicker from '../../components/DateRangePicker'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import {
     useInventoryApiV2CostMetricList,
@@ -49,11 +49,13 @@ export default function Spend() {
             connectionId: selectedConnections.connections,
         }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        ...(activeTimeRange.start && {
+            startTime: dayjs(activeTimeRange.start.toString())
+                .unix()
+                .toString(),
         }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        ...(activeTimeRange.end && {
+            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
         }),
         pageSize: 5000,
         pageNumber: 1,
@@ -65,8 +67,8 @@ export default function Spend() {
         useOnboardApiV1ConnectionsSummaryList({
             connector: [selectedConnections.provider],
             connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.from).unix(),
-            endTime: dayjs(activeTimeRange.to).unix(),
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
             pageSize: 5000,
             pageNumber: 1,
             sortBy: 'cost',
@@ -104,14 +106,7 @@ export default function Spend() {
             >
                 <Metric>Spend</Metric>
                 <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        selectPlaceholder="Time Range"
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <DateRangePicker isSpend />
                     <ConnectionList />
                 </Flex>
             </Flex>
