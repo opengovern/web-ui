@@ -1,6 +1,5 @@
 import {
     Col,
-    DateRangePicker,
     Flex,
     Grid,
     Metric,
@@ -11,6 +10,10 @@ import {
     TabPanels,
     TextInput,
 } from '@tremor/react'
+import { DateRangePicker } from '@react-spectrum/datepicker'
+import { Provider } from '@react-spectrum/provider'
+import { theme } from '@react-spectrum/theme-default'
+import { today, getLocalTimeZone } from '@internationalized/date'
 import React, { useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -32,11 +35,11 @@ export default function Insights() {
     const [searchQuery, setSearchQuery] = useState('')
 
     const query = {
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix(),
+        ...(activeTimeRange.start && {
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
         }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix(),
+        ...(activeTimeRange.end && {
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
         }),
     }
     const { response: insightList, isLoading: listLoading } =
@@ -54,14 +57,13 @@ export default function Insights() {
                     className="mb-6"
                 >
                     <Metric>Insights</Metric>
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        selectPlaceholder="Selection"
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <Provider theme={theme}>
+                        <DateRangePicker
+                            value={activeTimeRange}
+                            onChange={setActiveTimeRange}
+                            maxValue={today(getLocalTimeZone())}
+                        />
+                    </Provider>
                 </Flex>
                 <TabGroup>
                     <TabList className="mb-6">

@@ -1,5 +1,9 @@
 import { useAtom } from 'jotai'
-import { DateRangePicker, Flex } from '@tremor/react'
+import { Flex } from '@tremor/react'
+import { DateRangePicker } from '@react-spectrum/datepicker'
+import { Provider } from '@react-spectrum/provider'
+import { theme } from '@react-spectrum/theme-default'
+import { today, getLocalTimeZone } from '@internationalized/date'
 import { useNavigate } from 'react-router-dom'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../../../store'
@@ -35,13 +39,13 @@ export default function AccountsDetails() {
                 <Breadcrumbs pages={breadcrumbsPages} />
 
                 <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <Provider theme={theme}>
+                        <DateRangePicker
+                            value={activeTimeRange}
+                            onChange={setActiveTimeRange}
+                            maxValue={today(getLocalTimeZone())}
+                        />
+                    </Provider>
                     <ConnectionList />
                 </Flex>
             </Flex>

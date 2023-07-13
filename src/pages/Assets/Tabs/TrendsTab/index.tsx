@@ -35,8 +35,8 @@ export default function TrendsTab({ categories }: IProps) {
         return {
             connector: [selectedConnections.provider],
             connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.from).unix(),
-            endTime: dayjs(activeTimeRange.to).unix(),
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
             pageSize: 5,
             pageNumber: 1,
             sortBy,
@@ -61,8 +61,10 @@ export default function TrendsTab({ categories }: IProps) {
         return {
             connector: [selectedConnections.provider],
             connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.from).unix().toString(),
-            endTime: dayjs(activeTimeRange.to).unix().toString(),
+            startTime: dayjs(activeTimeRange.start.toString())
+                .unix()
+                .toString(),
+            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
             pageSize: 5,
             pageNumber: 1,
             sortBy,
@@ -85,8 +87,8 @@ export default function TrendsTab({ categories }: IProps) {
         return {
             connector: [selectedConnections.provider],
             connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.from).unix(),
-            endTime: dayjs(activeTimeRange.to).unix(),
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
             pageSize: 5,
             pageNumber: 1,
             sortBy,

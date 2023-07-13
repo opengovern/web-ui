@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react'
 import { useAtom } from 'jotai'
 import {
     Button,
-    DateRangePicker,
     Flex,
     Metric,
     Tab,
@@ -11,6 +10,10 @@ import {
     TabPanel,
     TabPanels,
 } from '@tremor/react'
+import { DateRangePicker } from '@react-spectrum/datepicker'
+import { Provider } from '@react-spectrum/provider'
+import { theme } from '@react-spectrum/theme-default'
+import { today, getLocalTimeZone } from '@internationalized/date'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
@@ -44,14 +47,13 @@ const Assets: React.FC<any> = () => {
             >
                 <Metric>Spend</Metric>
                 <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        selectPlaceholder="Time Range"
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <Provider theme={theme}>
+                        <DateRangePicker
+                            value={activeTimeRange}
+                            onChange={setActiveTimeRange}
+                            maxValue={today(getLocalTimeZone())}
+                        />
+                    </Provider>
                     <ConnectionList />
                 </Flex>
             </Flex>

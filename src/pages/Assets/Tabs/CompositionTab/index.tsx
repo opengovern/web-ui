@@ -40,7 +40,9 @@ export default function CompositionTab({ top }: IProps) {
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
         }),
-        ...(activeTimeRange.to && { time: dayjs(activeTimeRange.to).unix() }),
+        ...(activeTimeRange.start && {
+            time: dayjs(activeTimeRange.start.toString()).unix(),
+        }),
     }
     const { response: composition, isLoading } =
         useInventoryApiV2ResourcesCompositionDetail('category', query)

@@ -39,11 +39,13 @@ export default function CostMetrics({ pageSize, categories }: IProps) {
             connectionId: selectedConnections.connections,
         }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        ...(activeTimeRange.start && {
+            startTime: dayjs(activeTimeRange.start.toString())
+                .unix()
+                .toString(),
         }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        ...(activeTimeRange.end && {
+            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
         }),
         ...(pageSize && { pageSize }),
     }
@@ -54,8 +56,8 @@ export default function CostMetrics({ pageSize, categories }: IProps) {
         useOnboardApiV1ConnectionsSummaryList({
             connector: [selectedConnections.provider],
             connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.from).unix(),
-            endTime: dayjs(activeTimeRange.to).unix(),
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
             pageSize: 10000,
             pageNumber: 1,
         })

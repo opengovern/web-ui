@@ -41,11 +41,13 @@ export default function GrowthTrend({ categories }: IProps) {
         ...(selectedTrendCostProvider && {
             connector: [selectedTrendCostProvider],
         }),
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        ...(activeTimeRange.start && {
+            startTime: dayjs(activeTimeRange.start.toString())
+                .unix()
+                .toString(),
         }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        ...(activeTimeRange.end && {
+            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
         }),
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,

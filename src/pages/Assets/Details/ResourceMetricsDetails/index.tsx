@@ -1,12 +1,14 @@
 import {
     Card,
-    DateRangePicker,
     Flex,
     SearchSelect,
     SearchSelectItem,
     Title,
 } from '@tremor/react'
-
+import { DateRangePicker } from '@react-spectrum/datepicker'
+import { Provider } from '@react-spectrum/provider'
+import { theme } from '@react-spectrum/theme-default'
+import { today, getLocalTimeZone } from '@internationalized/date'
 import { useRef } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -103,11 +105,13 @@ export default function ResourceMetricsDetails() {
             connectionId: selectedConnections.connections,
         }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-        ...(activeTimeRange.from && {
-            startTime: dayjs(activeTimeRange.from).unix().toString(),
+        ...(activeTimeRange.start && {
+            startTime: dayjs(activeTimeRange.start.toString())
+                .unix()
+                .toString(),
         }),
-        ...(activeTimeRange.to && {
-            endTime: dayjs(activeTimeRange.to).unix().toString(),
+        ...(activeTimeRange.end && {
+            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
         }),
         pageSize: 1000,
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
@@ -182,13 +186,13 @@ export default function ResourceMetricsDetails() {
                 <Breadcrumbs pages={breadcrumbsPages} />
 
                 <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <Provider theme={theme}>
+                        <DateRangePicker
+                            value={activeTimeRange}
+                            onChange={setActiveTimeRange}
+                            maxValue={today(getLocalTimeZone())}
+                        />
+                    </Provider>
                     <ConnectionList />
                 </Flex>
             </Flex>

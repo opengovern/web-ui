@@ -8,9 +8,11 @@ import {
     TabGroup,
     TabList,
     Tab,
-    DateRangePicker,
 } from '@tremor/react'
-
+import { DateRangePicker } from '@react-spectrum/datepicker'
+import { Provider } from '@react-spectrum/provider'
+import { theme } from '@react-spectrum/theme-default'
+import { today, getLocalTimeZone } from '@internationalized/date'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -210,11 +212,15 @@ export default function CostMetricsDetails() {
                 connectionId: selectedConnections.connections,
             }),
             ...(activeCategory && { tag: [`category=${activeCategory}`] }),
-            ...(activeTimeRange.from && {
-                startTime: dayjs(activeTimeRange.from).unix().toString(),
+            ...(activeTimeRange.start && {
+                startTime: dayjs(activeTimeRange.start.toString())
+                    .unix()
+                    .toString(),
             }),
-            ...(activeTimeRange.to && {
-                endTime: dayjs(activeTimeRange.to).unix().toString(),
+            ...(activeTimeRange.end && {
+                endTime: dayjs(activeTimeRange.end.toString())
+                    .unix()
+                    .toString(),
             }),
             pageSize: 10000,
             pageNumber: 1,
@@ -226,11 +232,11 @@ export default function CostMetricsDetails() {
             ...(selectedConnections.connections && {
                 connectionId: selectedConnections.connections,
             }),
-            ...(activeTimeRange.from && {
-                startTime: dayjs(activeTimeRange.from).unix(),
+            ...(activeTimeRange.start && {
+                startTime: dayjs(activeTimeRange.start.toString()).unix(),
             }),
-            ...(activeTimeRange.to && {
-                endTime: dayjs(activeTimeRange.to).unix(),
+            ...(activeTimeRange.end && {
+                endTime: dayjs(activeTimeRange.end.toString()).unix(),
             }),
             pageSize: 10000,
             pageNumber: 1,
@@ -306,13 +312,13 @@ export default function CostMetricsDetails() {
             >
                 <Breadcrumbs pages={breadcrumbsPages} />
                 <Flex flexDirection="row" justifyContent="end" alignItems="end">
-                    <DateRangePicker
-                        className="max-w-md"
-                        value={activeTimeRange}
-                        onValueChange={setActiveTimeRange}
-                        enableClear={false}
-                        maxDate={new Date()}
-                    />
+                    <Provider theme={theme}>
+                        <DateRangePicker
+                            value={activeTimeRange}
+                            onChange={setActiveTimeRange}
+                            maxValue={today(getLocalTimeZone())}
+                        />
+                    </Provider>
                     <ConnectionList />
                 </Flex>
             </Flex>

@@ -1,6 +1,5 @@
 import { useAtom } from 'jotai'
 import {
-    DateRangePicker,
     Flex,
     Metric,
     Tab,
@@ -9,6 +8,10 @@ import {
     TabPanel,
     TabPanels,
 } from '@tremor/react'
+import { DateRangePicker } from '@react-spectrum/datepicker'
+import { Provider } from '@react-spectrum/provider'
+import { theme } from '@react-spectrum/theme-default'
+import { today, getLocalTimeZone } from '@internationalized/date'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { timeAtom } from '../../store'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
@@ -65,14 +68,13 @@ export default function Assets() {
                 alignItems="end"
                 className="relative top-10 h-0"
             >
-                <DateRangePicker
-                    className="max-w-md"
-                    value={activeTimeRange}
-                    onValueChange={setActiveTimeRange}
-                    selectPlaceholder="Time Range"
-                    enableClear={false}
-                    maxDate={new Date()}
-                />
+                <Provider theme={theme}>
+                    <DateRangePicker
+                        value={activeTimeRange}
+                        onChange={setActiveTimeRange}
+                        maxValue={today(getLocalTimeZone())}
+                    />
+                </Provider>
             </Flex>
 
             <TabGroup className="mt-3">

@@ -32,7 +32,7 @@ export default function Summary({
             connectionId: selectedConnections?.connections,
             pageSize: 5,
             pageNumber: 1,
-            endTime: String(dayjs(activeTimeRange.to).unix()),
+            endTime: String(dayjs(activeTimeRange.end.toString()).unix()),
             sortBy: 'count',
         })
     const {
@@ -43,7 +43,7 @@ export default function Summary({
         connectionId: selectedConnections?.connections,
         pageSize: 5,
         pageNumber: 1,
-        endTime: String(dayjs(activeTimeRange.to).unix()),
+        endTime: String(dayjs(activeTimeRange.end.toString()).unix()),
         sortBy: 'growth_rate',
     })
 

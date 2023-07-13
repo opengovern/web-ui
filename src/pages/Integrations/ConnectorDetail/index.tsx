@@ -25,8 +25,8 @@ export default function ConnectorDetail() {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             connector,
-            startTime: dayjs(activeTimeRange.from).unix(),
-            endTime: dayjs(activeTimeRange.to).unix(),
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
             pageSize: 10000,
             pageNumber: 1,
         })
