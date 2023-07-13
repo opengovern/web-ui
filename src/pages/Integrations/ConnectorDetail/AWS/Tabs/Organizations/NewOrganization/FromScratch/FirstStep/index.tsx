@@ -1,8 +1,8 @@
 import { Bold, Button, Flex, Text } from '@tremor/react'
 
 interface IStep {
-    onNext: any
-    onPrevious: any
+    onNext: () => void
+    onPrevious: () => void
 }
 
 export default function FirstStep({ onNext, onPrevious }: IStep) {

@@ -103,7 +103,7 @@ export default function NewPrincipal({ open, onClose }: INewPrinciple) {
                     />
                 )
             case 3:
-                return <FinalStep data={principal} onNext={close} />
+                return <FinalStep data={data} health="" onNext={close} />
             default:
                 return null
         }

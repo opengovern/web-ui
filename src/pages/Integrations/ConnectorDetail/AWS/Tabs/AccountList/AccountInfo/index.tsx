@@ -10,16 +10,17 @@ import {
 import { useState } from 'react'
 import { useOnboardApiV1CredentialDetail } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
 
 interface IAccInfo {
-    data: any
+    data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
     open: boolean
-    onClose: any
+    onClose: () => void
 }
 
 export default function AccountInfo({ data, open, onClose }: IAccInfo) {
     const { response: credential } = useOnboardApiV1CredentialDetail(
-        data?.credentialID,
+        data?.credentialID || '',
         {},
         !!data && open
     )
@@ -45,7 +46,7 @@ export default function AccountInfo({ data, open, onClose }: IAccInfo) {
                     <Flex>
                         <Text>AWS account ID</Text>
                         <Text className="text-black">
-                            {data?.metadata.account_id}
+                            {data?.metadata?.account_id}
                         </Text>
                     </Flex>
                     <Divider />
@@ -89,16 +90,12 @@ export default function AccountInfo({ data, open, onClose }: IAccInfo) {
                         ) : (
                             <Flex justifyContent="end">
                                 <Text className="text-black">
-                                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                    {/* @ts-ignore */}
                                     {credential?.config.accessKey}
                                 </Text>
                                 <Button
                                     variant="light"
                                     className="ml-3"
                                     onClick={() => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
                                         setKey(credential?.config.accessKey)
                                         seteKey(true)
                                     }}

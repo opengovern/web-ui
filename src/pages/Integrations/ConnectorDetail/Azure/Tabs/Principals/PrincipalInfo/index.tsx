@@ -10,9 +10,10 @@ import {
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
 
 interface IPriInfo {
-    data: any
+    data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
     open: boolean
     onClose: () => void
 }
@@ -41,21 +42,21 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                     <Flex>
                         <Text>Application ID</Text>
                         <Text className="text-black">
-                            {data?.metadata.organization_master_account_email}
+                            {data?.metadata?.organization_master_account_email}
                         </Text>
                     </Flex>
                     <Divider />
                     <Flex>
                         <Text>Object ID</Text>
                         <Text className="text-black">
-                            {data?.metadata.object_id}
+                            {data?.metadata?.object_id}
                         </Text>
                     </Flex>
                     <Divider />
                     <Flex>
                         <Text>Directory ID</Text>
                         <Text className="text-black">
-                            {data?.metadata.organization_master_account_email}
+                            {data?.metadata?.organization_master_account_email}
                         </Text>
                     </Flex>
                     <Divider />
@@ -106,13 +107,13 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                         ) : (
                             <Flex justifyContent="end">
                                 <Text className="text-black">
-                                    {data?.metadata.secret_id}
+                                    {data?.metadata?.secret_id}
                                 </Text>
                                 <Button
                                     variant="light"
                                     className="ml-3"
                                     onClick={() => {
-                                        setId(data?.metadata.secret_id)
+                                        setId(data?.metadata?.secret_id)
                                         seteId(true)
                                     }}
                                 >

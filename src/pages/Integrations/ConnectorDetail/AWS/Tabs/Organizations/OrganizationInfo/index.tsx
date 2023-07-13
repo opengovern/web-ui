@@ -11,16 +11,17 @@ import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useOnboardApiV1CredentialDetail } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
+import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
 
 interface IOrgInfo {
-    data: any
+    data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
     open: boolean
-    onClose: any
+    onClose: () => void
 }
 
 export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
     const { response: credential } = useOnboardApiV1CredentialDetail(
-        data?.id,
+        data?.id || '',
         {},
         !!data && open
     )
@@ -47,7 +48,7 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                 <Flex>
                     <Text>Email</Text>
                     <Text className="text-black">
-                        {data?.metadata.organization_master_account_email}
+                        {data?.metadata?.organization_master_account_email}
                     </Text>
                 </Flex>
                 <Divider />
@@ -91,14 +92,14 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                 <Flex>
                     <Text>AWS account name</Text>
                     <Text className="text-black">
-                        {data?.metadata.iam_user_name}
+                        {data?.metadata?.iam_user_name}
                     </Text>
                 </Flex>
                 <Divider />
                 <Flex>
                     <Text>AWS account ID</Text>
                     <Text className="text-black">
-                        {data?.metadata.account_id}
+                        {data?.metadata?.account_id}
                     </Text>
                 </Flex>
                 <Divider />
@@ -138,16 +139,12 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                     ) : (
                         <Flex justifyContent="end">
                             <Text className="text-black">
-                                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                {/* @ts-ignore */}
                                 {credential?.config.accessKey}
                             </Text>
                             <Button
                                 variant="light"
                                 className="ml-3"
                                 onClick={() => {
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
                                     setKey(credential?.config.accessKey)
                                     seteKey(true)
                                 }}
@@ -233,16 +230,12 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                     ) : (
                         <Flex justifyContent="end">
                             <Text className="text-black">
-                                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                {/* @ts-ignore */}
                                 {credential?.config.assumeRoleName}
                             </Text>
                             <Button
                                 variant="light"
                                 className="ml-3"
                                 onClick={() => {
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
                                     setRole(credential?.config.assumeRoleName)
                                     seteRole(true)
                                 }}
@@ -279,16 +272,12 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                     ) : (
                         <Flex justifyContent="end">
                             <Text className="text-black">
-                                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                {/* @ts-ignore */}
                                 {credential?.config.externalId}
                             </Text>
                             <Button
                                 variant="light"
                                 className="ml-3"
                                 onClick={() => {
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
                                     setId(credential?.config.externalId)
                                     seteId(true)
                                 }}

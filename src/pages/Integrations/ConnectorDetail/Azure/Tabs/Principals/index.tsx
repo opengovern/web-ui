@@ -112,7 +112,9 @@ export default function Principals({ principals }: IPrincipals) {
 
     const [open, setOpen] = useState(false)
     const [openInfo, setOpenInfo] = useState(false)
-    const [priData, setPriData] = useState(null)
+    const [priData, setPriData] = useState<
+        GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
+    >(undefined)
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -120,7 +122,9 @@ export default function Principals({ principals }: IPrincipals) {
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
-        onRowClicked: (event: RowClickedEvent<any>) => {
+        onRowClicked: (
+            event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
+        ) => {
             setPriData(event.data)
             setOpenInfo(true)
         },
