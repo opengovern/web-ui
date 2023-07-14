@@ -12,6 +12,7 @@ import dayjs from 'dayjs'
 import {
     exactPriceDisplay,
     numericDisplay,
+    priceDisplay,
 } from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
@@ -132,7 +133,7 @@ export default function GrowthTrend() {
                     showLegend={false}
                     data={fixTime(sortedTrend()) || []}
                     showAnimation
-                    valueFormatter={exactPriceDisplay}
+                    valueFormatter={priceDisplay}
                 />
             )}
         </Card>
