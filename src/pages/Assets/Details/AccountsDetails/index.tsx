@@ -26,13 +26,9 @@ export default function AccountsDetails() {
 
     return (
         <LoggedInLayout currentPage="assets">
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                alignItems="center"
-            >
+            <Flex>
                 <Breadcrumbs pages={breadcrumbsPages} />
-                <Flex flexDirection="row" justifyContent="end">
+                <Flex justifyContent="end">
                     <DateRangePicker />
                     <ConnectionList />
                 </Flex>

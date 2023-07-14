@@ -8,6 +8,7 @@ import {
     Title,
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import { useNavigate } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import { ReactComponent as AzureIcon } from '../../../icons/azure-round.svg'
 import { ReactComponent as CisIcon } from '../../../icons/cis-round.svg'
@@ -19,6 +20,8 @@ interface IComplianceCard {
 }
 
 export default function ComplianceCard({ benchmark }: IComplianceCard) {
+    const navigate = useNavigate()
+
     const critical = benchmark?.checks?.criticalCount || 0
     const high = benchmark?.checks?.highCount || 0
     const medium = benchmark?.checks?.mediumCount || 0
@@ -36,7 +39,11 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
     const skip = benchmark?.result?.skipCount || 0
 
     return (
-        <Card key={benchmark?.id}>
+        <Card
+            key={benchmark?.id}
+            className="cursor-pointer"
+            onClick={() => navigate(`${benchmark?.id}`)}
+        >
             <Title className="w-full truncate mb-1">{benchmark?.title}</Title>
             <Text className="line-clamp-2 mb-6">{benchmark?.description}</Text>
             <CategoryBar
@@ -80,7 +87,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                 }
             >
                 <Text className="font-semibold">Coverage:</Text>
-                <Badge color="emerald">
+                <Badge color="emerald" className="cursor-pointer">
                     {((ok / (ok + info + error + skip + alarm)) * 100).toFixed(
                         2
                     )}

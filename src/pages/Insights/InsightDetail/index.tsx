@@ -3,12 +3,8 @@ import {
     Button,
     Callout,
     Card,
-    Col,
     Flex,
-    Grid,
     Icon,
-    SearchSelect,
-    SearchSelectItem,
     Select,
     SelectItem,
     Subtitle,
@@ -23,7 +19,7 @@ import { AgGridReact } from 'ag-grid-react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
-import { today, getLocalTimeZone } from '@internationalized/date'
+import { getLocalTimeZone } from '@internationalized/date'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
     useComplianceApiV1InsightDetail,
@@ -31,10 +27,7 @@ import {
 } from '../../../api/compliance.gen'
 import { timeAtom } from '../../../store'
 import Downloader from './Downloader'
-import {
-    numberGroupedDisplay,
-    numericDisplay,
-} from '../../../utilities/numericDisplay'
+import { numberGroupedDisplay } from '../../../utilities/numericDisplay'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import DateRangePicker from '../../../components/DateRangePicker'
 import Spinner from '../../../components/Spinner'
@@ -96,20 +89,6 @@ const insightsResultToRows = (details: any) => {
             return { id: i, ...object }
         }) || []
     )
-}
-
-const calculatePercent = (inputData: any) => {
-    if (
-        Number(inputData?.oldTotalResultValue) &&
-        Number(inputData?.totalResultValue)
-    ) {
-        return (
-            ((inputData.totalResultValue - inputData.oldTotalResultValue) /
-                inputData.oldTotalResultValue) *
-                100 || 0
-        )
-    }
-    return 0
 }
 
 const gridOptions: GridOptions = {
