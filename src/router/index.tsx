@@ -18,6 +18,7 @@ import ConnectorDetail from '../pages/Integrations/ConnectorDetail'
 import MetricDetails from '../pages/Assets/Details/MetricDetails'
 import Compliance from '../pages/Compliance'
 import BenchmarkDetail from '../pages/Compliance/BenchmarkDetail'
+import Home from '../pages/Home'
 
 const routes = [
     {
@@ -127,6 +128,11 @@ const authRoutes = [
         key: 'benchmark detail',
         path: '/:ws/compliance/:id',
         component: BenchmarkDetail,
+    },
+    {
+        key: 'home',
+        path: '/:ws/home',
+        component: Home,
     },
 ]
 
