@@ -59,6 +59,7 @@ const navigation = [
     },
     {
         name: 'Settings',
+        id: 'settings',
         page: 'settings/entitlement',
         icon: Cog6ToothIcon,
     },
@@ -160,7 +161,8 @@ export default function LoggedInLayout({
                                                             <Link
                                                                 to={`/${workspace}/${item.page}`}
                                                                 className={classNames(
-                                                                    item.page ===
+                                                                    (item.id ||
+                                                                        item.page) ===
                                                                         currentPage
                                                                         ? 'bg-blue-900/50 text-gray-200'
                                                                         : 'text-gray-300 hover:bg-blue-900/50',
@@ -207,7 +209,8 @@ export default function LoggedInLayout({
                                         to={`/${workspace}/${item.page}`}
                                         className={`p-2 group flex rounded-md text-sm leading-6 font-semibold   
                                                     ${
-                                                        item.page ===
+                                                        (item.id ||
+                                                            item.page) ===
                                                         currentPage
                                                             ? 'bg-blue-900/50 text-gray-200'
                                                             : 'text-gray-300 hover:bg-blue-900/50'

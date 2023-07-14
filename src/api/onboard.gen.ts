@@ -1652,7 +1652,7 @@ interface IuseOnboardApiV1SourceDeleteState {
 }
 
 export const useOnboardApiV1SourceDelete = (
-    sourceId: number,
+    sourceId: string,
     params: RequestParams = {},
     autoExecute = true
 ) => {

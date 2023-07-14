@@ -5356,7 +5356,7 @@ export class Api<
          * @request DELETE:/onboard/api/v1/source/{sourceId}
          * @secure
          */
-        apiV1SourceDelete: (sourceId: number, params: RequestParams = {}) =>
+        apiV1SourceDelete: (sourceId: string, params: RequestParams = {}) =>
             this.request<void, any>({
                 path: `/onboard/api/v1/source/${sourceId}`,
                 method: 'DELETE',

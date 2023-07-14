@@ -59,6 +59,23 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
+        field: 'credentialName',
+        headerName: 'Parent Organization Name',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
+        field: 'credentialID',
+        headerName: 'Parent Organization ID',
+        hide: true,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
         field: 'lifecycleState',
         headerName: 'State',
         sortable: true,
