@@ -172,7 +172,7 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                                     insight.totalResultValue -
                                                         insight.oldTotalResultValue >
                                                     0
-                                                        ? 'green'
+                                                        ? 'emerald'
                                                         : 'red'
                                                 }
                                             >
@@ -219,7 +219,7 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                                             insight.totalResultValue -
                                                                 insight.oldTotalResultValue >
                                                             0
-                                                                ? 'green'
+                                                                ? 'emerald'
                                                                 : 'red'
                                                         }
                                                     >

@@ -31,7 +31,7 @@ interface IWorkSpace {
 const getBadgeColor = (status: string) => {
     switch (status) {
         case 'PROVISIONED':
-            return 'green'
+            return 'emerald'
         case 'SUSPENDED':
             return 'orange'
         case 'DELETED':

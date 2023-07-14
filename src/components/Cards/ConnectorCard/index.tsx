@@ -21,7 +21,7 @@ export const getConnectorIcon = (connector: any) => {
 
 const getBadgeColor = (status: any) => {
     if (status === 'enabled') {
-        return 'green'
+        return 'emerald'
     }
     return 'rose'
 }
