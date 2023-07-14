@@ -24,9 +24,7 @@ export default function TrendsTab({ categories }: IProps) {
             connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
             ...(activeTimeRange.start && {
-                startTime: dayjs(activeTimeRange.start.toString())
-                    .startOf('day')
-                    .unix(),
+                startTime: dayjs(activeTimeRange.start.toString()).unix(),
             }),
             ...(activeTimeRange.end && {
                 endTime: dayjs(activeTimeRange.end.toString())
@@ -45,9 +43,7 @@ export default function TrendsTab({ categories }: IProps) {
         connector: [selectedConnections?.provider],
         connectionId: selectedConnections?.connections,
         ...(activeTimeRange.start && {
-            startTime: dayjs(activeTimeRange.start.toString())
-                .startOf('day')
-                .unix(),
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
         }),
         ...(activeTimeRange.end && {
             endTime: dayjs(activeTimeRange.end.toString()).endOf('day').unix(),
@@ -64,7 +60,6 @@ export default function TrendsTab({ categories }: IProps) {
             }),
             ...(activeTimeRange.start && {
                 startTime: dayjs(activeTimeRange.start.toString())
-                    .startOf('day')
                     .unix()
                     .toString(),
             }),
@@ -90,7 +85,6 @@ export default function TrendsTab({ categories }: IProps) {
         }),
         ...(activeTimeRange.start && {
             startTime: dayjs(activeTimeRange.start.toString())
-                .startOf('day')
                 .unix()
                 .toString(),
         }),

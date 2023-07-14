@@ -13,6 +13,7 @@ import {
     priceDisplay,
 } from '../../../../../utilities/numericDisplay'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
+import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
 type IProps = {
     categories: {
@@ -33,7 +34,6 @@ export default function TopServicesTrend({ categories }: IProps) {
         }),
         ...(activeTimeRange.start && {
             startTime: dayjs(activeTimeRange.start.toString())
-                .startOf('day')
                 .unix()
                 .toString(),
         }),
@@ -63,7 +63,6 @@ export default function TopServicesTrend({ categories }: IProps) {
                 }),
                 ...(activeTimeRange.start && {
                     startTime: dayjs(activeTimeRange.start.toString())
-                        .startOf('day')
                         .unix()
                         .toString(),
                 }),
@@ -83,7 +82,6 @@ export default function TopServicesTrend({ categories }: IProps) {
 
     const fixTime = (input: any) => {
         const result: object[] = []
-        console.log('input top service Trend: ', input)
         if (input === undefined) {
             return result
         }
@@ -102,9 +100,7 @@ export default function TopServicesTrend({ categories }: IProps) {
                         services.push(name)
                     }
                     temp[name] = input[item].costTrend[i].count
-                    temp.date = dayjs(input[item].costTrend[i].date).format(
-                        'DD MMM'
-                    )
+                    temp.date = dateDisplay(input[item].costTrend[i].date)
                 }
                 result.push(temp)
             }

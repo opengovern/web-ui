@@ -10,6 +10,7 @@ import {
 } from '../../../../../utilities/numericDisplay'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
 import { useInventoryApiV2CostTrendConnections } from './apiCostTrends'
+import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
 export default function TopAccountsTrend() {
     const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
@@ -19,9 +20,7 @@ export default function TopAccountsTrend() {
             connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
             ...(activeTimeRange.start && {
-                startTime: dayjs(activeTimeRange.start.toString())
-                    .startOf('day')
-                    .unix(),
+                startTime: dayjs(activeTimeRange.start.toString()).unix(),
             }),
             ...(activeTimeRange.end && {
                 endTime: dayjs(activeTimeRange.end.toString())
@@ -43,7 +42,6 @@ export default function TopAccountsTrend() {
                 }),
                 ...(activeTimeRange.start && {
                     startTime: dayjs(activeTimeRange.start.toString())
-                        .startOf('day')
                         .unix()
                         .toString(),
                 }),
@@ -86,7 +84,7 @@ export default function TopAccountsTrend() {
             })
             .map(([date, valueArray]) => {
                 const trendMap = new Map<string, string | number>()
-                trendMap.set('date', dayjs.unix(date).format('DD MMM'))
+                trendMap.set('date', dateDisplay(date))
                 valueArray.forEach((item) => {
                     const name =
                         topAccounts?.connections?.find(

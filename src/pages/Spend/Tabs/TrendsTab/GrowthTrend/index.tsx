@@ -8,6 +8,7 @@ import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
 import { badgeDelta } from '../../../../../utilities/deltaType'
+import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
 const getConnections = (con: any) => {
     if (con.provider.length) {
@@ -35,7 +36,6 @@ export default function GrowthTrend() {
         }),
         ...(activeTimeRange.start && {
             startTime: dayjs(activeTimeRange.start.toString())
-                .startOf('day')
                 .unix()
                 .toString(),
         }),
@@ -62,7 +62,7 @@ export default function GrowthTrend() {
             const temp: any = {}
             const title = getConnections(selectedConnections)
             temp[title] = data[item].count
-            temp.date = dayjs(data[item].date).format('DD MMM')
+            temp.date = dateDisplay(data[item].date)
             result.push(temp)
         }
         return result
