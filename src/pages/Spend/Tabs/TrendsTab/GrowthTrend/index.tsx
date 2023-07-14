@@ -1,19 +1,8 @@
 import { useEffect, useState } from 'react'
-import {
-    BadgeDelta,
-    Card,
-    DeltaType,
-    Flex,
-    Subtitle,
-    Title,
-} from '@tremor/react'
-import { useAtom } from 'jotai'
+import { Card, DeltaType, Flex, Title } from '@tremor/react'
+import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
-import {
-    exactPriceDisplay,
-    numericDisplay,
-    priceDisplay,
-} from '../../../../../utilities/numericDisplay'
+import { priceDisplay } from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
@@ -34,24 +23,27 @@ const getConnections = (con: any) => {
 }
 
 export default function GrowthTrend() {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const [growthDeltaType, setGrowthDeltaType] =
         useState<DeltaType>('unchanged')
     const [growthDelta, setGrowthDelta] = useState(0)
-
     const query = {
         ...(selectedConnections.provider.length && {
             connector: [selectedConnections.provider],
         }),
         ...(activeTimeRange.start && {
             startTime: dayjs(activeTimeRange.start.toString())
+                .startOf('day')
                 .unix()
                 .toString(),
         }),
         ...(activeTimeRange.end && {
-            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
+            endTime: dayjs(activeTimeRange.end.toString())
+                .endOf('day')
+                .unix()
+                .toString(),
         }),
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
@@ -68,11 +60,9 @@ export default function GrowthTrend() {
         for (let j = 1; j < keys.length; j += 1) {
             const item = keys[j]
             const temp: any = {}
-            const day = dayjs(data[item].date).format('DD')
-            const month = dayjs(data[item].date).format('MMM')
             const title = getConnections(selectedConnections)
             temp[title] = data[item].count
-            temp.date = `${month} ${day}`
+            temp.date = dayjs(data[item].date).format('DD MMM')
             result.push(temp)
         }
         return result

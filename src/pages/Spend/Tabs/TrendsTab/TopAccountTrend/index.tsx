@@ -19,10 +19,14 @@ export default function TopAccountsTrend() {
             connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
             ...(activeTimeRange.start && {
-                startTime: dayjs(activeTimeRange.start.toString()).unix(),
+                startTime: dayjs(activeTimeRange.start.toString())
+                    .startOf('day')
+                    .unix(),
             }),
             ...(activeTimeRange.end && {
-                endTime: dayjs(activeTimeRange.end.toString()).unix(),
+                endTime: dayjs(activeTimeRange.end.toString())
+                    .endOf('day')
+                    .unix(),
             }),
             pageSize: 5,
             pageNumber: 1,
@@ -39,11 +43,13 @@ export default function TopAccountsTrend() {
                 }),
                 ...(activeTimeRange.start && {
                     startTime: dayjs(activeTimeRange.start.toString())
+                        .startOf('day')
                         .unix()
                         .toString(),
                 }),
                 ...(activeTimeRange.end && {
                     endTime: dayjs(activeTimeRange.end.toString())
+                        .endOf('day')
                         .unix()
                         .toString(),
                 }),
@@ -80,7 +86,7 @@ export default function TopAccountsTrend() {
             })
             .map(([date, valueArray]) => {
                 const trendMap = new Map<string, string | number>()
-                trendMap.set('date', dayjs.unix(date).format('MMM DD, YYYY'))
+                trendMap.set('date', dayjs.unix(date).format('DD MMM'))
                 valueArray.forEach((item) => {
                     const name =
                         topAccounts?.connections?.find(
