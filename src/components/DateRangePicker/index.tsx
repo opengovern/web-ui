@@ -13,7 +13,7 @@ export default function DateRangePicker({ isSpend = false }: DatePickerProps) {
         isSpend ? spendTimeAtom : timeAtom
     )
     return (
-        <Provider theme={theme}>
+        <Provider theme={theme} colorScheme="light">
             <DatePicker
                 value={activeTimeRange}
                 onChange={setActiveTimeRange}
