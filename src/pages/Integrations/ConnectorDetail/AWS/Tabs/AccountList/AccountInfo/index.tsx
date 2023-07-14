@@ -7,10 +7,15 @@ import {
     TextInput,
     Title,
 } from '@tremor/react'
-import { useState } from 'react'
-import { useOnboardApiV1CredentialDetail } from '../../../../../../../api/onboard.gen'
+import { useEffect, useState } from 'react'
+import {
+    useOnboardApiV1CredentialDetail,
+    useOnboardApiV1SourceDelete,
+    useOnboardApiV1SourceHealthcheckCreate,
+} from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
+import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/schedule.gen'
 
 interface IAccInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
@@ -29,6 +34,47 @@ export default function AccountInfo({ data, open, onClose }: IAccInfo) {
     const [ekey, seteKey] = useState(false)
     const [secret, setSecret] = useState('')
     const [esecret, seteSecret] = useState(false)
+
+    const {
+        isExecuted: isDeleteExecuted,
+        isLoading: isDeleteLoading,
+        sendNow: deleteNow,
+    } = useOnboardApiV1SourceDelete(data?.id || '', {}, false)
+
+    const {
+        isExecuted: isHealthCheckExecuted,
+        isLoading: isHealthCheckLoading,
+        sendNow: runHealthCheckNow,
+    } = useOnboardApiV1SourceHealthcheckCreate(data?.id || '', {}, false)
+
+    const {
+        isExecuted: isDiscoverExecuted,
+        isLoading: isDiscoverLoading,
+        sendNow: discoverNow,
+    } = useScheduleApiV1DescribeTriggerUpdate(data?.id || '', {}, false)
+
+    useEffect(() => {
+        if (isDeleteExecuted && !isDeleteLoading) {
+            onClose()
+        }
+    }, [isDeleteLoading])
+
+    useEffect(() => {
+        if (isHealthCheckExecuted && !isHealthCheckLoading) {
+            onClose()
+        }
+    }, [isHealthCheckLoading])
+
+    useEffect(() => {
+        if (isDiscoverExecuted && !isDiscoverLoading) {
+            onClose()
+        }
+    }, [isDiscoverLoading])
+
+    const buttonsDisabled =
+        (isDeleteExecuted && isDeleteLoading) ||
+        (isHealthCheckExecuted && isHealthCheckLoading) ||
+        (isDiscoverExecuted && isDiscoverLoading)
 
     return (
         <DrawerPanel title="AWS Account" open={open} onClose={() => onClose()}>
@@ -147,9 +193,31 @@ export default function AccountInfo({ data, open, onClose }: IAccInfo) {
                     </Flex>
                 </Flex>
                 <Flex justifyContent="end">
-                    <Button variant="secondary">Delete</Button>
-                    <Button className="mx-3">Health Check</Button>
-                    <Button>Trigger Discovery</Button>
+                    <Button
+                        variant="secondary"
+                        color="rose"
+                        loading={isDeleteExecuted && isDeleteLoading}
+                        disabled={buttonsDisabled}
+                        onClick={deleteNow}
+                    >
+                        Delete
+                    </Button>
+                    <Button
+                        className="ml-3"
+                        loading={isHealthCheckExecuted && isHealthCheckLoading}
+                        disabled={buttonsDisabled}
+                        onClick={runHealthCheckNow}
+                    >
+                        Trigger Health Check
+                    </Button>
+                    <Button
+                        className="ml-3"
+                        loading={isDiscoverExecuted && isDiscoverLoading}
+                        disabled={buttonsDisabled}
+                        onClick={discoverNow}
+                    >
+                        Trigger Discovery
+                    </Button>
                 </Flex>
             </Flex>
         </DrawerPanel>

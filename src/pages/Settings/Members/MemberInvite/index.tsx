@@ -132,7 +132,7 @@ export default function MemberInvite({
             </List>
             <Flex justifyContent="end" className="truncate space-x-4">
                 <Button
-                    loading={isExecuted && isLoading}
+                    disabled={isExecuted && isLoading}
                     onClick={() => close(false)}
                     variant="secondary"
                 >

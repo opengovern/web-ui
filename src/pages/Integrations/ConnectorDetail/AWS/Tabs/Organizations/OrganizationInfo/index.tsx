@@ -8,8 +8,12 @@ import {
     Title,
 } from '@tremor/react'
 import dayjs from 'dayjs'
-import { useState } from 'react'
-import { useOnboardApiV1CredentialDetail } from '../../../../../../../api/onboard.gen'
+import { useEffect, useState } from 'react'
+import {
+    useOnboardApiV1CredentialAutoonboardCreate,
+    useOnboardApiV1CredentialDelete,
+    useOnboardApiV1CredentialDetail,
+} from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
 
@@ -34,6 +38,30 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
     const [erole, seteRole] = useState(false)
     const [id, setId] = useState('')
     const [eid, seteId] = useState(false)
+
+    const {
+        isExecuted: isDeleteExecuted,
+        isLoading: isDeleteLoading,
+        sendNow: deleteNow,
+    } = useOnboardApiV1CredentialDelete(id, {}, false)
+
+    const {
+        isExecuted: isDiscoverExecuted,
+        isLoading: isDiscoverLoading,
+        sendNow: discoverNow,
+    } = useOnboardApiV1CredentialAutoonboardCreate(id, {}, false)
+
+    useEffect(() => {
+        if (isDeleteExecuted && !isDeleteLoading) {
+            onClose()
+        }
+    }, [isDeleteLoading])
+
+    useEffect(() => {
+        if (isDiscoverExecuted && !isDiscoverLoading) {
+            onClose()
+        }
+    }, [isDiscoverLoading])
 
     return (
         <DrawerPanel title="Organization" open={open} onClose={() => onClose()}>
@@ -288,8 +316,24 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                     )}
                 </Flex>
                 <Flex justifyContent="end" className="my-6">
-                    <Button variant="secondary">Delete</Button>
-                    <Button className="ml-3">Discover New Accounts</Button>
+                    <Button
+                        variant="secondary"
+                        color="rose"
+                        loading={isDeleteExecuted && isDeleteLoading}
+                        disabled={isDiscoverExecuted && isDiscoverLoading}
+                        onClick={deleteNow}
+                    >
+                        Delete
+                    </Button>
+
+                    <Button
+                        className="ml-3"
+                        loading={isDiscoverExecuted && isDiscoverLoading}
+                        disabled={isDeleteExecuted && isDeleteLoading}
+                        onClick={discoverNow}
+                    >
+                        Discover New Accounts
+                    </Button>
                 </Flex>
             </Flex>
         </DrawerPanel>

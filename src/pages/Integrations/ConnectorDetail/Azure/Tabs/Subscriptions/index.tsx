@@ -1,6 +1,11 @@
 import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
+import {
+    ColDef,
+    GridOptions,
+    ICellRendererParams,
+    RowClickedEvent,
+} from 'ag-grid-community'
 import { Button, Card, Flex, Title } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
@@ -9,6 +14,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
+import SubscriptionInfo from './SubscriptionInfo'
 
 interface ISubscriptions {
     subscriptions: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -52,6 +58,23 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
+        field: 'credentialName',
+        headerName: 'Parent SPN Name',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
+        field: 'credentialID',
+        headerName: 'Parent SPN ID',
+        hide: true,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
         field: 'lifecycleState',
         headerName: 'State',
         sortable: true,
@@ -89,15 +112,25 @@ const columns: ColDef[] = [
 ]
 
 export default function Subscriptions({ subscriptions, spns }: ISubscriptions) {
-    const [open, setOpen] = useState(false)
     const gridRef = useRef<AgGridReact>(null)
-    console.log(subscriptions)
+
+    const [open, setOpen] = useState(false)
+    const [openInfo, setOpenInfo] = useState(false)
+    const [priData, setPriData] = useState<
+        GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
+    >(undefined)
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
+        onRowClicked: (
+            event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+        ) => {
+            setPriData(event.data)
+            setOpenInfo(true)
+        },
         sideBar: {
             toolPanels: [
                 {
@@ -135,6 +168,11 @@ export default function Subscriptions({ subscriptions, spns }: ISubscriptions) {
                     rowData={subscriptions}
                 />
             </div>
+            <SubscriptionInfo
+                data={priData}
+                open={openInfo}
+                onClose={() => setOpenInfo(false)}
+            />
             <NewAzureSubscription
                 spns={spns}
                 open={open}

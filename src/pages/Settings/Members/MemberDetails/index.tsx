@@ -70,6 +70,16 @@ export default function MemberDetails({
         return <div />
     }
 
+    const lastActivity = () => {
+        const d = dayjs(user.lastActivity || Date.now().toString())
+        const unix = d.unix()
+        if (unix < 0) {
+            return 'Never'
+        }
+
+        return d.format('MMM DD, YYYY HH:mm:ss Z')
+    }
+
     const items = [
         {
             title: 'Email',
@@ -83,9 +93,7 @@ export default function MemberDetails({
         },
         {
             title: 'Last Activity',
-            value: dayjs(user.lastActivity || Date.now().toString()).format(
-                'MMM DD, YYYY HH:mm:ss Z'
-            ),
+            value: lastActivity(),
         },
         {
             title: 'Status',

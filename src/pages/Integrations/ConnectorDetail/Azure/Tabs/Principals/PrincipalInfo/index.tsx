@@ -7,10 +7,14 @@ import {
     TextInput,
     Title,
 } from '@tremor/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
+import {
+    useOnboardApiV1CredentialAutoonboardCreate,
+    useOnboardApiV1CredentialDelete,
+} from '../../../../../../../api/onboard.gen'
 
 interface IPriInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
@@ -23,6 +27,30 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
     const [eid, seteId] = useState(false)
     const [value, setValue] = useState('')
     const [evalue, seteValue] = useState(false)
+
+    const {
+        isExecuted: isDeleteExecuted,
+        isLoading: isDeleteLoading,
+        sendNow: deleteNow,
+    } = useOnboardApiV1CredentialDelete(id, {}, false)
+
+    const {
+        isExecuted: isDiscoverExecuted,
+        isLoading: isDiscoverLoading,
+        sendNow: discoverNow,
+    } = useOnboardApiV1CredentialAutoonboardCreate(id, {}, false)
+
+    useEffect(() => {
+        if (isDeleteExecuted && !isDeleteLoading) {
+            onClose()
+        }
+    }, [isDeleteLoading])
+
+    useEffect(() => {
+        if (isDiscoverExecuted && !isDiscoverLoading) {
+            onClose()
+        }
+    }, [isDiscoverLoading])
 
     return (
         <DrawerPanel
@@ -169,8 +197,24 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                     </Flex>
                 </Flex>
                 <Flex justifyContent="end" className="my-6">
-                    <Button variant="secondary">Delete</Button>
-                    <Button className="ml-3">Discover New Subscriptions</Button>
+                    <Button
+                        variant="secondary"
+                        color="rose"
+                        loading={isDeleteExecuted && isDeleteLoading}
+                        disabled={isDiscoverExecuted && isDiscoverLoading}
+                        onClick={deleteNow}
+                    >
+                        Delete
+                    </Button>
+
+                    <Button
+                        className="ml-3"
+                        loading={isDiscoverExecuted && isDiscoverLoading}
+                        disabled={isDeleteExecuted && isDeleteLoading}
+                        onClick={discoverNow}
+                    >
+                        Discover New Subscriptions
+                    </Button>
                 </Flex>
             </Flex>
         </DrawerPanel>
