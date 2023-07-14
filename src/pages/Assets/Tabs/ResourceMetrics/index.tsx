@@ -1,7 +1,6 @@
-import { useAtom } from 'jotai/index'
+import { useAtom, useAtomValue } from 'jotai/index'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
-import { DateRangePickerValue } from '@tremor/react'
 import {
     filterAtom,
     selectedResourceCategoryAtom,
@@ -21,8 +20,8 @@ interface IProps {
 
 export default function ResourceMetrics({ pageSize, categories }: IProps) {
     const navigate = useNavigate()
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
@@ -84,6 +83,10 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
             selectedCategory={selectedResourceCategory}
             onChangeCategory={setSelectedResourceCategory}
             metrics={metrics()}
+            isSameDay={
+                activeTimeRange.start.toString() ===
+                activeTimeRange.end.toString()
+            }
         />
     )
 }

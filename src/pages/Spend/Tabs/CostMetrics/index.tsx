@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useAtom } from 'jotai/index'
-import { selectedResourceCategoryAtom } from '../../../../store'
+import { useAtom, useAtomValue } from 'jotai/index'
+import { selectedResourceCategoryAtom, spendTimeAtom } from '../../../../store'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
 import MetricsList, { IMetric } from '../../../../components/MetricsList'
 import {
@@ -30,6 +30,7 @@ export default function CostMetrics({
     serviceCostLoading,
     categories,
 }: IProps) {
+    const activeTimeRange = useAtomValue(spendTimeAtom)
     const [selectedScopeIdx, setSelectedScopeIdx] = useState<number>(0)
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
@@ -84,6 +85,10 @@ export default function CostMetrics({
             selectedScopeIdx={selectedScopeIdx}
             onScopeChange={setSelectedScopeIdx}
             hideFrom
+            isSameDay={
+                activeTimeRange.start.toString() ===
+                activeTimeRange.end.toString()
+            }
         />
     )
 }
