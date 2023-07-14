@@ -5,7 +5,7 @@ import {
     useOnboardApiV1ConnectorList,
 } from '../../api/onboard.gen'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import { numericDisplay } from '../../utilities/numericDisplay'
+import { numberDisplay } from '../../utilities/numericDisplay'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 
@@ -21,23 +21,17 @@ export default function Integrations() {
             <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6 mb-10">
                 <SummaryCard
                     title="Total Connections"
-                    metric={String(
-                        numericDisplay(topMetrics?.totalConnections)
-                    )}
+                    metric={numberDisplay(topMetrics?.totalConnections, 0)}
                     loading={metricsLoading}
                 />
                 <SummaryCard
                     title="Active Connections"
-                    metric={String(
-                        numericDisplay(topMetrics?.connectionsEnabled)
-                    )}
+                    metric={numberDisplay(topMetrics?.connectionsEnabled, 0)}
                     loading={metricsLoading}
                 />
                 <SummaryCard
                     title="Total Unhealthy Connections"
-                    metric={String(
-                        numericDisplay(topMetrics?.unhealthyConnections)
-                    )}
+                    metric={numberDisplay(topMetrics?.unhealthyConnections, 0)}
                     loading={metricsLoading}
                 />
             </Grid>
