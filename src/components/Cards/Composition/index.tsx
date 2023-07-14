@@ -1,6 +1,8 @@
 import {
+    Badge,
     BadgeDelta,
     Card,
+    Color,
     DeltaType,
     Divider,
     DonutChart,
@@ -22,7 +24,7 @@ import Spinner from '../../Spinner'
 import { timeAtom } from '../../../store'
 
 interface listProps {
-    percent?: number
+    val?: number
     name: string
     value: string
     delta?: string
@@ -48,6 +50,8 @@ type IProps = {
     newList?: listProps[]
     oldList?: listProps[]
 }
+
+const colors: Color[] = ['indigo', 'emerald', 'yellow', 'rose', 'blue', 'gray']
 
 export default function Composition({
     newData,
@@ -142,14 +146,15 @@ export default function Composition({
                             ? exactPriceDisplay
                             : (v) => v.toLocaleString('en-US')
                     }
+                    colors={colors}
                 />
                 <List className="w-2/5">
                     {selectedIndex === 0
-                        ? newList?.map((item) => (
+                        ? newList?.map((item, i) => (
                               <ListItem key={item.name}>
-                                  {/* {item.percent && ( */}
-                                  {/*    <Text>%{item.percent.toFixed(2)}</Text> */}
-                                  {/* )} */}
+                                  <Badge color={colors[i]} className="mr-1">
+                                      {item.val}%
+                                  </Badge>
                                   <Text>{item.name}</Text>
                                   <Flex
                                       justifyContent="end"
@@ -167,11 +172,11 @@ export default function Composition({
                                   </Flex>
                               </ListItem>
                           ))
-                        : oldList?.map((item) => (
-                              <ListItem key={item.name} className="my-2">
-                                  {/* {item.percent && ( */}
-                                  {/*    <Text>%{item.percent.toFixed(2)}</Text> */}
-                                  {/* )} */}
+                        : oldList?.map((item, i) => (
+                              <ListItem key={item.name}>
+                                  <Badge color={colors[i]} className="mr-1">
+                                      {item.val}%
+                                  </Badge>
                                   <Text>{item.name}</Text>
                                   <Flex
                                       justifyContent="end"

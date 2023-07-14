@@ -8,7 +8,10 @@ import {
 } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
-import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    priceDisplay,
+} from '../../../../../utilities/numericDisplay'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
 
 type IProps = {
@@ -126,7 +129,7 @@ export default function TopServicesTrend({ categories }: IProps) {
                     categories={serviceNames}
                     data={trendData}
                     showAnimation
-                    valueFormatter={exactPriceDisplay}
+                    valueFormatter={priceDisplay}
                 />
             ) : (
                 <Spinner className="h-80" />

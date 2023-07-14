@@ -105,6 +105,11 @@ export default function CompositionTab({ top }: IProps) {
                 return {
                     name: key,
                     value: record[key].old_count || 0,
+                    val: Math.round(
+                        ((record[key].old_count || 0) /
+                            (compositionData?.total_count || 1)) *
+                            100
+                    ),
                 }
             })
         }
@@ -120,12 +125,11 @@ export default function CompositionTab({ top }: IProps) {
                     record[key].old_count,
                     record[key].count
                 ),
-                percent:
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    // eslint-disable-next-line no-unsafe-optional-chaining
-                    (record[key].count / compositionData?.total_count) * 100 ||
-                    0,
+                val: Math.round(
+                    ((record[key].count || 0) /
+                        (compositionData?.total_count || 1)) *
+                        100
+                ),
             }
         })
         v.push({
@@ -143,12 +147,11 @@ export default function CompositionTab({ top }: IProps) {
                 compositionData?.others?.old_count,
                 compositionData?.others?.count
             ),
-            percent:
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                (compositionData?.others / compositionData?.total_count) *
-                    100 || 0,
+            val: Math.round(
+                ((compositionData?.others?.count || 0) /
+                    (compositionData?.total_count || 1)) *
+                    100
+            ),
         })
         return v
     }

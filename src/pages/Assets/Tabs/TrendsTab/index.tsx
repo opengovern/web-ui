@@ -157,7 +157,7 @@ export default function TrendsTab({ categories }: IProps) {
                     value: `${percentageByChange(
                         item.oldResourceCount,
                         item.resourceCount
-                    )} %`,
+                    )}%`,
                 }
             }) || []
         const ServicesData =
@@ -167,7 +167,7 @@ export default function TrendsTab({ categories }: IProps) {
                     value: `${percentageByChange(
                         item.old_resource_count,
                         item.resource_count
-                    )} %`,
+                    )}%`,
                 }
             }) || []
         const RegionData =
@@ -177,7 +177,7 @@ export default function TrendsTab({ categories }: IProps) {
                     value: `${percentageByChange(
                         item.resourceOldCount,
                         item.resourceCount
-                    )} %`,
+                    )}%`,
                 }
             }) || []
         return {

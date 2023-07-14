@@ -10,7 +10,7 @@ import {
     TabPanels,
     TextInput,
 } from '@tremor/react'
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
@@ -78,7 +78,7 @@ export default function Insights() {
                         <Col>
                             <TextInput
                                 icon={MagnifyingGlassIcon}
-                                placeholder="Search..."
+                                placeholder="Search Insights"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -95,7 +95,7 @@ export default function Insights() {
                                     numItems={1}
                                     numItemsMd={2}
                                     numItemsLg={3}
-                                    className="gap-3 w-100"
+                                    className="gap-3 w-full"
                                 >
                                     {insightList
                                         ?.filter(
@@ -111,29 +111,11 @@ export default function Insights() {
                                                         searchQuery.toLowerCase()
                                                     )
                                         )
-                                        ?.sort((a, b) => {
-                                            if (
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
-                                                a.totalResultValue >
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
-                                                b.totalResultValue
-                                            ) {
-                                                return -1
-                                            }
-                                            if (
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
-                                                a.totalResultValue <
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
-                                                b.totalResultValue
-                                            ) {
-                                                return 1
-                                            }
-                                            return 0
-                                        })
+                                        ?.sort(
+                                            (a, b) =>
+                                                (b.totalResultValue || 0) -
+                                                (a.totalResultValue || 0)
+                                        )
                                         .filter((insight) => {
                                             if (
                                                 selectedCategory.length &&
@@ -162,7 +144,7 @@ export default function Insights() {
                                     numItems={1}
                                     numItemsMd={2}
                                     numItemsLg={3}
-                                    className="gap-3 w-100"
+                                    className="gap-3 w-full"
                                 >
                                     {insightGroup
                                         ?.filter(

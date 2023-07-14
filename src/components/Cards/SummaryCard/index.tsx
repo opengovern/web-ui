@@ -14,7 +14,7 @@ import Spinner from '../../Spinner'
 
 type IProps = {
     title: string
-    metric: string
+    metric: string | number
     metricPrev?: string
     delta?: string
     deltaType?: DeltaType

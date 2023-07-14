@@ -46,9 +46,7 @@ export default function SummaryMetrics({
             />
             <SummaryCard
                 title="Services"
-                metric={String(
-                    serviceCostResponse?.total_count?.toLocaleString('en-US')
-                )}
+                metric={Number(serviceCostResponse?.total_count)}
                 loading={serviceCostLoading}
             />
         </Grid>
