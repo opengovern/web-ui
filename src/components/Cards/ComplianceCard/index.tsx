@@ -9,6 +9,8 @@ import {
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
+import { ReactComponent as AzureIcon } from '../../../icons/azure-round.svg'
+import { ReactComponent as CisIcon } from '../../../icons/cis-round.svg'
 
 interface IComplianceCard {
     benchmark:
@@ -86,11 +88,19 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                 </Badge>
             </Flex>
             <Flex className="mt-6">
-                <Text>icons</Text>
+                <Flex justifyContent="start">
+                    {!!(
+                        benchmark?.tags?.plugin &&
+                        benchmark?.tags?.plugin[0] === 'azure'
+                    ) && <Icon size="xl" icon={AzureIcon} className="p-0" />}
+                    {!!benchmark?.tags?.cis && (
+                        <Icon size="xl" icon={CisIcon} className="p-0" />
+                    )}
+                </Flex>
                 <Icon
                     icon={ChevronRightIcon}
                     color="blue"
-                    size="md"
+                    size="lg"
                     className="p-0"
                 />
             </Flex>

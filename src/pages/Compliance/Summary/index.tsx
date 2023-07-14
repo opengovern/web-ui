@@ -9,7 +9,7 @@ export default function Summary() {
             numItems={1}
             numItemsMd={2}
             numItemsLg={3}
-            className="w-full gap-3 my-6"
+            className="w-full gap-3 mt-6 mb-10"
         >
             <SummaryCard title="Number of active alarms" metric="600" />
             <SummaryCard title="Accounts" metric="450" />
