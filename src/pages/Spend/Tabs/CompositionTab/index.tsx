@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import Composition from '../../../../components/Cards/Composition'
 import { useInventoryApiV2CostCompositionList } from '../../../../api/inventory.gen'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
@@ -23,10 +23,10 @@ interface dataProps {
 }
 
 export default function CompositionTab({ top }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
-    const { response: compositionOld, isLoading: oldIsLoading } =
+    const { response: composition, isLoading } =
         useInventoryApiV2CostCompositionList({
             top,
             ...(selectedConnections.provider && {
@@ -36,35 +36,13 @@ export default function CompositionTab({ top }: IProps) {
                 connectionId: selectedConnections.connections,
             }),
             ...(activeTimeRange.start && {
-                endTime: dayjs(activeTimeRange.start.toString())
+                endTime: dayjs(activeTimeRange.end.toString())
+                    .endOf('day')
                     .unix()
                     .toString(),
             }),
             ...(activeTimeRange.start && {
                 startTime: dayjs(activeTimeRange.start.toString())
-                    .subtract(1, 'day')
-                    .unix()
-                    .toString(),
-            }),
-        })
-
-    const { response: compositionNew, isLoading: newIsLoading } =
-        useInventoryApiV2CostCompositionList({
-            top,
-            ...(selectedConnections.provider && {
-                connector: [selectedConnections.provider],
-            }),
-            ...(selectedConnections.connections && {
-                connectionId: selectedConnections.connections,
-            }),
-            ...(activeTimeRange.end && {
-                endTime: dayjs(activeTimeRange.end.toString())
-                    .unix()
-                    .toString(),
-            }),
-            ...(activeTimeRange.end && {
-                startTime: dayjs(activeTimeRange.end.toString())
-                    .subtract(1, 'day')
                     .unix()
                     .toString(),
             }),
@@ -126,11 +104,9 @@ export default function CompositionTab({ top }: IProps) {
 
     return (
         <Composition
-            newData={compositionChart(compositionNew)}
-            oldData={compositionChart(compositionOld)}
-            isLoading={oldIsLoading || newIsLoading}
-            newList={compositionList(compositionNew)}
-            oldList={compositionList(compositionOld)}
+            newData={compositionChart(composition)}
+            isLoading={isLoading}
+            newList={compositionList(composition)}
             isCost
         />
     )
