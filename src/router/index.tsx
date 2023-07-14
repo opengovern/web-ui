@@ -29,7 +29,7 @@ const routes = [
     {
         key: 'ws name',
         path: '/:ws',
-        element: <Navigate to="assets" />,
+        element: <Navigate to="home" />,
     },
     {
         key: 'callback',
