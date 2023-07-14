@@ -106,21 +106,20 @@ export default function CompositionTab({ top }: IProps) {
             return {
                 name: item.name,
                 value: exactPriceDisplay(item.value),
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                percent: (item.value / compositionData?.total_count) * 100 || 0,
+                val: Math.round(
+                    (item.value / (compositionData?.total_cost_value || 1)) *
+                        100
+                ),
             }
         })
         v.push({
             name: 'Others',
             value: exactPriceDisplay(compositionData?.others),
-            percent:
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                (compositionData?.others / compositionData?.total_count) *
-                    100 || 0,
+            val: Math.round(
+                ((compositionData?.others || 0) /
+                    (compositionData?.total_cost_value || 1)) *
+                    100
+            ),
         })
         return v
     }
