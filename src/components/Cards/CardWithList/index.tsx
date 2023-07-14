@@ -24,9 +24,6 @@ import {
 import Spinner from '../../Spinner'
 
 type IProps = {
-    // count?: any
-    // provider?: any
-    // connections?: any
     title?: any
     tabs?: any
     data?: any
@@ -72,12 +69,8 @@ export default function CardWithList({
         try {
             return data[tab]?.map((item: Item) => (
                 <ListItem>
-                    <Text>{item.name}</Text>
-                    {item.value && (
-                        <Flex justifyContent="end" className="space-x-2">
-                            {value(item)}
-                        </Flex>
-                    )}
+                    <Text className="w-4/5 truncate">{item.name}</Text>
+                    {item.value && <Text>{value(item)}</Text>}
                 </ListItem>
             ))
         } catch (e) {
@@ -88,23 +81,19 @@ export default function CardWithList({
 
     return loading ? (
         <Card>
-            <Flex className="h-96">
+            <Flex className="h-56">
                 <Spinner />
             </Flex>
         </Card>
     ) : (
         <Card>
-            <Flex alignItems="start">
-                <Title>{title}</Title>
-            </Flex>
+            <Title>{title}</Title>
             <TabGroup
                 index={selectedIndex}
                 onIndexChange={setSelectedIndex}
                 className="mt-3"
             >
                 <TabList>
-                    {/* {formattedData && */}
-                    {/*    tabs.map((item) => <Tab key={item}>{item}</Tab>)} */}
                     {tabs.map((item: any) => (
                         <Tab key={item}>{item}</Tab>
                     ))}

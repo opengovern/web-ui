@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, Title } from '@tremor/react'
 import { atom, useAtom } from 'jotai'
 import dayjs from 'dayjs'
@@ -8,8 +8,12 @@ import {
 } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
-import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    priceDisplay,
+} from '../../../../../utilities/numericDisplay'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
+import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
 type IProps = {
     categories: {
@@ -18,15 +22,12 @@ type IProps = {
     }[]
 }
 
-const trendDataAtom = atom<object[]>([])
-const serviceNamesAtom = atom<string[]>([])
-
 export default function TopServicesTrend({ categories }: IProps) {
     const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
-    const [serviceNames, setServiceNames] = useAtom(serviceNamesAtom)
-    const [trendData, setTrendData] = useAtom(trendDataAtom)
+    const [serviceNames, setServiceNames] = useState<string[]>([])
+    const [trendData, setTrendData] = useState<object[]>([])
     const { response: metrics, isLoading } = useInventoryApiV2CostMetricList({
         ...(selectedConnections.provider && {
             connector: [selectedConnections.provider],
@@ -37,7 +38,10 @@ export default function TopServicesTrend({ categories }: IProps) {
                 .toString(),
         }),
         ...(activeTimeRange.end && {
-            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
+            endTime: dayjs(activeTimeRange.end.toString())
+                .endOf('day')
+                .unix()
+                .toString(),
         }),
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
@@ -64,6 +68,7 @@ export default function TopServicesTrend({ categories }: IProps) {
                 }),
                 ...(activeTimeRange.end && {
                     endTime: dayjs(activeTimeRange.end.toString())
+                        .endOf('day')
                         .unix()
                         .toString(),
                 }),
@@ -77,13 +82,15 @@ export default function TopServicesTrend({ categories }: IProps) {
 
     const fixTime = (input: any) => {
         const result: object[] = []
-        if (data === undefined) {
+        if (input === undefined) {
             return result
         }
 
         const services: string[] = []
         if (input) {
-            for (let i = 0; i < 5; i += 1) {
+            const length =
+                input[0].costTrend.length > 5 ? 5 : input[0].costTrend.length
+            for (let i = 0; i < length; i += 1) {
                 const temp: any = {}
                 const keys = Object.keys(input)
                 for (let j = 1; j < keys.length; j += 1) {
@@ -92,14 +99,8 @@ export default function TopServicesTrend({ categories }: IProps) {
                     if (!services.includes(name)) {
                         services.push(name)
                     }
-                    const day = dayjs(input[item].costTrend[i].date).format(
-                        'DD'
-                    )
-                    const month = dayjs(input[item].costTrend[i].date).format(
-                        'MMM'
-                    )
                     temp[name] = input[item].costTrend[i].count
-                    temp.date = `${month} ${day}`
+                    temp.date = dateDisplay(input[item].costTrend[i].date)
                 }
                 result.push(temp)
             }
@@ -126,7 +127,7 @@ export default function TopServicesTrend({ categories }: IProps) {
                     categories={serviceNames}
                     data={trendData}
                     showAnimation
-                    valueFormatter={exactPriceDisplay}
+                    valueFormatter={priceDisplay}
                 />
             ) : (
                 <Spinner className="h-80" />

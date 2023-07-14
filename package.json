@@ -12,6 +12,7 @@
     "@react-spectrum/datepicker": "^3.6.0",
     "@react-spectrum/provider": "^3.8.0",
     "@react-spectrum/theme-default": "^3.5.3",
+    "@react-spectrum/view": "^3.6.0",
     "@tailwindcss/forms": "^0.5.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

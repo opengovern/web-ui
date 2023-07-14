@@ -41,6 +41,7 @@ interface IMetricsList {
     onScopeChange?: (scopeIdx: number) => void
 
     hideFrom?: boolean
+    isSameDay?: boolean
 }
 
 export default function MetricsList({
@@ -55,6 +56,7 @@ export default function MetricsList({
     selectedScopeIdx,
     onScopeChange,
     hideFrom = false,
+    isSameDay = false,
 }: IMetricsList) {
     const navigate = useNavigate()
     const percentage = (a?: number, b?: number): number => {
@@ -131,15 +133,22 @@ export default function MetricsList({
                             title={metric.name}
                             metric={metric.displayedValue}
                             metricPrev={
-                                metric.oldValue && !hideFrom
+                                metric.oldValue && !hideFrom && !isSameDay
                                     ? String(
                                           numericDisplay(metric.oldValue || 0)
                                       )
                                     : undefined
                             }
-                            delta={`${Math.abs(
-                                percentage(metric.newValue, metric.oldValue)
-                            ).toFixed(2)}`}
+                            delta={
+                                !isSameDay
+                                    ? `${Math.abs(
+                                          percentage(
+                                              metric.newValue,
+                                              metric.oldValue
+                                          )
+                                      ).toFixed(2)}`
+                                    : undefined
+                            }
                             deltaType={deltaType(
                                 percentage(metric.newValue, metric.oldValue)
                             )}
