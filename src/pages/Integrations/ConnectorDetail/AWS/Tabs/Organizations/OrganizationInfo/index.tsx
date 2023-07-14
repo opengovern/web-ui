@@ -92,7 +92,7 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                     <Badge
                         color={
                             credential?.healthStatus === 'healthy'
-                                ? 'green'
+                                ? 'emerald'
                                 : 'rose'
                         }
                     >
@@ -135,7 +135,9 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                     <Text>AWS account health</Text>
                     <Badge
                         color={
-                            data?.healthStatus === 'healthy' ? 'green' : 'rose'
+                            data?.healthStatus === 'healthy'
+                                ? 'emerald'
+                                : 'rose'
                         }
                     >
                         {data?.healthStatus}

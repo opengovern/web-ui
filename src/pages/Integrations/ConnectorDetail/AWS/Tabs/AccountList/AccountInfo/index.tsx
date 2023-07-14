@@ -101,7 +101,7 @@ export default function AccountInfo({ data, open, onClose }: IAccInfo) {
                         <Badge
                             color={
                                 data?.lifecycleState === 'ONBOARD'
-                                    ? 'green'
+                                    ? 'emerald'
                                     : 'rose'
                             }
                         >
