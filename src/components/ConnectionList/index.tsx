@@ -1,18 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Button, Flex, Text } from '@tremor/react'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
 import { useAtom } from 'jotai'
-import { ReactComponent as AzureIcon } from '../../icons/elements-supplemental-provider-logo-azure-new.svg'
-import { ReactComponent as AWSIcon } from '../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import DrawerPanel from '../DrawerPanel'
 import Spinner from '../Spinner'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import { filterAtom } from '../../store'
+import { AWSIcon, AzureIcon } from '../../icons/icons'
 
 interface IConnection {
     id: string

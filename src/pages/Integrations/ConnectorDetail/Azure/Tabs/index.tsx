@@ -19,13 +19,13 @@ export default function AzureTabs({ principals, subscriptions }: IAzure) {
                 <Tab>Principals</Tab>
             </TabList>
             <TabPanels>
-                <TabPanel>
+                <TabPanel key="sub">
                     <Subscriptions
                         subscriptions={subscriptions}
                         spns={principals}
                     />
                 </TabPanel>
-                <TabPanel>
+                <TabPanel key="pri">
                     <Principals principals={principals} />
                 </TabPanel>
             </TabPanels>

@@ -12,13 +12,12 @@ import 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
-import { ReactComponent as AzureIcon } from '../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
-import { ReactComponent as AWSIcon } from '../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceSortItem,
 } from '../../../../api/api'
 import AxiosAPI, { setWorkspace } from '../../../../api/ApiConfig'
+import { AWSIcon, AzureIcon } from '../../../../icons/icons'
 
 const columns: ColDef[] = [
     {

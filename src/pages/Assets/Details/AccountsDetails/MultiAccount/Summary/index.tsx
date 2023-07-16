@@ -19,13 +19,12 @@ import {
     useOnboardApiV1ConnectionsSummaryList,
 } from '../../../../../../api/onboard.gen'
 import Spinner from '../../../../../../components/Spinner'
-import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
-import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import {
     badgeTypeByDelta,
     percentageByChange,
 } from '../../../../../../utilities/deltaType'
 import { filterAtom, timeAtom } from '../../../../../../store'
+import { AWSIcon, AzureIcon } from '../../../../../../icons/icons'
 
 export default function Summary() {
     const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)

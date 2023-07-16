@@ -8,10 +8,10 @@ import {
     ICellRendererParams,
     RowClickedEvent,
 } from 'ag-grid-community'
-import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import PrincipalInfo from './PrincipalInfo'
 import NewPrincipal from './NewPrincipal'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../api/api'
+import { AzureIcon } from '../../../../../../icons/icons'
 
 interface IPrincipals {
     principals: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
@@ -32,7 +32,7 @@ const columns: ColDef[] = [
                     justifyContent="center"
                     className="w-full h-full"
                 >
-                    <AzureIcon />
+                    <AzureIcon key={params.data.id} />
                 </Flex>
             )
         },
@@ -150,29 +150,27 @@ export default function Principals({ principals }: IPrincipals) {
     }
 
     return (
-        <>
-            <Card>
-                <Flex flexDirection="row">
-                    <Title>Service Principals</Title>
-                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                        Add New SPN
-                    </Button>
-                </Flex>
-                <div className="ag-theme-alpine mt-6">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                        rowData={principals}
-                    />
-                </div>
-            </Card>
+        <Card>
+            <Flex flexDirection="row">
+                <Title>Service Principals</Title>
+                <Button icon={PlusIcon} onClick={() => setOpen(true)}>
+                    Add New SPN
+                </Button>
+            </Flex>
+            <div className="ag-theme-alpine mt-6" key="principals">
+                <AgGridReact
+                    ref={gridRef}
+                    domLayout="autoHeight"
+                    gridOptions={gridOptions}
+                    rowData={principals}
+                />
+            </div>
             <PrincipalInfo
                 data={priData}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
             />
             <NewPrincipal open={open} onClose={() => setOpen(false)} />
-        </>
+        </Card>
     )
 }

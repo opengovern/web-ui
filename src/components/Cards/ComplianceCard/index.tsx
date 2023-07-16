@@ -10,8 +10,7 @@ import {
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
-import { ReactComponent as AzureIcon } from '../../../icons/azure-round.svg'
-import { ReactComponent as CisIcon } from '../../../icons/cis-round.svg'
+import { CisIcon, RoundAzureIcon } from '../../../icons/icons'
 
 interface IComplianceCard {
     benchmark:
@@ -99,7 +98,9 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                     {!!(
                         benchmark?.tags?.plugin &&
                         benchmark?.tags?.plugin[0] === 'azure'
-                    ) && <Icon size="xl" icon={AzureIcon} className="p-0" />}
+                    ) && (
+                        <Icon size="xl" icon={RoundAzureIcon} className="p-0" />
+                    )}
                     {!!benchmark?.tags?.cis && (
                         <Icon size="xl" icon={CisIcon} className="p-0" />
                     )}

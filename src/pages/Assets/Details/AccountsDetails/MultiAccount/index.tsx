@@ -20,11 +20,10 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 import Summary from './Summary'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { ConnectionDetails } from './ConnectionDetails'
-import { ReactComponent as AzureIcon } from '../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
-import { ReactComponent as AWSIcon } from '../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import { agGridDateComparator } from '../../../../../utilities/dateComparator'
 import { filterAtom, timeAtom } from '../../../../../store'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
+import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
 
 const columns: ColDef[] = [
     {

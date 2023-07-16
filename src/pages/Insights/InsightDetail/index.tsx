@@ -39,8 +39,7 @@ import {
     percentageByChange,
 } from '../../../utilities/deltaType'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
-import { ReactComponent as AWSIcon } from '../../../icons/elements-supplemental-provider-logo-aws-original.svg'
-import { ReactComponent as AzureIcon } from '../../../icons/elements-supplemental-provider-logo-azure-new.svg'
+import { AWSIcon, AzureIcon } from '../../../icons/icons'
 
 const chartData = (inputData: any) => {
     const data = []
