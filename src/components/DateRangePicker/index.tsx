@@ -2,12 +2,12 @@ import { today, getLocalTimeZone } from '@internationalized/date'
 import { useAtom } from 'jotai'
 import { useRef } from 'react'
 import { useDateRangePickerState } from 'react-stately'
-
 import { useDateRangePicker } from 'react-aria'
 import {
     CalendarIcon,
     ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline'
+import { AriaDateRangePickerProps, DateValue } from '@react-aria/datepicker'
 import { timeAtom, spendTimeAtom } from '../../store'
 import { FieldButton } from './Button'
 import { RangeCalendar } from './Calendar/RangeCalendar'
@@ -19,7 +19,7 @@ interface DatePickerProps {
     isSpend?: boolean
 }
 
-function CustomDatePicker(props: any) {
+function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
     const state = useDateRangePickerState(props)
     const ref = useRef(null)
     const {
@@ -31,12 +31,11 @@ function CustomDatePicker(props: any) {
         dialogProps,
         calendarProps,
     } = useDateRangePicker(props, state, ref)
-
+    const { label } = props
     return (
         <div className="relative inline-flex flex-col text-left">
             <span {...labelProps} className="text-sm text-gray-800">
-                {/* eslint-disable-next-line react/destructuring-assignment */}
-                {props.label}
+                {label}
             </span>
             <div {...groupProps} ref={ref} className="flex group h-9">
                 <div className="flex bg-white border border-gray-300 group-hover:border-gray-400 transition-colors rounded-l-md pr-10 group-focus-within:border-blue-600 group-focus-within:group-hover:border-blue-600 p-1 relative">
@@ -75,7 +74,12 @@ export default function DateRangePicker({ isSpend = false }: DatePickerProps) {
     return (
         <CustomDatePicker
             value={activeTimeRange}
-            onChange={setActiveTimeRange}
+            onChange={(value) => {
+                setActiveTimeRange({
+                    start: value.start,
+                    end: value.end,
+                })
+            }}
             maxValue={today(getLocalTimeZone())}
         />
     )
