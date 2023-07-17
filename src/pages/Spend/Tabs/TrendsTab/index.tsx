@@ -149,7 +149,7 @@ export default function TrendsTab({ categories }: IProps) {
 
     return (
         <>
-            <Grid numItems={1} numItemsMd={2} className="gap-3 mb-3">
+            <Grid numItems={1} numItemsMd={2} className="gap-4 mb-3">
                 <CardWithList
                     title="Top by Consumption"
                     tabs={['Accounts', 'Services']}

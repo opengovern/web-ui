@@ -97,7 +97,7 @@ export default function SettingsEntitlement() {
         </Flex>
     ) : (
         <>
-            <Grid numItemsSm={2} numItemsLg={4} className="gap-3">
+            <Grid numItemsSm={2} numItemsLg={4} className="gap-4">
                 <Card key="activeUsers">
                     <Text>Active users</Text>
                     <Metric>{numericDisplay(currentUsers)}</Metric>

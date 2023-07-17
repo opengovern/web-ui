@@ -59,7 +59,7 @@ export default function GrowthTrend({ categories }: IProps) {
             resourcesTrend?.map((item) => {
                 return {
                     'Resource Count': item.count,
-                    date: item.date,
+                    date: dayjs(item.date).format('MMM DD, YYYY'),
                 }
             }) || []
         )

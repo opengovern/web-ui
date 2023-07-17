@@ -23,7 +23,7 @@ export default function Compliance() {
                     numItems={1}
                     numItemsMd={2}
                     numItemsLg={3}
-                    className="w-full gap-3 mb-3"
+                    className="w-full gap-4 mb-3"
                 >
                     <Col numColSpan={1} numColSpanMd={2}>
                         <Title>Benchmarks</Title>
@@ -43,7 +43,7 @@ export default function Compliance() {
                         numItems={1}
                         numItemsMd={2}
                         numItemsLg={3}
-                        className="w-full gap-3"
+                        className="w-full gap-4"
                     >
                         {benchmarks?.benchmarkSummary
                             ?.sort(

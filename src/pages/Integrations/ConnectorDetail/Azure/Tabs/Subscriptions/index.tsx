@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import {
     ColDef,
@@ -8,13 +8,13 @@ import {
 } from 'ag-grid-community'
 import { Button, Card, Flex, Title } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { ReactComponent as AzureIcon } from '../../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
 import NewAzureSubscription from './NewSubscription'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
 import SubscriptionInfo from './SubscriptionInfo'
+import { AzureIcon } from '../../../../../../icons/icons'
 
 interface ISubscriptions {
     subscriptions: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -36,7 +36,7 @@ const columns: ColDef[] = [
                     justifyContent="center"
                     className="w-full h-full"
                 >
-                    <AzureIcon />
+                    <AzureIcon key={params.data.id} />
                 </Flex>
             )
         },
@@ -160,7 +160,7 @@ export default function Subscriptions({ subscriptions, spns }: ISubscriptions) {
                     Create New Azure Subscription
                 </Button>
             </Flex>
-            <div className="ag-theme-alpine mt-6">
+            <div className="ag-theme-alpine mt-6" key="subscriptions">
                 <AgGridReact
                     ref={gridRef}
                     domLayout="autoHeight"

@@ -69,7 +69,7 @@ export default function Summary({
                     <Text>Total Services</Text>
                 </Flex>
             </Flex>
-            <Grid numItems={1} numItemsMd={2} className="w-full gap-3 mt-3">
+            <Grid numItems={1} numItemsMd={2} className="w-full gap-4 mt-3">
                 <Card key="TopXServices" className="h-fit">
                     <Flex justifyContent="start" className="space-x-4">
                         <Title className="truncate">Popular Services</Title>

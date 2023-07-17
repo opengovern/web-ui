@@ -7,9 +7,5 @@ type IProps = {
 }
 
 export function ConnectionDetails({ connection, index }: IProps) {
-    return (
-        <div>
-            <RenderObject obj={connection[index]} />
-        </div>
-    )
+    return <RenderObject obj={connection[index]} />
 }

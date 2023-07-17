@@ -66,7 +66,7 @@ export default function Insights() {
                             Insight groups
                         </Tab>
                     </TabList>
-                    <Grid numItems={3} className="gap-3 mb-6">
+                    <Grid numItems={3} className="gap-4 mb-6">
                         <Col numColSpan={2}>
                             <InsightCategories
                                 selected={selectedTab}
@@ -95,7 +95,7 @@ export default function Insights() {
                                     numItems={1}
                                     numItemsMd={2}
                                     numItemsLg={3}
-                                    className="gap-3 w-full"
+                                    className="gap-4 w-full"
                                 >
                                     {insightList
                                         ?.filter(
@@ -144,7 +144,7 @@ export default function Insights() {
                                     numItems={1}
                                     numItemsMd={2}
                                     numItemsLg={3}
-                                    className="gap-3 w-full"
+                                    className="gap-4 w-full"
                                 >
                                     {insightGroup
                                         ?.filter(

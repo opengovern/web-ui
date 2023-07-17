@@ -39,7 +39,7 @@ export default function Workspaces() {
                                 refreshList()
                             }}
                         />
-                        <Grid numItems={1} className="gap-3">
+                        <Grid numItems={1} className="gap-4">
                             {workspaces?.map((ws) => {
                                 return (
                                     <WorkspaceCard

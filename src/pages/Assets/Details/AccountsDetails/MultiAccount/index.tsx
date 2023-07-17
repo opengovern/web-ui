@@ -6,7 +6,7 @@ import {
     ICellRendererParams,
 } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import { Button, Flex } from '@tremor/react'
+import { Button, Flex, Title } from '@tremor/react'
 import { useRef, useState } from 'react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import { useAtom } from 'jotai'
@@ -20,11 +20,10 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 import Summary from './Summary'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { ConnectionDetails } from './ConnectionDetails'
-import { ReactComponent as AzureIcon } from '../../../../../icons/elements-supplemental-provider-logo-azure-new.svg'
-import { ReactComponent as AWSIcon } from '../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import { agGridDateComparator } from '../../../../../utilities/dateComparator'
 import { filterAtom, timeAtom } from '../../../../../store'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
+import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
 
 const columns: ColDef[] = [
     {
@@ -202,7 +201,8 @@ export default function MultiAccount() {
     return (
         <>
             <Summary />
-            <Flex justifyContent="end" className="mb-3 mt-6" alignItems="end">
+            <Flex className="mb-4 mt-6">
+                <Title>Accounts</Title>
                 <Button
                     variant="secondary"
                     onClick={() => gridRef?.current?.api.exportDataAsCsv()}
@@ -211,7 +211,7 @@ export default function MultiAccount() {
                     Download
                 </Button>
             </Flex>
-            <div className="ag-theme-alpine mt-4">
+            <div className="ag-theme-alpine">
                 <AgGridReact
                     ref={gridRef}
                     domLayout="autoHeight"

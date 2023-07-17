@@ -60,7 +60,10 @@ export default function CLIMenu() {
 
     return (
         <Popover className="relative isolate z-50 border-0">
-            <Popover.Button className="-mx-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+            <Popover.Button
+                className="-mx-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                id="CLI"
+            >
                 <span className="sr-only">CLI</span>
                 <CommandLineIcon className="h-6 w-6" />
             </Popover.Button>

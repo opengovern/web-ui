@@ -27,7 +27,7 @@ export default function SummaryMetrics() {
         })
 
     return (
-        <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6 mb-10">
+        <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6 mb-10">
             <SummaryCard
                 title="Accounts"
                 metric={String(numericDisplay(accounts?.connectionCount))}

@@ -1,6 +1,8 @@
 import {
     Button,
+    Col,
     Flex,
+    Grid,
     SearchSelect,
     SearchSelectItem,
     Tab,
@@ -75,22 +77,43 @@ export default function MetricsList({
 
     return (
         <div>
-            <Flex className="gap-x-2 mb-6">
-                <Flex flexDirection="row" justifyContent="start">
-                    <Title>{name} metrics</Title>
-                    <Button
-                        variant="light"
-                        className="ml-2"
-                        onClick={() => seeMoreUrl && navigate(seeMoreUrl)}
-                    >
-                        <Text color="blue">(See all)</Text>
-                    </Button>
-                </Flex>
+            <Grid numItems={1} numItemsMd={3} className="gap-4 mb-3">
+                <Col numColSpan={2}>
+                    <Flex>
+                        <Flex justifyContent="start">
+                            <Title>{name} metrics</Title>
+                            <Button
+                                variant="light"
+                                className="ml-2"
+                                onClick={() =>
+                                    seeMoreUrl && navigate(seeMoreUrl)
+                                }
+                            >
+                                <Text color="blue">(See all)</Text>
+                            </Button>
+                        </Flex>
+                        <Flex justifyContent="end">
+                            {scopes && scopes.length > 0 && (
+                                <TabGroup
+                                    className="w-fit border rounded-lg"
+                                    index={selectedScopeIdx}
+                                    onIndexChange={onScopeChange}
+                                >
+                                    <TabList variant="solid">
+                                        {scopes.map((item) => (
+                                            <Tab className="pt-0.5 pb-1">
+                                                <Text>{item}</Text>
+                                            </Tab>
+                                        ))}
+                                    </TabList>
+                                </TabGroup>
+                            )}
+                        </Flex>
+                    </Flex>
+                </Col>
                 <SearchSelect
                     onValueChange={onChangeCategory}
                     value={selectedCategory}
-                    placeholder="Source Selection"
-                    className="max-w-xs"
                 >
                     {categories.map((category) => (
                         <SearchSelectItem
@@ -101,31 +124,15 @@ export default function MetricsList({
                         </SearchSelectItem>
                     ))}
                 </SearchSelect>
-                {scopes && scopes.length > 0 && (
-                    <span className="ml-5">
-                        <TabGroup
-                            index={selectedScopeIdx}
-                            onIndexChange={onScopeChange}
-                        >
-                            <TabList variant="solid">
-                                {scopes.map((item) => (
-                                    <Tab>{item}</Tab>
-                                ))}
-                            </TabList>
-                        </TabGroup>
-                    </span>
-                )}
-            </Flex>
+            </Grid>
             {isLoading ? (
-                <div className="flex items-center justify-center mt-48">
-                    <Spinner />
-                </div>
+                <Spinner className="mt-48" />
             ) : (
                 <Swiper
                     gridContainerProps={{
                         numItemsSm: 2,
                         numItemsMd: 3,
-                        className: 'gap-3 w-full',
+                        className: 'gap-4 w-full',
                     }}
                 >
                     {metrics?.map((metric) => (

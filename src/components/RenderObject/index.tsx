@@ -1,4 +1,5 @@
-import { Bold, List, ListItem, Text } from '@tremor/react'
+import { Bold, List, ListItem, Text, Title } from '@tremor/react'
+import { snakeCaseToLabel } from '../../utilities/labelMaker'
 
 export function RenderObject({ obj }: any) {
     return (
@@ -11,22 +12,22 @@ export function RenderObject({ obj }: any) {
                         }
                         return (
                             <div>
-                                {key !== '0' ? (
-                                    <Text className="font-bold mt-10 mb-2">
-                                        {key}
-                                    </Text>
-                                ) : null}
+                                {key !== '0' && (
+                                    <Title className="mt-10 mb-2">
+                                        {snakeCaseToLabel(key)}
+                                    </Title>
+                                )}
                                 <RenderObject obj={obj[key]} />
                             </div>
                         )
                     }
 
                     return (
-                        <ListItem key={key} className="break-words">
-                            <Text>{key}</Text>
-                            <div>
-                                <Bold>{String(obj[key])}</Bold>
-                            </div>
+                        <ListItem key={key} className="py-4 flex items-start">
+                            <Text>{snakeCaseToLabel(key)}</Text>
+                            <Text className="text-gray-900 w-3/5 whitespace-pre-wrap text-end">
+                                {String(obj[key])}
+                            </Text>
                         </ListItem>
                     )
                 })}

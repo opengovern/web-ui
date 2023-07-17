@@ -1,5 +1,4 @@
 import {
-    Badge,
     BadgeDelta,
     Card,
     Color,
@@ -9,7 +8,6 @@ import {
     Flex,
     List,
     ListItem,
-    Metric,
     Tab,
     TabGroup,
     TabList,
@@ -51,7 +49,7 @@ type IProps = {
     oldList?: listProps[]
 }
 
-const colors: Color[] = ['indigo', 'emerald', 'yellow', 'rose', 'blue', 'gray']
+const colors: Color[] = ['blue', 'sky', 'cyan', 'teal', 'emerald', 'slate']
 
 export default function Composition({
     newData,
@@ -104,38 +102,29 @@ export default function Composition({
                     <TabGroup
                         index={selectedIndex}
                         onIndexChange={setSelectedIndex}
-                        className="w-fit"
+                        className="w-fit rounded-lg"
                     >
                         <TabList variant="solid">
-                            <Tab>
-                                {dayjs(activeTimeRange.end.toString()).format(
-                                    'MMM DD'
-                                )}
+                            <Tab className="pt-0.5 pb-1">
+                                <Text>
+                                    {dayjs(
+                                        activeTimeRange.end.toString()
+                                    ).format('MMM DD')}
+                                </Text>
                             </Tab>
-                            <Tab>
-                                {dayjs(activeTimeRange.start.toString()).format(
-                                    'MMM DD'
-                                )}
+                            <Tab className="pt-0.5 pb-1">
+                                <Text>
+                                    {dayjs(
+                                        activeTimeRange.start.toString()
+                                    ).format('MMM DD')}
+                                </Text>
                             </Tab>
                         </TabList>
                     </TabGroup>
                 )}
             </Flex>
-            <Text className="mt-3">Total</Text>
-            <Metric>
-                {selectedIndex === 0 ? newData?.total : oldData?.total}
-            </Metric>
             <Divider />
-            <Flex flexDirection="row" alignItems="start">
-                <Flex flexDirection="col" alignItems="start" className="w-1/7">
-                    <Title>Allocation</Title>
-                    <Text>
-                        {selectedIndex === 0
-                            ? newData?.totalValueCount
-                            : oldData?.totalValueCount}{' '}
-                        Asset
-                    </Text>
-                </Flex>
+            <Flex justifyContent="center">
                 <DonutChart
                     data={compositionData(newData, oldData, selectedIndex)}
                     category="value"
@@ -148,41 +137,58 @@ export default function Composition({
                     }
                     colors={colors}
                 />
-                <List className="w-2/5">
+                <List className="w-2/5 ml-12">
                     {selectedIndex === 0
                         ? newList?.map((item, i) => (
                               <ListItem key={item.name}>
-                                  <Badge color={colors[i]} className="mr-1">
-                                      {item.val}%
-                                  </Badge>
-                                  <Text>{item.name}</Text>
-                                  <Flex
-                                      justifyContent="end"
-                                      className="space-x-2"
-                                  >
-                                      <Text>{item.value}</Text>
-                                      {item.delta && (
-                                          <BadgeDelta
-                                              deltaType={item.deltaType}
-                                              size="xs"
-                                          >
-                                              {item.delta}
-                                          </BadgeDelta>
-                                      )}
+                                  <Flex>
+                                      <Flex
+                                          justifyContent="start"
+                                          className="w-36"
+                                      >
+                                          <div
+                                              className={`h-3 w-3 mr-4 rounded-sm bg-${colors[i]}-500`}
+                                          />
+                                          <Text>{item.name}</Text>
+                                      </Flex>
+                                      <Text>{item.val}%</Text>
+                                      <Flex className="w-32">
+                                          <Text>{item.value}</Text>
+                                          {item.delta && (
+                                              <BadgeDelta
+                                                  deltaType={item.deltaType}
+                                                  size="xs"
+                                              >
+                                                  {item.delta}
+                                              </BadgeDelta>
+                                          )}
+                                      </Flex>
                                   </Flex>
                               </ListItem>
                           ))
                         : oldList?.map((item, i) => (
                               <ListItem key={item.name}>
-                                  <Badge color={colors[i]} className="mr-1">
-                                      {item.val}%
-                                  </Badge>
-                                  <Text>{item.name}</Text>
-                                  <Flex
-                                      justifyContent="end"
-                                      className="space-x-2"
-                                  >
-                                      <Text>{item.value}</Text>
+                                  <Flex>
+                                      <Flex
+                                          justifyContent="start"
+                                          className="w-36"
+                                      >
+                                          <div
+                                              className={`h-3 w-3 mr-4 rounded-sm bg-${colors[i]}-500`}
+                                          />
+                                          <Text>{item.name}</Text>
+                                      </Flex>
+                                      <Text>{item.val}%</Text>
+                                      <Flex className="w-32">
+                                          <BadgeDelta
+                                              deltaType="moderateIncrease"
+                                              size="xs"
+                                              className="opacity-0"
+                                          >
+                                              0
+                                          </BadgeDelta>
+                                          <Text>{item.value}</Text>
+                                      </Flex>
                                   </Flex>
                               </ListItem>
                           ))}

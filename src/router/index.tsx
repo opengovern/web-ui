@@ -19,6 +19,7 @@ import MetricDetails from '../pages/Assets/Details/MetricDetails'
 import Compliance from '../pages/Compliance'
 import BenchmarkDetail from '../pages/Compliance/BenchmarkDetail'
 import Home from '../pages/Home'
+import Stack from '../pages/Stack'
 
 const routes = [
     {
@@ -133,6 +134,11 @@ const authRoutes = [
         key: 'home',
         path: '/:ws/home',
         component: Home,
+    },
+    {
+        key: 'stack',
+        path: '/:ws/stack',
+        component: Stack,
     },
 ]
 

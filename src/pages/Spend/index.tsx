@@ -122,7 +122,7 @@ export default function Spend() {
                     <Tab>Trends</Tab>
                     <Tab>Breakdown</Tab>
                 </TabList>
-                <TabPanels>
+                <TabPanels className="mt-6">
                     <TabPanel>
                         <CostMetrics
                             categories={categoryOptions}
