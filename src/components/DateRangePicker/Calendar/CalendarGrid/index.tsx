@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { useCalendarGrid, useLocale } from 'react-aria'
 import { getWeeksInMonth } from '@internationalized/date'
 import { AriaCalendarCellProps } from '@react-aria/calendar'
@@ -21,27 +20,19 @@ export function CalendarGrid({ state, ...props }: { state: any }) {
                 </tr>
             </thead>
             <tbody>
-                {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    [...new Array(weeksInMonth).keys()].map((weekIndex) => (
-                        <tr key={weekIndex}>
-                            {state
-                                .getDatesInWeek(weekIndex)
-                                .map((date: AriaCalendarCellProps['date']) =>
-                                    date ? (
-                                        <CalendarCell
-                                            state={state}
-                                            date={date}
-                                        />
-                                    ) : (
-                                        // eslint-disable-next-line jsx-a11y/control-has-associated-label
-                                        <td />
-                                    )
-                                )}
-                        </tr>
-                    ))
-                }
+                {[...new Array(weeksInMonth).keys()].map((weekIndex) => (
+                    <tr key={weekIndex}>
+                        {state
+                            .getDatesInWeek(weekIndex)
+                            .map((date: AriaCalendarCellProps['date']) =>
+                                date ? (
+                                    <CalendarCell state={state} date={date} />
+                                ) : (
+                                    <div />
+                                )
+                            )}
+                    </tr>
+                ))}
             </tbody>
         </table>
     )

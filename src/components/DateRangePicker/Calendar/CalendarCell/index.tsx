@@ -51,6 +51,343 @@ export function CalendarCell({
 
     const { focusProps, isFocusVisible } = useFocusRing()
 
+    if (isSelected) {
+        if (isSelectionStart || isSelectionEnd) {
+            if (
+                isSelected &&
+                !isDisabled &&
+                !(isSelectionStart || isSelectionEnd)
+            ) {
+                return (
+                    <td
+                        {...cellProps}
+                        className={`py-0.5 relative ${
+                            isFocusVisible ? 'z-10' : 'z-0'
+                        }`}
+                    >
+                        <div
+                            {...mergeProps(buttonProps, focusProps)}
+                            ref={ref}
+                            hidden={isOutsideVisibleRange}
+                            className={`w-10 h-10 outline-none group ${
+                                isRoundedLeft ? 'rounded-l-full' : ''
+                            } ${isRoundedRight ? 'rounded-r-full' : ''} ${
+                                isInvalid ? 'bg-red-300' : 'bg-blue-300'
+                            } ${isDisabled ? 'disabled' : ''}`}
+                        >
+                            <div
+                                className={`w-full h-full rounded-full flex items-center justify-center ${
+                                    isDisabled && !isInvalid
+                                        ? 'text-gray-400'
+                                        : ''
+                                } ${
+                                    // Focus ring, visible while the cell has keyboard focus.
+                                    isFocusVisible
+                                        ? 'ring-2 group-focus:z-2 ring-blue-600 ring-offset-2'
+                                        : ''
+                                } ${
+                                    // Darker selection background for the start and end.
+                                    isInvalid
+                                        ? 'bg-red-600 text-white hover:bg-red-700'
+                                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                                } ${
+                                    // Hover state for cells in the middle of the range.
+                                    isInvalid
+                                        ? 'hover:bg-red-400'
+                                        : 'hover:bg-blue-400'
+                                } ${
+                                    // Hover state for non-selected cells.
+                                    !isSelected && !isDisabled
+                                        ? 'hover:bg-blue-100'
+                                        : ''
+                                } cursor-default`}
+                            >
+                                {formattedDate}
+                            </div>
+                        </div>
+                    </td>
+                )
+            }
+            return (
+                <td
+                    {...cellProps}
+                    className={`py-0.5 relative ${
+                        isFocusVisible ? 'z-10' : 'z-0'
+                    }`}
+                >
+                    <div
+                        {...mergeProps(buttonProps, focusProps)}
+                        ref={ref}
+                        hidden={isOutsideVisibleRange}
+                        className={`w-10 h-10 outline-none group ${
+                            isRoundedLeft ? 'rounded-l-full' : ''
+                        } ${isRoundedRight ? 'rounded-r-full' : ''} ${
+                            isInvalid ? 'bg-red-300' : 'bg-blue-300'
+                        } ${isDisabled ? 'disabled' : ''}`}
+                    >
+                        <div
+                            className={`w-full h-full rounded-full flex items-center justify-center ${
+                                isDisabled && !isInvalid ? 'text-gray-400' : ''
+                            } ${
+                                // Focus ring, visible while the cell has keyboard focus.
+                                isFocusVisible
+                                    ? 'ring-2 group-focus:z-2 ring-blue-600 ring-offset-2'
+                                    : ''
+                            } ${
+                                // Darker selection background for the start and end.
+                                isInvalid
+                                    ? 'bg-red-600 text-white hover:bg-red-700'
+                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                            } ${
+                                // Hover state for cells in the middle of the range.
+                                ''
+                            } ${
+                                // Hover state for non-selected cells.
+                                !isSelected && !isDisabled
+                                    ? 'hover:bg-blue-100'
+                                    : ''
+                            } cursor-default`}
+                        >
+                            {formattedDate}
+                        </div>
+                    </div>
+                </td>
+            )
+        }
+        if (
+            isSelected &&
+            !isDisabled &&
+            !(isSelectionStart || isSelectionEnd)
+        ) {
+            return (
+                <td
+                    {...cellProps}
+                    className={`py-0.5 relative ${
+                        isFocusVisible ? 'z-10' : 'z-0'
+                    }`}
+                >
+                    <div
+                        {...mergeProps(buttonProps, focusProps)}
+                        ref={ref}
+                        hidden={isOutsideVisibleRange}
+                        className={`w-10 h-10 outline-none group ${
+                            isRoundedLeft ? 'rounded-l-full' : ''
+                        } ${isRoundedRight ? 'rounded-r-full' : ''} ${
+                            isInvalid ? 'bg-red-300' : 'bg-blue-300'
+                        } ${isDisabled ? 'disabled' : ''}`}
+                    >
+                        <div
+                            className={`w-full h-full rounded-full flex items-center justify-center ${
+                                isDisabled && !isInvalid ? 'text-gray-400' : ''
+                            } ${
+                                // Focus ring, visible while the cell has keyboard focus.
+                                isFocusVisible
+                                    ? 'ring-2 group-focus:z-2 ring-blue-600 ring-offset-2'
+                                    : ''
+                            } ${
+                                // Darker selection background for the start and end.
+                                ''
+                            } ${
+                                // Hover state for cells in the middle of the range.
+                                isInvalid
+                                    ? 'hover:bg-red-400'
+                                    : 'hover:bg-blue-400'
+                            } ${
+                                // Hover state for non-selected cells.
+                                !isSelected && !isDisabled
+                                    ? 'hover:bg-blue-100'
+                                    : ''
+                            } cursor-default`}
+                        >
+                            {formattedDate}
+                        </div>
+                    </div>
+                </td>
+            )
+        }
+        return (
+            <td
+                {...cellProps}
+                className={`py-0.5 relative ${isFocusVisible ? 'z-10' : 'z-0'}`}
+            >
+                <div
+                    {...mergeProps(buttonProps, focusProps)}
+                    ref={ref}
+                    hidden={isOutsideVisibleRange}
+                    className={`w-10 h-10 outline-none group ${
+                        isRoundedLeft ? 'rounded-l-full' : ''
+                    } ${isRoundedRight ? 'rounded-r-full' : ''} ${
+                        isInvalid ? 'bg-red-300' : 'bg-blue-300'
+                    } ${isDisabled ? 'disabled' : ''}`}
+                >
+                    <div
+                        className={`w-full h-full rounded-full flex items-center justify-center ${
+                            isDisabled && !isInvalid ? 'text-gray-400' : ''
+                        } ${
+                            // Focus ring, visible while the cell has keyboard focus.
+                            isFocusVisible
+                                ? 'ring-2 group-focus:z-2 ring-blue-600 ring-offset-2'
+                                : ''
+                        } ${
+                            // Darker selection background for the start and end.
+                            ''
+                        } ${
+                            // Hover state for cells in the middle of the range.
+                            ''
+                        } ${
+                            // Hover state for non-selected cells.
+                            !isSelected && !isDisabled
+                                ? 'hover:bg-blue-100'
+                                : ''
+                        } cursor-default`}
+                    >
+                        {formattedDate}
+                    </div>
+                </div>
+            </td>
+        )
+    }
+    if (isSelectionStart || isSelectionEnd) {
+        if (
+            isSelected &&
+            !isDisabled &&
+            !(isSelectionStart || isSelectionEnd)
+        ) {
+            return (
+                <td
+                    {...cellProps}
+                    className={`py-0.5 relative ${
+                        isFocusVisible ? 'z-10' : 'z-0'
+                    }`}
+                >
+                    <div
+                        {...mergeProps(buttonProps, focusProps)}
+                        ref={ref}
+                        hidden={isOutsideVisibleRange}
+                        className={`w-10 h-10 outline-none group ${
+                            isRoundedLeft ? 'rounded-l-full' : ''
+                        } ${isRoundedRight ? 'rounded-r-full' : ''} ${''} ${
+                            isDisabled ? 'disabled' : ''
+                        }`}
+                    >
+                        <div
+                            className={`w-full h-full rounded-full flex items-center justify-center ${
+                                isDisabled && !isInvalid ? 'text-gray-400' : ''
+                            } ${
+                                // Focus ring, visible while the cell has keyboard focus.
+                                isFocusVisible
+                                    ? 'ring-2 group-focus:z-2 ring-blue-600 ring-offset-2'
+                                    : ''
+                            } ${
+                                // Darker selection background for the start and end.
+                                isInvalid
+                                    ? 'bg-red-600 text-white hover:bg-red-700'
+                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                            } ${
+                                // Hover state for cells in the middle of the range.
+                                isInvalid
+                                    ? 'hover:bg-red-400'
+                                    : 'hover:bg-blue-400'
+                            } ${
+                                // Hover state for non-selected cells.
+                                !isSelected && !isDisabled
+                                    ? 'hover:bg-blue-100'
+                                    : ''
+                            } cursor-default`}
+                        >
+                            {formattedDate}
+                        </div>
+                    </div>
+                </td>
+            )
+        }
+        return (
+            <td
+                {...cellProps}
+                className={`py-0.5 relative ${isFocusVisible ? 'z-10' : 'z-0'}`}
+            >
+                <div
+                    {...mergeProps(buttonProps, focusProps)}
+                    ref={ref}
+                    hidden={isOutsideVisibleRange}
+                    className={`w-10 h-10 outline-none group ${
+                        isRoundedLeft ? 'rounded-l-full' : ''
+                    } ${isRoundedRight ? 'rounded-r-full' : ''} ${''} ${
+                        isDisabled ? 'disabled' : ''
+                    }`}
+                >
+                    <div
+                        className={`w-full h-full rounded-full flex items-center justify-center ${
+                            isDisabled && !isInvalid ? 'text-gray-400' : ''
+                        } ${
+                            // Focus ring, visible while the cell has keyboard focus.
+                            isFocusVisible
+                                ? 'ring-2 group-focus:z-2 ring-blue-600 ring-offset-2'
+                                : ''
+                        } ${
+                            // Darker selection background for the start and end.
+                            isInvalid
+                                ? 'bg-red-600 text-white hover:bg-red-700'
+                                : 'bg-blue-600 text-white hover:bg-blue-700'
+                        } ${
+                            // Hover state for cells in the middle of the range.
+                            ''
+                        } ${
+                            // Hover state for non-selected cells.
+                            !isSelected && !isDisabled
+                                ? 'hover:bg-blue-100'
+                                : ''
+                        } cursor-default`}
+                    >
+                        {formattedDate}
+                    </div>
+                </div>
+            </td>
+        )
+    }
+    if (isSelected && !isDisabled && !(isSelectionStart || isSelectionEnd)) {
+        return (
+            <td
+                {...cellProps}
+                className={`py-0.5 relative ${isFocusVisible ? 'z-10' : 'z-0'}`}
+            >
+                <div
+                    {...mergeProps(buttonProps, focusProps)}
+                    ref={ref}
+                    hidden={isOutsideVisibleRange}
+                    className={`w-10 h-10 outline-none group ${
+                        isRoundedLeft ? 'rounded-l-full' : ''
+                    } ${isRoundedRight ? 'rounded-r-full' : ''} ${''} ${
+                        isDisabled ? 'disabled' : ''
+                    }`}
+                >
+                    <div
+                        className={`w-full h-full rounded-full flex items-center justify-center ${
+                            isDisabled && !isInvalid ? 'text-gray-400' : ''
+                        } ${
+                            // Focus ring, visible while the cell has keyboard focus.
+                            isFocusVisible
+                                ? 'ring-2 group-focus:z-2 ring-blue-600 ring-offset-2'
+                                : ''
+                        } ${
+                            // Darker selection background for the start and end.
+                            ''
+                        } ${
+                            // Hover state for cells in the middle of the range.
+                            isInvalid ? 'hover:bg-red-400' : 'hover:bg-blue-400'
+                        } ${
+                            // Hover state for non-selected cells.
+                            !isSelected && !isDisabled
+                                ? 'hover:bg-blue-100'
+                                : ''
+                        } cursor-default`}
+                    >
+                        {formattedDate}
+                    </div>
+                </div>
+            </td>
+        )
+    }
     return (
         <td
             {...cellProps}
@@ -62,10 +399,9 @@ export function CalendarCell({
                 hidden={isOutsideVisibleRange}
                 className={`w-10 h-10 outline-none group ${
                     isRoundedLeft ? 'rounded-l-full' : ''
-                } ${isRoundedRight ? 'rounded-r-full' : ''} ${
-                    // eslint-disable-next-line no-nested-ternary
-                    isSelected ? (isInvalid ? 'bg-red-300' : 'bg-blue-300') : ''
-                } ${isDisabled ? 'disabled' : ''}`}
+                } ${isRoundedRight ? 'rounded-r-full' : ''} ${''} ${
+                    isDisabled ? 'disabled' : ''
+                }`}
             >
                 <div
                     className={`w-full h-full rounded-full flex items-center justify-center ${
@@ -77,22 +413,10 @@ export function CalendarCell({
                             : ''
                     } ${
                         // Darker selection background for the start and end.
-                        // eslint-disable-next-line no-nested-ternary
-                        isSelectionStart || isSelectionEnd
-                            ? isInvalid
-                                ? 'bg-red-600 text-white hover:bg-red-700'
-                                : 'bg-blue-600 text-white hover:bg-blue-700'
-                            : ''
+                        ''
                     } ${
                         // Hover state for cells in the middle of the range.
-                        // eslint-disable-next-line no-nested-ternary
-                        isSelected &&
-                        !isDisabled &&
-                        !(isSelectionStart || isSelectionEnd)
-                            ? isInvalid
-                                ? 'hover:bg-red-400'
-                                : 'hover:bg-blue-400'
-                            : ''
+                        ''
                     } ${
                         // Hover state for non-selected cells.
                         !isSelected && !isDisabled ? 'hover:bg-blue-100' : ''
