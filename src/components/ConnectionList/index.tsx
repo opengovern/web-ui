@@ -295,7 +295,7 @@ export default function ConnectionList() {
         <>
             <Button
                 variant="secondary"
-                className="ml-2 h-[2rem]"
+                className="ml-2 h-9"
                 onClick={() => setOpenDrawer(true)}
                 icon={
                     selectedConnections.connections.length > 0 ||

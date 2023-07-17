@@ -40,7 +40,7 @@ export default function Assets() {
         <LoggedInLayout currentPage="assets">
             <Flex justifyContent="between" alignItems="center">
                 <Metric>Assets</Metric>
-                <Flex justifyContent="end">
+                <Flex justifyContent="end" alignItems="start">
                     <DateRangePicker />
                     <ConnectionList />
                 </Flex>
