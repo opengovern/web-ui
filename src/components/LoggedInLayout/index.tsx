@@ -12,6 +12,7 @@ import {
     HomeIcon,
     MagnifyingGlassIcon,
     MoonIcon,
+    RectangleStackIcon,
     ServerStackIcon,
     ShieldCheckIcon,
     SunIcon,
@@ -58,6 +59,11 @@ const navigation = [
         icon: CpuChipIcon,
     },
     {
+        name: 'Stack',
+        page: 'stack',
+        icon: RectangleStackIcon,
+    },
+    {
         name: 'Settings',
         id: 'settings',
         page: 'settings/entitlement',
@@ -79,6 +85,7 @@ type IProps = {
         | 'integration'
         | 'compliance'
         | 'settings'
+        | 'stack'
     showSidebar?: boolean
 }
 
