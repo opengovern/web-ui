@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import { Dialog, Menu, Popover, Transition } from '@headlessui/react'
+import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
     BanknotesIcon,
     Bars3Icon,
@@ -7,7 +7,6 @@ import {
     ChevronDoubleRightIcon,
     ChevronDownIcon,
     Cog6ToothIcon,
-    CommandLineIcon,
     CpuChipIcon,
     DocumentChartBarIcon,
     HomeIcon,
@@ -15,6 +14,7 @@ import {
     MoonIcon,
     ServerStackIcon,
     ShieldCheckIcon,
+    SunIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { useAuth0 } from '@auth0/auth0-react'
@@ -91,6 +91,7 @@ export default function LoggedInLayout({
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const { user, logout } = useAuth0()
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
+    const [theme, setTheme] = useState(localStorage.theme || 'dark')
 
     const sidebar = (
         <>
@@ -251,8 +252,10 @@ export default function LoggedInLayout({
 
     const toggleTheme = () => {
         if (localStorage.theme === 'dark') {
+            setTheme('light')
             localStorage.theme = 'light'
         } else {
+            setTheme('dark')
             localStorage.theme = 'dark'
         }
 
@@ -298,7 +301,11 @@ export default function LoggedInLayout({
                                     onClick={toggleTheme}
                                 >
                                     <span className="sr-only">Theme</span>
-                                    <MoonIcon className="h-6 w-6" />
+                                    {theme === 'dark' ? (
+                                        <SunIcon className="h-6 w-6" />
+                                    ) : (
+                                        <MoonIcon className="h-6 w-6" />
+                                    )}
                                 </button>
                                 <CLIMenu />
                                 {/* <button

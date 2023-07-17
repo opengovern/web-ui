@@ -8,6 +8,7 @@ import {
     List,
     ListItem,
     Metric,
+    Subtitle,
     Text,
     Title,
 } from '@tremor/react'
@@ -43,10 +44,10 @@ export default function Summary() {
         })
 
     return (
-        <Flex className="mt-10">
-            <Grid numItems={3} className="w-full gap-3">
+        <Flex className="mt-12">
+            <Grid numItems={3} className="w-full gap-4">
                 <Col numColSpan={1}>
-                    <Flex flexDirection="col" className="gap-y-3 h-full">
+                    <Flex flexDirection="col" className="gap-y-4 h-full">
                         <Card className="gap-y-2 h-1/2">
                             <Flex>
                                 <Text className="font-medium">
@@ -126,18 +127,18 @@ export default function Summary() {
                                                 ) : (
                                                     <AWSIcon />
                                                 )}
-                                                <Text className="ml-1">
+                                                <Text className="ml-4">
                                                     {
                                                         item.providerConnectionName
                                                     }
                                                 </Text>
                                             </Flex>
-                                            <Flex justifyContent="end">
-                                                <Bold>
+                                            <Flex className="w-1/4">
+                                                <Subtitle>
                                                     {numericDisplay(
                                                         item.resourceCount
                                                     )}
-                                                </Bold>{' '}
+                                                </Subtitle>
                                                 <BadgeDelta
                                                     size="xs"
                                                     deltaType={badgeTypeByDelta(

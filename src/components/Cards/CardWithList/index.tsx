@@ -67,8 +67,8 @@ export default function CardWithList({
     // eslint-disable-next-line consistent-return
     const tabDetails = (tab: string) => {
         try {
-            return data[tab]?.map((item: Item) => (
-                <ListItem>
+            return data[tab]?.map((item: Item, i: number) => (
+                <ListItem className={`${i === 0 && 'pt-4'}`}>
                     <Text className="w-4/5 truncate">{item.name}</Text>
                     {item.value && <Text>{value(item)}</Text>}
                 </ListItem>

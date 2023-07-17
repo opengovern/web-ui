@@ -24,7 +24,7 @@ export default function AWSSummary({
     credentialLoading,
 }: IAWSSummary) {
     return (
-        <Grid numItemsMd={2} numItemsLg={3} className="w-full gap-3 mt-6 mb-10">
+        <Grid numItemsMd={2} numItemsLg={3} className="w-full gap-4 mt-6 mb-10">
             <SummaryCard
                 title="Onboarded AWS Accounts"
                 metric={String(

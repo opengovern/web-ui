@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Button, Flex, Icon, Metric } from '@tremor/react'
+import { Bold, Button, Flex, Icon, Metric, Title } from '@tremor/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 interface Iprops {
@@ -49,9 +49,11 @@ export default function DrawerPanel({
                                         justifyContent="start"
                                         className="h-full w-full overflow-y-scroll bg-white py-6 shadow-xl"
                                     >
-                                        <Dialog.Title className="w-full leading-6 px-4 sm:px-6 text-gray-900 border-b pb-3">
-                                            <Flex flexDirection="row">
-                                                <Metric>{title}</Metric>
+                                        <Dialog.Title className="absolute top-0 w-full bg-white px-4 sm:px-6 text-gray-900 border-b pt-5 pb-4">
+                                            <Flex>
+                                                <Title className="text-lg font-semibold my-1">
+                                                    {title}
+                                                </Title>
                                                 <Button
                                                     variant="light"
                                                     className="rounded-md text-gray-300 hover:text-white focus:outline-none"
@@ -68,7 +70,7 @@ export default function DrawerPanel({
                                                 </Button>
                                             </Flex>
                                         </Dialog.Title>
-                                        <div className="w-full h-full mt-6 px-4 sm:px-6">
+                                        <div className="w-full h-full mt-16 px-4 sm:px-6">
                                             {children}
                                         </div>
                                     </Flex>

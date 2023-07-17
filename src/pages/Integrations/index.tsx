@@ -18,7 +18,7 @@ export default function Integrations() {
     return (
         <LoggedInLayout currentPage="integration">
             <Metric>Integrations</Metric>
-            <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6 mb-10">
+            <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6 mb-10">
                 <SummaryCard
                     title="Total Connections"
                     metric={numberDisplay(topMetrics?.totalConnections, 0)}
@@ -41,7 +41,7 @@ export default function Integrations() {
                     <Spinner />
                 </Flex>
             ) : (
-                <Grid numItemsMd={2} numItemsLg={3} className="gap-3 mt-6">
+                <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6">
                     {connectors?.map((connector) => (
                         <ConnectorCard
                             connector={connector.name}

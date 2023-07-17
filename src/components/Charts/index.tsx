@@ -23,7 +23,7 @@ export default function Chart({
     lines,
     ...props
 }: LineChartProps & IProps) {
-    const colors: Color[] = ['indigo', 'emerald', 'yellow', 'rose', 'blue']
+    const colors: Color[] = ['blue', 'emerald', 'rose', 'amber', 'fuchsia']
     const buildChart = () => {
         switch (type) {
             case 'area':

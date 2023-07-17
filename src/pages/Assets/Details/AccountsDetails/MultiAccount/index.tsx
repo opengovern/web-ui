@@ -6,7 +6,7 @@ import {
     ICellRendererParams,
 } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import { Button, Flex } from '@tremor/react'
+import { Button, Flex, Title } from '@tremor/react'
 import { useRef, useState } from 'react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import { useAtom } from 'jotai'
@@ -201,7 +201,8 @@ export default function MultiAccount() {
     return (
         <>
             <Summary />
-            <Flex justifyContent="end" className="mb-3 mt-6" alignItems="end">
+            <Flex className="mb-4 mt-6">
+                <Title>Accounts</Title>
                 <Button
                     variant="secondary"
                     onClick={() => gridRef?.current?.api.exportDataAsCsv()}
@@ -210,7 +211,7 @@ export default function MultiAccount() {
                     Download
                 </Button>
             </Flex>
-            <div className="ag-theme-alpine mt-4">
+            <div className="ag-theme-alpine">
                 <AgGridReact
                     ref={gridRef}
                     domLayout="autoHeight"

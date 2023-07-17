@@ -70,7 +70,7 @@ export default function SingleAccount() {
                 <Grid
                     numItemsMd={2}
                     numItemsLg={3}
-                    className="gap-3 mt-6 mb-10 w-full"
+                    className="gap-4 mt-6 mb-10 w-full"
                 >
                     <SummaryCard
                         title="Resource Count"
