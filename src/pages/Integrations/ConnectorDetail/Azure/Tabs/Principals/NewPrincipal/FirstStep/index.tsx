@@ -7,7 +7,7 @@ interface IStep {
 
 export default function FirstStep({ onNext, onPrevious }: IStep) {
     return (
-        <Flex flexDirection="col" justifyContent="between" className="h-[84vh]">
+        <Flex flexDirection="col" justifyContent="between" className="h-full">
             <Flex flexDirection="col" alignItems="start">
                 <Bold className="my-6">Deploy IAM Role</Bold>
                 <Text className="mb-3">

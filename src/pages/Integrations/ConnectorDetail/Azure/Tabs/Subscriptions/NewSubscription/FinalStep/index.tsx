@@ -94,7 +94,7 @@ export default function FinalStep({ onNext, subscriptions }: IStep) {
         },
     }
     return (
-        <Flex flexDirection="col" className="h-[84vh]">
+        <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
                 <Bold className="my-6">Discovered Azure Subscription</Bold>
                 <div className="ag-theme-alpine w-full">
