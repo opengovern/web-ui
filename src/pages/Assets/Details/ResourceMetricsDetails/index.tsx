@@ -6,7 +6,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useRef } from 'react'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
@@ -79,8 +79,9 @@ export default function ResourceMetricsDetails() {
     const navigate = useNavigate()
     const gridRef = useRef<AgGridReact>(null)
 
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
+
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )

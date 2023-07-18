@@ -1,16 +1,16 @@
 import {
-    Card,
-    Title,
     BadgeDelta,
-    SearchSelectItem,
-    SearchSelect,
+    Card,
     Flex,
+    SearchSelect,
+    SearchSelectItem,
+    Tab,
     TabGroup,
     TabList,
-    Tab,
+    Title,
 } from '@tremor/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
@@ -187,8 +187,9 @@ const columnsAccounts: ColDef[] = [
 export default function CostMetricsDetails() {
     const navigate = useNavigate()
     const gridRef = useRef<AgGridReact>(null)
-    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
+
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )

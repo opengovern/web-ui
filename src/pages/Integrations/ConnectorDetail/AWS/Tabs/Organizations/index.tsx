@@ -8,13 +8,13 @@ import {
 } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import React, { useRef, useState } from 'react'
-import { ReactComponent as AWSIcon } from '../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import OrganizationInfo from './OrganizationInfo'
 import NewOrganization from './NewOrganization'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
+import { AWSIcon } from '../../../../../../icons/icons'
 
 interface IOrganizations {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]

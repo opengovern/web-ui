@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useInventoryApiV2ResourcesCompositionDetail } from '../../../../api/inventory.gen'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import Composition from '../../../../components/Cards/Composition'
@@ -29,8 +29,9 @@ interface dataProps {
 }
 
 export default function CompositionTab({ top }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
+
     const query = {
         top,
         ...(selectedConnections.provider && {

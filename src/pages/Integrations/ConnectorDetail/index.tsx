@@ -1,7 +1,7 @@
 import { Flex, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
+import { useAtomValue } from 'jotai/index'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
     useOnboardApiV1ConnectionsSummaryList,
@@ -19,7 +19,7 @@ export default function ConnectorDetail() {
     const navigate = useNavigate()
     const { connector } = useParams()
 
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
 
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({

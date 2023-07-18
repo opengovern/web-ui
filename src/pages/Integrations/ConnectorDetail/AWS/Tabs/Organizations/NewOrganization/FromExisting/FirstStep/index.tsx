@@ -7,8 +7,8 @@ import {
 } from 'ag-grid-community'
 import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { ReactComponent as AWSIcon } from '../../../../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../../../api/api'
+import { AWSIcon } from '../../../../../../../../../icons/icons'
 
 interface IStep {
     onNext: (connectionID: string) => void

@@ -10,7 +10,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2ServicesMetricList } from '../../../../../api/inventory.gen'
@@ -29,8 +29,8 @@ export default function Summary({
     totalServices,
     totalServicesLoading,
 }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const { response: topServices, isLoading: topServicesLoading } =
         useInventoryApiV2ServicesMetricList({

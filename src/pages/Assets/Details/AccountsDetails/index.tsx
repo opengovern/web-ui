@@ -1,6 +1,6 @@
-import { useAtom } from 'jotai'
 import { Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
+import { useAtomValue } from 'jotai/index'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import { filterAtom } from '../../../../store'
 import SingleAccount from './SingleAccount'
@@ -11,7 +11,7 @@ import DateRangePicker from '../../../../components/DateRangePicker'
 
 export default function AccountsDetails() {
     const navigate = useNavigate()
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const breadcrumbsPages = [
         {

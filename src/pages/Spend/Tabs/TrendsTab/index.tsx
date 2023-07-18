@@ -1,6 +1,6 @@
 import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import GrowthTrend from './GrowthTrend'
 import TopAccountTrend from './TopAccountTrend'
 import TopServiceTrend from './TopServiceTrend'
@@ -16,8 +16,8 @@ type IProps = {
     }[]
 }
 export default function TrendsTab({ categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const { response: topAccounts, isLoading: isLoadingTopAccount } =
         useOnboardApiV1ConnectionsSummaryList({

@@ -1,7 +1,7 @@
 import { Badge, Button, Card, Flex, Title } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { AgGridReact } from 'ag-grid-react'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import {
     ColDef,
     GridOptions,
@@ -32,7 +32,7 @@ const columns: ColDef[] = [
                     justifyContent="center"
                     className="w-full h-full"
                 >
-                    <AzureIcon key={params.data.id} />
+                    <AzureIcon />
                 </Flex>
             )
         },

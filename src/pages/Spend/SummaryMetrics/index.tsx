@@ -1,5 +1,5 @@
 import { Grid } from '@tremor/react'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai/index'
 import SummaryCard from '../../../components/Cards/SummaryCard'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { filterAtom } from '../../../store'
@@ -35,7 +35,7 @@ export default function SummaryMetrics({
     accountCostLoading,
     serviceCostLoading,
 }: IProps) {
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     return (
         <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6 mb-10">

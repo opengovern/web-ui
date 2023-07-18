@@ -1,13 +1,7 @@
 import { Bold, Button, Flex } from '@tremor/react'
-import {
-    ColDef,
-    GridOptions,
-    ICellRendererParams,
-    RowClickedEvent,
-} from 'ag-grid-community'
-import React, { useRef, useState } from 'react'
+import { ColDef, GridOptions, RowClickedEvent } from 'ag-grid-community'
+import { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { ReactComponent as AWSIcon } from '../../../../../../../../../icons/elements-supplemental-provider-logo-aws-original.svg'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../../../api/api'
 
 interface IStep {

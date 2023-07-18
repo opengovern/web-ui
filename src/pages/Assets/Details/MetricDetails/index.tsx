@@ -1,10 +1,10 @@
 import { Card, Flex, Title } from '@tremor/react'
 import { useRef } from 'react'
-import { useAtom } from 'jotai'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
+import { useAtomValue } from 'jotai/index'
 import { filterAtom } from '../../../../store'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
@@ -88,7 +88,7 @@ export default function MetricDetails() {
     const navigate = useNavigate()
     const gridRef = useRef<AgGridReact>(null)
 
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const getSort = (
         sortModel: {
