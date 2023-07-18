@@ -19,11 +19,11 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import Summary from './Summary'
 import DrawerPanel from '../../../../../components/DrawerPanel'
-import { ConnectionDetails } from './ConnectionDetails'
 import { agGridDateComparator } from '../../../../../utilities/dateComparator'
 import { filterAtom, timeAtom } from '../../../../../store'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
 import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
+import { RenderObject } from '../../../../../components/RenderObject'
 
 const columns: ColDef[] = [
     {
@@ -146,7 +146,7 @@ export default function MultiAccount() {
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const [drawerOpen, setDrawerOpen] = useState(false)
-    const [selectedAccountIndex, setSelectedAccountIndex] = useState(0)
+    const [selectedConnection, setSelectedConnection] = useState<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>()
 
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -190,9 +190,9 @@ export default function MultiAccount() {
                 gridRef.current?.api.showLoadingOverlay()
             }
         },
-        onCellClicked(event: CellClickedEvent<any>) {
-            if (event.rowIndex !== null) {
-                setSelectedAccountIndex(event.rowIndex)
+        onCellClicked(event: CellClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>) {
+            if (event.data !== null) {
+                setSelectedConnection(event.data)
                 setDrawerOpen(true)
             }
         },
@@ -224,10 +224,7 @@ export default function MultiAccount() {
                 onClose={() => setDrawerOpen(false)}
                 title="Connection Details"
             >
-                <ConnectionDetails
-                    connection={accounts?.connections || []}
-                    index={selectedAccountIndex}
-                />
+                <RenderObject obj={selectedConnection} />
             </DrawerPanel>
         </>
     )
