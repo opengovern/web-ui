@@ -149,6 +149,7 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
+        paginationPageSize: 25,
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,

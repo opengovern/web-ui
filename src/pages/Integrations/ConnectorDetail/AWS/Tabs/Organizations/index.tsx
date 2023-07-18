@@ -141,6 +141,7 @@ export default function Organizations({
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
+        paginationPageSize: 25,
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
