@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Flex } from '@tremor/react'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import Steps from '../../../../../../../components/Steps'
 import FirstStep from './FirstStep'
@@ -105,13 +106,19 @@ export default function NewPrincipal({ open, onClose }: INewPrinciple) {
             case 3:
                 return <FinalStep data={data} health="" onNext={close} />
             default:
-                return null
+                return ' '
         }
     }
     return (
-        <DrawerPanel title="New Setvice Principle" open={open} onClose={close}>
-            <Steps steps={3} currentStep={stepNum} />
-            {showStep(stepNum)}
+        <DrawerPanel title="New Service Principle" open={open} onClose={close}>
+            <Flex
+                flexDirection="col"
+                justifyContent="between"
+                className="h-full"
+            >
+                <Steps steps={3} currentStep={stepNum} />
+                {showStep(stepNum)}
+            </Flex>
         </DrawerPanel>
     )
 }

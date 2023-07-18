@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Flex } from '@tremor/react'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import Steps from '../../../../../../../components/Steps'
 import FirstStep from './FirstStep'
@@ -64,7 +65,7 @@ export default function NewAzureSubscription({
                     />
                 )
             default:
-                return null
+                return ' '
         }
     }
 
@@ -74,8 +75,14 @@ export default function NewAzureSubscription({
             open={open}
             onClose={close}
         >
-            <Steps steps={2} currentStep={stepNum} />
-            {showStep(stepNum)}
+            <Flex
+                flexDirection="col"
+                justifyContent="between"
+                className="h-full"
+            >
+                <Steps steps={2} currentStep={stepNum} />
+                {showStep(stepNum)}
+            </Flex>
         </DrawerPanel>
     )
 }

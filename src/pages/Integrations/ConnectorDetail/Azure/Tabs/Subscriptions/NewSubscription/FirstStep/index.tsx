@@ -120,7 +120,7 @@ export default function FirstStep({ onNext, onPrevious, spns }: IStep) {
         },
     }
     return (
-        <Flex flexDirection="col" className="h-full">
+        <Flex flexDirection="col" justifyContent="between" className="h-full">
             <Flex flexDirection="col" alignItems="start">
                 <Bold className="my-6">Select SPN</Bold>
                 <div className="ag-theme-alpine w-full">

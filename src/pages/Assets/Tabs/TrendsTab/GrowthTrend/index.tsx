@@ -15,6 +15,7 @@ import Chart from '../../../../../components/Charts'
 import { filterAtom, timeAtom } from '../../../../../store'
 import { badgeDelta } from '../../../../../utilities/deltaType'
 import Spinner from '../../../../../components/Spinner'
+import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
 type IProps = {
     categories: {
@@ -59,7 +60,7 @@ export default function GrowthTrend({ categories }: IProps) {
             resourcesTrend?.map((item) => {
                 return {
                     'Resource Count': item.count,
-                    date: dayjs(item.date).format('MMM DD, YYYY'),
+                    date: dateDisplay(item.date),
                 }
             }) || []
         )

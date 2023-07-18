@@ -33,7 +33,7 @@ export default function DrawerPanel({
 
                 <div className="fixed inset-0 overflow-hidden">
                     <div className="absolute inset-0 overflow-hidden">
-                        <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                        <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full">
                             <Transition.Child
                                 as={Fragment}
                                 enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -49,8 +49,13 @@ export default function DrawerPanel({
                                         justifyContent="start"
                                         className="h-full w-full overflow-y-scroll bg-white py-6 shadow-xl"
                                     >
-                                        <Dialog.Title className="absolute top-0 w-full bg-white px-4 sm:px-6 text-gray-900 border-b pt-5 pb-4">
-                                            <Flex>
+                                        <Dialog.Title className="absolute top-0 w-[560px] bg-white px-4 sm:px-6 text-gray-900 border-b pt-5 pb-4">
+                                            <Flex
+                                                flexDirection="row"
+                                                justifyContent="between"
+                                                alignItems="center"
+                                                className="w-full"
+                                            >
                                                 <Title className="text-lg font-semibold my-1">
                                                     {title}
                                                 </Title>
@@ -70,7 +75,7 @@ export default function DrawerPanel({
                                                 </Button>
                                             </Flex>
                                         </Dialog.Title>
-                                        <div className="w-full h-full mt-16 px-4 sm:px-6">
+                                        <div className="w-full h-full pt-16 px-4 sm:px-6">
                                             {children}
                                         </div>
                                     </Flex>

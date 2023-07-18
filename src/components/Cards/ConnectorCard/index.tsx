@@ -1,4 +1,4 @@
-import { Badge, Card, Flex, Icon, Text, Title } from '@tremor/react'
+import { Badge, Card, Flex, Icon, Subtitle, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { numericDisplay } from '../../../utilities/numericDisplay'
@@ -43,16 +43,20 @@ export default function ConnectorCard({
             <Flex flexDirection="row" className="mb-3">
                 {getConnectorIcon(connector)}
                 <Badge color={getBadgeColor(status)}>
-                    {status === 'enabled' ? 'Active' : 'Deactive'}
+                    {status === 'enabled' ? (
+                        <Text color="emerald">Active</Text>
+                    ) : (
+                        <Text color="rose">InActive</Text>
+                    )}
                 </Badge>
             </Flex>
             <Flex flexDirection="row" className="mb-1">
                 <Title>{title}</Title>
                 <Title>{numericDisplay(count)}</Title>
             </Flex>
-            <Text>{description}</Text>
+            <Subtitle>{description}</Subtitle>
             <Flex flexDirection="row" justifyContent="end">
-                <Icon icon={ChevronRightIcon} />
+                <Icon color="blue" icon={ChevronRightIcon} />
             </Flex>
         </Card>
     )

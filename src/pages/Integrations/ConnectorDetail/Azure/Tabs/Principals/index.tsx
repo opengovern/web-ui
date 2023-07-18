@@ -1,7 +1,7 @@
-import { Button, Card, Flex, Title } from '@tremor/react'
+import { Badge, Button, Card, Flex, Title } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { AgGridReact } from 'ag-grid-react'
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import {
     ColDef,
     GridOptions,
@@ -68,6 +68,23 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
+        cellRenderer: (params: ICellRendererParams) => {
+            function getBadgeColor(status: string) {
+                switch (status) {
+                    case 'healthy':
+                        return 'emerald'
+                    case 'unhealthy':
+                        return 'rose'
+                    default:
+                        return 'neutral'
+                }
+            }
+            return (
+                <Badge color={getBadgeColor(params.value)}>
+                    {params.value}
+                </Badge>
+            )
+        },
     },
     {
         field: 'healthReason',
@@ -119,6 +136,7 @@ export default function Principals({ principals }: IPrincipals) {
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
+        paginationPageSize: 25,
         rowSelection: 'multiple',
         animateRows: true,
         getRowHeight: (params) => 50,
