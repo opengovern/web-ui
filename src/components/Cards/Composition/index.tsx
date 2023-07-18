@@ -20,6 +20,7 @@ import dayjs from 'dayjs'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { timeAtom } from '../../../store'
+import { dateDisplay } from '../../../utilities/dateDisplay'
 
 interface listProps {
     val?: number
@@ -107,16 +108,16 @@ export default function Composition({
                         <TabList variant="solid">
                             <Tab className="pt-0.5 pb-1">
                                 <Text>
-                                    {dayjs(
+                                    {dateDisplay(
                                         activeTimeRange.end.toString()
-                                    ).format('MMM DD')}
+                                    )}
                                 </Text>
                             </Tab>
                             <Tab className="pt-0.5 pb-1">
                                 <Text>
-                                    {dayjs(
+                                    {dateDisplay(
                                         activeTimeRange.start.toString()
-                                    ).format('MMM DD')}
+                                    )}
                                 </Text>
                             </Tab>
                         </TabList>
