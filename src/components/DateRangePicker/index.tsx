@@ -1,4 +1,4 @@
-import { today, getLocalTimeZone } from '@internationalized/date'
+import { getLocalTimeZone, today } from '@internationalized/date'
 import { useAtom } from 'jotai'
 import { useRef } from 'react'
 import { useDateRangePickerState } from 'react-stately'
@@ -8,7 +8,7 @@ import {
     ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline'
 import { AriaDateRangePickerProps, DateValue } from '@react-aria/datepicker'
-import { timeAtom, spendTimeAtom } from '../../store'
+import { spendTimeAtom, timeAtom } from '../../store'
 import { FieldButton } from './Button'
 import { RangeCalendar } from './Calendar/RangeCalendar'
 import { DateField } from './DateField'
@@ -47,6 +47,13 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                     {state.validationState === 'invalid' && (
                         <ExclamationTriangleIcon className="w-6 h-6 text-red-500 absolute right-1" />
                     )}
+                    <button
+                        type="button"
+                        className="absolute w-full h-full left-0 opacity-0"
+                        onClick={() => state.setOpen(true)}
+                    >
+                        open datepicker
+                    </button>
                 </div>
                 <FieldButton {...buttonProps} isPressed={state.isOpen}>
                     <CalendarIcon className="w-5 h-5 text-gray-700 group-focus-within:text-blue-700" />
