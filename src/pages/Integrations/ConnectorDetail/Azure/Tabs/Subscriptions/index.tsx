@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import {
     ColDef,
@@ -6,7 +6,7 @@ import {
     ICellRendererParams,
     RowClickedEvent,
 } from 'ag-grid-community'
-import { Button, Card, Flex, Title } from '@tremor/react'
+import { Badge, Button, Card, Flex, Title } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import NewAzureSubscription from './NewSubscription'
 import {
@@ -81,6 +81,27 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
+        cellRenderer: (params: ICellRendererParams) => {
+            function getBadgeColor(status: string) {
+                switch (status) {
+                    case 'NOT_ONBOARD':
+                        return 'neutral'
+                    case 'IN_PROGRESS':
+                        return 'yellow'
+                    case 'ONBOARD':
+                        return 'emerald'
+                    case 'UNHEALTHY':
+                        return 'rose'
+                    default:
+                        return 'gray'
+                }
+            }
+            return (
+                <Badge color={getBadgeColor(params.value)}>
+                    {params.value}
+                </Badge>
+            )
+        },
     },
     {
         field: 'id',

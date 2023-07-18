@@ -16,7 +16,7 @@ interface IStep {
 
 export default function FinalStep({ data, health, onNext }: IStep) {
     return (
-        <Flex flexDirection="col" className="h-full">
+        <Flex flexDirection="col" className="h-[84vh]">
             <Flex flexDirection="col" alignItems="start">
                 <Bold className="my-6">See details</Bold>
                 <Text className="mb-3">SPN Details & Health</Text>

@@ -23,7 +23,7 @@ export default function SecondStep({ error, onNext, onPrevious }: IStep) {
     const [subscriptionId, setSubscriptionId] = useState('')
 
     return (
-        <Flex flexDirection="col" className="h-full">
+        <Flex flexDirection="col" className="h-[84vh]">
             <Flex flexDirection="col" alignItems="start">
                 <Bold className="my-6">Deploy IAM Role</Bold>
                 <Text className="mb-3">

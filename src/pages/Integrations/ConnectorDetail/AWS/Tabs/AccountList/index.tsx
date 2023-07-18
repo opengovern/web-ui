@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Title } from '@tremor/react'
+import { Badge, Button, Card, Flex, Title } from '@tremor/react'
 import React, { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import {
@@ -21,7 +21,6 @@ interface IAccountList {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
-
 const columns: ColDef[] = [
     {
         field: 'connector',
@@ -82,6 +81,27 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
+        cellRenderer: (params: ICellRendererParams) => {
+            function getBadgeColor(status: string) {
+                switch (status) {
+                    case 'NOT_ONBOARD':
+                        return 'neutral'
+                    case 'IN_PROGRESS':
+                        return 'yellow'
+                    case 'ONBOARD':
+                        return 'emerald'
+                    case 'UNHEALTHY':
+                        return 'rose'
+                    default:
+                        return 'gray'
+                }
+            }
+            return (
+                <Badge color={getBadgeColor(params.value)}>
+                    {params.value}
+                </Badge>
+            )
+        },
     },
     {
         field: 'id',

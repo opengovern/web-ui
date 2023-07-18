@@ -109,7 +109,7 @@ export default function NewPrincipal({ open, onClose }: INewPrinciple) {
         }
     }
     return (
-        <DrawerPanel title="New Setvice Principle" open={open} onClose={close}>
+        <DrawerPanel title="New Service Principle" open={open} onClose={close}>
             <Steps steps={3} currentStep={stepNum} />
             {showStep(stepNum)}
         </DrawerPanel>
