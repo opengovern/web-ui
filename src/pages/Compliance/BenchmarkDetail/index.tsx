@@ -18,6 +18,8 @@ import Summary from './Tabs/Summary'
 import { useComplianceApiV1BenchmarksSummaryDetail } from '../../../api/compliance.gen'
 import ConnectionList from '../../../components/ConnectionList'
 import Assignments from './Tabs/Assignments'
+import Benchmarks from './Tabs/Benchmarks'
+import Findings from './Tabs/Findings'
 
 export default function BenchmarkDetail() {
     const navigate = useNavigate()
@@ -74,11 +76,15 @@ export default function BenchmarkDetail() {
                             connections={selectedConnections}
                         />
                     </TabPanel>
-                    <TabPanel>coming soon</TabPanel>
+                    <TabPanel>
+                        <Benchmarks id={id} />
+                    </TabPanel>
                     <TabPanel>
                         <Assignments id={id} />
                     </TabPanel>
-                    <TabPanel>coming soon</TabPanel>
+                    <TabPanel>
+                        <Findings id={id} connections={selectedConnections} />
+                    </TabPanel>
                 </TabPanels>
             </TabGroup>
         </LoggedInLayout>

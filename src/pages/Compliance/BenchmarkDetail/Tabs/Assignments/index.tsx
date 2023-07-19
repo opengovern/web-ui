@@ -127,7 +127,6 @@ export default function Assignments({ id }: IAssignments) {
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
-        rowSelection: 'multiple',
         animateRows: true,
         paginationPageSize: 25,
         async onCellClicked(

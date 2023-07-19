@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Bold, Button, Flex, Icon, Metric, Title } from '@tremor/react'
+import { Button, Flex, Icon, Title } from '@tremor/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 interface Iprops {
@@ -49,7 +49,7 @@ export default function DrawerPanel({
                                         justifyContent="start"
                                         className="h-full w-full overflow-y-scroll bg-white py-6 shadow-xl"
                                     >
-                                        <Dialog.Title className="absolute top-0 w-[560px] bg-white px-4 sm:px-6 text-gray-900 border-b pt-5 pb-4">
+                                        <Dialog.Title className="absolute top-0 w-[560px] bg-white px-4 text-gray-900 border-b pt-5 pb-4">
                                             <Flex
                                                 flexDirection="row"
                                                 justifyContent="between"
