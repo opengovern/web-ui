@@ -11,21 +11,20 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai/index'
 import LoggedInLayout from '../../../components/LoggedInLayout'
-import { timeAtom } from '../../../store'
+import { filterAtom, timeAtom } from '../../../store'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import DateRangePicker from '../../../components/DateRangePicker'
 import Summary from './Tabs/Summary'
-import {
-    useComplianceApiV1BenchmarksSummaryDetail,
-    useComplianceApiV1FindingsTopDetail,
-} from '../../../api/compliance.gen'
+import { useComplianceApiV1BenchmarksSummaryDetail } from '../../../api/compliance.gen'
 import ConnectionList from '../../../components/ConnectionList'
+import Assignments from './Tabs/Assignments'
 
 export default function BenchmarkDetail() {
     const navigate = useNavigate()
     const { id } = useParams()
 
     const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const { response: benchmarkDetail } =
         useComplianceApiV1BenchmarksSummaryDetail(String(id))
@@ -68,10 +67,17 @@ export default function BenchmarkDetail() {
                 </TabList>
                 <TabPanels className="mt-6">
                     <TabPanel>
-                        <Summary detail={benchmarkDetail} id={id} />
+                        <Summary
+                            detail={benchmarkDetail}
+                            id={id}
+                            timeRange={activeTimeRange}
+                            connections={selectedConnections}
+                        />
                     </TabPanel>
                     <TabPanel>coming soon</TabPanel>
-                    <TabPanel>coming soon</TabPanel>
+                    <TabPanel>
+                        <Assignments id={id} />
+                    </TabPanel>
                     <TabPanel>coming soon</TabPanel>
                 </TabPanels>
             </TabGroup>

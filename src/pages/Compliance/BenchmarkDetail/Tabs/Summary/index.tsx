@@ -1,11 +1,10 @@
 import { BarChart, Card, Flex, Grid, Title } from '@tremor/react'
 import dayjs from 'dayjs'
-import { useAtomValue } from 'jotai'
+import { DateValue } from '@react-aria/datepicker'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
 import CardWithList from '../../../../../components/Cards/CardWithList'
 import Chart from '../../../../../components/Charts'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../../../api/api'
-import { filterAtom } from '../../../../../store'
 import {
     useComplianceApiV1BenchmarksTrendDetail,
     useComplianceApiV1FindingsTopDetail,
@@ -16,6 +15,8 @@ interface ISummary {
         | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
         | undefined
     id: string | undefined
+    connections: any
+    timeRange: { start: DateValue; end: DateValue }
 }
 
 const generateBarData = (input: any) => {
@@ -58,25 +59,46 @@ const generateLineData = (input: any) => {
     return list
 }
 
-export default function Summary({ detail, id }: ISummary) {
-    const selectedConnections = useAtomValue(filterAtom)
+export default function Summary({
+    detail,
+    id,
+    connections,
+    timeRange,
+}: ISummary) {
+    const query = {
+        ...(connections.provider && {
+            connector: [connections.provider],
+        }),
+        ...(connections.connections && {
+            connectionId: connections.connections,
+        }),
+        ...(timeRange.start && {
+            startTime: dayjs(timeRange.start.toString()).unix().toString(),
+        }),
+        ...(timeRange.end && {
+            endTime: dayjs(timeRange.end.toString()).unix().toString(),
+        }),
+    }
 
     const { response: benchmarkTrend } =
-        useComplianceApiV1BenchmarksTrendDetail(String(id))
+        useComplianceApiV1BenchmarksTrendDetail(String(id), query)
     const { response: resources } = useComplianceApiV1FindingsTopDetail(
         String(id),
         'resourceID',
-        7
+        7,
+        query
     )
     const { response: resourceTypes } = useComplianceApiV1FindingsTopDetail(
         String(id),
         'resourceType',
-        7
+        7,
+        query
     )
     const { response: services } = useComplianceApiV1FindingsTopDetail(
         String(id),
         'connectionID',
-        7
+        7,
+        query
     )
 
     const generateTopDetail = () => {
