@@ -1138,6 +1138,10 @@ export const useInventoryApiV2MetadataResourcetypeList = (
 
         service?: string[]
 
+        resourceType?: string[]
+
+        summarzied?: boolean
+
         tag?: string[]
 
         pageSize?: number

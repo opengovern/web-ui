@@ -63,7 +63,7 @@ export default function BenchmarkDetail() {
             <TabGroup>
                 <TabList>
                     <Tab>Summary</Tab>
-                    <Tab>Benchmarks</Tab>
+                    <Tab>Policies</Tab>
                     <Tab>Assignments</Tab>
                     <Tab>Findings</Tab>
                 </TabList>

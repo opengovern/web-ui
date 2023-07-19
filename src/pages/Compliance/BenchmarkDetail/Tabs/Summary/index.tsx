@@ -25,12 +25,12 @@ const generateBarData = (input: any) => {
         for (let i = 0; i < input.length; i += 1) {
             list.push({
                 date: dayjs(input[i].timestamp * 1000).format('MMM DD, YYYY'),
-                Critical: input[i].checks.criticalCount,
-                High: input[i].checks.highCount,
-                Medium: input[i].checks.mediumCount,
-                Low: input[i].checks.lowCount,
-                Passed: input[i].checks.passedCount,
-                Unknown: input[i].checks.unknownCount,
+                Critical: input[i].checks?.criticalCount || 0,
+                High: input[i].checks?.highCount || 0,
+                Medium: input[i].checks?.mediumCount || 0,
+                Low: input[i].checks?.lowCount || 0,
+                Passed: input[i].checks?.passedCount || 0,
+                Unknown: input[i].checks?.unknownCount || 0,
             })
         }
     }
@@ -44,13 +44,13 @@ const generateLineData = (input: any) => {
             list.push({
                 date: dayjs(input[i].timestamp * 1000).format('MMM DD, YYYY'),
                 Score: (
-                    (input[i].checks.passedCount /
-                        (input[i].checks.criticalCount +
-                            input[i].checks.highCount +
-                            input[i].checks.mediumCount +
-                            input[i].checks.lowCount +
-                            input[i].checks.passedCount +
-                            input[i].checks.unknownCount)) *
+                    ((input[i].checks?.passedCount || 0) /
+                        ((input[i].checks?.criticalCount || 0) +
+                            (input[i].checks?.highCount || 0) +
+                            (input[i].checks?.mediumCount || 0) +
+                            (input[i].checks?.lowCount || 0) +
+                            (input[i].checks?.passedCount || 0) +
+                            (input[i].checks?.unknownCount || 0))) *
                         100 || 0
                 ).toFixed(2),
             })

@@ -6,7 +6,7 @@ import {
     ICellRendererParams,
     RowClickedEvent,
 } from 'ag-grid-community'
-import { Badge, Flex, List, ListItem, Text, Title } from '@tremor/react'
+import { Flex, Title } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useComplianceApiV1FindingsCreate } from '../../../../../api/compliance.gen'
 import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
@@ -114,7 +114,7 @@ export default function Findings({ id, connections }: IFinder) {
             size: 10000,
         },
     })
-    console.log(findings)
+
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,

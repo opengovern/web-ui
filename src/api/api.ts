@@ -650,6 +650,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      */
     enabled?: boolean
     /**
+     * Evaluated at
+     * @example "2020-01-01T00:00:00Z"
+     */
+    evaluatedAt?: string
+    /**
      * Benchmark ID
      * @example "azure_cis_v140"
      */
@@ -661,6 +666,21 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
     /**
      * Benchmark title
      * @example "Azure CIS v1.4.0"
+     */
+    title?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree {
+    children?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree[]
+    /**
+     * Benchmark ID
+     * @example "azure_cis_v140"
+     */
+    id?: string
+    policies?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree[]
+    /**
+     * Benchmark title
+     * @example "CIS v1.4.0"
      */
     title?: string
 }
@@ -792,6 +812,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse 
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse {
     records?: GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord[]
+    /** @example 100 */
+    totalCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsight {
@@ -975,6 +997,34 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy {
     title?: string
     /** @example "2020-01-01T00:00:00Z" */
     updatedAt?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree {
+    /**
+     * Policy ID
+     * @example "azure_cis_v140_7_5"
+     */
+    id?: string
+    /**
+     * Last checked
+     * @example 0
+     */
+    lastChecked?: number
+    /**
+     * Severity
+     * @example "low"
+     */
+    severity?: TypesFindingSeverity
+    /**
+     * Status
+     * @example "passed"
+     */
+    status?: TypesPolicyStatus
+    /**
+     * Policy title
+     * @example "7.5 Ensure that the latest OS Patches for all Virtual Machines are applied"
+     */
+    title?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
@@ -2082,6 +2132,7 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     name?: string
     organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganizationResponse
     ownerId?: string
+    /** @example "PROVISIONED" */
     status?: string
     tier?: string
     uri?: string
@@ -2252,6 +2303,12 @@ export enum TypesFindingSeverity {
     FindingSeverityMedium = 'medium',
     FindingSeverityHigh = 'high',
     FindingSeverityCritical = 'critical',
+}
+
+export enum TypesPolicyStatus {
+    PolicyStatusPASSED = 'passed',
+    PolicyStatusFAILED = 'failed',
+    PolicyStatusUNKNOWN = 'unknown',
 }
 
 export interface TypesSeverityResult {
@@ -3143,6 +3200,36 @@ export class Api<
             }),
 
         /**
+         * @description This API retrieves the benchmark tree, including all of its child benchmarks. Users can use this API to obtain a comprehensive overview of the benchmarks within a particular category or hierarchy.
+         *
+         * @tags compliance
+         * @name ApiV1BenchmarksTreeDetail
+         * @summary Get benchmark tree
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/tree
+         * @secure
+         */
+        apiV1BenchmarksTreeDetail: (
+            benchmarkId: string,
+            query: {
+                /** Status */
+                status: ('passed' | 'failed' | 'unknown')[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+                any
+            >({
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/tree`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description This API enables users to retrieve a trend of a benchmark result and checks
          *
          * @tags compliance
@@ -3275,7 +3362,7 @@ export class Api<
          */
         apiV1FindingsTopDetail: (
             benchmarkId: string,
-            field: 'resourceType' | 'connectionID' | 'resourceID',
+            field: 'resourceType' | 'connectionID' | 'resourceID' | 'service',
             count: number,
             query?: {
                 /** Connection IDs to filter by */
@@ -4020,6 +4107,10 @@ export class Api<
                 connector: ('' | 'AWS' | 'Azure')[]
                 /** Filter by service name */
                 service?: string[]
+                /** Filter by resource type */
+                resourceType?: string[]
+                /** Return only summarized results or not */
+                summarzied?: boolean
                 /** Key-Value tags in key=value format to filter by */
                 tag?: string[]
                 /** page size - default is 20 */

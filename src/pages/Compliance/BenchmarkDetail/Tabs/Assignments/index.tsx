@@ -42,7 +42,7 @@ const columns: ColDef[] = [
         },
     },
     {
-        field: 'connectionName',
+        field: 'providerConnectionName',
         headerName: 'Connection Name',
         sortable: true,
         filter: true,
@@ -55,7 +55,7 @@ const columns: ColDef[] = [
         sortable: true,
         filter: true,
         resizable: true,
-        flex: 2,
+        flex: 1,
     },
     {
         headerName: 'Enable',
@@ -150,7 +150,9 @@ export default function Assignments({ id }: IAssignments) {
                 ref={gridRef}
                 domLayout="autoHeight"
                 gridOptions={gridOptions}
-                rowData={assignments || []}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                rowData={assignments?.sort((a, b) => b.status - a.status) || []}
             />
         </div>
     )
