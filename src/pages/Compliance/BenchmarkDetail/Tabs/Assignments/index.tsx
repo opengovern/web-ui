@@ -1,5 +1,5 @@
 import { AgGridReact } from 'ag-grid-react'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
     CellClickedEvent,
     ColDef,
@@ -93,6 +93,7 @@ const columns: ColDef[] = [
 export default function Assignments({ id }: IAssignments) {
     const gridRef = useRef<AgGridReact>(null)
     const [connection, setConnection] = useState<any>(null)
+    const [status, setStatus] = useState<any>(null)
 
     const { response: assignments, sendNow: getData } =
         useComplianceApiV1AssignmentsBenchmarkDetail(String(id))
@@ -111,6 +112,18 @@ export default function Assignments({ id }: IAssignments) {
             false
         )
 
+    useEffect(() => {
+        if (connection && status === 'enable') {
+            sendDisable()
+        }
+        if (connection && status === 'disable') {
+            sendEnable()
+        }
+        if (connection && status) getData()
+        setConnection(null)
+        setStatus(null)
+    }, [connection, status])
+
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
@@ -121,15 +134,12 @@ export default function Assignments({ id }: IAssignments) {
             event: CellClickedEvent<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource>
         ) {
             if (event.colDef.headerName === 'Enable') {
-                // setConnection(event.data?.connectionID, () => {
-                //         if (event.data?.status) {
-                //             sendDisable()
-                //         } else {
-                //             sendEnable()
-                //         }
-                //         getData()
-                //         // await setConnection(null)
-                // })
+                setConnection(event.data?.connectionID)
+                if (event.data?.status) {
+                    setStatus('enable')
+                } else {
+                    setStatus('disable')
+                }
             }
         },
         getRowHeight: (params) => 50,
