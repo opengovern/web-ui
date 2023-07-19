@@ -146,7 +146,8 @@ export default function MultiAccount() {
     const selectedConnections = useAtomValue(filterAtom)
 
     const [drawerOpen, setDrawerOpen] = useState(false)
-    const [selectedConnection, setSelectedConnection] = useState<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>()
+    const [selectedConnection, setSelectedConnection] =
+        useState<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>()
 
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -190,7 +191,9 @@ export default function MultiAccount() {
                 gridRef.current?.api.showLoadingOverlay()
             }
         },
-        onCellClicked(event: CellClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>) {
+        onCellClicked(
+            event: CellClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+        ) {
             if (event.data !== null) {
                 setSelectedConnection(event.data)
                 setDrawerOpen(true)
