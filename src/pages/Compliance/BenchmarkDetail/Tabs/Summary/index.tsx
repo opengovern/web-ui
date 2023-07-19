@@ -1,12 +1,15 @@
 import { BarChart, Card, Flex, Grid, Title } from '@tremor/react'
 import dayjs from 'dayjs'
+import { useAtomValue } from 'jotai'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
 import CardWithList from '../../../../../components/Cards/CardWithList'
 import Chart from '../../../../../components/Charts'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../../../api/api'
-import { useAtomValue } from 'jotai/index'
 import { filterAtom } from '../../../../../store'
-import { useComplianceApiV1BenchmarksTrendDetail } from '../../../../../api/compliance.gen'
+import {
+    useComplianceApiV1BenchmarksTrendDetail,
+    useComplianceApiV1FindingsTopDetail,
+} from '../../../../../api/compliance.gen'
 
 interface ISummary {
     detail:
@@ -39,13 +42,16 @@ const generateLineData = (input: any) => {
         for (let i = 0; i < input.length; i += 1) {
             list.push({
                 date: dayjs(input[i].timestamp * 1000).format('MMM DD, YYYY'),
-                Result:
-                    input[i].checks.criticalCount +
-                    input[i].checks.highCount +
-                    input[i].checks.mediumCount +
-                    input[i].checks.lowCount +
-                    input[i].checks.passedCount +
-                    input[i].checks.unknownCount,
+                Score: (
+                    (input[i].checks.passedCount /
+                        (input[i].checks.criticalCount +
+                            input[i].checks.highCount +
+                            input[i].checks.mediumCount +
+                            input[i].checks.lowCount +
+                            input[i].checks.passedCount +
+                            input[i].checks.unknownCount)) *
+                        100 || 0
+                ).toFixed(2),
             })
         }
     }
@@ -57,6 +63,50 @@ export default function Summary({ detail, id }: ISummary) {
 
     const { response: benchmarkTrend } =
         useComplianceApiV1BenchmarksTrendDetail(String(id))
+    const { response: resources } = useComplianceApiV1FindingsTopDetail(
+        String(id),
+        'resourceID',
+        7
+    )
+    const { response: resourceTypes } = useComplianceApiV1FindingsTopDetail(
+        String(id),
+        'resourceType',
+        7
+    )
+    const { response: services } = useComplianceApiV1FindingsTopDetail(
+        String(id),
+        'connectionID',
+        7
+    )
+
+    const generateTopDetail = () => {
+        const resourceData =
+            resources?.records?.map((rec) => {
+                return {
+                    name: rec.value,
+                    value: rec.count,
+                }
+            }) || []
+        const resourceTypeData =
+            resourceTypes?.records?.map((rec) => {
+                return {
+                    name: rec.value,
+                    value: rec.count,
+                }
+            }) || []
+        const serviceData =
+            services?.records?.map((rec) => {
+                return {
+                    name: rec.value,
+                    value: rec.count,
+                }
+            }) || []
+        return {
+            Resources: resourceData,
+            'Resource Type': resourceTypeData,
+            Services: serviceData,
+        }
+    }
 
     const ok = detail?.result?.okCount || 0
     const info = detail?.result?.infoCount || 0
@@ -82,7 +132,7 @@ export default function Summary({ detail, id }: ISummary) {
                 <CardWithList
                     title="Top Services"
                     tabs={['Resources', 'Resource Type', 'Services']}
-                    data={{}}
+                    data={generateTopDetail()}
                 />
                 <Card>
                     <Title>Summary</Title>
@@ -111,12 +161,12 @@ export default function Summary({ detail, id }: ISummary) {
                 </Card>
             </Grid>
             <Card>
-                <Title>Compliance Trend Growth</Title>
+                <Title>Compliance Score Trend</Title>
                 <Chart
                     className="mt-4"
                     index="date"
                     type="line"
-                    categories={['Result']}
+                    categories={['Score']}
                     data={generateLineData(benchmarkTrend)}
                 />
             </Card>

@@ -15,7 +15,10 @@ import { timeAtom } from '../../../store'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import DateRangePicker from '../../../components/DateRangePicker'
 import Summary from './Tabs/Summary'
-import { useComplianceApiV1BenchmarksSummaryDetail } from '../../../api/compliance.gen'
+import {
+    useComplianceApiV1BenchmarksSummaryDetail,
+    useComplianceApiV1FindingsTopDetail,
+} from '../../../api/compliance.gen'
 import ConnectionList from '../../../components/ConnectionList'
 
 export default function BenchmarkDetail() {
