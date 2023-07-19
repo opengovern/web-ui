@@ -22,6 +22,7 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
     const navigate = useNavigate()
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
+
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )

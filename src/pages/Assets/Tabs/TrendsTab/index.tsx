@@ -1,6 +1,6 @@
 import { Flex, Grid } from '@tremor/react'
 import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import GrowthTrend from './GrowthTrend'
 import CardWithList from '../../../../components/Cards/CardWithList'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
@@ -19,8 +19,8 @@ type IProps = {
     }[]
 }
 export default function TrendsTab({ categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const queryTop5ConnectionsWithSort = (
         sortBy?:

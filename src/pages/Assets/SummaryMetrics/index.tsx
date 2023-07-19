@@ -1,6 +1,6 @@
 import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import { useInventoryApiV2ServicesSummaryList } from '../../../api/inventory.gen'
 import SummaryCard from '../../../components/Cards/SummaryCard'
@@ -8,8 +8,8 @@ import { numericDisplay } from '../../../utilities/numericDisplay'
 import { filterAtom, timeAtom } from '../../../store'
 
 export default function SummaryMetrics() {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const { response: accounts, isLoading: accountIsLoading } =
         useOnboardApiV1ConnectionsSummaryList({

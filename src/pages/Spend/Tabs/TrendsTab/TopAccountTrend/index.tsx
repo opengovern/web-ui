@@ -1,20 +1,18 @@
 import { Card, Title } from '@tremor/react'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
-import {
-    exactPriceDisplay,
-    priceDisplay,
-} from '../../../../../utilities/numericDisplay'
+import { priceDisplay } from '../../../../../utilities/numericDisplay'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
 import { useInventoryApiV2CostTrendConnections } from './apiCostTrends'
 import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
 export default function TopAccountsTrend() {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
+
     const { response: topAccounts, isLoading: isLoadingTopAccount } =
         useOnboardApiV1ConnectionsSummaryList({
             connector: [selectedConnections?.provider],

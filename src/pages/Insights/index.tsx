@@ -11,9 +11,9 @@ import {
     TextInput,
 } from '@tremor/react'
 import { useState } from 'react'
-import { useAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { useAtomValue } from 'jotai/index'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import InsightCategories from './InsightCategories'
 import {
@@ -28,7 +28,7 @@ import InsightGroupCard from '../../components/Cards/InsightGroupCard'
 
 export default function Insights() {
     const [selectedCategory, setSelectedCategory] = useState('')
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedTab, setSelectedTab] = useState(1)
 

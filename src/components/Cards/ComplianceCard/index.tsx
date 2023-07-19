@@ -10,7 +10,7 @@ import {
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
-import { CisIcon, RoundAzureIcon } from '../../../icons/icons'
+import { AWSIcon, AzureIcon, CisIcon, HipaaIcon } from '../../../icons/icons'
 
 interface IComplianceCard {
     benchmark:
@@ -94,16 +94,17 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                 </Badge>
             </Flex>
             <Flex className="mt-6">
-                <Flex justifyContent="start">
+                <Flex justifyContent="start" className="gap-x-1">
                     {!!(
                         benchmark?.tags?.plugin &&
                         benchmark?.tags?.plugin[0] === 'azure'
-                    ) && (
-                        <Icon size="xl" icon={RoundAzureIcon} className="p-0" />
-                    )}
-                    {!!benchmark?.tags?.cis && (
-                        <Icon size="xl" icon={CisIcon} className="p-0" />
-                    )}
+                    ) && <AzureIcon />}
+                    {!!(
+                        benchmark?.tags?.plugin &&
+                        benchmark?.tags?.plugin[0] === 'aws'
+                    ) && <AWSIcon />}
+                    {!!benchmark?.tags?.cis && <CisIcon />}
+                    {!!benchmark?.tags?.hipaa && <HipaaIcon />}
                 </Flex>
                 <Icon
                     icon={ChevronRightIcon}

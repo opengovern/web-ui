@@ -15,11 +15,10 @@ import {
     Title,
 } from '@tremor/react'
 import { useState } from 'react'
-import { useAtom } from 'jotai'
-import dayjs from 'dayjs'
+import { useAtomValue } from 'jotai/index'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
-import { timeAtom } from '../../../store'
+import { spendTimeAtom, timeAtom } from '../../../store'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 
 interface listProps {
@@ -61,7 +60,7 @@ export default function Composition({
     isCost = false,
 }: IProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const activeTimeRange = useAtomValue(isCost ? spendTimeAtom : timeAtom)
     const param = window.location.pathname.split('/')[2]
 
     const compositionData = (

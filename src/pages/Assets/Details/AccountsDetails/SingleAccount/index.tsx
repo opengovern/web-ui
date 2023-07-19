@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react'
 import {
     Bold,
     Card,
-    Col,
     Flex,
     Grid,
     List,
@@ -10,9 +8,8 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
 import {
     useOnboardApiV1CatalogMetricsList,
     useOnboardApiV1ConnectionsSummaryList,
@@ -24,8 +21,8 @@ import { filterAtom, timeAtom } from '../../../../../store'
 import { RenderObject } from '../../../../../components/RenderObject'
 
 export default function SingleAccount() {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const { response: topMetrics, isLoading: metricsLoading } =
         useOnboardApiV1CatalogMetricsList()

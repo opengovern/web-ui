@@ -9,7 +9,7 @@ import { AgGridReact } from 'ag-grid-react'
 import { Button, Flex, Title } from '@tremor/react'
 import { useRef, useState } from 'react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import {
     numberGroupedDisplay,
@@ -142,8 +142,8 @@ const columns: ColDef[] = [
 
 export default function MultiAccount() {
     const gridRef = useRef<AgGridReact>(null)
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [selectedAccountIndex, setSelectedAccountIndex] = useState(0)

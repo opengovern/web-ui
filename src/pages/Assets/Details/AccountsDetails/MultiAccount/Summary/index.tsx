@@ -1,6 +1,5 @@
 import {
     BadgeDelta,
-    Bold,
     Card,
     Col,
     Flex,
@@ -12,7 +11,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import { numericDisplay } from '../../../../../../utilities/numericDisplay'
 import {
@@ -28,8 +27,9 @@ import { filterAtom, timeAtom } from '../../../../../../store'
 import { AWSIcon, AzureIcon } from '../../../../../../icons/icons'
 
 export default function Summary() {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
+
     const { response: topMetrics, isLoading: metricsLoading } =
         useOnboardApiV1CatalogMetricsList()
     const { response: topAccounts, isLoading: topAccountLoading } =

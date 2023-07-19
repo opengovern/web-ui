@@ -8,7 +8,7 @@ import {
     TabPanel,
     TabPanels,
 } from '@tremor/react'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import DateRangePicker from '../../components/DateRangePicker'
 import LoggedInLayout from '../../components/LoggedInLayout'
@@ -30,8 +30,9 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 
 export default function Spend() {
     const [index, setIndex] = useState<number>(0)
-    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
+
     const { response: inventoryCategories } =
         useInventoryApiV2ResourcesTagList()
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(

@@ -4,7 +4,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { BadgeDelta, Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { useInventoryApiV2ServicesMetricList } from '../../../../api/inventory.gen'
@@ -82,8 +82,8 @@ export default function ServicesDetails() {
     const navigate = useNavigate()
     const gridRef = useRef<AgGridReact>(null)
 
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const { response: serviceList, isLoading: isServiceListLoading } =
         useInventoryApiV2ServicesMetricList({

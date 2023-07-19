@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Card, Title } from '@tremor/react'
-import { atom, useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import {
     useInventoryApiV2CostMetricList,
@@ -8,10 +8,7 @@ import {
 } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
-import {
-    exactPriceDisplay,
-    priceDisplay,
-} from '../../../../../utilities/numericDisplay'
+import { priceDisplay } from '../../../../../utilities/numericDisplay'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
 import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
@@ -23,8 +20,8 @@ type IProps = {
 }
 
 export default function TopServicesTrend({ categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(spendTimeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const [serviceNames, setServiceNames] = useState<string[]>([])
     const [trendData, setTrendData] = useState<object[]>([])

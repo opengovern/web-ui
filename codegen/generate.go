@@ -44,19 +44,11 @@ func main() {
 	matches := r.FindAllStringSubmatch(content, -1) // matches is [][]string
 
 	imports := map[string]interface{}{}
-	importFormat := `
-import useSWR from 'swr'
-import React, { useState, useEffect } from 'react'
-import { atom, useAtom } from 'jotai'
-import {
-    Api,
-%s
-    RequestParams,
-} from './api'
+	importFormat := `import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Api, %s RequestParams } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
-import { useParams } from 'react-router-dom'
-
 `
 	apiFiles := map[string]string{}
 	for _, match := range matches {
@@ -116,7 +108,7 @@ interface I%[6]sState {
 	error?: any
 }
 
-export const %[6]s = (%[2]s, autoExecute: boolean = true) => {
+export const %[6]s = (%[2]s, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
 
     const api = new Api()
@@ -207,6 +199,7 @@ export const %[6]s = (%[2]s, autoExecute: boolean = true) => {
 	}
 	for k, v := range apiFiles {
 		apiFiles[k] = fmt.Sprintf(importFormat, ims) + v
+// 		apiFiles[k] = importFormat + v
 		err = os.WriteFile(fmt.Sprintf("./src/api/%s.gen.ts", k), []byte(apiFiles[k]), os.ModePerm)
 		if err != nil {
 			panic(err)

@@ -12,7 +12,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useAtom } from 'jotai/index'
+import { useAtomValue } from 'jotai/index'
 import dayjs from 'dayjs'
 import React, { useEffect, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
@@ -179,7 +179,8 @@ export default function InsightDetail() {
     const gridRef = useRef<AgGridReact>(null)
     const navigate = useNavigate()
     const { id } = useParams()
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+
     const [detailsDate, setDetailsDate] = useState<string>('')
 
     const start = () => {

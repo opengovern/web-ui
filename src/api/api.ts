@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -39,8 +40,6 @@ export interface DescribeComplianceReportJob {
     /** Should be NULLSTRING */
     failureMessage?: string
     id?: number
-    /** @example 1 */
-    scheduleJobId?: number
     updatedAt?: string
 }
 
@@ -651,6 +650,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      */
     enabled?: boolean
     /**
+     * Evaluated at
+     * @example "2020-01-01T00:00:00Z"
+     */
+    evaluatedAt?: string
+    /**
      * Benchmark ID
      * @example "azure_cis_v140"
      */
@@ -666,10 +670,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
     title?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend {
-    resultTrend?: GithubComKaytuIoKaytuEnginePkgComplianceApiResultDatapoint[]
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree {
     children?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree[]
     /**
@@ -683,6 +683,16 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree {
      * @example "CIS v1.4.0"
      */
     title?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint {
+    checks?: TypesSeverityResult
+    result?: TypesComplianceResultSummary
+    /**
+     * Time
+     * @example 1686346668
+     */
+    timestamp?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport {
@@ -788,25 +798,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummary
     totalResult?: TypesComplianceResultSummary
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse {
-    /** @example 10 */
-    failedFindings?: number
-    /** @example 10 */
-    lastFailedFindings?: number
-    /** @example 90 */
-    lastPassedFindings?: number
-    /** @example 100 */
-    lastTotalFindings?: number
-    /** @example 0 */
-    lastUnknownFindings?: number
-    /** @example 90 */
-    passedFindings?: number
-    /** @example 100 */
-    totalFindings?: number
-    /** @example 0 */
-    unknownFindings?: number
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
     filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
     page: GithubComKaytuIoKaytuEnginePkgComplianceApiPage
@@ -814,27 +805,15 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse {
-    findings?: GithubComKaytuIoKaytuEnginePkgComplianceEsFinding[]
+    findings?: TypesFinding[]
     /** @example 100 */
     totalCount?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest {
-    /**
-     * Number of items to return
-     * @example 1
-     */
-    count?: number
-    /**
-     * Field to get top values for
-     * @example "resourceType"
-     */
-    field?: 'resourceType' | 'serviceName' | 'sourceID' | 'resourceID'
-    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse {
     records?: GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord[]
+    /** @example 100 */
+    totalCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsight {
@@ -1012,7 +991,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy {
     /** @example "azure_ad_manual_control" */
     queryID?: string
     /** @example "low" */
-    severity?: string
+    severity?: TypesFindingSeverity
     tags?: Record<string, string[]>
     /** @example "1.1 Ensure that multi-factor authentication status is enabled for all privileged users" */
     title?: string
@@ -1035,7 +1014,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree {
      * Severity
      * @example "low"
      */
-    severity?: string
+    severity?: TypesFindingSeverity
     /**
      * Status
      * @example "passed"
@@ -1072,13 +1051,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     updatedAt?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResultDatapoint {
-    /** Result */
-    result?: TypesSeverityResult
-    /** Datapoint Time */
-    time?: number
-}
-
 export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortFieldType {
     FieldResourceID = 'resourceID',
     FieldResourceName = 'resourceName',
@@ -1098,109 +1070,9 @@ export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortFieldType {
     FieldPolicySeverity = 'policySeverity',
 }
 
-export enum GithubComKaytuIoKaytuEnginePkgComplianceApiTopField {
-    TopFieldResourceType = 'resourceType',
-    TopFieldCloudService = 'serviceName',
-    TopFieldCloudAccount = 'sourceID',
-    TopFieldResources = 'resourceID',
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
     count?: number
     value?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceEsFinding {
-    /**
-     * Finding ID
-     * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1-azure_cis_v140_7_5"
-     */
-    ID?: string
-    /**
-     * Benchmark ID
-     * @example "azure_cis_v140"
-     */
-    benchmarkID?: string
-    /**
-     * Compliance job ID
-     * @example 1
-     */
-    complianceJobID?: number
-    /**
-     * Connection ID
-     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
-     */
-    connectionID?: string
-    /**
-     * Cloud provider
-     * @example "Azure"
-     */
-    connector?: SourceType
-    /**
-     * Timestamp of the policy description
-     * @example 1589395200
-     */
-    describedAt?: number
-    /**
-     * Timestamp of the policy evaluation
-     * @example 1589395200
-     */
-    evaluatedAt?: number
-    /**
-     * Evaluator name
-     * @example "steampipe-v0.5"
-     */
-    evaluator?: string
-    /**
-     * Policy ID
-     * @example "azure_cis_v140_7_5"
-     */
-    policyID?: string
-    /**
-     * Reason for the policy evaluation result
-     * @example "The VM is not using managed disks"
-     */
-    reason?: string
-    /**
-     * Resource ID
-     * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"
-     */
-    resourceID?: string
-    /**
-     * Resource location
-     * @example "eastus"
-     */
-    resourceLocation?: string
-    /**
-     * Resource name
-     * @example "vm-1"
-     */
-    resourceName?: string
-    /**
-     * Resource type
-     * @example "Microsoft.Compute/virtualMachines"
-     */
-    resourceType?: string
-    /**
-     * Compliance result
-     * @example "alarm"
-     */
-    result?: TypesComplianceResult
-    /**
-     * Schedule job ID
-     * @example 1
-     */
-    scheduleJobID?: number
-    /**
-     * Compliance severity
-     * @example "low"
-     */
-    severity?: string
-    /**
-     * Whether the policy is active or not
-     * @example true
-     */
-    stateActive?: boolean
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResource {
@@ -2260,6 +2132,7 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     name?: string
     organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganizationResponse
     ownerId?: string
+    /** @example "PROVISIONED" */
     status?: string
     tier?: string
     uri?: string
@@ -2306,7 +2179,6 @@ export enum SourceType {
 }
 
 export enum SummarizerJobType {
-    JobTypeResourceSummarizer = 'resourceSummarizer',
     JobTypeResourceMustSummarizer = 'resourceMustSummarizer',
     JobTypeComplianceSummarizer = 'complianceSummarizer',
 }
@@ -2330,6 +2202,107 @@ export interface TypesComplianceResultSummary {
     okCount?: number
     /** @example 1 */
     skipCount?: number
+}
+
+export interface TypesFinding {
+    /**
+     * Finding ID
+     * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1-azure_cis_v140_7_5"
+     */
+    ID?: string
+    /**
+     * Benchmark ID
+     * @example "azure_cis_v140"
+     */
+    benchmarkID?: string
+    /**
+     * Compliance job ID
+     * @example 1
+     */
+    complianceJobID?: number
+    /**
+     * Connection ID
+     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
+     */
+    connectionID?: string
+    /**
+     * Cloud provider
+     * @example "Azure"
+     */
+    connector?: SourceType
+    /**
+     * Timestamp of the policy description
+     * @example 1589395200
+     */
+    describedAt?: number
+    /**
+     * Timestamp of the policy evaluation
+     * @example 1589395200
+     */
+    evaluatedAt?: number
+    /**
+     * Evaluator name
+     * @example "steampipe-v0.5"
+     */
+    evaluator?: string
+    /**
+     * Policy ID
+     * @example "azure_cis_v140_7_5"
+     */
+    policyID?: string
+    /**
+     * Reason for the policy evaluation result
+     * @example "The VM is not using managed disks"
+     */
+    reason?: string
+    /**
+     * Resource ID
+     * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"
+     */
+    resourceID?: string
+    /**
+     * Resource location
+     * @example "eastus"
+     */
+    resourceLocation?: string
+    /**
+     * Resource name
+     * @example "vm-1"
+     */
+    resourceName?: string
+    /**
+     * Resource type
+     * @example "Microsoft.Compute/virtualMachines"
+     */
+    resourceType?: string
+    /**
+     * Compliance result
+     * @example "alarm"
+     */
+    result?: TypesComplianceResult
+    /**
+     * Schedule job ID
+     * @example 1
+     */
+    scheduleJobID?: number
+    /**
+     * Compliance severity
+     * @example "low"
+     */
+    severity?: TypesFindingSeverity
+    /**
+     * Whether the policy is active or not
+     * @example true
+     */
+    stateActive?: boolean
+}
+
+export enum TypesFindingSeverity {
+    FindingSeverityNone = 'none',
+    FindingSeverityLow = 'low',
+    FindingSeverityMedium = 'medium',
+    FindingSeverityHigh = 'high',
+    FindingSeverityCritical = 'critical',
 }
 
 export enum TypesPolicyStatus {
@@ -2538,6 +2511,27 @@ export class HttpClient<SecurityDataType = unknown> {
 export class Api<
     SecurityDataType extends unknown
 > extends HttpClient<SecurityDataType> {
+    ai = {
+        /**
+         * No description
+         *
+         * @tags resource
+         * @name ApiV1GptRunCreate
+         * @summary Runs the query on KaytuGPT and returns the generated query
+         * @request POST:/ai/api/v1/gpt/run
+         * @secure
+         */
+        apiV1GptRunCreate: (query: string, params: RequestParams = {}) =>
+            this.request<Record<string, string[]>, any>({
+                path: `/ai/api/v1/gpt/run`,
+                method: 'POST',
+                body: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+    }
     auth = {
         /**
          * @description Retrieves the details of a workspace key with specified ID.
@@ -2980,32 +2974,6 @@ export class Api<
     }
     compliance = {
         /**
-         * @description Returns top field by alarm count with respect to filters
-         *
-         * @tags compliance
-         * @name ApiV1AlarmsTopCreate
-         * @summary Top field by alarm count
-         * @request POST:/compliance/api/v1/alarms/top
-         * @secure
-         */
-        apiV1AlarmsTopCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-                any
-            >({
-                path: `/compliance/api/v1/alarms/top`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Returns all assignments
          *
          * @tags benchmarks_assignment
@@ -3211,6 +3179,10 @@ export class Api<
             query?: {
                 /** Connection IDs to filter by */
                 connectionId?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** timestamp for values in epoch seconds */
+                timeAt?: number
             },
             params: RequestParams = {}
         ) =>
@@ -3219,38 +3191,6 @@ export class Api<
                 any
             >({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/summary`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API allows users to retrieve datapoints of compliance severities over a specified time period, enabling users to keep track of and monitor changes in compliance.
-         *
-         * @tags compliance
-         * @name ApiV1BenchmarksSummaryResultTrendDetail
-         * @summary Get compliance result trend
-         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/summary/result/trend
-         * @secure
-         */
-        apiV1BenchmarksSummaryResultTrendDetail: (
-            benchmarkId: string,
-            query: {
-                /** Start time */
-                start: number
-                /** End time */
-                end: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResultTrend,
-                any
-            >({
-                path: `/compliance/api/v1/benchmarks/${benchmarkId}/summary/result/trend`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -3281,6 +3221,42 @@ export class Api<
                 any
             >({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/tree`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description This API enables users to retrieve a trend of a benchmark result and checks
+         *
+         * @tags compliance
+         * @name ApiV1BenchmarksTrendDetail
+         * @summary Get benchmark trend
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/trend
+         * @secure
+         */
+        apiV1BenchmarksTrendDetail: (
+            benchmarkId: string,
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** timestamp for start of the chart in epoch seconds */
+                startTime?: number
+                /** timestamp for end of the chart in epoch seconds */
+                endTime?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint[],
+                any
+            >({
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/trend`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -3329,6 +3305,10 @@ export class Api<
             query?: {
                 /** Connection IDs to filter by */
                 connectionId?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** timestamp for values in epoch seconds */
+                timeAt?: number
             },
             params: RequestParams = {}
         ) =>
@@ -3382,8 +3362,16 @@ export class Api<
          */
         apiV1FindingsTopDetail: (
             benchmarkId: string,
-            field: 'resourceType' | 'serviceName' | 'sourceID' | 'resourceID',
+            field: 'resourceType' | 'connectionID' | 'resourceID' | 'service',
             count: number,
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Severities to filter by */
+                severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+            },
             params: RequestParams = {}
         ) =>
             this.request<
@@ -3391,36 +3379,6 @@ export class Api<
                 any
             >({
                 path: `/compliance/api/v1/findings/${benchmarkId}/${field}/top/${count}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API enables users to retrieve findings metrics for two given times, which includes the total number of findings, the number of passed findings, the number of failed findings, and the number of unknowns findings. Users can use this API to compare the compliance status of their resources between two different time periods. The API will return the findings metrics for each time period separately, allowing users to easily compare the compliance status of their resources at each time period. This can be useful for monitoring the effectiveness of compliance measures over time and identifying any areas of improvement."
-         *
-         * @tags compliance
-         * @name ApiV1FindingsMetricsList
-         * @summary Returns findings metrics
-         * @request GET:/compliance/api/v1/findings/metrics
-         * @secure
-         */
-        apiV1FindingsMetricsList: (
-            query?: {
-                /** unix seconds for the start time */
-                start?: number
-                /** unix seconds for the end time */
-                end?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsMetricsResponse,
-                any
-            >({
-                path: `/compliance/api/v1/findings/metrics`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -4149,6 +4107,10 @@ export class Api<
                 connector: ('' | 'AWS' | 'Azure')[]
                 /** Filter by service name */
                 service?: string[]
+                /** Filter by resource type */
+                resourceType?: string[]
+                /** Return only summarized results or not */
+                summarzied?: boolean
                 /** Key-Value tags in key=value format to filter by */
                 tag?: string[]
                 /** page size - default is 20 */

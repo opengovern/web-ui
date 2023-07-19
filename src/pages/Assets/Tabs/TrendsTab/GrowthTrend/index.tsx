@@ -1,14 +1,6 @@
 import { useState } from 'react'
-import {
-    Card,
-    Flex,
-    SearchSelect,
-    SearchSelectItem,
-    MultiSelect,
-    MultiSelectItem,
-    Title,
-} from '@tremor/react'
-import { useAtom } from 'jotai'
+import { Card, Flex, MultiSelect, MultiSelectItem, Title } from '@tremor/react'
+import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import { useInventoryApiV2ResourcesTrendList } from '../../../../../api/inventory.gen'
 import Chart from '../../../../../components/Charts'
@@ -25,8 +17,9 @@ type IProps = {
 }
 
 export default function GrowthTrend({ categories }: IProps) {
-    const [activeTimeRange, setActiveTimeRange] = useAtom(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
+
     const [selectedResourceCategory, setSelectedResourceCategory] = useState<
         string[]
     >([])
