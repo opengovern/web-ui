@@ -45,7 +45,7 @@ const navigation = [
     },
     {
         name: 'Compliance',
-        page: 'compliance',
+        page: 'benchmarks',
         icon: ShieldCheckIcon,
     },
     {
@@ -83,7 +83,7 @@ type IProps = {
         | 'assets'
         | 'spend'
         | 'integration'
-        | 'compliance'
+        | 'benchmarks'
         | 'settings'
         | 'stack'
     showSidebar?: boolean

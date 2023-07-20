@@ -45,7 +45,7 @@ export default function Compliance() {
     const [search, setSearch] = useState('')
 
     return (
-        <LoggedInLayout currentPage="compliance">
+        <LoggedInLayout currentPage="benchmarks">
             <Flex flexDirection="col" alignItems="start">
                 <Metric>Compliance</Metric>
                 <Summary benchmark={benchmarks} loading={isLoading} />
