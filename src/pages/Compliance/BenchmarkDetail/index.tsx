@@ -9,7 +9,8 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useAtomValue } from 'jotai/index'
+import { useAtomValue } from 'jotai'
+import dayjs from 'dayjs'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../../store'
 import Breadcrumbs from '../../../components/Breadcrumbs'
@@ -56,16 +57,21 @@ export default function BenchmarkDetail() {
                             <ConnectionList />
                         </Flex>
                     </Flex>
-                    <Flex alignItems="end" className="mb-6">
-                        <Flex flexDirection="col" alignItems="start">
-                            <Title className="mb-1">
-                                {benchmarkDetail?.title}
-                            </Title>
-                            <Text className="w-2/3">
-                                {benchmarkDetail?.description}
-                            </Text>
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        justifyContent="start"
+                        className="mb-6"
+                    >
+                        <Flex className="mb-1">
+                            <Title>{benchmarkDetail?.title}</Title>
+                            <Text className="whitespace-nowrap">{`Last evaluation: ${dayjs(
+                                benchmarkDetail?.evaluatedAt
+                            ).format('MMM DD, YYYY')}`}</Text>
                         </Flex>
-                        <Text className="whitespace-nowrap">Last Check</Text>
+                        <Text className="w-2/3">
+                            {benchmarkDetail?.description}
+                        </Text>
                     </Flex>
                     <TabGroup>
                         <TabList>

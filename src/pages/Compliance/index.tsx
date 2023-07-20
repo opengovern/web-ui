@@ -43,12 +43,12 @@ export default function Compliance() {
         useComplianceApiV1BenchmarksSummaryList()
 
     const [search, setSearch] = useState('')
-    console.log(benchmarks)
+
     return (
         <LoggedInLayout currentPage="compliance">
             <Flex flexDirection="col" alignItems="start">
                 <Metric>Compliance</Metric>
-                <Summary />
+                <Summary benchmark={benchmarks} loading={isLoading} />
                 <Grid
                     numItems={1}
                     numItemsMd={2}
