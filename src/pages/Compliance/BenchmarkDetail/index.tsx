@@ -45,7 +45,7 @@ export default function BenchmarkDetail() {
     ]
 
     return (
-        <LoggedInLayout currentPage="compliance">
+        <LoggedInLayout currentPage="benchmarks">
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (

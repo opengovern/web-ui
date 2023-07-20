@@ -122,12 +122,12 @@ const authRoutes = [
     },
     {
         key: 'compliance',
-        path: '/:ws/compliance',
+        path: '/:ws/benchmarks',
         component: Compliance,
     },
     {
         key: 'benchmark detail',
-        path: '/:ws/compliance/:id',
+        path: '/:ws/benchmarks/:id',
         component: BenchmarkDetail,
     },
     {
