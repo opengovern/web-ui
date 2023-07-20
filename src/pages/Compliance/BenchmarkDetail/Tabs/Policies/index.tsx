@@ -1,10 +1,11 @@
 import { AgGridReact } from 'ag-grid-react'
 import { useRef } from 'react'
 import { GridOptions } from 'ag-grid-community'
+import dayjs from 'dayjs'
 import { useComplianceApiV1BenchmarksTreeDetail } from '../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
 
-interface IBenchmarks {
+interface IPolicies {
     id: string | undefined
 }
 
@@ -48,7 +49,7 @@ const rows = (json: any) => {
     return arr
 }
 
-export default function Benchmarks({ id }: IBenchmarks) {
+export default function Policies({ id }: IPolicies) {
     const gridRef = useRef<AgGridReact>(null)
 
     const { response: policies } = useComplianceApiV1BenchmarksTreeDetail(
@@ -57,14 +58,19 @@ export default function Benchmarks({ id }: IBenchmarks) {
     )
     const gridOptions: GridOptions = {
         columnDefs: [
-            // we're using the auto group column by default!
-            { field: 'severity' },
-            { field: 'status' },
-            { field: 'lastChecked' },
+            { field: 'severity', flex: 1 },
+            { field: 'status', flex: 1 },
+            {
+                field: 'lastChecked',
+                flex: 1,
+                valueFormatter: (param) => {
+                    if (param.value) {
+                        return dayjs(param.value * 1000).format('MMM DD, YYYY')
+                    }
+                    return ''
+                },
+            },
         ],
-        defaultColDef: {
-            flex: 1,
-        },
         autoGroupColumnDef: {
             headerName: 'Title',
             minWidth: 300,
@@ -72,13 +78,13 @@ export default function Benchmarks({ id }: IBenchmarks) {
                 suppressCount: true,
             },
         },
-        treeData: true, // enable Tree Data mode
+        treeData: true,
         animateRows: true,
         getDataPath: (data: any) => {
             return data.path.split('/')
         },
     }
-    console.log(gridOptions.rowData)
+
     return (
         <div className="ag-theme-alpine w-full">
             <AgGridReact

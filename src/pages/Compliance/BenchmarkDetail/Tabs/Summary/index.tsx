@@ -189,6 +189,7 @@ export default function Summary({
                     index="date"
                     type="line"
                     categories={['Score']}
+                    valueFormatter={(value) => `${value}%`}
                     data={generateLineData(benchmarkTrend)}
                 />
             </Card>
