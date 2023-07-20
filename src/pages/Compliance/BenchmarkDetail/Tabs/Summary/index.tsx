@@ -100,6 +100,12 @@ export default function Summary({
         7,
         query
     )
+    const { response: connection } = useComplianceApiV1FindingsTopDetail(
+        String(id),
+        'connectionID',
+        7,
+        query
+    )
 
     const generateTopDetail = () => {
         const resourceData =
@@ -123,10 +129,18 @@ export default function Summary({
                     value: rec.count,
                 }
             }) || []
+        const connectionData =
+            connection?.records?.map((rec) => {
+                return {
+                    name: rec.value,
+                    value: rec.count,
+                }
+            }) || []
         return {
             Resources: resourceData,
             'Resource Type': resourceTypeData,
             Services: serviceData,
+            Connections: connectionData,
         }
     }
 
@@ -145,7 +159,7 @@ export default function Summary({
                     metric={resources?.totalCount || 0}
                 />
                 <SummaryCard
-                    title="Score"
+                    title="Security score"
                     metric={`${(
                         (alarm / (ok + info + error + alarm + skip)) *
                         100
@@ -161,8 +175,13 @@ export default function Summary({
             </Grid>
             <Grid numItems={1} numItemsMd={2} className="w-full gap-4 mb-4">
                 <CardWithList
-                    title="Top Services"
-                    tabs={['Resources', 'Resource Type', 'Services']}
+                    title="Top Findings"
+                    tabs={[
+                        'Resources',
+                        'Resource Type',
+                        'Services',
+                        'Connections',
+                    ]}
                     data={generateTopDetail()}
                 />
                 <Card>
@@ -193,7 +212,7 @@ export default function Summary({
                 </Card>
             </Grid>
             <Card>
-                <Title>Compliance Score Trend</Title>
+                <Title>Compliance Security Score Trend</Title>
                 <Chart
                     className="mt-4"
                     index="date"

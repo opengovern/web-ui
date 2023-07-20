@@ -127,7 +127,7 @@ const authRoutes = [
     },
     {
         key: 'benchmark detail',
-        path: '/:ws/compliance/:id',
+        path: '/:ws/benchmarks/:id',
         component: BenchmarkDetail,
     },
     {

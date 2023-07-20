@@ -1,6 +1,11 @@
 import { Grid } from '@tremor/react'
+import dayjs from 'dayjs'
+import { useAtomValue } from 'jotai'
 import SummaryCard from '../../../components/Cards/SummaryCard'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse } from '../../../api/api'
+import { filterAtom, timeAtom } from '../../../store'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface ISummary {
     benchmark:
@@ -10,6 +15,18 @@ interface ISummary {
 }
 
 export default function Summary({ benchmark, loading }: ISummary) {
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
+    const { response: accounts, isLoading: accountLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            connector: [selectedConnections.provider],
+            connectionId: selectedConnections.connections,
+            startTime: dayjs(activeTimeRange.start.toString()).unix(),
+            endTime: dayjs(activeTimeRange.end.toString()).unix(),
+            pageSize: 10000,
+            pageNumber: 1,
+        })
+
     const critical = benchmark?.totalChecks?.criticalCount || 0
     const high = benchmark?.totalChecks?.highCount || 0
     const medium = benchmark?.totalChecks?.mediumCount || 0
@@ -31,7 +48,11 @@ export default function Summary({ benchmark, loading }: ISummary) {
                 metric={benchmark?.totalResult?.alarmCount || 0}
                 loading={loading}
             />
-            <SummaryCard title="Accounts" metric="450" loading={loading} />
+            <SummaryCard
+                title="Accounts"
+                metric={numericDisplay(accounts?.connectionCount)}
+                loading={accountLoading}
+            />
             <SummaryCard
                 title="Coverage"
                 metric={`${((passed / total) * 100).toFixed(2)}%`}
