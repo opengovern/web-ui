@@ -96,7 +96,7 @@ export default function Summary({
     )
     const { response: services } = useComplianceApiV1FindingsTopDetail(
         String(id),
-        'connectionID',
+        'service',
         7,
         query
     )
@@ -140,8 +140,17 @@ export default function Summary({
         <Flex flexDirection="col">
             <Grid numItems={2} numItemsMd={4} className="w-full gap-4 mb-4">
                 <SummaryCard title="Number of active alarms" metric={alarm} />
-                <SummaryCard title="Resources with alarms" metric={10} />
-                <SummaryCard title="Resources with alarms" metric={10} />
+                <SummaryCard
+                    title="Resources with alarms"
+                    metric={resources?.totalCount || 0}
+                />
+                <SummaryCard
+                    title="Score"
+                    metric={`${(
+                        (alarm / (ok + info + error + alarm + skip)) *
+                        100
+                    ).toFixed(2)}%`}
+                />
                 <SummaryCard
                     title="Coverage"
                     metric={`${(
@@ -179,6 +188,7 @@ export default function Summary({
                             'emerald',
                             'slate',
                         ]}
+                        showAnimation={false}
                     />
                 </Card>
             </Grid>
@@ -189,6 +199,7 @@ export default function Summary({
                     index="date"
                     type="line"
                     categories={['Score']}
+                    valueFormatter={(value) => `${value}%`}
                     data={generateLineData(benchmarkTrend)}
                 />
             </Card>

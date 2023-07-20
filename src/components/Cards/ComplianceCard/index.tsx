@@ -31,12 +31,6 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
     const total = critical + high + medium + low + passed + unknown
     const failed = critical + high + medium + low
 
-    const ok = benchmark?.result?.okCount || 0
-    const info = benchmark?.result?.infoCount || 0
-    const error = benchmark?.result?.errorCount || 0
-    const alarm = benchmark?.result?.alarmCount || 0
-    const skip = benchmark?.result?.skipCount || 0
-
     return (
         <Card
             key={benchmark?.id}
@@ -44,9 +38,22 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
             onClick={() => navigate(`${benchmark?.id}`)}
         >
             <Title className="w-full truncate mb-1">{benchmark?.title}</Title>
-            <Text className="line-clamp-2 mb-6">{benchmark?.description}</Text>
+            <Flex className={total ? '' : 'hidden'}>
+                <Text>Score:</Text>
+                <Badge
+                    color={
+                        (passed / total || 0) * 100 > 50 ? 'emerald' : 'rose'
+                    }
+                    className="cursor-pointer"
+                >
+                    {((passed / total || 0) * 100).toFixed(2)}%
+                </Badge>
+            </Flex>
+            <Text className="line-clamp-2 mb-6 mt-2">
+                {benchmark?.description}
+            </Text>
             <CategoryBar
-                className="w-full mb-2"
+                className={`w-full mb-2 ${total ? '' : 'hidden'}`}
                 values={[
                     (critical / total) * 100 || 0,
                     (high / total) * 100 || 0,
@@ -70,7 +77,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                     'slate',
                 ]}
             />
-            <Flex className="mb-6">
+            <Flex className={`mb-6 ${total ? '' : 'hidden'}`}>
                 <Text className="text-xs">{`${failed} of ${total} checks failed`}</Text>
                 {!!(failed / total) && (
                     <Text className="text-xs font-semibold">{`${Math.round(
@@ -78,22 +85,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                     )}% failed`}</Text>
                 )}
             </Flex>
-            <Flex
-                className={
-                    ok / (ok + info + error + skip + alarm)
-                        ? 'opacity-100'
-                        : 'opacity-0'
-                }
-            >
-                <Text className="font-semibold">Coverage:</Text>
-                <Badge color="emerald" className="cursor-pointer">
-                    {((ok / (ok + info + error + skip + alarm)) * 100).toFixed(
-                        2
-                    )}
-                    %
-                </Badge>
-            </Flex>
-            <Flex className="mt-6">
+            <Flex>
                 <Flex justifyContent="start" className="gap-x-1">
                     {!!(
                         benchmark?.tags?.plugin &&
@@ -106,12 +98,17 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                     {!!benchmark?.tags?.cis && <CisIcon />}
                     {!!benchmark?.tags?.hipaa && <HipaaIcon />}
                 </Flex>
-                <Icon
-                    icon={ChevronRightIcon}
-                    color="blue"
-                    size="lg"
-                    className="p-0"
-                />
+                <Flex justifyContent="end">
+                    <Text color="blue" className={`${total ? 'hidden' : ''}`}>
+                        Assign connection
+                    </Text>
+                    <Icon
+                        icon={ChevronRightIcon}
+                        color="blue"
+                        size="md"
+                        className="p-0"
+                    />
+                </Flex>
             </Flex>
         </Card>
     )
