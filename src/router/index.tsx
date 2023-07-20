@@ -20,6 +20,7 @@ import Compliance from '../pages/Compliance'
 import BenchmarkDetail from '../pages/Compliance/BenchmarkDetail'
 import Home from '../pages/Home'
 import Stack from '../pages/Stack'
+import Finder from '../pages/Finder'
 
 const routes = [
     {
@@ -139,6 +140,11 @@ const authRoutes = [
         key: 'stack',
         path: '/:ws/stack',
         component: Stack,
+    },
+    {
+        key: 'finder',
+        path: '/:ws/finder',
+        component: Finder,
     },
 ]
 
