@@ -23,8 +23,7 @@ import ConfirmModal from '../../Modal/ConfirmModal'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 
-// eslint-disable-next-line no-underscore-dangle
-const nodeEnv = window.__RUNTIME_CONFIG__.NODE_ENV as string
+const nodeEnv = process.env.REACT_APP_NODE_ENV as string
 const params =
     nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
 

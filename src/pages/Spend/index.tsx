@@ -28,8 +28,7 @@ import SummaryMetrics from './SummaryMetrics'
 import CostMetrics from './Tabs/CostMetrics'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 
-// eslint-disable-next-line no-underscore-dangle
-const nodeEnv = window.__RUNTIME_CONFIG__.NODE_ENV as string
+const nodeEnv = process.env.REACT_APP_NODE_ENV as string
 const params =
     nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
 export default function Spend() {

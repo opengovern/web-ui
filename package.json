@@ -69,14 +69,6 @@
         ],
         "rules": {
           "import/no-anonymous-default-export": "off",
-          "no-underscore-dangle": [
-            "error",
-            {
-              "allow": [
-                "__RUNTIME_CONFIG__"
-              ]
-            }
-          ],
           "react/no-unstable-nested-components": [
             "error",
             {

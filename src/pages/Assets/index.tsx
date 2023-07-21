@@ -16,8 +16,7 @@ import CompositionTab from './Tabs/CompositionTab'
 import SummaryMetrics from './SummaryMetrics'
 import ResourceMetrics from './Tabs/ResourceMetrics'
 
-// eslint-disable-next-line no-underscore-dangle
-const nodeEnv = window.__RUNTIME_CONFIG__.NODE_ENV as string
+const nodeEnv = process.env.REACT_APP_NODE_ENV as string
 const params =
     nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
 export default function Assets() {

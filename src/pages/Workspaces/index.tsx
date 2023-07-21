@@ -6,12 +6,13 @@ import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import CreateWorkspace from './CreateWorkspace'
 import Spinner from '../../components/Spinner'
 
-// eslint-disable-next-line no-underscore-dangle
-const nodeEnv = window.__RUNTIME_CONFIG__.NODE_ENV as string
+const nodeEnv = process.env.REACT_APP_NODE_ENV as string
 const params =
     nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
 export default function Workspaces() {
     const [openDrawer, setOpenDrawer] = useState(false)
+    console.log(params, 'params')
+    console.log(nodeEnv, 'nodeEnv')
     const {
         response: workspaces,
         isLoading,
