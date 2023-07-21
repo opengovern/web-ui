@@ -16,12 +16,12 @@ import CompositionTab from './Tabs/CompositionTab'
 import SummaryMetrics from './SummaryMetrics'
 import ResourceMetrics from './Tabs/ResourceMetrics'
 
-const nodeEnv = process.env.REACT_APP_NODE_ENV as string
-const params =
-    nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
 export default function Assets() {
     const { response: inventoryCategories, isLoading: categoriesLoading } =
-        useInventoryApiV2ResourcesTagList({}, params)
+        useInventoryApiV2ResourcesTagList(
+            {},
+            { headers: { prefer: 'dynamic=false' } }
+        )
 
     const categoryOptions = () => {
         if (categoriesLoading) {

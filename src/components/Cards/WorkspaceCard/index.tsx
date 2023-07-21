@@ -23,10 +23,6 @@ import ConfirmModal from '../../Modal/ConfirmModal'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 
-const nodeEnv = process.env.REACT_APP_NODE_ENV as string
-const params =
-    nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
-
 interface IWorkSpace {
     workspace: any
     refreshList: () => void
@@ -78,7 +74,11 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
         useState<boolean>(false)
 
     const { response: workspaceDetail, isLoading: workspaceLoading } =
-        useWorkspaceApiV1WorkspacesLimitsDetail(workspace.name, {}, params)
+        useWorkspaceApiV1WorkspacesLimitsDetail(
+            workspace.name,
+            {},
+            { headers: { prefer: 'dynamic=false' } }
+        )
     const {
         isLoading: suspendLoading,
         sendNow: callSuspend,
