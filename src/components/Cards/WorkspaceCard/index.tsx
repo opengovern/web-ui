@@ -74,7 +74,13 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
         useState<boolean>(false)
 
     const { response: workspaceDetail, isLoading: workspaceLoading } =
-        useWorkspaceApiV1WorkspacesLimitsDetail(workspace.name)
+        useWorkspaceApiV1WorkspacesLimitsDetail(
+            workspace.name,
+            {},
+            {
+                headers: { prefer: 'dynamic=false' },
+            }
+        )
     const {
         isLoading: suspendLoading,
         sendNow: callSuspend,

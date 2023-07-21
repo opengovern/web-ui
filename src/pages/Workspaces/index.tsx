@@ -12,7 +12,9 @@ export default function Workspaces() {
         response: workspaces,
         isLoading,
         sendNow: refreshList,
-    } = useWorkspaceApiV1WorkspacesList()
+    } = useWorkspaceApiV1WorkspacesList({
+        headers: { prefer: 'dynamic=false' },
+    })
 
     return (
         <LoggedInLayout currentPage="assets" showSidebar={false}>
