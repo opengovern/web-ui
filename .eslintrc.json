@@ -69,6 +69,14 @@
                 "devDependencies": ["**/*.stories.*", "**/.storybook/**/*.*"],
                 "peerDependencies": true
             }
+        ],
+        "no-underscore-dangle": [
+            "error",
+            {
+                "allow": [
+                    "__RUNTIME_CONFIG__"
+                ]
+            }
         ]
     }
 }

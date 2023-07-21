@@ -2,14 +2,16 @@ import axios from 'axios'
 
 const { hostname, origin } = window.location
 
-/* eslint no-underscore-dangle: ["error", { "allow": ["__RUNTIME_CONFIG__"] }] */
+const nodeEnv = process.env.REACT_APP_NODE_ENV as string
 // const BASE_URL = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL as string
-const BASE_URL = 'https://app.kaytu.dev'
+const BASE_URL = process.env.REACT_APP_BASE_URL as string
+const isDemo = nodeEnv === 'demo'
+// const BASE_URL = 'http://127.0.0.1:4010/'
 const instance = axios.create({
     baseURL:
         hostname === 'localhost' || hostname === '127.0.0.1'
-            ? `${BASE_URL}/keibi/` // 'https://app.dev.keibi.io/keibi/'
-            : `${origin}/keibi/`,
+            ? `${BASE_URL}${isDemo ? '' : '/keibi/'}` // 'https://app.dev.keibi.io/keibi/'
+            : `${origin}${isDemo ? '' : '/keibi/'}`,
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -22,9 +24,15 @@ export const setAuthHeader = (authToken?: string) => {
 
 export const setWorkspace = (workspaceName?: string) => {
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        instance.defaults.baseURL = `${BASE_URL}/${workspaceName}/`
+        // instance.defaults.baseURL = `${BASE_URL}/${workspaceName}/`
+        instance.defaults.baseURL = `${BASE_URL}${
+            isDemo ? '' : `/${workspaceName}`
+        }`
     } else {
-        instance.defaults.baseURL = `${origin}/${workspaceName}/`
+        // instance.defaults.baseURL = `${origin}/${workspaceName}/`
+        instance.defaults.baseURL = `${origin}${
+            isDemo ? '' : `/${workspaceName}`
+        }/`
     }
 }
 
