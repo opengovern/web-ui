@@ -96,6 +96,12 @@ export default function Summary({
     )
     const { response: services } = useComplianceApiV1FindingsTopDetail(
         String(id),
+        'service',
+        7,
+        query
+    )
+    const { response: connection } = useComplianceApiV1FindingsTopDetail(
+        String(id),
         'connectionID',
         7,
         query
@@ -123,10 +129,18 @@ export default function Summary({
                     value: rec.count,
                 }
             }) || []
+        const connectionData =
+            connection?.records?.map((rec) => {
+                return {
+                    name: rec.value,
+                    value: rec.count,
+                }
+            }) || []
         return {
             Resources: resourceData,
             'Resource Type': resourceTypeData,
             Services: serviceData,
+            Connections: connectionData,
         }
     }
 
@@ -140,8 +154,17 @@ export default function Summary({
         <Flex flexDirection="col">
             <Grid numItems={2} numItemsMd={4} className="w-full gap-4 mb-4">
                 <SummaryCard title="Number of active alarms" metric={alarm} />
-                <SummaryCard title="Resources with alarms" metric={10} />
-                <SummaryCard title="Resources with alarms" metric={10} />
+                <SummaryCard
+                    title="Resources with alarms"
+                    metric={resources?.totalCount || 0}
+                />
+                <SummaryCard
+                    title="Security score"
+                    metric={`${(
+                        (alarm / (ok + info + error + alarm + skip)) *
+                        100
+                    ).toFixed(2)}%`}
+                />
                 <SummaryCard
                     title="Coverage"
                     metric={`${(
@@ -152,8 +175,13 @@ export default function Summary({
             </Grid>
             <Grid numItems={1} numItemsMd={2} className="w-full gap-4 mb-4">
                 <CardWithList
-                    title="Top Services"
-                    tabs={['Resources', 'Resource Type', 'Services']}
+                    title="Top Findings"
+                    tabs={[
+                        'Resources',
+                        'Resource Type',
+                        'Services',
+                        'Connections',
+                    ]}
                     data={generateTopDetail()}
                 />
                 <Card>
@@ -179,16 +207,18 @@ export default function Summary({
                             'emerald',
                             'slate',
                         ]}
+                        showAnimation={false}
                     />
                 </Card>
             </Grid>
             <Card>
-                <Title>Compliance Score Trend</Title>
+                <Title>Compliance Security Score Trend</Title>
                 <Chart
                     className="mt-4"
                     index="date"
                     type="line"
                     categories={['Score']}
+                    valueFormatter={(value) => `${value}%`}
                     data={generateLineData(benchmarkTrend)}
                 />
             </Card>

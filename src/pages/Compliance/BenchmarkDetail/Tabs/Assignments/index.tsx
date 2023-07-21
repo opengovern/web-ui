@@ -47,7 +47,7 @@ const columns: ColDef[] = [
         sortable: true,
         filter: true,
         resizable: true,
-        flex: 2,
+        flex: 1,
     },
     {
         field: 'connectionID',

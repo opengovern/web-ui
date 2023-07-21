@@ -16,6 +16,7 @@ import {
     badgeTypeByDelta,
     percentageByChange,
 } from '../../../utilities/deltaType'
+import { AWSIcon, AzureIcon } from '../../../icons/icons'
 
 interface IInsightsCard {
     metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
@@ -116,15 +117,10 @@ export default function InsightCard({ metric }: IInsightsCard) {
                 className="h-full"
             >
                 <Flex flexDirection="col" alignItems="start">
-                    <Title
-                        color={metric?.connector === 'AWS' ? 'orange' : 'blue'}
-                    >
-                        {metric?.connector}
-                    </Title>
-                    <Title className="my-2 truncate max-w-full">
+                    <Title className="mb-2 truncate max-w-full">
                         {metric?.shortTitle}
                     </Title>
-                    <Flex flexDirection="row" className="mb-2">
+                    <Flex className="mb-2">
                         <Flex
                             flexDirection="row"
                             alignItems="end"
@@ -149,9 +145,12 @@ export default function InsightCard({ metric }: IInsightsCard) {
                     </Flex>
                     <Text>{metric?.description}</Text>
                 </Flex>
-                <Text className="mt-2">
-                    {calculateTime(metric?.result?.at(0)?.executedAt || 0)}
-                </Text>
+                <Flex className="mt-3">
+                    {metric?.connector === 'AWS' ? <AWSIcon /> : <AzureIcon />}
+                    <Text>
+                        {calculateTime(metric?.result?.at(0)?.executedAt || 0)}
+                    </Text>
+                </Flex>
             </Flex>
         </Card>
     )
