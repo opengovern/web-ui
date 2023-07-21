@@ -2,7 +2,7 @@ import { Grid } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
-import { useInventoryApiV2ServicesSummaryList } from '../../../api/inventory.gen'
+import { useInventoryApiV2ServicesMetricList } from '../../../api/inventory.gen'
 import SummaryCard from '../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { filterAtom, timeAtom } from '../../../store'
@@ -21,8 +21,12 @@ export default function SummaryMetrics() {
             pageNumber: 1,
         })
     const { response: services, isLoading: servicesIsLoading } =
-        useInventoryApiV2ServicesSummaryList({
-            connector: [selectedConnections.provider],
+        useInventoryApiV2ServicesMetricList({
+            connector: [
+                selectedConnections.provider !== ''
+                    ? selectedConnections.provider
+                    : '',
+            ],
             connectionId: selectedConnections.connections,
         })
 
@@ -36,7 +40,7 @@ export default function SummaryMetrics() {
             />
             <SummaryCard
                 title="Services"
-                metric={String(numericDisplay(services?.totalCount))}
+                metric={String(numericDisplay(services?.total_services))}
                 url="services-detail"
                 loading={servicesIsLoading}
             />

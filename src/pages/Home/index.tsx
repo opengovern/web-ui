@@ -18,7 +18,7 @@ import { numberDisplay, priceDisplay } from '../../utilities/numericDisplay'
 import {
     useInventoryApiV2CostTrendList,
     useInventoryApiV2ResourcesTrendList,
-    useInventoryApiV2ServicesSummaryList,
+    useInventoryApiV2ServicesMetricList,
 } from '../../api/inventory.gen'
 import { useWorkspaceApiV1WorkspacesLimitsDetail } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
@@ -30,7 +30,7 @@ export default function Home() {
     const [selectedType, setSelectedType] = useState('resource')
 
     const { response: services, isLoading: servicesIsLoading } =
-        useInventoryApiV2ServicesSummaryList({})
+        useInventoryApiV2ServicesMetricList({})
     const { response: limits, isLoading: limitsLoading } =
         useWorkspaceApiV1WorkspacesLimitsDetail(workspace || '')
     const { response: resourcesTrend, isLoading: resourceTrendLoading } =
@@ -126,7 +126,7 @@ export default function Home() {
                 />
                 <SummaryCard
                     title="Services"
-                    metric={numberDisplay(services?.totalCount, 0)}
+                    metric={numberDisplay(services?.total_services, 0)}
                     loading={servicesIsLoading}
                 />
                 <SummaryCard
