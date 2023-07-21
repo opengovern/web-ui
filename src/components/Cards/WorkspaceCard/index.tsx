@@ -23,6 +23,11 @@ import ConfirmModal from '../../Modal/ConfirmModal'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 
+// eslint-disable-next-line no-underscore-dangle
+const nodeEnv = window.__RUNTIME_CONFIG__.NODE_ENV as string
+const params =
+    nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
+
 interface IWorkSpace {
     workspace: any
     refreshList: () => void
@@ -74,13 +79,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
         useState<boolean>(false)
 
     const { response: workspaceDetail, isLoading: workspaceLoading } =
-        useWorkspaceApiV1WorkspacesLimitsDetail(
-            workspace.name,
-            {},
-            {
-                headers: { prefer: 'dynamic=false' },
-            }
-        )
+        useWorkspaceApiV1WorkspacesLimitsDetail(workspace.name, {}, params)
     const {
         isLoading: suspendLoading,
         sendNow: callSuspend,
