@@ -11,8 +11,6 @@ const params =
     nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
 export default function Workspaces() {
     const [openDrawer, setOpenDrawer] = useState(false)
-    console.log(params, 'params')
-    console.log(nodeEnv, 'nodeEnv')
     const {
         response: workspaces,
         isLoading,
