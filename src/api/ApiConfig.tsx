@@ -11,7 +11,7 @@ const instance = axios.create({
     baseURL:
         hostname === 'localhost' || hostname === '127.0.0.1'
             ? `${BASE_URL}${isDemo ? '' : '/keibi/'}` // 'https://app.dev.keibi.io/keibi/'
-            : `${origin}/keibi/`,
+            : `${origin}${isDemo ? '' : '/keibi/'}`,
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -30,7 +30,9 @@ export const setWorkspace = (workspaceName?: string) => {
         }`
     } else {
         // instance.defaults.baseURL = `${origin}/${workspaceName}/`
-        instance.defaults.baseURL = `${origin}/${workspaceName}/`
+        instance.defaults.baseURL = `${origin}${
+            isDemo ? '' : `/${workspaceName}`
+        }/`
     }
 }
 
