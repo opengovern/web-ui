@@ -28,9 +28,6 @@ import SummaryMetrics from './SummaryMetrics'
 import CostMetrics from './Tabs/CostMetrics'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 
-const nodeEnv = process.env.REACT_APP_NODE_ENV as string
-const params =
-    nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
 export default function Spend() {
     const [index, setIndex] = useState<number>(0)
     const activeTimeRange = useAtomValue(spendTimeAtom)
@@ -38,7 +35,7 @@ export default function Spend() {
 
     const { response: inventoryCategories } = useInventoryApiV2ResourcesTagList(
         {},
-        params
+        { headers: { prefer: 'dynamic=false' } }
     )
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom

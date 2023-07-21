@@ -6,16 +6,15 @@ import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import CreateWorkspace from './CreateWorkspace'
 import Spinner from '../../components/Spinner'
 
-const nodeEnv = process.env.REACT_APP_NODE_ENV as string
-const params =
-    nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
 export default function Workspaces() {
     const [openDrawer, setOpenDrawer] = useState(false)
     const {
         response: workspaces,
         isLoading,
         sendNow: refreshList,
-    } = useWorkspaceApiV1WorkspacesList(params)
+    } = useWorkspaceApiV1WorkspacesList({
+        headers: { prefer: 'dynamic=false' },
+    })
 
     return (
         <LoggedInLayout currentPage="assets" showSidebar={false}>
