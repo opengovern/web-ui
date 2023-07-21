@@ -28,13 +28,19 @@ import SummaryMetrics from './SummaryMetrics'
 import CostMetrics from './Tabs/CostMetrics'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 
+// eslint-disable-next-line no-underscore-dangle
+const nodeEnv = window.__RUNTIME_CONFIG__.NODE_ENV as string
+const params =
+    nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
 export default function Spend() {
     const [index, setIndex] = useState<number>(0)
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
-    const { response: inventoryCategories } =
-        useInventoryApiV2ResourcesTagList()
+    const { response: inventoryCategories } = useInventoryApiV2ResourcesTagList(
+        {},
+        params
+    )
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )

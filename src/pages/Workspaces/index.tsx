@@ -6,15 +6,17 @@ import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import CreateWorkspace from './CreateWorkspace'
 import Spinner from '../../components/Spinner'
 
+// eslint-disable-next-line no-underscore-dangle
+const nodeEnv = window.__RUNTIME_CONFIG__.NODE_ENV as string
+const params =
+    nodeEnv === 'demo' ? { headers: { prefer: 'dynamic=false' } } : {}
 export default function Workspaces() {
     const [openDrawer, setOpenDrawer] = useState(false)
     const {
         response: workspaces,
         isLoading,
         sendNow: refreshList,
-    } = useWorkspaceApiV1WorkspacesList({
-        headers: { prefer: 'dynamic=false' },
-    })
+    } = useWorkspaceApiV1WorkspacesList(params)
 
     return (
         <LoggedInLayout currentPage="assets" showSidebar={false}>
