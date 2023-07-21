@@ -1,14 +1,15 @@
-import { Flex, Text } from '@tremor/react'
+import { Button, Flex, Tab, TabGroup, TabList, Text } from '@tremor/react'
+import { DocumentIcon, PlayCircleIcon } from '@heroicons/react/24/outline'
 import LoggedInLayout from '../../components/LoggedInLayout'
 
-const navigation = [{ name: '', icon: true }]
+const navigation = [{ name: 'hi', icon: true }]
 
 export default function Finder() {
     return (
         <LoggedInLayout currentPage="finder">
-            <Flex>
-                <Flex className="w-56">
-                    <ul className="space-y-1.5">
+            <Flex alignItems="start" className="h-full gap-x-6">
+                <Flex className="w-56 h-full border-r border-gray-300">
+                    <ul className="w-full space-y-1.5">
                         {navigation.map((item) => (
                             <li key={item.name}>
                                 {item.name === '' ? (
@@ -33,6 +34,25 @@ export default function Finder() {
                             </li>
                         ))}
                     </ul>
+                </Flex>
+                <Flex flexDirection="col">
+                    <textarea className="w-full" />
+                    <Flex justifyContent="end" className="gap-x-6 mt-4">
+                        <Button
+                            variant="light"
+                            color="gray"
+                            icon={DocumentIcon}
+                        >
+                            New Query
+                        </Button>
+                        <Button icon={PlayCircleIcon}>Run Script</Button>
+                    </Flex>
+                    <TabGroup className="mt-6">
+                        <TabList>
+                            <Tab>Get Started</Tab>
+                            <Tab>Result</Tab>
+                        </TabList>
+                    </TabGroup>
                 </Flex>
             </Flex>
         </LoggedInLayout>
