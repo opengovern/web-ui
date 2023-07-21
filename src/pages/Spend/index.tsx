@@ -76,7 +76,7 @@ export default function Spend() {
         })
 
     const categoryOptions = useMemo(() => {
-        if (!inventoryCategories)
+        if (!inventoryCategories?.category)
             return [{ label: 'no data', value: 'no data' }]
         return [{ label: 'All Categories', value: 'All Categories' }].concat(
             inventoryCategories.category.map((categoryName) => ({
