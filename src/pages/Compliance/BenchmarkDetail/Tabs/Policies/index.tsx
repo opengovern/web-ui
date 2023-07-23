@@ -53,9 +53,9 @@ export default function Policies({ id }: IPolicies) {
     const gridRef = useRef<AgGridReact>(null)
 
     const { response: policies } = useComplianceApiV1BenchmarksTreeDetail(
-        String(id),
-        { status: ['passed'] }
+        String(id)
     )
+
     const gridOptions: GridOptions = {
         columnDefs: [
             { field: 'severity', flex: 1 },

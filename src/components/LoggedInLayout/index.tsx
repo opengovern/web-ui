@@ -417,6 +417,7 @@ export default function LoggedInLayout({
                     flexDirection="col"
                     alignItems="center"
                     className="mt-16 bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll"
+                    id="kaytu-container"
                 >
                     <Flex justifyContent="center" className="px-12">
                         <div className="max-w-6xl w-full py-8">{children}</div>

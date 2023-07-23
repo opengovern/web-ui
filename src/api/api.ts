@@ -602,13 +602,18 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSou
      * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
      */
     connectionID?: string
-    /** Connection Name */
-    connectionName?: string
     /**
      * Clout Provider
      * @example "Azure"
      */
     connector?: SourceType
+    /**
+     * Provider Connection ID
+     * @example "1283192749"
+     */
+    providerConnectionID?: string
+    /** Provider Connection Name */
+    providerConnectionName?: string
     /**
      * Status
      * @example true
@@ -1498,10 +1503,8 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsRespon
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest {
-    /** Labels */
-    labels?: string[]
-    /** Specifies the Provider */
-    providerFilter?: SourceType
+    /** Specifies the Connectors */
+    connectorsFilter?: SourceType[]
     /** Specifies the Title */
     titleFilter?: string
 }
@@ -1537,6 +1540,12 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetri
     total_count?: number
     total_old_count?: number
     total_resource_types?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeTagsMetadataResponse {
+    resource_type_tags?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTag[]
+    /** @example 100 */
+    total_resource_type_tag_count?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse {
@@ -1694,6 +1703,19 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeFull {
     resource_type_name?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTag {
+    /** @example "environment" */
+    key?: string
+    values?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTagValue[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTagValue {
+    /** @example ["Microsoft.Compute/virtualMachines"] */
+    resource_types?: string[]
+    /** @example "dev" */
+    value?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint {
     count?: number
     date?: string
@@ -1701,7 +1723,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendData
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest {
     page: GithubComKaytuIoKaytuEnginePkgInventoryApiPage
-    /** NOTE: we don't support multi-field sort for now, if sort is empty, results would be sorted by first column */
+    query?: string
     sorts?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem[]
 }
 
@@ -1753,6 +1775,11 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary {
      * @example "compute"
      */
     serviceName?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory {
+    executed_at?: string
+    query?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem {
@@ -1836,6 +1863,7 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyAzureComplianceGitURL = 'azure_compliance_git_url',
     MetadataKeyInsightsGitURL = 'insights_git_url',
     MetadataKeyQueriesGitURL = 'queries_git_url',
+    MetadataKeyAnalyticsGitURL = 'analytics_git_url',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredential {
@@ -2103,7 +2131,7 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
     name?: string
     organization_id?: number
     owner_id?: string
-    status?: string
+    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus
     tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
     uri?: string
 }
@@ -2115,28 +2143,54 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage {
+    /** @example 100 */
     currentConnections?: number
+    /** @example 10000 */
     currentResources?: number
+    /** @example 10 */
     currentUsers?: number
+    /** @example "ws-698542025141040315" */
     id?: string
+    /** @example 1000 */
     maxConnections?: number
+    /** @example 100000 */
     maxResources?: number
+    /** @example 100 */
     maxUsers?: number
+    /** @example "keibi" */
     name?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
+    /** @example "2023-05-17T14:39:02.707659Z" */
     createdAt?: string
+    /** @example "Lorem ipsum dolor sit amet, consectetur adipiscing elit." */
     description?: string
+    /** @example "ws-698542025141040315" */
     id?: string
+    /** @example "keibi" */
     name?: string
     organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganizationResponse
+    /** @example "google-oauth2|204590896945502695694" */
     ownerId?: string
     /** @example "PROVISIONED" */
-    status?: string
-    tier?: string
+    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus
+    /** @example "ENTERPRISE" */
+    tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
+    /** @example "https://app.kaytu.dev/keibi" */
     uri?: string
+    /** @example "v0.45.4" */
     version?: string
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus {
+    StatusProvisioned = 'PROVISIONED',
+    StatusProvisioning = 'PROVISIONING',
+    StatusProvisioningFailed = 'PROVISIONING_FAILED',
+    StatusDeleting = 'DELETING',
+    StatusDeleted = 'DELETED',
+    StatusSuspending = 'SUSPENDING',
+    StatusSuspended = 'SUSPENDED',
 }
 
 export interface GormDeletedAt {
@@ -3210,10 +3264,6 @@ export class Api<
          */
         apiV1BenchmarksTreeDetail: (
             benchmarkId: string,
-            query: {
-                /** Status */
-                status: ('passed' | 'failed' | 'unknown')[]
-            },
             params: RequestParams = {}
         ) =>
             this.request<
@@ -3222,7 +3272,6 @@ export class Api<
             >({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/tree`,
                 method: 'GET',
-                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -3777,33 +3826,6 @@ export class Api<
             }),
 
         /**
-         * @description Run a specific smart query. In order to get the results in CSV format, Accepts header must be filled with `text/csv` value. Note that csv output doesn't process pagination and returns first 5000 records.
-         *
-         * @tags smart_query
-         * @name ApiV1QueryCreate
-         * @summary Run a specific smart query
-         * @request POST:/inventory/api/v1/query/{queryId}
-         * @secure
-         */
-        apiV1QueryCreate: (
-            queryId: string,
-            request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-                any
-            >({
-                path: `/inventory/api/v1/query/${queryId}`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Counting smart queries
          *
          * @tags smart_query
@@ -3820,6 +3842,80 @@ export class Api<
                 path: `/inventory/api/v1/query/count`,
                 method: 'GET',
                 body: request,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Run provided smart query and returns the result.
+         *
+         * @tags smart_query
+         * @name ApiV1QueryRunCreate
+         * @summary Run provided smart query and returns the result
+         * @request POST:/inventory/api/v1/query/run
+         * @secure
+         */
+        apiV1QueryRunCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+                any
+            >({
+                path: `/inventory/api/v1/query/run`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Run a specific smart query. In order to get the results in CSV format, Accepts header must be filled with `text/csv` value. Note that csv output doesn't process pagination and returns first 5000 records.
+         *
+         * @tags smart_query
+         * @name ApiV1QueryRunCreate2
+         * @summary Run a specific smart query
+         * @request POST:/inventory/api/v1/query/run/{queryId}
+         * @originalName apiV1QueryRunCreate
+         * @duplicate
+         * @secure
+         */
+        apiV1QueryRunCreate2: (
+            queryId: string,
+            request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+                any
+            >({
+                path: `/inventory/api/v1/query/run/${queryId}`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Get recently ran queries.
+         *
+         * @tags smart_query
+         * @name ApiV1QueryRunHistoryCreate
+         * @summary Get recently ran queries
+         * @request POST:/inventory/api/v1/query/run/history
+         * @secure
+         */
+        apiV1QueryRunHistoryCreate: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory[],
+                any
+            >({
+                path: `/inventory/api/v1/query/run/history`,
+                method: 'POST',
                 secure: true,
                 format: 'json',
                 ...params,
@@ -3969,6 +4065,85 @@ export class Api<
                 any
             >({
                 path: `/inventory/api/v1/resources/top/regions`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Get list of analytics with metrics of each type based on the given input filters.
+         *
+         * @tags analytics
+         * @name ApiV2AnalyticsMetricList
+         * @summary List analytics metrics
+         * @request GET:/inventory/api/v2/analytics/metric
+         * @secure
+         */
+        apiV2AnalyticsMetricList: (
+            query?: {
+                /** Key-Value tags in key=value format to filter by */
+                tag?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Metric Names */
+                metricNames?: string[]
+                /** timestamp for resource count in epoch seconds */
+                endTime?: string
+                /** timestamp for resource count change comparison in epoch seconds */
+                startTime?: string
+                /** Minimum number of resources with this tag value, default 1 */
+                minCount?: number
+                /** Sort by field - default is count */
+                sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
+                /** page size - default is 20 */
+                pageSize?: number
+                /** page number - default is 1 */
+                pageNumber?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+                any
+            >({
+                path: `/inventory/api/v2/analytics/metric`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description This API allows users to retrieve a list of tag keys with their possible values for all analytic metrics.
+         *
+         * @tags analytics
+         * @name ApiV2AnalyticsTagList
+         * @summary List analytics tags
+         * @request GET:/inventory/api/v2/analytics/tag
+         * @secure
+         */
+        apiV2AnalyticsTagList: (
+            query?: {
+                /** Connector type to filter by */
+                connector?: string[]
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Minimum number of resources with this tag value, default 1 */
+                minCount?: number
+                /** End time in unix timestamp format, default now */
+                endTime?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<Record<string, string[]>, any>({
+                path: `/inventory/api/v2/analytics/tag`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -4209,6 +4384,79 @@ export class Api<
             >({
                 path: `/inventory/api/v2/metadata/services/${serviceName}`,
                 method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Get a list of resource type tags metadata. The results could be filtered by provider name and service name.
+         *
+         * @tags metadata
+         * @name ApiV2MetadataTagsResourcetypeList
+         * @summary Get Resource Type Tags
+         * @request GET:/inventory/api/v2/metadata/tags/resourcetype
+         * @secure
+         */
+        apiV2MetadataTagsResourcetypeList: (
+            query: {
+                /** Filter by Connector */
+                connector: ('' | 'AWS' | 'Azure')[]
+                /** Filter by service name */
+                service?: string[]
+                /** Filter by resource type */
+                resourceType?: string[]
+                /** Return only summarized results or not */
+                summarzied?: boolean
+                /** page size - default is 20 */
+                pageSize?: number
+                /** page number - default is 1 */
+                pageNumber?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeTagsMetadataResponse,
+                any
+            >({
+                path: `/inventory/api/v2/metadata/tags/resourcetype`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Get a singular resource type tag metadata.
+         *
+         * @tags metadata
+         * @name ApiV2MetadataTagsResourcetypeDetail
+         * @summary Get Resource Type Tags
+         * @request GET:/inventory/api/v2/metadata/tags/resourcetype/{key}
+         * @secure
+         */
+        apiV2MetadataTagsResourcetypeDetail: (
+            key: string,
+            query: {
+                /** Filter by Connector */
+                connector: ('' | 'AWS' | 'Azure')[]
+                /** Filter by service name */
+                service?: string[]
+                /** Filter by resource type */
+                resourceType?: string[]
+                /** Return only summarized results or not */
+                summarzied?: boolean
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTag,
+                any
+            >({
+                path: `/inventory/api/v2/metadata/tags/resourcetype/${key}`,
+                method: 'GET',
+                query: query,
                 secure: true,
                 format: 'json',
                 ...params,
