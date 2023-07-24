@@ -6,17 +6,16 @@ import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import CreateWorkspace from './CreateWorkspace'
 import Spinner from '../../components/Spinner'
-import { isDemoAtom } from '../../store'
+import { isDemo } from '../../utilities/demo'
 
 export default function Workspaces() {
-    const isDemo = useAtomValue(isDemoAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
     const {
         response: workspaces,
         isLoading,
         sendNow: refreshList,
     } = useWorkspaceApiV1WorkspacesList({
-        ...(isDemo && { headers: { prefer: 'dynamic=false' } }),
+        ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
     })
 
     return (
