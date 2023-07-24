@@ -23,7 +23,7 @@ import {
 import ConfirmModal from '../../Modal/ConfirmModal'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
-import { isDemoAtom } from '../../../store'
+import { isDemo } from '../../../utilities/demo'
 
 interface IWorkSpace {
     workspace: any
@@ -70,7 +70,6 @@ const showSuspend = (status: string) => {
 }
 
 export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
-    const isDemo = useAtomValue(isDemoAtom)
     const navigate = useNavigate()
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const [suspendConfirmation, setSuspendConfirmation] =
@@ -81,7 +80,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
             workspace.name,
             {},
             {
-                ...(isDemo && { headers: { prefer: 'dynamic=false' } }),
+                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
             }
         )
     const {
