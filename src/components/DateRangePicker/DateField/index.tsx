@@ -26,13 +26,15 @@ function CustomDateSegment({
                         : undefined,
             }}
             className={`px-0.5 box-content tabular-nums text-right outline-none rounded-sm ${
-                !segment.isEditable ? 'text-gray-500' : 'text-gray-800'
+                !segment.isEditable
+                    ? 'text-gray-500 dark:text-gray-50'
+                    : 'text-gray-800 dark:text-gray-50'
             }`}
         >
             {/* Always reserve space for the placeholder, to prevent layout shift when editing. */}
             <span
                 aria-hidden="true"
-                className="block w-full text-center italic text-gray-500 group-focus:text-white"
+                className="block w-full text-center italic text-gray-500 dark:text-gray-50 group-focus:text-white"
                 style={{
                     visibility: segment.isPlaceholder ? undefined : 'hidden',
                     height: segment.isPlaceholder ? '' : 0,
