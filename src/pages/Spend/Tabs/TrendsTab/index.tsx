@@ -8,6 +8,7 @@ import { useInventoryApiV2CostMetricList } from '../../../../api/inventory.gen'
 import { filterAtom, spendTimeAtom } from '../../../../store'
 import CardWithList from '../../../../components/Cards/CardWithList'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { percentageByChange } from '../../../../utilities/deltaType'
 
 type IProps = {
     categories: {
@@ -106,7 +107,10 @@ export default function TrendsTab({ categories }: IProps) {
             topGrowthAccounts?.connections?.map((item) => {
                 return {
                     name: item.providerConnectionName,
-                    value: item.cost,
+                    value: `${percentageByChange(
+                        item.dailyCostAtEndTime,
+                        item.dailyCostAtStartTime
+                    )} %`,
                 }
             }) || []
 
@@ -114,7 +118,10 @@ export default function TrendsTab({ categories }: IProps) {
             topGrowingServices?.metrics?.map((item) => {
                 return {
                     name: item.cost_dimension_name,
-                    value: item.total_cost,
+                    value: `${percentageByChange(
+                        item.daily_cost_at_end_time,
+                        item.daily_cost_at_start_time
+                    )} %`,
                 }
             }) || []
 
@@ -165,7 +172,7 @@ export default function TrendsTab({ categories }: IProps) {
                         isLoadingTopGrowthAccounts ||
                         isLoadingTopGrowingServices
                     }
-                    valueIsPrice
+                    isPercentage
                 />
             </Grid>
             <GrowthTrend />

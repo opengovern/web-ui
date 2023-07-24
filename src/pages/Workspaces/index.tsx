@@ -1,19 +1,22 @@
 import React, { useState } from 'react'
 import { Button, Flex, Grid, Title } from '@tremor/react'
+import { useAtomValue } from 'jotai'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import CreateWorkspace from './CreateWorkspace'
 import Spinner from '../../components/Spinner'
+import { isDemoAtom } from '../../store'
 
 export default function Workspaces() {
+    const isDemo = useAtomValue(isDemoAtom)
     const [openDrawer, setOpenDrawer] = useState(false)
     const {
         response: workspaces,
         isLoading,
         sendNow: refreshList,
     } = useWorkspaceApiV1WorkspacesList({
-        headers: { prefer: 'dynamic=false' },
+        ...(isDemo && { headers: { prefer: 'dynamic=false' } }),
     })
 
     return (

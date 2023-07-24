@@ -57,7 +57,7 @@ export default function GrowthTrend() {
             return result
         }
         const keys = Object.keys(data)
-        for (let j = 1; j < keys.length; j += 1) {
+        for (let j = 0; j < keys.length; j += 1) {
             const item = keys[j]
             const temp: any = {}
             const title = getConnections(selectedConnections)
@@ -84,11 +84,6 @@ export default function GrowthTrend() {
         }
     }
 
-    useEffect(() => {
-        fixTime(costTrend)
-        findDeltaType(costTrend)
-    }, [costTrend])
-
     const sortedTrend = () => {
         return costTrend?.sort((a, b) => {
             const au = dayjs(a.date).unix()
@@ -100,6 +95,11 @@ export default function GrowthTrend() {
         })
     }
 
+    useEffect(() => {
+        fixTime(costTrend)
+        findDeltaType(costTrend)
+    }, [costTrend])
+
     return (
         <Card className="mb-3">
             <Flex justifyContent="start" className="gap-x-2">
@@ -107,8 +107,8 @@ export default function GrowthTrend() {
                 {costTrend &&
                     costTrend.length > 0 &&
                     badgeDelta(
-                        sortedTrend()?.at(costTrend.length - 1)?.count,
-                        sortedTrend()?.at(0)?.count
+                        sortedTrend()?.at(0)?.count,
+                        sortedTrend()?.at(costTrend.length - 1)?.count
                     )}
             </Flex>
             {isLoading ? (
