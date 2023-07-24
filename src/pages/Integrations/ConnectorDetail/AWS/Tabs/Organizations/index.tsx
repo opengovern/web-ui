@@ -7,7 +7,7 @@ import {
     RowClickedEvent,
 } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import OrganizationInfo from './OrganizationInfo'
 import NewOrganization from './NewOrganization'
 import {
@@ -36,7 +36,7 @@ const columns: ColDef[] = [
                     justifyContent="center"
                     className="w-full h-full"
                 >
-                    <AWSIcon />
+                    <AWSIcon id="org" />
                 </Flex>
             )
         },
@@ -83,6 +83,7 @@ const columns: ColDef[] = [
                         return 'neutral'
                 }
             }
+
             return (
                 <Badge color={getBadgeColor(params.value)}>
                     {params.value}
