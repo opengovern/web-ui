@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from 'jotai/index'
+import { useAtom, useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -9,6 +9,7 @@ import {
 import { useInventoryApiV2ResourcesMetricList } from '../../../../api/inventory.gen'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import MetricsList, { IMetric } from '../../../../components/MetricsList'
+import { isDemo } from '../../../../utilities/demo'
 
 interface IProps {
     categories: {
@@ -49,7 +50,9 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
         ...(pageSize && { pageSize }),
     }
     const { response: resourceMetricsResponse, isLoading } =
-        useInventoryApiV2ResourcesMetricList(query)
+        useInventoryApiV2ResourcesMetricList(query, {
+            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+        })
 
     const metrics = () => {
         return (

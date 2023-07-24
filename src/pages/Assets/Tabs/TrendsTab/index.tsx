@@ -11,6 +11,7 @@ import {
 import Spinner from '../../../../components/Spinner'
 import { filterAtom, timeAtom } from '../../../../store'
 import { percentageByChange } from '../../../../utilities/deltaType'
+import { isDemo } from '../../../../utilities/demo'
 
 type IProps = {
     categories: {
@@ -47,12 +48,18 @@ export default function TrendsTab({ categories }: IProps) {
         response: accountsConsumption,
         isLoading: loadingAccountsConsumption,
     } = useOnboardApiV1ConnectionsSummaryList(
-        queryTop5ConnectionsWithSort('resource_count')
+        queryTop5ConnectionsWithSort('resource_count'),
+        {
+            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+        }
     )
 
     const { response: accountsGrowth, isLoading: loadingAccountsGrowth } =
         useOnboardApiV1ConnectionsSummaryList(
-            queryTop5ConnectionsWithSort('growth_rate')
+            queryTop5ConnectionsWithSort('growth_rate'),
+            {
+                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+            }
         )
 
     const queryTop5ServicesWithSort = (
@@ -74,11 +81,19 @@ export default function TrendsTab({ categories }: IProps) {
     const {
         response: servicesConsumption,
         isLoading: loadingServicesConsumption,
-    } = useInventoryApiV2ServicesMetricList(queryTop5ServicesWithSort('count'))
+    } = useInventoryApiV2ServicesMetricList(
+        queryTop5ServicesWithSort('count'),
+        {
+            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+        }
+    )
 
     const { response: servicesGrowth, isLoading: loadingServicesGrowth } =
         useInventoryApiV2ServicesMetricList(
-            queryTop5ServicesWithSort('growth_rate')
+            queryTop5ServicesWithSort('growth_rate'),
+            {
+                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+            }
         )
 
     const queryTop5RegionsWithSort = (
@@ -97,12 +112,18 @@ export default function TrendsTab({ categories }: IProps) {
 
     const { response: regionConsumption, isLoading: loadingRegionConsumption } =
         useInventoryApiV2ResourcesRegionsSummaryList(
-            queryTop5RegionsWithSort('resource_count')
+            queryTop5RegionsWithSort('resource_count'),
+            {
+                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+            }
         )
 
     const { response: regionGrowth, isLoading: loadingRegionGrowth } =
         useInventoryApiV2ResourcesRegionsSummaryList(
-            queryTop5RegionsWithSort('growth_rate')
+            queryTop5RegionsWithSort('growth_rate'),
+            {
+                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+            }
         )
 
     if (
