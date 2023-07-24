@@ -21,6 +21,7 @@ import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
 import {
     filterAtom,
+    isDemoAtom,
     selectedResourceCategoryAtom,
     spendTimeAtom,
 } from '../../store'
@@ -29,13 +30,16 @@ import CostMetrics from './Tabs/CostMetrics'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 
 export default function Spend() {
+    const isDemo = useAtomValue(isDemoAtom)
     const [index, setIndex] = useState<number>(0)
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
     const { response: inventoryCategories } = useInventoryApiV2ResourcesTagList(
         {},
-        { headers: { prefer: 'dynamic=false' } }
+        {
+            ...(isDemo && { headers: { prefer: 'dynamic=false' } }),
+        }
     )
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom

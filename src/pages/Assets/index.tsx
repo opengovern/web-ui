@@ -7,6 +7,7 @@ import {
     TabPanel,
     TabPanels,
 } from '@tremor/react'
+import { useAtomValue } from 'jotai'
 import DateRangePicker from '../../components/DateRangePicker'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { useInventoryApiV2ResourcesTagList } from '../../api/inventory.gen'
@@ -15,12 +16,16 @@ import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
 import SummaryMetrics from './SummaryMetrics'
 import ResourceMetrics from './Tabs/ResourceMetrics'
+import { isDemoAtom } from '../../store'
 
 export default function Assets() {
+    const isDemo = useAtomValue(isDemoAtom)
     const { response: inventoryCategories, isLoading: categoriesLoading } =
         useInventoryApiV2ResourcesTagList(
             {},
-            { headers: { prefer: 'dynamic=false' } }
+            {
+                ...(isDemo && { headers: { prefer: 'dynamic=false' } }),
+            }
         )
 
     const categoryOptions = () => {

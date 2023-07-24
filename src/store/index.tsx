@@ -29,3 +29,6 @@ export const filterAtom = atom<IFilter>({
 
 export const selectedResourceCategoryAtom = atom('All Categories')
 export const sideBarCollapsedAtom = atom(false)
+
+const nodeEnv = process.env.REACT_APP_NODE_ENV as string
+export const isDemoAtom = atom(nodeEnv === 'demo')
