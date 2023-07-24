@@ -58,6 +58,7 @@ export const useComplianceApiV1AssignmentsList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -67,6 +68,7 @@ export const useComplianceApiV1AssignmentsList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -76,6 +78,7 @@ export const useComplianceApiV1AssignmentsList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -146,6 +149,7 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -159,6 +163,7 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -168,6 +173,7 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -243,6 +249,7 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -256,6 +263,7 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -265,6 +273,7 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -339,6 +348,7 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -348,6 +358,7 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -357,6 +368,7 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -426,6 +438,7 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -435,6 +448,7 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -444,6 +458,7 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -511,6 +526,7 @@ export const useComplianceApiV1BenchmarksList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -520,6 +536,7 @@ export const useComplianceApiV1BenchmarksList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -529,6 +546,7 @@ export const useComplianceApiV1BenchmarksList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -598,6 +616,7 @@ export const useComplianceApiV1BenchmarksDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -607,6 +626,7 @@ export const useComplianceApiV1BenchmarksDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -616,6 +636,7 @@ export const useComplianceApiV1BenchmarksDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -685,6 +706,7 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -694,6 +716,7 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -703,6 +726,7 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -779,6 +803,7 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -788,6 +813,7 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -797,6 +823,7 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -842,9 +869,6 @@ interface IuseComplianceApiV1BenchmarksTreeDetailState {
 
 export const useComplianceApiV1BenchmarksTreeDetail = (
     benchmarkId: string,
-    query: {
-        status: ('passed' | 'failed' | 'unknown')[]
-    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -865,21 +889,23 @@ export const useComplianceApiV1BenchmarksTreeDetail = (
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, query, params, autoExecute])
+        JSON.stringify([benchmarkId, params, autoExecute])
     )
 
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
         try {
             api.compliance
-                .apiV1BenchmarksTreeDetail(benchmarkId, query, params)
+                .apiV1BenchmarksTreeDetail(benchmarkId, params)
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -889,6 +915,7 @@ export const useComplianceApiV1BenchmarksTreeDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -903,10 +930,8 @@ export const useComplianceApiV1BenchmarksTreeDetail = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
+    if (JSON.stringify([benchmarkId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -969,6 +994,7 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -978,6 +1004,7 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -987,6 +1014,7 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1058,6 +1086,7 @@ export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1067,6 +1096,7 @@ export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1076,6 +1106,7 @@ export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1151,6 +1182,7 @@ export const useComplianceApiV1BenchmarksSummaryList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1160,6 +1192,7 @@ export const useComplianceApiV1BenchmarksSummaryList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1169,6 +1202,7 @@ export const useComplianceApiV1BenchmarksSummaryList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1237,6 +1271,7 @@ export const useComplianceApiV1FindingsCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1246,6 +1281,7 @@ export const useComplianceApiV1FindingsCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1255,6 +1291,7 @@ export const useComplianceApiV1FindingsCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1333,6 +1370,7 @@ export const useComplianceApiV1FindingsTopDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1348,6 +1386,7 @@ export const useComplianceApiV1FindingsTopDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1357,6 +1396,7 @@ export const useComplianceApiV1FindingsTopDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1453,6 +1493,7 @@ export const useComplianceApiV1InsightList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1462,6 +1503,7 @@ export const useComplianceApiV1InsightList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1471,6 +1513,7 @@ export const useComplianceApiV1InsightList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1546,6 +1589,7 @@ export const useComplianceApiV1InsightDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1555,6 +1599,7 @@ export const useComplianceApiV1InsightDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1564,6 +1609,7 @@ export const useComplianceApiV1InsightDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1642,6 +1688,7 @@ export const useComplianceApiV1InsightTrendDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1651,6 +1698,7 @@ export const useComplianceApiV1InsightTrendDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1660,6 +1708,7 @@ export const useComplianceApiV1InsightTrendDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1739,6 +1788,7 @@ export const useComplianceApiV1InsightGroupList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1748,6 +1798,7 @@ export const useComplianceApiV1InsightGroupList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1757,6 +1808,7 @@ export const useComplianceApiV1InsightGroupList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1833,6 +1885,7 @@ export const useComplianceApiV1InsightGroupDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1842,6 +1895,7 @@ export const useComplianceApiV1InsightGroupDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1851,6 +1905,7 @@ export const useComplianceApiV1InsightGroupDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1934,6 +1989,7 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1943,6 +1999,7 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1952,6 +2009,7 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2028,6 +2086,7 @@ export const useComplianceApiV1MetadataInsightList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2037,6 +2096,7 @@ export const useComplianceApiV1MetadataInsightList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2046,6 +2106,7 @@ export const useComplianceApiV1MetadataInsightList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2115,6 +2176,7 @@ export const useComplianceApiV1MetadataInsightDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2124,6 +2186,7 @@ export const useComplianceApiV1MetadataInsightDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2133,6 +2196,7 @@ export const useComplianceApiV1MetadataInsightDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2201,6 +2265,7 @@ export const useComplianceApiV1MetadataTagInsightList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2210,6 +2275,7 @@ export const useComplianceApiV1MetadataTagInsightList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2219,6 +2285,7 @@ export const useComplianceApiV1MetadataTagInsightList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2288,6 +2355,7 @@ export const useComplianceApiV1MetadataTagInsightDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2297,6 +2365,7 @@ export const useComplianceApiV1MetadataTagInsightDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2306,6 +2375,7 @@ export const useComplianceApiV1MetadataTagInsightDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2374,6 +2444,7 @@ export const useComplianceApiV1QueriesDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2383,6 +2454,7 @@ export const useComplianceApiV1QueriesDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2392,6 +2464,7 @@ export const useComplianceApiV1QueriesDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2461,6 +2534,7 @@ export const useComplianceApiV1QueriesSyncList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2470,6 +2544,7 @@ export const useComplianceApiV1QueriesSyncList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2479,6 +2554,7 @@ export const useComplianceApiV1QueriesSyncList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })

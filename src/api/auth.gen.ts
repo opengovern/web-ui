@@ -56,6 +56,7 @@ export const useAuthApiV1KeyDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -65,6 +66,7 @@ export const useAuthApiV1KeyDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -74,6 +76,7 @@ export const useAuthApiV1KeyDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -142,6 +145,7 @@ export const useAuthApiV1KeyActivateCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -151,6 +155,7 @@ export const useAuthApiV1KeyActivateCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -160,6 +165,7 @@ export const useAuthApiV1KeyActivateCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -228,6 +234,7 @@ export const useAuthApiV1KeyDeleteDelete = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -237,6 +244,7 @@ export const useAuthApiV1KeyDeleteDelete = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -246,6 +254,7 @@ export const useAuthApiV1KeyDeleteDelete = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -314,6 +323,7 @@ export const useAuthApiV1KeySuspendCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -323,6 +333,7 @@ export const useAuthApiV1KeySuspendCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -332,6 +343,7 @@ export const useAuthApiV1KeySuspendCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -400,6 +412,7 @@ export const useAuthApiV1KeyCreateCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -409,6 +422,7 @@ export const useAuthApiV1KeyCreateCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -418,6 +432,7 @@ export const useAuthApiV1KeyCreateCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -486,6 +501,7 @@ export const useAuthApiV1KeyRoleCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -495,6 +511,7 @@ export const useAuthApiV1KeyRoleCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -504,6 +521,7 @@ export const useAuthApiV1KeyRoleCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -571,6 +589,7 @@ export const useAuthApiV1KeysList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -580,6 +599,7 @@ export const useAuthApiV1KeysList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -589,6 +609,7 @@ export const useAuthApiV1KeysList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -657,6 +678,7 @@ export const useAuthApiV1RoleKeysDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -666,6 +688,7 @@ export const useAuthApiV1RoleKeysDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -675,6 +698,7 @@ export const useAuthApiV1RoleKeysDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -743,6 +767,7 @@ export const useAuthApiV1RoleUsersDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -752,6 +777,7 @@ export const useAuthApiV1RoleUsersDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -761,6 +787,7 @@ export const useAuthApiV1RoleUsersDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -828,6 +855,7 @@ export const useAuthApiV1RolesList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -837,6 +865,7 @@ export const useAuthApiV1RolesList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -846,6 +875,7 @@ export const useAuthApiV1RolesList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -914,6 +944,7 @@ export const useAuthApiV1RolesDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -923,6 +954,7 @@ export const useAuthApiV1RolesDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -932,6 +964,7 @@ export const useAuthApiV1RolesDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1000,6 +1033,7 @@ export const useAuthApiV1UserDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1009,6 +1043,7 @@ export const useAuthApiV1UserDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1018,6 +1053,7 @@ export const useAuthApiV1UserDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1087,6 +1123,7 @@ export const useAuthApiV1UserWorkspaceMembershipDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1096,6 +1133,7 @@ export const useAuthApiV1UserWorkspaceMembershipDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1105,6 +1143,7 @@ export const useAuthApiV1UserWorkspaceMembershipDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1175,6 +1214,7 @@ export const useAuthApiV1UserInviteDelete = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1184,6 +1224,7 @@ export const useAuthApiV1UserInviteDelete = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1193,6 +1234,7 @@ export const useAuthApiV1UserInviteDelete = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1261,6 +1303,7 @@ export const useAuthApiV1UserInviteCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1270,6 +1313,7 @@ export const useAuthApiV1UserInviteCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1279,6 +1323,7 @@ export const useAuthApiV1UserInviteCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1351,6 +1396,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1360,6 +1406,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1369,6 +1416,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1439,6 +1487,7 @@ export const useAuthApiV1UserRoleBindingUpdate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1448,6 +1497,7 @@ export const useAuthApiV1UserRoleBindingUpdate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1457,6 +1507,7 @@ export const useAuthApiV1UserRoleBindingUpdate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1524,6 +1575,7 @@ export const useAuthApiV1UserRoleBindingsList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1533,6 +1585,7 @@ export const useAuthApiV1UserRoleBindingsList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1542,6 +1595,7 @@ export const useAuthApiV1UserRoleBindingsList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1610,6 +1664,7 @@ export const useAuthApiV1UsersList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1619,6 +1674,7 @@ export const useAuthApiV1UsersList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1628,6 +1684,7 @@ export const useAuthApiV1UsersList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1696,6 +1753,7 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1705,6 +1763,7 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1714,6 +1773,7 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })

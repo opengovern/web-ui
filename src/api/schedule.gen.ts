@@ -60,6 +60,7 @@ export const useScheduleApiV0ComplianceSummarizerTriggerList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -69,6 +70,7 @@ export const useScheduleApiV0ComplianceSummarizerTriggerList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -78,6 +80,7 @@ export const useScheduleApiV0ComplianceSummarizerTriggerList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -146,6 +149,7 @@ export const useScheduleApiV0ComplianceTriggerList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -155,6 +159,7 @@ export const useScheduleApiV0ComplianceTriggerList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -164,6 +169,7 @@ export const useScheduleApiV0ComplianceTriggerList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -232,6 +238,7 @@ export const useScheduleApiV0DescribeTriggerList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -241,6 +248,7 @@ export const useScheduleApiV0DescribeTriggerList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -250,6 +258,7 @@ export const useScheduleApiV0DescribeTriggerList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -318,6 +327,7 @@ export const useScheduleApiV0InsightTriggerList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -327,6 +337,7 @@ export const useScheduleApiV0InsightTriggerList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -336,6 +347,7 @@ export const useScheduleApiV0InsightTriggerList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -404,6 +416,7 @@ export const useScheduleApiV0SummarizeTriggerList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -413,6 +426,7 @@ export const useScheduleApiV0SummarizeTriggerList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -422,6 +436,7 @@ export const useScheduleApiV0SummarizeTriggerList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -491,6 +506,7 @@ export const useScheduleApiV1BenchmarkEvaluationTriggerUpdate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -500,6 +516,7 @@ export const useScheduleApiV1BenchmarkEvaluationTriggerUpdate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -509,6 +526,7 @@ export const useScheduleApiV1BenchmarkEvaluationTriggerUpdate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -578,6 +596,7 @@ export const useScheduleApiV1BenchmarkEvaluationsList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -587,6 +606,7 @@ export const useScheduleApiV1BenchmarkEvaluationsList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -596,6 +616,7 @@ export const useScheduleApiV1BenchmarkEvaluationsList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -664,6 +685,7 @@ export const useScheduleApiV1ComplianceReportLastCompletedList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -673,6 +695,7 @@ export const useScheduleApiV1ComplianceReportLastCompletedList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -682,6 +705,7 @@ export const useScheduleApiV1ComplianceReportLastCompletedList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -751,6 +775,7 @@ export const useScheduleApiV1DescribeResourceCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -760,6 +785,7 @@ export const useScheduleApiV1DescribeResourceCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -769,6 +795,7 @@ export const useScheduleApiV1DescribeResourceCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -837,6 +864,7 @@ export const useScheduleApiV1DescribeResourceJobsPendingList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -846,6 +874,7 @@ export const useScheduleApiV1DescribeResourceJobsPendingList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -855,6 +884,7 @@ export const useScheduleApiV1DescribeResourceJobsPendingList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -923,6 +953,7 @@ export const useScheduleApiV1DescribeSourceJobsPendingList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -932,6 +963,7 @@ export const useScheduleApiV1DescribeSourceJobsPendingList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -941,6 +973,7 @@ export const useScheduleApiV1DescribeSourceJobsPendingList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1010,6 +1043,7 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1019,6 +1053,7 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1028,6 +1063,7 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1097,6 +1133,7 @@ export const useScheduleApiV1InsightEvaluationTriggerUpdate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1106,6 +1143,7 @@ export const useScheduleApiV1InsightEvaluationTriggerUpdate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1115,6 +1153,7 @@ export const useScheduleApiV1InsightEvaluationTriggerUpdate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1183,6 +1222,7 @@ export const useScheduleApiV1InsightJobDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1192,6 +1232,7 @@ export const useScheduleApiV1InsightJobDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1201,6 +1242,7 @@ export const useScheduleApiV1InsightJobDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1269,6 +1311,7 @@ export const useScheduleApiV1InsightJobsPendingList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1278,6 +1321,7 @@ export const useScheduleApiV1InsightJobsPendingList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1287,6 +1331,7 @@ export const useScheduleApiV1InsightJobsPendingList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1356,6 +1401,7 @@ export const useScheduleApiV1ResourceTypeDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1365,6 +1411,7 @@ export const useScheduleApiV1ResourceTypeDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1374,6 +1421,7 @@ export const useScheduleApiV1ResourceTypeDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1441,6 +1489,7 @@ export const useScheduleApiV1SourcesList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1450,6 +1499,7 @@ export const useScheduleApiV1SourcesList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1459,6 +1509,7 @@ export const useScheduleApiV1SourcesList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1527,6 +1578,7 @@ export const useScheduleApiV1SourcesDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1536,6 +1588,7 @@ export const useScheduleApiV1SourcesDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1545,6 +1598,7 @@ export const useScheduleApiV1SourcesDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1619,6 +1673,7 @@ export const useScheduleApiV1SourcesJobsComplianceDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1628,6 +1683,7 @@ export const useScheduleApiV1SourcesJobsComplianceDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1637,6 +1693,7 @@ export const useScheduleApiV1SourcesJobsComplianceDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1706,6 +1763,7 @@ export const useScheduleApiV1SourcesJobsComplianceRefreshCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1715,6 +1773,7 @@ export const useScheduleApiV1SourcesJobsComplianceRefreshCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1724,6 +1783,7 @@ export const useScheduleApiV1SourcesJobsComplianceRefreshCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1793,6 +1853,7 @@ export const useScheduleApiV1SourcesJobsDescribeDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1802,6 +1863,7 @@ export const useScheduleApiV1SourcesJobsDescribeDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1811,6 +1873,7 @@ export const useScheduleApiV1SourcesJobsDescribeDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1880,6 +1943,7 @@ export const useScheduleApiV1SourcesJobsDescribeRefreshCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1889,6 +1953,7 @@ export const useScheduleApiV1SourcesJobsDescribeRefreshCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1898,6 +1963,7 @@ export const useScheduleApiV1SourcesJobsDescribeRefreshCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1970,6 +2036,7 @@ export const useScheduleApiV1StacksList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1979,6 +2046,7 @@ export const useScheduleApiV1StacksList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1988,6 +2056,7 @@ export const useScheduleApiV1StacksList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2056,6 +2125,7 @@ export const useScheduleApiV1StacksDelete = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2065,6 +2135,7 @@ export const useScheduleApiV1StacksDelete = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2074,6 +2145,7 @@ export const useScheduleApiV1StacksDelete = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2142,6 +2214,7 @@ export const useScheduleApiV1StacksDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2151,6 +2224,7 @@ export const useScheduleApiV1StacksDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2160,6 +2234,7 @@ export const useScheduleApiV1StacksDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2230,6 +2305,7 @@ export const useScheduleApiV1StacksFindingsCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2239,6 +2315,7 @@ export const useScheduleApiV1StacksFindingsCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2248,6 +2325,7 @@ export const useScheduleApiV1StacksFindingsCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2324,6 +2402,7 @@ export const useScheduleApiV1StacksInsightDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2333,6 +2412,7 @@ export const useScheduleApiV1StacksInsightDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2342,6 +2422,7 @@ export const useScheduleApiV1StacksInsightDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2418,6 +2499,7 @@ export const useScheduleApiV1StacksInsightsDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2427,6 +2509,7 @@ export const useScheduleApiV1StacksInsightsDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2436,6 +2519,7 @@ export const useScheduleApiV1StacksInsightsDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2511,6 +2595,7 @@ export const useScheduleApiV1StacksCreateCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2520,6 +2605,7 @@ export const useScheduleApiV1StacksCreateCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2529,6 +2615,7 @@ export const useScheduleApiV1StacksCreateCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2600,6 +2687,7 @@ export const useScheduleApiV1StacksResourceList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2609,6 +2697,7 @@ export const useScheduleApiV1StacksResourceList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2618,6 +2707,7 @@ export const useScheduleApiV1StacksResourceList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2686,6 +2776,7 @@ export const useScheduleApiV1SummarizeJobsPendingList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2695,6 +2786,7 @@ export const useScheduleApiV1SummarizeJobsPendingList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2704,6 +2796,7 @@ export const useScheduleApiV1SummarizeJobsPendingList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })

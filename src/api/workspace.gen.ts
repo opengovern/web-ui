@@ -51,6 +51,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -60,6 +61,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -69,6 +71,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -137,6 +140,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -146,6 +150,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -155,6 +160,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -225,6 +231,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -234,6 +241,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -243,6 +251,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -318,6 +327,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -327,6 +337,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -336,6 +347,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -411,6 +423,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -420,6 +433,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -429,6 +443,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -503,6 +518,7 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -512,6 +528,7 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -521,6 +538,7 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -590,6 +608,7 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -599,6 +618,7 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -608,6 +628,7 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -678,6 +699,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -687,6 +709,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -696,6 +719,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -769,6 +793,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -778,6 +803,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -787,6 +813,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -854,6 +881,7 @@ export const useWorkspaceApiV1WorkspacesList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -863,6 +891,7 @@ export const useWorkspaceApiV1WorkspacesList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -872,6 +901,7 @@ export const useWorkspaceApiV1WorkspacesList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -942,6 +972,7 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -951,6 +982,7 @@ export const useWorkspaceApiV1WorkspacesDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -960,6 +992,7 @@ export const useWorkspaceApiV1WorkspacesDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1029,6 +1062,7 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1038,6 +1072,7 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1047,6 +1082,7 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1119,6 +1155,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1128,6 +1165,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1137,6 +1175,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1211,6 +1250,7 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1220,6 +1260,7 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1229,6 +1270,7 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })

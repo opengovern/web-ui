@@ -38,6 +38,7 @@ export const useAiApiV1GptRunCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -47,6 +48,7 @@ export const useAiApiV1GptRunCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -56,6 +58,7 @@ export const useAiApiV1GptRunCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })

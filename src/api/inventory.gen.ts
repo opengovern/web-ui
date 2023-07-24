@@ -15,6 +15,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeTagsMetadataResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
@@ -22,11 +23,13 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTag,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiService,
     GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
     RequestParams,
 } from './api'
@@ -67,6 +70,7 @@ export const useInventoryApiV1LocationsDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -76,6 +80,7 @@ export const useInventoryApiV1LocationsDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -85,6 +90,7 @@ export const useInventoryApiV1LocationsDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -153,6 +159,7 @@ export const useInventoryApiV1QueryList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -162,6 +169,7 @@ export const useInventoryApiV1QueryList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -171,6 +179,7 @@ export const useInventoryApiV1QueryList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -187,93 +196,6 @@ export const useInventoryApiV1QueryList = (
 
     if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([request, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseInventoryApiV1QueryCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse
-    error?: any
-}
-
-export const useInventoryApiV1QueryCreate = (
-    queryId: string,
-    request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseInventoryApiV1QueryCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([queryId, request, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV1QueryCreate(queryId, request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([queryId, request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([queryId, request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -326,6 +248,7 @@ export const useInventoryApiV1QueryCountList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -335,6 +258,7 @@ export const useInventoryApiV1QueryCountList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -344,6 +268,7 @@ export const useInventoryApiV1QueryCountList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -360,6 +285,274 @@ export const useInventoryApiV1QueryCountList = (
 
     if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([request, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV1QueryRunCreateState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse
+    error?: any
+}
+
+export const useInventoryApiV1QueryRunCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseInventoryApiV1QueryRunCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([request, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV1QueryRunCreate(request, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV1QueryRunCreate2State {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse
+    error?: any
+}
+
+export const useInventoryApiV1QueryRunCreate2 = (
+    queryId: string,
+    request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseInventoryApiV1QueryRunCreate2State>({
+        isLoading: true,
+        isExecuted: false,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([queryId, request, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV1QueryRunCreate2(queryId, request, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([queryId, request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([queryId, request, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV1QueryRunHistoryCreateState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory[]
+    error?: any
+}
+
+export const useInventoryApiV1QueryRunHistoryCreate = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV1QueryRunHistoryCreateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV1QueryRunHistoryCreate(params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
     }
 
     useEffect(() => {
@@ -412,6 +605,7 @@ export const useInventoryApiV1ResourceCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -421,6 +615,7 @@ export const useInventoryApiV1ResourceCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -430,6 +625,7 @@ export const useInventoryApiV1ResourceCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -498,6 +694,7 @@ export const useInventoryApiV1ResourcesCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -507,6 +704,7 @@ export const useInventoryApiV1ResourcesCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -516,6 +714,7 @@ export const useInventoryApiV1ResourcesCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -588,6 +787,7 @@ export const useInventoryApiV1ResourcesFiltersCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -597,6 +797,7 @@ export const useInventoryApiV1ResourcesFiltersCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -606,6 +807,7 @@ export const useInventoryApiV1ResourcesFiltersCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -687,6 +889,7 @@ export const useInventoryApiV1ResourcesRegionsList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -696,6 +899,7 @@ export const useInventoryApiV1ResourcesRegionsList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -705,6 +909,7 @@ export const useInventoryApiV1ResourcesRegionsList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -780,6 +985,7 @@ export const useInventoryApiV1ResourcesTopRegionsList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -789,6 +995,7 @@ export const useInventoryApiV1ResourcesTopRegionsList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -798,6 +1005,216 @@ export const useInventoryApiV1ResourcesTopRegionsList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2AnalyticsMetricListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse
+    error?: any
+}
+
+export const useInventoryApiV2AnalyticsMetricList = (
+    query?: {
+        tag?: string[]
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        metricNames?: string[]
+
+        endTime?: string
+
+        startTime?: string
+
+        minCount?: number
+
+        sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
+
+        pageSize?: number
+
+        pageNumber?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2AnalyticsMetricListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2AnalyticsMetricList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2AnalyticsTagListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: Record<string, string[]>
+    error?: any
+}
+
+export const useInventoryApiV2AnalyticsTagList = (
+    query?: {
+        connector?: string[]
+
+        connectionId?: string[]
+
+        minCount?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseInventoryApiV2AnalyticsTagListState>(
+        {
+            isLoading: true,
+            isExecuted: false,
+        }
+    )
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2AnalyticsTagList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -877,6 +1294,7 @@ export const useInventoryApiV2CostCompositionList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -886,6 +1304,7 @@ export const useInventoryApiV2CostCompositionList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -895,6 +1314,7 @@ export const useInventoryApiV2CostCompositionList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -977,6 +1397,7 @@ export const useInventoryApiV2CostMetricList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -986,6 +1407,7 @@ export const useInventoryApiV2CostMetricList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -995,6 +1417,7 @@ export const useInventoryApiV2CostMetricList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1073,6 +1496,7 @@ export const useInventoryApiV2CostTrendList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1082,6 +1506,7 @@ export const useInventoryApiV2CostTrendList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1091,6 +1516,7 @@ export const useInventoryApiV2CostTrendList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1174,6 +1600,7 @@ export const useInventoryApiV2MetadataResourcetypeList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1183,6 +1610,7 @@ export const useInventoryApiV2MetadataResourcetypeList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1192,6 +1620,7 @@ export const useInventoryApiV2MetadataResourcetypeList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1261,6 +1690,7 @@ export const useInventoryApiV2MetadataResourcetypeDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1270,6 +1700,7 @@ export const useInventoryApiV2MetadataResourcetypeDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1279,6 +1710,7 @@ export const useInventoryApiV2MetadataResourcetypeDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1356,6 +1788,7 @@ export const useInventoryApiV2MetadataServicesList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1365,6 +1798,7 @@ export const useInventoryApiV2MetadataServicesList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1374,6 +1808,7 @@ export const useInventoryApiV2MetadataServicesList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1443,6 +1878,7 @@ export const useInventoryApiV2MetadataServicesDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1452,6 +1888,7 @@ export const useInventoryApiV2MetadataServicesDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1461,6 +1898,7 @@ export const useInventoryApiV2MetadataServicesDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1477,6 +1915,207 @@ export const useInventoryApiV2MetadataServicesDetail = (
 
     if (JSON.stringify([serviceName, params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([serviceName, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2MetadataTagsResourcetypeListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeTagsMetadataResponse
+    error?: any
+}
+
+export const useInventoryApiV2MetadataTagsResourcetypeList = (
+    query: {
+        connector: ('' | 'AWS' | 'Azure')[]
+
+        service?: string[]
+
+        resourceType?: string[]
+
+        summarzied?: boolean
+
+        pageSize?: number
+
+        pageNumber?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2MetadataTagsResourcetypeListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2MetadataTagsResourcetypeList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2MetadataTagsResourcetypeDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTag
+    error?: any
+}
+
+export const useInventoryApiV2MetadataTagsResourcetypeDetail = (
+    key: string,
+    query: {
+        connector: ('' | 'AWS' | 'Azure')[]
+
+        service?: string[]
+
+        resourceType?: string[]
+
+        summarzied?: boolean
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2MetadataTagsResourcetypeDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([key, query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2MetadataTagsResourcetypeDetail(key, query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([key, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([key, query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1541,6 +2180,7 @@ export const useInventoryApiV2ResourcesCompositionDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1550,6 +2190,7 @@ export const useInventoryApiV2ResourcesCompositionDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1559,6 +2200,7 @@ export const useInventoryApiV2ResourcesCompositionDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1627,6 +2269,7 @@ export const useInventoryApiV2ResourcesCountList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1636,6 +2279,7 @@ export const useInventoryApiV2ResourcesCountList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1645,6 +2289,7 @@ export const useInventoryApiV2ResourcesCountList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1736,6 +2381,7 @@ export const useInventoryApiV2ResourcesMetricList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1745,6 +2391,7 @@ export const useInventoryApiV2ResourcesMetricList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1754,6 +2401,7 @@ export const useInventoryApiV2ResourcesMetricList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1830,6 +2478,7 @@ export const useInventoryApiV2ResourcesMetricDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1839,6 +2488,7 @@ export const useInventoryApiV2ResourcesMetricDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1848,6 +2498,7 @@ export const useInventoryApiV2ResourcesMetricDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1929,6 +2580,7 @@ export const useInventoryApiV2ResourcesRegionsCompositionList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1938,6 +2590,7 @@ export const useInventoryApiV2ResourcesRegionsCompositionList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1947,6 +2600,7 @@ export const useInventoryApiV2ResourcesRegionsCompositionList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2030,6 +2684,7 @@ export const useInventoryApiV2ResourcesRegionsSummaryList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2039,6 +2694,7 @@ export const useInventoryApiV2ResourcesRegionsSummaryList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2048,6 +2704,7 @@ export const useInventoryApiV2ResourcesRegionsSummaryList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2129,6 +2786,7 @@ export const useInventoryApiV2ResourcesRegionsTrendList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2138,6 +2796,7 @@ export const useInventoryApiV2ResourcesRegionsTrendList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2147,6 +2806,7 @@ export const useInventoryApiV2ResourcesRegionsTrendList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2225,6 +2885,7 @@ export const useInventoryApiV2ResourcesTagList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2234,6 +2895,7 @@ export const useInventoryApiV2ResourcesTagList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2243,6 +2905,7 @@ export const useInventoryApiV2ResourcesTagList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2321,6 +2984,7 @@ export const useInventoryApiV2ResourcesTagDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2330,6 +2994,7 @@ export const useInventoryApiV2ResourcesTagDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2339,6 +3004,7 @@ export const useInventoryApiV2ResourcesTagDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2422,6 +3088,7 @@ export const useInventoryApiV2ResourcesTrendList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2431,6 +3098,7 @@ export const useInventoryApiV2ResourcesTrendList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2440,6 +3108,7 @@ export const useInventoryApiV2ResourcesTrendList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2521,6 +3190,7 @@ export const useInventoryApiV2ServicesCostTrendList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2530,6 +3200,7 @@ export const useInventoryApiV2ServicesCostTrendList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2539,6 +3210,7 @@ export const useInventoryApiV2ServicesCostTrendList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2624,6 +3296,7 @@ export const useInventoryApiV2ServicesMetricList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2633,6 +3306,7 @@ export const useInventoryApiV2ServicesMetricList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2642,6 +3316,7 @@ export const useInventoryApiV2ServicesMetricList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2718,6 +3393,7 @@ export const useInventoryApiV2ServicesMetricDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2727,6 +3403,7 @@ export const useInventoryApiV2ServicesMetricDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2736,6 +3413,7 @@ export const useInventoryApiV2ServicesMetricDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2821,6 +3499,7 @@ export const useInventoryApiV2ServicesSummaryList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2830,6 +3509,7 @@ export const useInventoryApiV2ServicesSummaryList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2839,6 +3519,7 @@ export const useInventoryApiV2ServicesSummaryList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2915,6 +3596,7 @@ export const useInventoryApiV2ServicesSummaryDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2924,6 +3606,7 @@ export const useInventoryApiV2ServicesSummaryDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2933,6 +3616,7 @@ export const useInventoryApiV2ServicesSummaryDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -3002,6 +3686,7 @@ export const useInventoryApiV2ServicesTagList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -3011,6 +3696,7 @@ export const useInventoryApiV2ServicesTagList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -3020,6 +3706,7 @@ export const useInventoryApiV2ServicesTagList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -3089,6 +3776,7 @@ export const useInventoryApiV2ServicesTagDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -3098,6 +3786,7 @@ export const useInventoryApiV2ServicesTagDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -3107,6 +3796,7 @@ export const useInventoryApiV2ServicesTagDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })

@@ -58,6 +58,7 @@ export const useOnboardApiV1CatalogMetricsList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -67,6 +68,7 @@ export const useOnboardApiV1CatalogMetricsList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -76,6 +78,7 @@ export const useOnboardApiV1CatalogMetricsList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -146,6 +149,7 @@ export const useOnboardApiV1ConnectionsStateCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -155,6 +159,7 @@ export const useOnboardApiV1ConnectionsStateCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -164,6 +169,7 @@ export const useOnboardApiV1ConnectionsStateCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -238,6 +244,7 @@ export const useOnboardApiV1ConnectionsCountList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -247,6 +254,7 @@ export const useOnboardApiV1ConnectionsCountList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -256,6 +264,7 @@ export const useOnboardApiV1ConnectionsCountList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -348,6 +357,7 @@ export const useOnboardApiV1ConnectionsSummaryList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -357,6 +367,7 @@ export const useOnboardApiV1ConnectionsSummaryList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -366,6 +377,7 @@ export const useOnboardApiV1ConnectionsSummaryList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -440,6 +452,7 @@ export const useOnboardApiV1ConnectionsSummaryDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -449,6 +462,7 @@ export const useOnboardApiV1ConnectionsSummaryDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -458,6 +472,7 @@ export const useOnboardApiV1ConnectionsSummaryDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -527,6 +542,7 @@ export const useOnboardApiV1ConnectorList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -536,6 +552,7 @@ export const useOnboardApiV1ConnectorList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -545,6 +562,7 @@ export const useOnboardApiV1ConnectorList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -613,6 +631,7 @@ export const useOnboardApiV1ConnectorDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -622,6 +641,7 @@ export const useOnboardApiV1ConnectorDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -631,6 +651,7 @@ export const useOnboardApiV1ConnectorDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -709,6 +730,7 @@ export const useOnboardApiV1CredentialList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -718,6 +740,7 @@ export const useOnboardApiV1CredentialList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -727,6 +750,7 @@ export const useOnboardApiV1CredentialList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -795,6 +819,7 @@ export const useOnboardApiV1CredentialCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -804,6 +829,7 @@ export const useOnboardApiV1CredentialCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -813,6 +839,7 @@ export const useOnboardApiV1CredentialCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -881,6 +908,7 @@ export const useOnboardApiV1CredentialDelete = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -890,6 +918,7 @@ export const useOnboardApiV1CredentialDelete = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -899,6 +928,7 @@ export const useOnboardApiV1CredentialDelete = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -967,6 +997,7 @@ export const useOnboardApiV1CredentialDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -976,6 +1007,7 @@ export const useOnboardApiV1CredentialDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -985,6 +1017,7 @@ export const useOnboardApiV1CredentialDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1054,6 +1087,7 @@ export const useOnboardApiV1CredentialUpdate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1063,6 +1097,7 @@ export const useOnboardApiV1CredentialUpdate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1072,6 +1107,7 @@ export const useOnboardApiV1CredentialUpdate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1146,6 +1182,7 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1155,6 +1192,7 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1164,6 +1202,7 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1233,6 +1272,7 @@ export const useOnboardApiV1CredentialDisableCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1242,6 +1282,7 @@ export const useOnboardApiV1CredentialDisableCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1251,6 +1292,7 @@ export const useOnboardApiV1CredentialDisableCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1320,6 +1362,7 @@ export const useOnboardApiV1CredentialEnableCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1329,6 +1372,7 @@ export const useOnboardApiV1CredentialEnableCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1338,6 +1382,7 @@ export const useOnboardApiV1CredentialEnableCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1407,6 +1452,7 @@ export const useOnboardApiV1CredentialHealthcheckDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1416,6 +1462,7 @@ export const useOnboardApiV1CredentialHealthcheckDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1425,6 +1472,7 @@ export const useOnboardApiV1CredentialHealthcheckDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1502,6 +1550,7 @@ export const useOnboardApiV1CredentialSourcesListList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1511,6 +1560,7 @@ export const useOnboardApiV1CredentialSourcesListList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1520,6 +1570,7 @@ export const useOnboardApiV1CredentialSourcesListList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1588,6 +1639,7 @@ export const useOnboardApiV1SourceDelete = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1597,6 +1649,7 @@ export const useOnboardApiV1SourceDelete = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1606,6 +1659,7 @@ export const useOnboardApiV1SourceDelete = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1674,6 +1728,7 @@ export const useOnboardApiV1SourceDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1683,6 +1738,7 @@ export const useOnboardApiV1SourceDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1692,6 +1748,7 @@ export const useOnboardApiV1SourceDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1761,6 +1818,7 @@ export const useOnboardApiV1SourceCredentialsDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1770,6 +1828,7 @@ export const useOnboardApiV1SourceCredentialsDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1779,6 +1838,7 @@ export const useOnboardApiV1SourceCredentialsDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1848,6 +1908,7 @@ export const useOnboardApiV1SourceCredentialsUpdate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1857,6 +1918,7 @@ export const useOnboardApiV1SourceCredentialsUpdate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1866,6 +1928,7 @@ export const useOnboardApiV1SourceCredentialsUpdate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -1935,6 +1998,7 @@ export const useOnboardApiV1SourceHealthcheckCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -1944,6 +2008,7 @@ export const useOnboardApiV1SourceHealthcheckCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -1953,6 +2018,7 @@ export const useOnboardApiV1SourceHealthcheckCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2022,6 +2088,7 @@ export const useOnboardApiV1SourceAccountDetail = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2031,6 +2098,7 @@ export const useOnboardApiV1SourceAccountDetail = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2040,6 +2108,7 @@ export const useOnboardApiV1SourceAccountDetail = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2108,6 +2177,7 @@ export const useOnboardApiV1SourceAwsCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2117,6 +2187,7 @@ export const useOnboardApiV1SourceAwsCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2126,6 +2197,7 @@ export const useOnboardApiV1SourceAwsCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2194,6 +2266,7 @@ export const useOnboardApiV1SourceAzureCreate = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2203,6 +2276,7 @@ export const useOnboardApiV1SourceAzureCreate = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2212,6 +2286,7 @@ export const useOnboardApiV1SourceAzureCreate = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2282,6 +2357,7 @@ export const useOnboardApiV1SourcesList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2291,6 +2367,7 @@ export const useOnboardApiV1SourcesList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2300,6 +2377,7 @@ export const useOnboardApiV1SourcesList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
@@ -2370,6 +2448,7 @@ export const useOnboardApiV1SourcesCountList = (
     const sendRequest = () => {
         setState({
             ...state,
+            error: undefined,
             isLoading: true,
             isExecuted: true,
         })
@@ -2379,6 +2458,7 @@ export const useOnboardApiV1SourcesCountList = (
                 .then((resp) => {
                     setState({
                         ...state,
+                        error: undefined,
                         response: resp.data,
                         isLoading: false,
                         isExecuted: true,
@@ -2388,6 +2468,7 @@ export const useOnboardApiV1SourcesCountList = (
                     setState({
                         ...state,
                         error: err,
+                        response: undefined,
                         isLoading: false,
                         isExecuted: true,
                     })
