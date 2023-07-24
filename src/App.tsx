@@ -1,7 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Card } from '@tremor/react'
 import Router from './router'
 import Spinner from './components/Spinner'
 import { setAuthHeader, setWorkspace } from './api/ApiConfig'
@@ -15,8 +13,6 @@ function App() {
         if (isAuthenticated && token === '') {
             if (!accessTokenLoading) {
                 setAccessTokenLoading(true)
-
-                console.log('temp')
                 getAccessTokenSilently()
                     .then((accessToken) => {
                         setToken(accessToken)
