@@ -46,9 +46,6 @@ export default function MemberDetails({
         false
     )
 
-    const loading =
-        (isExecuted && isLoading) || (deleteExecuted && deleteLoading)
-
     useEffect(() => {
         if (role === 'viewer' || role === 'editor' || role === 'admin') {
             setRoleValue(role)
@@ -77,7 +74,7 @@ export default function MemberDetails({
             return 'Never'
         }
 
-        return d.format('MMM DD, YYYY HH:mm:ss Z')
+        return d.format('MMM DD, YYYY HH:mm')
     }
 
     const items = [
@@ -88,7 +85,7 @@ export default function MemberDetails({
         {
             title: 'Member Since',
             value: dayjs(user.createdAt || Date.now().toString()).format(
-                'MMM DD, YYYY HH:mm:ss Z'
+                'MMM DD, YYYY HH:mm'
             ),
         },
         {
@@ -209,14 +206,19 @@ export default function MemberDetails({
                 </List>
                 <Flex justifyContent="end" className="truncate space-x-4">
                     <Button
-                        loading={loading}
+                        loading={deleteExecuted && deleteLoading}
+                        disabled={isExecuted && isLoading}
                         onClick={() => setDeleteConfirmation(true)}
                         variant="secondary"
                         color="rose"
                     >
                         <TrashIcon className="h-5 w-5" color="rose" />
                     </Button>
-                    <Button loading={loading} onClick={() => updateRole()}>
+                    <Button
+                        loading={isExecuted && isLoading}
+                        disabled={deleteExecuted && deleteLoading}
+                        onClick={() => updateRole()}
+                    >
                         Update Changes
                     </Button>
                 </Flex>
