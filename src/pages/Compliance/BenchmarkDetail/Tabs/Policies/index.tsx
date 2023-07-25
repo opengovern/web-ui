@@ -143,6 +143,25 @@ export default function Policies({ id }: IPolicies) {
         getDataPath: (data: any) => {
             return data.path.split('/')
         },
+        sideBar: {
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+            ],
+            defaultToolPanel: '',
+        },
     }
 
     return (
