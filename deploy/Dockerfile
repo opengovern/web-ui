@@ -1,3 +1,4 @@
+ARG APP_VERSION
 # Set the base image to node:20-alpine
 FROM docker.io/node:20-alpine as build
 
@@ -11,7 +12,7 @@ COPY . /app/
 RUN npm install
 RUN npm run build
 RUN npm i @sentry/cli
-RUN npm run sentry:sourcemaps
+RUN sentry-cli sourcemaps inject --org sentry --project kaytu ./build && sentry-cli --url https://sen.kaytu.dev/ sourcemaps upload --org sentry --release ${APP_VERSION} --project kaytu ./build
 
 # Prepare nginx
 FROM docker.io/nginx:1.25.0-alpine

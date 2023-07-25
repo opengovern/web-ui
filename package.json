@@ -62,7 +62,7 @@
     "build-storybook": "storybook build -s public",
     "chromatic": "npx chromatic --project-token=2ae656df246a --allow-console-errors",
     "codegen": "npx swagger-typescript-api --axios -p https://app.kaytu.dev/docs/api/1.0/swagger.yaml -o ./src/api -n api.ts && go run codegen/generate.go",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sentry --project kaytu ./build && sentry-cli --url https://sen.kaytu.dev/ sourcemaps upload --org sentry --project kaytu ./build"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sentry --project kaytu ./build && sentry-cli --url https://sen.kaytu.dev/ sourcemaps upload --org sentry --release v1.0.0 --project kaytu ./build"
   },
   "eslintConfig": {
     "overrides": [
