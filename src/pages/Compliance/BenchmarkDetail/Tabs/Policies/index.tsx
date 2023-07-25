@@ -166,7 +166,7 @@ export default function Policies({ id }: IPolicies) {
 
     return (
         <>
-            <Flex className="mb-4 mt-6">
+            <Flex className="mb-4">
                 <Title>Policies</Title>
                 <Button
                     variant="secondary"

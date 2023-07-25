@@ -6,7 +6,7 @@ import {
     GridOptions,
     ICellRendererParams,
 } from 'ag-grid-community'
-import { Flex } from '@tremor/react'
+import { Button, Flex, Title } from '@tremor/react'
 import {
     useComplianceApiV1AssignmentsBenchmarkDetail,
     useComplianceApiV1AssignmentsConnectionCreate,
@@ -145,15 +145,44 @@ export default function Assignments({ id }: IAssignments) {
     }
 
     return (
-        <div className="ag-theme-alpine w-full">
-            <AgGridReact
-                ref={gridRef}
-                domLayout="autoHeight"
-                gridOptions={gridOptions}
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                rowData={assignments?.sort((a, b) => b.status - a.status) || []}
-            />
-        </div>
+        <>
+            <Flex className="mb-4">
+                <Title>Assignments</Title>
+                <Flex justifyContent="end" className="gap-x-2">
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setConnection('all')
+                            setStatus('enable')
+                        }}
+                    >
+                        Disable All
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            setConnection('all')
+                            setStatus('disable')
+                        }}
+                    >
+                        Enable All
+                    </Button>
+                </Flex>
+            </Flex>
+            <div className="ag-theme-alpine w-full">
+                <AgGridReact
+                    ref={gridRef}
+                    domLayout="autoHeight"
+                    gridOptions={gridOptions}
+                    rowData={
+                        assignments?.sort(
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            (a, b) => b.status - a.status
+                        ) || []
+                    }
+                />
+            </div>
+        </>
     )
 }
