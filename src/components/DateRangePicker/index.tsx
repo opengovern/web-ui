@@ -38,7 +38,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                 {label}
             </span>
             <div {...groupProps} ref={ref} className="flex group h-9">
-                <div className="flex bg-white border border-gray-300 group-hover:border-gray-400 transition-colors rounded-l-md pr-10 group-focus-within:border-blue-600 group-focus-within:group-hover:border-blue-600 p-1 relative">
+                <div className="flex bg-white dark:bg-gray-900 dark:text-gray-50 border border-gray-300 group-hover:border-gray-400 transition-colors rounded-l-md pr-10 group-focus-within:border-blue-600 group-focus-within:group-hover:border-blue-600 p-1 relative">
                     <DateField {...startFieldProps} />
                     <span aria-hidden="true" className="px-2">
                         –
@@ -56,7 +56,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                     </button>
                 </div>
                 <FieldButton {...buttonProps} isPressed={state.isOpen}>
-                    <CalendarIcon className="w-5 h-5 text-gray-700 group-focus-within:text-blue-700" />
+                    <CalendarIcon className="w-5 h-5 text-gray-700 dark:text-gray-50 group-focus-within:text-blue-700" />
                 </FieldButton>
             </div>
             {state.isOpen && (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Flex } from '@tremor/react'
+import { Tab, TabGroup, TabList } from '@tremor/react'
 import { useComplianceApiV1MetadataTagInsightList } from '../../../api/compliance.gen'
 
 interface IInsightCategories {
@@ -32,19 +32,17 @@ export default function InsightCategories({
     }
 
     return (
-        <Flex flexDirection="row" justifyContent="start">
-            {allCategories.map((category) => (
-                <Button
-                    size="xs"
-                    variant={
-                        selectedCategory === category ? 'primary' : 'secondary'
-                    }
-                    onClick={() => handleClick(category)}
-                    className="mr-2"
-                >
-                    {category}
-                </Button>
-            ))}
-        </Flex>
+        <TabGroup>
+            <TabList variant="solid">
+                {allCategories.map((category) => (
+                    <Tab
+                        className="border-none"
+                        onClick={() => handleClick(category)}
+                    >
+                        {category}
+                    </Tab>
+                ))}
+            </TabList>
+        </TabGroup>
     )
 }

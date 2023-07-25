@@ -67,7 +67,7 @@ export default function BenchmarkDetail() {
                             <Title>{benchmarkDetail?.title}</Title>
                             <Text className="whitespace-nowrap">{`Last evaluation: ${dayjs(
                                 benchmarkDetail?.evaluatedAt
-                            ).format('MMM DD, YYYY')}`}</Text>
+                            ).format('MMM DD, YYYY - HH:mm')}`}</Text>
                         </Flex>
                         <Text className="w-2/3">
                             {benchmarkDetail?.description}

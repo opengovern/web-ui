@@ -177,7 +177,7 @@ export default function Finder() {
                     </Flex>
                     <Flex
                         flexDirection="col"
-                        className="w-full h-full max-h-full overflow-hidden overflow-y-scroll"
+                        className="w-full h-full max-h-full overflow-hidden overflow-y-scroll px-1 pt-1"
                     >
                         <Card>
                             <Editor
@@ -186,7 +186,7 @@ export default function Finder() {
                                     highlight(text, languages.sql, 'sql')
                                 }
                                 value={code}
-                                className="w-full bg-white font-mono text-sm"
+                                className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
                                 style={{ minHeight: '200px' }}
                                 placeholder="-- write your SQL query here"
                             />
@@ -242,7 +242,7 @@ export default function Finder() {
                             index={selectedIndex}
                             onIndexChange={setSelectedIndex}
                         >
-                            <TabList className="sticky top-2 z-10 bg-gray-100">
+                            <TabList className="bg-gray-100 dark:bg-gray-900">
                                 <Tab>Get Started</Tab>
                                 <Tab
                                     className={

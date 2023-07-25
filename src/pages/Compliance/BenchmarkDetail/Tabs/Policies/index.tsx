@@ -1,7 +1,9 @@
 import { AgGridReact } from 'ag-grid-react'
 import { useRef } from 'react'
-import { GridOptions } from 'ag-grid-community'
+import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import dayjs from 'dayjs'
+import { Badge, Button, Flex, Title } from '@tremor/react'
+import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import { useComplianceApiV1BenchmarksTreeDetail } from '../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
 
@@ -32,9 +34,6 @@ const rows = (json: any) => {
         }
     }
     if (arr.length) {
-        // for (let i = 0; i < arr.length; i += 1) {
-        //     if (arr[i].path.includes('.') && arr[i].path[arr[i].path.indexOf('.') + 2])
-        // }
         return arr.sort((a: any, b: any) => {
             if (a.path < b.path) {
                 return -1
@@ -49,6 +48,77 @@ const rows = (json: any) => {
     return arr
 }
 
+const renderBadge = (severity: any) => {
+    if (severity) {
+        if (severity === 'low') {
+            return <Badge color="lime">Low</Badge>
+        }
+        if (severity === 'medium') {
+            return <Badge color="yellow">Medium</Badge>
+        }
+        if (severity === 'high') {
+            return <Badge color="orange">High</Badge>
+        }
+        return <Badge color="rose">Critical</Badge>
+    }
+    return ''
+}
+
+const renderStatus = (status: any) => {
+    if (status) {
+        if (status === 'passed') {
+            return <Badge color="emerald">Passed</Badge>
+        }
+        return <Badge color="rose">Failed</Badge>
+    }
+    return ''
+}
+
+const columns: ColDef[] = [
+    {
+        field: 'severity',
+        width: 120,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        cellRenderer: (params: ICellRendererParams) => (
+            <Flex
+                className="h-full w-full"
+                justifyContent="center"
+                alignItems="center"
+            >
+                {renderBadge(params.data?.severity)}
+            </Flex>
+        ),
+    },
+    {
+        field: 'status',
+        width: 100,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        cellRenderer: (params: ICellRendererParams) => (
+            <Flex
+                className="h-full w-full"
+                justifyContent="center"
+                alignItems="center"
+            >
+                {renderStatus(params.data?.status)}
+            </Flex>
+        ),
+    },
+    {
+        field: 'lastChecked',
+        width: 120,
+        valueFormatter: (param: any) => {
+            if (param.value) {
+                return dayjs(param.value * 1000).format('MMM DD, YYYY')
+            }
+            return ''
+        },
+    },
+]
+
 export default function Policies({ id }: IPolicies) {
     const gridRef = useRef<AgGridReact>(null)
 
@@ -57,23 +127,13 @@ export default function Policies({ id }: IPolicies) {
     )
 
     const gridOptions: GridOptions = {
-        columnDefs: [
-            { field: 'severity', flex: 1 },
-            { field: 'status', flex: 1 },
-            {
-                field: 'lastChecked',
-                flex: 1,
-                valueFormatter: (param) => {
-                    if (param.value) {
-                        return dayjs(param.value * 1000).format('MMM DD, YYYY')
-                    }
-                    return ''
-                },
-            },
-        ],
+        columnDefs: columns,
         autoGroupColumnDef: {
             headerName: 'Title',
-            minWidth: 300,
+            flex: 2,
+            sortable: true,
+            filter: true,
+            resizable: true,
             cellRendererParams: {
                 suppressCount: true,
             },
@@ -86,13 +146,25 @@ export default function Policies({ id }: IPolicies) {
     }
 
     return (
-        <div className="ag-theme-alpine w-full">
-            <AgGridReact
-                ref={gridRef}
-                domLayout="autoHeight"
-                rowData={rows(policies)}
-                gridOptions={gridOptions}
-            />
-        </div>
+        <>
+            <Flex className="mb-4 mt-6">
+                <Title>Policies</Title>
+                <Button
+                    variant="secondary"
+                    onClick={() => gridRef?.current?.api.exportDataAsCsv()}
+                    icon={ArrowDownOnSquareIcon}
+                >
+                    Download
+                </Button>
+            </Flex>
+            <div className="ag-theme-alpine w-full">
+                <AgGridReact
+                    ref={gridRef}
+                    domLayout="autoHeight"
+                    rowData={rows(policies)}
+                    gridOptions={gridOptions}
+                />
+            </div>
+        </>
     )
 }

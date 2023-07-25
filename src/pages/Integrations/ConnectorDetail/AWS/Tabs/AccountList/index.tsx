@@ -1,5 +1,5 @@
 import { Badge, Button, Card, Flex, Title } from '@tremor/react'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import {
     ColDef,
@@ -21,6 +21,7 @@ interface IAccountList {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
+
 const columns: ColDef[] = [
     {
         field: 'connector',
@@ -36,7 +37,7 @@ const columns: ColDef[] = [
                     justifyContent="center"
                     className="w-full h-full"
                 >
-                    <AWSIcon />
+                    <AWSIcon id="acc" />
                 </Flex>
             )
         },
@@ -96,6 +97,7 @@ const columns: ColDef[] = [
                         return 'gray'
                 }
             }
+
             return (
                 <Badge color={getBadgeColor(params.value)}>
                     {params.value}
