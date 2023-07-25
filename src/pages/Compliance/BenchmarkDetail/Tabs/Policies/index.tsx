@@ -77,7 +77,7 @@ const renderStatus = (status: any) => {
 const columns: ColDef[] = [
     {
         field: 'severity',
-        flex: 0.5,
+        width: 120,
         sortable: true,
         filter: true,
         resizable: true,
@@ -93,7 +93,7 @@ const columns: ColDef[] = [
     },
     {
         field: 'status',
-        flex: 0.5,
+        width: 100,
         sortable: true,
         filter: true,
         resizable: true,
@@ -109,7 +109,7 @@ const columns: ColDef[] = [
     },
     {
         field: 'lastChecked',
-        flex: 0.5,
+        width: 120,
         valueFormatter: (param: any) => {
             if (param.value) {
                 return dayjs(param.value * 1000).format('MMM DD, YYYY')

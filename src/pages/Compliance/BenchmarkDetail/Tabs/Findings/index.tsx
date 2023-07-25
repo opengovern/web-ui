@@ -6,7 +6,7 @@ import {
     ICellRendererParams,
     RowClickedEvent,
 } from 'ag-grid-community'
-import { Flex, Title } from '@tremor/react'
+import { Badge, Flex, Title } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useComplianceApiV1FindingsCreate } from '../../../../../api/compliance.gen'
 import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
@@ -16,6 +16,22 @@ import { RenderObject } from '../../../../../components/RenderObject'
 interface IFinder {
     id: string | undefined
     connections: any
+}
+
+const renderBadge = (severity: any) => {
+    if (severity) {
+        if (severity === 'low') {
+            return <Badge color="lime">Low</Badge>
+        }
+        if (severity === 'medium') {
+            return <Badge color="yellow">Medium</Badge>
+        }
+        if (severity === 'high') {
+            return <Badge color="orange">High</Badge>
+        }
+        return <Badge color="rose">Critical</Badge>
+    }
+    return ''
 }
 
 const columns: ColDef[] = [
@@ -71,6 +87,15 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 0.5,
+        cellRenderer: (params: ICellRendererParams) => (
+            <Flex
+                className="h-full w-full"
+                justifyContent="center"
+                alignItems="center"
+            >
+                {renderBadge(params.data?.severity)}
+            </Flex>
+        ),
     },
     {
         field: 'reason',
