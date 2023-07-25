@@ -54,6 +54,7 @@ jobs:
         tags: ${{ vars.DOCKER_REGISTRY }}/kaytu-frontend:${{ steps.tag_version.outputs.new_tag }}
         build-args: |
           APP_VERSION=${{ steps.tag_version.outputs.new_tag }}
+          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
         file: deploy/Dockerfile
         cache-from: type=gha
         cache-to: type=gha,mode=max
