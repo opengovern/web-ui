@@ -13,7 +13,7 @@ RUN npm install
 RUN npm run build
 RUN npm i @sentry/cli
 RUN npx sentry-cli sourcemaps inject --org sentry --project kaytu ./build
-RUN npx sentry-cli --url https://sen.kaytu.dev/ sourcemaps upload --org sentry --release ${APP_VERSION} --project kaytu ./build
+RUN npx sentry-cli --url https://sen.kaytu.dev/ sourcemaps upload --org sentry --release v0.0.1 --project kaytu ./build
 
 # Prepare nginx
 FROM docker.io/nginx:1.25.0-alpine

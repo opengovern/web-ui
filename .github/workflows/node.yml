@@ -52,8 +52,8 @@ jobs:
         context: .
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ vars.DOCKER_REGISTRY }}/kaytu-frontend:${{ steps.tag_version.outputs.new_tag }}
-        file: deploy/Dockerfile
         build-args: |
           APP_VERSION=${{ steps.tag_version.outputs.new_tag }}
+        file: deploy/Dockerfile
         cache-from: type=gha
         cache-to: type=gha,mode=max
