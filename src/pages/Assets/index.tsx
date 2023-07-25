@@ -16,15 +16,14 @@ import TrendsTab from './Tabs/TrendsTab'
 import CompositionTab from './Tabs/CompositionTab'
 import SummaryMetrics from './SummaryMetrics'
 import ResourceMetrics from './Tabs/ResourceMetrics'
-import { isDemoAtom } from '../../store'
+import { isDemo } from '../../utilities/demo'
 
 export default function Assets() {
-    const isDemo = useAtomValue(isDemoAtom)
     const { response: inventoryCategories, isLoading: categoriesLoading } =
         useInventoryApiV2ResourcesTagList(
             {},
             {
-                ...(isDemo && { headers: { prefer: 'dynamic=false' } }),
+                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
             }
         )
 

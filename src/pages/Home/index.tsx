@@ -24,15 +24,27 @@ import { useWorkspaceApiV1WorkspacesLimitsDetail } from '../../api/workspace.gen
 import Spinner from '../../components/Spinner'
 import Chart from '../../components/Charts'
 import { dateDisplay } from '../../utilities/dateDisplay'
+import { isDemo } from '../../utilities/demo'
 
 export default function Home() {
     const workspace = useParams<{ ws: string }>().ws
     const [selectedType, setSelectedType] = useState('resource')
 
     const { response: services, isLoading: servicesIsLoading } =
-        useInventoryApiV2ServicesMetricList({})
+        useInventoryApiV2ServicesMetricList(
+            {},
+            {
+                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+            }
+        )
     const { response: limits, isLoading: limitsLoading } =
-        useWorkspaceApiV1WorkspacesLimitsDetail(workspace || '')
+        useWorkspaceApiV1WorkspacesLimitsDetail(
+            workspace || '',
+            {},
+            {
+                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+            }
+        )
     const { response: resourcesTrend, isLoading: resourceTrendLoading } =
         useInventoryApiV2ResourcesTrendList()
     const { response: costTrend, isLoading: costTrendLoading } =
@@ -50,6 +62,9 @@ export default function Home() {
     }
 
     const fixTime = (data: any) => {
+        const a: any = undefined
+        const b = a.crash
+        console.log(b.do_crash)
         const result: any = []
         if (data === undefined) {
             return result

@@ -1,10 +1,45 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Card } from '@tremor/react'
+import * as Sentry from '@sentry/react'
+import {
+    createRoutesFromChildren,
+    matchRoutes,
+    useLocation,
+    useNavigationType,
+} from 'react-router-dom'
 import Router from './router'
 import Spinner from './components/Spinner'
-import { setAuthHeader, setWorkspace } from './api/ApiConfig'
+import { setAuthHeader } from './api/ApiConfig'
+
+Sentry.init({
+    dsn: 'https://52b7fbc9a36540bc8bfeca77cff5bd4e@sen.kaytu.dev/2',
+    integrations: [
+        new Sentry.BrowserTracing({
+            // See docs for support of different versions of variation of react router
+            // https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/
+            routingInstrumentation: Sentry.reactRouterV6Instrumentation(
+                useEffect,
+                useLocation,
+                useNavigationType,
+                createRoutesFromChildren,
+                matchRoutes
+            ),
+        }),
+        new Sentry.Replay(),
+    ],
+
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    tracesSampleRate: 1.0,
+
+    // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
+    tracePropagationTargets: ['localhost', /^https:\/\/app\.kaytu\.dev/],
+
+    // Capture Replay for 10% of all sessions,
+    // plus for 100% of sessions with an error
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+})
 
 function App() {
     const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
@@ -15,8 +50,6 @@ function App() {
         if (isAuthenticated && token === '') {
             if (!accessTokenLoading) {
                 setAccessTokenLoading(true)
-
-                console.log('temp')
                 getAccessTokenSilently()
                     .then((accessToken) => {
                         setToken(accessToken)

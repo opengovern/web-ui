@@ -1,6 +1,8 @@
 # Set the base image to node:20-alpine
 FROM docker.io/node:20-alpine as build
 
+ARG APP_VERSION
+ARG SENTRY_AUTH_TOKEN
 # Specify where our app will live in the container
 WORKDIR /app
 
@@ -10,6 +12,9 @@ COPY . /app/
 # Prepare the container for building React
 RUN npm install
 RUN npm run build
+RUN npm i @sentry/cli
+RUN npx sentry-cli sourcemaps inject --org sentry --project kaytu ./build
+RUN SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} npx sentry-cli --url https://sen.kaytu.dev/ sourcemaps upload --org sentry --release ${APP_VERSION} --project kaytu ./build
 
 # Prepare nginx
 FROM docker.io/nginx:1.25.0-alpine

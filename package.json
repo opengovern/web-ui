@@ -13,7 +13,7 @@
     "@react-aria/datepicker": "^3.5.0",
     "@react-aria/overlays": "^3.15.0",
     "@react-spectrum/view": "^3.6.0",
-    "@sentry/react": "^7.58.1",
+    "@sentry/react": "^7.60.0",
     "@tailwindcss/forms": "^0.5.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -61,7 +61,8 @@
     "storybook": "storybook dev -p 6006 -s public",
     "build-storybook": "storybook build -s public",
     "chromatic": "npx chromatic --project-token=2ae656df246a --allow-console-errors",
-    "codegen": "npx swagger-typescript-api --axios -p https://app.kaytu.dev/docs/api/1.0/swagger.yaml -o ./src/api -n api.ts && go run codegen/generate.go"
+    "codegen": "npx swagger-typescript-api --axios -p https://app.kaytu.dev/docs/api/1.0/swagger.yaml -o ./src/api -n api.ts && go run codegen/generate.go",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sentry --project kaytu ./build && sentry-cli --url https://sen.kaytu.dev/ sourcemaps upload --org sentry --release v1.0.0 --project kaytu ./build"
   },
   "eslintConfig": {
     "overrides": [

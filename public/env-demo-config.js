@@ -1,1 +1,0 @@
-window.__RUNTIME_CONFIG__ = {"NODE_ENV":"demo","REACT_APP_AUTH0_CLIENT_ID":"vYzloLgV7846oTcvfUrLMryhz0FiRZH2","REACT_APP_AUTH0_DOMAIN":"kaytu-dev.us.auth0.com","REACT_APP_BASE_URL":"demo.kaytu.dev","REACT_APP_AUTH0_AUDIENCE":"https://app.kaytu.io"};

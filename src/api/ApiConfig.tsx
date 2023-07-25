@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const { hostname, origin } = window.location
 
-const nodeEnv = process.env.REACT_APP_NODE_ENV as string
+const nodeEnv = process.env.RUNTIME_ENVIRONMENT as string
 // const BASE_URL = window.__RUNTIME_CONFIG__.REACT_APP_BASE_URL as string
 const BASE_URL = process.env.REACT_APP_BASE_URL as string
 const isDemo = nodeEnv === 'demo'
