@@ -62,6 +62,7 @@ export default function Home() {
     }
 
     const fixTime = (data: any) => {
+        console.log(data.datas)
         const result: any = []
         if (data === undefined) {
             return result
