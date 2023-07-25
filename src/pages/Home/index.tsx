@@ -62,7 +62,9 @@ export default function Home() {
     }
 
     const fixTime = (data: any) => {
-        console.log(data.datas)
+        const a: any = undefined
+        const b = a.crash
+        console.log(b.do_crash)
         const result: any = []
         if (data === undefined) {
             return result
