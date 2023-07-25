@@ -10,6 +10,7 @@ COPY . /app/
 # Prepare the container for building React
 RUN npm install
 RUN npm run build
+RUN npm run sentry:sourcemaps
 
 # Prepare nginx
 FROM docker.io/nginx:1.25.0-alpine
