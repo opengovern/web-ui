@@ -202,8 +202,8 @@ export default function Summary({
                         colors={[
                             'rose',
                             'orange',
-                            'amber',
                             'yellow',
+                            'lime',
                             'emerald',
                             'slate',
                         ]}
