@@ -20,15 +20,17 @@ import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/
 interface IAccInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
     open: boolean
+    type: string
     onClose: () => void
 }
 
-export default function AccountInfo({ data, open, onClose }: IAccInfo) {
+export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
     const { response: credential } = useOnboardApiV1CredentialDetail(
         data?.credentialID || '',
         {},
         !!data && open
     )
+    // console.log(data)
 
     const [key, setKey] = useState('')
     const [ekey, seteKey] = useState(false)

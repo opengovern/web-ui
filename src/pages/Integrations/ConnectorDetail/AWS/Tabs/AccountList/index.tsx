@@ -22,6 +22,25 @@ interface IAccountList {
     organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
+const getType = (account: any) => {
+    if (account) {
+        if (account.credentialType === 'auto-aws') {
+            return 'Standalone Account'
+        }
+        if (
+            account.credentialType === 'manual-aws-org' &&
+            account.providerConnectionID ===
+                account.metadata.account_organization.MasterAccountId
+        ) {
+            return 'Organization Management Account'
+        }
+        if (account.credentialType === 'manual-aws-org') {
+            return 'Organization Member Account'
+        }
+    }
+    return ''
+}
+
 const columns: ColDef[] = [
     {
         field: 'connector',
@@ -57,6 +76,16 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
+    },
+    {
+        headerName: 'Account Type',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+        cellRenderer: (params: ICellRendererParams) => {
+            return getType(params.data)
+        },
     },
     {
         field: 'credentialName',
@@ -202,6 +231,7 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
             </Card>
             <AccountInfo
                 data={accData}
+                type={getType(accData)}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
             />
