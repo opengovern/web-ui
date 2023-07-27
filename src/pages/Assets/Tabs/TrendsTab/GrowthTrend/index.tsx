@@ -2,7 +2,10 @@ import { useState } from 'react'
 import { Card, Flex, MultiSelect, MultiSelectItem, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
-import { useInventoryApiV2ResourcesTrendList } from '../../../../../api/inventory.gen'
+import {
+    useInventoryApiV2AnalyticsTrendList,
+    useInventoryApiV2ResourcesTrendList,
+} from '../../../../../api/inventory.gen'
 import Chart from '../../../../../components/Charts'
 import { filterAtom, timeAtom } from '../../../../../store'
 import { badgeDelta } from '../../../../../utilities/deltaType'
@@ -34,19 +37,17 @@ export default function GrowthTrend({ categories }: IProps) {
             tag: activeCategory,
         }),
         ...(activeTimeRange.start && {
-            startTime: dayjs(activeTimeRange.start.toString())
-                .unix()
-                .toString(),
+            startTime: activeTimeRange.start.unix().toString(),
         }),
         ...(activeTimeRange.end && {
-            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
+            endTime: activeTimeRange.end.unix().toString(),
         }),
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
         }),
     }
     const { response: resourcesTrend, isLoading } =
-        useInventoryApiV2ResourcesTrendList(query)
+        useInventoryApiV2AnalyticsTrendList(query)
 
     const trendData = () => {
         return (

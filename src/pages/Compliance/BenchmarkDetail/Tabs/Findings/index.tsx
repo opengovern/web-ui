@@ -12,6 +12,7 @@ import { useComplianceApiV1FindingsCreate } from '../../../../../api/compliance.
 import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../components/RenderObject'
+import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
 interface IFinder {
     id: string | undefined
@@ -113,7 +114,7 @@ const columns: ColDef[] = [
         resizable: true,
         valueFormatter: (param) => {
             if (param.value) {
-                return dayjs(param.value).format('MMM DD, YYYY')
+                return dateDisplay(param.value)
             }
             return ''
         },

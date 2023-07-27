@@ -24,6 +24,7 @@ import ConfirmModal from '../../Modal/ConfirmModal'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { isDemo } from '../../../utilities/demo'
+import { dateDisplay } from '../../../utilities/dateDisplay'
 
 interface IWorkSpace {
     workspace: any
@@ -215,7 +216,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                             {workspace.version}
                         </Text>
                         <Text className="pl-2">
-                            {dayjs(workspace.createdAt).format('MMM DD, YYYY')}
+                            {dateDisplay(workspace.createdAt)}
                         </Text>
                     </Flex>
                     {getButton(workspace.status || '')}

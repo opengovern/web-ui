@@ -1,11 +1,11 @@
 import { AgGridReact } from 'ag-grid-react'
 import { useRef } from 'react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-import dayjs from 'dayjs'
 import { Badge, Button, Flex, Title } from '@tremor/react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import { useComplianceApiV1BenchmarksTreeDetail } from '../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
+import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
 interface IPolicies {
     id: string | undefined
@@ -112,7 +112,7 @@ const columns: ColDef[] = [
         width: 120,
         valueFormatter: (param: any) => {
             if (param.value) {
-                return dayjs(param.value * 1000).format('MMM DD, YYYY')
+                return dateDisplay(param.value * 1000)
             }
             return ''
         },

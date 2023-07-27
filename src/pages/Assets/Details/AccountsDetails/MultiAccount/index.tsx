@@ -155,8 +155,8 @@ export default function MultiAccount() {
                 connector: [selectedConnections.provider],
             }),
             connectionId: selectedConnections?.connections,
-            startTime: dayjs(activeTimeRange.start.toString()).unix(),
-            endTime: dayjs(activeTimeRange.end.toString()).unix(),
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
             pageSize: 10000,
             pageNumber: 1,
         })

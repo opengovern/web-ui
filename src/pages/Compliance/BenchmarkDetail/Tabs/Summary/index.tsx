@@ -9,6 +9,7 @@ import {
     useComplianceApiV1BenchmarksTrendDetail,
     useComplianceApiV1FindingsTopDetail,
 } from '../../../../../api/compliance.gen'
+import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
 interface ISummary {
     detail:
@@ -16,7 +17,7 @@ interface ISummary {
         | undefined
     id: string | undefined
     connections: any
-    timeRange: { start: DateValue; end: DateValue }
+    timeRange: { start: dayjs.Dayjs; end: dayjs.Dayjs }
 }
 
 const generateBarData = (input: any) => {
@@ -24,7 +25,7 @@ const generateBarData = (input: any) => {
     if (input) {
         for (let i = 0; i < input.length; i += 1) {
             list.push({
-                date: dayjs(input[i].timestamp * 1000).format('MMM DD, YYYY'),
+                date: dateDisplay(input[i].timestamp * 1000),
                 Critical: input[i].checks?.criticalCount || 0,
                 High: input[i].checks?.highCount || 0,
                 Medium: input[i].checks?.mediumCount || 0,
@@ -42,7 +43,7 @@ const generateLineData = (input: any) => {
     if (input) {
         for (let i = 0; i < input.length; i += 1) {
             list.push({
-                date: dayjs(input[i].timestamp * 1000).format('MMM DD, YYYY'),
+                date: dateDisplay(input[i].timestamp * 1000),
                 Score: (
                     ((input[i].checks?.passedCount || 0) /
                         ((input[i].checks?.criticalCount || 0) +
@@ -73,10 +74,10 @@ export default function Summary({
             connectionId: connections.connections,
         }),
         ...(timeRange.start && {
-            startTime: dayjs(timeRange.start.toString()).unix().toString(),
+            startTime: timeRange.start.unix().toString(),
         }),
         ...(timeRange.end && {
-            endTime: dayjs(timeRange.end.toString()).unix().toString(),
+            endTime: timeRange.end.unix().toString(),
         }),
     }
 

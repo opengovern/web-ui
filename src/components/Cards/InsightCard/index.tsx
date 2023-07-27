@@ -17,6 +17,7 @@ import {
     percentageByChange,
 } from '../../../utilities/deltaType'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
+import { dateDisplay } from '../../../utilities/dateDisplay'
 
 interface IInsightsCard {
     metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
@@ -67,9 +68,9 @@ const generateBadge = (
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title={`Data is available after ${dayjs(
+                title={`Data is available after ${dateDisplay(
                     met.firstOldResultDate
-                ).format('MMM DD, YYYY')}`}
+                )}`}
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="border-0 text-xs leading-5 truncate max-w-full"

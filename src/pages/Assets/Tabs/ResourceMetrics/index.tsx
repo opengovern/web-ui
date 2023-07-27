@@ -6,7 +6,10 @@ import {
     selectedResourceCategoryAtom,
     timeAtom,
 } from '../../../../store'
-import { useInventoryApiV2ResourcesMetricList } from '../../../../api/inventory.gen'
+import {
+    useInventoryApiV2AnalyticsMetricList,
+    useInventoryApiV2ResourcesMetricList,
+} from '../../../../api/inventory.gen'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import MetricsList, { IMetric } from '../../../../components/MetricsList'
 import { isDemo } from '../../../../utilities/demo'
@@ -40,36 +43,29 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
         }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
         ...(activeTimeRange.start && {
-            startTime: dayjs(activeTimeRange.start.toString())
-                .unix()
-                .toString(),
+            startTime: activeTimeRange.start.unix().toString(),
         }),
         ...(activeTimeRange.end && {
-            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
+            endTime: activeTimeRange.end.unix().toString(),
         }),
         ...(pageSize && { pageSize }),
     }
     const { response: resourceMetricsResponse, isLoading } =
-        useInventoryApiV2ResourcesMetricList(query, {
+        useInventoryApiV2AnalyticsMetricList(query, {
             ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
         })
 
     const metrics = () => {
         return (
-            resourceMetricsResponse?.resource_types?.map((resourceType) => {
+            resourceMetricsResponse?.metrics?.map((metric) => {
                 const v: IMetric = {
-                    name:
-                        resourceType.resource_name ||
-                        resourceType.resource_type ||
-                        '',
-                    displayedValue: numericDisplay(resourceType.count),
-                    newValue: resourceType.count || 0,
-                    oldValue: resourceType.old_count || 0,
+                    name: metric.name || '',
+                    displayedValue: numericDisplay(metric.count),
+                    newValue: metric.count || 0,
+                    oldValue: metric.old_count || 0,
                     onClick: () => {
                         navigate(
-                            `metrics/${encodeURIComponent(
-                                resourceType.resource_type || ''
-                            )}`
+                            `metrics/${encodeURIComponent(metric.name || '')}`
                         )
                     },
                 }

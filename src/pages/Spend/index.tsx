@@ -56,12 +56,10 @@ export default function Spend() {
         }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
         ...(activeTimeRange.start && {
-            startTime: dayjs(activeTimeRange.start.toString())
-                .unix()
-                .toString(),
+            startTime: activeTimeRange.start.unix().toString(),
         }),
         ...(activeTimeRange.end && {
-            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
+            endTime: activeTimeRange.end.unix().toString(),
         }),
         pageSize: 5000,
         pageNumber: 1,
@@ -75,8 +73,8 @@ export default function Spend() {
                 connector: [selectedConnections.provider],
             }),
             connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.start.toString()).unix(),
-            endTime: dayjs(activeTimeRange.end.toString()).unix(),
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
             pageSize: 5000,
             pageNumber: 1,
             sortBy: 'cost',

@@ -1,6 +1,5 @@
 import { Flex, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai/index'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
@@ -26,8 +25,8 @@ export default function ConnectorDetail() {
             ...(provider !== '' && {
                 connector: [provider],
             }),
-            startTime: dayjs(activeTimeRange.start.toString()).unix(),
-            endTime: dayjs(activeTimeRange.end.toString()).unix(),
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
             pageSize: 10000,
             pageNumber: 1,
         })

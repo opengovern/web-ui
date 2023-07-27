@@ -40,6 +40,7 @@ import {
 } from '../../../utilities/deltaType'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
+import { dateDisplay } from '../../../utilities/dateDisplay'
 
 const chartData = (inputData: any) => {
     const data = []
@@ -150,9 +151,9 @@ const generateBadge = (
     if (!met?.oldTotalResultValue) {
         return (
             <Callout
-                title={`Data is available after ${dayjs(
+                title={`Data is available after ${dateDisplay(
                     met.firstOldResultDate
-                ).format('MMM DD, YYYY')}`}
+                )}`}
                 color="rose"
                 icon={ExclamationCircleIcon}
                 className="ml-3 border-0 text-xs leading-5 w-96 drop-shadow-sm"
@@ -185,9 +186,7 @@ export default function InsightDetail() {
 
     const start = () => {
         if (detailsDate === '') {
-            return dayjs(
-                activeTimeRange.start.toDate(getLocalTimeZone()) || new Date()
-            )
+            return activeTimeRange.start
         }
         const d = new Date(0)
         d.setUTCSeconds(parseInt(detailsDate, 10) - 1)
@@ -195,11 +194,7 @@ export default function InsightDetail() {
     }
     const end = () => {
         if (detailsDate === '') {
-            return dayjs(
-                activeTimeRange.end.toDate(getLocalTimeZone()) ||
-                    activeTimeRange.start.toDate(getLocalTimeZone()) ||
-                    new Date()
-            )
+            return activeTimeRange.end || activeTimeRange.start
         }
         const d = new Date(0)
         d.setUTCSeconds(parseInt(detailsDate, 10) + 1)
@@ -207,14 +202,14 @@ export default function InsightDetail() {
     }
     const query = {
         ...(activeTimeRange.start && {
-            startTime: dayjs(activeTimeRange.start.toString()).unix(),
+            startTime: activeTimeRange.start.unix(),
         }),
         ...(activeTimeRange.end
             ? {
-                  endTime: dayjs(activeTimeRange.end.toString()).unix(),
+                  endTime: activeTimeRange.end.unix(),
               }
             : {
-                  endTime: dayjs(activeTimeRange.start.toString()).unix(),
+                  endTime: activeTimeRange.start.unix(),
               }),
     }
     const { response: insightTrend, isLoading: trendLoading } =

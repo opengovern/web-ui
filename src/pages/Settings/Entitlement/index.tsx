@@ -19,6 +19,7 @@ import Spinner from '../../../components/Spinner'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
 import { useInventoryApiV2ResourcesMetricDetail } from '../../../api/inventory.gen'
+import { dateDisplay } from '../../../utilities/dateDisplay'
 
 export default function SettingsEntitlement() {
     const workspace = useParams<{ ws: string }>().ws
@@ -81,9 +82,9 @@ export default function SettingsEntitlement() {
         },
         {
             title: 'Creation Date',
-            value: dayjs(
+            value: dateDisplay(
                 currentWorkspace?.createdAt || Date.now().toString()
-            ).format('MMM DD, YYYY'),
+            ),
         },
         {
             title: 'Workspace Tier',
