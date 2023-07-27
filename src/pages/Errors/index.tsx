@@ -2,13 +2,9 @@ import { Flex, Grid, Metric, Text } from '@tremor/react'
 import notFoundImg from '../../icons/404.png'
 import LoggedInLayout from '../../components/LoggedInLayout'
 
-type IProps = {
-    error?: any
-}
-export default function NotFound({ error }: IProps) {
-    console.log(error)
+export default function NotFound() {
     return (
-        <LoggedInLayout currentPage="">
+        <LoggedInLayout currentPage="404">
             <Flex justifyContent="center" className="md:mt-32">
                 <Grid numItems={1} numItemsMd={2}>
                     <img src={notFoundImg} alt="stack" />
