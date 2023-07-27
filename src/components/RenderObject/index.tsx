@@ -13,7 +13,7 @@ export function RenderObject({ obj }: any) {
                         return (
                             <div>
                                 {key !== '0' && (
-                                    <Title className="mt-10 mb-2">
+                                    <Title className="mt-6">
                                         {snakeCaseToLabel(key)}
                                     </Title>
                                 )}
@@ -23,7 +23,7 @@ export function RenderObject({ obj }: any) {
                     }
 
                     return (
-                        <ListItem key={key} className="py-4 flex items-start">
+                        <ListItem key={key} className="py-6 flex items-start">
                             <Text>{snakeCaseToLabel(key)}</Text>
                             <Text className="text-gray-900 w-3/5 whitespace-pre-wrap text-end">
                                 {String(obj[key])}
