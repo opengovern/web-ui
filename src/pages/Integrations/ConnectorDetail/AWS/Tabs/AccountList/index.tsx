@@ -16,6 +16,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
 import { AWSIcon } from '../../../../../../icons/icons'
+import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 
 interface IAccountList {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -121,7 +122,7 @@ const columns: ColDef[] = [
         hide: true,
         flex: 1,
         valueFormatter: (param) => {
-            return dayjs(param.value).format('MMM DD, YYYY HH:mm:ss')
+            return dateTimeDisplay(param.value)
         },
     },
     {
@@ -133,7 +134,7 @@ const columns: ColDef[] = [
         hide: true,
         flex: 1,
         valueFormatter: (param) => {
-            return dayjs(param.value).format('MMM DD, YYYY HH:mm:ss')
+            return dateTimeDisplay(param.value)
         },
     },
 ]

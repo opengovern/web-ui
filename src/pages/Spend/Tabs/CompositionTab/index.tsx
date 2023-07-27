@@ -36,15 +36,10 @@ export default function CompositionTab({ top }: IProps) {
                 connectionId: selectedConnections.connections,
             }),
             ...(activeTimeRange.start && {
-                endTime: dayjs(activeTimeRange.end.toString())
-                    .endOf('day')
-                    .unix()
-                    .toString(),
+                endTime: activeTimeRange.end.unix().toString(),
             }),
             ...(activeTimeRange.start && {
-                startTime: dayjs(activeTimeRange.start.toString())
-                    .unix()
-                    .toString(),
+                startTime: activeTimeRange.start.unix().toString(),
             }),
         })
 

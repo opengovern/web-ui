@@ -1,13 +1,12 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
 import { BadgeDelta, Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
-import { useInventoryApiV2ServicesMetricList } from '../../../../api/inventory.gen'
+import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
 import Summary from './Summary'
 import { filterAtom, timeAtom } from '../../../../store'
 import DateRangePicker from '../../../../components/DateRangePicker'
@@ -18,18 +17,33 @@ import {
     badgeTypeByDelta,
     percentageByChange,
 } from '../../../../utilities/deltaType'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
+import { AWSIcon, AzureIcon } from '../../../../icons/icons'
 
 const columns: ColDef[] = [
     {
-        field: 'connector',
-        headerName: 'Cloud Provider',
+        field: 'connectors',
+        headerName: 'Cloud Providers',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
+        ) => (
+            <Flex
+                justifyContent="center"
+                alignItems="center"
+                className="w-full h-full"
+            >
+                {params.data?.connectors?.map((item) =>
+                    item === 'Azure' ? <AzureIcon /> : <AWSIcon />
+                )}
+            </Flex>
+        ),
     },
     {
-        field: 'service_label',
+        field: 'name',
         headerName: 'Service Name',
         sortable: true,
         filter: true,
@@ -37,7 +51,7 @@ const columns: ColDef[] = [
         flex: 2,
     },
     {
-        field: 'resource_count',
+        field: 'count',
         headerName: 'Resource Count',
         sortable: true,
         filter: true,
@@ -45,7 +59,7 @@ const columns: ColDef[] = [
         flex: 1,
     },
     {
-        field: 'old_resource_count',
+        field: 'old_count',
         headerName: 'Old Resource Count',
         sortable: true,
         filter: true,
@@ -63,13 +77,13 @@ const columns: ColDef[] = [
                 <Flex className="h-full w-full">
                     <BadgeDelta
                         deltaType={badgeTypeByDelta(
-                            params?.data.old_resource_count,
-                            params?.data.resource_count
+                            params?.data.old_count,
+                            params?.data.count
                         )}
                     >
                         {`${percentageByChange(
-                            params?.data.old_resource_count,
-                            params?.data.resource_count
+                            params?.data.old_count,
+                            params?.data.count
                         )}%`}
                     </BadgeDelta>
                 </Flex>
@@ -86,15 +100,15 @@ export default function ServicesDetails() {
     const selectedConnections = useAtomValue(filterAtom)
 
     const { response: serviceList, isLoading: isServiceListLoading } =
-        useInventoryApiV2ServicesMetricList({
+        useInventoryApiV2AnalyticsMetricList({
             connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
             pageSize: 1000,
             pageNumber: 1,
-            endTime: String(dayjs(activeTimeRange.end.toString()).unix()),
+            endTime: String(activeTimeRange.end.unix()),
             sortBy: 'name',
         })
-    console.log(serviceList)
+
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
@@ -108,12 +122,6 @@ export default function ServicesDetails() {
             }
         },
     }
-
-    const rowData = (serviceList?.services || []).map((data) => {
-        const newData = { ...data }
-        newData.resource_count = data.resource_count
-        return newData
-    })
 
     const breadcrumbsPages = [
         {
@@ -140,7 +148,7 @@ export default function ServicesDetails() {
                 </Flex>
             </Flex>
             <Summary
-                totalServices={serviceList?.total_services}
+                totalServices={serviceList?.total_metrics}
                 totalServicesLoading={isServiceListLoading}
             />
             <div className="ag-theme-alpine mt-3">
@@ -148,7 +156,7 @@ export default function ServicesDetails() {
                     ref={gridRef}
                     domLayout="autoHeight"
                     gridOptions={gridOptions}
-                    rowData={rowData}
+                    rowData={serviceList?.metrics || []}
                 />
             </div>
         </LoggedInLayout>

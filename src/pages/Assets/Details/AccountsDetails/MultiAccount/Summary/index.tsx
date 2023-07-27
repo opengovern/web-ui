@@ -36,8 +36,8 @@ export default function Summary() {
         useOnboardApiV1ConnectionsSummaryList({
             connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
-            startTime: dayjs(activeTimeRange.start.toString()).unix(),
-            endTime: dayjs(activeTimeRange.end.toString()).unix(),
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
             pageSize: 5,
             pageNumber: 1,
             sortBy: 'resource_count',

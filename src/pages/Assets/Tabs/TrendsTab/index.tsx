@@ -5,6 +5,8 @@ import GrowthTrend from './GrowthTrend'
 import CardWithList from '../../../../components/Cards/CardWithList'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 import {
+    useInventoryApiV2AnalyticsMetricList,
+    useInventoryApiV2AnalyticsRegionsSummaryList,
     useInventoryApiV2ResourcesRegionsSummaryList,
     useInventoryApiV2ServicesMetricList,
 } from '../../../../api/inventory.gen'
@@ -36,8 +38,8 @@ export default function TrendsTab({ categories }: IProps) {
         return {
             connector: [selectedConnections.provider],
             connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.start.toString()).unix(),
-            endTime: dayjs(activeTimeRange.end.toString()).unix(),
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
             pageSize: 5,
             pageNumber: 1,
             sortBy,
@@ -68,10 +70,8 @@ export default function TrendsTab({ categories }: IProps) {
         return {
             connector: [selectedConnections.provider],
             connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.start.toString())
-                .unix()
-                .toString(),
-            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
+            startTime: activeTimeRange.start.unix().toString(),
+            endTime: activeTimeRange.end.unix().toString(),
             pageSize: 5,
             pageNumber: 1,
             sortBy,
@@ -81,7 +81,7 @@ export default function TrendsTab({ categories }: IProps) {
     const {
         response: servicesConsumption,
         isLoading: loadingServicesConsumption,
-    } = useInventoryApiV2ServicesMetricList(
+    } = useInventoryApiV2AnalyticsMetricList(
         queryTop5ServicesWithSort('count'),
         {
             ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
@@ -89,7 +89,7 @@ export default function TrendsTab({ categories }: IProps) {
     )
 
     const { response: servicesGrowth, isLoading: loadingServicesGrowth } =
-        useInventoryApiV2ServicesMetricList(
+        useInventoryApiV2AnalyticsMetricList(
             queryTop5ServicesWithSort('growth_rate'),
             {
                 ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
@@ -102,8 +102,8 @@ export default function TrendsTab({ categories }: IProps) {
         return {
             connector: [selectedConnections.provider],
             connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.start.toString()).unix(),
-            endTime: dayjs(activeTimeRange.end.toString()).unix(),
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
             pageSize: 5,
             pageNumber: 1,
             sortBy,
@@ -111,7 +111,7 @@ export default function TrendsTab({ categories }: IProps) {
     }
 
     const { response: regionConsumption, isLoading: loadingRegionConsumption } =
-        useInventoryApiV2ResourcesRegionsSummaryList(
+        useInventoryApiV2AnalyticsRegionsSummaryList(
             queryTop5RegionsWithSort('resource_count'),
             {
                 ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
@@ -119,7 +119,7 @@ export default function TrendsTab({ categories }: IProps) {
         )
 
     const { response: regionGrowth, isLoading: loadingRegionGrowth } =
-        useInventoryApiV2ResourcesRegionsSummaryList(
+        useInventoryApiV2AnalyticsRegionsSummaryList(
             queryTop5RegionsWithSort('growth_rate'),
             {
                 ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
@@ -150,10 +150,10 @@ export default function TrendsTab({ categories }: IProps) {
                 }
             }) || []
         const ServicesData =
-            servicesConsumption?.services?.map((item) => {
+            servicesConsumption?.metrics?.map((item) => {
                 return {
-                    name: item.service_label,
-                    value: item.resource_count,
+                    name: item.name,
+                    value: item.count,
                 }
             }) || []
         const RegionData =
@@ -182,12 +182,12 @@ export default function TrendsTab({ categories }: IProps) {
                 }
             }) || []
         const ServicesData =
-            servicesGrowth?.services?.map((item) => {
+            servicesGrowth?.metrics?.map((item) => {
                 return {
-                    name: item.service_label,
+                    name: item.name,
                     value: `${percentageByChange(
-                        item.old_resource_count,
-                        item.resource_count
+                        item.old_count,
+                        item.count
                     )} %`,
                 }
             }) || []

@@ -21,8 +21,8 @@ export default function Summary({ benchmark, loading }: ISummary) {
         useOnboardApiV1ConnectionsSummaryList({
             connector: [selectedConnections.provider],
             connectionId: selectedConnections.connections,
-            startTime: dayjs(activeTimeRange.start.toString()).unix(),
-            endTime: dayjs(activeTimeRange.end.toString()).unix(),
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
             pageSize: 10000,
             pageNumber: 1,
         })

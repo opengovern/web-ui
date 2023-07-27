@@ -1,21 +1,23 @@
 import { atom } from 'jotai'
-import { parseDate, DateValue } from '@internationalized/date'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 export const timeAtom = atom<{
-    start: DateValue
-    end: DateValue
+    start: dayjs.Dayjs
+    end: dayjs.Dayjs
 }>({
-    start: parseDate(dayjs().subtract(1, 'week').format('YYYY-MM-DD')),
-    end: parseDate(dayjs().format('YYYY-MM-DD')),
+    start: dayjs.utc().subtract(1, 'week'),
+    end: dayjs.utc(),
 })
 
 export const spendTimeAtom = atom<{
-    start: DateValue
-    end: DateValue
+    start: dayjs.Dayjs
+    end: dayjs.Dayjs
 }>({
-    start: parseDate(dayjs().subtract(1, 'month').format('YYYY-MM-DD')),
-    end: parseDate(dayjs().format('YYYY-MM-DD')),
+    start: dayjs.utc().subtract(1, 'month'),
+    end: dayjs.utc(),
 })
 
 interface IFilter {

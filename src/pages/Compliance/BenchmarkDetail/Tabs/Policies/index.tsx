@@ -4,6 +4,7 @@ import { GridOptions } from 'ag-grid-community'
 import dayjs from 'dayjs'
 import { useComplianceApiV1BenchmarksTreeDetail } from '../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
+import { dateDisplay } from '../../../../../utilities/dateDisplay'
 
 interface IPolicies {
     id: string | undefined
@@ -65,7 +66,7 @@ export default function Policies({ id }: IPolicies) {
                 flex: 1,
                 valueFormatter: (param) => {
                     if (param.value) {
-                        return dayjs(param.value * 1000).format('MMM DD, YYYY')
+                        return dateDisplay(param.value * 1000)
                     }
                     return ''
                 },

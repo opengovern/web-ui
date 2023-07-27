@@ -16,6 +16,7 @@ import {
 } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
+import { dateDisplay } from '../../../../../../../utilities/dateDisplay'
 
 interface IOrgInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
@@ -83,7 +84,7 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                 <Flex>
                     <Text>Onboard date</Text>
                     <Text className="text-black">
-                        {dayjs(data?.onboardDate).format('MMM DD, YYYY')}
+                        {dateDisplay(data?.onboardDate)}
                     </Text>
                 </Flex>
                 <Divider />
@@ -103,9 +104,7 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                 <Flex>
                     <Text>Last health check</Text>
                     <Text className="text-black">
-                        {dayjs(credential?.lastHealthCheckTime).format(
-                            'MMM DD, YYYY'
-                        )}
+                        {dateDisplay(credential?.lastHealthCheckTime)}
                     </Text>
                 </Flex>
                 <Divider />

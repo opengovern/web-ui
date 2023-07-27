@@ -22,6 +22,7 @@ import Assignments from './Tabs/Assignments'
 import Policies from './Tabs/Policies'
 import Findings from './Tabs/Findings'
 import Spinner from '../../../components/Spinner'
+import { dateDisplay } from '../../../utilities/dateDisplay'
 
 export default function BenchmarkDetail() {
     const navigate = useNavigate()
@@ -65,9 +66,9 @@ export default function BenchmarkDetail() {
                     >
                         <Flex className="mb-1">
                             <Title>{benchmarkDetail?.title}</Title>
-                            <Text className="whitespace-nowrap">{`Last evaluation: ${dayjs(
+                            <Text className="whitespace-nowrap">{`Last evaluation: ${dateDisplay(
                                 benchmarkDetail?.evaluatedAt
-                            ).format('MMM DD, YYYY')}`}</Text>
+                            )}`}</Text>
                         </Flex>
                         <Text className="w-2/3">
                             {benchmarkDetail?.description}

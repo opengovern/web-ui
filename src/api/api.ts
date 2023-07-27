@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -623,7 +622,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSou
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment {
     /** Unix timestamp */
-    assignedAt?: number
+    assignedAt?: string
     /**
      * Benchmark ID
      * @example "azure_cis_v140"
@@ -1411,21 +1410,38 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionFull {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
-    /** @example "azure" */
+    /** @example "Azure" */
     connector?: SourceType
+    /** @example "microsoft.compute/disks" */
     cost_dimension_name?: string
+    /**
+     * @min 0
+     * @example 14118.81523108568
+     */
     daily_cost_at_end_time?: number
+    /**
+     * @min 0
+     * @example 21232.10443638001
+     */
     daily_cost_at_start_time?: number
+    /**
+     * @min 0
+     * @example 621041.2436112489
+     */
     total_cost?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint {
+    /** @min 0 */
     count?: number
+    /** @format date */
     date?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair {
+    /** @min 0 */
     count?: number
+    /** @min 0 */
     old_count?: number
 }
 
@@ -1485,21 +1501,43 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse 
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse {
-    /** @example 100 */
+    /**
+     * @min 0
+     * @example 100
+     */
     others?: number
     top_values?: Record<string, number>
-    /** @example 1000 */
+    /**
+     * @min 0
+     * @example 1000
+     */
     total_cost_value?: number
-    /** @example 10 */
+    /**
+     * @min 0
+     * @example 10
+     */
     total_count?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse {
     metrics?: GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric[]
-    /** @example 1000 */
+    /**
+     * @min 0
+     * @example 1000
+     */
     total_cost?: number
-    /** @example 10 */
+    /**
+     * @min 0
+     * @example 10
+     */
     total_count?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse {
+    metrics?: GithubComKaytuIoKaytuEnginePkgInventoryApiMetric[]
+    total_count?: number
+    total_metrics?: number
+    total_old_count?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest {
@@ -1515,7 +1553,9 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListRegionsResourceCo
         string,
         GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
     >
+    /** @min 0 */
     total_count?: number
+    /** @min 0 */
     total_value_count?: number
 }
 
@@ -1525,42 +1565,65 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompo
         string,
         GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
     >
+    /** @min 0 */
     total_count?: number
+    /** @min 0 */
     total_value_count?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse {
     resource_types?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType[]
-    /** @example 100 */
+    /**
+     * @min 0
+     * @example 100
+     */
     total_resource_type_count?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse {
     resource_types?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType[]
+    /** @min 0 */
     total_count?: number
+    /** @min 0 */
     total_old_count?: number
+    /** @min 0 */
     total_resource_types?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeTagsMetadataResponse {
     resource_type_tags?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTag[]
-    /** @example 100 */
+    /**
+     * @min 0
+     * @example 100
+     */
     total_resource_type_tag_count?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse {
     services?: GithubComKaytuIoKaytuEnginePkgInventoryApiService[]
-    /** @example 100 */
+    /**
+     * @min 0
+     * @example 100
+     */
     total_service_count?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse {
     services?: GithubComKaytuIoKaytuEnginePkgInventoryApiService[]
-    /** @example 10000 */
+    /**
+     * @min 0
+     * @example 10000
+     */
     total_count?: number
-    /** @example 9000 */
+    /**
+     * @min 0
+     * @example 9000
+     */
     total_old_count?: number
-    /** @example 50 */
+    /**
+     * @min 0
+     * @example 50
+     */
     total_services?: number
 }
 
@@ -1580,15 +1643,49 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderRes
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse {
-    /** Region */
+    /**
+     * Region
+     * @example "na-west"
+     */
     location?: string
     /**
      * Number of resources in the region
+     * @min 0
      * @example 100
      */
     resourceCount?: number
-    /** @example 50 */
+    /**
+     * @min 0
+     * @example 50
+     */
     resourceOldCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiMetric {
+    /**
+     * Cloud Provider
+     * @example ["[Azure]"]
+     */
+    connectors?: SourceType[]
+    /**
+     * Number of Resources of this Resource Type - Metric
+     * @example 100
+     */
+    count?: number
+    /** @example "vms" */
+    id?: string
+    /**
+     * Resource Type
+     * @example "VMs"
+     */
+    name?: string
+    /**
+     * Number of Resources of this Resource Type in the past - Metric
+     * @example 90
+     */
+    old_count?: number
+    /** Tags */
+    tags?: Record<string, string[]>
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiPage {
@@ -1598,6 +1695,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiPage {
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse {
     regions?: GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse[]
+    /** @min 0 */
     totalCount?: number
 }
 
@@ -1656,7 +1754,10 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType {
     attributes?: string[]
     /** List of Compliance that support this Resource Type - Metadata (GET only) */
     compliance?: string[]
-    /** Number of Compliance that use this Resource Type - Metadata */
+    /**
+     * Number of Compliance that use this Resource Type - Metadata
+     * @min 0
+     */
     compliance_count?: number
     /**
      * Cloud Provider
@@ -1665,17 +1766,25 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType {
     connector?: SourceType
     /**
      * Number of Resources of this Resource Type - Metric
+     * @min 0
      * @example 100
      */
     count?: number
     /** List of Insights that support this Resource Type - Metadata (GET only) */
     insights?: number[]
-    /** Number of Insights that use this Resource Type - Metadata */
+    /**
+     * Number of Insights that use this Resource Type - Metadata
+     * @min 0
+     */
     insights_count?: number
-    /** Logo URI */
+    /**
+     * Logo URI
+     * @example "https://kaytu.io/logo.png"
+     */
     logo_uri?: string
     /**
      * Number of Resources of this Resource Type in the past - Metric
+     * @min 0
      * @example 90
      */
     old_count?: number
@@ -1694,8 +1803,11 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType {
      * @example "compute"
      */
     service_name?: string
-    /** Tags */
-    tags?: Record<string, string[]>
+    /**
+     * Tags
+     * @example ["category:[Data and Analytics","Database","Integration","Management Governance","Storage]"]
+     */
+    tags?: string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeFull {
@@ -1704,6 +1816,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeFull {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTag {
+    absent_resource_types?: string[]
     /** @example "environment" */
     key?: string
     values?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTagValue[]
@@ -1717,7 +1830,12 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTagValue 
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint {
+    /**
+     * @min 0
+     * @example 100
+     */
     count?: number
+    /** @format date */
     date?: string
 }
 
@@ -1741,17 +1859,25 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse {
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiService {
     /** @example "Azure" */
     connector?: SourceType
+    /** @example "https://kaytu.io/logo.png" */
     logo_uri?: string
-    /** @example 90 */
+    /**
+     * @min 0
+     * @example 90
+     */
     old_resource_count?: number
-    /** @example 100 */
+    /**
+     * @min 0
+     * @example 100
+     */
     resource_count?: number
     resource_types?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType[]
     /** @example "Compute" */
     service_label?: string
     /** @example "compute" */
     service_name?: string
-    tags?: Record<string, string[]>
+    /** @example ["category:[Data and Analytics","Database","Integration","Management Governance","Storage]"] */
+    tags?: string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary {
@@ -1875,6 +2001,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
     accessKey: string
     accountId?: string
     assumeRoleName?: string
+    assumeRolePolicyName?: string
     externalId?: string
     regions?: string[]
     secretKey: string
@@ -1910,6 +2037,12 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecyc
     state?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionRequest {
+    description?: string
+    email?: string
+    name?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     /** @example "scheduled" */
     assetDiscoveryMethod?: SourceAssetDiscoveryMethodType
@@ -1920,6 +2053,8 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     /** @example "7r6123ac-ca1c-434f-b1a3-91w2w9d277c8" */
     credentialID?: string
     credentialName?: string
+    /** @example "manual" */
+    credentialType?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredentialType
     /** @example 1000 */
     dailyCostAtEndTime?: number
     /** @example 1000 */
@@ -1951,14 +2086,16 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest {
+    /** @example ["Azure"] */
     connectors?: string[]
+    /** @example "enabled" */
     state?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState {
+    ConnectionLifecycleStateOnboard = 'ONBOARD',
     ConnectionLifecycleStateNotOnboard = 'NOT_ONBOARD',
     ConnectionLifecycleStateInProgress = 'IN_PROGRESS',
-    ConnectionLifecycleStateOnboard = 'ONBOARD',
     ConnectionLifecycleStateUnhealthy = 'UNHEALTHY',
     ConnectionLifecycleStateArchived = 'ARCHIVED',
 }
@@ -1998,7 +2135,6 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount {
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest {
     config?: any
-    name?: string
     /** @example "Azure" */
     source_type?: SourceType
 }
@@ -2012,10 +2148,11 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
+    autoOnboardEnabled?: boolean
     config?: any
     connections?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     connectorType?: SourceType
-    credentialType?: SourceCredentialType
+    credentialType?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredentialType
     enabled?: boolean
     enabled_connections?: number
     healthReason?: string
@@ -2029,21 +2166,49 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
     unhealthy_connections?: number
 }
 
+export enum GithubComKaytuIoKaytuEnginePkgOnboardApiCredentialType {
+    CredentialTypeAutoAzure = 'auto-azure',
+    CredentialTypeAutoAws = 'auto-aws',
+    CredentialTypeManualAwsOrganization = 'manual-aws-org',
+    CredentialTypeManualAzureSpn = 'manual-azure-spn',
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse {
-    /** @example 10 */
+    /**
+     * @min 0
+     * @example 10
+     */
     connectionCount?: number
     connections?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
-    /** @example 10 */
+    /**
+     * @min 0
+     * @example 10
+     */
     oldConnectionCount?: number
-    /** @example 1000 */
+    /**
+     * @min 0
+     * @example 1000
+     */
     totalCost?: number
-    /** @example 10 */
+    /**
+     * @min 0
+     * @example 10
+     */
     totalDisabledCount?: number
-    /** @example 100 */
+    /**
+     * @min 0
+     * @example 100
+     */
     totalOldResourceCount?: number
-    /** @example 100 */
+    /**
+     * @min 0
+     * @example 100
+     */
     totalResourceCount?: number
-    /** @example 10 */
+    /**
+     * @min 0
+     * @example 10
+     */
     totalUnhealthyCount?: number
 }
 
@@ -2213,11 +2378,6 @@ export enum SourceConnectorStatus {
     ConnectorStatusEnabled = 'enabled',
     ConnectorStatusDisabled = 'disabled',
     ConnectorStatusComingSoon = 'coming_soon',
-}
-
-export enum SourceCredentialType {
-    CredentialTypeAutoGenerated = 'auto-generated',
-    CredentialTypeManual = 'manual',
 }
 
 export enum SourceHealthStatus {
@@ -3086,7 +3246,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[],
                 any
             >({
                 path: `/compliance/api/v1/assignments/${benchmarkId}/connection/${connectionId}`,
@@ -3904,18 +4064,18 @@ export class Api<
          * @description Get recently ran queries.
          *
          * @tags smart_query
-         * @name ApiV1QueryRunHistoryCreate
+         * @name ApiV1QueryRunHistoryList
          * @summary Get recently ran queries
-         * @request POST:/inventory/api/v1/query/run/history
+         * @request GET:/inventory/api/v1/query/run/history
          * @secure
          */
-        apiV1QueryRunHistoryCreate: (params: RequestParams = {}) =>
+        apiV1QueryRunHistoryList: (params: RequestParams = {}) =>
             this.request<
                 GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory[],
                 any
             >({
                 path: `/inventory/api/v1/query/run/history`,
-                method: 'POST',
+                method: 'GET',
                 secure: true,
                 format: 'json',
                 ...params,
@@ -4074,6 +4234,44 @@ export class Api<
             }),
 
         /**
+         * @description This API allows users to retrieve tag values with the most resources for the given key.
+         *
+         * @tags analytics
+         * @name ApiV2AnalyticsCompositionDetail
+         * @summary List analytics composition
+         * @request GET:/inventory/api/v2/analytics/composition/{key}
+         * @secure
+         */
+        apiV2AnalyticsCompositionDetail: (
+            key: string,
+            query: {
+                /** How many top values to return default is 5 */
+                top: number
+                /** Connector types to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** timestamp for resource count in epoch seconds */
+                endTime?: string
+                /** timestamp for resource count change comparison in epoch seconds */
+                startTime?: string
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+                any
+            >({
+                path: `/inventory/api/v2/analytics/composition/${key}`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Get list of analytics with metrics of each type based on the given input filters.
          *
          * @tags analytics
@@ -4090,8 +4288,8 @@ export class Api<
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Connection IDs to filter by */
                 connectionId?: string[]
-                /** Metric Names */
-                metricNames?: string[]
+                /** Metric IDs */
+                metricIDs?: string[]
                 /** timestamp for resource count in epoch seconds */
                 endTime?: string
                 /** timestamp for resource count change comparison in epoch seconds */
@@ -4108,10 +4306,51 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
                 any
             >({
                 path: `/inventory/api/v2/analytics/metric`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns list of regions analytics summary
+         *
+         * @tags analytics
+         * @name ApiV2AnalyticsRegionsSummaryList
+         * @summary List Regions Summary
+         * @request GET:/inventory/api/v2/analytics/regions/summary
+         * @secure
+         */
+        apiV2AnalyticsRegionsSummaryList: (
+            query?: {
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** start time in unix seconds - default is now */
+                startTime?: number
+                /** end time in unix seconds - default is one week ago */
+                endTime?: number
+                /** column to sort by - default is resource_count */
+                sortBy?: 'resource_count' | 'growth' | 'growth_rate'
+                /** page size - default is 20 */
+                pageSize?: number
+                /** page number - default is 1 */
+                pageNumber?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
+                any
+            >({
+                path: `/inventory/api/v2/analytics/regions/summary`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -4144,6 +4383,47 @@ export class Api<
         ) =>
             this.request<Record<string, string[]>, any>({
                 path: `/inventory/api/v2/analytics/tag`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description This API allows users to retrieve a list of resource counts over the course of the specified time frame based on the given input filters
+         *
+         * @tags analytics
+         * @name ApiV2AnalyticsTrendList
+         * @summary Get metric trend
+         * @request GET:/inventory/api/v2/analytics/trend
+         * @secure
+         */
+        apiV2AnalyticsTrendList: (
+            query?: {
+                /** Key-Value tags in key=value format to filter by */
+                tag?: string[]
+                /** Metric IDs to filter by */
+                ids?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** timestamp for start in epoch seconds */
+                startTime?: string
+                /** timestamp for end in epoch seconds */
+                endTime?: string
+                /** maximum number of datapoints to return, default is 30 */
+                datapointCount?: string
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[],
+                any
+            >({
+                path: `/inventory/api/v2/analytics/trend`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -5123,16 +5403,43 @@ export class Api<
             }),
 
         /**
-         * @description Enabling a single source either with connection ID.
+         * @description Update a connection with connection ID.
+         *
+         * @tags onboard
+         * @name ApiV1ConnectionsUpdate
+         * @summary Update a connection
+         * @request PUT:/onboard/api/v1/connections/{connectionId}
+         * @secure
+         */
+        apiV1ConnectionsUpdate: (
+            connectionId: string,
+            request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+                any
+            >({
+                path: `/onboard/api/v1/connections/${connectionId}`,
+                method: 'PUT',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Change connection lifecycle state with connection ID.
          *
          * @tags onboard
          * @name ApiV1ConnectionsStateCreate
-         * @summary Enable a single source
+         * @summary Change connection lifecycle state
          * @request POST:/onboard/api/v1/connections/{connectionId}/state
          * @secure
          */
         apiV1ConnectionsStateCreate: (
-            connectionId: number,
+            connectionId: string,
             request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
             params: RequestParams = {}
         ) =>
@@ -5178,9 +5485,9 @@ export class Api<
          * @secure
          */
         apiV1ConnectionsSummaryList: (
-            query: {
+            query?: {
                 /** Connector */
-                connector: ('' | 'AWS' | 'Azure')[]
+                connector?: ('' | 'AWS' | 'Azure')[]
                 /** Connection IDs */
                 connectionId?: string[]
                 /** lifecycle state filter */
@@ -5310,11 +5617,13 @@ export class Api<
                 connector?: '' | 'AWS' | 'Azure'
                 /** filter by health status */
                 health?: 'healthy' | 'unhealthy'
-                /**
-                 * filter by credential type
-                 * @default "manual"
-                 */
-                credentialType?: 'manual' | 'auto-generated'
+                /** filter by credential type */
+                credentialType?: (
+                    | 'auto-azure'
+                    | 'auto-aws'
+                    | 'manual-aws-org'
+                    | 'manual-azure-spn'
+                )[]
                 /**
                  * page size
                  * @default 50
@@ -5531,7 +5840,12 @@ export class Api<
                 /** filter by connector type */
                 connector?: '' | 'AWS' | 'Azure'
                 /** filter by credential type */
-                credentialType?: 'manual' | 'auto-generated'
+                credentialType?: (
+                    | 'auto-azure'
+                    | 'auto-aws'
+                    | 'manual-aws-org'
+                    | 'manual-azure-spn'
+                )[]
                 /**
                  * page size
                  * @default 50
@@ -5793,6 +6107,23 @@ export class Api<
             }),
     }
     schedule = {
+        /**
+         * @description Triggers a checkup job to run immediately
+         *
+         * @tags describe
+         * @name ApiV0CheckupTriggerList
+         * @summary Triggers a checkup job to run immediately
+         * @request GET:/schedule/api/v0/checkup/trigger
+         * @secure
+         */
+        apiV0CheckupTriggerList: (params: RequestParams = {}) =>
+            this.request<void, any>({
+                path: `/schedule/api/v0/checkup/trigger`,
+                method: 'GET',
+                secure: true,
+                ...params,
+            }),
+
         /**
          * No description
          *

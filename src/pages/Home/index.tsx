@@ -55,7 +55,7 @@ export default function Home() {
             resourcesTrend?.map((item) => {
                 return {
                     'Resource count': item.count,
-                    date: dayjs(item.date).format('MMM DD, YYYY'),
+                    date: dateDisplay(item.date),
                 }
             }) || []
         )

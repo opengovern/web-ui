@@ -11,9 +11,8 @@ import {
     Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import dayjs from 'dayjs'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
-import { useInventoryApiV2ServicesMetricList } from '../../../../../api/inventory.gen'
+import { useInventoryApiV2AnalyticsMetricList } from '../../../../../api/inventory.gen'
 import { filterAtom, timeAtom } from '../../../../../store'
 import Spinner from '../../../../../components/Spinner'
 import {
@@ -33,23 +32,23 @@ export default function Summary({
     const selectedConnections = useAtomValue(filterAtom)
 
     const { response: topServices, isLoading: topServicesLoading } =
-        useInventoryApiV2ServicesMetricList({
+        useInventoryApiV2AnalyticsMetricList({
             connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
             pageSize: 5,
             pageNumber: 1,
-            endTime: String(dayjs(activeTimeRange.end.toString()).unix()),
+            endTime: String(activeTimeRange.end.unix()),
             sortBy: 'count',
         })
     const {
         response: topFastestServices,
         isLoading: topFastestServicesLoading,
-    } = useInventoryApiV2ServicesMetricList({
+    } = useInventoryApiV2AnalyticsMetricList({
         connector: [selectedConnections?.provider],
         connectionId: selectedConnections?.connections,
         pageSize: 5,
         pageNumber: 1,
-        endTime: String(dayjs(activeTimeRange.end.toString()).unix()),
+        endTime: String(activeTimeRange.end.unix()),
         sortBy: 'growth_rate',
     })
     console.log(topFastestServices)
@@ -78,15 +77,10 @@ export default function Summary({
                         <Spinner className="py-24" />
                     ) : (
                         <List className="mt-2 h-full">
-                            {topServices?.services?.map((thing: any) => (
-                                <ListItem
-                                    key={thing.service_label}
-                                    className="py-3"
-                                >
-                                    <Text>{thing.service_label}</Text>
-                                    <Bold>
-                                        {numericDisplay(thing.resource_count)}
-                                    </Bold>
+                            {topServices?.metrics?.map((thing) => (
+                                <ListItem key={thing.name} className="py-3">
+                                    <Text>{thing.name}</Text>
+                                    <Bold>{numericDisplay(thing.count)}</Bold>
                                 </ListItem>
                             ))}
                         </List>
@@ -100,25 +94,23 @@ export default function Summary({
                         <Spinner className="py-24" />
                     ) : (
                         <List className="mt-2 h-full">
-                            {topFastestServices?.services?.map((thing: any) => (
-                                <ListItem key={thing.service_label}>
-                                    <Text>{thing.service_label}</Text>
+                            {topFastestServices?.metrics?.map((thing) => (
+                                <ListItem key={thing.name}>
+                                    <Text>{thing.name}</Text>
                                     <Flex justifyContent="end">
                                         <Bold>
-                                            {numericDisplay(
-                                                thing.resource_count
-                                            )}
+                                            {numericDisplay(thing.count)}
                                         </Bold>
                                         <BadgeDelta
                                             className="ml-3"
                                             deltaType={badgeTypeByDelta(
-                                                thing.old_resource_count,
-                                                thing.resource_count
+                                                thing.old_count,
+                                                thing.count
                                             )}
                                         >
                                             {`${percentageByChange(
-                                                thing.old_resource_count,
-                                                thing.resource_count
+                                                thing.old_count,
+                                                thing.count
                                             )}%`}
                                         </BadgeDelta>
                                     </Flex>

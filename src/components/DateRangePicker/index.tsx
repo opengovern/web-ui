@@ -1,4 +1,10 @@
-import { getLocalTimeZone, today } from '@internationalized/date'
+import {
+    getLocalTimeZone,
+    parseDate,
+    parseDateTime,
+    toCalendarDate,
+    today,
+} from '@internationalized/date'
 import { useAtom } from 'jotai'
 import { useRef } from 'react'
 import { useDateRangePickerState } from 'react-stately'
@@ -8,6 +14,7 @@ import {
     ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline'
 import { AriaDateRangePickerProps, DateValue } from '@react-aria/datepicker'
+import dayjs from 'dayjs'
 import { spendTimeAtom, timeAtom } from '../../store'
 import { FieldButton } from './Button'
 import { RangeCalendar } from './Calendar/RangeCalendar'
@@ -78,13 +85,23 @@ export default function DateRangePicker({ isSpend = false }: DatePickerProps) {
     const [activeTimeRange, setActiveTimeRange] = useAtom(
         isSpend ? spendTimeAtom : timeAtom
     )
+    const currentValue = () => {
+        return {
+            start: parseDate(
+                activeTimeRange.start.local().format('YYYY-MM-DD')
+            ),
+            end: parseDate(
+                activeTimeRange.end.startOf('day').local().format('YYYY-MM-DD')
+            ),
+        }
+    }
     return (
         <CustomDatePicker
-            value={activeTimeRange}
+            value={currentValue()}
             onChange={(value) => {
                 setActiveTimeRange({
-                    start: value.start,
-                    end: value.end,
+                    start: dayjs.utc(value.start.toString()),
+                    end: dayjs.utc(value.end.toString()).endOf('day'),
                 })
             }}
             maxValue={today(getLocalTimeZone())}

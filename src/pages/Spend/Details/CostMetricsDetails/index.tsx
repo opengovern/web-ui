@@ -211,14 +211,10 @@ export default function CostMetricsDetails() {
             }),
             ...(activeCategory && { tag: [`category=${activeCategory}`] }),
             ...(activeTimeRange.start && {
-                startTime: dayjs(activeTimeRange.start.toString())
-                    .unix()
-                    .toString(),
+                startTime: activeTimeRange.start.unix().toString(),
             }),
             ...(activeTimeRange.end && {
-                endTime: dayjs(activeTimeRange.end.toString())
-                    .unix()
-                    .toString(),
+                endTime: activeTimeRange.end.unix().toString(),
             }),
             pageSize: 10000,
             pageNumber: 1,
@@ -231,10 +227,10 @@ export default function CostMetricsDetails() {
                 connectionId: selectedConnections.connections,
             }),
             ...(activeTimeRange.start && {
-                startTime: dayjs(activeTimeRange.start.toString()).unix(),
+                startTime: activeTimeRange.start.unix(),
             }),
             ...(activeTimeRange.end && {
-                endTime: dayjs(activeTimeRange.end.toString()).unix(),
+                endTime: activeTimeRange.end.unix(),
             }),
             pageSize: 10000,
             pageNumber: 1,

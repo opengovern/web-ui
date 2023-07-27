@@ -35,15 +35,10 @@ export default function GrowthTrend() {
             connector: [selectedConnections.provider],
         }),
         ...(activeTimeRange.start && {
-            startTime: dayjs(activeTimeRange.start.toString())
-                .unix()
-                .toString(),
+            startTime: activeTimeRange.start.unix().toString(),
         }),
         ...(activeTimeRange.end && {
-            endTime: dayjs(activeTimeRange.end.toString())
-                .endOf('day')
-                .unix()
-                .toString(),
+            endTime: activeTimeRange.end.unix().toString(),
         }),
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,

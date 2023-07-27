@@ -15,6 +15,7 @@ import {
     useOnboardApiV1CredentialAutoonboardCreate,
     useOnboardApiV1CredentialDelete,
 } from '../../../../../../../api/onboard.gen'
+import { dateDisplay } from '../../../../../../../utilities/dateDisplay'
 
 interface IPriInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
@@ -104,9 +105,7 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                     <Flex>
                         <Text>Last health check</Text>
                         <Text className="text-black">
-                            {dayjs(data?.lastHealthCheckTime).format(
-                                'MMM DD, YYYY'
-                            )}
+                            {dateDisplay(data?.lastHealthCheckTime)}
                         </Text>
                     </Flex>
                     <Divider />

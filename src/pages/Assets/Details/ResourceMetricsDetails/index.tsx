@@ -7,7 +7,6 @@ import {
 } from '@tremor/react'
 import { useRef } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
-import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
@@ -17,8 +16,8 @@ import {
     timeAtom,
 } from '../../../../store'
 import {
-    useInventoryApiV2ResourcesMetricList,
-    useInventoryApiV2ResourcesTagList,
+    useInventoryApiV2AnalyticsMetricList,
+    useInventoryApiV2AnalyticsTagList,
 } from '../../../../api/inventory.gen'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
@@ -28,18 +27,16 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
 import { badgeDelta } from '../../../../utilities/deltaType'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType } from '../../../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
 
 const columns: ColDef[] = [
     {
-        field: 'resource_name',
+        field: 'name',
         headerName: 'Metric Name',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
-        valueFormatter: (params) =>
-            params.data?.resource_name || params.data?.resource_type || '',
     },
     {
         field: 'old_count',
@@ -67,7 +64,7 @@ const columns: ColDef[] = [
         resizable: true,
         flex: 1,
         cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType>
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) => (
             <Flex justifyContent="center" alignItems="center" className="mt-1">
                 {badgeDelta(params.data?.old_count, params.data?.count)}
@@ -88,7 +85,7 @@ export default function ResourceMetricsDetails() {
     const {
         response: inventoryCategories,
         isLoading: inventoryCategoriesLoading,
-    } = useInventoryApiV2ResourcesTagList()
+    } = useInventoryApiV2AnalyticsTagList()
 
     const activeCategory =
         selectedResourceCategory === 'All Categories'
@@ -103,19 +100,17 @@ export default function ResourceMetricsDetails() {
         }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
         ...(activeTimeRange.start && {
-            startTime: dayjs(activeTimeRange.start.toString())
-                .unix()
-                .toString(),
+            startTime: activeTimeRange.start.unix().toString(),
         }),
         ...(activeTimeRange.end && {
-            endTime: dayjs(activeTimeRange.end.toString()).unix().toString(),
+            endTime: activeTimeRange.end.unix().toString(),
         }),
         pageSize: 1000,
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
     }
 
     const { response: metrics, isLoading: metricsLoading } =
-        useInventoryApiV2ResourcesMetricList(query)
+        useInventoryApiV2AnalyticsMetricList(query)
 
     const categoryOptions = () => {
         if (inventoryCategoriesLoading)
@@ -217,7 +212,7 @@ export default function ResourceMetricsDetails() {
                         ref={gridRef}
                         domLayout="autoHeight"
                         gridOptions={gridOptions}
-                        rowData={metrics?.resource_types}
+                        rowData={metrics?.metrics || []}
                     />
                 </div>
             </Card>

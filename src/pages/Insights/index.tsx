@@ -34,10 +34,10 @@ export default function Insights() {
 
     const query = {
         ...(activeTimeRange.start && {
-            startTime: dayjs(activeTimeRange.start.toString()).unix(),
+            startTime: activeTimeRange.start.unix(),
         }),
         ...(activeTimeRange.end && {
-            endTime: dayjs(activeTimeRange.end.toString()).unix(),
+            endTime: activeTimeRange.end.unix(),
         }),
     }
     const { response: insightList, isLoading: listLoading } =

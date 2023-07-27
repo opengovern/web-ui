@@ -1,6 +1,10 @@
 import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
-import { useInventoryApiV2ResourcesCompositionDetail } from '../../../../api/inventory.gen'
+import { DeltaType } from '@tremor/react'
+import {
+    useInventoryApiV2AnalyticsCompositionDetail,
+    useInventoryApiV2ResourcesCompositionDetail,
+} from '../../../../api/inventory.gen'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import Composition from '../../../../components/Cards/Composition'
 import {
@@ -28,6 +32,14 @@ interface dataProps {
     chart: chartProps[]
 }
 
+interface compositeItem {
+    name: string
+    value: string
+    delta?: string
+    deltaType?: DeltaType
+    val: number
+}
+
 export default function CompositionTab({ top }: IProps) {
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
@@ -41,11 +53,11 @@ export default function CompositionTab({ top }: IProps) {
             connectionId: selectedConnections.connections,
         }),
         ...(activeTimeRange.end && {
-            time: dayjs(activeTimeRange.end.toString()).unix(),
+            time: activeTimeRange.end.unix(),
         }),
     }
     const { response: composition, isLoading } =
-        useInventoryApiV2ResourcesCompositionDetail('category', query)
+        useInventoryApiV2AnalyticsCompositionDetail('category', query)
 
     const recordToArray = (
         record?: Record<
@@ -80,13 +92,16 @@ export default function CompositionTab({ top }: IProps) {
             totalValueCount: numericDisplay(compositionData?.total_value_count),
             chart: recordToArray(compositionData?.top_values, old),
         }
-        v.chart.push({
+        const others = {
             name: 'Others',
             value:
                 (old === 0
                     ? compositionData?.others?.count
                     : compositionData?.others?.old_count) || 0,
-        })
+        }
+        if (others.value !== 0) {
+            v.chart.push(others)
+        }
         return v
     }
 
@@ -100,12 +115,12 @@ export default function CompositionTab({ top }: IProps) {
             return []
         }
         const record = compositionData?.top_values
-        let v
+        let v: compositeItem[]
         if (old === 1) {
             v = Object.keys(record).map((key) => {
                 return {
                     name: key,
-                    value: record[key].old_count || 0,
+                    value: numericDisplay(record[key].old_count || 0),
                     val: Math.round(
                         ((record[key].old_count || 0) /
                             (compositionData?.total_count || 1)) *
@@ -113,27 +128,28 @@ export default function CompositionTab({ top }: IProps) {
                     ),
                 }
             })
+        } else {
+            v = Object.keys(record).map((key) => {
+                return {
+                    name: key,
+                    value: numericDisplay(record[key].count || 0),
+                    delta: `${percentageByChange(
+                        record[key].old_count,
+                        record[key].count
+                    )}%`,
+                    deltaType: badgeTypeByDelta(
+                        record[key].old_count,
+                        record[key].count
+                    ),
+                    val: Math.round(
+                        ((record[key].count || 0) /
+                            (compositionData?.total_count || 1)) *
+                            100
+                    ),
+                }
+            })
         }
-        v = Object.keys(record).map((key) => {
-            return {
-                name: key,
-                value: numericDisplay(record[key].count || 0),
-                delta: `${percentageByChange(
-                    record[key].old_count,
-                    record[key].count
-                )}%`,
-                deltaType: badgeTypeByDelta(
-                    record[key].old_count,
-                    record[key].count
-                ),
-                val: Math.round(
-                    ((record[key].count || 0) /
-                        (compositionData?.total_count || 1)) *
-                        100
-                ),
-            }
-        })
-        v.push({
+        const others = {
             name: 'Others',
             value: numericDisplay(
                 old === 0
@@ -153,7 +169,10 @@ export default function CompositionTab({ top }: IProps) {
                     (compositionData?.total_count || 1)) *
                     100
             ),
-        })
+        }
+        if (others.value !== '0') {
+            v.push(others)
+        }
         return v
     }
 

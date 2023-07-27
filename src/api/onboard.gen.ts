@@ -2,9 +2,90 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    AwsResources,
+    DescribeComplianceReportJob,
+    DescribeDescribeResourceJob,
+    DescribeDescribeSourceJob,
+    DescribeInsightJob,
+    DescribeSummarizerJob,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
+    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiSource,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetFiltersResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourceRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListRegionsResourceCountCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeTagsMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetadataResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServiceSummariesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationByProviderResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTag,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiService,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiServiceSummary,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
     GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
     GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
@@ -18,6 +99,16 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -113,6 +204,101 @@ export const useOnboardApiV1CatalogMetricsList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
+interface IuseOnboardApiV1ConnectionsUpdateState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
+    error?: any
+}
+
+export const useOnboardApiV1ConnectionsUpdate = (
+    connectionId: string,
+    request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseOnboardApiV1ConnectionsUpdateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([connectionId, request, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.onboard
+                .apiV1ConnectionsUpdate(connectionId, request, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (
+        JSON.stringify([connectionId, request, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([connectionId, request, params, autoExecute])
+        )
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
 interface IuseOnboardApiV1ConnectionsStateCreateState {
     isLoading: boolean
     isExecuted: boolean
@@ -121,7 +307,7 @@ interface IuseOnboardApiV1ConnectionsStateCreateState {
 }
 
 export const useOnboardApiV1ConnectionsStateCreate = (
-    connectionId: number,
+    connectionId: string,
     request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
     params: RequestParams = {},
     autoExecute = true
@@ -307,8 +493,8 @@ interface IuseOnboardApiV1ConnectionsSummaryListState {
 }
 
 export const useOnboardApiV1ConnectionsSummaryList = (
-    query: {
-        connector: ('' | 'AWS' | 'Azure')[]
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
 
         connectionId?: string[]
 
@@ -699,7 +885,12 @@ export const useOnboardApiV1CredentialList = (
 
         health?: 'healthy' | 'unhealthy'
 
-        credentialType?: 'manual' | 'auto-generated'
+        credentialType?: (
+            | 'auto-azure'
+            | 'auto-aws'
+            | 'manual-aws-org'
+            | 'manual-azure-spn'
+        )[]
 
         pageSize?: number
 
@@ -1518,7 +1709,12 @@ export const useOnboardApiV1CredentialSourcesListList = (
     query?: {
         connector?: '' | 'AWS' | 'Azure'
 
-        credentialType?: 'manual' | 'auto-generated'
+        credentialType?: (
+            | 'auto-azure'
+            | 'auto-aws'
+            | 'manual-aws-org'
+            | 'manual-azure-spn'
+        )[]
 
         pageSize?: number
 
