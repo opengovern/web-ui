@@ -77,11 +77,6 @@ const authRoutes = [
         component: ResourceMetricsDetails,
     },
     {
-        key: 'metric details',
-        path: '/:ws/assets/metrics/:metricid',
-        component: MetricDetails,
-    },
-    {
         key: 'spend',
         path: '/:ws/spend',
         component: Spend,

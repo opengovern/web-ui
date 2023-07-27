@@ -1434,7 +1434,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint {
     /** @min 0 */
     count?: number
-    /** @format date */
+    /** @format date-time */
     date?: string
 }
 
@@ -1684,6 +1684,8 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiMetric {
      * @example 90
      */
     old_count?: number
+    /** @example "select * from kaytu_resources where resource_type = 'aws::ec2::instance'" */
+    query?: string
     /** Tags */
     tags?: Record<string, string[]>
 }
@@ -1835,7 +1837,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendData
      * @example 100
      */
     count?: number
-    /** @format date */
+    /** @format date-time */
     date?: string
 }
 
@@ -2023,13 +2025,25 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredentialConfig {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics {
-    /** @example 20 */
+    /**
+     * @min 0
+     * @example 20
+     */
     connectionsEnabled?: number
-    /** @example 15 */
+    /**
+     * @min 0
+     * @example 15
+     */
     healthyConnections?: number
-    /** @example 20 */
+    /**
+     * @min 0
+     * @example 20
+     */
     totalConnections?: number
-    /** @example 5 */
+    /**
+     * @min 0
+     * @example 5
+     */
     unhealthyConnections?: number
 }
 
@@ -2101,34 +2115,58 @@ export enum GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnector {
+    /** @example true */
     allowNewConnections?: boolean
+    /** @example false */
     autoOnboardSupport?: boolean
+    /** @example "This is a long volume of words for just showing the case of the description for the demo and checking value purposes only and has no meaning whatsoever" */
     description?: string
     direction?: SourceConnectorDirectionType
     /** @example "Azure" */
     label?: string
+    /** @example "https://kaytu.io/logo.png" */
     logo?: string
+    /**
+     * @min 0
+     * @example 10000
+     */
     maxConnectionLimit?: number
     /** @example "Azure" */
     name?: SourceType
+    /** @example "This is a short Description for this connector" */
     shortDescription?: string
+    /** @example "enabled" */
     status?: SourceConnectorStatus
     tags?: Record<string, any>
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount {
+    /** @example true */
     allowNewConnections?: boolean
+    /** @example false */
     autoOnboardSupport?: boolean
+    /**
+     * @min 0
+     * @example 1024
+     */
     connection_count?: number
+    /** @example "This is a long volume of words for just showing the case of the description for the demo and checking value purposes only and has no meaning whatsoever" */
     description?: string
     direction?: SourceConnectorDirectionType
     /** @example "Azure" */
     label?: string
+    /** @example "https://kaytu.io/logo.png" */
     logo?: string
+    /**
+     * @min 0
+     * @example 10000
+     */
     maxConnectionLimit?: number
     /** @example "Azure" */
     name?: SourceType
+    /** @example "This is a short Description for this connector" */
     shortDescription?: string
+    /** @example "enabled" */
     status?: SourceConnectorStatus
     tags?: Record<string, any>
 }
@@ -2148,21 +2186,48 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
+    /** @example false */
     autoOnboardEnabled?: boolean
     config?: any
     connections?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    /** @example "AWS" */
     connectorType?: SourceType
+    /** @example "manual-aws-org" */
     credentialType?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredentialType
+    /** @example true */
     enabled?: boolean
+    /**
+     * @min 0
+     * @example 250
+     */
     enabled_connections?: number
+    /** @example "" */
     healthReason?: string
+    /** @example "healthy" */
     healthStatus?: SourceHealthStatus
+    /** @example "1028642a-b22e-26ha-c5h2-22nl254678m5" */
     id?: string
+    /**
+     * @format date-time
+     * @example "2023-06-03T12:21:33.406928Z"
+     */
     lastHealthCheckTime?: string
     metadata?: Record<string, any>
     name?: string
+    /**
+     * @format date-time
+     * @example "2023-06-03T12:21:33.406928Z"
+     */
     onboardDate?: string
+    /**
+     * @min 0
+     * @example 300
+     */
     total_connections?: number
+    /**
+     * @min 0
+     * @example 50
+     */
     unhealthy_connections?: number
 }
 
@@ -2214,6 +2279,10 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryRe
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse {
     credentials?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    /**
+     * @min 0
+     * @example 5
+     */
     totalCredentialCount?: number
 }
 
