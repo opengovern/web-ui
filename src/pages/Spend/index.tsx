@@ -48,7 +48,7 @@ export default function Spend() {
             ? ''
             : selectedResourceCategory
     const query = {
-        ...(selectedConnections.provider && {
+        ...(selectedConnections.provider !== '' && {
             connector: [selectedConnections.provider],
         }),
         ...(selectedConnections.connections && {
@@ -71,7 +71,9 @@ export default function Spend() {
 
     const { response: accountCostResponse, isLoading: accountCostLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            connector: [selectedConnections.provider],
+            ...(selectedConnections.provider !== '' && {
+                connector: [selectedConnections.provider],
+            }),
             connectionId: selectedConnections.connections,
             startTime: dayjs(activeTimeRange.start.toString()).unix(),
             endTime: dayjs(activeTimeRange.end.toString()).unix(),

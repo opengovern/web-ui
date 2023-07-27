@@ -26,7 +26,7 @@ export default function TopServicesTrend({ categories }: IProps) {
     const [serviceNames, setServiceNames] = useState<string[]>([])
     const [trendData, setTrendData] = useState<object[]>([])
     const { response: metrics, isLoading } = useInventoryApiV2CostMetricList({
-        ...(selectedConnections.provider && {
+        ...(selectedConnections.provider !== '' && {
             connector: [selectedConnections.provider],
         }),
         ...(activeTimeRange.start && {
