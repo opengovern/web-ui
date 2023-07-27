@@ -85,8 +85,13 @@ export default function TopServicesTrend({ categories }: IProps) {
 
         const services: string[] = []
         if (input) {
-            const length =
-                input[0].costTrend.length > 5 ? 5 : input[0].costTrend.length
+            let length = 0
+            if (input[0].costTrend) {
+                length =
+                    input[0].costTrend.length > 5
+                        ? 5
+                        : input[0].costTrend.length
+            }
             for (let i = 0; i < length; i += 1) {
                 const temp: any = {}
                 const keys = Object.keys(input)
