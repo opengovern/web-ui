@@ -34,6 +34,7 @@ import {
     CheckCircleIcon,
     ExclamationCircleIcon,
 } from '@heroicons/react/24/solid'
+import { useLocation } from 'react-router-dom'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import QueryCard from '../../components/Cards/QueryCard'
 import {
@@ -76,7 +77,10 @@ const getTable = (headers: any, details: any) => {
 }
 
 export default function Finder() {
-    const [code, setCode] = useState('')
+    const queryParams = useLocation().search
+    const query = new URLSearchParams(queryParams).get('q')
+    const [loaded, setLoaded] = useState(false)
+    const [code, setCode] = useState(query || '')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchedQuery, setSearchedQuery] = useState('')
     const [searchCategory, setSearchCategory] = useState('')
@@ -115,6 +119,13 @@ export default function Finder() {
             setSelectedIndex(1)
         } else setSelectedIndex(0)
     }, [queryResponse])
+
+    useEffect(() => {
+        if (!loaded && code.length > 0) {
+            sendNow()
+            setLoaded(true)
+        }
+    }, [])
 
     return (
         <LoggedInLayout currentPage="finder">

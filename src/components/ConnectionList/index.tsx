@@ -113,7 +113,9 @@ export default function ConnectionList() {
     })
 
     const { response, isLoading } = useOnboardApiV1ConnectionsSummaryList({
-        connector: [''],
+        connector: [],
+        pageNumber: 1,
+        pageSize: 10000,
     })
 
     const updateSelectionByProvider = (api: any, newValue: any) => {
