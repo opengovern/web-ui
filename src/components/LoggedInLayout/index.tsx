@@ -87,6 +87,7 @@ type IProps = {
         | 'settings'
         | 'stack'
         | 'finder'
+        | '404'
     showSidebar?: boolean
 }
 
