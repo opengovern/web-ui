@@ -216,7 +216,7 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
 interface IuseComplianceApiV1AssignmentsConnectionCreateState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[]
     error?: any
 }
 

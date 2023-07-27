@@ -16,6 +16,7 @@ import {
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
 import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/schedule.gen'
+import { RenderObject } from '../../../../../../../components/RenderObject'
 
 interface IAccInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
@@ -24,13 +25,54 @@ interface IAccInfo {
     onClose: () => void
 }
 
+const renderMetadata = (
+    type: string,
+    data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
+) => {
+    if (data) {
+        if (
+            type === 'Organization Management Account' ||
+            type === 'Organization Member Account'
+        ) {
+            return (
+                <>
+                    <Title className="mt-6">Metadata</Title>
+                    <Divider />
+                    <Flex>
+                        <Text>ARN</Text>
+                        <Text className="text-black">
+                            {data.metadata?.account_organization.Arn}
+                        </Text>
+                    </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>Email</Text>
+                        <Text className="text-black">
+                            {
+                                data.metadata?.account_organization
+                                    .MasterAccountEmail
+                            }
+                        </Text>
+                    </Flex>
+                    <Title className="mt-6">Tags</Title>
+                    <Divider className="mb-0" />
+                    {data.metadata?.organization_tags && (
+                        <RenderObject obj={data.metadata?.organization_tags} />
+                    )}
+                </>
+            )
+        }
+    }
+    return null
+}
+
 export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
     const { response: credential } = useOnboardApiV1CredentialDetail(
         data?.credentialID || '',
         {},
         !!data && open
     )
-    // console.log(data)
+    console.log(data)
 
     const [key, setKey] = useState('')
     const [ekey, seteKey] = useState(false)
@@ -99,6 +141,11 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
                     </Flex>
                     <Divider />
                     <Flex>
+                        <Text>Account Type</Text>
+                        <Text className="text-black">{type}</Text>
+                    </Flex>
+                    <Divider />
+                    <Flex>
                         <Text>AWS account lifecycle state</Text>
                         <Badge
                             color={
@@ -140,16 +187,18 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
                                 <Text className="text-black">
                                     {credential?.config.accessKey}
                                 </Text>
-                                <Button
-                                    variant="light"
-                                    className="ml-3"
-                                    onClick={() => {
-                                        setKey(credential?.config.accessKey)
-                                        seteKey(true)
-                                    }}
-                                >
-                                    Edit
-                                </Button>
+                                {type !== 'Organization Member Account' && (
+                                    <Button
+                                        variant="light"
+                                        className="ml-3"
+                                        onClick={() => {
+                                            setKey(credential?.config.accessKey)
+                                            seteKey(true)
+                                        }}
+                                    >
+                                        Edit
+                                    </Button>
+                                )}
                             </Flex>
                         )}
                     </Flex>
@@ -193,8 +242,9 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
                             </Flex>
                         )}
                     </Flex>
+                    {renderMetadata(type, data)}
                 </Flex>
-                <Flex justifyContent="end">
+                <Flex justifyContent="end" className="mt-6 mb-12">
                     <Button
                         variant="secondary"
                         color="rose"

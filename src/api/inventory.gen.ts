@@ -10,6 +10,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiGetResourcesResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListRegionsResourceCountCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
@@ -482,14 +483,14 @@ export const useInventoryApiV1QueryRunCreate2 = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseInventoryApiV1QueryRunHistoryCreateState {
+interface IuseInventoryApiV1QueryRunHistoryListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory[]
     error?: any
 }
 
-export const useInventoryApiV1QueryRunHistoryCreate = (
+export const useInventoryApiV1QueryRunHistoryList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -505,7 +506,7 @@ export const useInventoryApiV1QueryRunHistoryCreate = (
     }
 
     const [state, setState] =
-        useState<IuseInventoryApiV1QueryRunHistoryCreateState>({
+        useState<IuseInventoryApiV1QueryRunHistoryListState>({
             isLoading: true,
             isExecuted: false,
         })
@@ -522,7 +523,7 @@ export const useInventoryApiV1QueryRunHistoryCreate = (
         })
         try {
             api.inventory
-                .apiV1QueryRunHistoryCreate(params)
+                .apiV1QueryRunHistoryList(params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1040,10 +1041,111 @@ export const useInventoryApiV1ResourcesTopRegionsList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
+interface IuseInventoryApiV2AnalyticsCompositionDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse
+    error?: any
+}
+
+export const useInventoryApiV2AnalyticsCompositionDetail = (
+    key: string,
+    query: {
+        top: number
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        endTime?: string
+
+        startTime?: string
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2AnalyticsCompositionDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([key, query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2AnalyticsCompositionDetail(key, query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([key, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([key, query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
 interface IuseInventoryApiV2AnalyticsMetricListState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeMetricsResponse
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse
     error?: any
 }
 
@@ -1055,7 +1157,7 @@ export const useInventoryApiV2AnalyticsMetricList = (
 
         connectionId?: string[]
 
-        metricNames?: string[]
+        metricIDs?: string[]
 
         endTime?: string
 
@@ -1102,6 +1204,110 @@ export const useInventoryApiV2AnalyticsMetricList = (
         try {
             api.inventory
                 .apiV2AnalyticsMetricList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2AnalyticsRegionsSummaryListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse
+    error?: any
+}
+
+export const useInventoryApiV2AnalyticsRegionsSummaryList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        startTime?: number
+
+        endTime?: number
+
+        sortBy?: 'resource_count' | 'growth' | 'growth_rate'
+
+        pageSize?: number
+
+        pageNumber?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2AnalyticsRegionsSummaryListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2AnalyticsRegionsSummaryList(query, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1201,6 +1407,110 @@ export const useInventoryApiV2AnalyticsTagList = (
         try {
             api.inventory
                 .apiV2AnalyticsTagList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2AnalyticsTrendListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
+    error?: any
+}
+
+export const useInventoryApiV2AnalyticsTrendList = (
+    query?: {
+        tag?: string[]
+
+        ids?: string[]
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        startTime?: string
+
+        endTime?: string
+
+        datapointCount?: string
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2AnalyticsTrendListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2AnalyticsTrendList(query, params)
                 .then((resp) => {
                     setState({
                         ...state,
