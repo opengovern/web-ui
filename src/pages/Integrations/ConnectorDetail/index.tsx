@@ -20,10 +20,12 @@ export default function ConnectorDetail() {
     const { connector } = useParams()
 
     const activeTimeRange = useAtomValue(timeAtom)
-
+    const provider = StringToProvider(connector || '')
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            connector: [StringToProvider(connector || '')],
+            ...(provider !== '' && {
+                connector: [provider],
+            }),
             startTime: dayjs(activeTimeRange.start.toString()).unix(),
             endTime: dayjs(activeTimeRange.end.toString()).unix(),
             pageSize: 10000,
@@ -31,7 +33,7 @@ export default function ConnectorDetail() {
         })
     const { response: credentials, isLoading: isCredentialLoading } =
         useOnboardApiV1CredentialList({
-            connector: StringToProvider(connector || ''),
+            connector: provider,
         })
 
     const breadcrumbsPages = [

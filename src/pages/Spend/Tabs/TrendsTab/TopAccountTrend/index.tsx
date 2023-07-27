@@ -15,7 +15,9 @@ export default function TopAccountsTrend() {
 
     const { response: topAccounts, isLoading: isLoadingTopAccount } =
         useOnboardApiV1ConnectionsSummaryList({
-            connector: [selectedConnections?.provider],
+            ...(selectedConnections.provider !== '' && {
+                connector: [selectedConnections.provider],
+            }),
             connectionId: selectedConnections?.connections,
             ...(activeTimeRange.start && {
                 startTime: dayjs(activeTimeRange.start.toString()).unix(),

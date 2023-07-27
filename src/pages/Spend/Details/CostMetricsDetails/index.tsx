@@ -226,7 +226,9 @@ export default function CostMetricsDetails() {
 
     const { response: accountMetrics, isLoading: accountMetricsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            connector: provider,
+            ...(selectedConnections.provider !== '' && {
+                connector: [selectedConnections.provider],
+            }),
             ...(selectedConnections.connections && {
                 connectionId: selectedConnections.connections,
             }),
