@@ -25,6 +25,7 @@ export default function SettingsGitRepositories() {
         useState<string>('')
     const [newInsightsGitURL, setNewInsightsGitURL] = useState<string>('')
     const [newQueriesGitURL, setNewQueriesGitURL] = useState<string>('')
+    const [newMetricsGitURL, setNewMetricsGitURL] = useState<string>('')
 
     const {
         response: awsComplianceGitURL,
@@ -38,6 +39,8 @@ export default function SettingsGitRepositories() {
         useMetadataApiV1MetadataDetail('insights_git_url')
     const { response: queriesGitURL, isLoading: loadingQueriesGitURL } =
         useMetadataApiV1MetadataDetail('queries_git_url')
+    const { response: metricsGitURL, isLoading: loadingMetricsGitURL } =
+        useMetadataApiV1MetadataDetail('analytics_git_url')
     const {
         isLoading: loadingSetAwsComplianceGitURL,
         isExecuted: executeSetAwsComplianceGitURL,
@@ -87,6 +90,18 @@ export default function SettingsGitRepositories() {
         false
     )
     const {
+        isLoading: loadingSetMetricsGitURL,
+        isExecuted: executeSetMetricsGitURL,
+        sendNow: setMetricsGitURL,
+    } = useMetadataApiV1MetadataCreate(
+        {
+            key: 'analytics_git_url',
+            value: newMetricsGitURL,
+        },
+        {},
+        false
+    )
+    const {
         isLoading: loadingSyncQueries,
         isExecuted: executeSyncQueries,
         sendNow: syncQueries,
@@ -96,7 +111,8 @@ export default function SettingsGitRepositories() {
         loadingAwsComplianceGitURL ||
         loadingAzureComplianceGitURL ||
         loadingInsightGitURL ||
-        loadingQueriesGitURL
+        loadingQueriesGitURL ||
+        loadingMetricsGitURL
     ) {
         return (
             <Flex justifyContent="center" className="mt-56">
@@ -111,6 +127,7 @@ export default function SettingsGitRepositories() {
         setNewAzureComplianceGitURL(azureComplianceGitURL?.value || '')
         setNewInsightsGitURL(insightsGitURL?.value || '')
         setNewQueriesGitURL(queriesGitURL?.value || '')
+        setNewMetricsGitURL(metricsGitURL?.value || '')
     }
 
     const save = async () => {
@@ -119,6 +136,7 @@ export default function SettingsGitRepositories() {
             setAzureComplianceGitURL(),
             setInsightGitURL(),
             setQueriesGitURL(),
+            setMetricsGitURL(),
         ]
         await Promise.all(setUrls).then(() => {
             syncQueries()
@@ -132,6 +150,7 @@ export default function SettingsGitRepositories() {
                 loadingSetAzureComplianceGitURL) ||
             (executeSetInsightGitURL && loadingSetInsightGitURL) ||
             (executeSetQueriesGitURL && loadingSetQueriesGitURL) ||
+            (executeSetMetricsGitURL && loadingSetMetricsGitURL) ||
             (executeSyncQueries && loadingSyncQueries)
         )
     }
@@ -244,8 +263,39 @@ export default function SettingsGitRepositories() {
                         }
                     />
                 </ListItem>
-                <ListItem key="queries_git_url" className="my-1">
+                <ListItem key="metrics_git_url" className="my-1">
+                    <Flex justifyContent="start" className="truncate space-x-4">
+                        <div className="truncate">
+                            <Text className="truncate text-sm">
+                                Metrics Git URL:
+                            </Text>
+                        </div>
+                    </Flex>
+                    <TextInput
+                        className="text-sm"
+                        value={newMetricsGitURL}
+                        onChange={(e) => setNewMetricsGitURL(e.target.value)}
+                        icon={
+                            executeSetMetricsGitURL && loadingSetMetricsGitURL
+                                ? Spinner
+                                : undefined
+                        }
+                        disabled={
+                            executeSetMetricsGitURL && loadingSetMetricsGitURL
+                        }
+                    />
+                </ListItem>
+                <ListItem key="buttons" className="my-1">
                     <Flex justifyContent="end" className="truncate space-x-4">
+                        <Button
+                            variant="secondary"
+                            color="amber"
+                            disabled={saveLoading()}
+                            loading={executeSyncQueries && loadingSyncQueries}
+                            onClick={syncQueries}
+                        >
+                            Sync
+                        </Button>
                         <Button loading={saveLoading()} onClick={save}>
                             Save
                         </Button>
