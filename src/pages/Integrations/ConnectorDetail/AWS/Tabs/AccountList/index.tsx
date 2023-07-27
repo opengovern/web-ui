@@ -1,5 +1,5 @@
 import { Badge, Button, Card, Flex, Title } from '@tremor/react'
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import {
     ColDef,
@@ -22,6 +22,26 @@ interface IAccountList {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
+
+const getType = (account: any) => {
+    if (account) {
+        if (account.credentialType === 'auto-aws') {
+            return 'Standalone Account'
+        }
+        if (
+            account.credentialType === 'manual-aws-org' &&
+            account.providerConnectionID ===
+                account.metadata.account_organization.MasterAccountId
+        ) {
+            return 'Organization Management Account'
+        }
+        if (account.credentialType === 'manual-aws-org') {
+            return 'Organization Member Account'
+        }
+    }
+    return ''
+}
+
 const columns: ColDef[] = [
     {
         field: 'connector',
@@ -37,7 +57,7 @@ const columns: ColDef[] = [
                     justifyContent="center"
                     className="w-full h-full"
                 >
-                    <AWSIcon />
+                    <AWSIcon id="acc" />
                 </Flex>
             )
         },
@@ -57,6 +77,16 @@ const columns: ColDef[] = [
         filter: true,
         resizable: true,
         flex: 1,
+    },
+    {
+        headerName: 'Account Type',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+        cellRenderer: (params: ICellRendererParams) => {
+            return getType(params.data)
+        },
     },
     {
         field: 'credentialName',
@@ -97,6 +127,7 @@ const columns: ColDef[] = [
                         return 'gray'
                 }
             }
+
             return (
                 <Badge color={getBadgeColor(params.value)}>
                     {params.value}
@@ -201,6 +232,7 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
             </Card>
             <AccountInfo
                 data={accData}
+                type={getType(accData)}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
             />

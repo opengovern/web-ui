@@ -223,13 +223,6 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                         </Flex>
                     )}
                 </Flex>
-                <Divider />
-                <Flex>
-                    <Text>Number of accounts</Text>
-                    <Text className="text-black">
-                        {credential?.total_connections}
-                    </Text>
-                </Flex>
                 <Title className="mt-12">Roles</Title>
                 <Divider />
                 <Flex
@@ -258,7 +251,7 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                         </>
                     ) : (
                         <Flex justifyContent="end">
-                            <Text className="text-black">
+                            <Text className="text-black text-end">
                                 {credential?.config.assumeRoleName}
                             </Text>
                             <Button

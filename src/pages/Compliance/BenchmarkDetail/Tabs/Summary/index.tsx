@@ -83,12 +83,8 @@ export default function Summary({
 
     const { response: benchmarkTrend } =
         useComplianceApiV1BenchmarksTrendDetail(String(id), query)
-    const { response: resources } = useComplianceApiV1FindingsTopDetail(
-        String(id),
-        'resourceID',
-        7,
-        query
-    )
+    const { response: resources, isLoading } =
+        useComplianceApiV1FindingsTopDetail(String(id), 'resourceID', 7, query)
     const { response: resourceTypes } = useComplianceApiV1FindingsTopDetail(
         String(id),
         'resourceType',
@@ -158,6 +154,7 @@ export default function Summary({
                 <SummaryCard
                     title="Resources with alarms"
                     metric={resources?.totalCount || 0}
+                    loading={isLoading}
                 />
                 <SummaryCard
                     title="Security score"
@@ -203,8 +200,8 @@ export default function Summary({
                         colors={[
                             'rose',
                             'orange',
-                            'amber',
                             'yellow',
+                            'lime',
                             'emerald',
                             'slate',
                         ]}

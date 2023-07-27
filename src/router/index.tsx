@@ -46,7 +46,7 @@ const routes = [
     {
         key: '*',
         path: '*',
-        element: <NotFound error={404} />,
+        element: <NotFound />,
     },
 ]
 

@@ -14,7 +14,9 @@ export default function SummaryMetrics() {
     const { response: accounts, isLoading: accountIsLoading } =
         useOnboardApiV1ConnectionsSummaryList(
             {
-                connector: [selectedConnections.provider],
+                ...(selectedConnections.provider !== '' && {
+                    connector: [selectedConnections.provider],
+                }),
                 connectionId: selectedConnections.connections,
                 startTime: activeTimeRange.start.unix(),
                 endTime: activeTimeRange.end.unix(),

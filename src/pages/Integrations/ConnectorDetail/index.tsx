@@ -1,6 +1,5 @@
 import { Flex, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai/index'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
@@ -20,10 +19,12 @@ export default function ConnectorDetail() {
     const { connector } = useParams()
 
     const activeTimeRange = useAtomValue(timeAtom)
-
+    const provider = StringToProvider(connector || '')
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            connector: [StringToProvider(connector || '')],
+            ...(provider !== '' && {
+                connector: [provider],
+            }),
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),
             pageSize: 10000,
@@ -31,7 +32,7 @@ export default function ConnectorDetail() {
         })
     const { response: credentials, isLoading: isCredentialLoading } =
         useOnboardApiV1CredentialList({
-            connector: StringToProvider(connector || ''),
+            connector: provider,
         })
 
     const breadcrumbsPages = [

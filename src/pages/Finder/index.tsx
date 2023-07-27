@@ -23,12 +23,9 @@ import {
     PlayCircleIcon,
     TableCellsIcon,
 } from '@heroicons/react/24/outline'
-import { useEffect, useState } from 'react'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { highlight, languages } from 'prismjs'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import 'prismjs/components/prism-sql'
-// eslint-disable-next-line import/no-extraneous-dependencies
+import { useEffect, useState } from 'react' // eslint-disable-next-line import/no-extraneous-dependencies
+import { highlight, languages } from 'prismjs' // eslint-disable-next-line import/no-extraneous-dependencies
+import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
 import Editor from 'react-simple-code-editor'
 import { GridOptions } from 'ag-grid-community'
@@ -82,6 +79,7 @@ export default function Finder() {
     const [code, setCode] = useState('')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchedQuery, setSearchedQuery] = useState('')
+    const [searchCategory, setSearchCategory] = useState('')
 
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2MetadataTagsResourcetypeDetail('category', {
@@ -131,53 +129,72 @@ export default function Finder() {
                     >
                         <Metric>Finder</Metric>
                         <TextInput
-                            className="w-full mt-6 mb-2"
+                            className="w-56 mt-6 mb-2"
                             icon={MagnifyingGlassIcon}
                             placeholder="Search..."
+                            value={searchCategory}
+                            onChange={(e) => setSearchCategory(e.target.value)}
                         />
-                        {categories?.values?.map((cat) => (
-                            <Accordion className="w-full border-0 rounded-none bg-transparent">
-                                <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                                    <Flex
-                                        justifyContent="start"
-                                        className="w-full"
-                                    >
-                                        <Icon icon={TableCellsIcon} />
-                                        <Text className="w-3/4 truncate text-start font-semibold">
-                                            {cat.value}
-                                        </Text>
-                                    </Flex>
-                                </AccordionHeader>
-                                <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
-                                    <Flex
-                                        flexDirection="col"
-                                        justifyContent="start"
-                                    >
-                                        {cat.resource_types?.map((subCat) => (
+                        {categories?.values?.map(
+                            (cat) =>
+                                !!cat.resource_types?.filter((catt) =>
+                                    catt
+                                        .toLowerCase()
+                                        .includes(searchCategory.toLowerCase())
+                                ).length && (
+                                    <Accordion className="w-56 border-0 rounded-none bg-transparent">
+                                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                                             <Flex
-                                                onClick={() =>
-                                                    setCode(
-                                                        `select * from kaytu_resources where resource_type = '${subCat}'`
-                                                    )
-                                                }
+                                                justifyContent="start"
+                                                className="w-full"
                                             >
-                                                <Icon
-                                                    icon={TableCellsIcon}
-                                                    className="opacity-0"
-                                                />
-                                                <Text className="w-full truncate text-start py-2 cursor-pointer hover:text-blue-600">
-                                                    {subCat}
+                                                <Icon icon={TableCellsIcon} />
+                                                <Text className="w-3/4 truncate text-start font-semibold">
+                                                    {cat.value}
                                                 </Text>
                                             </Flex>
-                                        ))}
-                                    </Flex>
-                                </AccordionBody>
-                            </Accordion>
-                        ))}
+                                        </AccordionHeader>
+                                        <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                                            <Flex
+                                                flexDirection="col"
+                                                justifyContent="start"
+                                            >
+                                                {cat.resource_types
+                                                    ?.filter((catt) =>
+                                                        catt
+                                                            .toLowerCase()
+                                                            .includes(
+                                                                searchCategory.toLowerCase()
+                                                            )
+                                                    )
+                                                    .map((subCat) => (
+                                                        <Flex
+                                                            onClick={() =>
+                                                                setCode(
+                                                                    `select * from kaytu_resources where resource_type = '${subCat}'`
+                                                                )
+                                                            }
+                                                        >
+                                                            <Icon
+                                                                icon={
+                                                                    TableCellsIcon
+                                                                }
+                                                                className="opacity-0"
+                                                            />
+                                                            <Text className="w-full truncate text-start py-2 cursor-pointer hover:text-blue-600">
+                                                                {subCat}
+                                                            </Text>
+                                                        </Flex>
+                                                    ))}
+                                            </Flex>
+                                        </AccordionBody>
+                                    </Accordion>
+                                )
+                        )}
                     </Flex>
                     <Flex
                         flexDirection="col"
-                        className="w-full h-full max-h-full overflow-hidden overflow-y-scroll"
+                        className="w-full h-full max-h-full overflow-hidden overflow-y-scroll px-1 pt-1"
                     >
                         <Card>
                             <Editor
@@ -186,7 +203,7 @@ export default function Finder() {
                                     highlight(text, languages.sql, 'sql')
                                 }
                                 value={code}
-                                className="w-full bg-white font-mono text-sm"
+                                className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
                                 style={{ minHeight: '200px' }}
                                 placeholder="-- write your SQL query here"
                             />
@@ -242,7 +259,7 @@ export default function Finder() {
                             index={selectedIndex}
                             onIndexChange={setSelectedIndex}
                         >
-                            <TabList className="sticky top-2 z-10 bg-gray-100">
+                            <TabList className="bg-gray-100 dark:bg-gray-900">
                                 <Tab>Get Started</Tab>
                                 <Tab
                                     className={

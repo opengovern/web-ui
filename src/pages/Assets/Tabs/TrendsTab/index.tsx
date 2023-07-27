@@ -36,7 +36,9 @@ export default function TrendsTab({ categories }: IProps) {
             | 'cost_growth_rate'
     ) => {
         return {
-            connector: [selectedConnections.provider],
+            ...(selectedConnections.provider !== '' && {
+                connector: [selectedConnections.provider],
+            }),
             connectionId: selectedConnections.connections,
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),

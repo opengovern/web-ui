@@ -22,7 +22,9 @@ export default function TrendsTab({ categories }: IProps) {
 
     const { response: topAccounts, isLoading: isLoadingTopAccount } =
         useOnboardApiV1ConnectionsSummaryList({
-            connector: [selectedConnections?.provider],
+            ...(selectedConnections.provider !== '' && {
+                connector: [selectedConnections.provider],
+            }),
             connectionId: selectedConnections?.connections,
             ...(activeTimeRange.start && {
                 startTime: activeTimeRange.start.unix(),
@@ -39,7 +41,9 @@ export default function TrendsTab({ categories }: IProps) {
         response: topGrowthAccounts,
         isLoading: isLoadingTopGrowthAccounts,
     } = useOnboardApiV1ConnectionsSummaryList({
-        connector: [selectedConnections?.provider],
+        ...(selectedConnections.provider !== '' && {
+            connector: [selectedConnections.provider],
+        }),
         connectionId: selectedConnections?.connections,
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),

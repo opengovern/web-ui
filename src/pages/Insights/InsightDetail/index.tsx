@@ -14,7 +14,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai/index'
 import dayjs from 'dayjs'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
@@ -241,7 +241,7 @@ export default function InsightDetail() {
             },
             current: false,
         },
-        { name: insightDetail?.shortTitle, path: '', current: true },
+        { name: 'Insight Detail', path: '', current: true },
     ]
 
     const trendDates = () => {
@@ -259,19 +259,6 @@ export default function InsightDetail() {
         )
     }
 
-    const getConnectorIcon = (connector: any) => {
-        if (connector === 'AWS')
-            return (
-                <Icon
-                    icon={AWSIcon}
-                    size="xl"
-                    variant="shadow"
-                    color="orange"
-                />
-            )
-        return <Icon icon={AzureIcon} size="xl" variant="shadow" color="blue" />
-    }
-
     useEffect(() => {
         if (detailLoading) {
             gridRef.current?.api.showLoadingOverlay()
@@ -280,7 +267,7 @@ export default function InsightDetail() {
 
     return (
         <LoggedInLayout currentPage="insight">
-            {trendLoading && detailLoading ? (
+            {trendLoading || detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
                 </Flex>
@@ -309,10 +296,11 @@ export default function InsightDetail() {
                                     <Flex
                                         flexDirection="row"
                                         justifyContent="start"
-                                        // className="w-2/3"
                                     >
-                                        {getConnectorIcon(
-                                            insightDetail?.connector
+                                        {insightDetail?.connector === 'AWS' ? (
+                                            <AWSIcon />
+                                        ) : (
+                                            <AzureIcon />
                                         )}
                                         <Flex
                                             flexDirection="col"

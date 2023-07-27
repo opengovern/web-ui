@@ -19,7 +19,9 @@ export default function Summary({ benchmark, loading }: ISummary) {
     const selectedConnections = useAtomValue(filterAtom)
     const { response: accounts, isLoading: accountLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            connector: [selectedConnections.provider],
+            ...(selectedConnections.provider !== '' && {
+                connector: [selectedConnections.provider],
+            }),
             connectionId: selectedConnections.connections,
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),
