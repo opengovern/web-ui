@@ -56,7 +56,7 @@ export default function TopAccountsTrend() {
         >()
         accountsTrends?.forEach((connTrend) => {
             connTrend.trend?.forEach((item) => {
-                const date = dayjs(item.date).unix()
+                const date = dayjs(item.date).unix() * 1000
                 const arr = dateMaps.get(date) || []
                 dateMaps.set(date, [
                     ...arr,
