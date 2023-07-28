@@ -66,6 +66,10 @@ const getTable = (headers: any, details: any) => {
             const row: any = {}
             for (let j = 0; j < columns.length; j += 1) {
                 row[headers[j]] = details[i][j]
+                row[headers[j]] =
+                    typeof details[i][j] === 'string'
+                        ? details[i][j]
+                        : JSON.stringify(details[i][j])
             }
             rows.push(row)
         }
