@@ -1,147 +1,71 @@
-import dayjs from 'dayjs'
-import {
-    CellClickedEvent,
-    ColDef,
-    GridOptions,
-    ICellRendererParams,
-} from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import { Button, Flex, Title } from '@tremor/react'
 import { useRef, useState } from 'react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import { useAtomValue } from 'jotai'
+import { GridApi } from 'ag-grid-community'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
-import {
-    numberGroupedDisplay,
-    priceDisplay,
-} from '../../../../../utilities/numericDisplay'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import Summary from './Summary'
 import DrawerPanel from '../../../../../components/DrawerPanel'
-import { agGridDateComparator } from '../../../../../utilities/dateComparator'
 import { filterAtom, timeAtom } from '../../../../../store'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
-import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
 import { RenderObject } from '../../../../../components/RenderObject'
+import Table, { IColumn } from '../../../../../components/Table'
 
-const columns: ColDef[] = [
+const columns: IColumn<any, any>[] = [
     {
         field: 'connector',
         headerName: 'Connector',
-        width: 50,
-        sortable: true,
-        filter: true,
-        cellStyle: { padding: 0 },
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
-        ) => (
-            <Flex
-                justifyContent="center"
-                alignItems="center"
-                className="w-full h-full"
-            >
-                {params.data?.connector === 'Azure' ? (
-                    <AzureIcon />
-                ) : (
-                    <AWSIcon />
-                )}
-            </Flex>
-        ),
+        type: 'connector',
     },
     {
         field: 'providerConnectionName',
         headerName: 'Name',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
+        type: 'string',
     },
     {
         field: 'providerConnectionID',
         headerName: 'ID',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
+        type: 'string',
     },
     {
         field: 'lifecycleState',
         headerName: 'State',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
+        type: 'string',
     },
     {
         field: 'cost',
         headerName: 'Cost',
-        sortable: true,
-        filter: 'agNumberColumnFilter',
-        resizable: true,
-        flex: 1,
-        cellDataType: 'text',
-        valueFormatter: (param) => {
-            return priceDisplay(param.value) || ''
-        },
+        type: 'price',
     },
     {
         field: 'resourceCount',
         headerName: 'Resources',
-        sortable: true,
-        filter: 'agNumberColumnFilter',
-        resizable: true,
-        flex: 1,
-        cellDataType: 'number',
-        valueFormatter: (param) => {
-            return numberGroupedDisplay(param.value) || ''
-        },
+        type: 'number',
     },
     {
         field: 'lastInventory',
         headerName: 'Last Inventory Date',
-        sortable: true,
-        filter: 'agDateColumnFilter',
-        filterParams: {
-            comparator: agGridDateComparator,
-        },
-        resizable: true,
-        flex: 1,
-        valueFormatter: (param) => {
-            if (param.value) {
-                return new Date(Date.parse(param.value)).toLocaleDateString()
-            }
-            return ''
-        },
+        type: 'date',
     },
     {
         field: 'id',
         headerName: 'Connection ID',
-        sortable: true,
-        filter: true,
-        resizable: true,
+        type: 'string',
         hide: true,
-        flex: 1,
     },
     {
         field: 'onboardDate',
         headerName: 'Onboard Date',
-        sortable: true,
-        filter: 'agDateColumnFilter',
-        filterParams: {
-            comparator: agGridDateComparator,
-        },
-        resizable: true,
+        type: 'date',
         hide: true,
-        flex: 1,
-        valueFormatter: (param) => {
-            return new Date(Date.parse(param.value)).toLocaleDateString()
-        },
     },
 ]
 
 export default function MultiAccount() {
-    const gridRef = useRef<AgGridReact>(null)
+    const gridRef = useRef<GridApi | null>(null)
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
@@ -161,48 +85,6 @@ export default function MultiAccount() {
             pageNumber: 1,
         })
 
-    const gridOptions: GridOptions = {
-        columnDefs: columns,
-        pagination: true,
-        paginationPageSize: 25,
-        rowSelection: 'multiple',
-        animateRows: true,
-        suppressExcelExport: true,
-        sideBar: {
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    toolPanel: 'agFiltersToolPanel',
-                },
-            ],
-            defaultToolPanel: '',
-        },
-        getRowHeight: (params) => 50,
-        onGridReady: () => {
-            if (isAccountsLoading) {
-                gridRef.current?.api.showLoadingOverlay()
-            }
-        },
-        onCellClicked(
-            event: CellClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
-        ) {
-            if (event.data !== null) {
-                setSelectedConnection(event.data)
-                setDrawerOpen(true)
-            }
-        },
-    }
-
     return (
         <>
             <Summary />
@@ -210,20 +92,31 @@ export default function MultiAccount() {
                 <Title>Accounts</Title>
                 <Button
                     variant="secondary"
-                    onClick={() => gridRef?.current?.api.exportDataAsCsv()}
+                    onClick={() => {
+                        gridRef.current?.exportDataAsCsv()
+                    }}
                     icon={ArrowDownOnSquareIcon}
                 >
                     Download
                 </Button>
             </Flex>
-            <div className="ag-theme-alpine">
-                <AgGridReact
-                    ref={gridRef}
-                    domLayout="autoHeight"
-                    gridOptions={gridOptions}
-                    rowData={accounts?.connections || []}
-                />
-            </div>
+
+            <Table
+                columns={columns}
+                rowData={accounts?.connections || []}
+                onGridReady={(e) => {
+                    gridRef.current = e.api
+                    if (isAccountsLoading) {
+                        e.api?.showLoadingOverlay()
+                    }
+                }}
+                onCellClicked={(event) => {
+                    if (event.data !== null) {
+                        setSelectedConnection(event.data)
+                        setDrawerOpen(true)
+                    }
+                }}
+            />
             <DrawerPanel
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}

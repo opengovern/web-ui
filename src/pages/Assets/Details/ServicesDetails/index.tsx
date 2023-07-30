@@ -19,15 +19,13 @@ import {
 } from '../../../../utilities/deltaType'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
 import { AWSIcon, AzureIcon } from '../../../../icons/icons'
+import Table, { IColumn } from '../../../../components/Table'
 
-const columns: ColDef[] = [
+const columns: IColumn<any, any>[] = [
     {
         field: 'connectors',
         headerName: 'Cloud Providers',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
+        type: 'string',
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) => (
@@ -45,33 +43,23 @@ const columns: ColDef[] = [
     {
         field: 'name',
         headerName: 'Service Name',
-        sortable: true,
-        filter: true,
-        resizable: true,
+        type: 'string',
         flex: 2,
     },
     {
         field: 'count',
         headerName: 'Resource Count',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
+        type: 'number',
     },
     {
         field: 'old_count',
         headerName: 'Old Resource Count',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
+        type: 'number',
     },
     {
+        field: 'growth',
         headerName: 'Growth',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
+        type: 'string',
         cellRenderer: (params: ICellRendererParams) => {
             return (
                 <Flex className="h-full w-full">
@@ -94,7 +82,6 @@ const columns: ColDef[] = [
 
 export default function ServicesDetails() {
     const navigate = useNavigate()
-    const gridRef = useRef<AgGridReact>(null)
 
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
@@ -109,20 +96,6 @@ export default function ServicesDetails() {
             sortBy: 'name',
         })
 
-    const gridOptions: GridOptions = {
-        columnDefs: columns,
-        pagination: true,
-        rowSelection: 'multiple',
-        paginationPageSize: 25,
-        animateRows: true,
-        getRowHeight: (params) => 50,
-        onGridReady: (params) => {
-            if (isServiceListLoading) {
-                params.api.showLoadingOverlay()
-            }
-        },
-    }
-
     const breadcrumbsPages = [
         {
             name: 'Assets',
@@ -133,7 +106,6 @@ export default function ServicesDetails() {
         },
         { name: 'Services detail', path: '', current: true },
     ]
-
     return (
         <LoggedInLayout currentPage="assets">
             <Flex
@@ -151,14 +123,15 @@ export default function ServicesDetails() {
                 totalServices={serviceList?.total_metrics}
                 totalServicesLoading={isServiceListLoading}
             />
-            <div className="ag-theme-alpine mt-3">
-                <AgGridReact
-                    ref={gridRef}
-                    domLayout="autoHeight"
-                    gridOptions={gridOptions}
-                    rowData={serviceList?.metrics || []}
-                />
-            </div>
+            <Table
+                columns={columns}
+                rowData={serviceList?.metrics || []}
+                onGridReady={(params) => {
+                    if (isServiceListLoading) {
+                        params.api.showLoadingOverlay()
+                    }
+                }}
+            />
         </LoggedInLayout>
     )
 }

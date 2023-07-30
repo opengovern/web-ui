@@ -43,11 +43,13 @@ export default function SummaryMetrics({
                 title={`Spend across ${getConnections(selectedConnections)}`}
                 metric={exactPriceDisplay(accountCostResponse?.totalCost)}
                 loading={accountCostLoading}
+                url="spend-metrics#accounts"
             />
             <SummaryCard
                 title="Services"
                 metric={Number(serviceCostResponse?.total_count)}
                 loading={serviceCostLoading}
+                url="spend-metrics#services"
             />
         </Grid>
     )
