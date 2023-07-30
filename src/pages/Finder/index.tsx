@@ -28,7 +28,7 @@ import { highlight, languages } from 'prismjs' // eslint-disable-next-line impor
 import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
 import Editor from 'react-simple-code-editor'
-import { GridOptions } from 'ag-grid-community'
+import { GridOptions, RowClickedEvent } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import {
     CheckCircleIcon,
@@ -45,6 +45,8 @@ import {
 import Spinner from '../../components/Spinner'
 import { snakeCaseToLabel } from '../../utilities/labelMaker'
 import { getErrorMessage } from '../../types/apierror'
+import DrawerPanel from '../../components/DrawerPanel'
+import { RenderObject } from '../../components/RenderObject'
 
 const getTable = (headers: any, details: any) => {
     const columns = []
@@ -96,6 +98,8 @@ export default function Finder() {
     const { response: queries, isLoading: queryLoading } =
         useInventoryApiV1QueryList({})
     // const { response: history } = useInventoryApiV1QueryRunHistoryCreate()
+    const [selectedRow, setSelectedRow] = useState({})
+    const [openDrawer, setOpenDrawer] = useState(false)
 
     const {
         response: queryResponse,
@@ -116,6 +120,11 @@ export default function Finder() {
         animateRows: true,
         paginationPageSize: 25,
         getRowHeight: (params) => 50,
+        onRowClicked(event: RowClickedEvent<any>) {
+            setSelectedRow(event.data)
+            setOpenDrawer(true)
+            console.log(event)
+        },
     }
 
     useEffect(() => {
@@ -137,6 +146,12 @@ export default function Finder() {
                 <Spinner className="mt-56" />
             ) : (
                 <Flex alignItems="start" className="gap-x-6">
+                    <DrawerPanel
+                        open={openDrawer}
+                        onClose={() => setOpenDrawer(false)}
+                    >
+                        <RenderObject obj={selectedRow} />
+                    </DrawerPanel>
                     <Flex
                         flexDirection="col"
                         alignItems="start"
