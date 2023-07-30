@@ -160,6 +160,7 @@ export default function ResourceMetricsDetails() {
                 </Flex>
 
                 <Table
+                    id="asset_resource_metrics"
                     rowData={metrics?.metrics || []}
                     columns={columns}
                     onGridReady={(params) => {

@@ -124,6 +124,7 @@ export default function ServicesDetails() {
                 totalServicesLoading={isServiceListLoading}
             />
             <Table
+                id="asset_service_details"
                 columns={columns}
                 rowData={serviceList?.metrics || []}
                 onGridReady={(params) => {

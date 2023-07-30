@@ -9,7 +9,7 @@ import {
     ValueFormatterFunc,
 } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Flex } from '@tremor/react'
 import { AWSIcon, AzureIcon } from '../../icons/icons'
 import {
@@ -34,6 +34,7 @@ export interface IColumn<TData, TValue> {
 }
 
 interface IProps<TData, TValue> {
+    id: string
     columns?: IColumn<TData, TValue>[]
     rowData: TData[] | null
     onGridReady?: (event: GridReadyEvent<TData>) => void
@@ -41,12 +42,39 @@ interface IProps<TData, TValue> {
 }
 
 export default function Table<TData = any, TValue = any>({
+    id,
     columns,
     rowData,
     onGridReady,
     onCellClicked,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
+    const visibility = useRef<Map<string, boolean> | undefined>(undefined)
+
+    if (visibility.current === undefined) {
+        visibility.current = new Map()
+        const columnVisibility = localStorage.getItem(
+            `table_${id}_columns_visibility`
+        )
+        if (columnVisibility) {
+            const v = JSON.parse(columnVisibility)
+            if (typeof v === 'object') {
+                Object.entries(v).forEach((vi) => {
+                    visibility.current?.set(vi[0], Boolean(vi[1]))
+                })
+            }
+        }
+    }
+
+    const saveVisibility = () => {
+        if (visibility.current) {
+            const o = Object.fromEntries(visibility.current.entries())
+            localStorage.setItem(
+                `table_${id}_columns_visibility`,
+                JSON.stringify(o)
+            )
+        }
+    }
 
     const buildColumnDef = () =>
         columns?.map((item) => {
@@ -61,6 +89,13 @@ export default function Table<TData = any, TValue = any>({
                 flex: item.flex || 1,
             }
 
+            if (
+                item.field &&
+                visibility.current?.get(item.field || '') !== undefined
+            ) {
+                v.hide = !visibility.current.get(item.field || '')
+            }
+            
             if (item.type === 'price') {
                 v.filter = 'agNumberColumnFilter'
                 v.cellDataType = 'text'
@@ -118,6 +153,12 @@ export default function Table<TData = any, TValue = any>({
             }
         },
         onCellClicked,
+        onColumnVisible: (e) => {
+            if (e.column?.getId() && e.visible !== undefined) {
+                visibility.current?.set(e.column?.getId(), e.visible)
+                saveVisibility()
+            }
+        },
         sideBar: {
             toolPanels: [
                 {

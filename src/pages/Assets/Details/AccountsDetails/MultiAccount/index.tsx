@@ -102,6 +102,7 @@ export default function MultiAccount() {
             </Flex>
 
             <Table
+                id="asset_multiaccount"
                 columns={columns}
                 rowData={accounts?.connections || []}
                 onGridReady={(e) => {
