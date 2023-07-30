@@ -8,7 +8,7 @@ import {
 import { useRef } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
+import { ColDef, ICellRendererParams } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import {
     filterAtom,
@@ -19,7 +19,6 @@ import {
     useInventoryApiV2AnalyticsMetricList,
     useInventoryApiV2AnalyticsTagList,
 } from '../../../../api/inventory.gen'
-import { numberDisplay } from '../../../../utilities/numericDisplay'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import DateRangePicker from '../../../../components/DateRangePicker'
@@ -28,41 +27,28 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
 import { badgeDelta } from '../../../../utilities/deltaType'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
+import Table, { IColumn } from '../../../../components/Table'
 
-const columns: ColDef[] = [
+const columns: IColumn<any, any>[] = [
     {
         field: 'name',
         headerName: 'Metric Name',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
+        type: 'string',
     },
     {
         field: 'old_count',
         headerName: 'From',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-        valueFormatter: (params) => numberDisplay(params.value, 0),
+        type: 'number',
     },
     {
         field: 'count',
         headerName: 'Count',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-        valueFormatter: (params) => numberDisplay(params.value, 0),
+        type: 'number',
     },
     {
         field: 'changes',
         headerName: 'Change',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
+        type: 'string',
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) => (
@@ -74,7 +60,6 @@ const columns: ColDef[] = [
 ]
 export default function ResourceMetricsDetails() {
     const navigate = useNavigate()
-    const gridRef = useRef<AgGridReact>(null)
 
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
@@ -122,39 +107,6 @@ export default function ResourceMetricsDetails() {
                 value: categoryName,
             })) || []
         )
-    }
-
-    const gridOptions: GridOptions = {
-        columnDefs: columns,
-        pagination: true,
-        paginationPageSize: 25,
-        rowSelection: 'multiple',
-        animateRows: true,
-        getRowHeight: (params) => 50,
-        onGridReady: (params) => {
-            if (metricsLoading) {
-                params.api.showLoadingOverlay()
-            }
-        },
-        sideBar: {
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    toolPanel: 'agFiltersToolPanel',
-                },
-            ],
-            defaultToolPanel: '',
-        },
     }
 
     const breadcrumbsPages = [
@@ -207,14 +159,15 @@ export default function ResourceMetricsDetails() {
                     </SearchSelect>
                 </Flex>
 
-                <div className="ag-theme-alpine mt-10">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                        rowData={metrics?.metrics || []}
-                    />
-                </div>
+                <Table
+                    rowData={metrics?.metrics || []}
+                    columns={columns}
+                    onGridReady={(params) => {
+                        if (metricsLoading) {
+                            params.api.showLoadingOverlay()
+                        }
+                    }}
+                />
             </Card>
         </LoggedInLayout>
     )

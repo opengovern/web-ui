@@ -1,15 +1,11 @@
 import { useAtom, useAtomValue } from 'jotai'
-import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import {
     filterAtom,
     selectedResourceCategoryAtom,
     timeAtom,
 } from '../../../../store'
-import {
-    useInventoryApiV2AnalyticsMetricList,
-    useInventoryApiV2ResourcesMetricList,
-} from '../../../../api/inventory.gen'
+import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import MetricsList, { IMetric } from '../../../../components/MetricsList'
 import { isDemo } from '../../../../utilities/demo'
@@ -81,7 +77,9 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
             name="Resource"
             seeMoreUrl="resource-metrics"
             isLoading={isLoading}
-            categories={categories}
+            categories={[
+                { label: 'All Categories', value: 'All Categories' },
+            ].concat(categories)}
             selectedCategory={selectedResourceCategory}
             onChangeCategory={setSelectedResourceCategory}
             metrics={metrics()}

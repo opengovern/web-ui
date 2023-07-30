@@ -12,7 +12,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
 import {
@@ -189,11 +189,14 @@ export default function CostMetricsDetails() {
     const gridRef = useRef<AgGridReact>(null)
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
+    const { hash } = useLocation()
 
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [selectedIndex, setSelectedIndex] = useState(
+        hash === '#accounts' ? 1 : 0
+    )
     const activeCategory =
         selectedResourceCategory === 'All Categories'
             ? ''
