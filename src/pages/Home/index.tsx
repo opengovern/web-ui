@@ -9,44 +9,43 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useParams } from 'react-router-dom'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import { numberDisplay, priceDisplay } from '../../utilities/numericDisplay'
 import {
+    useInventoryApiV2AnalyticsMetricList,
+    useInventoryApiV2AnalyticsTrendList,
     useInventoryApiV2CostTrendList,
-    useInventoryApiV2ResourcesTrendList,
-    useInventoryApiV2ServicesMetricList,
 } from '../../api/inventory.gen'
-import { useWorkspaceApiV1WorkspacesLimitsDetail } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
 import Chart from '../../components/Charts'
 import { dateDisplay } from '../../utilities/dateDisplay'
 import { isDemo } from '../../utilities/demo'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 
 export default function Home() {
-    const workspace = useParams<{ ws: string }>().ws
     const [selectedType, setSelectedType] = useState('resource')
-
     const { response: services, isLoading: servicesIsLoading } =
-        useInventoryApiV2ServicesMetricList(
+        useInventoryApiV2AnalyticsMetricList(
             {},
             {
                 ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
             }
         )
-    const { response: limits, isLoading: limitsLoading } =
-        useWorkspaceApiV1WorkspacesLimitsDetail(
-            workspace || '',
-            {},
+    const { response: summary, isLoading: limitsLoading } =
+        useOnboardApiV1ConnectionsSummaryList(
+            {
+                pageSize: 0,
+                pageNumber: 1,
+            },
             {
                 ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
             }
         )
     const { response: resourcesTrend, isLoading: resourceTrendLoading } =
-        useInventoryApiV2ResourcesTrendList()
+        useInventoryApiV2AnalyticsTrendList()
     const { response: costTrend, isLoading: costTrendLoading } =
         useInventoryApiV2CostTrendList()
 
@@ -133,17 +132,17 @@ export default function Home() {
             >
                 <SummaryCard
                     title="Cloud Accounts"
-                    metric={numberDisplay(limits?.currentConnections, 0)}
+                    metric={numberDisplay(summary?.connectionCount, 0)}
                     loading={limitsLoading}
                 />
                 <SummaryCard
                     title="Services"
-                    metric={numberDisplay(services?.total_services, 0)}
+                    metric={numberDisplay(services?.total_metrics, 0)}
                     loading={servicesIsLoading}
                 />
                 <SummaryCard
                     title="Resource Count"
-                    metric={numberDisplay(limits?.currentResources, 0)}
+                    metric={numberDisplay(summary?.totalResourceCount, 0)}
                     loading={limitsLoading}
                 />
             </Grid>
