@@ -8,12 +8,17 @@ import SummaryCard from '../../components/Cards/SummaryCard'
 import { numberDisplay } from '../../utilities/numericDisplay'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
+import { isDemo } from '../../utilities/demo'
 
 export default function Integrations() {
     const { response: topMetrics, isLoading: metricsLoading } =
-        useOnboardApiV1CatalogMetricsList()
+        useOnboardApiV1CatalogMetricsList({
+            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+        })
     const { response: connectors, isLoading: connectorsLoading } =
-        useOnboardApiV1ConnectorList()
+        useOnboardApiV1ConnectorList({
+            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+        })
 
     return (
         <LoggedInLayout currentPage="integration">
