@@ -1,10 +1,6 @@
-import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
 import { DeltaType } from '@tremor/react'
-import {
-    useInventoryApiV2AnalyticsCompositionDetail,
-    useInventoryApiV2ResourcesCompositionDetail,
-} from '../../../../api/inventory.gen'
+import { useInventoryApiV2AnalyticsCompositionDetail } from '../../../../api/inventory.gen'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import Composition from '../../../../components/Cards/Composition'
 import {

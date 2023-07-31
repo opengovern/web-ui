@@ -2,10 +2,7 @@ import { useState } from 'react'
 import { Card, Flex, MultiSelect, MultiSelectItem, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
-import {
-    useInventoryApiV2AnalyticsTrendList,
-    useInventoryApiV2ResourcesTrendList,
-} from '../../../../../api/inventory.gen'
+import { useInventoryApiV2AnalyticsTrendList } from '../../../../../api/inventory.gen'
 import Chart from '../../../../../components/Charts'
 import { filterAtom, timeAtom } from '../../../../../store'
 import { badgeDelta } from '../../../../../utilities/deltaType'
