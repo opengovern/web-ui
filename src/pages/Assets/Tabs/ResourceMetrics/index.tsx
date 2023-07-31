@@ -62,7 +62,7 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
                     onClick: () => {
                         navigate(
                             `./../finder?q=${encodeURIComponent(
-                                metric.query || ''
+                                metric.finderQuery || ''
                             )}`
                         )
                     },
