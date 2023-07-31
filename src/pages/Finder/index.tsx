@@ -41,7 +41,6 @@ import {
     useInventoryApiV1QueryList,
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsCategoriesList,
-    useInventoryApiV2MetadataTagsResourcetypeDetail,
 } from '../../api/inventory.gen'
 import Spinner from '../../components/Spinner'
 import { snakeCaseToLabel } from '../../utilities/labelMaker'

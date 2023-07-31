@@ -1,5 +1,4 @@
 import { Flex, Grid } from '@tremor/react'
-import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
 import GrowthTrend from './GrowthTrend'
 import CardWithList from '../../../../components/Cards/CardWithList'
@@ -7,8 +6,6 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.g
 import {
     useInventoryApiV2AnalyticsMetricList,
     useInventoryApiV2AnalyticsRegionsSummaryList,
-    useInventoryApiV2ResourcesRegionsSummaryList,
-    useInventoryApiV2ServicesMetricList,
 } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
 import { filterAtom, timeAtom } from '../../../../store'

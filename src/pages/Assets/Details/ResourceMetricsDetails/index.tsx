@@ -5,11 +5,9 @@ import {
     SearchSelectItem,
     Title,
 } from '@tremor/react'
-import { useRef } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
-import { ColDef, ICellRendererParams } from 'ag-grid-community'
-import { AgGridReact } from 'ag-grid-react'
+import { ICellRendererParams } from 'ag-grid-community'
 import {
     filterAtom,
     selectedResourceCategoryAtom,
