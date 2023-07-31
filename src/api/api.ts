@@ -2047,7 +2047,11 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     assetDiscoveryMethod?: SourceAssetDiscoveryMethodType
     /** @example "Azure" */
     connector?: SourceType
-    /** @example 1000 */
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
     cost?: number
     credential?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential
     /** @example "7r6123ac-ca1c-434f-b1a3-91w2w9d277c8" */
@@ -2055,9 +2059,17 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     credentialName?: string
     /** @example "manual" */
     credentialType?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredentialType
-    /** @example 1000 */
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
     dailyCostAtEndTime?: number
-    /** @example 1000 */
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
     dailyCostAtStartTime?: number
     /** @example "This is an example connection" */
     description?: string
@@ -2073,7 +2085,11 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     /** @example "enabled" */
     lifecycleState?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
     metadata?: Record<string, any>
-    /** @example 100 */
+    /**
+     * @min 0
+     * @max 1000000
+     * @example 100
+     */
     oldResourceCount?: number
     /** @example "2023-05-07T00:00:00Z" */
     onboardDate?: string
@@ -2081,7 +2097,11 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     providerConnectionID?: string
     /** @example "example-connection" */
     providerConnectionName?: string
-    /** @example 100 */
+    /**
+     * @min 0
+     * @max 1000000
+     * @example 100
+     */
     resourceCount?: number
 }
 
@@ -2184,6 +2204,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
     enabled?: boolean
     /**
      * @min 0
+     * @max 1000
      * @example 250
      */
     enabled_connections?: number
@@ -2208,11 +2229,13 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
     onboardDate?: string
     /**
      * @min 0
+     * @max 1000
      * @example 300
      */
     total_connections?: number
     /**
      * @min 0
+     * @max 100
      * @example 50
      */
     unhealthy_connections?: number
@@ -2228,37 +2251,44 @@ export enum GithubComKaytuIoKaytuEnginePkgOnboardApiCredentialType {
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse {
     /**
      * @min 0
+     * @max 1000
      * @example 10
      */
     connectionCount?: number
     connections?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     /**
      * @min 0
+     * @max 1000
      * @example 10
      */
     oldConnectionCount?: number
     /**
      * @min 0
+     * @max 10000000
      * @example 1000
      */
     totalCost?: number
     /**
      * @min 0
+     * @max 100
      * @example 10
      */
     totalDisabledCount?: number
     /**
      * @min 0
+     * @max 1000000
      * @example 100
      */
     totalOldResourceCount?: number
     /**
      * @min 0
+     * @max 1000000
      * @example 100
      */
     totalResourceCount?: number
     /**
      * @min 0
+     * @max 100
      * @example 10
      */
     totalUnhealthyCount?: number
@@ -2268,6 +2298,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse 
     credentials?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
     /**
      * @min 0
+     * @max 20
      * @example 5
      */
     totalCredentialCount?: number
