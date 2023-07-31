@@ -1224,21 +1224,6 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail {
     resourceTypeName?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiSource {
-    /** @example "123456789012" */
-    accountId?: string
-    /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
-    id?: string
-    /** @example "2021-01-01T00:00:00Z" */
-    lastComplianceReportAt?: string
-    /** @example "COMPLETED" */
-    lastDescribeJobStatus?: string
-    /** @example "2021-01-01T00:00:00Z" */
-    lastDescribedAt?: string
-    /** @example "Azure" */
-    type?: SourceType
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
     /**
      * Accounts included in the stack
@@ -1672,6 +1657,8 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiMetric {
      * @example 100
      */
     count?: number
+    /** @example "select * from kaytu_resources where resource_type = 'aws::ec2::instance'" */
+    finderQuery?: string
     /** @example "vms" */
     id?: string
     /**
@@ -1684,8 +1671,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiMetric {
      * @example 90
      */
     old_count?: number
-    /** @example "select * from kaytu_resources where resource_type = 'aws::ec2::instance'" */
-    query?: string
     /** Tags */
     tags?: Record<string, string[]>
 }
@@ -2064,6 +2049,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     connector?: SourceType
     /** @example 1000 */
     cost?: number
+    credential?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential
     /** @example "7r6123ac-ca1c-434f-b1a3-91w2w9d277c8" */
     credentialID?: string
     credentialName?: string
@@ -2213,6 +2199,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
      */
     lastHealthCheckTime?: string
     metadata?: Record<string, any>
+    /** @example "a-1mahsl7lzk" */
     name?: string
     /**
      * @format date-time
@@ -2338,14 +2325,12 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRespon
     id?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganizationResponse {
-    addressLine1?: string
-    addressLine2?: string
-    addressLine3?: string
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization {
+    address?: string
     city?: string
     companyName?: string
     contactEmail?: string
-    contactPerson?: string
+    contactName?: string
     contactPhone?: string
     country?: string
     id?: number
@@ -2360,13 +2345,22 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
+    /** @example "2023-05-17T14:39:02.707659Z" */
+    createdAt?: string
+    /** @example "Lorem ipsum dolor sit amet, consectetur adipiscing elit." */
     description?: string
+    /** @example "ws-698542025141040315" */
     id?: string
+    /** @example "kaytu" */
     name?: string
-    organization_id?: number
-    owner_id?: string
+    organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
+    /** @example "google-oauth2|204590896945502695694" */
+    ownerId?: string
+    /** @example "PROVISIONED" */
     status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus
+    /** @example "ENTERPRISE" */
     tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
+    /** @example "https://app.kaytu.dev/kaytu" */
     uri?: string
 }
 
@@ -2402,16 +2396,16 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     description?: string
     /** @example "ws-698542025141040315" */
     id?: string
-    /** @example "keibi" */
+    /** @example "kaytu" */
     name?: string
-    organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganizationResponse
+    organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
     /** @example "google-oauth2|204590896945502695694" */
     ownerId?: string
     /** @example "PROVISIONED" */
     status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus
     /** @example "ENTERPRISE" */
     tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
-    /** @example "https://app.kaytu.dev/keibi" */
+    /** @example "https://app.kaytu.dev/kaytu" */
     uri?: string
     /** @example "v0.45.4" */
     version?: string
@@ -6509,45 +6503,6 @@ export class Api<
             }),
 
         /**
-         * @description Retrieves list of all of Keibi sources
-         *
-         * @tags schedule
-         * @name ApiV1SourcesList
-         * @summary List Sources
-         * @request GET:/schedule/api/v1/sources
-         * @secure
-         */
-        apiV1SourcesList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgDescribeApiSource[],
-                any
-            >({
-                path: `/schedule/api/v1/sources`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieves Keibi source details by id Getting Keibi source by id
-         *
-         * @tags schedule
-         * @name ApiV1SourcesDetail
-         * @summary Get source
-         * @request GET:/schedule/api/v1/sources/{source_id}
-         * @secure
-         */
-        apiV1SourcesDetail: (sourceId: string, params: RequestParams = {}) =>
-            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiSource, any>({
-                path: `/schedule/api/v1/sources/${sourceId}`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Retrieves list of source compliance reports for a source by the given source id
          *
          * @tags schedule
@@ -6579,26 +6534,6 @@ export class Api<
             }),
 
         /**
-         * @description Run compliance report jobs
-         *
-         * @tags schedule
-         * @name ApiV1SourcesJobsComplianceRefreshCreate
-         * @summary Run compliance report jobs
-         * @request POST:/schedule/api/v1/sources/{source_id}/jobs/compliance/refresh
-         * @secure
-         */
-        apiV1SourcesJobsComplianceRefreshCreate: (
-            sourceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/schedule/api/v1/sources/${sourceId}/jobs/compliance/refresh`,
-                method: 'POST',
-                secure: true,
-                ...params,
-            }),
-
-        /**
          * @description Retrieves list of source describe jobs for a source by the given source id
          *
          * @tags schedule
@@ -6619,26 +6554,6 @@ export class Api<
                 method: 'GET',
                 secure: true,
                 format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Run describe jobs
-         *
-         * @tags schedule
-         * @name ApiV1SourcesJobsDescribeRefreshCreate
-         * @summary Run describe jobs
-         * @request POST:/schedule/api/v1/sources/{source_id}/jobs/describe/refresh
-         * @secure
-         */
-        apiV1SourcesJobsDescribeRefreshCreate: (
-            sourceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/schedule/api/v1/sources/${sourceId}/jobs/describe/refresh`,
-                method: 'POST',
-                secure: true,
                 ...params,
             }),
 
@@ -6884,6 +6799,53 @@ export class Api<
             }),
     }
     workspace = {
+        /**
+         * No description
+         *
+         * @tags workspace
+         * @name ApiV1OrganizationCreate
+         * @summary Create an organization
+         * @request POST:/workspace/api/v1/organization
+         * @secure
+         */
+        apiV1OrganizationCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
+                any
+            >({
+                path: `/workspace/api/v1/organization`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags workspace
+         * @name ApiV1OrganizationDelete
+         * @summary Create an organization
+         * @request DELETE:/workspace/api/v1/organization/{organizationId}
+         * @secure
+         */
+        apiV1OrganizationDelete: (
+            organizationId: number,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/workspace/api/v1/organization/${organizationId}`,
+                method: 'DELETE',
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
         /**
          * @description Returns workspace created
          *

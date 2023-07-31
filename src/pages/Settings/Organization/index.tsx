@@ -28,10 +28,8 @@ export default function SettingsOrganization() {
             value: (
                 <>
                     <p className="truncate">
-                        Line1: {response?.organization?.addressLine1}
+                        Address: {response?.organization?.address}
                     </p>
-                    <p>Line2: {response?.organization?.addressLine2}</p>
-                    <p>Line3: {response?.organization?.addressLine3}</p>
                     <p>City: {response?.organization?.city}</p>
                     <p>
                         State/Province/Region: {response?.organization?.state}
@@ -47,7 +45,7 @@ export default function SettingsOrganization() {
             key: 'Contact Details',
             value: (
                 <>
-                    <p>Name: {response?.organization?.contactPerson}</p>
+                    <p>Name: {response?.organization?.contactName}</p>
                     <p>Phone: {response?.organization?.contactPhone}</p>
                     <p>Email: {response?.organization?.contactEmail}</p>
                 </>
