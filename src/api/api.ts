@@ -1389,6 +1389,10 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAllResource {
     resourceTypeLabel?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse {
+    categoryResourceType?: Record<string, string[]>
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiConnectionFull {
     id?: string
     name?: string
@@ -4321,6 +4325,28 @@ export class Api<
                 path: `/inventory/api/v1/resources/top/regions`,
                 method: 'GET',
                 query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns list of categories for analytics summary
+         *
+         * @tags analytics
+         * @name ApiV2AnalyticsCategoriesList
+         * @summary List Analytics categories
+         * @request GET:/inventory/api/v2/analytics/categories
+         * @secure
+         */
+        apiV2AnalyticsCategoriesList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
+                any
+            >({
+                path: `/inventory/api/v2/analytics/categories`,
+                method: 'GET',
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',

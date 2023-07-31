@@ -40,6 +40,7 @@ import QueryCard from '../../components/Cards/QueryCard'
 import {
     useInventoryApiV1QueryList,
     useInventoryApiV1QueryRunCreate,
+    useInventoryApiV2AnalyticsCategoriesList,
     useInventoryApiV2MetadataTagsResourcetypeDetail,
 } from '../../api/inventory.gen'
 import Spinner from '../../components/Spinner'
@@ -92,9 +93,7 @@ export default function Finder() {
     const [searchCategory, setSearchCategory] = useState('')
 
     const { response: categories, isLoading: categoryLoading } =
-        useInventoryApiV2MetadataTagsResourcetypeDetail('category', {
-            connector: [],
-        })
+        useInventoryApiV2AnalyticsCategoriesList()
     const { response: queries, isLoading: queryLoading } =
         useInventoryApiV1QueryList({})
     // const { response: history } = useInventoryApiV1QueryRunHistoryCreate()
@@ -140,6 +139,23 @@ export default function Finder() {
         }
     }, [])
 
+    const recordToArray = (record?: Record<string, string[]> | undefined) => {
+        if (record === undefined) {
+            return []
+        }
+
+        return Object.keys(record).map((key) => {
+            return {
+                value: key,
+                resource_types: record[key],
+            }
+        })
+    }
+
+    const v = () => {
+        const arr = recordToArray(categories?.categoryResourceType)
+    }
+
     return (
         <LoggedInLayout currentPage="finder">
             {categoryLoading || queryLoading ? (
@@ -165,7 +181,7 @@ export default function Finder() {
                             value={searchCategory}
                             onChange={(e) => setSearchCategory(e.target.value)}
                         />
-                        {categories?.values?.map(
+                        {recordToArray(categories?.categoryResourceType).map(
                             (cat) =>
                                 !!cat.resource_types?.filter((catt) =>
                                     catt
