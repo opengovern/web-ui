@@ -15,10 +15,35 @@ export default function Integrations() {
         useOnboardApiV1CatalogMetricsList({
             ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
         })
-    const { response: connectors, isLoading: connectorsLoading } =
+    const { response: responseConnectors, isLoading: connectorsLoading } =
         useOnboardApiV1ConnectorList({
             ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
         })
+
+    const mockConnectors = [
+        {
+            allowNewConnections: true,
+            autoOnboardSupport: true,
+            connection_count: 50,
+            description: 'Microsoft Azure Subscriptions',
+            direction: 'both',
+            label: 'Azure',
+            name: 'Azure',
+            status: 'enabled',
+        },
+        {
+            allowNewConnections: true,
+            autoOnboardSupport: true,
+            connection_count: 50,
+            description: 'Amazon AWS Accounts',
+            direction: 'both',
+            label: 'AWS',
+            name: 'AWS',
+            status: 'enabled',
+        },
+    ]
+
+    const connectors = () => (isDemo() ? mockConnectors : responseConnectors)
 
     return (
         <LoggedInLayout currentPage="integration">
@@ -47,7 +72,7 @@ export default function Integrations() {
                 </Flex>
             ) : (
                 <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6">
-                    {connectors?.map((connector) => (
+                    {connectors()?.map((connector) => (
                         <ConnectorCard
                             connector={connector.name}
                             title={connector.label}

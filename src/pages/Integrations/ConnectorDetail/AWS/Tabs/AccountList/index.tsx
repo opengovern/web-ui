@@ -23,7 +23,9 @@ interface IAccountList {
     organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
-const getType = (account: any) => {
+const getType = (
+    account: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
+) => {
     if (account) {
         if (account.credentialType === 'auto-aws') {
             return 'Standalone Account'
@@ -31,7 +33,7 @@ const getType = (account: any) => {
         if (
             account.credentialType === 'manual-aws-org' &&
             account.providerConnectionID ===
-                account.metadata.account_organization.MasterAccountId
+                account?.metadata?.account_organization.MasterAccountId
         ) {
             return 'Organization Management Account'
         }
