@@ -95,7 +95,7 @@ export default function Table<TData = any, TValue = any>({
             ) {
                 v.hide = !visibility.current.get(item.field || '')
             }
-            
+
             if (item.type === 'price') {
                 v.filter = 'agNumberColumnFilter'
                 v.cellDataType = 'text'
