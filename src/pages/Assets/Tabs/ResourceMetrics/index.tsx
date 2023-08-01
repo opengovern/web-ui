@@ -77,9 +77,13 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
             name="Resource"
             seeMoreUrl="resource-metrics"
             isLoading={isLoading}
-            categories={[
-                { label: 'All Categories', value: 'All Categories' },
-            ].concat(categories)}
+            categories={
+                categories.length > 0
+                    ? [
+                          { label: 'All Categories', value: 'All Categories' },
+                      ].concat(categories)
+                    : categories
+            }
             selectedCategory={selectedResourceCategory}
             onChangeCategory={setSelectedResourceCategory}
             metrics={metrics()}
