@@ -8,7 +8,6 @@ import {
     RowClickedEvent,
 } from 'ag-grid-community'
 import { PlusIcon } from '@heroicons/react/24/solid'
-import dayjs from 'dayjs'
 import AccountInfo from './AccountInfo'
 import NewAWSAccount from './NewAWSAccount'
 import {
@@ -17,6 +16,7 @@ import {
 } from '../../../../../../api/api'
 import { AWSIcon } from '../../../../../../icons/icons'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
+import Notification from '../../../../../../components/Notification'
 
 interface IAccountList {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -179,6 +179,7 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
     >(undefined)
     const [openInfo, setOpenInfo] = useState(false)
     const [open, setOpen] = useState(false)
+    const [notification, setNotification] = useState<string>('')
 
     const gridOptions: GridOptions = {
         columnDefs: columns,
@@ -232,11 +233,13 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
                     />
                 </div>
             </Card>
+            {notification && <Notification text={notification} />}
             <AccountInfo
                 data={accData}
                 type={getType(accData)}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
+                notification={setNotification}
             />
             <NewAWSAccount
                 accounts={accounts}
