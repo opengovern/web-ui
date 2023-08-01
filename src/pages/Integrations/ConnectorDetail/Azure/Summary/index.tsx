@@ -1,12 +1,14 @@
 import { Grid } from '@tremor/react'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
-import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import {
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    numberDisplay,
+    numericDisplay,
+} from '../../../../../utilities/numericDisplay'
+import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
 } from '../../../../../api/api'
+import DualSummaryCard from '../../../../../components/Cards/DualSummaryCard'
 
 interface IAzureSummary {
     principalsSummary:
@@ -35,18 +37,25 @@ export default function AzureSummary({
                 loading={subscriptionsLoading}
             />
             <SummaryCard
-                title="Unhealthy Connections"
-                metric={String(
-                    numericDisplay(subscriptionsSummary?.totalUnhealthyCount)
-                )}
-                loading={subscriptionsLoading}
-            />
-            <SummaryCard
                 title="Service Principals"
                 metric={String(
                     numericDisplay(principalsSummary?.totalCredentialCount)
                 )}
                 loading={principalsLoading}
+            />
+            <DualSummaryCard
+                title1="Healthy Connections"
+                title2="Unhealthy Connections"
+                metric1={numberDisplay(
+                    (subscriptionsSummary?.connectionCount || 0) -
+                        (subscriptionsSummary?.totalUnhealthyCount || 0),
+                    0
+                )}
+                metric2={numberDisplay(
+                    subscriptionsSummary?.totalUnhealthyCount,
+                    0
+                )}
+                loading={subscriptionsLoading}
             />
         </Grid>
     )

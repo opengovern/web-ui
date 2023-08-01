@@ -1,10 +1,14 @@
 import { Grid } from '@tremor/react'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
-import { numericDisplay } from '../../../../../utilities/numericDisplay'
+import {
+    numberDisplay,
+    numericDisplay,
+} from '../../../../../utilities/numericDisplay'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
 } from '../../../../../api/api'
+import DualSummaryCard from '../../../../../components/Cards/DualSummaryCard'
 
 interface IAWSSummary {
     accountsSummary:
@@ -33,18 +37,22 @@ export default function AWSSummary({
                 loading={accountLoading}
             />
             <SummaryCard
-                title="Unhealthy Accounts"
-                metric={String(
-                    numericDisplay(accountsSummary?.totalUnhealthyCount)
-                )}
-                loading={accountLoading}
-            />
-            <SummaryCard
                 title="AWS Organizations"
                 metric={String(
                     numericDisplay(credential?.totalCredentialCount)
                 )}
                 loading={credentialLoading}
+            />
+            <DualSummaryCard
+                title1="Healthy Connections"
+                title2="Unhealthy Connections"
+                metric1={numberDisplay(
+                    (accountsSummary?.connectionCount || 0) -
+                        (accountsSummary?.totalUnhealthyCount || 0),
+                    0
+                )}
+                metric2={numberDisplay(accountsSummary?.totalUnhealthyCount, 0)}
+                loading={accountLoading}
             />
         </Grid>
     )

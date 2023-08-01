@@ -9,6 +9,7 @@ import { numberDisplay } from '../../utilities/numericDisplay'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 import { isDemo } from '../../utilities/demo'
+import DualSummaryCard from '../../components/Cards/DualSummaryCard'
 
 export default function Integrations() {
     const { response: topMetrics, isLoading: metricsLoading } =
@@ -42,7 +43,6 @@ export default function Integrations() {
             status: 'enabled',
         },
     ]
-
     const connectors = () => (isDemo() ? mockConnectors : responseConnectors)
 
     return (
@@ -50,18 +50,20 @@ export default function Integrations() {
             <Metric>Integrations</Metric>
             <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6 mb-10">
                 <SummaryCard
-                    title="Total Connections"
+                    title="Discovered Cloud Connection"
                     metric={numberDisplay(topMetrics?.totalConnections, 0)}
                     loading={metricsLoading}
                 />
                 <SummaryCard
-                    title="Active Connections"
+                    title="Onboarded Cloud Connection"
                     metric={numberDisplay(topMetrics?.connectionsEnabled, 0)}
                     loading={metricsLoading}
                 />
-                <SummaryCard
-                    title="Total Unhealthy Connections"
-                    metric={numberDisplay(topMetrics?.unhealthyConnections, 0)}
+                <DualSummaryCard
+                    title1="Healthy Connections"
+                    title2="Unhealthy Connections"
+                    metric1={numberDisplay(topMetrics?.unhealthyConnections, 0)}
+                    metric2={numberDisplay(topMetrics?.healthyConnections, 0)}
                     loading={metricsLoading}
                 />
             </Grid>
