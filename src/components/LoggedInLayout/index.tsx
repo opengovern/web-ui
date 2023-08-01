@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
     BanknotesIcon,
@@ -27,9 +27,9 @@ import {
     Title,
 } from '@tremor/react'
 import { useAtom } from 'jotai'
-import { ReactComponent as KaytuLogo } from '../../icons/logo-dark-sqare-sm-glyph 2.svg'
 import { sideBarCollapsedAtom } from '../../store'
 import CLIMenu from './CLIMenu'
+import { KaytuIcon } from '../../icons/icons'
 
 const navigation = [
     {
@@ -167,7 +167,7 @@ export default function LoggedInLayout({
                                 {/* Sidebar component, swap this element with another sidebar if you like */}
                                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-blue-950 px-6 pb-4 ring-1 ring-white/10">
                                     <div className="flex h-16 shrink-0 items-center">
-                                        <KaytuLogo className="h-8 w-auto" />
+                                        <KaytuIcon className="h-8 w-auto" />
                                     </div>
                                     <nav className="flex flex-1 flex-col">
                                         <ul className="flex flex-1 flex-col gap-y-7">
@@ -203,7 +203,7 @@ export default function LoggedInLayout({
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div className="transition ease-in-out hidden h-full lg:flex lg:flex-col bg-blue-950 px-6 pb-4">
+            <div className="transition ease-in-out hidden h-full lg:flex lg:flex-col bg-blue-950 pb-4">
                 <Flex
                     flexDirection="col"
                     className="h-full w-full gap-y-5 overflow-y-auto"
@@ -211,14 +211,16 @@ export default function LoggedInLayout({
                     <Flex
                         alignItems="center"
                         justifyContent="start"
-                        className="mt-2 h-16 shrink-0"
+                        className="mt-2 h-16 shrink-0 border-b border-gray-700"
                     >
-                        <KaytuLogo />
+                        <KaytuIcon className="ml-7 w-8 h-8" />
                         {!collapsed && (
-                            <Title className="text-slate-50 w-48">KAYTU</Title>
+                            <Title className="text-slate-50 ml-1.5">
+                                KAYTU
+                            </Title>
                         )}
                     </Flex>
-                    <nav className="w-full flex flex-1 flex-col justify-between items-center">
+                    <nav className="w-full flex flex-1 flex-col px-6 justify-between items-center">
                         <ul className="-mx-2 space-y-1 w-full">
                             {navigation.map((item) => (
                                 <li key={item.name}>
