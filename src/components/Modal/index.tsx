@@ -1,6 +1,5 @@
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/24/outline'
 
 interface ModalProps {
     open: boolean
@@ -30,7 +29,10 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                 </Transition.Child>
 
-                <div className="fixed inset-0 z-50 overflow-y-auto">
+                <div
+                    className="fixed mx-auto inset-0 z-50 overflow-y-auto"
+                    style={{ width: '480px' }}
+                >
                     <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                         <Transition.Child
                             as={Fragment}

@@ -179,7 +179,7 @@ export default function Subscriptions({ subscriptions, spns }: ISubscriptions) {
             <Flex flexDirection="row">
                 <Title>Azure Subscriptions</Title>
                 <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                    Create New Azure Subscription
+                    Onboard New Azure Subscription
                 </Button>
             </Flex>
             <div className="ag-theme-alpine mt-6" key="subscriptions">

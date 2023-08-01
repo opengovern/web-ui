@@ -1,4 +1,5 @@
 import {
+    BadgeDelta,
     Card,
     Flex,
     SearchSelect,
@@ -23,7 +24,7 @@ import DateRangePicker from '../../../../components/DateRangePicker'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
-import { badgeDelta } from '../../../../utilities/deltaType'
+import { badgeDelta, badgeTypeByDelta } from '../../../../utilities/deltaType'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 
@@ -34,24 +35,43 @@ const columns: IColumn<any, any>[] = [
         type: 'string',
     },
     {
-        field: 'old_count',
-        headerName: 'From',
-        type: 'number',
-    },
-    {
         field: 'count',
         headerName: 'Count',
         type: 'number',
     },
     {
-        field: 'changes',
+        field: 'changes (%)',
         headerName: 'Change',
         type: 'string',
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) => (
             <Flex justifyContent="center" alignItems="center" className="mt-1">
-                {badgeDelta(params.data?.old_count, params.data?.count)}
+                {params.data?.old_count
+                    ? badgeDelta(params.data?.old_count, params.data?.count)
+                    : badgeDelta(0, 0)}
+            </Flex>
+        ),
+    },
+    {
+        field: 'changes (Δ)',
+        headerName: 'Change',
+        type: 'string',
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
+        ) => (
+            <Flex justifyContent="center" alignItems="center" className="mt-1">
+                <BadgeDelta
+                    deltaType={badgeTypeByDelta(
+                        params.data?.old_count,
+                        params.data?.count
+                    )}
+                >
+                    {Math.abs(
+                        (params.data?.old_count || 0) -
+                            (params.data?.count || 0)
+                    )}
+                </BadgeDelta>
             </Flex>
         ),
     },
@@ -94,6 +114,7 @@ export default function ResourceMetricsDetails() {
 
     const { response: metrics, isLoading: metricsLoading } =
         useInventoryApiV2AnalyticsMetricList(query)
+    console.log(metrics)
 
     const categoryOptions = () => {
         if (inventoryCategoriesLoading)

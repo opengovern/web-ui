@@ -61,7 +61,7 @@ export default function ConfirmModal({
                 justifyContent="end"
                 alignItems="end"
                 flexDirection="row"
-                className="mt-5 sm:mt-6"
+                className="mt-5 sm:mt-6 gap-3"
             >
                 <Button
                     variant="secondary"
@@ -74,7 +74,6 @@ export default function ConfirmModal({
                 <Button
                     variant="primary"
                     loading={loading}
-                    className="ml-1"
                     onClick={() => {
                         setLoading(true)
                         onConfirm()

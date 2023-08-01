@@ -8,7 +8,6 @@ import {
     RowClickedEvent,
 } from 'ag-grid-community'
 import { PlusIcon } from '@heroicons/react/24/solid'
-import dayjs from 'dayjs'
 import AccountInfo from './AccountInfo'
 import NewAWSAccount from './NewAWSAccount'
 import {
@@ -17,6 +16,7 @@ import {
 } from '../../../../../../api/api'
 import { AWSIcon } from '../../../../../../icons/icons'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
+import Notification from '../../../../../../components/Notification'
 
 interface IAccountList {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -179,7 +179,8 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
     >(undefined)
     const [openInfo, setOpenInfo] = useState(false)
     const [open, setOpen] = useState(false)
-
+    const [notification, setNotification] = useState<string>('')
+    console.log(accounts)
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
@@ -220,7 +221,7 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
                 <Flex flexDirection="row">
                     <Title>AWS Accounts</Title>
                     <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                        Create New AWS Account
+                        Onboard New AWS Account
                     </Button>
                 </Flex>
                 <div className="ag-theme-alpine mt-6">
@@ -232,11 +233,13 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
                     />
                 </div>
             </Card>
+            {notification && <Notification text={notification} />}
             <AccountInfo
                 data={accData}
                 type={getType(accData)}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
+                notification={setNotification}
             />
             <NewAWSAccount
                 accounts={accounts}

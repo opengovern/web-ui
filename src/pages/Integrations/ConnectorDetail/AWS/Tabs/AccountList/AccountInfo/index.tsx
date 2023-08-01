@@ -8,6 +8,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
+import dayjs from 'dayjs'
 import {
     useOnboardApiV1CredentialDetail,
     useOnboardApiV1SourceDelete,
@@ -23,6 +24,7 @@ interface IAccInfo {
     open: boolean
     type: string
     onClose: () => void
+    notification: (text: string) => void
 }
 
 const renderMetadata = (
@@ -66,13 +68,18 @@ const renderMetadata = (
     return null
 }
 
-export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
+export default function AccountInfo({
+    data,
+    open,
+    type,
+    onClose,
+    notification,
+}: IAccInfo) {
     const { response: credential } = useOnboardApiV1CredentialDetail(
         data?.credentialID || '',
         {},
         !!data && open
     )
-    console.log(data)
 
     const [key, setKey] = useState('')
     const [ekey, seteKey] = useState(false)
@@ -105,6 +112,7 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
 
     useEffect(() => {
         if (isHealthCheckExecuted && !isHealthCheckLoading) {
+            notification('Health check completed')
             onClose()
         }
     }, [isHealthCheckLoading])
@@ -242,9 +250,27 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
                             </Flex>
                         )}
                     </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>Last Inventory</Text>
+                        <Text className="text-black">
+                            {dayjs(data?.lastInventory).format(
+                                'MMM DD, YYYY HH:mm'
+                            )}
+                        </Text>
+                    </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>Last Health Check</Text>
+                        <Text className="text-black">
+                            {dayjs(data?.lastHealthCheckTime).format(
+                                'MMM DD, YYYY HH:mm'
+                            )}
+                        </Text>
+                    </Flex>
                     {renderMetadata(type, data)}
                 </Flex>
-                <Flex justifyContent="end" className="mt-6 mb-12">
+                <Flex justifyContent="end" className="mt-6">
                     <Button
                         variant="secondary"
                         color="rose"
