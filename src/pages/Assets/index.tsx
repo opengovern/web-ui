@@ -30,8 +30,7 @@ export default function Assets() {
         if (categoriesLoading) {
             return [{ label: 'Loading', value: 'Loading' }]
         }
-        if (!inventoryCategories?.category)
-            return [{ label: 'no data', value: 'no data' }]
+        if (!inventoryCategories?.category) return []
         const output: { label: string; value: string }[] = []
         inventoryCategories.category.map((categoryName) =>
             output.push({

@@ -17,6 +17,7 @@ import SettingsOrganization from './Organization'
 import SettingsGitRepositories from './GitRepositories'
 import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
+import { isDemo } from '../../utilities/demo'
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -84,7 +85,9 @@ export default function Settings() {
     const [tokenLoading, setTokenLoading] = useState(true)
     const { getAccessTokenSilently } = useAuth0()
     const { response: curWorkspace, isLoading } =
-        useWorkspaceApiV1WorkspaceCurrentList()
+        useWorkspaceApiV1WorkspaceCurrentList({
+            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+        })
     const workspace = useParams<{ ws: string }>().ws
     const currentSubPage = useParams<{ settingsPage: string }>().settingsPage
 
@@ -99,9 +102,11 @@ export default function Settings() {
     const getRole = () => {
         if (decodedToken) {
             if (curWorkspace?.id)
-                return decodedToken['https://app.kaytu.io/workspaceAccess'][
-                    curWorkspace.id
-                ]
+                return (
+                    decodedToken['https://app.kaytu.io/workspaceAccess'][
+                        curWorkspace.id
+                    ] || 'viewer'
+                )
         }
         return 'viewer'
     }
