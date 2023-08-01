@@ -40,8 +40,7 @@ const columns: IColumn<any, any>[] = [
         type: 'number',
     },
     {
-        field: 'changes (%)',
-        headerName: 'Change',
+        headerName: 'Change (%)',
         type: 'string',
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
@@ -49,13 +48,12 @@ const columns: IColumn<any, any>[] = [
             <Flex justifyContent="center" alignItems="center" className="mt-1">
                 {params.data?.old_count
                     ? badgeDelta(params.data?.old_count, params.data?.count)
-                    : badgeDelta(0, 0)}
+                    : badgeDelta(1, 2)}
             </Flex>
         ),
     },
     {
-        field: 'changes (Δ)',
-        headerName: 'Change',
+        headerName: 'Change (Δ)',
         type: 'string',
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
