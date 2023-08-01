@@ -7,12 +7,10 @@ import {
     ChevronDoubleRightIcon,
     ChevronDownIcon,
     Cog6ToothIcon,
-    CpuChipIcon,
     DocumentChartBarIcon,
     HomeIcon,
     MagnifyingGlassIcon,
     MoonIcon,
-    RectangleStackIcon,
     ServerStackIcon,
     ShieldCheckIcon,
     SunIcon,
@@ -20,7 +18,14 @@ import {
 } from '@heroicons/react/24/outline'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link, useParams } from 'react-router-dom'
-import { Flex, Text, Title } from '@tremor/react'
+import {
+    Accordion,
+    AccordionBody,
+    AccordionHeader,
+    Flex,
+    Text,
+    Title,
+} from '@tremor/react'
 import { useAtom } from 'jotai'
 import { ReactComponent as KaytuLogo } from '../../icons/logo-dark-sqare-sm-glyph 2.svg'
 import { sideBarCollapsedAtom } from '../../store'
@@ -37,7 +42,15 @@ const navigation = [
         page: 'insight',
         icon: DocumentChartBarIcon,
     },
-    { name: 'Assets', page: 'assets', icon: ServerStackIcon },
+    {
+        name: 'Assets',
+        page: 'assets',
+        icon: ServerStackIcon,
+        children: [
+            { name: 'Summary', page: 'assets' },
+            { name: 'Stack', page: 'stack' },
+        ],
+    },
     {
         name: 'Spend',
         page: 'spend',
@@ -54,20 +67,14 @@ const navigation = [
         icon: MagnifyingGlassIcon,
     },
     {
-        name: 'Integrations',
-        page: 'integration',
-        icon: CpuChipIcon,
-    },
-    {
-        name: 'Stack',
-        page: 'stack',
-        icon: RectangleStackIcon,
-    },
-    {
-        name: 'Settings',
+        name: 'Administration',
         id: 'settings',
         page: 'settings/entitlement',
         icon: Cog6ToothIcon,
+        children: [
+            { name: 'Settings', page: 'settings/entitlement' },
+            { name: 'Integrations', page: 'integration' },
+        ],
     },
 ]
 
@@ -215,9 +222,50 @@ export default function LoggedInLayout({
                         <ul className="-mx-2 space-y-1 w-full">
                             {navigation.map((item) => (
                                 <li key={item.name}>
-                                    <Link
-                                        to={`/${workspace}/${item.page}`}
-                                        className={`p-2 group flex rounded-md text-sm leading-6 font-semibold   
+                                    {item.children?.length && !collapsed ? (
+                                        <Accordion
+                                            className="bg-transparent border-0"
+                                            defaultOpen
+                                        >
+                                            <AccordionHeader className="text-gray-300 bg-transparent pl-2 pr-3 py-2">
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="h-full"
+                                                >
+                                                    <item.icon className="h-6 w-6 shrink-0" />
+                                                    <Text className="ml-3 font-semibold text-inherit">
+                                                        {item.name}
+                                                    </Text>
+                                                </Flex>
+                                            </AccordionHeader>
+                                            <AccordionBody className="p-0">
+                                                {item.children.map((i) => (
+                                                    <Link
+                                                        to={`/${workspace}/${i.page}`}
+                                                        className={`p-2 my-2 flex rounded-md text-sm leading-6 font-semibold   
+                                                    ${
+                                                        i.page === currentPage
+                                                            ? 'bg-blue-900/50 text-gray-200'
+                                                            : 'text-gray-300 hover:bg-blue-900/50'
+                                                    }
+                                                    ${
+                                                        collapsed
+                                                            ? 'w-fit gap-x-0'
+                                                            : 'gap-x-3 '
+                                                    }
+                                                `}
+                                                    >
+                                                        <Text className="pl-9 font-semibold text-inherit my-0.5">
+                                                            {i.name}
+                                                        </Text>
+                                                    </Link>
+                                                ))}
+                                            </AccordionBody>
+                                        </Accordion>
+                                    ) : (
+                                        <Link
+                                            to={`/${workspace}/${item.page}`}
+                                            className={`p-2 group flex rounded-md text-sm leading-6 font-semibold   
                                                     ${
                                                         (item.id ||
                                                             item.page) ===
@@ -228,17 +276,18 @@ export default function LoggedInLayout({
                                                     ${
                                                         collapsed
                                                             ? 'w-fit gap-x-0'
-                                                            : 'gap-x-3 '
+                                                            : 'gap-x-3'
                                                     }
                                                 `}
-                                    >
-                                        <item.icon className="h-6 w-6 shrink-0" />
-                                        {!collapsed && (
-                                            <Text className="font-semibold text-inherit w-48">
-                                                {item.name}
-                                            </Text>
-                                        )}
-                                    </Link>
+                                        >
+                                            <item.icon className="h-6 w-6 shrink-0" />
+                                            {!collapsed && (
+                                                <Text className="font-semibold text-inherit w-48">
+                                                    {item.name}
+                                                </Text>
+                                            )}
+                                        </Link>
+                                    )}
                                 </li>
                             ))}
                         </ul>

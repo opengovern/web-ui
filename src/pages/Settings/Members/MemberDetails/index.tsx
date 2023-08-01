@@ -116,8 +116,6 @@ export default function MemberDetails({
         },
     ]
 
-    console.log(user)
-
     return (
         <>
             <ConfirmModal
