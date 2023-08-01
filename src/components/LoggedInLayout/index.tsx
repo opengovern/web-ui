@@ -227,7 +227,13 @@ export default function LoggedInLayout({
                                     {item.children?.length && !collapsed ? (
                                         <Accordion
                                             className="bg-transparent border-0"
-                                            defaultOpen
+                                            defaultOpen={
+                                                item.children.find(
+                                                    (child) =>
+                                                        child.page ===
+                                                        currentPage
+                                                )?.page === currentPage
+                                            }
                                         >
                                             <AccordionHeader className="text-gray-300 bg-transparent pl-2 pr-3 py-2">
                                                 <Flex
