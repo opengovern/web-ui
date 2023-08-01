@@ -8,6 +8,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
+import dayjs from 'dayjs'
 import {
     useOnboardApiV1CredentialDetail,
     useOnboardApiV1SourceDelete,
@@ -248,6 +249,24 @@ export default function AccountInfo({
                                 </Button>
                             </Flex>
                         )}
+                    </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>Last Inventory</Text>
+                        <Text className="text-black">
+                            {dayjs(data?.lastInventory).format(
+                                'MMM DD, YYYY HH:mm'
+                            )}
+                        </Text>
+                    </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>Last Health Check</Text>
+                        <Text className="text-black">
+                            {dayjs(data?.lastHealthCheckTime).format(
+                                'MMM DD, YYYY HH:mm'
+                            )}
+                        </Text>
                     </Flex>
                     {renderMetadata(type, data)}
                 </Flex>

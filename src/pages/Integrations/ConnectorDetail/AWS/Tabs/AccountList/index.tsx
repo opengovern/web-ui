@@ -180,7 +180,7 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
     const [openInfo, setOpenInfo] = useState(false)
     const [open, setOpen] = useState(false)
     const [notification, setNotification] = useState<string>('')
-
+    console.log(accounts)
     const gridOptions: GridOptions = {
         columnDefs: columns,
         pagination: true,
@@ -221,7 +221,7 @@ export default function AccountList({ accounts, organizations }: IAccountList) {
                 <Flex flexDirection="row">
                     <Title>AWS Accounts</Title>
                     <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                        Create New AWS Account
+                        Onboard New AWS Account
                     </Button>
                 </Flex>
                 <div className="ag-theme-alpine mt-6">

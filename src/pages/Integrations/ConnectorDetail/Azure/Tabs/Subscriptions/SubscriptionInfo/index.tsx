@@ -1,5 +1,6 @@
 import { Badge, Button, Divider, Flex, Text, Title } from '@tremor/react'
 import { useEffect } from 'react'
+import dayjs from 'dayjs'
 import {
     useOnboardApiV1SourceDelete,
     useOnboardApiV1SourceHealthcheckCreate,
@@ -95,6 +96,24 @@ export default function SubscriptionInfo({
                         >
                             {data?.lifecycleState}
                         </Badge>
+                    </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>Last Inventory</Text>
+                        <Text className="text-black">
+                            {dayjs(data?.lastInventory).format(
+                                'MMM DD, YYYY HH:mm'
+                            )}
+                        </Text>
+                    </Flex>
+                    <Divider />
+                    <Flex>
+                        <Text>Last Health Check</Text>
+                        <Text className="text-black">
+                            {dayjs(data?.lastHealthCheckTime).format(
+                                'MMM DD, YYYY HH:mm'
+                            )}
+                        </Text>
                     </Flex>
                 </Flex>
                 <Flex justifyContent="end">
