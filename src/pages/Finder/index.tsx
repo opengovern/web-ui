@@ -241,7 +241,7 @@ export default function Finder() {
                         flexDirection="col"
                         className="w-full h-full max-h-full overflow-hidden overflow-y-scroll px-1 pt-1"
                     >
-                        <Card>
+                        <Card className="relative overflow-hidden">
                             <Editor
                                 onValueChange={(text) => setCode(text)}
                                 highlight={(text) =>
@@ -252,6 +252,9 @@ export default function Finder() {
                                 style={{ minHeight: '200px' }}
                                 placeholder="-- write your SQL query here"
                             />
+                            {isLoading && isExecuted && (
+                                <Spinner className="bg-gray-100/30 backdrop-blur-sm top-0 left-0 absolute flex justify-center items-center w-full h-full" />
+                            )}
                         </Card>
                         <Flex className="w-full mt-4">
                             <Flex>
