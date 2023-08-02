@@ -186,7 +186,7 @@ export default function LoggedInLayout({
                                                                     'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                                                 )}
                                                             >
-                                                                <item.icon className="h-6 w-6 shrink-0" />
+                                                                <item.icon className="h-5 w-6 shrink-0" />
                                                                 {item.name}
                                                             </Link>
                                                         </li>
@@ -203,7 +203,10 @@ export default function LoggedInLayout({
             </Transition.Root>
 
             {/* Static sidebar for desktop */}
-            <div className="transition ease-in-out hidden h-full lg:flex lg:flex-col bg-blue-950 pb-4">
+            <div
+                className="transition ease-in-out hidden h-full lg:flex lg:flex-col pb-4"
+                style={{ backgroundColor: '#0B2447' }}
+            >
                 <Flex
                     flexDirection="col"
                     className="h-full w-full gap-y-5 overflow-y-auto"
@@ -213,7 +216,7 @@ export default function LoggedInLayout({
                         justifyContent="start"
                         className="mt-2 h-16 shrink-0 border-b border-gray-700"
                     >
-                        <KaytuIcon className="ml-7 w-8 h-8" />
+                        <KaytuIcon className="ml-7 w-7 h-7" />
                         {!collapsed && (
                             <Title className="text-slate-50 ml-1.5">
                                 KAYTU
@@ -221,7 +224,7 @@ export default function LoggedInLayout({
                         )}
                     </Flex>
                     <nav className="w-full flex flex-1 flex-col px-6 justify-between items-center">
-                        <ul className="-mx-2 space-y-1 w-full">
+                        <ul className="-mx-2 w-full">
                             {navigation.map((item) => (
                                 <li key={item.name}>
                                     {item.children?.length && !collapsed ? (
@@ -235,13 +238,13 @@ export default function LoggedInLayout({
                                                 )?.page === currentPage
                                             }
                                         >
-                                            <AccordionHeader className="text-gray-300 bg-transparent pl-2 pr-3 py-2">
+                                            <AccordionHeader className="text-gray-300 bg-transparent pl-2 pr-3 py-2 my-0.5">
                                                 <Flex
                                                     justifyContent="start"
                                                     className="h-full"
                                                 >
-                                                    <item.icon className="h-6 w-6 shrink-0" />
-                                                    <Text className="ml-3 font-semibold text-inherit">
+                                                    <item.icon className="h-4 w-4 shrink-0" />
+                                                    <Text className="ml-3 text-inherit">
                                                         {item.name}
                                                     </Text>
                                                 </Flex>
@@ -250,20 +253,14 @@ export default function LoggedInLayout({
                                                 {item.children.map((i) => (
                                                     <Link
                                                         to={`/${workspace}/${i.page}`}
-                                                        className={`p-2 my-2 flex rounded-md text-sm leading-6 font-semibold   
+                                                        className={`p-2 my-0.5 flex rounded-md text-sm  
                                                     ${
                                                         i.page === currentPage
-                                                            ? 'bg-blue-900/50 text-gray-200'
-                                                            : 'text-gray-300 hover:bg-blue-900/50'
-                                                    }
-                                                    ${
-                                                        collapsed
-                                                            ? 'w-fit gap-x-0'
-                                                            : 'gap-x-3 '
-                                                    }
-                                                `}
+                                                            ? 'bg-blue-900/40 text-gray-200 font-semibold'
+                                                            : 'text-gray-300 hover:bg-blue-900/20'
+                                                    }`}
                                                     >
-                                                        <Text className="pl-9 font-semibold text-inherit my-0.5">
+                                                        <Text className="pl-7 text-inherit my-0.5">
                                                             {i.name}
                                                         </Text>
                                                     </Link>
@@ -273,27 +270,28 @@ export default function LoggedInLayout({
                                     ) : (
                                         <Link
                                             to={`/${workspace}/${item.page}`}
-                                            className={`p-2 group flex rounded-md text-sm leading-6 font-semibold   
+                                            className={`p-2 group flex rounded-md text-sm my-0.5
                                                     ${
                                                         (item.id ||
                                                             item.page) ===
                                                         currentPage
-                                                            ? 'bg-blue-900/50 text-gray-200'
-                                                            : 'text-gray-300 hover:bg-blue-900/50'
+                                                            ? 'bg-blue-900/40 text-gray-200 font-semibold'
+                                                            : 'text-gray-300 hover:bg-blue-900/20'
                                                     }
                                                     ${
                                                         collapsed
                                                             ? 'w-fit gap-x-0'
                                                             : 'gap-x-3'
-                                                    }
-                                                `}
+                                                    }`}
                                         >
-                                            <item.icon className="h-6 w-6 shrink-0" />
-                                            {!collapsed && (
-                                                <Text className="font-semibold text-inherit w-48">
-                                                    {item.name}
-                                                </Text>
-                                            )}
+                                            <Flex>
+                                                <item.icon className="h-4 w-4 shrink-0" />
+                                                {!collapsed && (
+                                                    <Text className="ml-3 text-inherit w-48">
+                                                        {item.name}
+                                                    </Text>
+                                                )}
+                                            </Flex>
                                         </Link>
                                     )}
                                 </li>
@@ -339,7 +337,10 @@ export default function LoggedInLayout({
     return (
         <Flex flexDirection="row" className="h-screen overflow-hidden">
             {showSidebar && sidebar}
-            <div className="w-full h-full relative bg-blue-950">
+            <div
+                className="w-full h-full relative"
+                style={{ backgroundColor: '#0B2447' }}
+            >
                 <div className="px-12 absolute top-0 lg:top-2 w-full z-40 flex h-16 shrink-0 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm sm:gap-x-6 lg:rounded-tl-2xl">
                     <button
                         type="button"

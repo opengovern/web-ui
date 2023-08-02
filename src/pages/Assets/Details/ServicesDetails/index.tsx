@@ -1,8 +1,4 @@
-import { useRef } from 'react'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-alpine.css'
-import { AgGridReact } from 'ag-grid-react'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
+import { ICellRendererParams } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
 import { BadgeDelta, Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
@@ -124,6 +120,8 @@ export default function ServicesDetails() {
                 totalServicesLoading={isServiceListLoading}
             />
             <Table
+                title="Services"
+                downloadable
                 id="asset_service_details"
                 columns={columns}
                 rowData={serviceList?.metrics || []}

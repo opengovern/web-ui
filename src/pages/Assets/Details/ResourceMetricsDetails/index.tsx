@@ -1,34 +1,25 @@
-import {
-    BadgeDelta,
-    Card,
-    Flex,
-    SearchSelect,
-    SearchSelectItem,
-    Title,
-} from '@tremor/react'
-import { useAtom, useAtomValue } from 'jotai'
+import { BadgeDelta, Flex } from '@tremor/react'
+import { useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
 import { ICellRendererParams } from 'ag-grid-community'
-import {
-    filterAtom,
-    selectedResourceCategoryAtom,
-    timeAtom,
-} from '../../../../store'
-import {
-    useInventoryApiV2AnalyticsMetricList,
-    useInventoryApiV2AnalyticsTagList,
-} from '../../../../api/inventory.gen'
+import { filterAtom, timeAtom } from '../../../../store'
+import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import DateRangePicker from '../../../../components/DateRangePicker'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-alpine.css'
 import ConnectionList from '../../../../components/ConnectionList'
 import { badgeDelta, badgeTypeByDelta } from '../../../../utilities/deltaType'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 
 const columns: IColumn<any, any>[] = [
+    {
+        field: 'category',
+        rowGroup: true,
+        hide: true,
+        headerName: 'Category',
+        type: 'string',
+    },
     {
         field: 'name',
         headerName: 'Metric Name',
@@ -44,54 +35,75 @@ const columns: IColumn<any, any>[] = [
         type: 'string',
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
-        ) => (
-            <Flex justifyContent="center" alignItems="center" className="mt-1">
-                {params.data?.old_count
-                    ? badgeDelta(params.data?.old_count, params.data?.count)
-                    : badgeDelta(1, 2)}
-            </Flex>
-        ),
+        ) =>
+            params.data?.name && (
+                <Flex
+                    justifyContent="center"
+                    alignItems="center"
+                    className="mt-1"
+                >
+                    {params.data?.old_count
+                        ? badgeDelta(params.data?.old_count, params.data?.count)
+                        : badgeDelta(1, 2)}
+                </Flex>
+            ),
     },
     {
         headerName: 'Change (Δ)',
         type: 'string',
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
-        ) => (
-            <Flex justifyContent="center" alignItems="center" className="mt-1">
-                <BadgeDelta
-                    deltaType={badgeTypeByDelta(
-                        params.data?.old_count,
-                        params.data?.count
-                    )}
+        ) =>
+            params.data?.name && (
+                <Flex
+                    justifyContent="center"
+                    alignItems="center"
+                    className="mt-1"
                 >
-                    {Math.abs(
-                        (params.data?.old_count || 0) -
-                            (params.data?.count || 0)
-                    )}
-                </BadgeDelta>
-            </Flex>
-        ),
+                    <BadgeDelta
+                        deltaType={badgeTypeByDelta(
+                            params.data?.old_count,
+                            params.data?.count
+                        )}
+                    >
+                        {Math.abs(
+                            (params.data?.old_count || 0) -
+                                (params.data?.count || 0)
+                        )}
+                    </BadgeDelta>
+                </Flex>
+            ),
     },
 ]
+
+const rowGenerator = (data: any) => {
+    const rows = []
+    if (data) {
+        for (let i = 0; i < data.length; i += 1) {
+            if (data[i].tags.category.length > 1) {
+                for (let j = 0; j < data[i].tags.category.length; j += 1) {
+                    rows.push({
+                        ...data[i],
+                        category: data[i].tags.category[j],
+                    })
+                }
+            } else {
+                rows.push({
+                    ...data[i],
+                    category: data[i].tags.category,
+                })
+            }
+        }
+    }
+    return rows
+}
+
 export default function ResourceMetricsDetails() {
     const navigate = useNavigate()
 
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
-    const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
-        selectedResourceCategoryAtom
-    )
-    const {
-        response: inventoryCategories,
-        isLoading: inventoryCategoriesLoading,
-    } = useInventoryApiV2AnalyticsTagList()
-
-    const activeCategory =
-        selectedResourceCategory === 'All Categories'
-            ? ''
-            : selectedResourceCategory
     const query = {
         ...(selectedConnections.provider && {
             connector: [selectedConnections.provider],
@@ -99,7 +111,6 @@ export default function ResourceMetricsDetails() {
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
         }),
-        ...(activeCategory && { tag: [`category=${activeCategory}`] }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix().toString(),
         }),
@@ -107,24 +118,11 @@ export default function ResourceMetricsDetails() {
             endTime: activeTimeRange.end.unix().toString(),
         }),
         pageSize: 1000,
-        ...(activeCategory && { tag: [`category=${activeCategory}`] }),
     }
 
     const { response: metrics, isLoading: metricsLoading } =
         useInventoryApiV2AnalyticsMetricList(query)
-    console.log(metrics)
-
-    const categoryOptions = () => {
-        if (inventoryCategoriesLoading)
-            return [{ label: 'Loading', value: 'loading' }]
-
-        return [{ label: 'All Categories', value: 'All Categories' }].concat(
-            inventoryCategories?.category.map((categoryName) => ({
-                label: categoryName,
-                value: categoryName,
-            })) || []
-        )
-    }
+    console.log(rowGenerator(metrics?.metrics))
 
     const breadcrumbsPages = [
         {
@@ -151,42 +149,18 @@ export default function ResourceMetricsDetails() {
                     <ConnectionList />
                 </Flex>
             </Flex>
-            <Card className="mt-10">
-                <Flex>
-                    <Title>Resources Metrics</Title>
-                    <SearchSelect
-                        onValueChange={(e) => setSelectedResourceCategory(e)}
-                        value={selectedResourceCategory}
-                        placeholder={
-                            inventoryCategoriesLoading
-                                ? 'Loading'
-                                : 'Source Selection'
-                        }
-                        disabled={inventoryCategoriesLoading}
-                        className="max-w-xs mb-6"
-                    >
-                        {categoryOptions().map((category) => (
-                            <SearchSelectItem
-                                key={category.label}
-                                value={category.value}
-                            >
-                                {category.value}
-                            </SearchSelectItem>
-                        ))}
-                    </SearchSelect>
-                </Flex>
-
-                <Table
-                    id="asset_resource_metrics"
-                    rowData={metrics?.metrics || []}
-                    columns={columns}
-                    onGridReady={(params) => {
-                        if (metricsLoading) {
-                            params.api.showLoadingOverlay()
-                        }
-                    }}
-                />
-            </Card>
+            <Table
+                title="Resource Metrics"
+                downloadable
+                id="asset_resource_metrics"
+                rowData={rowGenerator(metrics?.metrics)}
+                columns={columns}
+                onGridReady={(params) => {
+                    if (metricsLoading) {
+                        params.api.showLoadingOverlay()
+                    }
+                }}
+            />
         </LoggedInLayout>
     )
 }

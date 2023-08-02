@@ -1,12 +1,7 @@
-import { AgGridReact } from 'ag-grid-react'
-import { Button, Flex, Title } from '@tremor/react'
 import { useRef, useState } from 'react'
-import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import { useAtomValue } from 'jotai'
 import { GridApi } from 'ag-grid-community'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-alpine.css'
 import Summary from './Summary'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { filterAtom, timeAtom } from '../../../../../store'
@@ -88,20 +83,9 @@ export default function MultiAccount() {
     return (
         <>
             <Summary />
-            <Flex className="mb-4 mt-6">
-                <Title>Accounts</Title>
-                <Button
-                    variant="secondary"
-                    onClick={() => {
-                        gridRef.current?.exportDataAsCsv()
-                    }}
-                    icon={ArrowDownOnSquareIcon}
-                >
-                    Download
-                </Button>
-            </Flex>
-
             <Table
+                title="Accounts"
+                downloadable
                 id="asset_multiaccount"
                 columns={columns}
                 rowData={accounts?.connections || []}
