@@ -1,4 +1,4 @@
-import { Flex, Grid, Metric, Title } from '@tremor/react'
+import { Card, Flex, Grid, Metric, Title } from '@tremor/react'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import {
     useOnboardApiV1CatalogMetricsList,
@@ -48,25 +48,39 @@ export default function Integrations() {
     return (
         <LoggedInLayout currentPage="integration">
             <Metric>Integrations</Metric>
-            <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6 mb-10">
-                <SummaryCard
-                    title="Discovered Cloud Connection"
-                    metric={numberDisplay(topMetrics?.totalConnections, 0)}
-                    loading={metricsLoading}
-                />
-                <SummaryCard
-                    title="Onboarded Cloud Connection"
-                    metric={numberDisplay(topMetrics?.connectionsEnabled, 0)}
-                    loading={metricsLoading}
-                />
-                <DualSummaryCard
-                    title1="Healthy Connections"
-                    title2="Unhealthy Connections"
-                    metric1={numberDisplay(topMetrics?.unhealthyConnections, 0)}
-                    metric2={numberDisplay(topMetrics?.healthyConnections, 0)}
-                    loading={metricsLoading}
-                />
-            </Grid>
+            <Card className="p-2 mt-6 mb-10">
+                <Grid numItems={2} numItemsLg={4} className="gap-3">
+                    <SummaryCard
+                        title="Discovered Cloud Connection"
+                        metric={numberDisplay(topMetrics?.totalConnections, 0)}
+                        loading={metricsLoading}
+                    />
+                    <SummaryCard
+                        title="Onboarded Cloud Connection"
+                        metric={numberDisplay(
+                            topMetrics?.connectionsEnabled,
+                            0
+                        )}
+                        loading={metricsLoading}
+                    />
+                    <SummaryCard
+                        title="Healthy Connections"
+                        metric={numberDisplay(
+                            topMetrics?.unhealthyConnections,
+                            0
+                        )}
+                        loading={metricsLoading}
+                    />
+                    <SummaryCard
+                        title="Unhealthy Connections"
+                        metric={numberDisplay(
+                            topMetrics?.healthyConnections,
+                            0
+                        )}
+                        loading={metricsLoading}
+                    />
+                </Grid>
+            </Card>
             <Title>Connectors</Title>
             {connectorsLoading ? (
                 <Flex className="mt-36">

@@ -28,7 +28,7 @@ export default function AWSSummary({
     credentialLoading,
 }: IAWSSummary) {
     return (
-        <Grid numItemsMd={2} numItemsLg={3} className="w-full gap-4 mt-6 mb-10">
+        <Grid numItems={2} numItemsLg={4} className="w-full gap-4 mt-6 mb-10">
             <SummaryCard
                 title="Onboarded AWS Accounts"
                 metric={String(
@@ -43,15 +43,18 @@ export default function AWSSummary({
                 )}
                 loading={credentialLoading}
             />
-            <DualSummaryCard
-                title1="Healthy Connections"
-                title2="Unhealthy Connections"
-                metric1={numberDisplay(
+            <SummaryCard
+                title="Healthy Connections"
+                metric={numberDisplay(
                     (accountsSummary?.connectionCount || 0) -
                         (accountsSummary?.totalUnhealthyCount || 0),
                     0
                 )}
-                metric2={numberDisplay(accountsSummary?.totalUnhealthyCount, 0)}
+                loading={accountLoading}
+            />
+            <SummaryCard
+                title="Unhealthy Connections"
+                metric={numberDisplay(accountsSummary?.totalUnhealthyCount, 0)}
                 loading={accountLoading}
             />
         </Grid>
