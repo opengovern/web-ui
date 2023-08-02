@@ -253,7 +253,7 @@ export default function Finder() {
                                 placeholder="-- write your SQL query here"
                             />
                             {isLoading && isExecuted && (
-                                <Spinner className="bg-gray-100/30 backdrop-blur-sm top-0 left-0 absolute flex justify-center items-center w-full h-full" />
+                                <Spinner className="bg-white/30 backdrop-blur-sm top-0 left-0 absolute flex justify-center items-center w-full h-full" />
                             )}
                         </Card>
                         <Flex className="w-full mt-4">
