@@ -13,7 +13,7 @@ import {
 import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai/index'
-import { Link, useParams } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import InsightCategories from './InsightCategories'
 import {
@@ -27,8 +27,8 @@ import Spinner from '../../components/Spinner'
 import InsightGroupCard from '../../components/Cards/InsightGroupCard'
 
 export default function Insights() {
-    const workspace = useParams<{ ws: string }>().ws
-    const tabs = useParams<{ insightTab: string }>().insightTab
+    const navigate = useNavigate()
+    const tabs = useLocation().hash
     const [selectedCategory, setSelectedCategory] = useState('')
     const activeTimeRange = useAtomValue(timeAtom)
     const [searchQuery, setSearchQuery] = useState('')
@@ -47,7 +47,7 @@ export default function Insights() {
         useComplianceApiV1InsightGroupList(query)
 
     useEffect(() => {
-        if (tabs === 'groups') {
+        if (tabs === '#groups') {
             setSelectedTab(1)
         } else {
             setSelectedTab(0)
@@ -68,15 +68,11 @@ export default function Insights() {
                 </Flex>
                 <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                     <TabList className="mb-6">
-                        <Tab>
-                            <Link to={`/${workspace}/insight/list`}>
-                                Insight list
-                            </Link>
+                        <Tab onClick={() => navigate('#list')}>
+                            Insight list
                         </Tab>
-                        <Tab>
-                            <Link to={`/${workspace}/insight/groups`}>
-                                Insight groups
-                            </Link>
+                        <Tab onClick={() => navigate('#groups')}>
+                            Insight groups
                         </Tab>
                     </TabList>
                     <Grid numItems={3} className="gap-4 mb-6">

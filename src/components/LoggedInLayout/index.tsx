@@ -39,21 +39,21 @@ const navigation = [
     },
     {
         name: 'Insights',
-        page: 'insight/list',
+        page: 'insight',
         icon: DocumentChartBarIcon,
     },
     {
         name: 'Assets',
-        page: 'assets/summary',
+        page: 'assets',
         icon: ServerStackIcon,
         children: [
-            { name: 'Summary', page: 'assets/summary' },
+            { name: 'Summary', page: 'assets' },
             { name: 'Stack', page: 'stack' },
         ],
     },
     {
         name: 'Spend',
-        page: 'spend/summary',
+        page: 'spend',
         icon: BanknotesIcon,
     },
     {
