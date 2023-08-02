@@ -11,7 +11,6 @@ import {
 } from '@tremor/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
-import dayjs from 'dayjs'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
@@ -186,6 +185,7 @@ const columnsAccounts: ColDef[] = [
 
 export default function CostMetricsDetails() {
     const navigate = useNavigate()
+    const tabs = useLocation().hash
     const gridRef = useRef<AgGridReact>(null)
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
@@ -302,6 +302,14 @@ export default function CostMetricsDetails() {
         },
     }
 
+    useEffect(() => {
+        if (tabs === '#services') {
+            setSelectedIndex(0)
+        } else {
+            setSelectedIndex(1)
+        }
+    }, [tabs])
+
     return (
         <LoggedInLayout currentPage="spend">
             <Flex
@@ -347,8 +355,12 @@ export default function CostMetricsDetails() {
                                 onIndexChange={setSelectedIndex}
                             >
                                 <TabList variant="solid">
-                                    <Tab>Services</Tab>
-                                    <Tab>Accounts</Tab>
+                                    <Tab onClick={() => navigate('#services')}>
+                                        Services
+                                    </Tab>
+                                    <Tab onClick={() => navigate('#accounts')}>
+                                        Accounts
+                                    </Tab>
                                 </TabList>
                             </TabGroup>
                         </span>
