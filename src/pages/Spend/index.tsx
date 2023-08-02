@@ -9,7 +9,7 @@ import {
     TabPanels,
 } from '@tremor/react'
 import { useAtom, useAtomValue } from 'jotai'
-import dayjs from 'dayjs'
+import { Link, useParams } from 'react-router-dom'
 import DateRangePicker from '../../components/DateRangePicker'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import {
@@ -30,6 +30,8 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import { isDemo } from '../../utilities/demo'
 
 export default function Spend() {
+    const workspace = useParams<{ ws: string }>().ws
+    const tabs = useParams<{ spendTab: string }>().spendTab
     const [index, setIndex] = useState<number>(0)
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
@@ -103,6 +105,23 @@ export default function Spend() {
         }
     }, [index])
 
+    useEffect(() => {
+        switch (tabs) {
+            case 'summary':
+                setIndex(0)
+                break
+            case 'trends':
+                setIndex(1)
+                break
+            case 'breakdowns':
+                setIndex(2)
+                break
+            default:
+                setIndex(0)
+                break
+        }
+    }, [tabs])
+
     return (
         <LoggedInLayout currentPage="spend">
             <Flex
@@ -124,9 +143,17 @@ export default function Spend() {
             />
             <TabGroup className="mt-3" index={index} onIndexChange={setIndex}>
                 <TabList>
-                    <Tab>Summary</Tab>
-                    <Tab>Trends</Tab>
-                    <Tab>Breakdown</Tab>
+                    <Tab>
+                        <Link to={`/${workspace}/spend/summary`}>Summary</Link>
+                    </Tab>
+                    <Tab>
+                        <Link to={`/${workspace}/spend/trends`}>Trends</Link>
+                    </Tab>
+                    <Tab>
+                        <Link to={`/${workspace}/spend/breakdowns`}>
+                            Breakdown
+                        </Link>
+                    </Tab>
                 </TabList>
                 <TabPanels className="mt-6">
                     <TabPanel>

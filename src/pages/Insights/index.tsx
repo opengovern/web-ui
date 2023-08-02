@@ -10,10 +10,10 @@ import {
     TabPanels,
     TextInput,
 } from '@tremor/react'
-import { useState } from 'react'
-import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai/index'
+import { Link, useParams } from 'react-router-dom'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import InsightCategories from './InsightCategories'
 import {
@@ -27,11 +27,12 @@ import Spinner from '../../components/Spinner'
 import InsightGroupCard from '../../components/Cards/InsightGroupCard'
 
 export default function Insights() {
+    const workspace = useParams<{ ws: string }>().ws
+    const tabs = useParams<{ insightTab: string }>().insightTab
     const [selectedCategory, setSelectedCategory] = useState('')
     const activeTimeRange = useAtomValue(timeAtom)
     const [searchQuery, setSearchQuery] = useState('')
-    const [selectedTab, setSelectedTab] = useState(1)
-
+    const [selectedTab, setSelectedTab] = useState(0)
     const query = {
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
@@ -45,6 +46,14 @@ export default function Insights() {
     const { response: insightGroup, isLoading: groupLoading } =
         useComplianceApiV1InsightGroupList(query)
 
+    useEffect(() => {
+        if (tabs === 'groups') {
+            setSelectedTab(1)
+        } else {
+            setSelectedTab(0)
+        }
+    }, [tabs])
+
     return (
         <LoggedInLayout currentPage="insight">
             <Flex flexDirection="col">
@@ -57,19 +66,23 @@ export default function Insights() {
                     <Metric>Insights</Metric>
                     <DateRangePicker />
                 </Flex>
-                <TabGroup>
+                <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                     <TabList className="mb-6">
-                        <Tab onClick={() => setSelectedTab(1)}>
-                            Insight list
+                        <Tab>
+                            <Link to={`/${workspace}/insight/list`}>
+                                Insight list
+                            </Link>
                         </Tab>
-                        <Tab onClick={() => setSelectedTab(2)}>
-                            Insight groups
+                        <Tab>
+                            <Link to={`/${workspace}/insight/groups`}>
+                                Insight groups
+                            </Link>
                         </Tab>
                     </TabList>
                     <Grid numItems={3} className="gap-4 mb-6">
                         <Col numColSpan={2}>
                             <InsightCategories
-                                selected={selectedTab}
+                                selected={selectedTab + 1}
                                 onChange={(category: string) =>
                                     setSelectedCategory(() => category)
                                 }

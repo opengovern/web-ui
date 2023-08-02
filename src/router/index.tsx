@@ -61,18 +61,23 @@ const authRoutes = [
         component: Assets,
     },
     {
+        key: 'assets tabs',
+        path: '/:ws/assets/:assetTab',
+        component: Assets,
+    },
+    {
         key: 'accounts detail',
-        path: '/:ws/assets/accounts-detail',
+        path: '/:ws/assets/:assetTab/accounts-detail',
         component: AccountsDetails,
     },
     {
         key: 'services detail',
-        path: '/:ws/assets/services-detail',
+        path: '/:ws/assets/:assetTab/services-detail',
         component: ServicesDetails,
     },
     {
         key: 'resource metrics',
-        path: '/:ws/assets/resource-metrics',
+        path: '/:ws/assets/:assetTab/resource-metrics',
         component: ResourceMetricsDetails,
     },
     {
@@ -81,18 +86,28 @@ const authRoutes = [
         component: Spend,
     },
     {
+        key: 'spend tabs',
+        path: '/:ws/spend/:spendTab',
+        component: Spend,
+    },
+    {
         key: 'spend metrics',
-        path: '/:ws/spend/spend-metrics',
+        path: '/:ws/spend/:spendTab/spend-metrics',
         component: CostMetricsDetails,
     },
     {
         key: 'insights',
-        path: '/:ws/insight',
+        path: '/:ws/insight/list',
+        component: Insights,
+    },
+    {
+        key: 'insights tabs',
+        path: '/:ws/insight/:insightTab',
         component: Insights,
     },
     {
         key: 'insight detail',
-        path: '/:ws/insight/:id',
+        path: '/:ws/insight/:insightTab/:id',
         component: InsightDetail,
     },
     {

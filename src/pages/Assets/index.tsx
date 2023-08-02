@@ -7,6 +7,8 @@ import {
     TabPanel,
     TabPanels,
 } from '@tremor/react'
+import { Link, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import DateRangePicker from '../../components/DateRangePicker'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { useInventoryApiV2AnalyticsTagList } from '../../api/inventory.gen'
@@ -18,6 +20,9 @@ import ResourceMetrics from './Tabs/ResourceMetrics'
 import { isDemo } from '../../utilities/demo'
 
 export default function Assets() {
+    const workspace = useParams<{ ws: string }>().ws
+    const tabs = useParams<{ assetTab: string }>().assetTab
+    const [selectedTab, setSelectedTab] = useState(0)
     const { response: inventoryCategories, isLoading: categoriesLoading } =
         useInventoryApiV2AnalyticsTagList(
             {},
@@ -41,6 +46,23 @@ export default function Assets() {
         return output
     }
 
+    useEffect(() => {
+        switch (tabs) {
+            case 'summary':
+                setSelectedTab(0)
+                break
+            case 'trends':
+                setSelectedTab(1)
+                break
+            case 'breakdowns':
+                setSelectedTab(2)
+                break
+            default:
+                setSelectedTab(0)
+                break
+        }
+    }, [tabs])
+
     return (
         <LoggedInLayout currentPage="assets">
             <Flex justifyContent="between" alignItems="center">
@@ -51,11 +73,19 @@ export default function Assets() {
                 </Flex>
             </Flex>
             <SummaryMetrics />
-            <TabGroup className="mt-3">
+            <TabGroup className="mt-3" index={selectedTab}>
                 <TabList>
-                    <Tab>Summary</Tab>
-                    <Tab>Trends</Tab>
-                    <Tab>Breakdown</Tab>
+                    <Tab onClick={() => setSelectedTab(0)}>
+                        <Link to={`/${workspace}/assets/summary`}>Summary</Link>
+                    </Tab>
+                    <Tab onClick={() => setSelectedTab(1)}>
+                        <Link to={`/${workspace}/assets/trends`}>Trends</Link>
+                    </Tab>
+                    <Tab onClick={() => setSelectedTab(2)}>
+                        <Link to={`/${workspace}/assets/breakdowns`}>
+                            Breakdown
+                        </Link>
+                    </Tab>
                 </TabList>
                 <TabPanels className="mt-6">
                     <TabPanel>
