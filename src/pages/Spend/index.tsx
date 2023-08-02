@@ -9,7 +9,7 @@ import {
     TabPanels,
 } from '@tremor/react'
 import { useAtom, useAtomValue } from 'jotai'
-import dayjs from 'dayjs'
+import { useNavigate, useLocation } from 'react-router-dom'
 import DateRangePicker from '../../components/DateRangePicker'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import {
@@ -30,6 +30,8 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import { isDemo } from '../../utilities/demo'
 
 export default function Spend() {
+    const navigate = useNavigate()
+    const tab = useLocation().hash
     const [index, setIndex] = useState<number>(0)
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
@@ -103,6 +105,23 @@ export default function Spend() {
         }
     }, [index])
 
+    useEffect(() => {
+        switch (tab) {
+            case '#summary':
+                setIndex(0)
+                break
+            case '#trends':
+                setIndex(1)
+                break
+            case '#breakdowns':
+                setIndex(2)
+                break
+            default:
+                setIndex(0)
+                break
+        }
+    }, [tab])
+
     return (
         <LoggedInLayout currentPage="spend">
             <Flex
@@ -124,9 +143,9 @@ export default function Spend() {
             />
             <TabGroup className="mt-3" index={index} onIndexChange={setIndex}>
                 <TabList>
-                    <Tab>Summary</Tab>
-                    <Tab>Trends</Tab>
-                    <Tab>Breakdown</Tab>
+                    <Tab onClick={() => navigate('#summary')}>Summary</Tab>
+                    <Tab onClick={() => navigate('#trends')}>Trends</Tab>
+                    <Tab onClick={() => navigate('#breakdowns')}>Breakdown</Tab>
                 </TabList>
                 <TabPanels className="mt-6">
                     <TabPanel>
