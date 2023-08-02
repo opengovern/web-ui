@@ -213,7 +213,7 @@ export default function LoggedInLayout({
                         justifyContent="start"
                         className="mt-2 h-16 shrink-0 border-b border-gray-700"
                     >
-                        <KaytuIcon className="ml-7 w-8 h-8" />
+                        <KaytuIcon className="ml-7 w-7 h-7" />
                         {!collapsed && (
                             <Title className="text-slate-50 ml-1.5">
                                 KAYTU
@@ -240,8 +240,8 @@ export default function LoggedInLayout({
                                                     justifyContent="start"
                                                     className="h-full"
                                                 >
-                                                    <item.icon className="h-6 w-6 shrink-0" />
-                                                    <Text className="ml-3 font-semibold text-inherit">
+                                                    <item.icon className="h-5 w-5 shrink-0" />
+                                                    <Text className="ml-3 text-inherit">
                                                         {item.name}
                                                     </Text>
                                                 </Flex>
@@ -250,20 +250,19 @@ export default function LoggedInLayout({
                                                 {item.children.map((i) => (
                                                     <Link
                                                         to={`/${workspace}/${i.page}`}
-                                                        className={`p-2 my-2 flex rounded-md text-sm leading-6 font-semibold   
+                                                        className={`p-2 my-2 flex rounded-md text-sm  
                                                     ${
                                                         i.page === currentPage
-                                                            ? 'bg-blue-900/50 text-gray-200'
+                                                            ? 'bg-blue-900/50 text-gray-200 font-semibold'
                                                             : 'text-gray-300 hover:bg-blue-900/50'
                                                     }
                                                     ${
                                                         collapsed
                                                             ? 'w-fit gap-x-0'
                                                             : 'gap-x-3 '
-                                                    }
-                                                `}
+                                                    }`}
                                                     >
-                                                        <Text className="pl-9 font-semibold text-inherit my-0.5">
+                                                        <Text className="pl-9 text-inherit my-0.5">
                                                             {i.name}
                                                         </Text>
                                                     </Link>
@@ -273,24 +272,23 @@ export default function LoggedInLayout({
                                     ) : (
                                         <Link
                                             to={`/${workspace}/${item.page}`}
-                                            className={`p-2 group flex rounded-md text-sm leading-6 font-semibold   
+                                            className={`p-2 group flex rounded-md text-sm
                                                     ${
                                                         (item.id ||
                                                             item.page) ===
                                                         currentPage
-                                                            ? 'bg-blue-900/50 text-gray-200'
+                                                            ? 'bg-blue-900/50 text-gray-200 font-semibold'
                                                             : 'text-gray-300 hover:bg-blue-900/50'
                                                     }
                                                     ${
                                                         collapsed
                                                             ? 'w-fit gap-x-0'
                                                             : 'gap-x-3'
-                                                    }
-                                                `}
+                                                    }`}
                                         >
-                                            <item.icon className="h-6 w-6 shrink-0" />
+                                            <item.icon className="h-5 w-5 shrink-0" />
                                             {!collapsed && (
-                                                <Text className="font-semibold text-inherit w-48">
+                                                <Text className="text-inherit w-48">
                                                     {item.name}
                                                 </Text>
                                             )}
