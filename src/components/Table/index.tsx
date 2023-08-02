@@ -9,8 +9,9 @@ import {
     ValueFormatterFunc,
 } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
-import { useEffect, useRef, useState } from 'react'
-import { Flex } from '@tremor/react'
+import { useRef } from 'react'
+import { Button, Flex, Title } from '@tremor/react'
+import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import { AWSIcon, AzureIcon } from '../../icons/icons'
 import {
     numberGroupedDisplay,
@@ -39,6 +40,8 @@ interface IProps<TData, TValue> {
     rowData: TData[] | null
     onGridReady?: (event: GridReadyEvent<TData>) => void
     onCellClicked?: (event: CellClickedEvent<TData>) => void
+    downloadable?: boolean
+    title?: string
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -47,6 +50,8 @@ export default function Table<TData = any, TValue = any>({
     rowData,
     onGridReady,
     onCellClicked,
+    downloadable = false,
+    title,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
     const visibility = useRef<Map<string, boolean> | undefined>(undefined)
@@ -181,13 +186,29 @@ export default function Table<TData = any, TValue = any>({
     }
 
     return (
-        <div className="ag-theme-alpine mt-10">
-            <AgGridReact
-                ref={gridRef}
-                domLayout="autoHeight"
-                gridOptions={gridOptions}
-                rowData={rowData}
-            />
-        </div>
+        <Flex flexDirection="col" className="w-full">
+            <Flex className="mt-6">
+                {!!title?.length && <Title>{title}</Title>}
+                {downloadable && (
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            gridRef.current?.api.exportDataAsCsv()
+                        }}
+                        icon={ArrowDownOnSquareIcon}
+                    >
+                        Download
+                    </Button>
+                )}
+            </Flex>
+            <div className="w-full ag-theme-alpine mt-4">
+                <AgGridReact
+                    ref={gridRef}
+                    domLayout="autoHeight"
+                    gridOptions={gridOptions}
+                    rowData={rowData}
+                />
+            </div>
+        </Flex>
     )
 }
