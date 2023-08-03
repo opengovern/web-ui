@@ -6,6 +6,7 @@ import {
     GridReadyEvent,
     ICellRendererParams,
     NestedFieldPaths,
+    RowClickedEvent,
     ValueFormatterFunc,
 } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
@@ -25,6 +26,8 @@ import { agGridDateComparator } from '../../utilities/dateComparator'
 export interface IColumn<TData, TValue> {
     type: 'string' | 'number' | 'price' | 'date' | 'connector'
     field?: NestedFieldPaths<TData, any>
+    width?: number
+    cellStyle?: any
     headerName?: string
     cellDataType?: boolean | string
     valueFormatter?: string | ValueFormatterFunc<TData, TValue>
@@ -40,10 +43,11 @@ export interface IColumn<TData, TValue> {
 
 interface IProps<TData, TValue> {
     id: string
-    columns?: IColumn<TData, TValue>[]
+    columns: IColumn<TData, TValue>[]
     rowData: TData[] | null
     onGridReady?: (event: GridReadyEvent<TData>) => void
     onCellClicked?: (event: CellClickedEvent<TData>) => void
+    onRowClicked?: (event: RowClickedEvent<TData>) => void
     downloadable?: boolean
     title?: string
 }
@@ -54,6 +58,7 @@ export default function Table<TData = any, TValue = any>({
     rowData,
     onGridReady,
     onCellClicked,
+    onRowClicked,
     downloadable = false,
     title,
 }: IProps<TData, TValue>) {
@@ -91,6 +96,7 @@ export default function Table<TData = any, TValue = any>({
                 field: item.field,
                 headerName: item.headerName,
                 filter: true,
+                width: item.width,
                 sortable: item.sortable || true,
                 resizable: item.resizable || true,
                 rowGroup: item.rowGroup || false,
@@ -163,6 +169,7 @@ export default function Table<TData = any, TValue = any>({
             }
         },
         onCellClicked,
+        onRowClicked,
         onColumnVisible: (e) => {
             if (e.column?.getId() && e.visible !== undefined) {
                 visibility.current?.set(e.column?.getId(), e.visible)

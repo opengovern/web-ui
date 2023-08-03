@@ -49,11 +49,10 @@ export default function ConnectorDetail() {
     return (
         <LoggedInLayout currentPage="integration">
             <Flex flexDirection="col" alignItems="start">
-                <Flex flexDirection="row" className="mb-6">
+                <Flex className="mb-6">
                     <Breadcrumbs pages={breadcrumbsPages} />
                 </Flex>
                 <Title>{connector}</Title>
-                <Text>Description</Text>
                 {connector === 'AWS' ? (
                     <>
                         <AWSSummary
@@ -65,6 +64,7 @@ export default function ConnectorDetail() {
                         <AWSTabs
                             accounts={accounts?.connections || []}
                             organizations={credentials?.credentials || []}
+                            loading={isCredentialLoading}
                         />
                     </>
                 ) : (
