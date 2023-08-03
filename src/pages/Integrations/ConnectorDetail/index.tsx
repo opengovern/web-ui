@@ -1,4 +1,4 @@
-import { Flex, Text, Title } from '@tremor/react'
+import { Flex, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai/index'
 import LoggedInLayout from '../../../components/LoggedInLayout'
@@ -52,7 +52,7 @@ export default function ConnectorDetail() {
                 <Flex className="mb-6">
                     <Breadcrumbs pages={breadcrumbsPages} />
                 </Flex>
-                <Title>{connector}</Title>
+                <Title className="font-semibold">{connector}</Title>
                 {connector === 'AWS' ? (
                     <>
                         <AWSSummary
