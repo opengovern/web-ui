@@ -1,11 +1,6 @@
 import { Badge, Button, Card, Flex, Title } from '@tremor/react'
-import { useRef, useState } from 'react'
-import { AgGridReact } from 'ag-grid-react'
-import {
-    GridOptions,
-    ICellRendererParams,
-    RowClickedEvent,
-} from 'ag-grid-community'
+import { useState } from 'react'
+import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import AccountInfo from './AccountInfo'
 import NewAWSAccount from './NewAWSAccount'
@@ -16,6 +11,7 @@ import {
 import { AWSIcon } from '../../../../../../icons/icons'
 import Notification from '../../../../../../components/Notification'
 import Table, { IColumn } from '../../../../../../components/Table'
+import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
 
 interface IAccountList {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -56,6 +52,21 @@ function getBadgeColor(status: string) {
             return 'rose'
         default:
             return 'gray'
+    }
+}
+
+function getBadgeText(status: string) {
+    switch (status) {
+        case 'NOT_ONBOARD':
+            return 'Not Onboarded'
+        case 'IN_PROGRESS':
+            return 'In Progress'
+        case 'ONBOARD':
+            return 'Onboarded'
+        case 'UNHEALTHY':
+            return 'Unhealthy'
+        default:
+            return 'Archived'
     }
 }
 
@@ -100,14 +111,12 @@ const columns: IColumn<any, any>[] = [
     },
     {
         headerName: 'Account Type',
+        field: 'type',
         type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
-        cellRenderer: (params: ICellRendererParams) => {
-            return getType(params.data)
-        },
     },
     {
         field: 'credentialName',
@@ -139,7 +148,7 @@ const columns: IColumn<any, any>[] = [
         cellRenderer: (params: ICellRendererParams) => {
             return (
                 <Badge color={getBadgeColor(params.value)}>
-                    {params.value}
+                    {getBadgeText(params.value)}
                 </Badge>
             )
         },
@@ -176,11 +185,24 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
+const generateRows = (data: any) => {
+    const rows = []
+    if (data) {
+        for (let i = 0; i < data.length; i += 1) {
+            // eslint-disable-next-line no-param-reassign
+            data[i].type = snakeCaseToLabel(data[i].metadata.account_type || '')
+            rows.push(data[i])
+        }
+    }
+    return rows
+}
+
 export default function AccountList({
     accounts,
     organizations,
     loading,
 }: IAccountList) {
+    console.log(accounts)
     const [accData, setAccData] = useState<
         GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
     >(undefined)
@@ -199,7 +221,7 @@ export default function AccountList({
                 </Flex>
                 <Table
                     id="aws_account_list"
-                    rowData={accounts}
+                    rowData={generateRows(accounts)}
                     columns={columns}
                     onGridReady={(params) => {
                         if (loading) {
