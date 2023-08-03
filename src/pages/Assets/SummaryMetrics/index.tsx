@@ -46,20 +46,32 @@ export default function SummaryMetrics() {
         <Grid numItemsMd={2} numItemsLg={3} className="gap-4 mt-6 mb-10">
             <SummaryCard
                 title="Accounts"
-                metric={String(numericDisplay(accounts?.connectionCount))}
+                metric={
+                    isDemo()
+                        ? String(numericDisplay(141420))
+                        : String(numericDisplay(accounts?.connectionCount))
+                }
                 url="accounts-detail"
-                loading={accountIsLoading}
+                loading={isDemo() ? false : accountIsLoading}
             />
             <SummaryCard
                 title="Services"
-                metric={String(numericDisplay(services?.total_metrics))}
+                metric={
+                    isDemo()
+                        ? String(numericDisplay(96))
+                        : String(numericDisplay(services?.total_metrics))
+                }
                 url="services-detail"
-                loading={servicesIsLoading}
+                loading={isDemo() ? false : servicesIsLoading}
             />
             <SummaryCard
                 title="Resources"
-                metric={String(numericDisplay(accounts?.totalResourceCount))}
-                loading={accountIsLoading}
+                metric={
+                    isDemo()
+                        ? String(numericDisplay(3926020))
+                        : String(numericDisplay(accounts?.totalResourceCount))
+                }
+                loading={isDemo() ? false : accountIsLoading}
             />
         </Grid>
     )
