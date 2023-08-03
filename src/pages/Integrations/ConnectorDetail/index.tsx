@@ -1,4 +1,4 @@
-import { Flex, Text, Title } from '@tremor/react'
+import { Flex, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai/index'
 import LoggedInLayout from '../../../components/LoggedInLayout'
@@ -49,11 +49,10 @@ export default function ConnectorDetail() {
     return (
         <LoggedInLayout currentPage="integration">
             <Flex flexDirection="col" alignItems="start">
-                <Flex flexDirection="row" className="mb-6">
+                <Flex className="mb-6">
                     <Breadcrumbs pages={breadcrumbsPages} />
                 </Flex>
-                <Title>{connector}</Title>
-                <Text>Description</Text>
+                <Title className="font-semibold">{connector}</Title>
                 {connector === 'AWS' ? (
                     <>
                         <AWSSummary
@@ -65,6 +64,7 @@ export default function ConnectorDetail() {
                         <AWSTabs
                             accounts={accounts?.connections || []}
                             organizations={credentials?.credentials || []}
+                            loading={isAccountsLoading}
                         />
                     </>
                 ) : (
@@ -78,6 +78,7 @@ export default function ConnectorDetail() {
                         <AzureTabs
                             principals={credentials?.credentials || []}
                             subscriptions={accounts?.connections || []}
+                            loading={isAccountsLoading}
                         />
                     </>
                 )}

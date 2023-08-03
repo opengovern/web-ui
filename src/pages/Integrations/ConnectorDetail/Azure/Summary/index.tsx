@@ -8,7 +8,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
 } from '../../../../../api/api'
-import DualSummaryCard from '../../../../../components/Cards/DualSummaryCard'
 
 interface IAzureSummary {
     principalsSummary:
@@ -28,7 +27,14 @@ export default function AzureSummary({
     subscriptionsLoading,
 }: IAzureSummary) {
     return (
-        <Grid numItemsMd={2} numItemsLg={3} className="w-full gap-4 mt-6 mb-10">
+        <Grid numItems={2} numItemsLg={3} className="w-full gap-4 mt-6 mb-10">
+            <SummaryCard
+                title="Discovered Azure Subscriptions"
+                metric={String(
+                    numericDisplay(subscriptionsSummary?.connectionCount)
+                )}
+                loading={subscriptionsLoading}
+            />
             <SummaryCard
                 title="Onboarded Azure Subscriptions"
                 metric={String(
@@ -43,19 +49,31 @@ export default function AzureSummary({
                 )}
                 loading={principalsLoading}
             />
-            <DualSummaryCard
-                title1="Healthy Connections"
-                title2="Unhealthy Connections"
-                metric1={numberDisplay(
+            <SummaryCard
+                title="Billing Accounts"
+                metric={numberDisplay(
                     (subscriptionsSummary?.connectionCount || 0) -
                         (subscriptionsSummary?.totalUnhealthyCount || 0),
                     0
                 )}
-                metric2={numberDisplay(
+                loading={principalsLoading}
+            />
+            <SummaryCard
+                title="Healthy Connections"
+                metric={numberDisplay(
+                    (subscriptionsSummary?.connectionCount || 0) -
+                        (subscriptionsSummary?.totalUnhealthyCount || 0),
+                    0
+                )}
+                loading={principalsLoading}
+            />
+            <SummaryCard
+                title="Unhealthy Connections"
+                metric={numberDisplay(
                     subscriptionsSummary?.totalUnhealthyCount,
                     0
                 )}
-                loading={subscriptionsLoading}
+                loading={principalsLoading}
             />
         </Grid>
     )

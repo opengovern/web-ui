@@ -9,9 +9,10 @@ import {
 interface IAWS {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    loading: boolean
 }
 
-export default function AWSTabs({ accounts, organizations }: IAWS) {
+export default function AWSTabs({ accounts, organizations, loading }: IAWS) {
     return (
         <TabGroup>
             <TabList className="mb-3">
@@ -23,6 +24,7 @@ export default function AWSTabs({ accounts, organizations }: IAWS) {
                     <AccountList
                         accounts={accounts}
                         organizations={organizations}
+                        loading={loading}
                     />
                 </TabPanel>
                 <TabPanel>

@@ -1,12 +1,6 @@
-import { Badge, Button, Card, Flex, Title } from '@tremor/react'
-import { useRef, useState } from 'react'
-import { AgGridReact } from 'ag-grid-react'
-import {
-    ColDef,
-    GridOptions,
-    ICellRendererParams,
-    RowClickedEvent,
-} from 'ag-grid-community'
+import { Badge, Button, Card, Flex } from '@tremor/react'
+import { useState } from 'react'
+import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import AccountInfo from './AccountInfo'
 import NewAWSAccount from './NewAWSAccount'
@@ -15,12 +9,14 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
 import { AWSIcon } from '../../../../../../icons/icons'
-import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 import Notification from '../../../../../../components/Notification'
+import Table, { IColumn } from '../../../../../../components/Table'
+import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
 
 interface IAccountList {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    loading: boolean
 }
 
 const getType = (
@@ -44,10 +40,41 @@ const getType = (
     return ''
 }
 
-const columns: ColDef[] = [
+function getBadgeColor(status: string) {
+    switch (status) {
+        case 'NOT_ONBOARD':
+            return 'neutral'
+        case 'IN_PROGRESS':
+            return 'yellow'
+        case 'ONBOARD':
+            return 'emerald'
+        case 'UNHEALTHY':
+            return 'rose'
+        default:
+            return 'gray'
+    }
+}
+
+function getBadgeText(status: string) {
+    switch (status) {
+        case 'NOT_ONBOARD':
+            return 'Not Onboarded'
+        case 'IN_PROGRESS':
+            return 'In Progress'
+        case 'ONBOARD':
+            return 'Onboarded'
+        case 'UNHEALTHY':
+            return 'Unhealthy'
+        default:
+            return 'Archived'
+    }
+}
+
+const columns: IColumn<any, any>[] = [
     {
         field: 'connector',
         headerName: 'Connector',
+        type: 'string',
         width: 50,
         sortable: true,
         filter: true,
@@ -67,6 +94,7 @@ const columns: ColDef[] = [
     {
         field: 'providerConnectionName',
         headerName: 'Name',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -75,6 +103,7 @@ const columns: ColDef[] = [
     {
         field: 'providerConnectionID',
         headerName: 'ID',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -82,16 +111,16 @@ const columns: ColDef[] = [
     },
     {
         headerName: 'Account Type',
+        field: 'type',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
-        cellRenderer: (params: ICellRendererParams) => {
-            return getType(params.data)
-        },
     },
     {
         field: 'credentialName',
+        type: 'string',
         headerName: 'Parent Organization Name',
         sortable: true,
         filter: true,
@@ -100,6 +129,7 @@ const columns: ColDef[] = [
     },
     {
         field: 'credentialID',
+        type: 'string',
         headerName: 'Parent Organization ID',
         hide: true,
         sortable: true,
@@ -109,36 +139,23 @@ const columns: ColDef[] = [
     },
     {
         field: 'lifecycleState',
+        type: 'string',
         headerName: 'State',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
         cellRenderer: (params: ICellRendererParams) => {
-            function getBadgeColor(status: string) {
-                switch (status) {
-                    case 'NOT_ONBOARD':
-                        return 'neutral'
-                    case 'IN_PROGRESS':
-                        return 'yellow'
-                    case 'ONBOARD':
-                        return 'emerald'
-                    case 'UNHEALTHY':
-                        return 'rose'
-                    default:
-                        return 'gray'
-                }
-            }
-
             return (
                 <Badge color={getBadgeColor(params.value)}>
-                    {params.value}
+                    {getBadgeText(params.value)}
                 </Badge>
             )
         },
     },
     {
         field: 'id',
+        type: 'string',
         headerName: 'Kaytu Connection ID',
         sortable: true,
         filter: true,
@@ -148,90 +165,75 @@ const columns: ColDef[] = [
     },
     {
         field: 'lastInventory',
+        type: 'date',
         headerName: 'Last Inventory',
         sortable: true,
         filter: true,
         resizable: true,
         hide: true,
         flex: 1,
-        valueFormatter: (param) => {
-            return dateTimeDisplay(param.value)
-        },
     },
     {
         field: 'onboardDate',
+        type: 'date',
         headerName: 'Onboard Date',
         sortable: true,
         filter: true,
         resizable: true,
         hide: true,
         flex: 1,
-        valueFormatter: (param) => {
-            return dateTimeDisplay(param.value)
-        },
     },
 ]
 
-export default function AccountList({ accounts, organizations }: IAccountList) {
-    const gridRef = useRef<AgGridReact>(null)
+const generateRows = (data: any) => {
+    const rows = []
+    if (data) {
+        for (let i = 0; i < data.length; i += 1) {
+            // eslint-disable-next-line no-param-reassign
+            data[i].type = snakeCaseToLabel(data[i].metadata.account_type || '')
+            rows.push(data[i])
+        }
+    }
+    return rows
+}
+
+export default function AccountList({
+    accounts,
+    organizations,
+    loading,
+}: IAccountList) {
     const [accData, setAccData] = useState<
         GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
     >(undefined)
     const [openInfo, setOpenInfo] = useState(false)
     const [open, setOpen] = useState(false)
     const [notification, setNotification] = useState<string>('')
-    console.log(accounts)
-    const gridOptions: GridOptions = {
-        columnDefs: columns,
-        pagination: true,
-        paginationPageSize: 25,
-        rowSelection: 'multiple',
-        animateRows: true,
-        getRowHeight: (params) => 50,
-        onRowClicked: (
-            event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
-        ) => {
-            setAccData(event.data)
-            setOpenInfo(true)
-        },
-        sideBar: {
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    toolPanel: 'agFiltersToolPanel',
-                },
-            ],
-            defaultToolPanel: '',
-        },
-    }
 
     return (
         <>
             <Card>
-                <Flex flexDirection="row">
-                    <Title>AWS Accounts</Title>
+                <Table
+                    downloadable
+                    title="Accounts"
+                    id="aws_account_list"
+                    rowData={generateRows(accounts)}
+                    columns={columns}
+                    onGridReady={(params) => {
+                        if (loading) {
+                            params.api.showLoadingOverlay()
+                        }
+                    }}
+                    onRowClicked={(
+                        event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+                    ) => {
+                        setAccData(event.data)
+                        setOpenInfo(true)
+                    }}
+                >
                     <Button icon={PlusIcon} onClick={() => setOpen(true)}>
                         Onboard New AWS Account
                     </Button>
-                </Flex>
-                <div className="ag-theme-alpine mt-6">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                        rowData={accounts}
-                    />
-                </div>
+                </Table>
             </Card>
             {notification && <Notification text={notification} />}
             <AccountInfo

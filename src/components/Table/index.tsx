@@ -6,6 +6,7 @@ import {
     GridReadyEvent,
     ICellRendererParams,
     NestedFieldPaths,
+    RowClickedEvent,
     ValueFormatterFunc,
 } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
@@ -25,6 +26,8 @@ import { agGridDateComparator } from '../../utilities/dateComparator'
 export interface IColumn<TData, TValue> {
     type: 'string' | 'number' | 'price' | 'date' | 'connector'
     field?: NestedFieldPaths<TData, any>
+    width?: number
+    cellStyle?: any
     headerName?: string
     cellDataType?: boolean | string
     valueFormatter?: string | ValueFormatterFunc<TData, TValue>
@@ -40,12 +43,14 @@ export interface IColumn<TData, TValue> {
 
 interface IProps<TData, TValue> {
     id: string
-    columns?: IColumn<TData, TValue>[]
+    columns: IColumn<TData, TValue>[]
     rowData: TData[] | null
     onGridReady?: (event: GridReadyEvent<TData>) => void
     onCellClicked?: (event: CellClickedEvent<TData>) => void
+    onRowClicked?: (event: RowClickedEvent<TData>) => void
     downloadable?: boolean
     title?: string
+    children?: any
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -54,8 +59,10 @@ export default function Table<TData = any, TValue = any>({
     rowData,
     onGridReady,
     onCellClicked,
+    onRowClicked,
     downloadable = false,
     title,
+    children,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
     const visibility = useRef<Map<string, boolean> | undefined>(undefined)
@@ -91,6 +98,7 @@ export default function Table<TData = any, TValue = any>({
                 field: item.field,
                 headerName: item.headerName,
                 filter: true,
+                width: item.width,
                 sortable: item.sortable || true,
                 resizable: item.resizable || true,
                 rowGroup: item.rowGroup || false,
@@ -163,6 +171,7 @@ export default function Table<TData = any, TValue = any>({
             }
         },
         onCellClicked,
+        onRowClicked,
         onColumnVisible: (e) => {
             if (e.column?.getId() && e.visible !== undefined) {
                 visibility.current?.set(e.column?.getId(), e.visible)
@@ -192,19 +201,24 @@ export default function Table<TData = any, TValue = any>({
 
     return (
         <Flex flexDirection="col" className="w-full">
-            <Flex className="mt-6">
-                {!!title?.length && <Title>{title}</Title>}
-                {downloadable && (
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            gridRef.current?.api.exportDataAsCsv()
-                        }}
-                        icon={ArrowDownOnSquareIcon}
-                    >
-                        Download
-                    </Button>
+            <Flex>
+                {!!title?.length && (
+                    <Title className="font-semibold">{title}</Title>
                 )}
+                <Flex className="w-fit gap-3">
+                    {downloadable && (
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                gridRef.current?.api.exportDataAsCsv()
+                            }}
+                            icon={ArrowDownOnSquareIcon}
+                        >
+                            Download
+                        </Button>
+                    )}
+                    {children}
+                </Flex>
             </Flex>
             <div className="w-full ag-theme-alpine mt-4">
                 <AgGridReact

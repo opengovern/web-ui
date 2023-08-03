@@ -22,7 +22,7 @@ export default function DualSummaryCard({
                     <Spinner />
                 </div>
             ) : (
-                <Flex className="gap-2 h-full">
+                <Flex className="gap-8 h-full">
                     <Flex flexDirection="col" alignItems="start">
                         <Text>{title1}</Text>
                         <Metric>{metric1}</Metric>
