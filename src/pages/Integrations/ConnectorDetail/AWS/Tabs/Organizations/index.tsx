@@ -1,8 +1,7 @@
 import { Badge, Button, Card, Flex } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
-import { AgGridReact } from 'ag-grid-react'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import OrganizationInfo from './OrganizationInfo'
 import NewOrganization from './NewOrganization'
 import {
@@ -138,7 +137,6 @@ export default function Organizations({
     organizations,
     accounts,
 }: IOrganizations) {
-    const gridRef = useRef<AgGridReact>(null)
     const [open, setOpen] = useState(false)
     const [openInfo, setOpenInfo] = useState(false)
     const [orgData, setOrgData] = useState<

@@ -78,6 +78,7 @@ export default function ConnectorDetail() {
                         <AzureTabs
                             principals={credentials?.credentials || []}
                             subscriptions={accounts?.connections || []}
+                            loading={isAccountsLoading}
                         />
                     </>
                 )}

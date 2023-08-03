@@ -214,7 +214,7 @@ export default function AccountList({
             <Card>
                 <Table
                     downloadable
-                    title="AWS Accounts"
+                    title="Accounts"
                     id="aws_account_list"
                     rowData={generateRows(accounts)}
                     columns={columns}

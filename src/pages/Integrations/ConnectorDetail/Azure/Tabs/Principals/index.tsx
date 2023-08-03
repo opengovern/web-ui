@@ -1,26 +1,22 @@
 import { Badge, Button, Card, Flex, Title } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
-import { AgGridReact } from 'ag-grid-react'
-import { useRef, useState } from 'react'
-import {
-    ColDef,
-    GridOptions,
-    ICellRendererParams,
-    RowClickedEvent,
-} from 'ag-grid-community'
+import { useState } from 'react'
+import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import PrincipalInfo from './PrincipalInfo'
 import NewPrincipal from './NewPrincipal'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../api/api'
 import { AzureIcon } from '../../../../../../icons/icons'
+import Table, { IColumn } from '../../../../../../components/Table'
 
 interface IPrincipals {
     principals: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
-const columns: ColDef[] = [
+const columns: IColumn<any, any>[] = [
     {
         field: 'connectortype',
         headerName: 'Connector',
+        type: 'string',
         width: 50,
         sortable: true,
         filter: true,
@@ -40,6 +36,7 @@ const columns: ColDef[] = [
     {
         field: 'name',
         headerName: 'Name',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -48,6 +45,7 @@ const columns: ColDef[] = [
     {
         field: 'credentialType',
         headerName: 'Credential Type',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -56,6 +54,7 @@ const columns: ColDef[] = [
     {
         field: 'enabled',
         headerName: 'Enabled',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -64,6 +63,7 @@ const columns: ColDef[] = [
     {
         field: 'healthStatus',
         headerName: 'Health Status',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -79,6 +79,7 @@ const columns: ColDef[] = [
                         return 'neutral'
                 }
             }
+
             return (
                 <Badge color={getBadgeColor(params.value)}>
                     {params.value}
@@ -89,6 +90,7 @@ const columns: ColDef[] = [
     {
         field: 'healthReason',
         headerName: 'Health Reason',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -98,6 +100,7 @@ const columns: ColDef[] = [
     {
         field: 'total_connections',
         headerName: 'Total Connections',
+        type: 'number',
         sortable: true,
         filter: true,
         resizable: true,
@@ -107,6 +110,7 @@ const columns: ColDef[] = [
     {
         field: 'enabled_connections',
         headerName: 'Enabled Connections',
+        type: 'number',
         sortable: true,
         filter: true,
         resizable: true,
@@ -116,6 +120,7 @@ const columns: ColDef[] = [
     {
         field: 'unhealthy_connections',
         headerName: 'Unhealthy Connections',
+        type: 'number',
         sortable: true,
         filter: true,
         resizable: true,
@@ -125,70 +130,39 @@ const columns: ColDef[] = [
 ]
 
 export default function Principals({ principals }: IPrincipals) {
-    const gridRef = useRef<AgGridReact>(null)
-
     const [open, setOpen] = useState(false)
     const [openInfo, setOpenInfo] = useState(false)
     const [priData, setPriData] = useState<
         GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
     >(undefined)
 
-    const gridOptions: GridOptions = {
-        columnDefs: columns,
-        pagination: true,
-        paginationPageSize: 25,
-        rowSelection: 'multiple',
-        animateRows: true,
-        getRowHeight: (params) => 50,
-        onRowClicked: (
-            event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
-        ) => {
-            setPriData(event.data)
-            setOpenInfo(true)
-        },
-        sideBar: {
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    toolPanel: 'agFiltersToolPanel',
-                },
-            ],
-            defaultToolPanel: '',
-        },
-    }
-
     return (
-        <Card>
-            <Flex flexDirection="row">
-                <Title>Service Principals</Title>
-                <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                    Add New SPN
-                </Button>
-            </Flex>
-            <div className="ag-theme-alpine mt-6" key="principals">
-                <AgGridReact
-                    ref={gridRef}
-                    domLayout="autoHeight"
-                    gridOptions={gridOptions}
+        <>
+            <Card>
+                <Table
+                    downloadable
+                    title="Principals"
+                    id="azure_pri_list"
+                    columns={columns}
                     rowData={principals}
-                />
-            </div>
+                    onRowClicked={(
+                        event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
+                    ) => {
+                        setPriData(event.data)
+                        setOpenInfo(true)
+                    }}
+                >
+                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
+                        Create New Principal
+                    </Button>
+                </Table>
+            </Card>
             <PrincipalInfo
                 data={priData}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
             />
             <NewPrincipal open={open} onClose={() => setOpen(false)} />
-        </Card>
+        </>
     )
 }

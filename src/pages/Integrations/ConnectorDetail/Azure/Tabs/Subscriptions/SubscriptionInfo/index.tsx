@@ -15,6 +15,21 @@ interface ISubscriptionInfo {
     onClose: () => void
 }
 
+function getBadgeText(status: string) {
+    switch (status) {
+        case 'NOT_ONBOARD':
+            return 'Not Onboarded'
+        case 'IN_PROGRESS':
+            return 'In Progress'
+        case 'ONBOARD':
+            return 'Onboarded'
+        case 'UNHEALTHY':
+            return 'Unhealthy'
+        default:
+            return 'Archived'
+    }
+}
+
 export default function SubscriptionInfo({
     data,
     open,
@@ -94,7 +109,7 @@ export default function SubscriptionInfo({
                                     : 'rose'
                             }
                         >
-                            {data?.lifecycleState}
+                            {getBadgeText(data?.lifecycleState || '')}
                         </Badge>
                     </Flex>
                     <Divider />

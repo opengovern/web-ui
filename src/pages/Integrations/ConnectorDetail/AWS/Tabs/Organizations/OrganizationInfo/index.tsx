@@ -7,7 +7,6 @@ import {
     TextInput,
     Title,
 } from '@tremor/react'
-import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import {
     useOnboardApiV1CredentialAutoonboardCreate,

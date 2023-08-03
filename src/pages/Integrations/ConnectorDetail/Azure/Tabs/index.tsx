@@ -9,9 +9,14 @@ import {
 interface IAzure {
     principals: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
     subscriptions: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    loading: boolean
 }
 
-export default function AzureTabs({ principals, subscriptions }: IAzure) {
+export default function AzureTabs({
+    principals,
+    subscriptions,
+    loading,
+}: IAzure) {
     return (
         <TabGroup>
             <TabList className="mb-3">
@@ -23,6 +28,7 @@ export default function AzureTabs({ principals, subscriptions }: IAzure) {
                     <Subscriptions
                         subscriptions={subscriptions}
                         spns={principals}
+                        loading={loading}
                     />
                 </TabPanel>
                 <TabPanel key="pri">

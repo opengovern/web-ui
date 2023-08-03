@@ -8,7 +8,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
 } from '../../../../../api/api'
-import DualSummaryCard from '../../../../../components/Cards/DualSummaryCard'
 
 interface IAzureSummary {
     principalsSummary:
