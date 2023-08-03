@@ -20,8 +20,7 @@ interface IProps {
 const resourceMetricsResponse2 = [
     {
         id: 'elastic_compute_cloud',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('aws::ec2::instance','aws::ec2::volume','aws::ec2::volumesnapshot','aws::autoscaling::autoscalinggroup','aws::ec2::eip','aws::ec2::host')",
+        finderQuery: '',
         connectors: ['AWS'],
         name: 'Elastic Compute Cloud (EC2)',
         tags: {
@@ -32,8 +31,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'config',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('aws::config::rule','aws::config::configurationrecorder')",
+        finderQuery: '',
         connectors: ['AWS'],
         name: 'Config',
         tags: {
@@ -44,8 +42,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'virtual_machines',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('microsoft.compute/virtualmachines','microsoft.compute/disks','microsoft.compute/images','microsoft.compute/snapshots')",
+        finderQuery: '',
         connectors: ['Azure'],
         name: 'Virtual Machines',
         tags: {
@@ -56,8 +53,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'storage_account',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('microsoft.storage/storageaccounts','microsoft.storage/queues','microsoft.storage/fileshares')",
+        finderQuery: '',
         connectors: ['Azure'],
         name: 'Storage Account',
         tags: {
@@ -68,8 +64,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'cloud_watch',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('aws::logs::loggroup','aws::cloudwatch::alarm')",
+        finderQuery: '',
         connectors: ['AWS'],
         name: 'CloudWatch',
         tags: {
@@ -80,8 +75,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'lambda',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('aws::lambda::function')",
+        finderQuery: '',
         connectors: ['AWS'],
         name: 'Lambda',
         tags: {
@@ -92,8 +86,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'cloud_formation',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('aws::cloudformation::stack','aws::cloudformation::stackset')",
+        finderQuery: '',
         connectors: ['AWS'],
         name: 'CloudFormation',
         tags: {
@@ -104,8 +97,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'iam',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('aws::iam::user','aws::iam::accesskey')",
+        finderQuery: '',
         connectors: ['AWS'],
         name: 'IAM',
         tags: {
@@ -116,8 +108,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'simple_storage_service',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('aws::s3::bucket')",
+        finderQuery: '',
         connectors: ['AWS'],
         name: 'Simple Storage Service (S3)',
         tags: {
@@ -128,8 +119,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'simple_queue_service',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('aws::sqs::queue')",
+        finderQuery: '',
         connectors: ['AWS'],
         name: 'Simple Queue Service (SQS)',
         tags: {
@@ -140,8 +130,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'access_keys',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('aws::ec2::keypair')",
+        finderQuery: '',
         connectors: ['AWS'],
         name: 'Access Keys',
         tags: {
@@ -152,8 +141,7 @@ const resourceMetricsResponse2 = [
     },
     {
         id: 'certificate_manager',
-        finderQuery:
-            "select * from kaytu_lookup where resource_type in ('aws::acmpca::certificateauthority','aws::certificatemanager::certificate')",
+        finderQuery: '',
         connectors: ['AWS'],
         name: 'Certificate Manager (ACM)',
         tags: {
