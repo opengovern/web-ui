@@ -15,6 +15,40 @@ type IProps = {
         value: string
     }[]
 }
+const resourcesTrend2 = [
+    {
+        count: 349054,
+        date: '2023-07-27T12:00:00Z',
+    },
+    {
+        count: 447802,
+        date: '2023-07-28T12:00:00Z',
+    },
+    {
+        count: 569084,
+        date: '2023-07-29T12:00:00Z',
+    },
+    {
+        count: 169669,
+        date: '2023-07-30T12:00:00Z',
+    },
+    {
+        count: 257643,
+        date: '2023-07-31T12:00:00Z',
+    },
+    {
+        count: 674350,
+        date: '2023-08-01T12:00:00Z',
+    },
+    {
+        count: 970058,
+        date: '2023-08-02T12:00:00Z',
+    },
+    {
+        count: 1093813,
+        date: '2023-08-03T12:00:00Z',
+    },
+]
 
 export default function GrowthTrend({ categories }: IProps) {
     const activeTimeRange = useAtomValue(timeAtom)
@@ -45,41 +79,6 @@ export default function GrowthTrend({ categories }: IProps) {
     }
     const { response: resourcesTrend, isLoading } =
         useInventoryApiV2AnalyticsTrendList(query)
-
-    const resourcesTrend2 = [
-        {
-            count: 349054,
-            date: '2023-07-27T12:00:00Z',
-        },
-        {
-            count: 447802,
-            date: '2023-07-28T12:00:00Z',
-        },
-        {
-            count: 569084,
-            date: '2023-07-29T12:00:00Z',
-        },
-        {
-            count: 169669,
-            date: '2023-07-30T12:00:00Z',
-        },
-        {
-            count: 257643,
-            date: '2023-07-31T12:00:00Z',
-        },
-        {
-            count: 674350,
-            date: '2023-08-01T12:00:00Z',
-        },
-        {
-            count: 970058,
-            date: '2023-08-02T12:00:00Z',
-        },
-        {
-            count: 1093813,
-            date: '2023-08-03T12:00:00Z',
-        },
-    ]
 
     const trendData = () => {
         return isDemo()

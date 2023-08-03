@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Card, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import dayjs from 'dayjs'
 import {
     useInventoryApiV2CostMetricList,
     useInventoryApiV2ServicesCostTrendList,
@@ -11,6 +10,135 @@ import Chart from '../../../../../components/Charts'
 import { priceDisplay } from '../../../../../utilities/numericDisplay'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
 import { dateDisplay } from '../../../../../utilities/dateDisplay'
+import { isDemo } from '../../../../../utilities/demo'
+
+const MockData = [
+    {
+        serviceName: 'AWS::EC2::Instance',
+        costTrend: [
+            {
+                count: 12630.07900738,
+                date: '2023-07-03T12:00:00Z',
+            },
+            {
+                count: 190209.2090010504,
+                date: '2023-07-08T12:00:00Z',
+            },
+            {
+                count: 84004.0190028391,
+                date: '2023-07-14T12:00:00Z',
+            },
+            {
+                count: 251256.629002884,
+                date: '2023-07-26T12:00:00Z',
+            },
+            {
+                count: 21630.07900738,
+                date: '2023-08-03T12:00:00Z',
+            },
+        ],
+    },
+    {
+        serviceName: 'Azure::VM',
+        costTrend: [
+            {
+                count: 18459.33402822,
+                date: '2023-07-03T12:00:00Z',
+            },
+            {
+                count: 16902.9981862763,
+                date: '2023-07-08T12:00:00Z',
+            },
+            {
+                count: 14334.44930136404,
+                date: '2023-07-14T12:00:00Z',
+            },
+            {
+                count: 14849.408132466835,
+                date: '2023-07-26T12:00:00Z',
+            },
+            {
+                count: 13420,
+                date: '2023-08-03T12:00:00Z',
+            },
+        ],
+    },
+    {
+        serviceName: 'Microsoft::SQL::Server',
+        costTrend: [
+            {
+                count: 18785.09410023,
+                date: '2023-07-03T12:00:00Z',
+            },
+            {
+                count: 23284.25565629249,
+                date: '2023-07-08T12:00:00Z',
+            },
+            {
+                count: 20741.18638722364,
+                date: '2023-07-14T12:00:00Z',
+            },
+            {
+                count: 18669.12372823586,
+                date: '2023-07-26T12:00:00Z',
+            },
+            {
+                count: 15420,
+                date: '2023-08-03T12:00:00Z',
+            },
+        ],
+    },
+    {
+        serviceName: 'AWS::RDS::Instance',
+        costTrend: [
+            {
+                count: 10925.761236362,
+                date: '2023-07-03T12:00:00Z',
+            },
+            {
+                count: 10834.967310723943,
+                date: '2023-07-08T12:00:00Z',
+            },
+            {
+                count: 19637.34879541858,
+                date: '2023-07-14T12:00:00Z',
+            },
+            {
+                count: 10180.09984875439,
+                date: '2023-07-26T12:00:00Z',
+            },
+            {
+                count: 25312,
+                date: '2023-08-03T12:00:00Z',
+            },
+        ],
+    },
+    {
+        serviceName: 'Application::Server',
+        costTrend: [
+            {
+                count: 11920.15888781,
+                date: '2023-07-03T12:00:00Z',
+            },
+            {
+                count: 17582.857486154,
+                date: '2023-07-08T12:00:00Z',
+            },
+            {
+                count: 15501.050410370262,
+                date: '2023-07-14T12:00:00Z',
+            },
+            {
+                count: 26353.28582341845,
+                date: '2023-07-26T12:00:00Z',
+            },
+            {
+                count: 16010,
+                date: '2023-08-03T12:00:00Z',
+            },
+        ],
+    },
+]
 
 type IProps = {
     categories: {
@@ -103,7 +231,7 @@ export default function TopServicesTrend({ categories }: IProps) {
     }
 
     useEffect(() => {
-        fixTime(data)
+        fixTime(isDemo() ? MockData : data)
     }, [data])
 
     return (

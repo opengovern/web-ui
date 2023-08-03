@@ -83,6 +83,25 @@ export default function Spend() {
         })
 
     const categoryOptions = useMemo(() => {
+        if (isDemo()) {
+            const output = [
+                { label: 'AI + ML', value: 'AI + ML' },
+                { label: 'App Platform', value: 'App Platform' },
+                {
+                    label: 'Application Integration',
+                    value: 'Application Integration',
+                },
+                { label: 'Compute', value: 'Compute' },
+                { label: 'DevOps', value: 'DevOps' },
+                { label: 'Governance', value: 'Governance' },
+                { label: 'Monitoring', value: 'Monitoring' },
+                { label: 'Network', value: 'Network' },
+                { label: 'Security', value: 'Security' },
+                { label: 'Serverless', value: 'Serverless' },
+                { label: 'Storage', value: 'Storage' },
+            ]
+            return output
+        }
         if (!inventoryCategories?.category)
             return [{ label: 'no data', value: 'no data' }]
         return [{ label: 'All Categories', value: 'All Categories' }].concat(

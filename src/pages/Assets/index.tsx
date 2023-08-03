@@ -19,6 +19,23 @@ import SummaryMetrics from './SummaryMetrics'
 import ResourceMetrics from './Tabs/ResourceMetrics'
 import { isDemo } from '../../utilities/demo'
 
+const MockCat = [
+    { label: 'AI + ML', value: 'AI + ML' },
+    { label: 'App Platform', value: 'App Platform' },
+    {
+        label: 'Application Integration',
+        value: 'Application Integration',
+    },
+    { label: 'Compute', value: 'Compute' },
+    { label: 'DevOps', value: 'DevOps' },
+    { label: 'Governance', value: 'Governance' },
+    { label: 'Monitoring', value: 'Monitoring' },
+    { label: 'Network', value: 'Network' },
+    { label: 'Security', value: 'Security' },
+    { label: 'Serverless', value: 'Serverless' },
+    { label: 'Storage', value: 'Storage' },
+]
+
 export default function Assets() {
     const navigate = useNavigate()
     const tabs = useLocation().hash
@@ -33,23 +50,7 @@ export default function Assets() {
 
     const categoryOptions = () => {
         if (isDemo()) {
-            const output = [
-                { label: 'AI + ML', value: 'AI + ML' },
-                { label: 'App Platform', value: 'App Platform' },
-                {
-                    label: 'Application Integration',
-                    value: 'Application Integration',
-                },
-                { label: 'Compute', value: 'Compute' },
-                { label: 'DevOps', value: 'DevOps' },
-                { label: 'Governance', value: 'Governance' },
-                { label: 'Monitoring', value: 'Monitoring' },
-                { label: 'Network', value: 'Network' },
-                { label: 'Security', value: 'Security' },
-                { label: 'Serverless', value: 'Serverless' },
-                { label: 'Storage', value: 'Storage' },
-            ]
-            return output
+            return MockCat
         }
         if (categoriesLoading) {
             return [{ label: 'Loading', value: 'Loading' }]

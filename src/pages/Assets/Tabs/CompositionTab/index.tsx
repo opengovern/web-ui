@@ -37,6 +37,37 @@ interface compositeItem {
     val: number
 }
 
+const composition2 = {
+    total_count: 542152,
+    total_value_count: 16,
+    top_values: {
+        Compute: {
+            old_count: 176303,
+            count: 162918,
+        },
+        Governance: {
+            old_count: 60884,
+            count: 59284,
+        },
+        Monitoring: {
+            old_count: 35199,
+            count: 39135,
+        },
+        Network: {
+            old_count: 60562,
+            count: 100794,
+        },
+        Storage: {
+            old_count: 57854,
+            count: 57971,
+        },
+    },
+    others: {
+        old_count: 111960,
+        count: 122050,
+    },
+}
+
 export default function CompositionTab({ top }: IProps) {
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
@@ -55,37 +86,6 @@ export default function CompositionTab({ top }: IProps) {
     }
     const { response: composition, isLoading } =
         useInventoryApiV2AnalyticsCompositionDetail('category', query)
-
-    const composition2 = {
-        total_count: 542152,
-        total_value_count: 16,
-        top_values: {
-            Compute: {
-                old_count: 176303,
-                count: 162918,
-            },
-            Governance: {
-                old_count: 60884,
-                count: 59284,
-            },
-            Monitoring: {
-                old_count: 35199,
-                count: 39135,
-            },
-            Network: {
-                old_count: 60562,
-                count: 100794,
-            },
-            Storage: {
-                old_count: 57854,
-                count: 57971,
-            },
-        },
-        others: {
-            old_count: 111960,
-            count: 122050,
-        },
-    }
 
     const recordToArray = (
         record?: Record<

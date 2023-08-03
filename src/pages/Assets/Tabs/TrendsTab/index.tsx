@@ -18,6 +18,145 @@ type IProps = {
         value: string
     }[]
 }
+
+const MockData = {
+    consumptionData: {
+        AccountData: [
+            {
+                name: 'SAT-Test-CAM',
+                value: 149620,
+            },
+            {
+                name: 'Micro-DB-Prod',
+                value: 50720,
+            },
+            {
+                name: 'MAN-DEV-DB',
+                value: 32000,
+            },
+            {
+                name: 'POD-app-DEV',
+                value: 16000,
+            },
+            {
+                name: 'Geek-Backend-DEV',
+                value: 670,
+            },
+        ],
+        ServicesData: [
+            {
+                name: 'Elastic Compute Cloud (EC2)',
+                value: 139620,
+            },
+            {
+                name: 'Config',
+                value: 40720,
+            },
+            {
+                name: 'Storage Account',
+                value: 22000,
+            },
+            {
+                name: 'Virtual Machines',
+                value: 14000,
+            },
+            {
+                name: 'DevOPS',
+                value: 570,
+            },
+        ],
+        RegionData: [
+            {
+                name: 'us-west-1',
+                value: 149620,
+            },
+            {
+                name: 'us-east-2',
+                value: 50720,
+            },
+            {
+                name: 'us-east-1',
+                value: 32000,
+            },
+            {
+                name: 'nl-west-2',
+                value: 16000,
+            },
+            {
+                name: 'nl-west-1',
+                value: 700,
+            },
+        ],
+    },
+    growthData: {
+        AccountData: [
+            {
+                name: 'ManCT-DEV',
+                value: '420 %',
+            },
+            {
+                name: 'SAT-Test-CAM',
+                value: '320 %',
+            },
+            {
+                name: 'Micro-DB-Prod',
+                value: '220 %',
+            },
+            {
+                name: 'ART-MACRO-Pipe',
+                value: '120 %',
+            },
+            {
+                name: 'POD-app-DEV',
+                value: '20 %',
+            },
+        ],
+        ServicesData: [
+            {
+                name: 'Secrets Manager',
+                value: '90.6 %',
+            },
+            {
+                name: 'Route 51',
+                value: '63.4 %',
+            },
+            {
+                name: 'Lambda',
+                value: '46 %',
+            },
+            {
+                name: 'Elasticsearch Service',
+                value: '39 %',
+            },
+            {
+                name: 'Simple Queue Service (SQS)',
+                value: '10 %',
+            },
+        ],
+        RegionData: [
+            {
+                name: 'us-west-1',
+                value: '45 %',
+            },
+            {
+                name: 'us-east-2',
+                value: '35 %',
+            },
+            {
+                name: 'us-east-1',
+                value: '24 %',
+            },
+            {
+                name: 'nl-west-2',
+                value: '16 %',
+            },
+            {
+                name: 'nl-west-1',
+                value: '9 %',
+            },
+        ],
+    },
+}
 export default function TrendsTab({ categories }: IProps) {
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
@@ -142,28 +281,7 @@ export default function TrendsTab({ categories }: IProps) {
 
     const consumptionData = () => {
         const AccountData = isDemo()
-            ? [
-                  {
-                      name: 'SAT-Test-CAM',
-                      value: 149620,
-                  },
-                  {
-                      name: 'Micro-DB-Prod',
-                      value: 50720,
-                  },
-                  {
-                      name: 'MAN-DEV-DB',
-                      value: 32000,
-                  },
-                  {
-                      name: 'POD-app-DEV',
-                      value: 16000,
-                  },
-                  {
-                      name: 'Geek-Backend-DEV',
-                      value: 670,
-                  },
-              ]
+            ? MockData.consumptionData.AccountData
             : accountsConsumption?.connections?.map((item) => {
                   return {
                       name: item.providerConnectionName,
@@ -171,28 +289,7 @@ export default function TrendsTab({ categories }: IProps) {
                   }
               }) || []
         const ServicesData = isDemo()
-            ? [
-                  {
-                      name: 'Elastic Compute Cloud (EC2)',
-                      value: 139620,
-                  },
-                  {
-                      name: 'Config',
-                      value: 40720,
-                  },
-                  {
-                      name: 'Storage Account',
-                      value: 22000,
-                  },
-                  {
-                      name: 'Virtual Machines',
-                      value: 14000,
-                  },
-                  {
-                      name: 'DevOPS',
-                      value: 570,
-                  },
-              ]
+            ? MockData.consumptionData.ServicesData
             : servicesConsumption?.metrics?.map((item) => {
                   return {
                       name: item.name,
@@ -200,28 +297,7 @@ export default function TrendsTab({ categories }: IProps) {
                   }
               }) || []
         const RegionData = isDemo()
-            ? [
-                  {
-                      name: 'us-west-1',
-                      value: 149620,
-                  },
-                  {
-                      name: 'us-east-2',
-                      value: 50720,
-                  },
-                  {
-                      name: 'us-east-1',
-                      value: 32000,
-                  },
-                  {
-                      name: 'nl-west-2',
-                      value: 16000,
-                  },
-                  {
-                      name: 'nl-west-1',
-                      value: 700,
-                  },
-              ]
+            ? MockData.consumptionData.RegionData
             : regionConsumption?.regions?.map((item) => {
                   return {
                       name: item.location,
@@ -237,28 +313,7 @@ export default function TrendsTab({ categories }: IProps) {
 
     const growthData = () => {
         const AccountData = isDemo()
-            ? [
-                  {
-                      name: 'ManCT-DEV',
-                      value: '420 %',
-                  },
-                  {
-                      name: 'SAT-Test-CAM',
-                      value: '320 %',
-                  },
-                  {
-                      name: 'Micro-DB-Prod',
-                      value: '220 %',
-                  },
-                  {
-                      name: 'ART-MACRO-Pipe',
-                      value: '120 %',
-                  },
-                  {
-                      name: 'POD-app-DEV',
-                      value: '20 %',
-                  },
-              ]
+            ? MockData.growthData.AccountData
             : accountsGrowth?.connections?.map((item) => {
                   return {
                       name: item.providerConnectionName,
@@ -269,28 +324,7 @@ export default function TrendsTab({ categories }: IProps) {
                   }
               }) || []
         const ServicesData = isDemo()
-            ? [
-                  {
-                      name: 'Secrets Manager',
-                      value: '90.6 %',
-                  },
-                  {
-                      name: 'Route 51',
-                      value: '63.4 %',
-                  },
-                  {
-                      name: 'Lambda',
-                      value: '46 %',
-                  },
-                  {
-                      name: 'Elasticsearch Service',
-                      value: '39 %',
-                  },
-                  {
-                      name: 'Simple Queue Service (SQS)',
-                      value: '10 %',
-                  },
-              ]
+            ? MockData.growthData.ServicesData
             : servicesGrowth?.metrics?.map((item) => {
                   return {
                       name: item.name,
@@ -301,28 +335,7 @@ export default function TrendsTab({ categories }: IProps) {
                   }
               }) || []
         const RegionData = isDemo()
-            ? [
-                  {
-                      name: 'us-west-1',
-                      value: '45 %',
-                  },
-                  {
-                      name: 'us-east-2',
-                      value: '35 %',
-                  },
-                  {
-                      name: 'us-east-1',
-                      value: '24 %',
-                  },
-                  {
-                      name: 'nl-west-2',
-                      value: '16 %',
-                  },
-                  {
-                      name: 'nl-west-1',
-                      value: '9 %',
-                  },
-              ]
+            ? MockData.growthData.RegionData
             : regionGrowth?.regions?.map((item) => {
                   return {
                       name: item.location,
