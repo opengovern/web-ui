@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Flex, Title } from '@tremor/react'
+import { Badge, Button, Card, Flex } from '@tremor/react'
 import { useState } from 'react'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { PlusIcon } from '@heroicons/react/24/solid'
@@ -213,13 +213,9 @@ export default function AccountList({
     return (
         <>
             <Card>
-                <Flex flexDirection="row">
-                    <Title>AWS Accounts</Title>
-                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                        Onboard New AWS Account
-                    </Button>
-                </Flex>
                 <Table
+                    downloadable
+                    title="AWS Accounts"
                     id="aws_account_list"
                     rowData={generateRows(accounts)}
                     columns={columns}
@@ -234,7 +230,11 @@ export default function AccountList({
                         setAccData(event.data)
                         setOpenInfo(true)
                     }}
-                />
+                >
+                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
+                        Onboard New AWS Account
+                    </Button>
+                </Table>
             </Card>
             {notification && <Notification text={notification} />}
             <AccountInfo

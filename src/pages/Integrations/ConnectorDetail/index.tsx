@@ -64,7 +64,7 @@ export default function ConnectorDetail() {
                         <AWSTabs
                             accounts={accounts?.connections || []}
                             organizations={credentials?.credentials || []}
-                            loading={isCredentialLoading}
+                            loading={isAccountsLoading}
                         />
                     </>
                 ) : (

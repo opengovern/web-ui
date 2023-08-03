@@ -50,6 +50,7 @@ interface IProps<TData, TValue> {
     onRowClicked?: (event: RowClickedEvent<TData>) => void
     downloadable?: boolean
     title?: string
+    children?: any
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -61,6 +62,7 @@ export default function Table<TData = any, TValue = any>({
     onRowClicked,
     downloadable = false,
     title,
+    children,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
     const visibility = useRef<Map<string, boolean> | undefined>(undefined)
@@ -199,19 +201,24 @@ export default function Table<TData = any, TValue = any>({
 
     return (
         <Flex flexDirection="col" className="w-full">
-            <Flex className="mt-6">
-                {!!title?.length && <Title>{title}</Title>}
-                {downloadable && (
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            gridRef.current?.api.exportDataAsCsv()
-                        }}
-                        icon={ArrowDownOnSquareIcon}
-                    >
-                        Download
-                    </Button>
+            <Flex>
+                {!!title?.length && (
+                    <Title className="font-semibold">{title}</Title>
                 )}
+                <Flex className="w-fit gap-3">
+                    {downloadable && (
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                gridRef.current?.api.exportDataAsCsv()
+                            }}
+                            icon={ArrowDownOnSquareIcon}
+                        >
+                            Download
+                        </Button>
+                    )}
+                    {children}
+                </Flex>
             </Flex>
             <div className="w-full ag-theme-alpine mt-4">
                 <AgGridReact

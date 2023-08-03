@@ -8,7 +8,7 @@ interface INotification {
 }
 
 export default function Notification({ text }: INotification) {
-    const [show, setShow] = useState(true)
+    const [show, setShow] = useState(!!text.length)
 
     return (
         <div
