@@ -1,11 +1,6 @@
-import { Badge, Button, Card, Flex, Title } from '@tremor/react'
+import { Badge, Button, Card, Flex } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
-import {
-    ColDef,
-    GridOptions,
-    ICellRendererParams,
-    RowClickedEvent,
-} from 'ag-grid-community'
+import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import { useRef, useState } from 'react'
 import OrganizationInfo from './OrganizationInfo'
@@ -15,16 +10,29 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
 import { AWSIcon } from '../../../../../../icons/icons'
+import Table, { IColumn } from '../../../../../../components/Table'
 
 interface IOrganizations {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
 }
 
-const columns: ColDef[] = [
+function getBadgeColor(status: string) {
+    switch (status) {
+        case 'healthy':
+            return 'emerald'
+        case 'unhealthy':
+            return 'rose'
+        default:
+            return 'neutral'
+    }
+}
+
+const columns: IColumn<any, any>[] = [
     {
         field: 'connectortype',
         headerName: 'Connector',
+        type: 'string',
         width: 50,
         sortable: true,
         filter: true,
@@ -44,6 +52,7 @@ const columns: ColDef[] = [
     {
         field: 'name',
         headerName: 'Name',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -52,6 +61,7 @@ const columns: ColDef[] = [
     {
         field: 'credentialType',
         headerName: 'Credential Type',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -60,6 +70,7 @@ const columns: ColDef[] = [
     {
         field: 'enabled',
         headerName: 'Enabled',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -68,22 +79,12 @@ const columns: ColDef[] = [
     {
         field: 'healthStatus',
         headerName: 'Health Status',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
         cellRenderer: (params: ICellRendererParams) => {
-            function getBadgeColor(status: string) {
-                switch (status) {
-                    case 'healthy':
-                        return 'emerald'
-                    case 'unhealthy':
-                        return 'rose'
-                    default:
-                        return 'neutral'
-                }
-            }
-
             return (
                 <Badge color={getBadgeColor(params.value)}>
                     {params.value}
@@ -94,6 +95,7 @@ const columns: ColDef[] = [
     {
         field: 'healthReason',
         headerName: 'Health Reason',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -103,6 +105,7 @@ const columns: ColDef[] = [
     {
         field: 'total_connections',
         headerName: 'Total Connections',
+        type: 'number',
         sortable: true,
         filter: true,
         resizable: true,
@@ -112,6 +115,7 @@ const columns: ColDef[] = [
     {
         field: 'enabled_connections',
         headerName: 'Enabled Connections',
+        type: 'number',
         sortable: true,
         filter: true,
         resizable: true,
@@ -121,6 +125,7 @@ const columns: ColDef[] = [
     {
         field: 'unhealthy_connections',
         headerName: 'Unhealthy Connections',
+        type: 'number',
         sortable: true,
         filter: true,
         resizable: true,
@@ -139,57 +144,27 @@ export default function Organizations({
     const [orgData, setOrgData] = useState<
         GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
     >(undefined)
-    const gridOptions: GridOptions = {
-        columnDefs: columns,
-        pagination: true,
-        paginationPageSize: 25,
-        rowSelection: 'multiple',
-        animateRows: true,
-        getRowHeight: (params) => 50,
-        onRowClicked: (
-            event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
-        ) => {
-            setOrgData(event.data)
-            setOpenInfo(true)
-        },
-        sideBar: {
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    toolPanel: 'agFiltersToolPanel',
-                },
-            ],
-            defaultToolPanel: '',
-        },
-    }
 
     return (
         <>
             <Card>
-                <Flex flexDirection="row">
-                    <Title>Organizations</Title>
+                <Table
+                    downloadable
+                    title="Organizations"
+                    id="aws_org_list"
+                    columns={columns}
+                    rowData={organizations}
+                    onRowClicked={(
+                        event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
+                    ) => {
+                        setOrgData(event.data)
+                        setOpenInfo(true)
+                    }}
+                >
                     <Button icon={PlusIcon} onClick={() => setOpen(true)}>
                         Create New Organization
                     </Button>
-                </Flex>
-                <div className="ag-theme-alpine mt-6">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                        rowData={organizations}
-                    />
-                </div>
+                </Table>
             </Card>
             <OrganizationInfo
                 open={openInfo}

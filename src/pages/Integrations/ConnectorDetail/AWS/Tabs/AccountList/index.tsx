@@ -202,7 +202,6 @@ export default function AccountList({
     organizations,
     loading,
 }: IAccountList) {
-    console.log(accounts)
     const [accData, setAccData] = useState<
         GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
     >(undefined)
