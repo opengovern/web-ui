@@ -12,6 +12,7 @@ import {
     percentageByChange,
 } from '../../../../utilities/deltaType'
 import { filterAtom, timeAtom } from '../../../../store'
+import { isDemo } from '../../../../utilities/demo'
 
 type IProps = {
     top: number
@@ -34,6 +35,37 @@ interface compositeItem {
     delta?: string
     deltaType?: DeltaType
     val: number
+}
+
+const composition2 = {
+    total_count: 542152,
+    total_value_count: 16,
+    top_values: {
+        Compute: {
+            old_count: 176303,
+            count: 162918,
+        },
+        Governance: {
+            old_count: 60884,
+            count: 59284,
+        },
+        Monitoring: {
+            old_count: 35199,
+            count: 39135,
+        },
+        Network: {
+            old_count: 60562,
+            count: 100794,
+        },
+        Storage: {
+            old_count: 57854,
+            count: 57971,
+        },
+    },
+    others: {
+        old_count: 111960,
+        count: 122050,
+    },
 }
 
 export default function CompositionTab({ top }: IProps) {
@@ -174,11 +206,27 @@ export default function CompositionTab({ top }: IProps) {
 
     return (
         <Composition
-            newData={compositionCart(composition, 0)}
-            oldData={compositionCart(composition, 1)}
-            isLoading={isLoading}
-            newList={compositionList(composition, 0)}
-            oldList={compositionList(composition, 1)}
+            newData={
+                isDemo()
+                    ? compositionCart(composition2, 0)
+                    : compositionCart(composition, 0)
+            }
+            oldData={
+                isDemo()
+                    ? compositionCart(composition2, 1)
+                    : compositionCart(composition, 1)
+            }
+            isLoading={isDemo() ? false : isLoading}
+            newList={
+                isDemo()
+                    ? compositionList(composition2, 0)
+                    : compositionList(composition, 0)
+            }
+            oldList={
+                isDemo()
+                    ? compositionList(composition2, 1)
+                    : compositionList(composition, 1)
+            }
         />
     )
 }

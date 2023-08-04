@@ -17,6 +17,140 @@ interface IProps {
     }[]
     pageSize: number
 }
+const resourceMetricsResponse2 = [
+    {
+        id: 'elastic_compute_cloud',
+        finderQuery: '',
+        connectors: ['AWS'],
+        name: 'Elastic Compute Cloud (EC2)',
+        tags: {
+            category: ['Compute'],
+        },
+        count: 142518,
+        old_count: 121274,
+    },
+    {
+        id: 'config',
+        finderQuery: '',
+        connectors: ['AWS'],
+        name: 'Config',
+        tags: {
+            category: ['Governance'],
+        },
+        count: 51286,
+        old_count: 41286,
+    },
+    {
+        id: 'virtual_machines',
+        finderQuery: '',
+        connectors: ['Azure'],
+        name: 'Virtual Machines',
+        tags: {
+            category: ['Compute'],
+        },
+        count: 39175,
+        old_count: 49275,
+    },
+    {
+        id: 'storage_account',
+        finderQuery: '',
+        connectors: ['Azure'],
+        name: 'Storage Account',
+        tags: {
+            category: ['Storage'],
+        },
+        count: 48689,
+        old_count: 47699,
+    },
+    {
+        id: 'cloud_watch',
+        finderQuery: '',
+        connectors: ['AWS'],
+        name: 'CloudWatch',
+        tags: {
+            category: ['Monitoring'],
+        },
+        count: 69420,
+        old_count: 42069,
+    },
+    {
+        id: 'lambda',
+        finderQuery: '',
+        connectors: ['AWS'],
+        name: 'Lambda',
+        tags: {
+            category: ['Serverless'],
+        },
+        count: 11490,
+        old_count: 31490,
+    },
+    {
+        id: 'cloud_formation',
+        finderQuery: '',
+        connectors: ['AWS'],
+        name: 'CloudFormation',
+        tags: {
+            category: ['DevOps'],
+        },
+        count: 22547,
+        old_count: 11547,
+    },
+    {
+        id: 'iam',
+        finderQuery: '',
+        connectors: ['AWS'],
+        name: 'IAM',
+        tags: {
+            category: ['Security'],
+        },
+        count: 11400,
+        old_count: 11000,
+    },
+    {
+        id: 'simple_storage_service',
+        finderQuery: '',
+        connectors: ['AWS'],
+        name: 'Simple Storage Service (S3)',
+        tags: {
+            category: ['Storage'],
+        },
+        count: 9035,
+        old_count: 8635,
+    },
+    {
+        id: 'simple_queue_service',
+        finderQuery: '',
+        connectors: ['AWS'],
+        name: 'Simple Queue Service (SQS)',
+        tags: {
+            category: ['Application Integration'],
+        },
+        count: 6429,
+        old_count: 6249,
+    },
+    {
+        id: 'access_keys',
+        finderQuery: '',
+        connectors: ['AWS'],
+        name: 'Access Keys',
+        tags: {
+            category: ['Security'],
+        },
+        count: 6921,
+        old_count: 5921,
+    },
+    {
+        id: 'certificate_manager',
+        finderQuery: '',
+        connectors: ['AWS'],
+        name: 'Certificate Manager (ACM)',
+        tags: {
+            category: ['Security'],
+        },
+        count: 7504,
+        old_count: 4504,
+    },
+]
 
 export default function ResourceMetrics({ pageSize, categories }: IProps) {
     const navigate = useNavigate()
@@ -52,31 +186,46 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
         })
 
     const metrics = () => {
-        return (
-            resourceMetricsResponse?.metrics?.map((metric) => {
-                const v: IMetric = {
-                    name: metric.name || '',
-                    displayedValue: numericDisplay(metric.count),
-                    newValue: metric.count || 0,
-                    oldValue: metric.old_count || 0,
-                    onClick: () => {
-                        navigate(
-                            `./../finder?q=${encodeURIComponent(
-                                metric.finderQuery || ''
-                            )}`
-                        )
-                    },
-                }
-                return v
-            }) || []
-        )
+        return isDemo()
+            ? resourceMetricsResponse2.map((metric) => {
+                  const v: IMetric = {
+                      name: metric.name || '',
+                      displayedValue: numericDisplay(metric.count),
+                      newValue: metric.count || 0,
+                      oldValue: metric.old_count || 0,
+                      onClick: () => {
+                          navigate(
+                              `./../finder?q=${encodeURIComponent(
+                                  metric.finderQuery || ''
+                              )}`
+                          )
+                      },
+                  }
+                  return v
+              })
+            : resourceMetricsResponse?.metrics?.map((metric) => {
+                  const v: IMetric = {
+                      name: metric.name || '',
+                      displayedValue: numericDisplay(metric.count),
+                      newValue: metric.count || 0,
+                      oldValue: metric.old_count || 0,
+                      onClick: () => {
+                          navigate(
+                              `./../finder?q=${encodeURIComponent(
+                                  metric.finderQuery || ''
+                              )}`
+                          )
+                      },
+                  }
+                  return v
+              }) || []
     }
 
     return (
         <MetricsList
             name="Resource"
             seeMoreUrl="resource-metrics"
-            isLoading={isLoading}
+            isLoading={isDemo() ? false : isLoading}
             categories={
                 categories.length > 0
                     ? [

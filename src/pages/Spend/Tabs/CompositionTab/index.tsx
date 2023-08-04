@@ -1,10 +1,10 @@
-import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
 import Composition from '../../../../components/Cards/Composition'
 import { useInventoryApiV2CostCompositionList } from '../../../../api/inventory.gen'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse } from '../../../../api/api'
 import { filterAtom, spendTimeAtom } from '../../../../store'
+import { isDemo } from '../../../../utilities/demo'
 
 type IProps = {
     top: number
@@ -20,6 +20,19 @@ interface dataProps {
     total: string
     totalValueCount: string
     chart: chartProps[]
+}
+
+const MockData = {
+    total_count: 274,
+    total_cost_value: 10010382.278223533,
+    top_values: {
+        'Amazon Cloud - Compute': 792880.9592041187,
+        'Azure Uncategorized': 1312915.3399999999,
+        'AWS::MKLL': 804152.81,
+        'microsoft.compute/disks': 949111.3869451011,
+        'microsoft.compute/virtualmachines': 755810.4877144546,
+    },
+    others: 5395511.294359864,
 }
 
 export default function CompositionTab({ top }: IProps) {
@@ -42,7 +55,6 @@ export default function CompositionTab({ top }: IProps) {
                 startTime: activeTimeRange.start.unix().toString(),
             }),
         })
-
     const recordToArray = (record?: Record<string, number>) => {
         if (record === undefined) {
             return []
@@ -99,9 +111,9 @@ export default function CompositionTab({ top }: IProps) {
 
     return (
         <Composition
-            newData={compositionChart(composition)}
-            isLoading={isLoading}
-            newList={compositionList(composition)}
+            newData={compositionChart(isDemo() ? MockData : composition)}
+            isLoading={isDemo() ? false : isLoading}
+            newList={compositionList(isDemo() ? MockData : composition)}
             isCost
         />
     )
