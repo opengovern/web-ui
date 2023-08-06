@@ -174,7 +174,9 @@ export default function GrowthTrend() {
         for (let j = 0; j < keys.length; j += 1) {
             const item = keys[j]
             const temp: any = {}
-            const title = getConnections(selectedConnections)
+            const title = isDemo()
+                ? 'all accounts'
+                : getConnections(selectedConnections)
             temp[title] = data[item].count
             temp.date = dateDisplay(data[item].date)
             result.push(temp)
@@ -222,7 +224,9 @@ export default function GrowthTrend() {
                     type="line"
                     yAxisWidth={120}
                     categories={[
-                        isDemo() ? 'Cost' : getConnections(selectedConnections),
+                        isDemo()
+                            ? 'all accounts'
+                            : getConnections(selectedConnections),
                     ]}
                     showLegend={false}
                     data={fixTime(sortedTrend()) || []}
