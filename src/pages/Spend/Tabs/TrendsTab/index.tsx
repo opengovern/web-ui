@@ -68,45 +68,45 @@ const MockData = {
         accounts: [
             {
                 name: 'Central Management',
-                value: '$1,304,549',
+                value: '1304549',
             },
             {
                 name: 'PODZ',
-                value: '$504,549',
+                value: '504549',
             },
             {
                 name: 'KOZET',
-                value: '$304,549',
+                value: '304549',
             },
             {
                 name: 'MAGNUM',
-                value: '$104,549',
+                value: '104549',
             },
             {
                 name: 'TARK-BALK',
-                value: '$4,549',
+                value: '4549',
             },
         ],
         services: [
             {
                 name: 'DDEVOPS',
-                value: '$1,204,549',
+                value: '1,204,549',
             },
             {
                 name: 'D-Search',
-                value: '$549,549',
+                value: '549,549',
             },
             {
                 name: 'Mango',
-                value: '$314,420',
+                value: '314,420',
             },
             {
                 name: 'Chico',
-                value: '$104,110',
+                value: '104,110',
             },
             {
                 name: 'M-Verst',
-                value: '$4,420',
+                value: '4,420',
             },
         ],
     },
