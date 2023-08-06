@@ -95,7 +95,9 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                         benchmark?.tags?.plugin &&
                         benchmark?.tags?.plugin[0] === 'aws'
                     ) && <AWSIcon />}
-                    {!!benchmark?.tags?.cis && <CisIcon />}
+                    {!!benchmark?.tags?.cis && (
+                        <CisIcon width={38} height={38} />
+                    )}
                     {!!benchmark?.tags?.hipaa && <HipaaIcon />}
                 </Flex>
                 <Flex justifyContent="end">
