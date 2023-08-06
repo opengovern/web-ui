@@ -9,6 +9,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
 } from '../../../../../api/api'
 import DualSummaryCard from '../../../../../components/Cards/DualSummaryCard'
+import { isDemo } from '../../../../../utilities/demo'
 
 interface IAWSSummary {
     accountsSummary:
@@ -19,6 +20,14 @@ interface IAWSSummary {
         | GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse
         | undefined
     credentialLoading: boolean
+}
+
+const MockData = {
+    discoveredAWSAccounts: 10,
+    onBoarded: 10,
+    org: 1,
+    healthy: 9,
+    unhealthy: 1,
 }
 
 export default function AWSSummary({
@@ -37,36 +46,55 @@ export default function AWSSummary({
             <SummaryCard
                 title="Discovered AWS Accounts"
                 metric={String(
-                    numericDisplay(accountsSummary?.connectionCount)
+                    numericDisplay(
+                        isDemo()
+                            ? MockData.discoveredAWSAccounts
+                            : accountsSummary?.connectionCount
+                    )
                 )}
                 loading={accountLoading}
             />
             <SummaryCard
                 title="Onboarded AWS Accounts"
                 metric={String(
-                    numericDisplay(accountsSummary?.connectionCount)
+                    numericDisplay(
+                        isDemo()
+                            ? MockData.onBoarded
+                            : accountsSummary?.connectionCount
+                    )
                 )}
                 loading={accountLoading}
             />
             <SummaryCard
                 title="AWS Organizations"
                 metric={String(
-                    numericDisplay(credential?.totalCredentialCount)
+                    numericDisplay(
+                        isDemo()
+                            ? MockData.org
+                            : credential?.totalCredentialCount
+                    )
                 )}
                 loading={credentialLoading}
             />
             <SummaryCard
                 title="Healthy Connections"
                 metric={numberDisplay(
-                    (accountsSummary?.connectionCount || 0) -
-                        (accountsSummary?.totalUnhealthyCount || 0),
+                    isDemo()
+                        ? MockData.healthy
+                        : (accountsSummary?.connectionCount || 0) -
+                              (accountsSummary?.totalUnhealthyCount || 0),
                     0
                 )}
                 loading={accountLoading}
             />
             <SummaryCard
                 title="Unhealthy Connections"
-                metric={numberDisplay(accountsSummary?.totalUnhealthyCount, 0)}
+                metric={numberDisplay(
+                    isDemo()
+                        ? MockData.unhealthy
+                        : accountsSummary?.totalUnhealthyCount,
+                    0
+                )}
                 loading={accountLoading}
             />
         </Grid>
