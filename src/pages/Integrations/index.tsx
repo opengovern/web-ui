@@ -1,4 +1,4 @@
-import { Col, Flex, Grid, Metric, Title } from '@tremor/react'
+import { Flex, Grid, Metric, Title } from '@tremor/react'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import {
     useOnboardApiV1CatalogMetricsList,
@@ -9,7 +9,6 @@ import { numberDisplay } from '../../utilities/numericDisplay'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 import { isDemo } from '../../utilities/demo'
-import DualSummaryCard from '../../components/Cards/DualSummaryCard'
 
 export default function Integrations() {
     const { response: topMetrics, isLoading: metricsLoading } =
@@ -59,23 +58,18 @@ export default function Integrations() {
                     metric={numberDisplay(topMetrics?.connectionsEnabled, 0)}
                     loading={metricsLoading}
                 />
-                <Col numColSpan={2}>
-                    <DualSummaryCard
-                        title1="Healthy Connections"
-                        title2="Unhealthy Connections"
-                        metric1={numberDisplay(
-                            topMetrics?.unhealthyConnections,
-                            0
-                        )}
-                        metric2={numberDisplay(
-                            topMetrics?.healthyConnections,
-                            0
-                        )}
-                        loading={metricsLoading}
-                    />
-                </Col>
+                <SummaryCard
+                    title="Healthy Connections"
+                    metric={numberDisplay(topMetrics?.unhealthyConnections, 0)}
+                    loading={metricsLoading}
+                />
+                <SummaryCard
+                    title="Unhealthy Connections"
+                    metric={numberDisplay(topMetrics?.healthyConnections, 0)}
+                    loading={metricsLoading}
+                />
             </Grid>
-            <Title>Connectors</Title>
+            <Title className="font-semibold">Connectors</Title>
             {connectorsLoading ? (
                 <Flex className="mt-36">
                     <Spinner />

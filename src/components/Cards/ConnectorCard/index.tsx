@@ -50,8 +50,8 @@ export default function ConnectorCard({
                 </Badge>
             </Flex>
             <Flex flexDirection="row" className="mb-1">
-                <Title>{title}</Title>
-                <Title>{numericDisplay(count)}</Title>
+                <Title className="font-semibold">{title}</Title>
+                <Title className="font-semibold">{numericDisplay(count)}</Title>
             </Flex>
             <Subtitle>{description}</Subtitle>
             <Flex flexDirection="row" justifyContent="end">

@@ -56,7 +56,7 @@ export default function Compliance() {
                     className="w-full gap-4 mb-3"
                 >
                     <Col numColSpan={1} numColSpanMd={2}>
-                        <Title>Benchmarks</Title>
+                        <Title className="font-semibold">Benchmarks</Title>
                     </Col>
                     <Col numColSpan={1}>
                         <TextInput
