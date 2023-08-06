@@ -8,6 +8,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
 } from '../../../../../api/api'
+import { isDemo } from '../../../../../utilities/demo'
 
 interface IAzureSummary {
     principalsSummary:
@@ -31,29 +32,37 @@ export default function AzureSummary({
             <SummaryCard
                 title="Discovered Azure Subscriptions"
                 metric={String(
-                    numericDisplay(subscriptionsSummary?.connectionCount)
+                    numericDisplay(
+                        isDemo() ? 10 : subscriptionsSummary?.connectionCount
+                    )
                 )}
                 loading={subscriptionsLoading}
             />
             <SummaryCard
                 title="Onboarded Azure Subscriptions"
                 metric={String(
-                    numericDisplay(subscriptionsSummary?.connectionCount)
+                    numericDisplay(
+                        isDemo() ? 10 : subscriptionsSummary?.connectionCount
+                    )
                 )}
                 loading={subscriptionsLoading}
             />
             <SummaryCard
                 title="Service Principals"
                 metric={String(
-                    numericDisplay(principalsSummary?.totalCredentialCount)
+                    numericDisplay(
+                        isDemo() ? 1 : principalsSummary?.totalCredentialCount
+                    )
                 )}
                 loading={principalsLoading}
             />
             <SummaryCard
                 title="Billing Accounts"
                 metric={numberDisplay(
-                    (subscriptionsSummary?.connectionCount || 0) -
-                        (subscriptionsSummary?.totalUnhealthyCount || 0),
+                    isDemo()
+                        ? 10
+                        : (subscriptionsSummary?.connectionCount || 0) -
+                              (subscriptionsSummary?.totalUnhealthyCount || 0),
                     0
                 )}
                 loading={principalsLoading}
@@ -61,8 +70,10 @@ export default function AzureSummary({
             <SummaryCard
                 title="Healthy Connections"
                 metric={numberDisplay(
-                    (subscriptionsSummary?.connectionCount || 0) -
-                        (subscriptionsSummary?.totalUnhealthyCount || 0),
+                    isDemo()
+                        ? 10
+                        : (subscriptionsSummary?.connectionCount || 0) -
+                              (subscriptionsSummary?.totalUnhealthyCount || 0),
                     0
                 )}
                 loading={principalsLoading}
@@ -70,7 +81,7 @@ export default function AzureSummary({
             <SummaryCard
                 title="Unhealthy Connections"
                 metric={numberDisplay(
-                    subscriptionsSummary?.totalUnhealthyCount,
+                    isDemo() ? 0 : subscriptionsSummary?.totalUnhealthyCount,
                     0
                 )}
                 loading={principalsLoading}
