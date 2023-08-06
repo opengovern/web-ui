@@ -114,7 +114,9 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                 </Flex>
                 {generateBadge(metric)}
             </Flex>
-            <Text>{metric?.description}</Text>
+            <Text className="line-clamp-2 h-[2.5em]">
+                {metric?.description}
+            </Text>
             <Flex className="mt-6 mb-3">
                 <Text className="font-semibold">Insight</Text>
                 <Text className="font-semibold">Total</Text>
