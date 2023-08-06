@@ -118,7 +118,7 @@ export default function InsightCard({ metric }: IInsightsCard) {
                 className="h-full"
             >
                 <Flex flexDirection="col" alignItems="start">
-                    <Title className="mb-2 truncate max-w-full">
+                    <Title className="font-semibold mb-2 truncate max-w-full">
                         {metric?.shortTitle}
                     </Title>
                     <Flex className="mb-2">
@@ -128,7 +128,7 @@ export default function InsightCard({ metric }: IInsightsCard) {
                             className="w-fit"
                         >
                             {!!metric?.totalResultValue && (
-                                <Title className="mr-1">
+                                <Title className="font-semibold mr-1">
                                     {numericDisplay(
                                         metric?.totalResultValue || 0
                                     )}

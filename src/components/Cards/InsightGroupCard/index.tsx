@@ -96,11 +96,13 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
 
     return (
         <Card key={metric.id}>
-            <Title className="mb-2 w-full truncate">{metric?.shortTitle}</Title>
+            <Title className="font-semibold mb-2 w-full truncate">
+                {metric?.shortTitle}
+            </Title>
             <Flex flexDirection="row" className="mb-2">
                 <Flex flexDirection="row" alignItems="end" className="w-fit">
                     {!!metric?.totalResultValue && (
-                        <Title className="mr-1">
+                        <Title className="font-semibold mr-1">
                             {numericDisplay(metric?.totalResultValue || 0)}
                         </Title>
                     )}
@@ -114,7 +116,7 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                 </Flex>
                 {generateBadge(metric)}
             </Flex>
-            <Text>{metric?.description}</Text>
+            <Text className="h-10">{metric?.description}</Text>
             <Flex className="mt-6 mb-3">
                 <Text className="font-semibold">Insight</Text>
                 <Text className="font-semibold">Total</Text>

@@ -37,7 +37,9 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
             className="cursor-pointer"
             onClick={() => navigate(`${benchmark?.id}`)}
         >
-            <Title className="w-full truncate mb-1">{benchmark?.title}</Title>
+            <Title className="w-full truncate mb-1 font-semibold">
+                {benchmark?.title}
+            </Title>
             <Flex className={total ? '' : 'hidden'}>
                 <Text>Score:</Text>
                 <Badge
@@ -86,7 +88,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                 )}
             </Flex>
             <Flex>
-                <Flex justifyContent="start" className="gap-x-1">
+                <Flex justifyContent="start" className="h-fit gap-x-1">
                     {!!(
                         benchmark?.tags?.plugin &&
                         benchmark?.tags?.plugin[0] === 'azure'
@@ -95,7 +97,9 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                         benchmark?.tags?.plugin &&
                         benchmark?.tags?.plugin[0] === 'aws'
                     ) && <AWSIcon />}
-                    {!!benchmark?.tags?.cis && <CisIcon />}
+                    {!!benchmark?.tags?.cis && (
+                        <CisIcon className="w-10 h-10" />
+                    )}
                     {!!benchmark?.tags?.hipaa && <HipaaIcon />}
                 </Flex>
                 <Flex justifyContent="end">
