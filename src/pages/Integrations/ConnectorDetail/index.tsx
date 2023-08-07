@@ -810,8 +810,6 @@ export default function ConnectorDetail() {
         },
         { name: connector, path: '', current: true },
     ]
-    console.log('accounts', accounts)
-    console.log('credentials', credentials)
     return (
         <LoggedInLayout currentPage="integration">
             <Flex flexDirection="col" alignItems="start">

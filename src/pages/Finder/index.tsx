@@ -121,7 +121,6 @@ export default function Finder() {
         onRowClicked(event: RowClickedEvent<any>) {
             setSelectedRow(event.data)
             setOpenDrawer(true)
-            console.log(event)
         },
     }
 

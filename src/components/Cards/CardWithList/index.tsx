@@ -74,7 +74,6 @@ export default function CardWithList({
                 </ListItem>
             ))
         } catch (e) {
-            console.log(e)
             return null
         }
     }

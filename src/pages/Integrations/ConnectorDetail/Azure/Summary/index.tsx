@@ -27,7 +27,6 @@ export default function AzureSummary({
     subscriptionsSummary,
     subscriptionsLoading,
 }: IAzureSummary) {
-    console.log(subscriptionsSummary)
     return (
         <Grid numItems={2} numItemsLg={3} className="w-full gap-4 mt-6 mb-10">
             <SummaryCard

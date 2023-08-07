@@ -122,7 +122,6 @@ export default function ResourceMetricsDetails() {
 
     const { response: metrics, isLoading: metricsLoading } =
         useInventoryApiV2AnalyticsMetricList(query)
-    console.log(rowGenerator(metrics?.metrics))
 
     const breadcrumbsPages = [
         {
