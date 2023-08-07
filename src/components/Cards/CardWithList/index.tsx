@@ -87,7 +87,7 @@ export default function CardWithList({
         </Card>
     ) : (
         <Card>
-            <Title>{title}</Title>
+            <Title className="font-semibold">{title}</Title>
             <TabGroup
                 index={selectedIndex}
                 onIndexChange={setSelectedIndex}
