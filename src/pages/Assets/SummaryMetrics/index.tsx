@@ -20,7 +20,7 @@ export default function SummaryMetrics() {
                 connectionId: selectedConnections.connections,
                 startTime: activeTimeRange.start.unix(),
                 endTime: activeTimeRange.end.unix(),
-                pageSize: 10000,
+                pageSize: 0,
                 pageNumber: 1,
             },
             {

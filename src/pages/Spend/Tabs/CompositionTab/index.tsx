@@ -1,6 +1,9 @@
 import { useAtomValue } from 'jotai'
 import Composition from '../../../../components/Cards/Composition'
-import { useInventoryApiV2CostCompositionList } from '../../../../api/inventory.gen'
+import {
+    useInventoryApiV2AnalyticsSpendCompositionList,
+    useInventoryApiV2CostCompositionList,
+} from '../../../../api/inventory.gen'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse } from '../../../../api/api'
 import { filterAtom, spendTimeAtom } from '../../../../store'
@@ -40,7 +43,7 @@ export default function CompositionTab({ top }: IProps) {
     const selectedConnections = useAtomValue(filterAtom)
 
     const { response: composition, isLoading } =
-        useInventoryApiV2CostCompositionList({
+        useInventoryApiV2AnalyticsSpendCompositionList({
             top,
             ...(selectedConnections.provider && {
                 connector: [selectedConnections.provider],
@@ -78,7 +81,12 @@ export default function CompositionTab({ top }: IProps) {
             totalValueCount: (compositionData?.total_count || 0).toString(),
             chart: recordToArray(compositionData?.top_values),
         }
-        v.chart.push({ name: 'Others', value: compositionData?.others || 0 })
+        if (compositionData?.others !== 0) {
+            v.chart.push({
+                name: 'Others',
+                value: compositionData?.others || 0,
+            })
+        }
         return v
     }
 
@@ -97,15 +105,17 @@ export default function CompositionTab({ top }: IProps) {
                 ),
             }
         })
-        v.push({
-            name: 'Others',
-            value: exactPriceDisplay(compositionData?.others),
-            val: Math.round(
-                ((compositionData?.others || 0) /
-                    (compositionData?.total_cost_value || 1)) *
-                    100
-            ),
-        })
+        if (compositionData?.others !== 0) {
+            v.push({
+                name: 'Others',
+                value: exactPriceDisplay(compositionData?.others),
+                val: Math.round(
+                    ((compositionData?.others || 0) /
+                        (compositionData?.total_cost_value || 1)) *
+                        100
+                ),
+            })
+        }
         return v
     }
 

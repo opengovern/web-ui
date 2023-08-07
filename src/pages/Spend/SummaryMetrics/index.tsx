@@ -2,7 +2,7 @@ import { Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai/index'
 import SummaryCard from '../../../components/Cards/SummaryCard'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
-import { filterAtom } from '../../../store'
+import { IFilter, filterAtom } from '../../../store'
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
@@ -20,7 +20,7 @@ interface IProps {
     serviceCostLoading: boolean
 }
 
-const getConnections = (con: any) => {
+const getConnections = (con: IFilter) => {
     if (con.provider.length) {
         return con.provider
     }

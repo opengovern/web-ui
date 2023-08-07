@@ -20,7 +20,7 @@ export const spendTimeAtom = atom<{
     end: dayjs.utc(),
 })
 
-interface IFilter {
+export interface IFilter {
     provider: '' | 'AWS' | 'Azure'
     connections: string[]
 }

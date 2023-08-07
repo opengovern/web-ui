@@ -9,113 +9,6 @@
  * ---------------------------------------------------------------
  */
 
-export interface AwsResources {
-    errorCode?: string
-    errors?: Record<string, string>
-    resources?: Record<string, DescriberResource[]>
-}
-
-export interface DescribeComplianceReportJob {
-    /**
-     * Not the primary key but should be a unique identifier
-     * @example "azure_cis_v1"
-     */
-    BenchmarkId?: string
-    /** @example false */
-    IsStack?: boolean
-    /** @example 1619510400 */
-    ReportCreatedAt?: number
-    /**
-     * Not the primary key but should be a unique identifier
-     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
-     */
-    SourceId?: string
-    /** @example "Azure" */
-    SourceType?: SourceType
-    /** @example "InProgress" */
-    Status?: GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReportJobStatus
-    createdAt?: string
-    deletedAt?: GormDeletedAt
-    /** Should be NULLSTRING */
-    failureMessage?: string
-    id?: number
-    updatedAt?: string
-}
-
-export interface DescribeDescribeResourceJob {
-    createdAt?: string
-    deletedAt?: GormDeletedAt
-    describedResourceCount?: number
-    /** Should be NULLSTRING */
-    errorCode?: string
-    /** Should be NULLSTRING */
-    failureMessage?: string
-    id?: number
-    parentJobID?: number
-    resourceType?: string
-    retryCount?: number
-    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResourceJobStatus
-    updatedAt?: string
-}
-
-export interface DescribeDescribeSourceJob {
-    accountID?: string
-    createdAt?: string
-    deletedAt?: GormDeletedAt
-    describeResourceJobs?: DescribeDescribeResourceJob[]
-    describedAt?: string
-    fullDiscovery?: boolean
-    id?: number
-    /** Not the primary key but should be a unique identifier */
-    sourceID?: string
-    sourceType?: SourceType
-    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSourceJobStatus
-    triggerType?: GithubComKaytuIoKaytuEnginePkgDescribeEnumsDescribeTriggerType
-    updatedAt?: string
-}
-
-export interface DescribeInsightJob {
-    accountID?: string
-    createdAt?: string
-    deletedAt?: GormDeletedAt
-    failureMessage?: string
-    id?: number
-    insightID?: number
-    isStack?: boolean
-    scheduleUUID?: string
-    sourceID?: string
-    sourceType?: SourceType
-    status?: GithubComKaytuIoKaytuEnginePkgInsightApiInsightJobStatus
-    updatedAt?: string
-}
-
-export interface DescribeSummarizerJob {
-    createdAt?: string
-    deletedAt?: GormDeletedAt
-    failureMessage?: string
-    id?: number
-    jobType?: SummarizerJobType
-    scheduleJobID?: number
-    status?: GithubComKaytuIoKaytuEnginePkgSummarizerApiSummarizerJobStatus
-    updatedAt?: string
-}
-
-export interface DescriberResource {
-    account?: string
-    /** ARN uniquely identifies an AWS resource across regions, accounts and types. */
-    arn?: string
-    description?: any
-    /**
-     * ID doesn't uniquely identifies a resource. It will be used to create a
-     * unique identifier by concating PARTITION|REGION|ACCOUNT|TYPE|ID
-     */
-    id?: string
-    name?: string
-    partition?: string
-    region?: string
-    type?: string
-}
-
 export interface EchoHTTPError {
     message?: any
 }
@@ -279,34 +172,6 @@ export enum GithubComKaytuIoKaytuEnginePkgAuthApiInviteStatus {
     InviteStatusPENDING = 'pending',
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgAuthApiMembership {
-    /**
-     * Assignment timestamp in UTC
-     * @example "2023-03-31T09:36:09.855Z"
-     */
-    assignedAt?: string
-    /**
-     * Last activity timestamp in UTC
-     * @example "2023-04-21T08:53:09.928Z"
-     */
-    lastActivity?: string
-    /**
-     * Name of the role
-     * @example "admin"
-     */
-    roleName?: 'admin' | 'editor' | 'viewer'
-    /**
-     * Unique identifier for the workspace
-     * @example "ws123456789"
-     */
-    workspaceID?: string
-    /**
-     * Name of the Workspace
-     * @example "demo"
-     */
-    workspaceName?: string
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest {
     /**
      * Name of the role
@@ -322,110 +187,10 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest {
 
 export enum GithubComKaytuIoKaytuEnginePkgAuthApiRole {
     InternalRole = 'internal',
+    KeibiAdminRole = 'keibi-admin',
     AdminRole = 'admin',
     EditorRole = 'editor',
     ViewerRole = 'viewer',
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse {
-    /**
-     * Role Description and accesses
-     * @example "The Administrator role is a super user role with all of the capabilities that can be assigned to a role, and its enables access to all data & configuration on a Kaytu Workspace. You cannot edit or delete the Administrator role."
-     */
-    description?: string
-    /**
-     * Name of the role
-     * @example "admin"
-     */
-    role?: 'admin' | 'editor' | 'viewer'
-    /**
-     * Number of users having this role
-     * @example 1
-     */
-    userCount?: number
-    /** List of users having the role */
-    users?: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse[]
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser {
-    /**
-     * Is the user blocked or not
-     * @example false
-     */
-    blocked?: boolean
-    /**
-     * Creation timestamp in UTC
-     * @example "2023-03-31T09:36:09.855Z"
-     */
-    createdAt?: string
-    /**
-     * Email address of the user
-     * @example "johndoe@example.com"
-     */
-    email?: string
-    /**
-     * Is email verified or not
-     * @example true
-     */
-    emailVerified?: boolean
-    /**
-     * Last activity timestamp in UTC
-     * @example "2023-04-21T08:53:09.928Z"
-     */
-    lastActivity?: string
-    /**
-     * Name of the role
-     * @example "admin"
-     */
-    roleName?: 'admin' | 'editor' | 'viewer'
-    /**
-     * Invite status
-     * @example "accepted"
-     */
-    status?: 'accepted' | 'pending'
-    /**
-     * Unique identifier for the user
-     * @example "auth|123456789"
-     */
-    userId?: string
-    /**
-     * Username
-     * @example "John Doe"
-     */
-    userName?: string
-    /**
-     * A list of workspace ids which the user has the specified role in them
-     * @example ["demo"]
-     */
-    workspaces?: string[]
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse {
-    /**
-     * Role Description and accesses
-     * @example "The Administrator role is a super user role with all of the capabilities that can be assigned to a role, and its enables access to all data & configuration on a Kaytu Workspace. You cannot edit or delete the Administrator role."
-     */
-    description?: string
-    /**
-     * Name of the role
-     * @example "admin"
-     */
-    roleName?: 'admin' | 'editor' | 'viewer'
-    /**
-     * Number of users having this role in the workspace
-     * @example 1
-     */
-    userCount?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest {
-    /** Unique identifier for the key */
-    id?: number
-    /**
-     * Name of the role
-     * @example "admin"
-     */
-    roleName?: 'admin' | 'editor' | 'viewer'
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiUserRoleBinding {
@@ -520,80 +285,6 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
      * @example "John Doe"
      */
     userName?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
-    /**
-     * Whether the benchmark is auto assigned or not
-     * @example true
-     */
-    autoAssign?: boolean
-    /**
-     * Whether the benchmark is baseline or not
-     * @example true
-     */
-    baseline?: boolean
-    /** Benchmark category */
-    category?: string
-    /**
-     * Benchmark children
-     * @example ["[azure_cis_v140_1"," azure_cis_v140_2]"]
-     */
-    children?: string[]
-    /**
-     * Benchmark connectors
-     * @example ["[azure]"]
-     */
-    connectors?: SourceType[]
-    /**
-     * Benchmark creation date
-     * @example "2020-01-01T00:00:00Z"
-     */
-    createdAt?: string
-    /**
-     * Benchmark description
-     * @example "The CIS Microsoft Azure Foundations Security Benchmark provides prescriptive guidance for establishing a secure baseline configuration for Microsoft Azure."
-     */
-    description?: string
-    /**
-     * Benchmark document URI
-     * @example "benchmarks/azure_cis_v140.md"
-     */
-    documentURI?: string
-    /**
-     * Whether the benchmark is enabled or not
-     * @example true
-     */
-    enabled?: boolean
-    /**
-     * Benchmark ID
-     * @example "azure_cis_v140"
-     */
-    id?: string
-    /** Benchmark logo URI */
-    logoURI?: string
-    /**
-     * Whether the benchmark is managed or not
-     * @example true
-     */
-    managed?: boolean
-    /**
-     * Benchmark policies
-     * @example ["[azure_cis_v140_1_1"," azure_cis_v140_1_2]"]
-     */
-    policies?: string[]
-    /** Benchmark tags */
-    tags?: Record<string, string[]>
-    /**
-     * Benchmark title
-     * @example "Azure CIS v1.4.0"
-     */
-    title?: string
-    /**
-     * Benchmark last update date
-     * @example "2020-01-01T00:00:00Z"
-     */
-    updatedAt?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource {
@@ -698,26 +389,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapo
      * @example 1686346668
      */
     timestamp?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport {
-    /** @example "" */
-    failureMessage?: string
-    /** @example 1 */
-    id?: number
-    /** @example 1619510400 */
-    reportCreatedAt?: number
-    /** @example "InProgress" */
-    status?: GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReportJobStatus
-    /** @example "2021-01-01T00:00:00Z" */
-    updatedAt?: string
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReportJobStatus {
-    ComplianceReportJobCreated = 'CREATED',
-    ComplianceReportJobInProgress = 'IN_PROGRESS',
-    ComplianceReportJobCompletedWithFailure = 'COMPLETED_WITH_FAILURE',
-    ComplianceReportJobCompleted = 'COMPLETED',
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgComplianceApiDirectionType {
@@ -908,14 +579,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup {
     totalResultValue?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse {
-    trend?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[]
-    trendPerInsight?: Record<
-        string,
-        GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[]
-    >
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightResult {
     /**
      * Connection ID
@@ -974,34 +637,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPage {
      * @example 100
      */
     size?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy {
-    /** @example "Azure" */
-    connector?: SourceType
-    /** @example "2020-01-01T00:00:00Z" */
-    createdAt?: string
-    /** @example "Enable multi-factor authentication for all user credentials who have write access to Azure resources. These include roles like 'Service Co-Administrators', 'Subscription Owners', 'Contributors'." */
-    description?: string
-    /** @example "benchmarks/azure_cis_v140_1_1.md" */
-    documentURI?: string
-    /** @example true */
-    enabled?: boolean
-    /** @example "azure_cis_v140_1_1" */
-    id?: string
-    /** @example true */
-    managed?: boolean
-    /** @example true */
-    manualVerification?: boolean
-    /** @example "azure_ad_manual_control" */
-    queryID?: string
-    /** @example "low" */
-    severity?: TypesFindingSeverity
-    tags?: Record<string, string[]>
-    /** @example "1.1 Ensure that multi-factor authentication status is enabled for all privileged users" */
-    title?: string
-    /** @example "2020-01-01T00:00:00Z" */
-    updatedAt?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree {
@@ -1080,51 +715,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
     value?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResource {
-    failureMessage?: string
-    /** @example "Microsoft.Compute/virtualMachines" */
-    resourceType?: string
-    /**
-     * CREATED, QUEUED, IN_PROGRESS, TIMEOUT, FAILED, SUCCEEDED
-     * @example "IN_PROGRESS"
-     */
-    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResourceJobStatus
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResourceJobStatus {
-    DescribeResourceJobCreated = 'CREATED',
-    DescribeResourceJobQueued = 'QUEUED',
-    DescribeResourceJobInProgress = 'IN_PROGRESS',
-    DescribeResourceJobTimeout = 'TIMEOUT',
-    DescribeResourceJobFailed = 'FAILED',
-    DescribeResourceJobSucceeded = 'SUCCEEDED',
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest {
-    accessKey?: string
-    accountID?: string
-    additionalFields?: Record<string, string>
-    provider?: SourceType
-    resourceType?: string
-    secretKey?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource {
-    describeResourceJobs?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeResource[]
-    /**
-     * CREATED, QUEUED, IN_PROGRESS, TIMEOUT, FAILED, SUCCEEDED
-     * @example "IN_PROGRESS"
-     */
-    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSourceJobStatus
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSourceJobStatus {
-    DescribeSourceJobCreated = 'CREATED',
-    DescribeSourceJobInProgress = 'IN_PROGRESS',
-    DescribeSourceJobCompletedWithFailure = 'COMPLETED_WITH_FAILURE',
-    DescribeSourceJobCompleted = 'COMPLETED',
-}
-
 export enum GithubComKaytuIoKaytuEnginePkgDescribeApiEvaluationType {
     EvaluationTypeInsight = 'INSIGHT',
     EvaluationTypeBenchmark = 'BENCHMARK',
@@ -1140,89 +730,6 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings {
     page: GithubComKaytuIoKaytuEnginePkgComplianceApiPage
     /** Sorts to apply */
     sorts?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingSortItem[]
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob {
-    /**
-     * Failure Message
-     * @example ""
-     */
-    FailureMessage?: string
-    /**
-     * Account ID
-     * @example "0123456789"
-     */
-    accountId?: string
-    /**
-     * Insight Job creation timestamp
-     * @example "2021-04-27T15:04:05Z"
-     */
-    createdAt?: string
-    /**
-     * Insight Job Unique ID
-     * @format int64
-     * @example 1
-     */
-    id?: number
-    /**
-     * Insight ID
-     * @format int64
-     * @example 1
-     */
-    insightId?: number
-    /**
-     * Source ID
-     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
-     */
-    sourceId?: string
-    /**
-     * Cloud provider
-     * @example "Azure"
-     */
-    sourceType?: SourceType
-    /**
-     * Insight Job Status
-     * @example "InProgress"
-     */
-    status?: GithubComKaytuIoKaytuEnginePkgInsightApiInsightJobStatus
-    /**
-     * Insight Job last update timestamp
-     * @example "2021-04-27T15:04:05Z"
-     */
-    updatedAt?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest {
-    /**
-     * Filter evaluations for this benchmark
-     * @example "azure_cis_v1"
-     */
-    benchmarkID?: string
-    /**
-     * Filter evaluations for this connection
-     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
-     */
-    connectionID?: string
-    /**
-     * Filter evaluations for this connector
-     * @example "Azure"
-     */
-    connector?: SourceType
-    /**
-     * Filter evaluations created after this timestamp
-     * @example 1619510400
-     */
-    evaluatedAtAfter?: number
-    /**
-     * Filter evaluations created before this timestamp
-     * @example 1619610400
-     */
-    evaluatedAtBefore?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail {
-    resourceTypeARN?: string
-    resourceTypeName?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
@@ -1319,62 +826,13 @@ export enum GithubComKaytuIoKaytuEnginePkgDescribeApiStackStatus {
     StackStatusCompletedWithFailure = 'COMPLETED_WITH_FAILURE',
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest {
-    /**
-     * Benchmark ID to evaluate
-     * @example "azure_cis_v1"
-     */
-    benchmarkID?: string
-    /**
-     * Connection ID to evaluate
-     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
-     */
-    connectionID?: string
-    /**
-     * Resource IDs to evaluate
-     * @example ["/subscriptions/123/resourceGroups/rg1/providers/Microsoft.Compute/virtualMachines/vm1"]
-     */
-    resourceIDs?: string[]
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest {
-    /**
-     * Connection ID to evaluate
-     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
-     */
-    connectionID?: string
-    /**
-     * Insight ID to evaluate
-     * @example 1
-     */
-    insightID?: number
-    /**
-     * Resource IDs to evaluate
-     * @example ["/subscriptions/123/resourceGroups/rg1/providers/Microsoft.Compute/virtualMachines/vm1"]
-     */
-    resourceIDs?: string[]
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgDescribeEnumsDescribeTriggerType {
-    DescribeTriggerTypeInitialDiscovery = 'initial_discovery',
-    DescribeTriggerTypeScheduled = 'scheduled',
-    DescribeTriggerTypeManual = 'manual',
-    DescribeTriggerTypeStack = 'stack',
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgInsightApiInsightJobStatus {
-    InsightJobInProgress = 'IN_PROGRESS',
-    InsightJobFailed = 'FAILED',
-    InsightJobSucceeded = 'SUCCEEDED',
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse {
     categoryResourceType?: Record<string, string[]>
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
-    /** @example "Azure" */
-    connector?: SourceType
+    /** @example ["Azure"] */
+    connector?: SourceType[]
     /** @example "microsoft.compute/disks" */
     cost_dimension_name?: string
     /**
@@ -1470,6 +928,12 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompo
     total_count?: number
     /** @min 0 */
     total_value_count?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint {
+    costTrend?: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+    /** @example "EC2-Service-Example" */
+    serviceName?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse {
@@ -1699,11 +1163,6 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyAnalyticsGitURL = 'analytics_git_url',
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredential {
-    accessKey?: string
-    secretKey?: string
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
     accessKey: string
     accountId?: string
@@ -1712,12 +1171,6 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
     externalId?: string
     regions?: string[]
     secretKey: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential {
-    clientID?: string
-    clientSecret?: string
-    tenantID?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredentialConfig {
@@ -1750,16 +1203,6 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics {
      * @example 5
      */
     unhealthyConnections?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest {
-    state?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionRequest {
-    description?: string
-    email?: string
-    name?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
@@ -1796,6 +1239,8 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     /** @example "johndoe@example.com" */
     email?: string
     healthReason?: string
+    /** @example "healthy" */
+    healthState?: SourceHealthStatus
     /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
     id?: string
     /** @example "2023-05-07T00:00:00Z" */
@@ -1825,45 +1270,22 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     resourceCount?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest {
-    /** @example ["Azure"] */
-    connectors?: string[]
-    /** @example "enabled" */
-    state?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup {
+    /** @example ["[\"1e8ac3bf-c268-4a87-9374-ce04cc40a596\"]"] */
+    connectionIds?: string[]
+    connections?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    /** @example "UltraSightApplication" */
+    name?: string
+    /** @example "SELECT kaytu_id FROM kaytu_connections WHERE tags->'application' IS NOT NULL AND tags->'application' @> '"UltraSight"'" */
+    query?: string
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState {
     ConnectionLifecycleStateOnboard = 'ONBOARD',
-    ConnectionLifecycleStateNotOnboard = 'NOT_ONBOARD',
+    ConnectionLifecycleStateDisabled = 'DISABLED',
+    ConnectionLifecycleStateDiscovered = 'DISCOVERED',
     ConnectionLifecycleStateInProgress = 'IN_PROGRESS',
-    ConnectionLifecycleStateUnhealthy = 'UNHEALTHY',
     ConnectionLifecycleStateArchived = 'ARCHIVED',
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnector {
-    /** @example true */
-    allowNewConnections?: boolean
-    /** @example false */
-    autoOnboardSupport?: boolean
-    /** @example "This is a long volume of words for just showing the case of the description for the demo and checking value purposes only and has no meaning whatsoever" */
-    description?: string
-    direction?: SourceConnectorDirectionType
-    /** @example "Azure" */
-    label?: string
-    /** @example "https://kaytu.io/logo.png" */
-    logo?: string
-    /**
-     * @min 0
-     * @example 10000
-     */
-    maxConnectionLimit?: number
-    /** @example "Azure" */
-    name?: SourceType
-    /** @example "This is a short Description for this connector" */
-    shortDescription?: string
-    /** @example "enabled" */
-    status?: SourceConnectorStatus
-    tags?: Record<string, any>
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount {
@@ -1920,6 +1342,12 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
     connectorType?: SourceType
     /** @example "manual-aws-org" */
     credentialType?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredentialType
+    /**
+     * @min 0
+     * @max 100
+     * @example 50
+     */
+    discovered_connections?: number
     /** @example true */
     enabled?: boolean
     /**
@@ -1996,6 +1424,12 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryRe
     totalDisabledCount?: number
     /**
      * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalDiscoveredCount?: number
+    /**
+     * @min 0
      * @max 1000000
      * @example 100
      */
@@ -2042,12 +1476,6 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest
     /** @example "Azure" */
     connector?: SourceType
     name?: string
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgSummarizerApiSummarizerJobStatus {
-    SummarizerJobInProgress = 'IN_PROGRESS',
-    SummarizerJobFailed = 'FAILED',
-    SummarizerJobSucceeded = 'SUCCEEDED',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest {
@@ -2172,12 +1600,6 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus {
     StatusSuspended = 'SUSPENDED',
 }
 
-export interface GormDeletedAt {
-    time?: string
-    /** Valid is true if Time is not NULL */
-    valid?: boolean
-}
-
 export enum SourceAssetDiscoveryMethodType {
     AssetDiscoveryMethodTypeScheduled = 'scheduled',
 }
@@ -2204,11 +1626,6 @@ export enum SourceType {
     Nil = '',
     CloudAWS = 'AWS',
     CloudAzure = 'Azure',
-}
-
-export enum SummarizerJobType {
-    JobTypeResourceMustSummarizer = 'resourceMustSummarizer',
-    JobTypeComplianceSummarizer = 'complianceSummarizer',
 }
 
 export enum TypesComplianceResult {
@@ -2562,86 +1979,6 @@ export class Api<
     }
     auth = {
         /**
-         * @description Retrieves the details of a workspace key with specified ID.
-         *
-         * @tags keys
-         * @name ApiV1KeyDetail
-         * @summary Get Workspace Key Details
-         * @request GET:/auth/api/v1/key/{id}
-         * @secure
-         */
-        apiV1KeyDetail: (id: string, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-                any
-            >({
-                path: `/auth/api/v1/key/${id}`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Activates Workspace Key by ID
-         *
-         * @tags keys
-         * @name ApiV1KeyActivateCreate
-         * @summary Activate Workspace Key
-         * @request POST:/auth/api/v1/key/{id}/activate
-         * @secure
-         */
-        apiV1KeyActivateCreate: (id: string, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-                any
-            >({
-                path: `/auth/api/v1/key/${id}/activate`,
-                method: 'POST',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Deletes the specified workspace key by ID.
-         *
-         * @tags keys
-         * @name ApiV1KeyDeleteDelete
-         * @summary Delete Workspace Key
-         * @request DELETE:/auth/api/v1/key/{id}/delete
-         * @secure
-         */
-        apiV1KeyDeleteDelete: (id: string, params: RequestParams = {}) =>
-            this.request<void, any>({
-                path: `/auth/api/v1/key/${id}/delete`,
-                method: 'DELETE',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Suspends Workspace Key by ID
-         *
-         * @tags keys
-         * @name ApiV1KeySuspendCreate
-         * @summary Suspend Workspace Key
-         * @request POST:/auth/api/v1/key/{id}/suspend
-         * @secure
-         */
-        apiV1KeySuspendCreate: (id: string, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-                any
-            >({
-                path: `/auth/api/v1/key/${id}/suspend`,
-                method: 'POST',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Creates workspace key for the defined role with the defined name in the workspace.
          *
          * @tags keys
@@ -2668,28 +2005,19 @@ export class Api<
             }),
 
         /**
-         * @description Updates the role of the specified key in workspace.
+         * @description Deletes the specified workspace key by ID.
          *
          * @tags keys
-         * @name ApiV1KeyRoleCreate
-         * @summary Update Workspace Key Role
-         * @request POST:/auth/api/v1/key/role
+         * @name ApiV1KeyDeleteDelete
+         * @summary Delete Workspace Key
+         * @request DELETE:/auth/api/v1/key/{id}/delete
          * @secure
          */
-        apiV1KeyRoleCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-                any
-            >({
-                path: `/auth/api/v1/key/role`,
-                method: 'POST',
-                body: request,
+        apiV1KeyDeleteDelete: (id: string, params: RequestParams = {}) =>
+            this.request<void, any>({
+                path: `/auth/api/v1/key/${id}/delete`,
+                method: 'DELETE',
                 secure: true,
-                type: ContentType.Json,
-                format: 'json',
                 ...params,
             }),
 
@@ -2715,156 +2043,6 @@ export class Api<
             }),
 
         /**
-         * @description List Workspace Keys for Specified Role.
-         *
-         * @tags roles
-         * @name ApiV1RoleKeysDetail
-         * @summary List Role Keys
-         * @request GET:/auth/api/v1/role/{roleName}/keys
-         * @secure
-         */
-        apiV1RoleKeysDetail: (roleName: string, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey[],
-                any
-            >({
-                path: `/auth/api/v1/role/${roleName}/keys`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Returns a list of users in the workspace with the specified role.
-         *
-         * @tags roles
-         * @name ApiV1RoleUsersDetail
-         * @summary Lists Role Users
-         * @request GET:/auth/api/v1/role/{roleName}/users
-         * @secure
-         */
-        apiV1RoleUsersDetail: (roleName: string, params: RequestParams = {}) =>
-            this.request<GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser[], any>({
-                path: `/auth/api/v1/role/${roleName}/users`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieve Role Information and User Count for Workspace.
-         *
-         * @tags roles
-         * @name ApiV1RolesList
-         * @summary List Roles
-         * @request GET:/auth/api/v1/roles
-         * @secure
-         */
-        apiV1RolesList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse[],
-                any
-            >({
-                path: `/auth/api/v1/roles`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieves Role Details, Description, User Count, and User List for Workspace.
-         *
-         * @tags roles
-         * @name ApiV1RolesDetail
-         * @summary Get Role Details
-         * @request GET:/auth/api/v1/roles/{roleName}
-         * @secure
-         */
-        apiV1RolesDetail: (roleName: string, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
-                any
-            >({
-                path: `/auth/api/v1/roles/${roleName}`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Returns user details by specified user id.
-         *
-         * @tags users
-         * @name ApiV1UserDetail
-         * @summary Get User details
-         * @request GET:/auth/api/v1/user/{userId}
-         * @secure
-         */
-        apiV1UserDetail: (userId: string, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-                any
-            >({
-                path: `/auth/api/v1/user/${userId}`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Returns a list of workspaces that the specified user belongs to, along with their role in each workspace.
-         *
-         * @tags users
-         * @name ApiV1UserWorkspaceMembershipDetail
-         * @summary User Workspaces
-         * @request GET:/auth/api/v1/user/{userId}/workspace/membership
-         * @secure
-         */
-        apiV1UserWorkspaceMembershipDetail: (
-            userId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiMembership[],
-                any
-            >({
-                path: `/auth/api/v1/user/${userId}/workspace/membership`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Revokes user's access to the workspace.
-         *
-         * @tags users
-         * @name ApiV1UserInviteDelete
-         * @summary Revoke Invitation
-         * @request DELETE:/auth/api/v1/user/invite
-         * @secure
-         */
-        apiV1UserInviteDelete: (
-            query: {
-                /** User ID */
-                userId: string
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/auth/api/v1/user/invite`,
-                method: 'DELETE',
-                query: query,
-                secure: true,
-                ...params,
-            }),
-
-        /**
          * @description Sends an invitation to a user to join the workspace with a designated role.
          *
          * @tags users
@@ -2880,6 +2058,28 @@ export class Api<
             this.request<void, any>({
                 path: `/auth/api/v1/user/invite`,
                 method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description Updates the role of a user in the workspace.
+         *
+         * @tags users
+         * @name ApiV1UserRoleBindingUpdate
+         * @summary Update User Role
+         * @request PUT:/auth/api/v1/user/role/binding
+         * @secure
+         */
+        apiV1UserRoleBindingUpdate: (
+            request: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/auth/api/v1/user/role/binding`,
+                method: 'PUT',
                 body: request,
                 secure: true,
                 type: ContentType.Json,
@@ -2911,28 +2111,6 @@ export class Api<
             }),
 
         /**
-         * @description Updates the role of a user in the workspace.
-         *
-         * @tags users
-         * @name ApiV1UserRoleBindingUpdate
-         * @summary Update User Role
-         * @request PUT:/auth/api/v1/user/role/binding
-         * @secure
-         */
-        apiV1UserRoleBindingUpdate: (
-            request: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/auth/api/v1/user/role/binding`,
-                method: 'PUT',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
          * @description Retrieves the roles that the user who sent the request has in all workspaces they are a member of.
          *
          * @tags users
@@ -2947,6 +2125,27 @@ export class Api<
                 any
             >({
                 path: `/auth/api/v1/user/role/bindings`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns user details by specified user id.
+         *
+         * @tags users
+         * @name ApiV1UserDetail
+         * @summary Get User details
+         * @request GET:/auth/api/v1/user/{userId}
+         * @secure
+         */
+        apiV1UserDetail: (userId: string, params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+                any
+            >({
+                path: `/auth/api/v1/user/${userId}`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -3002,46 +2201,27 @@ export class Api<
     }
     compliance = {
         /**
-         * @description Returns all assignments
+         * @description Returns all benchmark assigned sources with benchmark id
          *
          * @tags benchmarks_assignment
-         * @name ApiV1AssignmentsList
-         * @summary Get all assignments
-         * @request GET:/compliance/api/v1/assignments
+         * @name ApiV1AssignmentsBenchmarkDetail
+         * @summary Get all benchmark assigned sources with benchmark id
+         * @request GET:/compliance/api/v1/assignments/benchmark/{benchmark_id}
          * @secure
          */
-        apiV1AssignmentsList: (params: RequestParams = {}) =>
+        apiV1AssignmentsBenchmarkDetail: (
+            benchmarkId: string,
+            params: RequestParams = {}
+        ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource[],
                 any
             >({
-                path: `/compliance/api/v1/assignments`,
+                path: `/compliance/api/v1/assignments/benchmark/${benchmarkId}`,
                 method: 'GET',
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Delete benchmark assignment with source id and benchmark id
-         *
-         * @tags benchmarks_assignment
-         * @name ApiV1AssignmentsConnectionDelete
-         * @summary Delete benchmark assignment for inventory service
-         * @request DELETE:/compliance/api/v1/assignments/{benchmark_id}/connection/{connection_id}
-         * @secure
-         */
-        apiV1AssignmentsConnectionDelete: (
-            benchmarkId: string,
-            connectionId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/compliance/api/v1/assignments/${benchmarkId}/connection/${connectionId}`,
-                method: 'DELETE',
-                secure: true,
-                type: ContentType.Json,
                 ...params,
             }),
 
@@ -3072,121 +2252,54 @@ export class Api<
             }),
 
         /**
-         * @description Returns all benchmark assigned sources with benchmark id
+         * @description Delete benchmark assignment with source id and benchmark id
          *
          * @tags benchmarks_assignment
-         * @name ApiV1AssignmentsBenchmarkDetail
-         * @summary Get all benchmark assigned sources with benchmark id
-         * @request GET:/compliance/api/v1/assignments/benchmark/{benchmark_id}
+         * @name ApiV1AssignmentsConnectionDelete
+         * @summary Delete benchmark assignment for inventory service
+         * @request DELETE:/compliance/api/v1/assignments/{benchmark_id}/connection/{connection_id}
          * @secure
          */
-        apiV1AssignmentsBenchmarkDetail: (
+        apiV1AssignmentsConnectionDelete: (
             benchmarkId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource[],
-                any
-            >({
-                path: `/compliance/api/v1/assignments/benchmark/${benchmarkId}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Returns all benchmark assignments with source id
-         *
-         * @tags benchmarks_assignment
-         * @name ApiV1AssignmentsConnectionDetail
-         * @summary Get all benchmark assignments with source id
-         * @request GET:/compliance/api/v1/assignments/connection/{connection_id}
-         * @secure
-         */
-        apiV1AssignmentsConnectionDetail: (
             connectionId: string,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[],
-                any
-            >({
-                path: `/compliance/api/v1/assignments/connection/${connectionId}`,
-                method: 'GET',
+            this.request<void, any>({
+                path: `/compliance/api/v1/assignments/${benchmarkId}/connection/${connectionId}`,
+                method: 'DELETE',
                 secure: true,
                 type: ContentType.Json,
-                format: 'json',
                 ...params,
             }),
 
         /**
-         * @description This API returns a comprehensive list of all available benchmarks. Users can use this API to obtain an overview of the entire set of benchmarks and their corresponding details, such as their names, descriptions, and IDs.
+         * @description This API enables users to retrieve a summary of all benchmarks and their associated checks and results within a specified time interval. Users can use this API to obtain an overview of all benchmarks, including their names, descriptions, and other relevant information, as well as the checks and their corresponding results within the specified time period.
          *
          * @tags compliance
-         * @name ApiV1BenchmarksList
-         * @summary List benchmarks
-         * @request GET:/compliance/api/v1/benchmarks
+         * @name ApiV1BenchmarksSummaryList
+         * @summary List benchmarks summaries
+         * @request GET:/compliance/api/v1/benchmarks/summary
          * @secure
          */
-        apiV1BenchmarksList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark[],
-                any
-            >({
-                path: `/compliance/api/v1/benchmarks`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API enables users to retrieve benchmark details by specifying the benchmark ID. Users can use this API to obtain specific details about a particular benchmark, such as its name, description, and other relevant information.
-         *
-         * @tags compliance
-         * @name ApiV1BenchmarksDetail
-         * @summary Get benchmark
-         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}
-         * @secure
-         */
-        apiV1BenchmarksDetail: (
-            benchmarkId: string,
+        apiV1BenchmarksSummaryList: (
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** timestamp for values in epoch seconds */
+                timeAt?: number
+            },
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
                 any
             >({
-                path: `/compliance/api/v1/benchmarks/${benchmarkId}`,
+                path: `/compliance/api/v1/benchmarks/summary`,
                 method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API returns a list of all policies associated with a specific benchmark. Users can use this API to obtain a comprehensive overview of the policies related to a particular benchmark and their corresponding details, such as their names, descriptions, and IDs.
-         *
-         * @tags compliance
-         * @name ApiV1BenchmarksPoliciesDetail
-         * @summary List Benchmark Policies
-         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/policies
-         * @secure
-         */
-        apiV1BenchmarksPoliciesDetail: (
-            benchmarkId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy[],
-                any
-            >({
-                path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies`,
-                method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -3280,66 +2393,6 @@ export class Api<
                 any
             >({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/trend`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API enables users to retrieve policy details by specifying the policy ID. Users can use this API to obtain specific details about a particular policy, such as its title, description, and other relevant information.
-         *
-         * @tags compliance
-         * @name ApiV1BenchmarksPoliciesDetail2
-         * @summary Get policy
-         * @request GET:/compliance/api/v1/benchmarks/policies/{policy_id}
-         * @originalName apiV1BenchmarksPoliciesDetail
-         * @duplicate
-         * @secure
-         */
-        apiV1BenchmarksPoliciesDetail2: (
-            policyId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
-                any
-            >({
-                path: `/compliance/api/v1/benchmarks/policies/${policyId}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API enables users to retrieve a summary of all benchmarks and their associated checks and results within a specified time interval. Users can use this API to obtain an overview of all benchmarks, including their names, descriptions, and other relevant information, as well as the checks and their corresponding results within the specified time period.
-         *
-         * @tags compliance
-         * @name ApiV1BenchmarksSummaryList
-         * @summary List benchmarks summaries
-         * @request GET:/compliance/api/v1/benchmarks/summary
-         * @secure
-         */
-        apiV1BenchmarksSummaryList: (
-            query?: {
-                /** Connection IDs to filter by */
-                connectionId?: string[]
-                /** Connector type to filter by */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** timestamp for values in epoch seconds */
-                timeAt?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-                any
-            >({
-                path: `/compliance/api/v1/benchmarks/summary`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -3447,6 +2500,43 @@ export class Api<
             }),
 
         /**
+         * @description This API returns a list of insight groups based on specified filters. The API provides details of insights, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
+         *
+         * @tags insights
+         * @name ApiV1InsightGroupList
+         * @summary List insight groups
+         * @request GET:/compliance/api/v1/insight/group
+         * @secure
+         */
+        apiV1InsightGroupList: (
+            query?: {
+                /** Key-Value tags in key=value format to filter by */
+                tag?: string[]
+                /** filter insights by connector */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** filter the result by source id */
+                connectionId?: string[]
+                /** unix seconds for the start time of the trend */
+                startTime?: number
+                /** unix seconds for the end time of the trend */
+                endTime?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup[],
+                any
+            >({
+                path: `/compliance/api/v1/insight/group`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description This API returns the specified insight with ID. The API provides details of the insight, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
          *
          * @tags insights
@@ -3515,140 +2605,6 @@ export class Api<
             }),
 
         /**
-         * @description This API returns a list of insight groups based on specified filters. The API provides details of insights, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
-         *
-         * @tags insights
-         * @name ApiV1InsightGroupList
-         * @summary List insight groups
-         * @request GET:/compliance/api/v1/insight/group
-         * @secure
-         */
-        apiV1InsightGroupList: (
-            query?: {
-                /** Key-Value tags in key=value format to filter by */
-                tag?: string[]
-                /** filter insights by connector */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** unix seconds for the start time of the trend */
-                startTime?: number
-                /** unix seconds for the end time of the trend */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup[],
-                any
-            >({
-                path: `/compliance/api/v1/insight/group`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API returns the specified insight group with ID. The API provides details of the insight, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
-         *
-         * @tags insights
-         * @name ApiV1InsightGroupDetail
-         * @summary Get insight group
-         * @request GET:/compliance/api/v1/insight/group/{insightGroupId}
-         * @secure
-         */
-        apiV1InsightGroupDetail: (
-            insightGroupId: string,
-            query?: {
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** unix seconds for the start time of the trend */
-                startTime?: number
-                /** unix seconds for the end time of the trend */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-                any
-            >({
-                path: `/compliance/api/v1/insight/group/${insightGroupId}`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API allows users to retrieve insight group results datapoints for a specified connection during a specified time period. Returns "all:provider" job results if connectionId is not defined.
-         *
-         * @tags insights
-         * @name ApiV1InsightGroupTrendDetail
-         * @summary Get insight group trend
-         * @request GET:/compliance/api/v1/insight/group/{insightGroupId}/trend
-         * @secure
-         */
-        apiV1InsightGroupTrendDetail: (
-            insightGroupId: string,
-            query?: {
-                /** filter the result by source id */
-                connectionId?: string[]
-                /** unix seconds for the start time of the trend */
-                startTime?: number
-                /** unix seconds for the end time of the trend */
-                endTime?: number
-                /** number of datapoints to return */
-                datapointCount?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
-                any
-            >({
-                path: `/compliance/api/v1/insight/group/${insightGroupId}/trend`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieves all insights metadata.
-         *
-         * @tags insights
-         * @name ApiV1MetadataInsightList
-         * @summary List insights metadata
-         * @request GET:/compliance/api/v1/metadata/insight
-         * @secure
-         */
-        apiV1MetadataInsightList: (
-            query?: {
-                /** filter by connector */
-                connector?: ('' | 'AWS' | 'Azure')[]
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[],
-                any
-            >({
-                path: `/compliance/api/v1/metadata/insight`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Get insight metadata by id
          *
          * @tags insights
@@ -3690,49 +2646,6 @@ export class Api<
                 format: 'json',
                 ...params,
             }),
-
-        /**
-         * @description This API allows users to retrieve an insights tag key with the possible values for it.
-         *
-         * @tags insights
-         * @name ApiV1MetadataTagInsightDetail
-         * @summary Get insights tag key
-         * @request GET:/compliance/api/v1/metadata/tag/insight/{key}
-         * @secure
-         */
-        apiV1MetadataTagInsightDetail: (
-            key: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<string[], any>({
-                path: `/compliance/api/v1/metadata/tag/insight/${key}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API enables users to retrieve query details by specifying the query ID.
-         *
-         * @tags compliance
-         * @name ApiV1QueriesDetail
-         * @summary Get query
-         * @request GET:/compliance/api/v1/queries/{query_id}
-         * @secure
-         */
-        apiV1QueriesDetail: (queryId: string, params: RequestParams = {}) =>
-            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiQuery, any>(
-                {
-                    path: `/compliance/api/v1/queries/${queryId}`,
-                    method: 'GET',
-                    secure: true,
-                    type: ContentType.Json,
-                    format: 'json',
-                    ...params,
-                }
-            ),
 
         /**
          * @description This API syncs queries with the git backend.
@@ -3835,13 +2748,20 @@ export class Api<
          * @request GET:/inventory/api/v2/analytics/categories
          * @secure
          */
-        apiV2AnalyticsCategoriesList: (params: RequestParams = {}) =>
+        apiV2AnalyticsCategoriesList: (
+            query?: {
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
+            },
+            params: RequestParams = {}
+        ) =>
             this.request<
                 GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
                 any
             >({
                 path: `/inventory/api/v2/analytics/categories`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -3860,12 +2780,16 @@ export class Api<
         apiV2AnalyticsCompositionDetail: (
             key: string,
             query: {
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
                 /** How many top values to return default is 5 */
                 top: number
                 /** Connector types to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** timestamp for resource count in epoch seconds */
                 endTime?: string
                 /** timestamp for resource count change comparison in epoch seconds */
@@ -3899,10 +2823,14 @@ export class Api<
             query?: {
                 /** Key-Value tags in key=value format to filter by */
                 tag?: string[]
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** Metric IDs */
                 metricIDs?: string[]
                 /** timestamp for resource count in epoch seconds */
@@ -3946,8 +2874,10 @@ export class Api<
             query?: {
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** start time in unix seconds - default is now */
                 startTime?: number
                 /** end time in unix seconds - default is one week ago */
@@ -3975,6 +2905,170 @@ export class Api<
             }),
 
         /**
+         * @description This API allows users to retrieve the cost composition with respect to specified filters. The API returns information such as the total cost for the given time range, and the top services by cost.
+         *
+         * @tags inventory
+         * @name ApiV2AnalyticsSpendCompositionList
+         * @summary List cost composition
+         * @request GET:/inventory/api/v2/analytics/spend/composition
+         * @secure
+         */
+        apiV2AnalyticsSpendCompositionList: (
+            query?: {
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
+                connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
+                /** How many top values to return default is 5 */
+                top?: number
+                /** timestamp for start in epoch seconds */
+                startTime?: string
+                /** timestamp for end in epoch seconds */
+                endTime?: string
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+                any
+            >({
+                path: `/inventory/api/v2/analytics/spend/composition`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description This API allows users to retrieve cost metrics with respect to specified filters. The API returns information such as the total cost and costs per each service based on the specified filters.
+         *
+         * @tags inventory
+         * @name ApiV2AnalyticsSpendMetricList
+         * @summary List spend metrics
+         * @request GET:/inventory/api/v2/analytics/spend/metric
+         * @secure
+         */
+        apiV2AnalyticsSpendMetricList: (
+            query?: {
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
+                connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
+                /** timestamp for start in epoch seconds */
+                startTime?: string
+                /** timestamp for end in epoch seconds */
+                endTime?: string
+                /** Sort by field - default is cost */
+                sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
+                /** page size - default is 20 */
+                pageSize?: number
+                /** page number - default is 1 */
+                pageNumber?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+                any
+            >({
+                path: `/inventory/api/v2/analytics/spend/metric`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description This API allows users to retrieve a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
+         *
+         * @tags inventory
+         * @name ApiV2AnalyticsSpendMetricsTrendList
+         * @summary Get Cost Trend
+         * @request GET:/inventory/api/v2/analytics/spend/metrics/trend
+         * @secure
+         */
+        apiV2AnalyticsSpendMetricsTrendList: (
+            query?: {
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
+                connectionId?: string[]
+                /** Metrics IDs */
+                metricIds?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
+                /** timestamp for start in epoch seconds */
+                startTime?: string
+                /** timestamp for end in epoch seconds */
+                endTime?: string
+                /** maximum number of datapoints to return, default is 30 */
+                datapointCount?: string
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint[],
+                any
+            >({
+                path: `/inventory/api/v2/analytics/spend/metrics/trend`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description This API allows users to retrieve a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
+         *
+         * @tags inventory
+         * @name ApiV2AnalyticsSpendTrendList
+         * @summary Get Cost Trend
+         * @request GET:/inventory/api/v2/analytics/spend/trend
+         * @secure
+         */
+        apiV2AnalyticsSpendTrendList: (
+            query?: {
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
+                connectionId?: string[]
+                /** Metrics IDs */
+                metricIds?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
+                /** timestamp for start in epoch seconds */
+                startTime?: string
+                /** timestamp for end in epoch seconds */
+                endTime?: string
+                /** maximum number of datapoints to return, default is 30 */
+                datapointCount?: string
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
+                any
+            >({
+                path: `/inventory/api/v2/analytics/spend/trend`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description This API allows users to retrieve a list of tag keys with their possible values for all analytic metrics.
          *
          * @tags analytics
@@ -3987,12 +3081,16 @@ export class Api<
             query?: {
                 /** Connector type to filter by */
                 connector?: string[]
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** Minimum number of resources with this tag value, default 1 */
                 minCount?: number
                 /** End time in unix timestamp format, default now */
                 endTime?: number
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
             },
             params: RequestParams = {}
         ) =>
@@ -4019,12 +3117,16 @@ export class Api<
             query?: {
                 /** Key-Value tags in key=value format to filter by */
                 tag?: string[]
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
                 /** Metric IDs to filter by */
                 ids?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** timestamp for start in epoch seconds */
                 startTime?: string
                 /** timestamp for end in epoch seconds */
@@ -4060,8 +3162,10 @@ export class Api<
             query?: {
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** How many top values to return default is 5 */
                 top?: number
                 /** timestamp for start in epoch seconds */
@@ -4097,8 +3201,10 @@ export class Api<
             query?: {
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** timestamp for start in epoch seconds */
                 startTime?: string
                 /** timestamp for end in epoch seconds */
@@ -4138,8 +3244,10 @@ export class Api<
             query?: {
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** timestamp for start in epoch seconds */
                 startTime?: string
                 /** timestamp for end in epoch seconds */
@@ -4174,8 +3282,10 @@ export class Api<
         apiV2ResourcesMetricDetail: (
             resourceType: string,
             query?: {
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** timestamp for resource count in epoch seconds */
                 endTime?: string
                 /** timestamp for resource count change comparison in epoch seconds */
@@ -4209,8 +3319,10 @@ export class Api<
             query?: {
                 /** Connector type to filter by */
                 connector?: string[]
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** Minimum number of resources with this tag value, default 1 */
                 minCount?: number
                 /** End time in unix timestamp format, default now */
@@ -4243,8 +3355,10 @@ export class Api<
                 services?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by */
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string
                 /** timestamp for start in epoch seconds */
                 startTime?: string
                 /** timestamp for end in epoch seconds */
@@ -4334,26 +3448,31 @@ export class Api<
             }),
 
         /**
-         * @description Update a connection with connection ID.
+         * @description Returns a list of connection groups
          *
-         * @tags onboard
-         * @name ApiV1ConnectionsUpdate
-         * @summary Update a connection
-         * @request PUT:/onboard/api/v1/connections/{connectionId}
+         * @tags connection-groups
+         * @name ApiV1ConnectionGroupsList
+         * @summary List connection groups
+         * @request GET:/onboard/api/v1/connection-groups
          * @secure
          */
-        apiV1ConnectionsUpdate: (
-            connectionId: string,
-            request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionRequest,
+        apiV1ConnectionGroupsList: (
+            query?: {
+                /**
+                 * Populate connections
+                 * @default false
+                 */
+                populateConnections?: boolean
+            },
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup[],
                 any
             >({
-                path: `/onboard/api/v1/connections/${connectionId}`,
-                method: 'PUT',
-                body: request,
+                path: `/onboard/api/v1/connection-groups`,
+                method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -4361,45 +3480,32 @@ export class Api<
             }),
 
         /**
-         * @description Change connection lifecycle state with connection ID.
+         * @description Returns a connection group
          *
-         * @tags onboard
-         * @name ApiV1ConnectionsStateCreate
-         * @summary Change connection lifecycle state
-         * @request POST:/onboard/api/v1/connections/{connectionId}/state
+         * @tags connection-groups
+         * @name ApiV1ConnectionGroupsDetail
+         * @summary Get connection group
+         * @request GET:/onboard/api/v1/connection-groups/{connectionGroupName}
          * @secure
          */
-        apiV1ConnectionsStateCreate: (
-            connectionId: string,
-            request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+        apiV1ConnectionGroupsDetail: (
+            connectionGroupName: string,
+            query?: {
+                /**
+                 * Populate connections
+                 * @default false
+                 */
+                populateConnections?: boolean
+            },
             params: RequestParams = {}
         ) =>
-            this.request<void, any>({
-                path: `/onboard/api/v1/connections/${connectionId}/state`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * @description Returns a count of connections
-         *
-         * @tags onboard
-         * @name ApiV1ConnectionsCountList
-         * @summary Connections count
-         * @request GET:/onboard/api/v1/connections/count
-         * @secure
-         */
-        apiV1ConnectionsCountList: (
-            type: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<number, any>({
-                path: `/onboard/api/v1/connections/count`,
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
+                any
+            >({
+                path: `/onboard/api/v1/connection-groups/${connectionGroupName}`,
                 method: 'GET',
-                body: type,
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -4457,38 +3563,6 @@ export class Api<
             }),
 
         /**
-         * @description Returns a connections summaries
-         *
-         * @tags connections
-         * @name ApiV1ConnectionsSummaryDetail
-         * @summary Get connection summary
-         * @request GET:/onboard/api/v1/connections/summary/{connectionId}
-         * @secure
-         */
-        apiV1ConnectionsSummaryDetail: (
-            connectionId: string,
-            query?: {
-                /** start time in unix seconds */
-                startTime?: number
-                /** end time in unix seconds */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-                any
-            >({
-                path: `/onboard/api/v1/connections/summary/${connectionId}`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Returns list of all connectors
          *
          * @tags onboard
@@ -4503,30 +3577,6 @@ export class Api<
                 any
             >({
                 path: `/onboard/api/v1/connector`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Returns connector details by name
-         *
-         * @tags onboard
-         * @name ApiV1ConnectorDetail
-         * @summary Get connector
-         * @request GET:/onboard/api/v1/connector/{connectorName}
-         * @secure
-         */
-        apiV1ConnectorDetail: (
-            connectorName: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
-                any
-            >({
-                path: `/onboard/api/v1/connector/${connectorName}`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -4607,26 +3657,6 @@ export class Api<
             }),
 
         /**
-         * @description Remove a credential by Id
-         *
-         * @tags onboard
-         * @name ApiV1CredentialDelete
-         * @summary Delete credential
-         * @request DELETE:/onboard/api/v1/credential/{credentialId}
-         * @secure
-         */
-        apiV1CredentialDelete: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/onboard/api/v1/credential/${credentialId}`,
-                method: 'DELETE',
-                secure: true,
-                ...params,
-            }),
-
-        /**
          * @description Retrieving credential details by credential ID
          *
          * @tags onboard
@@ -4674,6 +3704,26 @@ export class Api<
             }),
 
         /**
+         * @description Remove a credential by Id
+         *
+         * @tags onboard
+         * @name ApiV1CredentialDelete
+         * @summary Delete credential
+         * @request DELETE:/onboard/api/v1/credential/{credentialId}
+         * @secure
+         */
+        apiV1CredentialDelete: (
+            credentialId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/onboard/api/v1/credential/${credentialId}`,
+                method: 'DELETE',
+                secure: true,
+                ...params,
+            }),
+
+        /**
          * @description Onboard all available connections for a credential
          *
          * @tags onboard
@@ -4692,241 +3742,6 @@ export class Api<
             >({
                 path: `/onboard/api/v1/credential/${credentialId}/autoonboard`,
                 method: 'POST',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Disable credential
-         *
-         * @tags onboard
-         * @name ApiV1CredentialDisableCreate
-         * @summary Disable credential
-         * @request POST:/onboard/api/v1/credential/{credentialId}/disable
-         * @secure
-         */
-        apiV1CredentialDisableCreate: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/onboard/api/v1/credential/${credentialId}/disable`,
-                method: 'POST',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Enable credential
-         *
-         * @tags onboard
-         * @name ApiV1CredentialEnableCreate
-         * @summary Enable credential
-         * @request POST:/onboard/api/v1/credential/{credentialId}/enable
-         * @secure
-         */
-        apiV1CredentialEnableCreate: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/onboard/api/v1/credential/${credentialId}/enable`,
-                method: 'POST',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags onboard
-         * @name ApiV1CredentialHealthcheckDetail
-         * @summary Get live credential health status
-         * @request GET:/onboard/api/v1/credential/{credentialId}/healthcheck
-         * @secure
-         */
-        apiV1CredentialHealthcheckDetail: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/onboard/api/v1/credential/${credentialId}/healthcheck`,
-                method: 'GET',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Returning a list of sources including both AWS and Azure unless filtered by Type.
-         *
-         * @tags onboard
-         * @name ApiV1CredentialSourcesListList
-         * @summary Returns a list of sources
-         * @request GET:/onboard/api/v1/credential/sources/list
-         * @secure
-         */
-        apiV1CredentialSourcesListList: (
-            query?: {
-                /** filter by connector type */
-                connector?: '' | 'AWS' | 'Azure'
-                /** filter by credential type */
-                credentialType?: (
-                    | 'auto-azure'
-                    | 'auto-aws'
-                    | 'manual-aws-org'
-                    | 'manual-azure-spn'
-                )[]
-                /**
-                 * page size
-                 * @default 50
-                 */
-                pageSize?: number
-                /**
-                 * page number
-                 * @default 1
-                 */
-                pageNumber?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
-                any
-            >({
-                path: `/onboard/api/v1/credential/sources/list`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Deleting a single source either AWS / Azure for the given source id.
-         *
-         * @tags onboard
-         * @name ApiV1SourceDelete
-         * @summary Delete source
-         * @request DELETE:/onboard/api/v1/source/{sourceId}
-         * @secure
-         */
-        apiV1SourceDelete: (sourceId: string, params: RequestParams = {}) =>
-            this.request<void, any>({
-                path: `/onboard/api/v1/source/${sourceId}`,
-                method: 'DELETE',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Returning single source either AWS / Azure.
-         *
-         * @tags onboard
-         * @name ApiV1SourceDetail
-         * @summary Get source
-         * @request GET:/onboard/api/v1/source/{sourceId}
-         * @secure
-         */
-        apiV1SourceDetail: (sourceId: number, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-                any
-            >({
-                path: `/onboard/api/v1/source/${sourceId}`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Returns credential for a source with given source ID. The responses are different for different source types.
-         *
-         * @tags onboard
-         * @name ApiV1SourceCredentialsDetail
-         * @summary Get source credential
-         * @request GET:/onboard/api/v1/source/{sourceId}/credentials
-         * @secure
-         */
-        apiV1SourceCredentialsDetail: (
-            sourceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
-                any
-            >({
-                path: `/onboard/api/v1/source/${sourceId}/credentials`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Update source credential
-         *
-         * @tags onboard
-         * @name ApiV1SourceCredentialsUpdate
-         * @summary Update source credential
-         * @request PUT:/onboard/api/v1/source/{sourceId}/credentials
-         * @secure
-         */
-        apiV1SourceCredentialsUpdate: (
-            sourceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/onboard/api/v1/source/${sourceId}/credentials`,
-                method: 'PUT',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Get live source health status with given source ID.
-         *
-         * @tags onboard
-         * @name ApiV1SourceHealthcheckCreate
-         * @summary Get source health
-         * @request POST:/onboard/api/v1/source/{sourceId}/healthcheck
-         * @secure
-         */
-        apiV1SourceHealthcheckCreate: (
-            sourceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-                any
-            >({
-                path: `/onboard/api/v1/source/${sourceId}/healthcheck`,
-                method: 'POST',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Returning account source either AWS / Azure.
-         *
-         * @tags onboard
-         * @name ApiV1SourceAccountDetail
-         * @summary List account sources
-         * @request GET:/onboard/api/v1/source/account/{account_id}
-         * @secure
-         */
-        apiV1SourceAccountDetail: (
-            accountId: number,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-                any
-            >({
-                path: `/onboard/api/v1/source/account/${accountId}`,
-                method: 'GET',
                 secure: true,
                 format: 'json',
                 ...params,
@@ -4985,284 +3800,47 @@ export class Api<
             }),
 
         /**
-         * @description Returning a list of sources including both AWS and Azure unless filtered by Type.
+         * @description Deleting a single source either AWS / Azure for the given source id.
          *
          * @tags onboard
-         * @name ApiV1SourcesList
-         * @summary List all sources
-         * @request GET:/onboard/api/v1/sources
+         * @name ApiV1SourceDelete
+         * @summary Delete source
+         * @request DELETE:/onboard/api/v1/source/{sourceId}
          * @secure
          */
-        apiV1SourcesList: (
-            query?: {
-                /** filter by source type */
-                connector?: ('' | 'AWS' | 'Azure')[]
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[],
-                any
-            >({
-                path: `/onboard/api/v1/sources`,
-                method: 'GET',
-                query: query,
+        apiV1SourceDelete: (sourceId: string, params: RequestParams = {}) =>
+            this.request<void, any>({
+                path: `/onboard/api/v1/source/${sourceId}`,
+                method: 'DELETE',
                 secure: true,
-                format: 'json',
                 ...params,
             }),
 
         /**
-         * @description Returning number of sources including both AWS and Azure unless filtered by Type.
+         * @description Get live source health status with given source ID.
          *
          * @tags onboard
-         * @name ApiV1SourcesCountList
-         * @summary Count sources
-         * @request GET:/onboard/api/v1/sources/count
+         * @name ApiV1SourceHealthcheckDetail
+         * @summary Get source health
+         * @request GET:/onboard/api/v1/source/{sourceId}/healthcheck
          * @secure
          */
-        apiV1SourcesCountList: (
-            query?: {
-                /** filter by source type */
-                connector?: '' | 'AWS' | 'Azure'
-            },
+        apiV1SourceHealthcheckDetail: (
+            sourceId: string,
             params: RequestParams = {}
         ) =>
-            this.request<number, any>({
-                path: `/onboard/api/v1/sources/count`,
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+                any
+            >({
+                path: `/onboard/api/v1/source/${sourceId}/healthcheck`,
                 method: 'GET',
-                query: query,
                 secure: true,
                 format: 'json',
                 ...params,
             }),
     }
     schedule = {
-        /**
-         * @description Triggers a checkup job to run immediately
-         *
-         * @tags describe
-         * @name ApiV0CheckupTriggerList
-         * @summary Triggers a checkup job to run immediately
-         * @request GET:/schedule/api/v0/checkup/trigger
-         * @secure
-         */
-        apiV0CheckupTriggerList: (params: RequestParams = {}) =>
-            this.request<void, any>({
-                path: `/schedule/api/v0/checkup/trigger`,
-                method: 'GET',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags describe
-         * @name ApiV0ComplianceSummarizerTriggerList
-         * @summary Triggers a compliance summarizer job to run immediately
-         * @request GET:/schedule/api/v0/compliance/summarizer/trigger
-         * @secure
-         */
-        apiV0ComplianceSummarizerTriggerList: (params: RequestParams = {}) =>
-            this.request<void, any>({
-                path: `/schedule/api/v0/compliance/summarizer/trigger`,
-                method: 'GET',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Triggers a compliance job to run immediately
-         *
-         * @tags describe
-         * @name ApiV0ComplianceTriggerList
-         * @summary Triggers a compliance job to run immediately
-         * @request GET:/schedule/api/v0/compliance/trigger
-         * @secure
-         */
-        apiV0ComplianceTriggerList: (params: RequestParams = {}) =>
-            this.request<void, any>({
-                path: `/schedule/api/v0/compliance/trigger`,
-                method: 'GET',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Triggers a describe job to run immediately
-         *
-         * @tags describe
-         * @name ApiV0DescribeTriggerList
-         * @summary Triggers a describe job to run immediately
-         * @request GET:/schedule/api/v0/describe/trigger
-         * @secure
-         */
-        apiV0DescribeTriggerList: (params: RequestParams = {}) =>
-            this.request<void, any>({
-                path: `/schedule/api/v0/describe/trigger`,
-                method: 'GET',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Triggers an insight job to run immediately
-         *
-         * @tags describe
-         * @name ApiV0InsightTriggerList
-         * @summary Triggers an insight job to run immediately
-         * @request GET:/schedule/api/v0/insight/trigger
-         * @secure
-         */
-        apiV0InsightTriggerList: (params: RequestParams = {}) =>
-            this.request<void, any>({
-                path: `/schedule/api/v0/insight/trigger`,
-                method: 'GET',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Triggers a summarize job to run immediately
-         *
-         * @tags describe
-         * @name ApiV0SummarizeTriggerList
-         * @summary Triggers a summarize job to run immediately
-         * @request GET:/schedule/api/v0/summarize/trigger
-         * @secure
-         */
-        apiV0SummarizeTriggerList: (params: RequestParams = {}) =>
-            this.request<void, any>({
-                path: `/schedule/api/v0/summarize/trigger`,
-                method: 'GET',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Triggers a benchmark evaluation job to run immediately
-         *
-         * @tags describe
-         * @name ApiV1BenchmarkEvaluationTriggerUpdate
-         * @summary Trigger benchmark evaluation
-         * @request PUT:/schedule/api/v1/benchmark/evaluation/trigger
-         * @secure
-         */
-        apiV1BenchmarkEvaluationTriggerUpdate: (
-            request: GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<DescribeComplianceReportJob[], any>({
-                path: `/schedule/api/v1/benchmark/evaluation/trigger`,
-                method: 'PUT',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description This API allows users to retrieve details of all benchmark evaluation jobs based on specified filters. The API returns information such as evaluation time, benchmark ID, connection ID, connector name, status, and failure message.
-         *
-         * @tags describe
-         * @name ApiV1BenchmarkEvaluationsList
-         * @summary Lists benchmark evaluations
-         * @request GET:/schedule/api/v1/benchmark/evaluations
-         * @secure
-         */
-        apiV1BenchmarkEvaluationsList: (
-            request: GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<DescribeComplianceReportJob[], any>({
-                path: `/schedule/api/v1/benchmark/evaluations`,
-                method: 'GET',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags schedule
-         * @name ApiV1ComplianceReportLastCompletedList
-         * @summary Get last completed compliance report
-         * @request GET:/schedule/api/v1/compliance/report/last/completed
-         * @secure
-         */
-        apiV1ComplianceReportLastCompletedList: (params: RequestParams = {}) =>
-            this.request<number, any>({
-                path: `/schedule/api/v1/compliance/report/last/completed`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags describe
-         * @name ApiV1DescribeResourceCreate
-         * @summary Describe single resource
-         * @request POST:/schedule/api/v1/describe/resource
-         * @secure
-         */
-        apiV1DescribeResourceCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<AwsResources, any>({
-                path: `/schedule/api/v1/describe/resource`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags schedule
-         * @name ApiV1DescribeResourceJobsPendingList
-         * @summary Listing describe resource jobs
-         * @request GET:/schedule/api/v1/describe/resource/jobs/pending
-         * @secure
-         */
-        apiV1DescribeResourceJobsPendingList: (params: RequestParams = {}) =>
-            this.request<DescribeDescribeResourceJob[], any>({
-                path: `/schedule/api/v1/describe/resource/jobs/pending`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags schedule
-         * @name ApiV1DescribeSourceJobsPendingList
-         * @summary Listing describe source jobs
-         * @request GET:/schedule/api/v1/describe/source/jobs/pending
-         * @secure
-         */
-        apiV1DescribeSourceJobsPendingList: (params: RequestParams = {}) =>
-            this.request<DescribeDescribeSourceJob[], any>({
-                path: `/schedule/api/v1/describe/source/jobs/pending`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
         /**
          * @description Triggers a describe job to run immediately
          *
@@ -5274,154 +3852,17 @@ export class Api<
          */
         apiV1DescribeTriggerUpdate: (
             connectionId: string,
+            query: {
+                /** Resource Type */
+                resource_type: string[]
+            },
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
                 path: `/schedule/api/v1/describe/trigger/${connectionId}`,
                 method: 'PUT',
-                secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description Trigger an insight evaluation to run immediately with given details
-         *
-         * @tags describe
-         * @name ApiV1InsightEvaluationTriggerUpdate
-         * @summary Trigger insight evaluation
-         * @request PUT:/schedule/api/v1/insight/evaluation/trigger
-         * @secure
-         */
-        apiV1InsightEvaluationTriggerUpdate: (
-            request: GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<DescribeInsightJob[], any>({
-                path: `/schedule/api/v1/insight/evaluation/trigger`,
-                method: 'PUT',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get an Insight Job details by ID
-         *
-         * @tags describe
-         * @name ApiV1InsightJobDetail
-         * @summary Get an Insight Job
-         * @request GET:/schedule/api/v1/insight/job/{jobId}
-         * @secure
-         */
-        apiV1InsightJobDetail: (jobId: string, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
-                any
-            >({
-                path: `/schedule/api/v1/insight/job/${jobId}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags schedule
-         * @name ApiV1InsightJobsPendingList
-         * @summary Listing insight jobs
-         * @request GET:/schedule/api/v1/insight/jobs/pending
-         * @secure
-         */
-        apiV1InsightJobsPendingList: (params: RequestParams = {}) =>
-            this.request<DescribeInsightJob[], any>({
-                path: `/schedule/api/v1/insight/jobs/pending`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description get resource type by provider
-         *
-         * @tags schedule
-         * @name ApiV1ResourceTypeDetail
-         * @summary get resource type by provider
-         * @request GET:/schedule/api/v1/resource_type/{provider}
-         * @secure
-         */
-        apiV1ResourceTypeDetail: (
-            provider: 'aws' | 'azure',
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail[],
-                any
-            >({
-                path: `/schedule/api/v1/resource_type/${provider}`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieves list of source compliance reports for a source by the given source id
-         *
-         * @tags schedule
-         * @name ApiV1SourcesJobsComplianceDetail
-         * @summary List source compliance reports
-         * @request GET:/schedule/api/v1/sources/{source_id}/jobs/compliance
-         * @secure
-         */
-        apiV1SourcesJobsComplianceDetail: (
-            sourceId: string,
-            query?: {
-                /** From Time (TimeRange) */
-                from?: number
-                /** To Time (TimeRange) */
-                to?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport[],
-                any
-            >({
-                path: `/schedule/api/v1/sources/${sourceId}/jobs/compliance`,
-                method: 'GET',
                 query: query,
                 secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieves list of source describe jobs for a source by the given source id
-         *
-         * @tags schedule
-         * @name ApiV1SourcesJobsDescribeDetail
-         * @summary List source describe jobs
-         * @request GET:/schedule/api/v1/sources/{source_id}/jobs/describe
-         * @secure
-         */
-        apiV1SourcesJobsDescribeDetail: (
-            sourceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource[],
-                any
-            >({
-                path: `/schedule/api/v1/sources/${sourceId}/jobs/describe`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
                 ...params,
             }),
 
@@ -5456,22 +3897,65 @@ export class Api<
             ),
 
         /**
-         * @description Delete a stack by ID
+         * @description Create a stack by giving terraform statefile and additional resources Config structure for azure: {tenantId: string, objectId: string, secretId: string, clientId: string, clientSecret:string} Config structure for aws: {accessKey: string, secretKey: string}
          *
          * @tags stack
-         * @name ApiV1StacksDelete
-         * @summary Delete a Stack
-         * @request DELETE:/schedule/api/v1/stacks/{stackId}
+         * @name ApiV1StacksCreateCreate
+         * @summary Create stack
+         * @request POST:/schedule/api/v1/stacks/create
          * @secure
          */
-        apiV1StacksDelete: (stackId: string, params: RequestParams = {}) =>
-            this.request<void, any>({
-                path: `/schedule/api/v1/stacks/${stackId}`,
-                method: 'DELETE',
+        apiV1StacksCreateCreate: (
+            data: {
+                /**
+                 * File to upload
+                 * @format binary
+                 */
+                terraformFile: File
+                /** Tags Map[string][]string */
+                tag?: string
+                /** Config json structure */
+                config: string
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack, any>({
+                path: `/schedule/api/v1/stacks/create`,
+                method: 'POST',
+                body: data,
                 secure: true,
-                type: ContentType.Json,
+                type: ContentType.FormData,
+                format: 'json',
                 ...params,
             }),
+
+        /**
+         * @description Get list of all stacks containing a resource
+         *
+         * @tags stack
+         * @name ApiV1StacksResourceList
+         * @summary List Resource Stacks
+         * @request GET:/schedule/api/v1/stacks/resource
+         * @secure
+         */
+        apiV1StacksResourceList: (
+            query: {
+                /** Resource ID */
+                resourceId: string
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack[], any>(
+                {
+                    path: `/schedule/api/v1/stacks/resource`,
+                    method: 'GET',
+                    query: query,
+                    secure: true,
+                    type: ContentType.Json,
+                    format: 'json',
+                    ...params,
+                }
+            ),
 
         /**
          * @description Get a stack details by ID
@@ -5489,6 +3973,24 @@ export class Api<
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Delete a stack by ID
+         *
+         * @tags stack
+         * @name ApiV1StacksDelete
+         * @summary Delete a Stack
+         * @request DELETE:/schedule/api/v1/stacks/{stackId}
+         * @secure
+         */
+        apiV1StacksDelete: (stackId: string, params: RequestParams = {}) =>
+            this.request<void, any>({
+                path: `/schedule/api/v1/stacks/${stackId}`,
+                method: 'DELETE',
+                secure: true,
+                type: ContentType.Json,
                 ...params,
             }),
 
@@ -5586,85 +4088,6 @@ export class Api<
                 format: 'json',
                 ...params,
             }),
-
-        /**
-         * @description Create a stack by giving terraform statefile and additional resources Config structure for azure: {tenantId: string, objectId: string, secretId: string, clientId: string, clientSecret:string} Config structure for aws: {accessKey: string, secretKey: string}
-         *
-         * @tags stack
-         * @name ApiV1StacksCreateCreate
-         * @summary Create stack
-         * @request POST:/schedule/api/v1/stacks/create
-         * @secure
-         */
-        apiV1StacksCreateCreate: (
-            data: {
-                /**
-                 * File to upload
-                 * @format binary
-                 */
-                terraformFile: File
-                /** Tags Map[string][]string */
-                tag?: string
-                /** Config json structure */
-                config: string
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack, any>({
-                path: `/schedule/api/v1/stacks/create`,
-                method: 'POST',
-                body: data,
-                secure: true,
-                type: ContentType.FormData,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get list of all stacks containing a resource
-         *
-         * @tags stack
-         * @name ApiV1StacksResourceList
-         * @summary List Resource Stacks
-         * @request GET:/schedule/api/v1/stacks/resource
-         * @secure
-         */
-        apiV1StacksResourceList: (
-            query: {
-                /** Resource ID */
-                resourceId: string
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack[], any>(
-                {
-                    path: `/schedule/api/v1/stacks/resource`,
-                    method: 'GET',
-                    query: query,
-                    secure: true,
-                    type: ContentType.Json,
-                    format: 'json',
-                    ...params,
-                }
-            ),
-
-        /**
-         * No description
-         *
-         * @tags schedule
-         * @name ApiV1SummarizeJobsPendingList
-         * @summary Listing summarize jobs
-         * @request GET:/schedule/api/v1/summarize/jobs/pending
-         * @secure
-         */
-        apiV1SummarizeJobsPendingList: (params: RequestParams = {}) =>
-            this.request<DescribeSummarizerJob[], any>({
-                path: `/schedule/api/v1/summarize/jobs/pending`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
     }
     workspace = {
         /**
@@ -5734,6 +4157,28 @@ export class Api<
                 path: `/workspace/api/v1/workspace`,
                 method: 'POST',
                 body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns all workspaces with owner id
+         *
+         * @tags workspace
+         * @name ApiV1WorkspaceCurrentList
+         * @summary List all workspaces with owner id
+         * @request GET:/workspace/api/v1/workspace/current
+         * @secure
+         */
+        apiV1WorkspaceCurrentList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
+                any
+            >({
+                path: `/workspace/api/v1/workspace/current`,
+                method: 'GET',
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -5899,28 +4344,6 @@ export class Api<
          * @description Returns all workspaces with owner id
          *
          * @tags workspace
-         * @name ApiV1WorkspaceCurrentList
-         * @summary List all workspaces with owner id
-         * @request GET:/workspace/api/v1/workspace/current
-         * @secure
-         */
-        apiV1WorkspaceCurrentList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
-                any
-            >({
-                path: `/workspace/api/v1/workspace/current`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Returns all workspaces with owner id
-         *
-         * @tags workspace
          * @name ApiV1WorkspacesList
          * @summary List all workspaces with owner id
          * @request GET:/workspace/api/v1/workspaces
@@ -5936,27 +4359,6 @@ export class Api<
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get workspace with workspace id
-         *
-         * @tags workspace
-         * @name ApiV1WorkspacesDetail
-         * @summary Get workspace for workspace service
-         * @request GET:/workspace/api/v1/workspaces/{workspace_id}
-         * @secure
-         */
-        apiV1WorkspacesDetail: (
-            workspaceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspaces/${workspaceId}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
                 ...params,
             }),
 
@@ -5978,6 +4380,31 @@ export class Api<
                 any
             >({
                 path: `/workspace/api/v1/workspaces/byid/${workspaceId}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags workspace
+         * @name ApiV1WorkspacesLimitsByidDetail
+         * @summary Get workspace limits
+         * @request GET:/workspace/api/v1/workspaces/limits/byid/{workspace_id}
+         * @secure
+         */
+        apiV1WorkspacesLimitsByidDetail: (
+            workspaceId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+                any
+            >({
+                path: `/workspace/api/v1/workspaces/limits/byid/${workspaceId}`,
                 method: 'GET',
                 secure: true,
                 type: ContentType.Json,
@@ -6016,27 +4443,23 @@ export class Api<
             }),
 
         /**
-         * No description
+         * @description Get workspace with workspace id
          *
          * @tags workspace
-         * @name ApiV1WorkspacesLimitsByidDetail
-         * @summary Get workspace limits
-         * @request GET:/workspace/api/v1/workspaces/limits/byid/{workspace_id}
+         * @name ApiV1WorkspacesDetail
+         * @summary Get workspace for workspace service
+         * @request GET:/workspace/api/v1/workspaces/{workspace_id}
          * @secure
          */
-        apiV1WorkspacesLimitsByidDetail: (
+        apiV1WorkspacesDetail: (
             workspaceId: string,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-                any
-            >({
-                path: `/workspace/api/v1/workspaces/limits/byid/${workspaceId}`,
+            this.request<void, any>({
+                path: `/workspace/api/v1/workspaces/${workspaceId}`,
                 method: 'GET',
                 secure: true,
                 type: ContentType.Json,
-                format: 'json',
                 ...params,
             }),
     }

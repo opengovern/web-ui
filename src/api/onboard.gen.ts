@@ -2,12 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    AwsResources,
-    DescribeComplianceReportJob,
-    DescribeDescribeResourceJob,
-    DescribeDescribeSourceJob,
-    DescribeInsightJob,
-    DescribeSummarizerJob,
     GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
@@ -15,40 +9,23 @@ import {
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
     GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
@@ -56,6 +33,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
@@ -65,13 +43,9 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
@@ -188,16 +162,17 @@ export const useOnboardApiV1CatalogMetricsList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseOnboardApiV1ConnectionsUpdateState {
+interface IuseOnboardApiV1ConnectionGroupsListState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup[]
     error?: any
 }
 
-export const useOnboardApiV1ConnectionsUpdate = (
-    connectionId: string,
-    request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionRequest,
+export const useOnboardApiV1ConnectionGroupsList = (
+    query?: {
+        populateConnections?: boolean
+    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -212,12 +187,13 @@ export const useOnboardApiV1ConnectionsUpdate = (
         setWorkspace('keibi')
     }
 
-    const [state, setState] = useState<IuseOnboardApiV1ConnectionsUpdateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+    const [state, setState] =
+        useState<IuseOnboardApiV1ConnectionGroupsListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, request, params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -229,7 +205,100 @@ export const useOnboardApiV1ConnectionsUpdate = (
         })
         try {
             api.onboard
-                .apiV1ConnectionsUpdate(connectionId, request, params)
+                .apiV1ConnectionGroupsList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseOnboardApiV1ConnectionGroupsDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup
+    error?: any
+}
+
+export const useOnboardApiV1ConnectionGroupsDetail = (
+    connectionGroupName: string,
+    query?: {
+        populateConnections?: boolean
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseOnboardApiV1ConnectionGroupsDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([connectionGroupName, query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.onboard
+                .apiV1ConnectionGroupsDetail(connectionGroupName, query, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -259,198 +328,12 @@ export const useOnboardApiV1ConnectionsUpdate = (
     }
 
     if (
-        JSON.stringify([connectionId, request, params, autoExecute]) !==
+        JSON.stringify([connectionGroupName, query, params, autoExecute]) !==
         lastInput
     ) {
         setLastInput(
-            JSON.stringify([connectionId, request, params, autoExecute])
+            JSON.stringify([connectionGroupName, query, params, autoExecute])
         )
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1ConnectionsStateCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useOnboardApiV1ConnectionsStateCreate = (
-    connectionId: string,
-    request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1ConnectionsStateCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, request, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1ConnectionsStateCreate(connectionId, request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (
-        JSON.stringify([connectionId, request, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([connectionId, request, params, autoExecute])
-        )
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1ConnectionsCountListState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: number
-    error?: any
-}
-
-export const useOnboardApiV1ConnectionsCountList = (
-    type: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1ConnectionsCountListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([type, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1ConnectionsCountList(type, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([type, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([type, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -582,103 +465,6 @@ export const useOnboardApiV1ConnectionsSummaryList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseOnboardApiV1ConnectionsSummaryDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
-    error?: any
-}
-
-export const useOnboardApiV1ConnectionsSummaryDetail = (
-    connectionId: string,
-    query?: {
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1ConnectionsSummaryDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1ConnectionsSummaryDetail(connectionId, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (
-        JSON.stringify([connectionId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([connectionId, query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
 interface IuseOnboardApiV1ConnectorListState {
     isLoading: boolean
     isExecuted: boolean
@@ -749,95 +535,6 @@ export const useOnboardApiV1ConnectorList = (
 
     if (JSON.stringify([params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1ConnectorDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnector
-    error?: any
-}
-
-export const useOnboardApiV1ConnectorDetail = (
-    connectorName: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseOnboardApiV1ConnectorDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectorName, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1ConnectorDetail(connectorName, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([connectorName, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([connectorName, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1049,95 +746,6 @@ export const useOnboardApiV1CredentialCreate = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseOnboardApiV1CredentialDeleteState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useOnboardApiV1CredentialDelete = (
-    credentialId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseOnboardApiV1CredentialDeleteState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1CredentialDelete(credentialId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
 interface IuseOnboardApiV1CredentialDetailState {
     isLoading: boolean
     isExecuted: boolean
@@ -1322,6 +930,95 @@ export const useOnboardApiV1CredentialUpdate = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
+interface IuseOnboardApiV1CredentialDeleteState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: void
+    error?: any
+}
+
+export const useOnboardApiV1CredentialDelete = (
+    credentialId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseOnboardApiV1CredentialDeleteState>({
+        isLoading: true,
+        isExecuted: false,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([credentialId, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.onboard
+                .apiV1CredentialDelete(credentialId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
 interface IuseOnboardApiV1CredentialAutoonboardCreateState {
     isLoading: boolean
     isExecuted: boolean
@@ -1394,917 +1091,6 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
 
     if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([credentialId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1CredentialDisableCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useOnboardApiV1CredentialDisableCreate = (
-    credentialId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1CredentialDisableCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1CredentialDisableCreate(credentialId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1CredentialEnableCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useOnboardApiV1CredentialEnableCreate = (
-    credentialId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1CredentialEnableCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1CredentialEnableCreate(credentialId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1CredentialHealthcheckDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useOnboardApiV1CredentialHealthcheckDetail = (
-    credentialId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1CredentialHealthcheckDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1CredentialHealthcheckDetail(credentialId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1CredentialSourcesListListState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse
-    error?: any
-}
-
-export const useOnboardApiV1CredentialSourcesListList = (
-    query?: {
-        connector?: '' | 'AWS' | 'Azure'
-
-        credentialType?: (
-            | 'auto-azure'
-            | 'auto-aws'
-            | 'manual-aws-org'
-            | 'manual-azure-spn'
-        )[]
-
-        pageSize?: number
-
-        pageNumber?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1CredentialSourcesListListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1CredentialSourcesListList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1SourceDeleteState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useOnboardApiV1SourceDelete = (
-    sourceId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseOnboardApiV1SourceDeleteState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1SourceDelete(sourceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1SourceDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
-    error?: any
-}
-
-export const useOnboardApiV1SourceDetail = (
-    sourceId: number,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseOnboardApiV1SourceDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1SourceDetail(sourceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1SourceCredentialsDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential
-    error?: any
-}
-
-export const useOnboardApiV1SourceCredentialsDetail = (
-    sourceId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1SourceCredentialsDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1SourceCredentialsDetail(sourceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1SourceCredentialsUpdateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useOnboardApiV1SourceCredentialsUpdate = (
-    sourceId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1SourceCredentialsUpdateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1SourceCredentialsUpdate(sourceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1SourceHealthcheckCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
-    error?: any
-}
-
-export const useOnboardApiV1SourceHealthcheckCreate = (
-    sourceId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1SourceHealthcheckCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([sourceId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1SourceHealthcheckCreate(sourceId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseOnboardApiV1SourceAccountDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
-    error?: any
-}
-
-export const useOnboardApiV1SourceAccountDetail = (
-    accountId: number,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseOnboardApiV1SourceAccountDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([accountId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.onboard
-                .apiV1SourceAccountDetail(accountId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([accountId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([accountId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2501,17 +1287,15 @@ export const useOnboardApiV1SourceAzureCreate = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseOnboardApiV1SourcesListState {
+interface IuseOnboardApiV1SourceDeleteState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    response?: void
     error?: any
 }
 
-export const useOnboardApiV1SourcesList = (
-    query?: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-    },
+export const useOnboardApiV1SourceDelete = (
+    sourceId: string,
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -2526,12 +1310,12 @@ export const useOnboardApiV1SourcesList = (
         setWorkspace('keibi')
     }
 
-    const [state, setState] = useState<IuseOnboardApiV1SourcesListState>({
+    const [state, setState] = useState<IuseOnboardApiV1SourceDeleteState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([sourceId, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -2543,7 +1327,7 @@ export const useOnboardApiV1SourcesList = (
         })
         try {
             api.onboard
-                .apiV1SourcesList(query, params)
+                .apiV1SourceDelete(sourceId, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2572,8 +1356,8 @@ export const useOnboardApiV1SourcesList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2592,17 +1376,15 @@ export const useOnboardApiV1SourcesList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseOnboardApiV1SourcesCountListState {
+interface IuseOnboardApiV1SourceHealthcheckDetailState {
     isLoading: boolean
     isExecuted: boolean
-    response?: number
+    response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     error?: any
 }
 
-export const useOnboardApiV1SourcesCountList = (
-    query?: {
-        connector?: '' | 'AWS' | 'Azure'
-    },
+export const useOnboardApiV1SourceHealthcheckDetail = (
+    sourceId: string,
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -2617,12 +1399,13 @@ export const useOnboardApiV1SourcesCountList = (
         setWorkspace('keibi')
     }
 
-    const [state, setState] = useState<IuseOnboardApiV1SourcesCountListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+    const [state, setState] =
+        useState<IuseOnboardApiV1SourceHealthcheckDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([sourceId, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -2634,7 +1417,7 @@ export const useOnboardApiV1SourcesCountList = (
         })
         try {
             api.onboard
-                .apiV1SourcesCountList(query, params)
+                .apiV1SourceHealthcheckDetail(sourceId, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2663,8 +1446,8 @@ export const useOnboardApiV1SourcesCountList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([sourceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([sourceId, params, autoExecute]))
     }
 
     useEffect(() => {

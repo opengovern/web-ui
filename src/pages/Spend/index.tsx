@@ -13,8 +13,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import DateRangePicker from '../../components/DateRangePicker'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import {
-    useInventoryApiV2CostMetricList,
-    useInventoryApiV2ResourcesTagList,
+    useInventoryApiV2AnalyticsSpendMetricList,
+    useInventoryApiV2AnalyticsTagList,
 } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
 import TrendsTab from './Tabs/TrendsTab'
@@ -36,12 +36,16 @@ export default function Spend() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
-    const { response: inventoryCategories } = useInventoryApiV2ResourcesTagList(
-        {},
-        {
-            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-        }
-    )
+    const { response: inventoryCategories, isLoading: categoriesLoading } =
+        useInventoryApiV2AnalyticsTagList(
+            {
+                metricType: 'spend',
+            },
+            {
+                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+            }
+        )
+
     const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
         selectedResourceCategoryAtom
     )
@@ -67,7 +71,7 @@ export default function Spend() {
         pageNumber: 1,
     }
     const { response: serviceCostResponse, isLoading: serviceCostLoading } =
-        useInventoryApiV2CostMetricList(query)
+        useInventoryApiV2AnalyticsSpendMetricList(query)
 
     const { response: accountCostResponse, isLoading: accountCostLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -101,6 +105,9 @@ export default function Spend() {
                 { label: 'Storage', value: 'Storage' },
             ]
             return output
+        }
+        if (categoriesLoading) {
+            return [{ label: 'Loading', value: 'Loading' }]
         }
         if (!inventoryCategories?.category)
             return [{ label: 'no data', value: 'no data' }]
