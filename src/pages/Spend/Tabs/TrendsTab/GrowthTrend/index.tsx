@@ -2,9 +2,7 @@ import { Card, Flex, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import { priceDisplay } from '../../../../../utilities/numericDisplay'
-import {
-    useInventoryApiV2AnalyticsSpendTrendList,
-} from '../../../../../api/inventory.gen'
+import { useInventoryApiV2AnalyticsSpendTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
 import { IFilter, filterAtom, spendTimeAtom } from '../../../../../store'
@@ -168,12 +166,16 @@ export default function GrowthTrend() {
     }
     const { response: costTrend, isLoading } =
         useInventoryApiV2AnalyticsSpendTrendList(query)
-    const fixTime = (data: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[] | undefined) => {
+    const fixTime = (
+        data:
+            | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+            | undefined
+    ) => {
         const result: any[] = []
         if (data === undefined) {
             return result
         }
-        data.forEach(item => {
+        data.forEach((item) => {
             const temp: any = {}
             const title = isDemo()
                 ? 'all accounts'
@@ -181,7 +183,7 @@ export default function GrowthTrend() {
             temp[title] = item.count
             temp.date = dateDisplay(item.date)
             result.push(temp)
-        });
+        })
         return result
     }
 
