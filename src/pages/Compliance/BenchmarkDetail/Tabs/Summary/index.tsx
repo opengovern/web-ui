@@ -1,6 +1,5 @@
 import { BarChart, Card, Flex, Grid, Title } from '@tremor/react'
 import dayjs from 'dayjs'
-import { DateValue } from '@react-aria/datepicker'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
 import CardWithList from '../../../../../components/Cards/CardWithList'
 import Chart from '../../../../../components/Charts'
@@ -183,7 +182,7 @@ export default function Summary({
                     data={generateTopDetail()}
                 />
                 <Card>
-                    <Title>Summary</Title>
+                    <Title className="font-semibold">Summary</Title>
                     <BarChart
                         className="mt-4"
                         data={generateBarData(benchmarkTrend)}
@@ -210,7 +209,9 @@ export default function Summary({
                 </Card>
             </Grid>
             <Card>
-                <Title>Compliance Security Score Trend</Title>
+                <Title className="font-semibold">
+                    Compliance Security Score Trend
+                </Title>
                 <Chart
                     className="mt-4"
                     index="date"

@@ -16,6 +16,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'
 import { useRef } from 'react'
 import { Button, Flex, Title } from '@tremor/react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
+import dayjs from 'dayjs'
 import { AWSIcon, AzureIcon } from '../../icons/icons'
 import {
     numberGroupedDisplay,
@@ -51,6 +52,7 @@ interface IProps<TData, TValue> {
     downloadable?: boolean
     title?: string
     children?: any
+    options?: any
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -63,6 +65,7 @@ export default function Table<TData = any, TValue = any>({
     downloadable = false,
     title,
     children,
+    options,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
     const visibility = useRef<Map<string, boolean> | undefined>(undefined)
@@ -135,9 +138,11 @@ export default function Table<TData = any, TValue = any>({
                 }
                 v.valueFormatter = (param) => {
                     if (param.value) {
-                        return new Date(
-                            Date.parse(String(param.value))
-                        ).toLocaleDateString()
+                        return dayjs(
+                            Number(param.value)
+                                ? param.value * 1000
+                                : param.value
+                        ).format('MMM DD, YYYY')
                     }
                     return ''
                 }
@@ -197,6 +202,7 @@ export default function Table<TData = any, TValue = any>({
             ],
             defaultToolPanel: '',
         },
+        ...options,
     }
 
     return (

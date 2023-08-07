@@ -1,12 +1,6 @@
-import { AgGridReact } from 'ag-grid-react'
-import React, { useEffect, useRef, useState } from 'react'
-import {
-    CellClickedEvent,
-    ColDef,
-    GridOptions,
-    ICellRendererParams,
-} from 'ag-grid-community'
-import { Button, Flex, Title } from '@tremor/react'
+import { useEffect, useState } from 'react'
+import { CellClickedEvent, ICellRendererParams } from 'ag-grid-community'
+import { Button, Flex } from '@tremor/react'
 import {
     useComplianceApiV1AssignmentsBenchmarkDetail,
     useComplianceApiV1AssignmentsConnectionCreate,
@@ -14,16 +8,18 @@ import {
 } from '../../../../../api/compliance.gen'
 import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource } from '../../../../../api/api'
+import Table, { IColumn } from '../../../../../components/Table'
 
 interface IAssignments {
     id: string | undefined
 }
 
-const columns: ColDef[] = [
+const columns: IColumn<any, any>[] = [
     {
-        width: 50,
+        flex: 0.5,
         sortable: true,
         filter: true,
+        type: 'string',
         cellStyle: { padding: 0 },
         cellRenderer: (params: ICellRendererParams) => {
             return (
@@ -44,6 +40,7 @@ const columns: ColDef[] = [
     {
         field: 'providerConnectionName',
         headerName: 'Connection Name',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -52,6 +49,7 @@ const columns: ColDef[] = [
     {
         field: 'connectionID',
         headerName: 'Connection ID',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -60,6 +58,7 @@ const columns: ColDef[] = [
     {
         headerName: 'Enable',
         sortable: true,
+        type: 'string',
         filter: true,
         resizable: true,
         flex: 0.5,
@@ -91,7 +90,6 @@ const columns: ColDef[] = [
 ]
 
 export default function Assignments({ id }: IAssignments) {
-    const gridRef = useRef<AgGridReact>(null)
     const [connection, setConnection] = useState<any>(null)
     const [status, setStatus] = useState<any>(null)
 
@@ -124,65 +122,51 @@ export default function Assignments({ id }: IAssignments) {
         setStatus(null)
     }, [connection, status])
 
-    const gridOptions: GridOptions = {
-        columnDefs: columns,
-        pagination: true,
-        animateRows: true,
-        paginationPageSize: 25,
-        async onCellClicked(
-            event: CellClickedEvent<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource>
-        ) {
-            if (event.colDef.headerName === 'Enable') {
-                setConnection(event.data?.connectionID)
-                if (event.data?.status) {
-                    setStatus('enable')
-                } else {
-                    setStatus('disable')
-                }
-            }
-        },
-        getRowHeight: (params) => 50,
-    }
-
     return (
-        <>
-            <Flex className="mb-4">
-                <Title>Assignments</Title>
-                <Flex justifyContent="end" className="gap-x-2">
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            setConnection('all')
-                            setStatus('enable')
-                        }}
-                    >
-                        Disable All
-                    </Button>
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            setConnection('all')
-                            setStatus('disable')
-                        }}
-                    >
-                        Enable All
-                    </Button>
-                </Flex>
-            </Flex>
-            <div className="ag-theme-alpine w-full">
-                <AgGridReact
-                    ref={gridRef}
-                    domLayout="autoHeight"
-                    gridOptions={gridOptions}
-                    rowData={
-                        assignments?.sort(
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            (a, b) => b.status - a.status
-                        ) || []
+        <Table
+            title="Assignmnets"
+            id="compliance_assignments"
+            columns={columns}
+            onCellClicked={(
+                event: CellClickedEvent<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource>
+            ) => {
+                if (event.colDef.headerName === 'Enable') {
+                    setConnection(event.data?.connectionID)
+                    if (event.data?.status) {
+                        setStatus('enable')
+                    } else {
+                        setStatus('disable')
                     }
-                />
-            </div>
-        </>
+                }
+            }}
+            rowData={
+                assignments?.sort(
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    (a, b) => b.status - a.status
+                ) || []
+            }
+        >
+            <Flex justifyContent="end" className="gap-x-2">
+                <Button
+                    variant="secondary"
+                    onClick={() => {
+                        setConnection('all')
+                        setStatus('enable')
+                    }}
+                >
+                    Disable All
+                </Button>
+                <Button
+                    variant="secondary"
+                    onClick={() => {
+                        setConnection('all')
+                        setStatus('disable')
+                    }}
+                >
+                    Enable All
+                </Button>
+            </Flex>
+        </Table>
     )
 }
