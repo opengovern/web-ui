@@ -1,9 +1,6 @@
 import { useAtomValue } from 'jotai'
 import Composition from '../../../../components/Cards/Composition'
-import {
-    useInventoryApiV2AnalyticsSpendCompositionList,
-    useInventoryApiV2CostCompositionList,
-} from '../../../../api/inventory.gen'
+import { useInventoryApiV2AnalyticsSpendCompositionList } from '../../../../api/inventory.gen'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse } from '../../../../api/api'
 import { filterAtom, spendTimeAtom } from '../../../../store'
