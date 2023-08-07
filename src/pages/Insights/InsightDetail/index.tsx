@@ -4,7 +4,6 @@ import {
     Callout,
     Card,
     Flex,
-    Icon,
     Select,
     SelectItem,
     Subtitle,
@@ -19,7 +18,6 @@ import { AgGridReact } from 'ag-grid-react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
-import { getLocalTimeZone } from '@internationalized/date'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
     useComplianceApiV1InsightDetail,
@@ -55,6 +53,12 @@ const chartData = (inputData: any) => {
         }
     }
     return data
+}
+
+const generateType = (input: any) => {
+    if (Number(Date.parse(input))) return 'date'
+    if (Number(input)) return 'number'
+    return 'string'
 }
 
 const insightsHeadersToColumns = (headers: any) => {
@@ -307,7 +311,7 @@ export default function InsightDetail() {
                                             alignItems="start"
                                             className="ml-3"
                                         >
-                                            <Title className="whitespace-nowrap">
+                                            <Title className="font-semibold whitespace-nowrap">
                                                 {insightDetail?.shortTitle}
                                             </Title>
                                             <Text>
@@ -323,7 +327,7 @@ export default function InsightDetail() {
                                             className="m-3"
                                         >
                                             {!!insightDetail?.totalResultValue && (
-                                                <Title className="mr-1">
+                                                <Title className="font-semibold mr-1">
                                                     {numberGroupedDisplay(
                                                         insightDetail?.totalResultValue ||
                                                             0
@@ -346,7 +350,7 @@ export default function InsightDetail() {
                         </Flex>
                     </Flex>
                     <Card>
-                        <Title>Insight count</Title>
+                        <Title className="font-semibold">Insight count</Title>
                         <Chart
                             className="mt-4 h-80"
                             index="date"
@@ -358,7 +362,7 @@ export default function InsightDetail() {
                         />
                     </Card>
                     <Flex flexDirection="row" className="mt-6">
-                        <Title>Results</Title>
+                        <Title className="font-semibold">Results</Title>
                         <Flex className="w-1/3">
                             <Select
                                 className="mr-4"
