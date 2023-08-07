@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import {
     Flex,
     Tab,
@@ -10,6 +10,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
+import { useEffect, useState } from 'react'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import { filterAtom, timeAtom } from '../../../store'
 import Breadcrumbs from '../../../components/Breadcrumbs'
@@ -24,6 +25,8 @@ import Spinner from '../../../components/Spinner'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 
 export default function BenchmarkDetail() {
+    const [selectedTab, setSelectedTab] = useState(0)
+    const tabs = useLocation().hash
     const navigate = useNavigate()
     const { id } = useParams()
 
@@ -43,6 +46,23 @@ export default function BenchmarkDetail() {
         },
         { name: 'Benchmark Detail', path: '', current: true },
     ]
+
+    useEffect(() => {
+        switch (tabs) {
+            case '#policies':
+                setSelectedTab(1)
+                break
+            case '#assignments':
+                setSelectedTab(2)
+                break
+            case '#findings':
+                setSelectedTab(3)
+                break
+            default:
+                setSelectedTab(0)
+                break
+        }
+    }, [tabs])
 
     return (
         <LoggedInLayout currentPage="benchmarks">
@@ -73,12 +93,23 @@ export default function BenchmarkDetail() {
                             {benchmarkDetail?.description}
                         </Text>
                     </Flex>
-                    <TabGroup>
+                    <TabGroup
+                        index={selectedTab}
+                        onIndexChange={setSelectedTab}
+                    >
                         <TabList>
-                            <Tab>Summary</Tab>
-                            <Tab>Policies</Tab>
-                            <Tab>Assignments</Tab>
-                            <Tab>Findings</Tab>
+                            <Tab onClick={() => navigate('#summary')}>
+                                Summary
+                            </Tab>
+                            <Tab onClick={() => navigate('#policies')}>
+                                Policies
+                            </Tab>
+                            <Tab onClick={() => navigate('#assignments')}>
+                                Assignments
+                            </Tab>
+                            <Tab onClick={() => navigate('#findings')}>
+                                Findings
+                            </Tab>
                         </TabList>
                         <TabPanels className="mt-6">
                             <TabPanel>
