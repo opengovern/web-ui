@@ -1,11 +1,9 @@
-import { AgGridReact } from 'ag-grid-react'
-import { useRef } from 'react'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
-import { Badge, Button, Flex, Title } from '@tremor/react'
-import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
+import { GridOptions, ICellRendererParams } from 'ag-grid-community'
+import { Badge, Flex } from '@tremor/react'
 import { useComplianceApiV1BenchmarksTreeDetail } from '../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
 import { dateDisplay } from '../../../../../utilities/dateDisplay'
+import Table, { IColumn } from '../../../../../components/Table'
 
 interface IPolicies {
     id: string | undefined
@@ -74,10 +72,11 @@ const renderStatus = (status: any) => {
     return ''
 }
 
-const columns: ColDef[] = [
+const columns: IColumn<any, any>[] = [
     {
         field: 'severity',
         width: 120,
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -94,6 +93,7 @@ const columns: ColDef[] = [
     {
         field: 'status',
         width: 100,
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -109,25 +109,17 @@ const columns: ColDef[] = [
     },
     {
         field: 'lastChecked',
+        type: 'date',
         width: 120,
-        valueFormatter: (param: any) => {
-            if (param.value) {
-                return dateDisplay(param.value * 1000)
-            }
-            return ''
-        },
     },
 ]
 
 export default function Policies({ id }: IPolicies) {
-    const gridRef = useRef<AgGridReact>(null)
-
     const { response: policies } = useComplianceApiV1BenchmarksTreeDetail(
         String(id)
     )
 
     const gridOptions: GridOptions = {
-        columnDefs: columns,
         autoGroupColumnDef: {
             headerName: 'Title',
             flex: 2,
@@ -139,51 +131,19 @@ export default function Policies({ id }: IPolicies) {
             },
         },
         treeData: true,
-        animateRows: true,
         getDataPath: (data: any) => {
             return data.path.split('/')
-        },
-        sideBar: {
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    toolPanel: 'agFiltersToolPanel',
-                },
-            ],
-            defaultToolPanel: '',
         },
     }
 
     return (
-        <>
-            <Flex className="mb-4">
-                <Title>Policies</Title>
-                <Button
-                    variant="secondary"
-                    onClick={() => gridRef?.current?.api.exportDataAsCsv()}
-                    icon={ArrowDownOnSquareIcon}
-                >
-                    Download
-                </Button>
-            </Flex>
-            <div className="ag-theme-alpine w-full">
-                <AgGridReact
-                    ref={gridRef}
-                    domLayout="autoHeight"
-                    rowData={rows(policies)}
-                    gridOptions={gridOptions}
-                />
-            </div>
-        </>
+        <Table
+            title="Policies"
+            downloadable
+            id="compliance_policies"
+            columns={columns}
+            rowData={rows(policies)}
+            options={gridOptions}
+        />
     )
 }
