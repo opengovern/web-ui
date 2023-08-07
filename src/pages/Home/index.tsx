@@ -148,7 +148,7 @@ export default function Home() {
             </Grid>
             <Card>
                 <Flex>
-                    <Title>Growth Trend</Title>
+                    <Title className="font-semibold">Growth Trend</Title>
                     <TabGroup className="w-fit rounded-lg">
                         <TabList variant="solid">
                             <Tab

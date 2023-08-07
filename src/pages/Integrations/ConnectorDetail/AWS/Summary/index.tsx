@@ -49,7 +49,7 @@ export default function AWSSummary({
                     numericDisplay(
                         isDemo()
                             ? MockData.discoveredAWSAccounts
-                            : accountsSummary?.connectionCount
+                            : accountsSummary?.totalDiscoveredCount
                     )
                 )}
                 loading={accountLoading}

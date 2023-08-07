@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -1373,8 +1374,8 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesRe
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
-    /** @example "Azure" */
-    connector?: SourceType
+    /** @example ["Azure"] */
+    connector?: SourceType[]
     /** @example "microsoft.compute/disks" */
     cost_dimension_name?: string
     /**
@@ -1796,6 +1797,8 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     /** @example "johndoe@example.com" */
     email?: string
     healthReason?: string
+    /** @example "healthy" */
+    healthState?: SourceHealthStatus
     /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
     id?: string
     /** @example "2023-05-07T00:00:00Z" */
@@ -1832,11 +1835,19 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest 
     state?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup {
+    connections?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    /** @example "UltraSightApplication" */
+    name?: string
+    /** @example "SELECT kaytu_id FROM kaytu_connections WHERE tags->'application' IS NOT NULL AND tags->'application' @> '"UltraSight"'" */
+    query?: string
+}
+
 export enum GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState {
     ConnectionLifecycleStateOnboard = 'ONBOARD',
-    ConnectionLifecycleStateNotOnboard = 'NOT_ONBOARD',
+    ConnectionLifecycleStateDisabled = 'DISABLED',
+    ConnectionLifecycleStateDiscovered = 'DISCOVERED',
     ConnectionLifecycleStateInProgress = 'IN_PROGRESS',
-    ConnectionLifecycleStateUnhealthy = 'UNHEALTHY',
     ConnectionLifecycleStateArchived = 'ARCHIVED',
 }
 
@@ -1920,6 +1931,12 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
     connectorType?: SourceType
     /** @example "manual-aws-org" */
     credentialType?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredentialType
+    /**
+     * @min 0
+     * @max 100
+     * @example 50
+     */
+    discovered_connections?: number
     /** @example true */
     enabled?: boolean
     /**
@@ -1994,6 +2011,12 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryRe
      * @example 10
      */
     totalDisabledCount?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalDiscoveredCount?: number
     /**
      * @min 0
      * @max 1000000
@@ -3835,13 +3858,20 @@ export class Api<
          * @request GET:/inventory/api/v2/analytics/categories
          * @secure
          */
-        apiV2AnalyticsCategoriesList: (params: RequestParams = {}) =>
+        apiV2AnalyticsCategoriesList: (
+            query?: {
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
+            },
+            params: RequestParams = {}
+        ) =>
             this.request<
                 GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
                 any
             >({
                 path: `/inventory/api/v2/analytics/categories`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -3860,6 +3890,8 @@ export class Api<
         apiV2AnalyticsCompositionDetail: (
             key: string,
             query: {
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
                 /** How many top values to return default is 5 */
                 top: number
                 /** Connector types to filter by */
@@ -3899,6 +3931,8 @@ export class Api<
             query?: {
                 /** Key-Value tags in key=value format to filter by */
                 tag?: string[]
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Connection IDs to filter by */
@@ -3975,6 +4009,47 @@ export class Api<
             }),
 
         /**
+         * @description This API allows users to retrieve cost metrics with respect to specified filters. The API returns information such as the total cost and costs per each service based on the specified filters.
+         *
+         * @tags inventory
+         * @name ApiV2AnalyticsSpendMetricList
+         * @summary List spend metrics
+         * @request GET:/inventory/api/v2/analytics/spend/metric
+         * @secure
+         */
+        apiV2AnalyticsSpendMetricList: (
+            query?: {
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** timestamp for start in epoch seconds */
+                startTime?: string
+                /** timestamp for end in epoch seconds */
+                endTime?: string
+                /** Sort by field - default is cost */
+                sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
+                /** page size - default is 20 */
+                pageSize?: number
+                /** page number - default is 1 */
+                pageNumber?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+                any
+            >({
+                path: `/inventory/api/v2/analytics/spend/metric`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description This API allows users to retrieve a list of tag keys with their possible values for all analytic metrics.
          *
          * @tags analytics
@@ -3993,6 +4068,8 @@ export class Api<
                 minCount?: number
                 /** End time in unix timestamp format, default now */
                 endTime?: number
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
             },
             params: RequestParams = {}
         ) =>
@@ -4019,6 +4096,8 @@ export class Api<
             query?: {
                 /** Key-Value tags in key=value format to filter by */
                 tag?: string[]
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
                 /** Metric IDs to filter by */
                 ids?: string[]
                 /** Connector type to filter by */
@@ -4329,6 +4408,63 @@ export class Api<
                 path: `/onboard/api/v1/catalog/metrics`,
                 method: 'GET',
                 secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns a list of connection groups
+         *
+         * @tags connection-groups
+         * @name ApiV1ConnectionGroupsList
+         * @summary List connection groups
+         * @request GET:/onboard/api/v1/connection-groups
+         * @secure
+         */
+        apiV1ConnectionGroupsList: (
+            query?: {
+                /**
+                 * Populate connections
+                 * @default false
+                 */
+                populateConnections?: boolean
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup[],
+                any
+            >({
+                path: `/onboard/api/v1/connection-groups`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns a connection group
+         *
+         * @tags connection-groups
+         * @name ApiV1ConnectionGroupsDetail
+         * @summary Get connection group
+         * @request GET:/onboard/api/v1/connection-groups/{connectionGroupName}
+         * @secure
+         */
+        apiV1ConnectionGroupsDetail: (
+            connectionGroupName: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
+                any
+            >({
+                path: `/onboard/api/v1/connection-groups/${connectionGroupName}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
                 format: 'json',
                 ...params,
             }),
@@ -5090,23 +5226,6 @@ export class Api<
             }),
 
         /**
-         * @description Triggers a describe job to run immediately
-         *
-         * @tags describe
-         * @name ApiV0DescribeTriggerList
-         * @summary Triggers a describe job to run immediately
-         * @request GET:/schedule/api/v0/describe/trigger
-         * @secure
-         */
-        apiV0DescribeTriggerList: (params: RequestParams = {}) =>
-            this.request<void, any>({
-                path: `/schedule/api/v0/describe/trigger`,
-                method: 'GET',
-                secure: true,
-                ...params,
-            }),
-
-        /**
          * @description Triggers an insight job to run immediately
          *
          * @tags describe
@@ -5269,16 +5388,47 @@ export class Api<
          * @tags describe
          * @name ApiV1DescribeTriggerUpdate
          * @summary Triggers a describe job to run immediately
-         * @request PUT:/schedule/api/v1/describe/trigger/{connection_id}
+         * @request PUT:/schedule/api/v1/describe/trigger
          * @secure
          */
         apiV1DescribeTriggerUpdate: (
+            query: {
+                /** Resource Type */
+                resource_type: string[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/schedule/api/v1/describe/trigger`,
+                method: 'PUT',
+                query: query,
+                secure: true,
+                ...params,
+            }),
+
+        /**
+         * @description Triggers a describe job to run immediately
+         *
+         * @tags describe
+         * @name ApiV1DescribeTriggerUpdate2
+         * @summary Triggers a describe job to run immediately
+         * @request PUT:/schedule/api/v1/describe/trigger/{connection_id}
+         * @originalName apiV1DescribeTriggerUpdate
+         * @duplicate
+         * @secure
+         */
+        apiV1DescribeTriggerUpdate2: (
             connectionId: string,
+            query: {
+                /** Resource Type */
+                resource_type: string[]
+            },
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
                 path: `/schedule/api/v1/describe/trigger/${connectionId}`,
                 method: 'PUT',
+                query: query,
                 secure: true,
                 ...params,
             }),

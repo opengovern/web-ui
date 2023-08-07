@@ -27,13 +27,16 @@ export default function AzureSummary({
     subscriptionsSummary,
     subscriptionsLoading,
 }: IAzureSummary) {
+    console.log(subscriptionsSummary)
     return (
         <Grid numItems={2} numItemsLg={3} className="w-full gap-4 mt-6 mb-10">
             <SummaryCard
                 title="Discovered Azure Subscriptions"
                 metric={String(
                     numericDisplay(
-                        isDemo() ? 10 : subscriptionsSummary?.connectionCount
+                        isDemo()
+                            ? 10
+                            : subscriptionsSummary?.totalDiscoveredCount
                     )
                 )}
                 loading={subscriptionsLoading}
@@ -58,13 +61,10 @@ export default function AzureSummary({
             />
             <SummaryCard
                 title="Billing Accounts"
-                metric={numberDisplay(
-                    isDemo()
-                        ? 10
-                        : (subscriptionsSummary?.connectionCount || 0) -
-                              (subscriptionsSummary?.totalUnhealthyCount || 0),
+                metric={`$${numberDisplay(
+                    isDemo() ? 10 : subscriptionsSummary?.totalCost,
                     0
-                )}
+                )}`}
                 loading={principalsLoading}
             />
             <SummaryCard
