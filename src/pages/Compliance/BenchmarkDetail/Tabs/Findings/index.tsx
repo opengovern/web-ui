@@ -1,18 +1,11 @@
-import { AgGridReact } from 'ag-grid-react'
-import { useRef, useState } from 'react'
-import {
-    ColDef,
-    GridOptions,
-    ICellRendererParams,
-    RowClickedEvent,
-} from 'ag-grid-community'
+import { useState } from 'react'
+import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { Badge, Flex, Title } from '@tremor/react'
-import dayjs from 'dayjs'
 import { useComplianceApiV1FindingsCreate } from '../../../../../api/compliance.gen'
 import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../components/RenderObject'
-import { dateDisplay } from '../../../../../utilities/dateDisplay'
+import Table, { IColumn } from '../../../../../components/Table'
 
 interface IFinder {
     id: string | undefined
@@ -35,11 +28,12 @@ const renderBadge = (severity: any) => {
     return ''
 }
 
-const columns: ColDef[] = [
+const columns: IColumn<any, any>[] = [
     {
         width: 50,
         sortable: true,
         filter: true,
+        type: 'string',
         cellStyle: { padding: 0 },
         cellRenderer: (params: ICellRendererParams) => {
             return (
@@ -60,6 +54,7 @@ const columns: ColDef[] = [
     {
         field: 'policyID',
         headerName: 'Policy ID',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -68,6 +63,7 @@ const columns: ColDef[] = [
     {
         field: 'connectionID',
         headerName: 'Connection ID',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -76,6 +72,7 @@ const columns: ColDef[] = [
     {
         field: 'resourceID',
         headerName: 'Resource ID',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -84,6 +81,7 @@ const columns: ColDef[] = [
     {
         field: 'severity',
         headerName: 'Severity',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -101,6 +99,7 @@ const columns: ColDef[] = [
     {
         field: 'reason',
         headerName: 'Reason',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
@@ -109,21 +108,15 @@ const columns: ColDef[] = [
     {
         field: 'evaluatedAt',
         headerName: 'Evaluation Date',
+        type: 'date',
         sortable: true,
         filter: true,
         resizable: true,
-        valueFormatter: (param) => {
-            if (param.value) {
-                return dateDisplay(param.value)
-            }
-            return ''
-        },
         flex: 1,
     },
 ]
 
 export default function Findings({ id, connections }: IFinder) {
-    const gridRef = useRef<AgGridReact>(null)
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
 
@@ -141,25 +134,18 @@ export default function Findings({ id, connections }: IFinder) {
         },
     })
 
-    const gridOptions: GridOptions = {
-        columnDefs: columns,
-        pagination: true,
-        animateRows: true,
-        paginationPageSize: 25,
-        getRowHeight: (params) => 50,
-        onRowClicked(event: RowClickedEvent<any>) {
-            setFinding(event.data)
-            setOpen(true)
-        },
-    }
-
     return (
-        <div className="ag-theme-alpine w-full">
-            <AgGridReact
-                ref={gridRef}
-                domLayout="autoHeight"
-                gridOptions={gridOptions}
+        <>
+            <Table
+                title="Findings"
+                downloadable
+                id="compliance_findings"
+                columns={columns}
                 rowData={findings?.findings || []}
+                onCellClicked={(event: RowClickedEvent<any>) => {
+                    setFinding(event.data)
+                    setOpen(true)
+                }}
             />
             <DrawerPanel
                 open={open}
@@ -169,6 +155,6 @@ export default function Findings({ id, connections }: IFinder) {
                 <Title>Summary</Title>
                 <RenderObject obj={finding} />
             </DrawerPanel>
-        </div>
+        </>
     )
 }
