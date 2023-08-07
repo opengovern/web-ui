@@ -96,6 +96,12 @@ export default function Compliance() {
                                 )}
                         </Grid>
                         <Divider />
+                        {!!benchmarkList(benchmarks?.benchmarkSummary)
+                            .notConnected.length && (
+                            <Title className="font-semibold mb-4">
+                                Not Assigned
+                            </Title>
+                        )}
                         <Grid
                             numItems={1}
                             numItemsMd={2}
