@@ -40,7 +40,7 @@ export default function BenchmarkDetail() {
         {
             name: 'Compliance',
             path: () => {
-                navigate(-1)
+                navigate('./..')
             },
             current: false,
         },
