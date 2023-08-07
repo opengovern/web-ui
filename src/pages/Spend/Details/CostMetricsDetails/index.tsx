@@ -262,7 +262,7 @@ export default function CostMetricsDetails() {
         {
             name: 'Spend',
             path: () => {
-                navigate(-1)
+                navigate('./..')
             },
             current: false,
         },

@@ -128,7 +128,7 @@ export default function ResourceMetricsDetails() {
         {
             name: 'Assets',
             path: () => {
-                navigate(-1)
+                navigate('./..')
             },
             current: false,
         },
