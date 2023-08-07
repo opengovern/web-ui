@@ -2,12 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    AwsResources,
-    DescribeComplianceReportJob,
-    DescribeDescribeResourceJob,
-    DescribeDescribeSourceJob,
-    DescribeInsightJob,
-    DescribeSummarizerJob,
     GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
@@ -15,40 +9,23 @@ import {
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
     GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiComplianceReport,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSingleResourceRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiDescribeSource,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiInsightJob,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiListBenchmarkEvaluationsRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiResourceTypeDetail,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerBenchmarkEvaluationRequest,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiTriggerInsightEvaluationRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
@@ -56,6 +33,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
@@ -65,13 +43,9 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredential,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionCountRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnector,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
@@ -373,6 +347,9 @@ interface IuseInventoryApiV2AnalyticsCategoriesListState {
 }
 
 export const useInventoryApiV2AnalyticsCategoriesList = (
+    query?: {
+        metricType?: 'assets' | 'spend'
+    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -393,7 +370,7 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -405,7 +382,7 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
         })
         try {
             api.inventory
-                .apiV2AnalyticsCategoriesList(params)
+                .apiV2AnalyticsCategoriesList(query, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -434,8 +411,8 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
         }
     }
 
-    if (JSON.stringify([params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -464,11 +441,15 @@ interface IuseInventoryApiV2AnalyticsCompositionDetailState {
 export const useInventoryApiV2AnalyticsCompositionDetail = (
     key: string,
     query: {
+        metricType?: 'assets' | 'spend'
+
         top: number
 
         connector?: ('' | 'AWS' | 'Azure')[]
 
         connectionId?: string[]
+
+        connectionGroup?: string
 
         endTime?: string
 
@@ -566,9 +547,13 @@ export const useInventoryApiV2AnalyticsMetricList = (
     query?: {
         tag?: string[]
 
+        metricType?: 'assets' | 'spend'
+
         connector?: ('' | 'AWS' | 'Azure')[]
 
         connectionId?: string[]
+
+        connectionGroup?: string
 
         metricIDs?: string[]
 
@@ -678,6 +663,8 @@ export const useInventoryApiV2AnalyticsRegionsSummaryList = (
 
         connectionId?: string[]
 
+        connectionGroup?: string
+
         startTime?: number
 
         endTime?: number
@@ -769,6 +756,422 @@ export const useInventoryApiV2AnalyticsRegionsSummaryList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
+interface IuseInventoryApiV2AnalyticsSpendCompositionListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
+    error?: any
+}
+
+export const useInventoryApiV2AnalyticsSpendCompositionList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        connectionGroup?: string
+
+        top?: number
+
+        startTime?: string
+
+        endTime?: string
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2AnalyticsSpendCompositionListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2AnalyticsSpendCompositionList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2AnalyticsSpendMetricListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse
+    error?: any
+}
+
+export const useInventoryApiV2AnalyticsSpendMetricList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        connectionGroup?: string
+
+        startTime?: string
+
+        endTime?: string
+
+        sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
+
+        pageSize?: number
+
+        pageNumber?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2AnalyticsSpendMetricListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2AnalyticsSpendMetricList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2AnalyticsSpendMetricsTrendListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint[]
+    error?: any
+}
+
+export const useInventoryApiV2AnalyticsSpendMetricsTrendList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        metricIds?: string[]
+
+        connectionGroup?: string
+
+        startTime?: string
+
+        endTime?: string
+
+        datapointCount?: string
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2AnalyticsSpendMetricsTrendListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2AnalyticsSpendMetricsTrendList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2AnalyticsSpendTrendListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+    error?: any
+}
+
+export const useInventoryApiV2AnalyticsSpendTrendList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        metricIds?: string[]
+
+        connectionGroup?: string
+
+        startTime?: string
+
+        endTime?: string
+
+        datapointCount?: string
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2AnalyticsSpendTrendListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2AnalyticsSpendTrendList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
 interface IuseInventoryApiV2AnalyticsTagListState {
     isLoading: boolean
     isExecuted: boolean
@@ -782,9 +1185,13 @@ export const useInventoryApiV2AnalyticsTagList = (
 
         connectionId?: string[]
 
+        connectionGroup?: string
+
         minCount?: number
 
         endTime?: number
+
+        metricType?: 'assets' | 'spend'
     },
     params: RequestParams = {},
     autoExecute = true
@@ -879,11 +1286,15 @@ export const useInventoryApiV2AnalyticsTrendList = (
     query?: {
         tag?: string[]
 
+        metricType?: 'assets' | 'spend'
+
         ids?: string[]
 
         connector?: ('' | 'AWS' | 'Azure')[]
 
         connectionId?: string[]
+
+        connectionGroup?: string
 
         startTime?: string
 
@@ -985,6 +1396,8 @@ export const useInventoryApiV2CostCompositionList = (
 
         connectionId?: string[]
 
+        connectionGroup?: string
+
         top?: number
 
         startTime?: string
@@ -1084,6 +1497,8 @@ export const useInventoryApiV2CostMetricList = (
         connector?: ('' | 'AWS' | 'Azure')[]
 
         connectionId?: string[]
+
+        connectionGroup?: string
 
         startTime?: string
 
@@ -1188,6 +1603,8 @@ export const useInventoryApiV2CostTrendList = (
 
         connectionId?: string[]
 
+        connectionGroup?: string
+
         startTime?: string
 
         endTime?: string
@@ -1285,6 +1702,8 @@ export const useInventoryApiV2ResourcesMetricDetail = (
     resourceType: string,
     query?: {
         connectionId?: string[]
+
+        connectionGroup?: string
 
         endTime?: string
 
@@ -1386,6 +1805,8 @@ export const useInventoryApiV2ResourcesTagList = (
 
         connectionId?: string[]
 
+        connectionGroup?: string
+
         minCount?: number
 
         endTime?: number
@@ -1486,6 +1907,8 @@ export const useInventoryApiV2ServicesCostTrendList = (
         connector?: ('' | 'AWS' | 'Azure')[]
 
         connectionId?: string[]
+
+        connectionGroup?: string
 
         startTime?: string
 
