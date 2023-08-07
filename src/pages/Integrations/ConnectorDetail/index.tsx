@@ -1,6 +1,6 @@
 import { Flex, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useAtomValue } from 'jotai/index'
+import { useAtomValue } from 'jotai'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
     useOnboardApiV1ConnectionsSummaryList,
@@ -810,8 +810,6 @@ export default function ConnectorDetail() {
         },
         { name: connector, path: '', current: true },
     ]
-    console.log('accounts', accounts)
-    console.log('credentials', credentials)
     return (
         <LoggedInLayout currentPage="integration">
             <Flex flexDirection="col" alignItems="start">

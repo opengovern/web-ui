@@ -1,3 +1,5 @@
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import Organizations from './Organizations'
 import AccountList from './AccountList'
@@ -13,11 +15,23 @@ interface IAWS {
 }
 
 export default function AWSTabs({ accounts, organizations, loading }: IAWS) {
+    const [selectedTab, setSelectedTab] = useState(0)
+    const navigate = useNavigate()
+    const tabs = useLocation().hash
+    useEffect(() => {
+        if (tabs === '#organizations') {
+            setSelectedTab(1)
+        } else {
+            setSelectedTab(0)
+        }
+    }, [tabs])
     return (
-        <TabGroup>
+        <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
             <TabList className="mb-3">
-                <Tab>AWS Accounts</Tab>
-                <Tab>Organizations</Tab>
+                <Tab onClick={() => navigate('#accounts')}>AWS Accounts</Tab>
+                <Tab onClick={() => navigate('#organizations')}>
+                    Organizations
+                </Tab>
             </TabList>
             <TabPanels>
                 <TabPanel>
