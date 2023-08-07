@@ -158,9 +158,13 @@ const generateRows = (data: any) => {
     const rows = []
     if (data) {
         for (let i = 0; i < data.length; i += 1) {
-            // eslint-disable-next-line no-param-reassign
-            data[i].type = snakeCaseToLabel(data[i].metadata.account_type || '')
-            rows.push(data[i])
+            if (data[i].metadata) {
+                // eslint-disable-next-line no-param-reassign
+                data[i].type = snakeCaseToLabel(
+                    data[i].metadata.account_type || ''
+                )
+                rows.push(data[i])
+            }
         }
     }
     return rows
