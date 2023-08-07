@@ -15,7 +15,7 @@ interface IFinder {
 const renderBadge = (severity: any) => {
     if (severity) {
         if (severity === 'low') {
-            return <Badge color="lime">Low</Badge>
+            return <Badge color="blue">Low</Badge>
         }
         if (severity === 'medium') {
             return <Badge color="yellow">Medium</Badge>

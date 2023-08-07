@@ -200,7 +200,7 @@ export default function Summary({
                             'rose',
                             'orange',
                             'yellow',
-                            'lime',
+                            'blue',
                             'emerald',
                             'slate',
                         ]}
