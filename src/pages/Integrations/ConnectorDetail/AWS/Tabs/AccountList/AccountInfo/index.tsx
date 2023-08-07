@@ -117,7 +117,13 @@ export default function AccountInfo({
         isExecuted: isDiscoverExecuted,
         isLoading: isDiscoverLoading,
         sendNow: discoverNow,
-    } = useScheduleApiV1DescribeTriggerUpdate(data?.id || '', {}, false)
+    } = useScheduleApiV1DescribeTriggerUpdate(
+        {
+            resource_type: data?.id ? [data?.id] : [''],
+        },
+        {},
+        false
+    )
 
     useEffect(() => {
         if (isDeleteExecuted && !isDeleteLoading) {
