@@ -16,8 +16,8 @@ import SummaryCard from '../../components/Cards/SummaryCard'
 import { numberDisplay, priceDisplay } from '../../utilities/numericDisplay'
 import {
     useInventoryApiV2AnalyticsMetricList,
+    useInventoryApiV2AnalyticsSpendTrendList,
     useInventoryApiV2AnalyticsTrendList,
-    useInventoryApiV2CostTrendList,
 } from '../../api/inventory.gen'
 import Spinner from '../../components/Spinner'
 import Chart from '../../components/Charts'
@@ -47,7 +47,7 @@ export default function Home() {
     const { response: resourcesTrend, isLoading: resourceTrendLoading } =
         useInventoryApiV2AnalyticsTrendList()
     const { response: costTrend, isLoading: costTrendLoading } =
-        useInventoryApiV2CostTrendList()
+        useInventoryApiV2AnalyticsSpendTrendList()
 
     const resourceTrendData = () => {
         return (

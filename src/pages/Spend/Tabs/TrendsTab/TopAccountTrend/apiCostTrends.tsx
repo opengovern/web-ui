@@ -12,7 +12,7 @@ interface ConnectionTrend {
     trend: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
 }
 
-const apiV2CostTrendConnections = (
+const apiV2AnalyticsSpendTrendList = (
     api: Api<any>,
     connectionIDs?: string[],
     query?: {
@@ -29,7 +29,7 @@ const apiV2CostTrendConnections = (
     return Promise.all(
         connectionIDs.map((connectionId) => {
             return api.inventory
-                .apiV2CostTrendList(
+                .apiV2AnalyticsSpendTrendList(
                     { ...query, connectionId: [connectionId] },
                     params
                 )
@@ -89,7 +89,7 @@ export const useInventoryApiV2CostTrendConnections = (
             isExecuted: true,
         })
         try {
-            apiV2CostTrendConnections(api, connectionIDs, query, params)
+            apiV2AnalyticsSpendTrendList(api, connectionIDs, query, params)
                 .then((resp) => {
                     setState({
                         ...state,

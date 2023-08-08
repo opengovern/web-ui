@@ -2,15 +2,16 @@ import { Card, Flex, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
 import { priceDisplay } from '../../../../../utilities/numericDisplay'
-import { useInventoryApiV2CostTrendList } from '../../../../../api/inventory.gen'
+import { useInventoryApiV2AnalyticsSpendTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
-import { filterAtom, spendTimeAtom } from '../../../../../store'
+import { IFilter, filterAtom, spendTimeAtom } from '../../../../../store'
 import { badgeDelta } from '../../../../../utilities/deltaType'
 import { dateDisplay } from '../../../../../utilities/dateDisplay'
 import { isDemo } from '../../../../../utilities/demo'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../../../../api/api'
 
-const getConnections = (con: any) => {
+const getConnections = (con: IFilter) => {
     if (con.provider.length) {
         return con.provider
     }
@@ -164,23 +165,25 @@ export default function GrowthTrend() {
         }),
     }
     const { response: costTrend, isLoading } =
-        useInventoryApiV2CostTrendList(query)
-    const fixTime = (data: any) => {
-        const result: any = []
+        useInventoryApiV2AnalyticsSpendTrendList(query)
+    const fixTime = (
+        data:
+            | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+            | undefined
+    ) => {
+        const result: any[] = []
         if (data === undefined) {
             return result
         }
-        const keys = Object.keys(data)
-        for (let j = 0; j < keys.length; j += 1) {
-            const item = keys[j]
+        data.forEach((item) => {
             const temp: any = {}
             const title = isDemo()
                 ? 'all accounts'
                 : getConnections(selectedConnections)
-            temp[title] = data[item].count
-            temp.date = dateDisplay(data[item].date)
+            temp[title] = item.count
+            temp.date = dateDisplay(item.date)
             result.push(temp)
-        }
+        })
         return result
     }
 

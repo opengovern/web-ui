@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import GrowthTrend from './GrowthTrend'
 import TopAccountTrend from './TopAccountTrend'
 import TopServiceTrend from './TopServiceTrend'
-import { useInventoryApiV2CostMetricList } from '../../../../api/inventory.gen'
+import { useInventoryApiV2AnalyticsSpendMetricList } from '../../../../api/inventory.gen'
 import { filterAtom, spendTimeAtom } from '../../../../store'
 import CardWithList from '../../../../components/Cards/CardWithList'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
@@ -153,7 +153,7 @@ export default function TrendsTab({ categories }: IProps) {
     })
 
     const { response: topServices, isLoading: isLoadingTopServices } =
-        useInventoryApiV2CostMetricList({
+        useInventoryApiV2AnalyticsSpendMetricList({
             ...(selectedConnections.provider && {
                 connector: [selectedConnections.provider],
             }),
@@ -173,7 +173,7 @@ export default function TrendsTab({ categories }: IProps) {
     const {
         response: topGrowingServices,
         isLoading: isLoadingTopGrowingServices,
-    } = useInventoryApiV2CostMetricList({
+    } = useInventoryApiV2AnalyticsSpendMetricList({
         ...(selectedConnections.provider && {
             connector: [selectedConnections.provider],
         }),

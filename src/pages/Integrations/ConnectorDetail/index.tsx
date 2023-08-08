@@ -1,6 +1,6 @@
 import { Flex, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useAtomValue } from 'jotai/index'
+import { useAtomValue } from 'jotai'
 import LoggedInLayout from '../../../components/LoggedInLayout'
 import {
     useOnboardApiV1ConnectionsSummaryList,
@@ -804,7 +804,7 @@ export default function ConnectorDetail() {
         {
             name: 'Integrations',
             path: () => {
-                navigate(-1)
+                navigate('./..')
             },
             current: false,
         },

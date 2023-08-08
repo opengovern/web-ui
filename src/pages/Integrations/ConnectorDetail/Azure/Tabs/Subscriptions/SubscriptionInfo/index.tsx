@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import dayjs from 'dayjs'
 import {
     useOnboardApiV1SourceDelete,
-    useOnboardApiV1SourceHealthcheckCreate,
+    useOnboardApiV1SourceHealthcheckDetail,
 } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
@@ -45,7 +45,7 @@ export default function SubscriptionInfo({
         isExecuted: isHealthCheckExecuted,
         isLoading: isHealthCheckLoading,
         sendNow: runHealthCheckNow,
-    } = useOnboardApiV1SourceHealthcheckCreate(data?.id || '', {}, false)
+    } = useOnboardApiV1SourceHealthcheckDetail(data?.id || '', {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,

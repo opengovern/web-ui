@@ -1,6 +1,6 @@
 import { Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
-import { useAtomValue } from 'jotai/index'
+import { useAtomValue } from 'jotai'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
 import { filterAtom } from '../../../../store'
 import SingleAccount from './SingleAccount'
@@ -17,7 +17,7 @@ export default function AccountsDetails() {
         {
             name: 'Assets',
             path: () => {
-                navigate(-1)
+                navigate('./..')
             },
             current: false,
         },

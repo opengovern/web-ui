@@ -96,7 +96,7 @@ export default function ServicesDetails() {
         {
             name: 'Assets',
             path: () => {
-                navigate(-1)
+                navigate('./..')
             },
             current: false,
         },

@@ -2,7 +2,16 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
@@ -14,115 +23,64 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiQuery,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
 
-interface IuseComplianceApiV1AssignmentsListState {
+interface IuseComplianceApiV1AssignmentsBenchmarkDetailState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[]
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource[]
     error?: any
 }
 
-export const useComplianceApiV1AssignmentsList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseComplianceApiV1AssignmentsListState>(
-        {
-            isLoading: true,
-            isExecuted: false,
-        }
-    )
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1AssignmentsList(params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1AssignmentsConnectionDeleteState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useComplianceApiV1AssignmentsConnectionDelete = (
+export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     benchmarkId: string,
-    connectionId: string,
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -138,12 +96,12 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
     }
 
     const [state, setState] =
-        useState<IuseComplianceApiV1AssignmentsConnectionDeleteState>({
+        useState<IuseComplianceApiV1AssignmentsBenchmarkDetailState>({
             isLoading: true,
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, connectionId, params, autoExecute])
+        JSON.stringify([benchmarkId, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -155,11 +113,7 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
         })
         try {
             api.compliance
-                .apiV1AssignmentsConnectionDelete(
-                    benchmarkId,
-                    connectionId,
-                    params
-                )
+                .apiV1AssignmentsBenchmarkDetail(benchmarkId, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -188,13 +142,8 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, connectionId, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([benchmarkId, connectionId, params, autoExecute])
-        )
+    if (JSON.stringify([benchmarkId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -313,104 +262,15 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseComplianceApiV1AssignmentsBenchmarkDetailState {
+interface IuseComplianceApiV1AssignmentsConnectionDeleteState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource[]
+    response?: void
     error?: any
 }
 
-export const useComplianceApiV1AssignmentsBenchmarkDetail = (
+export const useComplianceApiV1AssignmentsConnectionDelete = (
     benchmarkId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1AssignmentsBenchmarkDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1AssignmentsBenchmarkDetail(benchmarkId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([benchmarkId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1AssignmentsConnectionDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[]
-    error?: any
-}
-
-export const useComplianceApiV1AssignmentsConnectionDetail = (
     connectionId: string,
     params: RequestParams = {},
     autoExecute = true
@@ -427,12 +287,12 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
     }
 
     const [state, setState] =
-        useState<IuseComplianceApiV1AssignmentsConnectionDetailState>({
+        useState<IuseComplianceApiV1AssignmentsConnectionDeleteState>({
             isLoading: true,
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, params, autoExecute])
+        JSON.stringify([benchmarkId, connectionId, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -444,7 +304,11 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
         })
         try {
             api.compliance
-                .apiV1AssignmentsConnectionDetail(connectionId, params)
+                .apiV1AssignmentsConnectionDelete(
+                    benchmarkId,
+                    connectionId,
+                    params
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -473,8 +337,13 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
         }
     }
 
-    if (JSON.stringify([connectionId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, params, autoExecute]))
+    if (
+        JSON.stringify([benchmarkId, connectionId, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([benchmarkId, connectionId, params, autoExecute])
+        )
     }
 
     useEffect(() => {
@@ -493,103 +362,21 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseComplianceApiV1BenchmarksListState {
+interface IuseComplianceApiV1BenchmarksSummaryListState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark[]
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse
     error?: any
 }
 
-export const useComplianceApiV1BenchmarksList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
+export const useComplianceApiV1BenchmarksSummaryList = (
+    query?: {
+        connectionId?: string[]
 
-    const api = new Api()
-    api.instance = AxiosAPI
+        connector?: ('' | 'AWS' | 'Azure')[]
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseComplianceApiV1BenchmarksListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1BenchmarksList(params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1BenchmarksDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark
-    error?: any
-}
-
-export const useComplianceApiV1BenchmarksDetail = (
-    benchmarkId: string,
+        timeAt?: number
+    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -605,12 +392,12 @@ export const useComplianceApiV1BenchmarksDetail = (
     }
 
     const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksDetailState>({
+        useState<IuseComplianceApiV1BenchmarksSummaryListState>({
             isLoading: true,
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -622,7 +409,7 @@ export const useComplianceApiV1BenchmarksDetail = (
         })
         try {
             api.compliance
-                .apiV1BenchmarksDetail(benchmarkId, params)
+                .apiV1BenchmarksSummaryList(query, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -651,98 +438,8 @@ export const useComplianceApiV1BenchmarksDetail = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1BenchmarksPoliciesDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy[]
-    error?: any
-}
-
-export const useComplianceApiV1BenchmarksPoliciesDetail = (
-    benchmarkId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksPoliciesDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1BenchmarksPoliciesDetail(benchmarkId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([benchmarkId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1033,192 +730,6 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
         JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
     ) {
         setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1BenchmarksPoliciesDetail2State {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy
-    error?: any
-}
-
-export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
-    policyId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksPoliciesDetail2State>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([policyId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1BenchmarksPoliciesDetail2(policyId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([policyId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([policyId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1BenchmarksSummaryListState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse
-    error?: any
-}
-
-export const useComplianceApiV1BenchmarksSummaryList = (
-    query?: {
-        connectionId?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        timeAt?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksSummaryListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1BenchmarksSummaryList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1548,6 +1059,106 @@ export const useComplianceApiV1InsightList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
+interface IuseComplianceApiV1InsightGroupListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup[]
+    error?: any
+}
+
+export const useComplianceApiV1InsightGroupList = (
+    query?: {
+        tag?: string[]
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        startTime?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1InsightGroupListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.compliance
+                .apiV1InsightGroupList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
 interface IuseComplianceApiV1InsightDetailState {
     isLoading: boolean
     isExecuted: boolean
@@ -1743,404 +1354,6 @@ export const useComplianceApiV1InsightTrendDetail = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseComplianceApiV1InsightGroupListState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup[]
-    error?: any
-}
-
-export const useComplianceApiV1InsightGroupList = (
-    query?: {
-        tag?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1InsightGroupListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1InsightGroupList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1InsightGroupDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup
-    error?: any
-}
-
-export const useComplianceApiV1InsightGroupDetail = (
-    insightGroupId: string,
-    query?: {
-        connectionId?: string[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1InsightGroupDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightGroupId, query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1InsightGroupDetail(insightGroupId, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (
-        JSON.stringify([insightGroupId, query, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([insightGroupId, query, params, autoExecute])
-        )
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1InsightGroupTrendDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroupTrendResponse
-    error?: any
-}
-
-export const useComplianceApiV1InsightGroupTrendDetail = (
-    insightGroupId: string,
-    query?: {
-        connectionId?: string[]
-
-        startTime?: number
-
-        endTime?: number
-
-        datapointCount?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1InsightGroupTrendDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightGroupId, query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1InsightGroupTrendDetail(insightGroupId, query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (
-        JSON.stringify([insightGroupId, query, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([insightGroupId, query, params, autoExecute])
-        )
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1MetadataInsightListState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[]
-    error?: any
-}
-
-export const useComplianceApiV1MetadataInsightList = (
-    query?: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1MetadataInsightListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1MetadataInsightList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
 interface IuseComplianceApiV1MetadataInsightDetailState {
     isLoading: boolean
     isExecuted: boolean
@@ -2302,185 +1515,6 @@ export const useComplianceApiV1MetadataTagInsightList = (
 
     if (JSON.stringify([params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1MetadataTagInsightDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: string[]
-    error?: any
-}
-
-export const useComplianceApiV1MetadataTagInsightDetail = (
-    key: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1MetadataTagInsightDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1MetadataTagInsightDetail(key, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([key, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([key, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1QueriesDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiQuery
-    error?: any
-}
-
-export const useComplianceApiV1QueriesDetail = (
-    queryId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseComplianceApiV1QueriesDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([queryId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1QueriesDetail(queryId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([queryId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([queryId, params, autoExecute]))
     }
 
     useEffect(() => {

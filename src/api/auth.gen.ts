@@ -9,28 +9,78 @@ import {
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
     GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiMembership,
     GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser,
-    GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
     GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
 
-interface IuseAuthApiV1KeyDetailState {
+interface IuseAuthApiV1KeyCreateCreateState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
+    response?: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse
     error?: any
 }
 
-export const useAuthApiV1KeyDetail = (
-    id: string,
+export const useAuthApiV1KeyCreateCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -45,12 +95,12 @@ export const useAuthApiV1KeyDetail = (
         setWorkspace('keibi')
     }
 
-    const [state, setState] = useState<IuseAuthApiV1KeyDetailState>({
+    const [state, setState] = useState<IuseAuthApiV1KeyCreateCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([id, params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -62,7 +112,7 @@ export const useAuthApiV1KeyDetail = (
         })
         try {
             api.auth
-                .apiV1KeyDetail(id, params)
+                .apiV1KeyCreateCreate(request, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -91,97 +141,8 @@ export const useAuthApiV1KeyDetail = (
         }
     }
 
-    if (JSON.stringify([id, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([id, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseAuthApiV1KeyActivateCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
-    error?: any
-}
-
-export const useAuthApiV1KeyActivateCreate = (
-    id: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1KeyActivateCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([id, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1KeyActivateCreate(id, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([id, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([id, params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -289,273 +250,6 @@ export const useAuthApiV1KeyDeleteDelete = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAuthApiV1KeySuspendCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
-    error?: any
-}
-
-export const useAuthApiV1KeySuspendCreate = (
-    id: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1KeySuspendCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([id, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1KeySuspendCreate(id, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([id, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([id, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseAuthApiV1KeyCreateCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse
-    error?: any
-}
-
-export const useAuthApiV1KeyCreateCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1KeyCreateCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1KeyCreateCreate(request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseAuthApiV1KeyRoleCreateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
-    error?: any
-}
-
-export const useAuthApiV1KeyRoleCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgAuthApiUpdateKeyRoleRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1KeyRoleCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1KeyRoleCreate(request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
 interface IuseAuthApiV1KeysListState {
     isLoading: boolean
     isExecuted: boolean
@@ -644,631 +338,6 @@ export const useAuthApiV1KeysList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAuthApiV1RoleKeysDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey[]
-    error?: any
-}
-
-export const useAuthApiV1RoleKeysDetail = (
-    roleName: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1RoleKeysDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([roleName, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1RoleKeysDetail(roleName, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([roleName, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([roleName, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseAuthApiV1RoleUsersDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiRoleUser[]
-    error?: any
-}
-
-export const useAuthApiV1RoleUsersDetail = (
-    roleName: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1RoleUsersDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([roleName, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1RoleUsersDetail(roleName, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([roleName, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([roleName, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseAuthApiV1RolesListState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiRolesListResponse[]
-    error?: any
-}
-
-export const useAuthApiV1RolesList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1RolesListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1RolesList(params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseAuthApiV1RolesDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiRoleDetailsResponse
-    error?: any
-}
-
-export const useAuthApiV1RolesDetail = (
-    roleName: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1RolesDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([roleName, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1RolesDetail(roleName, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([roleName, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([roleName, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseAuthApiV1UserDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse
-    error?: any
-}
-
-export const useAuthApiV1UserDetail = (
-    userId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1UserDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([userId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1UserDetail(userId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([userId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([userId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseAuthApiV1UserWorkspaceMembershipDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAuthApiMembership[]
-    error?: any
-}
-
-export const useAuthApiV1UserWorkspaceMembershipDetail = (
-    userId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] =
-        useState<IuseAuthApiV1UserWorkspaceMembershipDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([userId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1UserWorkspaceMembershipDetail(userId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([userId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([userId, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseAuthApiV1UserInviteDeleteState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useAuthApiV1UserInviteDelete = (
-    query: {
-        userId: string
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1UserInviteDeleteState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1UserInviteDelete(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
 interface IuseAuthApiV1UserInviteCreateState {
     isLoading: boolean
     isExecuted: boolean
@@ -1310,6 +379,97 @@ export const useAuthApiV1UserInviteCreate = (
         try {
             api.auth
                 .apiV1UserInviteCreate(request, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseAuthApiV1UserRoleBindingUpdateState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: void
+    error?: any
+}
+
+export const useAuthApiV1UserRoleBindingUpdate = (
+    request: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseAuthApiV1UserRoleBindingUpdateState>(
+        {
+            isLoading: true,
+            isExecuted: false,
+        }
+    )
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([request, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.auth
+                .apiV1UserRoleBindingUpdate(request, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1451,97 +611,6 @@ export const useAuthApiV1UserRoleBindingDelete = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAuthApiV1UserRoleBindingUpdateState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: void
-    error?: any
-}
-
-export const useAuthApiV1UserRoleBindingUpdate = (
-    request: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('keibi')
-    }
-
-    const [state, setState] = useState<IuseAuthApiV1UserRoleBindingUpdateState>(
-        {
-            isLoading: true,
-            isExecuted: false,
-        }
-    )
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.auth
-                .apiV1UserRoleBindingUpdate(request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
 interface IuseAuthApiV1UserRoleBindingsListState {
     isLoading: boolean
     isExecuted: boolean
@@ -1612,6 +681,95 @@ export const useAuthApiV1UserRoleBindingsList = (
 
     if (JSON.stringify([params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseAuthApiV1UserDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse
+    error?: any
+}
+
+export const useAuthApiV1UserDetail = (
+    userId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] = useState<IuseAuthApiV1UserDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([userId, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.auth
+                .apiV1UserDetail(userId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([userId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([userId, params, autoExecute]))
     }
 
     useEffect(() => {

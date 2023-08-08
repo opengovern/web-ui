@@ -12,12 +12,12 @@ import dayjs from 'dayjs'
 import {
     useOnboardApiV1CredentialDetail,
     useOnboardApiV1SourceDelete,
-    useOnboardApiV1SourceHealthcheckCreate,
+    useOnboardApiV1SourceHealthcheckDetail,
 } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
-import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/schedule.gen'
 import { RenderObject } from '../../../../../../../components/RenderObject'
+import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/schedule.gen'
 
 interface IAccInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
@@ -111,7 +111,7 @@ export default function AccountInfo({
         isExecuted: isHealthCheckExecuted,
         isLoading: isHealthCheckLoading,
         sendNow: runHealthCheckNow,
-    } = useOnboardApiV1SourceHealthcheckCreate(data?.id || '', {}, false)
+    } = useOnboardApiV1SourceHealthcheckDetail(data?.id || '', {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,

@@ -20,8 +20,8 @@ import {
     spendTimeAtom,
 } from '../../../../store'
 import {
-    useInventoryApiV2CostMetricList,
-    useInventoryApiV2ResourcesTagList,
+    useInventoryApiV2AnalyticsSpendMetricList,
+    useInventoryApiV2AnalyticsTagList,
 } from '../../../../api/inventory.gen'
 import Spinner from '../../../../components/Spinner'
 import DateRangePicker from '../../../../components/DateRangePicker'
@@ -205,7 +205,7 @@ export default function CostMetricsDetails() {
     const provider: ('' | 'AWS' | 'Azure')[] = [selectedConnections.provider]
 
     const { response: serviceMetrics, isLoading: serviceMetricsLoading } =
-        useInventoryApiV2CostMetricList({
+        useInventoryApiV2AnalyticsSpendMetricList({
             ...(selectedConnections.provider && {
                 connector: provider,
             }),
@@ -242,9 +242,12 @@ export default function CostMetricsDetails() {
         })
 
     const { response: inventoryCategories, isLoading: categoriesLoading } =
-        useInventoryApiV2ResourcesTagList()
+        useInventoryApiV2AnalyticsTagList()
 
     const categoryOptions = useMemo(() => {
+        if (categoriesLoading) {
+            return [{ label: 'Loading', value: 'Loading' }]
+        }
         if (!inventoryCategories?.category)
             return [{ label: 'no data', value: 'no data' }]
         return [{ label: 'All Categories', value: 'All Categories' }].concat(
@@ -259,7 +262,7 @@ export default function CostMetricsDetails() {
         {
             name: 'Spend',
             path: () => {
-                navigate(-1)
+                navigate('./..')
             },
             current: false,
         },
