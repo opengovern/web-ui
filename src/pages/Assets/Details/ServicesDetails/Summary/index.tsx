@@ -51,7 +51,6 @@ export default function Summary({
         endTime: String(activeTimeRange.end.unix()),
         sortBy: 'growth_rate',
     })
-    console.log(topFastestServices)
 
     return (
         <Flex flexDirection="col" className="mt-6">

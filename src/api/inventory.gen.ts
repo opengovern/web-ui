@@ -1189,6 +1189,8 @@ export const useInventoryApiV2AnalyticsTagList = (
 
         minCount?: number
 
+        startTime?: number
+
         endTime?: number
 
         metricType?: 'assets' | 'spend'

@@ -33,7 +33,9 @@ export default function AzureSummary({
                 title="Discovered Azure Subscriptions"
                 metric={String(
                     numericDisplay(
-                        isDemo() ? 10 : subscriptionsSummary?.connectionCount
+                        isDemo()
+                            ? 10
+                            : subscriptionsSummary?.totalDiscoveredCount
                     )
                 )}
                 loading={subscriptionsLoading}
@@ -58,13 +60,10 @@ export default function AzureSummary({
             />
             <SummaryCard
                 title="Billing Accounts"
-                metric={numberDisplay(
-                    isDemo()
-                        ? 10
-                        : (subscriptionsSummary?.connectionCount || 0) -
-                              (subscriptionsSummary?.totalUnhealthyCount || 0),
+                metric={`$${numberDisplay(
+                    isDemo() ? 10 : subscriptionsSummary?.totalCost,
                     0
-                )}
+                )}`}
                 loading={principalsLoading}
             />
             <SummaryCard

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Button, Flex, Grid, Title } from '@tremor/react'
-import { useAtomValue } from 'jotai'
 import LoggedInLayout from '../../components/LoggedInLayout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
@@ -28,7 +27,9 @@ export default function Workspaces() {
                 <Flex justifyContent="center" flexDirection="row">
                     <div className="max-w-6xl w-2/3">
                         <Flex flexDirection="row" className="mb-6">
-                            <Title>Your Workspaces</Title>
+                            <Title className="font-semibold">
+                                Your Workspaces
+                            </Title>
                             <Button
                                 variant="secondary"
                                 onClick={() => setOpenDrawer(true)}

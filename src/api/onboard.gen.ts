@@ -365,7 +365,14 @@ export const useOnboardApiV1ConnectionsSummaryList = (
 
         connectionId?: string[]
 
-        lifecycleState?: string
+        lifecycleState?:
+            | 'DISABLED'
+            | 'DISCOVERED'
+            | 'IN_PROGRESS'
+            | 'ONBOARD'
+            | 'ARCHIVED'
+
+        healthState?: 'healthy' | 'unhealthy'
 
         pageSize?: number
 

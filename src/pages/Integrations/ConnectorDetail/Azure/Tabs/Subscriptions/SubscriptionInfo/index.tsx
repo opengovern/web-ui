@@ -52,11 +52,13 @@ export default function SubscriptionInfo({
         isLoading: isDiscoverLoading,
         sendNow: discoverNow,
     } = useScheduleApiV1DescribeTriggerUpdate(
-        data?.id || '',
-        { resource_type: [] },
+        {
+            resource_type: data?.id ? [data?.id] : [''],
+        },
         {},
         false
     )
+
     useEffect(() => {
         if (isDeleteExecuted && !isDeleteLoading) {
             onClose()

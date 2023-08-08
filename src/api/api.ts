@@ -2201,11 +2201,11 @@ export class Api<
     }
     compliance = {
         /**
-         * @description Returns all benchmark assigned sources with benchmark id
+         * @description Retrieving all benchmark assigned sources with benchmark id
          *
          * @tags benchmarks_assignment
          * @name ApiV1AssignmentsBenchmarkDetail
-         * @summary Get all benchmark assigned sources with benchmark id
+         * @summary Get benchmark assigned sources
          * @request GET:/compliance/api/v1/assignments/benchmark/{benchmark_id}
          * @secure
          */
@@ -2226,11 +2226,11 @@ export class Api<
             }),
 
         /**
-         * @description Returns benchmark assignment which insert
+         * @description Creating a benchmark assignment for a connection.
          *
          * @tags benchmarks_assignment
          * @name ApiV1AssignmentsConnectionCreate
-         * @summary Create benchmark assignment for inventory service
+         * @summary Create benchmark assignment
          * @request POST:/compliance/api/v1/assignments/{benchmark_id}/connection/{connection_id}
          * @secure
          */
@@ -2256,7 +2256,7 @@ export class Api<
          *
          * @tags benchmarks_assignment
          * @name ApiV1AssignmentsConnectionDelete
-         * @summary Delete benchmark assignment for inventory service
+         * @summary Delete benchmark assignment
          * @request DELETE:/compliance/api/v1/assignments/{benchmark_id}/connection/{connection_id}
          * @secure
          */
@@ -2274,7 +2274,7 @@ export class Api<
             }),
 
         /**
-         * @description This API enables users to retrieve a summary of all benchmarks and their associated checks and results within a specified time interval. Users can use this API to obtain an overview of all benchmarks, including their names, descriptions, and other relevant information, as well as the checks and their corresponding results within the specified time period.
+         * @description Retrieving a summary of all benchmarks and their associated checks and results within a specified time interval.
          *
          * @tags compliance
          * @name ApiV1BenchmarksSummaryList
@@ -2307,7 +2307,7 @@ export class Api<
             }),
 
         /**
-         * @description This API enables users to retrieve a summary of a benchmark and its associated checks and results. Users can use this API to obtain an overview of the benchmark, including its name, description, and other relevant information, as well as the checks and their corresponding results.
+         * @description Retrieving a summary of a benchmark and its associated checks and results.
          *
          * @tags compliance
          * @name ApiV1BenchmarksSummaryDetail
@@ -2341,7 +2341,7 @@ export class Api<
             }),
 
         /**
-         * @description This API retrieves the benchmark tree, including all of its child benchmarks. Users can use this API to obtain a comprehensive overview of the benchmarks within a particular category or hierarchy.
+         * @description Retrieving the benchmark tree, including all of its child benchmarks.
          *
          * @tags compliance
          * @name ApiV1BenchmarksTreeDetail
@@ -2366,7 +2366,7 @@ export class Api<
             }),
 
         /**
-         * @description This API enables users to retrieve a trend of a benchmark result and checks
+         * @description Retrieving a trend of a benchmark result and checks.
          *
          * @tags compliance
          * @name ApiV1BenchmarksTrendDetail
@@ -2402,7 +2402,7 @@ export class Api<
             }),
 
         /**
-         * @description This API enables users to retrieve all compliance run findings with respect to filters. Users can use this API to obtain a list of all compliance run findings that match specific filters, such as compliance run ID, resource ID, results, and other relevant parameters.
+         * @description Retrieving all compliance run findings with respect to filters.
          *
          * @tags compliance
          * @name ApiV1FindingsCreate
@@ -2428,7 +2428,7 @@ export class Api<
             }),
 
         /**
-         * @description This API enables users to retrieve the top field by finding count.
+         * @description Retrieving the top field by finding count.
          *
          * @tags compliance
          * @name ApiV1FindingsTopDetail
@@ -2464,7 +2464,7 @@ export class Api<
             }),
 
         /**
-         * @description This API returns a list of insights based on specified filters. The API provides details of insights, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
+         * @description Retrieving list of insights based on specified filters. Provides details of insights, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
          *
          * @tags insights
          * @name ApiV1InsightList
@@ -2500,7 +2500,7 @@ export class Api<
             }),
 
         /**
-         * @description This API returns a list of insight groups based on specified filters. The API provides details of insights, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
+         * @description Retrieving list of insight groups based on specified filters. The API provides details of insights, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
          *
          * @tags insights
          * @name ApiV1InsightGroupList
@@ -2537,7 +2537,7 @@ export class Api<
             }),
 
         /**
-         * @description This API returns the specified insight with ID. The API provides details of the insight, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
+         * @description Retrieving the specified insight with ID. Provides details of the insight, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
          *
          * @tags insights
          * @name ApiV1InsightDetail
@@ -2570,7 +2570,7 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve insight results datapoints for a specified connection during a specified time period. Returns "all:provider" job results if connectionId is not defined.
+         * @description Retrieving insight results datapoints for a specified connection during a specified time period. Returns "all:provider" job results if connectionId is not defined.
          *
          * @tags insights
          * @name ApiV1InsightTrendDetail
@@ -2605,7 +2605,7 @@ export class Api<
             }),
 
         /**
-         * @description Get insight metadata by id
+         * @description Retrieving insight metadata by id
          *
          * @tags insights
          * @name ApiV1MetadataInsightDetail
@@ -2629,7 +2629,7 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve a list of insights tag keys with their possible values.
+         * @description Retrieving a list of insights tag keys with their possible values.
          *
          * @tags insights
          * @name ApiV1MetadataTagInsightList
@@ -2648,7 +2648,7 @@ export class Api<
             }),
 
         /**
-         * @description This API syncs queries with the git backend.
+         * @description Syncs queries with the git backend.
          *
          * @tags compliance
          * @name ApiV1QueriesSyncList
@@ -2667,7 +2667,7 @@ export class Api<
     }
     inventory = {
         /**
-         * @description Listing smart queries by specified filters
+         * @description Retrieving list of smart queries by specified filters
          *
          * @tags smart_query
          * @name ApiV1QueryList
@@ -2697,7 +2697,7 @@ export class Api<
          *
          * @tags smart_query
          * @name ApiV1QueryRunCreate
-         * @summary Run provided smart query and returns the result
+         * @summary Run query
          * @request POST:/inventory/api/v1/query/run
          * @secure
          */
@@ -2719,11 +2719,11 @@ export class Api<
             }),
 
         /**
-         * @description Get recently ran queries.
+         * @description List queries which have been run recently
          *
          * @tags smart_query
          * @name ApiV1QueryRunHistoryList
-         * @summary Get recently ran queries
+         * @summary List recently ran queries
          * @request GET:/inventory/api/v1/query/run/history
          * @secure
          */
@@ -2740,7 +2740,7 @@ export class Api<
             }),
 
         /**
-         * @description Returns list of categories for analytics summary
+         * @description Retrieving list of categories for analytics
          *
          * @tags analytics
          * @name ApiV2AnalyticsCategoriesList
@@ -2769,7 +2769,7 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve tag values with the most resources for the given key.
+         * @description Retrieving tag values with the most resources for the given key.
          *
          * @tags analytics
          * @name ApiV2AnalyticsCompositionDetail
@@ -2811,7 +2811,7 @@ export class Api<
             }),
 
         /**
-         * @description Get list of analytics with metrics of each type based on the given input filters.
+         * @description Retrieving list of analytics with metrics of each type based on the given input filters.
          *
          * @tags analytics
          * @name ApiV2AnalyticsMetricList
@@ -2862,7 +2862,7 @@ export class Api<
             }),
 
         /**
-         * @description Returns list of regions analytics summary
+         * @description Retrieving list of regions analytics summary
          *
          * @tags analytics
          * @name ApiV2AnalyticsRegionsSummaryList
@@ -2905,9 +2905,9 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve the cost composition with respect to specified filters. The API returns information such as the total cost for the given time range, and the top services by cost.
+         * @description Retrieving the cost composition with respect to specified filters. Retrieving information such as the total cost for the given time range, and the top services by cost.
          *
-         * @tags inventory
+         * @tags analytics
          * @name ApiV2AnalyticsSpendCompositionList
          * @summary List cost composition
          * @request GET:/inventory/api/v2/analytics/spend/composition
@@ -2944,9 +2944,9 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve cost metrics with respect to specified filters. The API returns information such as the total cost and costs per each service based on the specified filters.
+         * @description Retrieving cost metrics with respect to specified filters. The API returns information such as the total cost and costs per each service based on the specified filters.
          *
-         * @tags inventory
+         * @tags analytics
          * @name ApiV2AnalyticsSpendMetricList
          * @summary List spend metrics
          * @request GET:/inventory/api/v2/analytics/spend/metric
@@ -2987,9 +2987,9 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
+         * @description Retrieving a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
          *
-         * @tags inventory
+         * @tags analytics
          * @name ApiV2AnalyticsSpendMetricsTrendList
          * @summary Get Cost Trend
          * @request GET:/inventory/api/v2/analytics/spend/metrics/trend
@@ -3028,9 +3028,9 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
+         * @description Retrieving a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
          *
-         * @tags inventory
+         * @tags analytics
          * @name ApiV2AnalyticsSpendTrendList
          * @summary Get Cost Trend
          * @request GET:/inventory/api/v2/analytics/spend/trend
@@ -3069,7 +3069,7 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve a list of tag keys with their possible values for all analytic metrics.
+         * @description Retrieving a list of tag keys with their possible values for all analytic metrics.
          *
          * @tags analytics
          * @name ApiV2AnalyticsTagList
@@ -3085,8 +3085,10 @@ export class Api<
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string
-                /** Minimum number of resources with this tag value, default 1 */
+                /** Minimum number of resources/spend with this tag value, default 1 */
                 minCount?: number
+                /** Start time in unix timestamp format, default now - 1 month */
+                startTime?: number
                 /** End time in unix timestamp format, default now */
                 endTime?: number
                 /** Metric type, default: assets */
@@ -3105,7 +3107,7 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve a list of resource counts over the course of the specified time frame based on the given input filters
+         * @description Retrieving a list of resource counts over the course of the specified time frame based on the given input filters
          *
          * @tags analytics
          * @name ApiV2AnalyticsTrendList
@@ -3150,9 +3152,9 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve the cost composition with respect to specified filters. The API returns information such as the total cost for the given time range, and the top services by cost.
+         * @description Retrieving the cost composition with respect to specified filters. Retrieving information such as the total cost for the given time range, and the top services by cost.
          *
-         * @tags inventory
+         * @tags cost
          * @name ApiV2CostCompositionList
          * @summary List cost composition
          * @request GET:/inventory/api/v2/cost/composition
@@ -3189,9 +3191,9 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve cost metrics with respect to specified filters. The API returns information such as the total cost and costs per each service based on the specified filters.
+         * @description Retrieving cost metrics with respect to specified filters. The API returns information such as the total cost and costs per each service based on the specified filters.
          *
-         * @tags inventory
+         * @tags cost
          * @name ApiV2CostMetricList
          * @summary List cost metrics
          * @request GET:/inventory/api/v2/cost/metric
@@ -3232,9 +3234,9 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
+         * @description Retrieving a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
          *
-         * @tags inventory
+         * @tags cost
          * @name ApiV2CostTrendList
          * @summary Get Cost Trend
          * @request GET:/inventory/api/v2/cost/trend
@@ -3271,11 +3273,11 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve metrics for a specific resource type.
+         * @description Retrieving metrics for a specific resource type.
          *
-         * @tags inventory
+         * @tags resource
          * @name ApiV2ResourcesMetricDetail
-         * @summary Get resource metrics
+         * @summary List resource-type metrics
          * @request GET:/inventory/api/v2/resources/metric/{resourceType}
          * @secure
          */
@@ -3307,9 +3309,9 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve a list of tag keys with their possible values for all resource types.
+         * @description Retrieving a list of tag keys with their possible values for all resource types.
          *
-         * @tags inventory
+         * @tags resource
          * @name ApiV2ResourcesTagList
          * @summary List resourcetype tags
          * @request GET:/inventory/api/v2/resources/tag
@@ -3341,9 +3343,9 @@ export class Api<
             }),
 
         /**
-         * @description This API allows users to retrieve a list of costs over the course of the specified time frame for the given services. If startTime and endTime are empty, the API returns the last month trend.
+         * @description Retrieving a list of costs over the course of the specified time frame for the given services. If startTime and endTime are empty, the API returns the last month trend.
          *
-         * @tags inventory
+         * @tags cost
          * @name ApiV2ServicesCostTrendList
          * @summary Get Services Cost Trend
          * @request GET:/inventory/api/v2/services/cost/trend
@@ -3387,7 +3389,7 @@ export class Api<
          *
          * @tags metadata
          * @name ApiV1MetadataCreate
-         * @summary Sets the config metadata for the given key
+         * @summary Set key metadata
          * @request POST:/metadata/api/v1/metadata
          * @secure
          */
@@ -3409,7 +3411,7 @@ export class Api<
          *
          * @tags metadata
          * @name ApiV1MetadataDetail
-         * @summary Returns the config metadata for the given key
+         * @summary Get key metadata
          * @request GET:/metadata/api/v1/metadata/{key}
          * @secure
          */
@@ -3427,11 +3429,11 @@ export class Api<
     }
     onboard = {
         /**
-         * @description Returns the list of metrics for catalog page.
+         * @description Retrieving the list of metrics for catalog page.
          *
          * @tags onboard
          * @name ApiV1CatalogMetricsList
-         * @summary Get catalog metrics
+         * @summary List catalog metrics
          * @request GET:/onboard/api/v1/catalog/metrics
          * @secure
          */
@@ -3448,7 +3450,7 @@ export class Api<
             }),
 
         /**
-         * @description Returns a list of connection groups
+         * @description Retrieving a list of connection groups
          *
          * @tags connection-groups
          * @name ApiV1ConnectionGroupsList
@@ -3480,7 +3482,7 @@ export class Api<
             }),
 
         /**
-         * @description Returns a connection group
+         * @description Retrieving a connection group
          *
          * @tags connection-groups
          * @name ApiV1ConnectionGroupsDetail
@@ -3513,7 +3515,7 @@ export class Api<
             }),
 
         /**
-         * @description Returns a list of connections summaries
+         * @description Retrieving a list of connections summaries
          *
          * @tags connections
          * @name ApiV1ConnectionsSummaryList
@@ -3528,7 +3530,14 @@ export class Api<
                 /** Connection IDs */
                 connectionId?: string[]
                 /** lifecycle state filter */
-                lifecycleState?: string
+                lifecycleState?:
+                    | 'DISABLED'
+                    | 'DISCOVERED'
+                    | 'IN_PROGRESS'
+                    | 'ONBOARD'
+                    | 'ARCHIVED'
+                /** health state filter */
+                healthState?: 'healthy' | 'unhealthy'
                 /** page size - default is 20 */
                 pageSize?: number
                 /** page number - default is 1 */
@@ -3681,7 +3690,7 @@ export class Api<
             }),
 
         /**
-         * @description Edit a credential by Id
+         * @description Edit a credential by ID
          *
          * @tags onboard
          * @name ApiV1CredentialUpdate
@@ -3704,7 +3713,7 @@ export class Api<
             }),
 
         /**
-         * @description Remove a credential by Id
+         * @description Remove a credential by ID
          *
          * @tags onboard
          * @name ApiV1CredentialDelete
@@ -3728,7 +3737,7 @@ export class Api<
          *
          * @tags onboard
          * @name ApiV1CredentialAutoonboardCreate
-         * @summary Onboard all available connections for a credential
+         * @summary Onboard credential connections
          * @request POST:/onboard/api/v1/credential/{credentialId}/autoonboard
          * @secure
          */
@@ -3842,11 +3851,11 @@ export class Api<
     }
     schedule = {
         /**
-         * @description Triggers a describe job to run immediately
+         * @description Triggers a describe job to run immediately for the given connection
          *
          * @tags describe
          * @name ApiV1DescribeTriggerUpdate
-         * @summary Triggers a describe job to run immediately
+         * @summary Triggers describer
          * @request PUT:/schedule/api/v1/describe/trigger/{connection_id}
          * @secure
          */
@@ -3958,11 +3967,11 @@ export class Api<
             ),
 
         /**
-         * @description Get a stack details by ID
+         * @description Get stack details by ID
          *
          * @tags stack
          * @name ApiV1StacksDetail
-         * @summary Get a Stack
+         * @summary Get Stack
          * @request GET:/schedule/api/v1/stacks/{stackId}
          * @secure
          */
@@ -3981,7 +3990,7 @@ export class Api<
          *
          * @tags stack
          * @name ApiV1StacksDelete
-         * @summary Delete a Stack
+         * @summary Delete Stack
          * @request DELETE:/schedule/api/v1/stacks/{stackId}
          * @secure
          */
