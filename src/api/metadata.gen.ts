@@ -41,6 +41,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,

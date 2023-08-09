@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
-import { priceDisplay } from '../../../../../utilities/numericDisplay'
+import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
 import { useInventoryApiV2CostTrendConnections } from './apiCostTrends'
 import { dateDisplay } from '../../../../../utilities/dateDisplay'
@@ -255,7 +255,7 @@ export default function TopAccountsTrend() {
                     }
                     data={trendData()}
                     showAnimation
-                    valueFormatter={priceDisplay}
+                    valueFormatter={exactPriceDisplay}
                     showLegend={false}
                 />
             )}

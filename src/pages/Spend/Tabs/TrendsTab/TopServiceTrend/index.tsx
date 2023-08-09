@@ -1,21 +1,15 @@
-import { useEffect, useState } from 'react'
 import { Card, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendMetricsTrendList,
-    useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
-import { priceDisplay } from '../../../../../utilities/numericDisplay'
+import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
 import { filterAtom, spendTimeAtom } from '../../../../../store'
-import { dateDisplay } from '../../../../../utilities/dateDisplay'
 import { isDemo } from '../../../../../utilities/demo'
-import {
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint,
-} from '../../../../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint } from '../../../../../api/api'
 
 const MockData: GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint[] =
     [
@@ -157,8 +151,8 @@ export default function TopServicesTrend({ categories }: IProps) {
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
-    const [serviceNames, setServiceNames] = useState<string[]>([])
-    const [trendData, setTrendData] = useState<object[]>([])
+    // const [serviceNames, setServiceNames] = useState<string[]>([])
+    // const [trendData, setTrendData] = useState<object[]>([])
     const { response: metrics, isLoading } =
         useInventoryApiV2AnalyticsSpendMetricList({
             ...(selectedConnections.provider !== '' && {
@@ -177,7 +171,7 @@ export default function TopServicesTrend({ categories }: IProps) {
             sortBy: 'cost',
         })
 
-    const { response: data, isLoading: costTrendLoading } =
+    const { response: costTrendResponse, isLoading: costTrendLoading } =
         useInventoryApiV2AnalyticsSpendMetricsTrendList(
             {
                 metricIds:
@@ -202,50 +196,65 @@ export default function TopServicesTrend({ categories }: IProps) {
             !isLoading
         )
 
-    const fixTime = (
-        input:
-            | GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint[]
-            | undefined
-    ) => {
+    const data = () => {
+        return isDemo() ? MockData : costTrendResponse
+    }
+
+    const serviceNames = () => {
+        const services: string[] = []
+        const input = data()
+        if (input === undefined) {
+            return services
+        }
+
+        input.forEach((item) => {
+            const name = item.serviceName || ''
+            if (!services.includes(name)) {
+                services.push(name)
+            }
+        })
+        return services
+    }
+
+    const trendData = () => {
         const result: object[] = []
+        const input = data()
         if (input === undefined) {
             return result
         }
 
-        const services: string[] = []
-        if (input) {
-            let length = 0
-            if (input[0].costTrend) {
-                length =
-                    input[0].costTrend.length > 5
-                        ? 5
-                        : input[0].costTrend.length
-            }
-            for (let i = 0; i < length; i += 1) {
-                const temp: any = {}
-                input.forEach((item) => {
-                    if (item.costTrend === undefined) {
-                        return
-                    }
+        const dateMap = new Map<string, Map<string, number>>()
 
-                    const name = item.serviceName || ''
-                    if (!services.includes(name)) {
-                        services.push(name)
+        input.forEach((item, index, array) => {
+            item.costTrend?.forEach((trend, trendIdx, trendArr) => {
+                const key = trend.date || ''
+                if (dateMap.has(key)) {
+                    const m = dateMap.get(key)
+                    if (m !== undefined) {
+                        m.set(item.serviceName || '', trend.count || 0)
+                        dateMap.set(key, m)
                     }
-                    temp[name] = item.costTrend[i].count
-                    temp.date = dateDisplay(item.costTrend[i].date)
-                })
-                result.push(temp)
-            }
-        }
-        setServiceNames(services)
-        setTrendData(result)
+                } else {
+                    dateMap.set(
+                        trend.date || '',
+                        new Map([[item.serviceName || '', trend.count || 0]])
+                    )
+                }
+            })
+        })
+
+        dateMap.forEach((valueMap, date) => {
+            const m = new Map<string, string | number>()
+            m.set('date', date)
+
+            valueMap.forEach((value, key) => {
+                m.set(key, value)
+            })
+
+            result.push(Object.entries(m))
+        })
         return result
     }
-
-    useEffect(() => {
-        fixTime(isDemo() ? MockData : data)
-    }, [data])
 
     return (
         <Card>
@@ -257,10 +266,10 @@ export default function TopServicesTrend({ categories }: IProps) {
                     type="area"
                     yAxisWidth={120}
                     showLegend={false}
-                    categories={serviceNames}
-                    data={trendData}
+                    categories={serviceNames()}
+                    data={trendData()}
                     showAnimation
-                    valueFormatter={priceDisplay}
+                    valueFormatter={exactPriceDisplay}
                 />
             ) : (
                 <Spinner className="h-80" />
