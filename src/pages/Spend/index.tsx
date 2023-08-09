@@ -70,21 +70,29 @@ export default function Spend() {
         pageSize: 5000,
         pageNumber: 1,
     }
-    const { response: serviceCostResponse, isLoading: serviceCostLoading } =
-        useInventoryApiV2AnalyticsSpendMetricList(query)
+    const {
+        response: serviceCostResponse,
+        isLoading: serviceCostLoading,
+        error: serviceCostError,
+        sendNow: serviceCostSendNow,
+    } = useInventoryApiV2AnalyticsSpendMetricList(query)
 
-    const { response: accountCostResponse, isLoading: accountCostLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
-            ...(selectedConnections.provider !== '' && {
-                connector: [selectedConnections.provider],
-            }),
-            connectionId: selectedConnections.connections,
-            startTime: activeTimeRange.start.unix(),
-            endTime: activeTimeRange.end.unix(),
-            pageSize: 5000,
-            pageNumber: 1,
-            sortBy: 'cost',
-        })
+    const {
+        response: accountCostResponse,
+        isLoading: accountCostLoading,
+        error: accountCostError,
+        sendNow: accountCostSendNow,
+    } = useOnboardApiV1ConnectionsSummaryList({
+        ...(selectedConnections.provider !== '' && {
+            connector: [selectedConnections.provider],
+        }),
+        connectionId: selectedConnections.connections,
+        startTime: activeTimeRange.start.unix(),
+        endTime: activeTimeRange.end.unix(),
+        pageSize: 5000,
+        pageNumber: 1,
+        sortBy: 'cost',
+    })
 
     const categoryOptions = useMemo(() => {
         if (isDemo()) {
@@ -163,8 +171,8 @@ export default function Spend() {
             </Flex>
             <SummaryMetrics
                 accountCostResponse={accountCostResponse}
-                serviceCostResponse={serviceCostResponse}
                 accountCostLoading={accountCostLoading}
+                serviceCostResponse={serviceCostResponse}
                 serviceCostLoading={serviceCostLoading}
             />
             <TabGroup className="mt-3" index={index} onIndexChange={setIndex}>
@@ -181,6 +189,10 @@ export default function Spend() {
                             serviceCostResponse={serviceCostResponse}
                             accountCostLoading={accountCostLoading}
                             serviceCostLoading={serviceCostLoading}
+                            accountCostError={accountCostError}
+                            accountCostSendNow={accountCostSendNow}
+                            serviceCostError={serviceCostError}
+                            serviceCostSendNow={serviceCostSendNow}
                         />
                     </TabPanel>
                     <TabPanel>{trendsTab}</TabPanel>

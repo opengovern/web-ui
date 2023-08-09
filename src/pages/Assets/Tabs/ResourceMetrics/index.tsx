@@ -180,10 +180,14 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
         }),
         ...(pageSize && { pageSize }),
     }
-    const { response: resourceMetricsResponse, isLoading } =
-        useInventoryApiV2AnalyticsMetricList(query, {
-            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-        })
+    const {
+        response: resourceMetricsResponse,
+        isLoading,
+        error,
+        sendNow,
+    } = useInventoryApiV2AnalyticsMetricList(query, {
+        ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+    })
 
     const metrics = () => {
         return isDemo()
@@ -233,6 +237,7 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
                       ].concat(categories)
                     : categories
             }
+            error={error}
             selectedCategory={selectedResourceCategory}
             onChangeCategory={setSelectedResourceCategory}
             metrics={metrics()}
@@ -240,6 +245,7 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
                 activeTimeRange.start.toString() ===
                 activeTimeRange.end.toString()
             }
+            sendNow={sendNow}
         />
     )
 }

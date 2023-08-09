@@ -1,4 +1,5 @@
 import {
+    Button,
     Col,
     Divider,
     Flex,
@@ -39,8 +40,12 @@ const benchmarkList = (ben: any) => {
 }
 
 export default function Compliance() {
-    const { response: benchmarks, isLoading } =
-        useComplianceApiV1BenchmarksSummaryList()
+    const {
+        response: benchmarks,
+        isLoading,
+        error,
+        sendNow,
+    } = useComplianceApiV1BenchmarksSummaryList()
 
     const [search, setSearch] = useState('')
 
@@ -66,9 +71,10 @@ export default function Compliance() {
                         />
                     </Col>
                 </Grid>
+                {/* eslint-disable-next-line no-nested-ternary */}
                 {isLoading ? (
                     <Spinner className="mt-56" />
-                ) : (
+                ) : error === undefined ? (
                     <>
                         <Grid
                             numItems={1}
@@ -128,6 +134,8 @@ export default function Compliance() {
                                 )}
                         </Grid>
                     </>
+                ) : (
+                    <Button onClick={() => sendNow()}>Retry</Button>
                 )}
             </Flex>
         </LoggedInLayout>

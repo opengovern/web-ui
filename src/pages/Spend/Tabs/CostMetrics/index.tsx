@@ -22,6 +22,10 @@ interface IProps {
         label: string
         value: string
     }[]
+    accountCostError?: any
+    serviceCostError?: any
+    accountCostSendNow: () => void
+    serviceCostSendNow: () => void
 }
 const accountCostResponse2: IMetric[] = [
     {
@@ -130,6 +134,10 @@ export default function CostMetrics({
     serviceCostResponse,
     accountCostLoading,
     serviceCostLoading,
+    accountCostError,
+    accountCostSendNow,
+    serviceCostError,
+    serviceCostSendNow,
     categories,
 }: IProps) {
     const activeTimeRange = useAtomValue(spendTimeAtom)
@@ -189,6 +197,10 @@ export default function CostMetrics({
                     : serviceCostLoading
             }
             metrics={metrics()}
+            error={selectedScopeIdx === 0 ? accountCostError : serviceCostError}
+            sendNow={
+                selectedScopeIdx === 0 ? accountCostSendNow : serviceCostSendNow
+            }
             categories={categories}
             selectedCategory={selectedResourceCategory}
             onChangeCategory={setSelectedResourceCategory}

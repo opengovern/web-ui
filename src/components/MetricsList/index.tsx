@@ -44,6 +44,8 @@ interface IMetricsList {
 
     hideFrom?: boolean
     isSameDay?: boolean
+    error?: any
+    sendNow?: () => void
 }
 
 export default function MetricsList({
@@ -59,6 +61,8 @@ export default function MetricsList({
     onScopeChange,
     hideFrom = false,
     isSameDay = false,
+    error,
+    sendNow,
 }: IMetricsList) {
     const navigate = useNavigate()
     const percentage = (a?: number, b?: number): number => {
@@ -125,9 +129,10 @@ export default function MetricsList({
                     ))}
                 </SearchSelect>
             </Grid>
+            {/* eslint-disable-next-line no-nested-ternary */}
             {isLoading ? (
                 <Spinner className="mt-48" />
-            ) : (
+            ) : error === undefined ? (
                 <Swiper
                     gridContainerProps={{
                         numItemsSm: 2,
@@ -163,6 +168,8 @@ export default function MetricsList({
                         />
                     ))}
                 </Swiper>
+            ) : (
+                <Button onClick={sendNow}>Retry</Button>
             )}
         </div>
     )
