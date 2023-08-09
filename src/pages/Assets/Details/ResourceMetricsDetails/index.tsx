@@ -168,8 +168,6 @@ export default function ResourceMetricsDetails() {
         groupAllowUnbalanced: true,
     }
 
-    console.log(rowGenerator(metrics?.metrics))
-
     return (
         <LoggedInLayout currentPage="assets">
             <Flex
