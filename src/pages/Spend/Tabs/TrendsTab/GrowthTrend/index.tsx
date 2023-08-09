@@ -166,6 +166,7 @@ export default function GrowthTrend() {
     }
     const { response: costTrend, isLoading } =
         useInventoryApiV2AnalyticsSpendTrendList(query)
+    
     const fixTime = (
         data:
             | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]

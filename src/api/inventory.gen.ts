@@ -77,6 +77,7 @@ interface IuseInventoryApiV1QueryListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -166,6 +167,7 @@ interface IuseInventoryApiV1QueryRunCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -255,6 +257,7 @@ interface IuseInventoryApiV1QueryRunHistoryListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -344,6 +347,7 @@ interface IuseInventoryApiV2AnalyticsCategoriesListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -436,6 +440,7 @@ interface IuseInventoryApiV2AnalyticsCompositionDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -541,6 +546,7 @@ interface IuseInventoryApiV2AnalyticsMetricListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -655,6 +661,7 @@ interface IuseInventoryApiV2AnalyticsRegionsSummaryListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -761,6 +768,7 @@ interface IuseInventoryApiV2AnalyticsSpendCompositionListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -863,6 +871,7 @@ interface IuseInventoryApiV2AnalyticsSpendMetricListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -969,6 +978,7 @@ interface IuseInventoryApiV2AnalyticsSpendMetricsTrendListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1073,6 +1083,7 @@ interface IuseInventoryApiV2AnalyticsSpendTableListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1171,6 +1182,7 @@ interface IuseInventoryApiV2AnalyticsSpendTrendListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1275,6 +1287,7 @@ interface IuseInventoryApiV2AnalyticsTagListState {
     isLoading: boolean
     isExecuted: boolean
     response?: Record<string, string[]>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1380,6 +1393,7 @@ interface IuseInventoryApiV2AnalyticsTrendListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1488,6 +1502,7 @@ interface IuseInventoryApiV2CostCompositionListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1590,6 +1605,7 @@ interface IuseInventoryApiV2CostMetricListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1695,6 +1711,7 @@ interface IuseInventoryApiV2CostTrendListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1796,6 +1813,7 @@ interface IuseInventoryApiV2ResourcesMetricDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1897,6 +1915,7 @@ interface IuseInventoryApiV2ResourcesTagListState {
     isLoading: boolean
     isExecuted: boolean
     response?: Record<string, string[]>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1998,6 +2017,7 @@ interface IuseInventoryApiV2ServicesCostTrendListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 

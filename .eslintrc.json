@@ -75,7 +75,7 @@
             {
                 "allow": ["__RUNTIME_CONFIG__"]
             }
-        ],
-        "@typescript-eslint/no-explicit-any": "error"
+        ]
+        // "@typescript-eslint/no-explicit-any": "error"
     }
 }

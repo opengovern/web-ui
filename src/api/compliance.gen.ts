@@ -77,6 +77,7 @@ interface IuseComplianceApiV1AssignmentsBenchmarkDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -167,6 +168,7 @@ interface IuseComplianceApiV1AssignmentsConnectionCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -267,6 +269,7 @@ interface IuseComplianceApiV1AssignmentsConnectionDeleteState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -367,6 +370,7 @@ interface IuseComplianceApiV1BenchmarksSummaryListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -463,6 +467,7 @@ interface IuseComplianceApiV1BenchmarksSummaryDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -562,6 +567,7 @@ interface IuseComplianceApiV1BenchmarksTreeDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -652,6 +658,7 @@ interface IuseComplianceApiV1BenchmarksTrendDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -753,6 +760,7 @@ interface IuseComplianceApiV1FindingsCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -842,6 +850,7 @@ interface IuseComplianceApiV1FindingsTopDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -965,6 +974,7 @@ interface IuseComplianceApiV1InsightListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1064,6 +1074,7 @@ interface IuseComplianceApiV1InsightGroupListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1164,6 +1175,7 @@ interface IuseComplianceApiV1InsightDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1260,6 +1272,7 @@ interface IuseComplianceApiV1InsightTrendDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1359,6 +1372,7 @@ interface IuseComplianceApiV1MetadataInsightDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1449,6 +1463,7 @@ interface IuseComplianceApiV1MetadataTagInsightListState {
     isLoading: boolean
     isExecuted: boolean
     response?: Record<string, string[]>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1538,6 +1553,7 @@ interface IuseComplianceApiV1QueriesSyncListState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 

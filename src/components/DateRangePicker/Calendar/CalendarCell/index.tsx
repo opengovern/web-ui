@@ -7,12 +7,13 @@ import {
 } from 'react-aria'
 import { isSameDay, getDayOfWeek } from '@internationalized/date'
 import { AriaCalendarCellProps } from '@react-aria/calendar'
+import { RangeCalendarState } from 'react-stately'
 
 export function CalendarCell({
     state,
     date,
 }: {
-    state: any
+    state: RangeCalendarState
     date: AriaCalendarCellProps['date']
 }) {
     const ref = useRef(null)

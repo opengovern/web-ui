@@ -25,9 +25,10 @@ import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { isDemo } from '../../../utilities/demo'
 import { dateDisplay } from '../../../utilities/dateDisplay'
+import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse } from '../../../api/api'
 
 interface IWorkSpace {
-    workspace: any
+    workspace: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse
     refreshList: () => void
 }
 
@@ -78,7 +79,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
 
     const { response: workspaceDetail, isLoading: workspaceLoading } =
         useWorkspaceApiV1WorkspacesLimitsDetail(
-            workspace.name,
+            workspace.name || '',
             {},
             {
                 ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
@@ -88,17 +89,17 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
         isLoading: suspendLoading,
         sendNow: callSuspend,
         isExecuted: eS,
-    } = useWorkspaceApiV1WorkspaceSuspendCreate(workspace.id, {}, false)
+    } = useWorkspaceApiV1WorkspaceSuspendCreate(workspace.id || '', {}, false)
     const {
         isLoading: resumeLoading,
         sendNow: callResume,
         isExecuted: eR,
-    } = useWorkspaceApiV1WorkspaceResumeCreate(workspace.id, {}, false)
+    } = useWorkspaceApiV1WorkspaceResumeCreate(workspace.id || '', {}, false)
     const {
         isLoading: deleteLoading,
         sendNow: callDelete,
         isExecuted: eD,
-    } = useWorkspaceApiV1WorkspaceDelete(workspace.id, {}, false)
+    } = useWorkspaceApiV1WorkspaceDelete(workspace.id || '', {}, false)
 
     const details = {
         Tier: workspace.tier,
@@ -172,7 +173,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                         </Badge>
                     </Flex>
                     <Flex flexDirection="row" className="w-fit">
-                        {showSuspend(workspace.status) && (
+                        {showSuspend(workspace.status || '') && (
                             <Button
                                 variant="light"
                                 className="pr-2 border-r-gray-600"
@@ -182,7 +183,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                                 Suspend
                             </Button>
                         )}
-                        {showDelete(workspace.status) && (
+                        {showDelete(workspace.status || '') && (
                             <Button
                                 variant="light"
                                 className="pl-2"

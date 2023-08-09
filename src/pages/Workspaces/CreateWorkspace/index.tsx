@@ -14,7 +14,7 @@ import { useWorkspaceApiV1WorkspaceCreate } from '../../../api/workspace.gen'
 
 interface ICreateWorkspace {
     open: boolean
-    onClose: any
+    onClose: () => void
 }
 
 const inputRegex = /^[a-zA-Z0-9-]+$/

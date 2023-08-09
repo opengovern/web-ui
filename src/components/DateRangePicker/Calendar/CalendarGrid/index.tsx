@@ -1,9 +1,14 @@
 import { useCalendarGrid, useLocale } from 'react-aria'
 import { getWeeksInMonth } from '@internationalized/date'
-import { AriaCalendarCellProps } from '@react-aria/calendar'
+import { RangeCalendarState } from 'react-stately'
 import { CalendarCell } from '../CalendarCell'
 
-export function CalendarGrid({ state, ...props }: { state: any }) {
+export function CalendarGrid({
+    state,
+    ...props
+}: {
+    state: RangeCalendarState
+}) {
     const { locale } = useLocale()
     const { gridProps, headerProps, weekDays } = useCalendarGrid(props, state)
 
@@ -24,7 +29,7 @@ export function CalendarGrid({ state, ...props }: { state: any }) {
                     <tr key={weekIndex}>
                         {state
                             .getDatesInWeek(weekIndex)
-                            .map((date: AriaCalendarCellProps['date']) =>
+                            .map((date) =>
                                 date ? (
                                     <CalendarCell state={state} date={date} />
                                 ) : (

@@ -77,6 +77,7 @@ interface IuseAuthApiV1KeyCreateCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -166,6 +167,7 @@ interface IuseAuthApiV1KeyDeleteDeleteState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -255,6 +257,7 @@ interface IuseAuthApiV1KeysListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -343,6 +346,7 @@ interface IuseAuthApiV1UserInviteCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -432,6 +436,7 @@ interface IuseAuthApiV1UserRoleBindingUpdateState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -523,6 +528,7 @@ interface IuseAuthApiV1UserRoleBindingDeleteState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -616,6 +622,7 @@ interface IuseAuthApiV1UserRoleBindingsListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -704,6 +711,7 @@ interface IuseAuthApiV1UserDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -793,6 +801,7 @@ interface IuseAuthApiV1UsersListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -882,6 +891,7 @@ interface IuseAuthApiV1WorkspaceRoleBindingsListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 

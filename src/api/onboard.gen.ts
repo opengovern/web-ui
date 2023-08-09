@@ -77,6 +77,7 @@ interface IuseOnboardApiV1CatalogMetricsListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -167,6 +168,7 @@ interface IuseOnboardApiV1ConnectionGroupsListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -259,6 +261,7 @@ interface IuseOnboardApiV1ConnectionGroupsDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -357,6 +360,7 @@ interface IuseOnboardApiV1ConnectionsSummaryListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -477,6 +481,7 @@ interface IuseOnboardApiV1ConnectorListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -565,6 +570,7 @@ interface IuseOnboardApiV1CredentialListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -669,6 +675,7 @@ interface IuseOnboardApiV1CredentialCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -758,6 +765,7 @@ interface IuseOnboardApiV1CredentialDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -847,6 +855,7 @@ interface IuseOnboardApiV1CredentialUpdateState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -942,6 +951,7 @@ interface IuseOnboardApiV1CredentialDeleteState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1031,6 +1041,7 @@ interface IuseOnboardApiV1CredentialAutoonboardCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1121,6 +1132,7 @@ interface IuseOnboardApiV1SourceAwsCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1210,6 +1222,7 @@ interface IuseOnboardApiV1SourceAzureCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1299,6 +1312,7 @@ interface IuseOnboardApiV1SourceDeleteState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1388,6 +1402,7 @@ interface IuseOnboardApiV1SourceHealthcheckDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 

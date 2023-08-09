@@ -7,17 +7,17 @@ import { AWSIcon, AzureIcon } from '../../../icons/icons'
 interface IConnectorCard {
     connector: string | undefined
     title: string | undefined
-    status: any
+    status: string | undefined
     count: number | string | undefined
     description: string | undefined
 }
 
-export const getConnectorIcon = (connector: any) => {
+export const getConnectorIcon = (connector: string | undefined) => {
     if (connector === 'AWS') return <AWSIcon key="aws" />
     return <AzureIcon key="azure" />
 }
 
-const getBadgeColor = (status: any) => {
+const getBadgeColor = (status: string | undefined) => {
     if (status === 'enabled') {
         return 'emerald'
     }
