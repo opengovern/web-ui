@@ -1,4 +1,5 @@
 import {
+    Button,
     Col,
     Flex,
     Grid,
@@ -41,10 +42,18 @@ export default function Insights() {
             endTime: activeTimeRange.end.unix(),
         }),
     }
-    const { response: insightList, isLoading: listLoading } =
-        useComplianceApiV1InsightList(query)
-    const { response: insightGroup, isLoading: groupLoading } =
-        useComplianceApiV1InsightGroupList(query)
+    const {
+        response: insightList,
+        isLoading: listLoading,
+        sendNow: insightSendNow,
+        error: insightError,
+    } = useComplianceApiV1InsightList(query)
+    const {
+        response: insightGroup,
+        isLoading: groupLoading,
+        sendNow: insightGroupSendNow,
+        error: insightGroupError,
+    } = useComplianceApiV1InsightGroupList(query)
 
     useEffect(() => {
         if (tabs === '#groups') {
@@ -95,11 +104,12 @@ export default function Insights() {
                     </Grid>
                     <TabPanels>
                         <TabPanel>
+                            {/* eslint-disable-next-line no-nested-ternary */}
                             {listLoading ? (
                                 <Flex justifyContent="center" className="mt-56">
                                     <Spinner />
                                 </Flex>
-                            ) : (
+                            ) : insightError === undefined ? (
                                 <Grid
                                     numItems={1}
                                     numItemsMd={2}
@@ -141,14 +151,19 @@ export default function Insights() {
                                             </Col>
                                         ))}
                                 </Grid>
+                            ) : (
+                                <Button onClick={() => insightSendNow()}>
+                                    Retry
+                                </Button>
                             )}
                         </TabPanel>
                         <TabPanel>
+                            {/* eslint-disable-next-line no-nested-ternary */}
                             {groupLoading ? (
                                 <Flex justifyContent="center" className="mt-56">
                                     <Spinner />
                                 </Flex>
-                            ) : (
+                            ) : insightGroupError === undefined ? (
                                 <Grid
                                     numItems={1}
                                     numItemsMd={2}
@@ -187,6 +202,10 @@ export default function Insights() {
                                             </Col>
                                         ))}
                                 </Grid>
+                            ) : (
+                                <Button onClick={() => insightGroupSendNow()}>
+                                    Retry
+                                </Button>
                             )}
                         </TabPanel>
                     </TabPanels>
