@@ -1,7 +1,7 @@
-import { BadgeDelta, Flex } from '@tremor/react'
+import { BadgeDelta, Card, Flex } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
-import { ICellRendererParams } from 'ag-grid-community'
+import { GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { filterAtom, timeAtom } from '../../../../store'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
 import LoggedInLayout from '../../../../components/LoggedInLayout'
@@ -16,7 +16,6 @@ const columns: IColumn<any, any>[] = [
     {
         field: 'category',
         rowGroup: true,
-        hide: true,
         headerName: 'Category',
         type: 'string',
     },
@@ -134,6 +133,21 @@ export default function ResourceMetricsDetails() {
         { name: 'Resource metrics', path: '', current: true },
     ]
 
+    const options: GridOptions = {
+        autoGroupColumnDef: {
+            field: 'category',
+            minWidth: 200,
+        },
+        columnTypes: {
+            dimension: {
+                enableRowGroup: true,
+                enablePivot: true,
+            },
+        },
+        groupDefaultExpanded: -1,
+        rowGroupPanelShow: 'always',
+    }
+
     return (
         <LoggedInLayout currentPage="assets">
             <Flex
@@ -148,18 +162,21 @@ export default function ResourceMetricsDetails() {
                     <ConnectionList />
                 </Flex>
             </Flex>
-            <Table
-                title="Resource Metrics"
-                downloadable
-                id="asset_resource_metrics"
-                rowData={rowGenerator(metrics?.metrics)}
-                columns={columns}
-                onGridReady={(params) => {
-                    if (metricsLoading) {
-                        params.api.showLoadingOverlay()
-                    }
-                }}
-            />
+            <Card className="mt-4">
+                <Table
+                    options={options}
+                    title="Resource Metrics"
+                    downloadable
+                    id="asset_resource_metrics"
+                    rowData={rowGenerator(metrics?.metrics)}
+                    columns={columns}
+                    onGridReady={(params) => {
+                        if (metricsLoading) {
+                            params.api.showLoadingOverlay()
+                        }
+                    }}
+                />
+            </Card>
         </LoggedInLayout>
     )
 }

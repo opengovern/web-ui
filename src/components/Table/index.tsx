@@ -52,7 +52,7 @@ interface IProps<TData, TValue> {
     downloadable?: boolean
     title?: string
     children?: any
-    options?: any
+    options?: GridOptions
 }
 
 export default function Table<TData = any, TValue = any>({
