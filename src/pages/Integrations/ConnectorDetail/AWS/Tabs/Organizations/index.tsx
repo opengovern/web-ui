@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Flex } from '@tremor/react'
+import { Badge, Button, Card } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useState } from 'react'
@@ -8,7 +8,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
-import { AWSIcon } from '../../../../../../icons/icons'
 import Table, { IColumn } from '../../../../../../components/Table'
 
 interface IOrganizations {
@@ -28,26 +27,26 @@ function getBadgeColor(status: string) {
 }
 
 const columns: IColumn<any, any>[] = [
-    {
-        field: 'connectortype',
-        headerName: 'Connector',
-        type: 'string',
-        width: 50,
-        sortable: true,
-        filter: true,
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="w-full h-full"
-                >
-                    <AWSIcon id="org" />
-                </Flex>
-            )
-        },
-    },
+    // {
+    //     field: 'connectortype',
+    //     headerName: 'Connector',
+    //     type: 'string',
+    //     width: 50,
+    //     sortable: true,
+    //     filter: true,
+    //     cellStyle: { padding: 0 },
+    //     cellRenderer: (params: ICellRendererParams) => {
+    //         return (
+    //             <Flex
+    //                 alignItems="center"
+    //                 justifyContent="center"
+    //                 className="w-full h-full"
+    //             >
+    //                 <AWSIcon id="org" />
+    //             </Flex>
+    //         )
+    //     },
+    // },
     {
         field: 'name',
         headerName: 'Name',

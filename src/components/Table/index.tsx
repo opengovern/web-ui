@@ -34,6 +34,7 @@ export interface IColumn<TData, TValue> {
     valueFormatter?: string | ValueFormatterFunc<TData, TValue>
     cellRenderer?: any
     rowGroup?: boolean
+    enableRowGroup?: boolean
 
     hide?: boolean
     filter?: boolean
@@ -105,6 +106,7 @@ export default function Table<TData = any, TValue = any>({
                 sortable: item.sortable || true,
                 resizable: item.resizable || true,
                 rowGroup: item.rowGroup || false,
+                enableRowGroup: item.enableRowGroup || false,
                 hide: item.hide || false,
                 cellRenderer: item.cellRenderer,
                 flex: item.flex || 1,

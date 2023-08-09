@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
-import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
-import { Badge, Button, Card, Flex } from '@tremor/react'
+import {
+    GridOptions,
+    ICellRendererParams,
+    RowClickedEvent,
+} from 'ag-grid-community'
+import { Badge, Button, Card } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import NewAzureSubscription from './NewSubscription'
 import {
@@ -8,7 +12,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
 import SubscriptionInfo from './SubscriptionInfo'
-import { AzureIcon } from '../../../../../../icons/icons'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
 
@@ -49,26 +52,26 @@ function getBadgeText(status: string) {
 }
 
 const columns: IColumn<any, any>[] = [
-    {
-        field: 'connector',
-        headerName: 'Connector',
-        type: 'string',
-        width: 50,
-        sortable: true,
-        filter: true,
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="w-full h-full"
-                >
-                    <AzureIcon key={params.data.id} />
-                </Flex>
-            )
-        },
-    },
+    // {
+    //     field: 'connector',
+    //     headerName: 'Connector',
+    //     type: 'string',
+    //     width: 50,
+    //     sortable: true,
+    //     filter: true,
+    //     cellStyle: { padding: 0 },
+    //     cellRenderer: (params: ICellRendererParams) => {
+    //         return (
+    //             <Flex
+    //                 alignItems="center"
+    //                 justifyContent="center"
+    //                 className="w-full h-full"
+    //             >
+    //                 <AzureIcon key={params.data.id} />
+    //             </Flex>
+    //         )
+    //     },
+    // },
     {
         field: 'providerConnectionName',
         headerName: 'Name',
@@ -110,6 +113,8 @@ const columns: IColumn<any, any>[] = [
         field: 'lifecycleState',
         headerName: 'State',
         type: 'string',
+        rowGroup: true,
+        enableRowGroup: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -181,6 +186,19 @@ export default function Subscriptions({
         GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
     >(undefined)
 
+    const options: GridOptions = {
+        enableGroupEdit: true,
+        columnTypes: {
+            dimension: {
+                enableRowGroup: true,
+                enablePivot: true,
+            },
+        },
+        groupDefaultExpanded: -1,
+        rowGroupPanelShow: 'always',
+        groupAllowUnbalanced: true,
+    }
+
     return (
         <>
             <Card>
@@ -190,6 +208,7 @@ export default function Subscriptions({
                     id="azure_subscription_list"
                     rowData={generateRows(subscriptions)}
                     columns={columns}
+                    options={options}
                     onGridReady={(params) => {
                         if (loading) {
                             params.api.showLoadingOverlay()

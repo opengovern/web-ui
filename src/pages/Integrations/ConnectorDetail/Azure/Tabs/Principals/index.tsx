@@ -1,11 +1,10 @@
-import { Badge, Button, Card, Flex, Title } from '@tremor/react'
+import { Badge, Button, Card } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import PrincipalInfo from './PrincipalInfo'
 import NewPrincipal from './NewPrincipal'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../api/api'
-import { AzureIcon } from '../../../../../../icons/icons'
 import Table, { IColumn } from '../../../../../../components/Table'
 
 interface IPrincipals {
@@ -13,26 +12,26 @@ interface IPrincipals {
 }
 
 const columns: IColumn<any, any>[] = [
-    {
-        field: 'connectortype',
-        headerName: 'Connector',
-        type: 'string',
-        width: 50,
-        sortable: true,
-        filter: true,
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="w-full h-full"
-                >
-                    <AzureIcon />
-                </Flex>
-            )
-        },
-    },
+    // {
+    //     field: 'connectortype',
+    //     headerName: 'Connector',
+    //     type: 'string',
+    //     width: 50,
+    //     sortable: true,
+    //     filter: true,
+    //     cellStyle: { padding: 0 },
+    //     cellRenderer: (params: ICellRendererParams) => {
+    //         return (
+    //             <Flex
+    //                 alignItems="center"
+    //                 justifyContent="center"
+    //                 className="w-full h-full"
+    //             >
+    //                 <AzureIcon />
+    //             </Flex>
+    //         )
+    //     },
+    // },
     {
         field: 'name',
         headerName: 'Name',

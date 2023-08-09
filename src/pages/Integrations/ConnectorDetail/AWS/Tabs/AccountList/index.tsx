@@ -1,6 +1,10 @@
-import { Badge, Button, Card, Flex } from '@tremor/react'
+import { Badge, Button, Card } from '@tremor/react'
 import { useState } from 'react'
-import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
+import {
+    GridOptions,
+    ICellRendererParams,
+    RowClickedEvent,
+} from 'ag-grid-community'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import AccountInfo from './AccountInfo'
 import NewAWSAccount from './NewAWSAccount'
@@ -8,7 +12,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
-import { AWSIcon } from '../../../../../../icons/icons'
 import Notification from '../../../../../../components/Notification'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
@@ -71,26 +74,26 @@ function getBadgeText(status: string) {
 }
 
 const columns: IColumn<any, any>[] = [
-    {
-        field: 'connector',
-        headerName: 'Connector',
-        type: 'string',
-        width: 50,
-        sortable: true,
-        filter: true,
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="w-full h-full"
-                >
-                    <AWSIcon id="acc" />
-                </Flex>
-            )
-        },
-    },
+    // {
+    //     field: 'connector',
+    //     headerName: 'Connector',
+    //     type: 'string',
+    //     width: 50,
+    //     sortable: true,
+    //     filter: true,
+    //     cellStyle: { padding: 0 },
+    //     cellRenderer: (params: ICellRendererParams) => {
+    //         return (
+    //             <Flex
+    //                 alignItems="center"
+    //                 justifyContent="center"
+    //                 className="w-full h-full"
+    //             >
+    //                 <AWSIcon id="acc" />
+    //             </Flex>
+    //         )
+    //     },
+    // },
     {
         field: 'providerConnectionName',
         headerName: 'Name',
@@ -113,6 +116,8 @@ const columns: IColumn<any, any>[] = [
         headerName: 'Account Type',
         field: 'type',
         type: 'string',
+        rowGroup: true,
+        enableRowGroup: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -141,6 +146,7 @@ const columns: IColumn<any, any>[] = [
         field: 'lifecycleState',
         type: 'string',
         headerName: 'State',
+        enableRowGroup: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -213,6 +219,19 @@ export default function AccountList({
     const [open, setOpen] = useState(false)
     const [notification, setNotification] = useState<string>('')
 
+    const options: GridOptions = {
+        enableGroupEdit: true,
+        columnTypes: {
+            dimension: {
+                enableRowGroup: true,
+                enablePivot: true,
+            },
+        },
+        groupDefaultExpanded: -1,
+        rowGroupPanelShow: 'always',
+        groupAllowUnbalanced: true,
+    }
+
     return (
         <>
             <Card>
@@ -220,6 +239,7 @@ export default function AccountList({
                     downloadable
                     title="Accounts"
                     id="aws_account_list"
+                    options={options}
                     rowData={generateRows(accounts)}
                     columns={columns}
                     onGridReady={(params) => {
