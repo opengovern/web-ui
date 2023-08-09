@@ -9,19 +9,41 @@ import Breadcrumbs from '../../../../components/Breadcrumbs'
 import DateRangePicker from '../../../../components/DateRangePicker'
 import ConnectionList from '../../../../components/ConnectionList'
 import { badgeDelta, badgeTypeByDelta } from '../../../../utilities/deltaType'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiMetric,
+    SourceType,
+} from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
+import { AWSIcon, AzureIcon } from '../../../../icons/icons'
 
 const columns: IColumn<any, any>[] = [
     {
-        field: 'category',
-        rowGroup: true,
-        headerName: 'Category',
+        headerName: 'Connectors',
+        field: 'connectors',
         type: 'string',
+        enableRowGroup: true,
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
+        ) =>
+            params.data?.name && (
+                <Flex justifyContent="center" alignItems="center">
+                    {params.value.includes('AWS' as SourceType) && <AWSIcon />}
+                    {params.value.includes('Azure' as SourceType) && (
+                        <AzureIcon />
+                    )}
+                </Flex>
+            ),
     },
     {
         field: 'name',
-        headerName: 'Metric Name',
+        headerName: 'Service Name',
+        type: 'string',
+    },
+    {
+        field: 'category',
+        rowGroup: true,
+        enableRowGroup: true,
+        headerName: 'Category',
         type: 'string',
     },
     {
@@ -134,10 +156,7 @@ export default function ResourceMetricsDetails() {
     ]
 
     const options: GridOptions = {
-        autoGroupColumnDef: {
-            field: 'category',
-            minWidth: 200,
-        },
+        enableGroupEdit: true,
         columnTypes: {
             dimension: {
                 enableRowGroup: true,
@@ -146,7 +165,10 @@ export default function ResourceMetricsDetails() {
         },
         groupDefaultExpanded: -1,
         rowGroupPanelShow: 'always',
+        groupAllowUnbalanced: true,
     }
+
+    console.log(rowGenerator(metrics?.metrics))
 
     return (
         <LoggedInLayout currentPage="assets">
