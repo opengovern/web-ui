@@ -95,6 +95,16 @@ export default function DateRangePicker({ isSpend = false }: DatePickerProps) {
             ),
         }
     }
+
+    const minValue = () => {
+        return parseDate('2022-12-01')
+    }
+    const maxValue = () => {
+        if (isSpend) {
+            return today(getLocalTimeZone()).subtract({ days: 2 })
+        }
+        return today(getLocalTimeZone())
+    }
     return (
         <CustomDatePicker
             value={currentValue()}
@@ -104,7 +114,8 @@ export default function DateRangePicker({ isSpend = false }: DatePickerProps) {
                     end: dayjs.utc(value.end.toString()).endOf('day'),
                 })
             }}
-            maxValue={today(getLocalTimeZone())}
+            minValue={minValue()}
+            maxValue={maxValue()}
         />
     )
 }
