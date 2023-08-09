@@ -19,8 +19,8 @@ import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import dayjs from 'dayjs'
 import { AWSIcon, AzureIcon } from '../../icons/icons'
 import {
+    exactPriceDisplay,
     numberGroupedDisplay,
-    priceDisplay,
 } from '../../utilities/numericDisplay'
 import { agGridDateComparator } from '../../utilities/dateComparator'
 
@@ -121,7 +121,7 @@ export default function Table<TData = any, TValue = any>({
                 v.filter = 'agNumberColumnFilter'
                 v.cellDataType = 'text'
                 v.valueFormatter = (param) => {
-                    return priceDisplay(String(param.value)) || ''
+                    return exactPriceDisplay(String(param.value)) || ''
                 }
             } else if (item.type === 'number') {
                 v.filter = 'agNumberColumnFilter'

@@ -41,6 +41,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
@@ -1020,6 +1021,104 @@ export const useInventoryApiV2AnalyticsSpendMetricsTrendList = (
         try {
             api.inventory
                 .apiV2AnalyticsSpendMetricsTrendList(query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseInventoryApiV2AnalyticsSpendTableListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+    error?: any
+}
+
+export const useInventoryApiV2AnalyticsSpendTableList = (
+    query?: {
+        startTime?: string
+
+        endTime?: string
+
+        granularity?: 'monthly' | 'daily'
+
+        dimension?: 'connection' | 'metric'
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('keibi')
+    }
+
+    const [state, setState] =
+        useState<IuseInventoryApiV2AnalyticsSpendTableListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.inventory
+                .apiV2AnalyticsSpendTableList(query, params)
                 .then((resp) => {
                     setState({
                         ...state,

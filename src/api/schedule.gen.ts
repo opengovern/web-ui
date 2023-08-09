@@ -41,6 +41,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
@@ -81,8 +82,8 @@ interface IuseScheduleApiV1DescribeTriggerUpdateState {
 
 export const useScheduleApiV1DescribeTriggerUpdate = (
     connectionId: string,
-    query: {
-        resource_type: string[]
+    query?: {
+        resource_type?: string[]
     },
     params: RequestParams = {},
     autoExecute = true

@@ -1111,6 +1111,14 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem {
     field?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow {
+    costValue?: Record<string, number>
+    /** @example "compute" */
+    dimensionId?: string
+    /** @example "Compute" */
+    dimensionName?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest {
     key?: string
     value?: any
@@ -3028,6 +3036,41 @@ export class Api<
             }),
 
         /**
+         * @description Returns spend table with respect to the dimension and granularity
+         *
+         * @tags inventory
+         * @name ApiV2AnalyticsSpendTableList
+         * @summary Get Spend Trend
+         * @request GET:/inventory/api/v2/analytics/spend/table
+         * @secure
+         */
+        apiV2AnalyticsSpendTableList: (
+            query?: {
+                /** timestamp for start in epoch seconds */
+                startTime?: string
+                /** timestamp for end in epoch seconds */
+                endTime?: string
+                /** Granularity of the table, default is daily */
+                granularity?: 'monthly' | 'daily'
+                /** Dimension of the table, default is metric */
+                dimension?: 'connection' | 'metric'
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[],
+                any
+            >({
+                path: `/inventory/api/v2/analytics/spend/table`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
          *
          * @tags analytics
@@ -3861,9 +3904,9 @@ export class Api<
          */
         apiV1DescribeTriggerUpdate: (
             connectionId: string,
-            query: {
+            query?: {
                 /** Resource Type */
-                resource_type: string[]
+                resource_type?: string[]
             },
             params: RequestParams = {}
         ) =>
