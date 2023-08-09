@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { DateFieldState, DateSegment, useDateFieldState } from 'react-stately'
 import { useDateField, useDateSegment, useLocale } from 'react-aria'
-import { createCalendar } from '@internationalized/date'
+import { DateValue, createCalendar } from '@internationalized/date'
 import { AriaDateFieldOptions } from '@react-aria/datepicker'
 
 function CustomDateSegment({
@@ -48,7 +48,7 @@ function CustomDateSegment({
     )
 }
 
-export function DateField(props: AriaDateFieldOptions<any>) {
+export function DateField(props: AriaDateFieldOptions<DateValue>) {
     const { locale } = useLocale()
     const state = useDateFieldState({
         ...props,

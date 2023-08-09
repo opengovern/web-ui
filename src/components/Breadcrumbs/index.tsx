@@ -3,8 +3,8 @@ import { Button, Flex } from '@tremor/react'
 
 type IProps = {
     pages: {
-        name: any
-        path: any
+        name: string | undefined
+        path: (() => void) | string
         current: boolean
     }[]
 }
@@ -21,12 +21,22 @@ export default function Breadcrumbs({ pages }: IProps) {
         }
         return nP
     }
+
+    const handleOnClick = (path: (() => void) | string) => {
+        return () => {
+            if (typeof path === 'string') {
+                // do nothing
+            } else {
+                path()
+            }
+        }
+    }
     return (
         <nav className="flex" aria-label="Breadcrumb">
             <ol className="flex items-center space-x-4">
                 <li>
                     <Button
-                        onClick={pages[0].path}
+                        onClick={handleOnClick(pages[0].path)}
                         variant="light"
                         className="text-sm font-medium hover:text-blue-600"
                         aria-current={pages[0].current ? 'page' : undefined}
@@ -39,7 +49,7 @@ export default function Breadcrumbs({ pages }: IProps) {
                         <Flex alignItems="center">
                             <ChevronRightIcon className="h-5 w-5 flex-shrink-0 text-gray-600" />
                             <Button
-                                onClick={page.href}
+                                onClick={handleOnClick(page.href)}
                                 variant="light"
                                 className={`${
                                     page.current

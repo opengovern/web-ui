@@ -9,7 +9,6 @@ import {
 } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
-import dayjs from 'dayjs'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import {
@@ -23,7 +22,7 @@ interface IInsightsCard {
     metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
 }
 
-const calculateTime = (inputData: any) => {
+const calculateTime = (inputData: string) => {
     if (inputData) {
         const date = Date.parse(inputData) / 1000
         const now = Date.now() / 1000
@@ -95,7 +94,7 @@ const generateBadge = (
 
 export default function InsightCard({ metric }: IInsightsCard) {
     const navigate = useNavigate()
-    const navigateToAssetsInsightsDetails = (id: any) => {
+    const navigateToAssetsInsightsDetails = (id: number | undefined) => {
         navigate(`${id}`)
     }
     return (
@@ -149,7 +148,9 @@ export default function InsightCard({ metric }: IInsightsCard) {
                 <Flex className="mt-3">
                     {metric?.connector === 'AWS' ? <AWSIcon /> : <AzureIcon />}
                     <Text>
-                        {calculateTime(metric?.result?.at(0)?.executedAt || 0)}
+                        {calculateTime(
+                            metric?.result?.at(0)?.executedAt || '0'
+                        )}
                     </Text>
                 </Flex>
             </Flex>

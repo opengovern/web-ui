@@ -177,39 +177,29 @@ export default function TopAccountsTrend() {
             !isLoadingTopAccount
         )
 
+    const data = () => {
+        return isDemo() ? MockData : accountsTrends
+    }
+
     const trendData = () => {
         const dateMaps = new Map<
             number,
             { connectionId: string; value: number }[]
         >()
-        // eslint-disable-next-line no-unused-expressions
-        isDemo()
-            ? MockData?.forEach((connTrend) => {
-                  connTrend.trend?.forEach((item) => {
-                      const date = dayjs(item.date).unix() * 1000
-                      const arr = dateMaps.get(date) || []
-                      dateMaps.set(date, [
-                          ...arr,
-                          {
-                              connectionId: connTrend.connectionId,
-                              value: item.count || 0,
-                          },
-                      ])
-                  })
-              })
-            : accountsTrends?.forEach((connTrend) => {
-                  connTrend.trend?.forEach((item) => {
-                      const date = dayjs(item.date).unix() * 1000
-                      const arr = dateMaps.get(date) || []
-                      dateMaps.set(date, [
-                          ...arr,
-                          {
-                              connectionId: connTrend.connectionId,
-                              value: item.count || 0,
-                          },
-                      ])
-                  })
-              })
+
+        data()?.forEach((connTrend) => {
+            connTrend.trend?.forEach((item) => {
+                const date = dayjs(item.date).unix() * 1000
+                const arr = dateMaps.get(date) || []
+                dateMaps.set(date, [
+                    ...arr,
+                    {
+                        connectionId: connTrend.connectionId,
+                        value: item.count || 0,
+                    },
+                ])
+            })
+        })
 
         return Array.from(dateMaps)
             .sort((a, b) => {

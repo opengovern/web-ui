@@ -5,7 +5,7 @@ type IProps = {
     metric?: string
     metricPrev?: string
     deltaType?: DeltaType
-    delta?: any
+    delta?: string
     onClick?: () => void
 }
 

@@ -18,8 +18,9 @@ type IProps = {
     metricPrev?: string
     delta?: string
     deltaType?: DeltaType
-    areaChartData?: any
-    url?: any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    areaChartData?: any[]
+    url?: string
     loading?: boolean
 }
 

@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { AgGridReact } from 'ag-grid-react'
-import { ColDef, GridOptions, ICellRendererParams } from 'ag-grid-community'
+import {
+    ColDef,
+    GridApi,
+    GridOptions,
+    ICellRendererParams,
+    IRowNode,
+} from 'ag-grid-community'
 import { Button, Flex, Text } from '@tremor/react'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
 import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
@@ -118,7 +124,10 @@ export default function ConnectionList() {
         pageSize: 10000,
     })
 
-    const updateSelectionByProvider = (api: any, newValue: any) => {
+    const updateSelectionByProvider = (
+        api: GridApi | undefined,
+        newValue: string
+    ) => {
         if (newValue.length) {
             if (newValue === 'All') {
                 api?.deselectAll()
@@ -127,7 +136,7 @@ export default function ConnectionList() {
                 return
             }
 
-            api?.forEachNode((node: any) => {
+            api?.forEachNode((node: IRowNode) => {
                 if (node.data?.connector === newValue) {
                     node.setSelected(true, false, 'checkboxSelected')
                 } else {
@@ -137,7 +146,7 @@ export default function ConnectionList() {
         }
     }
 
-    const initializeSelectedConnections = (api: any) => {
+    const initializeSelectedConnections = (api: GridApi) => {
         if (selectedConnections === undefined) {
             return
         }
@@ -156,7 +165,7 @@ export default function ConnectionList() {
                 console.error("couldn't find tag", selectedConnections.provider)
             }
         } else {
-            api?.forEachNode((node: any) => {
+            api?.forEachNode((node: IRowNode) => {
                 const item = selectedConnections.connections?.find(
                     (data: string) => data === node.data?.id
                 )
@@ -170,14 +179,14 @@ export default function ConnectionList() {
         }
     }
 
-    const selectionText = (api: any) => {
+    const selectionText = (api: GridApi | undefined) => {
         if (api === undefined) {
             return ''
         }
 
         const conns =
             selectedProvider.value === ''
-                ? api.getSelectedNodes().map((data: any) => data.data?.id)
+                ? api.getSelectedNodes().map((data: IRowNode) => data.data?.id)
                 : []
 
         if (selectedProvider.value === '') {
@@ -235,12 +244,12 @@ export default function ConnectionList() {
             setSelectedProvider({ label: 'All', value: '' })
         },
         getRowHeight: (params) => 50,
-        isRowSelectable: (rowNode: any) => {
+        isRowSelectable: (rowNode) => {
             return rowNode.data
                 ? rowNode.data.lifecycleState === 'ONBOARD'
                 : false
         },
-        getRowStyle: (params: any) => {
+        getRowStyle: (params) => {
             if (params.data.lifecycleState !== 'ONBOARD') {
                 return { opacity: 0.4 }
             }
