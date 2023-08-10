@@ -153,9 +153,11 @@ const columns: IColumn<any, any>[] = [
         flex: 1,
         cellRenderer: (params: ICellRendererParams) => {
             return (
-                <Badge color={getBadgeColor(params.value)}>
-                    {getBadgeText(params.value)}
-                </Badge>
+                params.data?.providerConnectionName && (
+                    <Badge color={getBadgeColor(params.value)}>
+                        {getBadgeText(params.value)}
+                    </Badge>
+                )
             )
         },
     },
@@ -198,7 +200,7 @@ const generateRows = (data: any) => {
             if (data[i].metadata) {
                 // eslint-disable-next-line no-param-reassign
                 data[i].type = snakeCaseToLabel(
-                    data[i].metadata.account_type || ''
+                    data[i].metadata.account_type || 'N/A'
                 )
                 rows.push(data[i])
             }
