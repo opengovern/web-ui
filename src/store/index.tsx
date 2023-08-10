@@ -31,3 +31,5 @@ export const filterAtom = atom<IFilter>({
 
 export const selectedResourceCategoryAtom = atom('All Categories')
 export const sideBarCollapsedAtom = atom(false)
+export const assetOpenAtom = atom(false)
+export const administrationOpenAtom = atom(false)

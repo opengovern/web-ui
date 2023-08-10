@@ -27,7 +27,11 @@ import {
     Title,
 } from '@tremor/react'
 import { useAtom } from 'jotai'
-import { sideBarCollapsedAtom } from '../../store'
+import {
+    administrationOpenAtom,
+    assetOpenAtom,
+    sideBarCollapsedAtom,
+} from '../../store'
 import CLIMenu from './CLIMenu'
 import { KaytuIcon } from '../../icons/icons'
 
@@ -104,10 +108,25 @@ export default function LoggedInLayout({
     showSidebar = true,
 }: IProps) {
     const workspace = useParams<{ ws: string }>().ws
-    const [sidebarOpen, setSidebarOpen] = useState(false)
     const { user, logout } = useAuth0()
+
+    const [sidebarOpen, setSidebarOpen] = useState(false)
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
+    const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom)
+    const [administrationOpen, setAdministrationOpen] = useAtom(
+        administrationOpenAtom
+    )
     const [theme, setTheme] = useState(localStorage.theme || 'dark')
+
+    const isOpen = (item: any) => {
+        if (item.name === 'Assets') {
+            return assetOpen
+        }
+        if (item.name === 'Administration') {
+            return administrationOpen
+        }
+        return false
+    }
 
     const sidebar = (
         <>
@@ -230,13 +249,18 @@ export default function LoggedInLayout({
                                     {item.children?.length && !collapsed ? (
                                         <Accordion
                                             className="bg-transparent border-0"
-                                            defaultOpen={
-                                                item.children.find(
-                                                    (child) =>
-                                                        child.page ===
-                                                        currentPage
-                                                )?.page === currentPage
-                                            }
+                                            defaultOpen={isOpen(item)}
+                                            onClick={() => {
+                                                if (item.name === 'Assets') {
+                                                    setAssetOpen(!assetOpen)
+                                                }
+                                                if (
+                                                    item.name ===
+                                                    'Administration'
+                                                ) {
+                                                    setAssetOpen(!assetOpen)
+                                                }
+                                            }}
                                         >
                                             <AccordionHeader className="text-gray-300 bg-transparent pl-2 pr-3 py-2 my-0.5">
                                                 <Flex
@@ -357,9 +381,7 @@ export default function LoggedInLayout({
                                 {user?.given_name || user?.email || ''}
                             </Title>
                         </div>
-                        {/* Separator */}
                         <div className="h-6 w-px bg-gray-900/10 dark:bg-white/20 lg:hidden" />
-
                         <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
                             <div className="flex items-center gap-x-4 lg:gap-x-6">
                                 <button
@@ -375,26 +397,6 @@ export default function LoggedInLayout({
                                     )}
                                 </button>
                                 <CLIMenu />
-                                {/* <button
-                                        type="button"
-                                        className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-                                        onClick={}
-                                    >
-                                        <span className="sr-only">CLI</span>
-                                        <CommandLineIcon
-                                            className="h-6 w-6"
-                                        />
-                                    </button> */}
-                                {/* <button
-                                    type="button"
-                                    className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-                                >
-                                    <span className="sr-only">Help</span>
-                                    <QuestionMarkCircleIcon
-                                        className="h-6 w-6"
-                                    />
-                                </button> */}
-                                {/* Separator */}
                                 <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-white/20" />
                                 {/* Profile dropdown */}
                                 <Menu as="div" className="relative">
