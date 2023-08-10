@@ -10,7 +10,7 @@ import {
 } from '@tremor/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import Menu from '../../components/Menu'
 import Summary from './Summary'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../api/compliance.gen'
 import Spinner from '../../components/Spinner'
@@ -50,7 +50,7 @@ export default function Compliance() {
     const [search, setSearch] = useState('')
 
     return (
-        <LoggedInLayout currentPage="benchmarks">
+        <Menu currentPage="benchmarks">
             <Flex flexDirection="col" alignItems="start">
                 <Metric>Compliance</Metric>
                 <Summary benchmark={benchmarks} loading={isLoading} />
@@ -138,6 +138,6 @@ export default function Compliance() {
                     <Button onClick={() => sendNow()}>Retry</Button>
                 )}
             </Flex>
-        </LoggedInLayout>
+        </Menu>
     )
 }

@@ -10,7 +10,7 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import DateRangePicker from '../../components/DateRangePicker'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import Menu from '../../components/Menu'
 import { useInventoryApiV2AnalyticsTagList } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
 import TrendsTab from './Tabs/TrendsTab'
@@ -84,7 +84,7 @@ export default function Assets() {
     }, [tabs])
 
     return (
-        <LoggedInLayout currentPage="assets">
+        <Menu currentPage="assets">
             <Flex justifyContent="between" alignItems="center">
                 <Metric>Assets</Metric>
                 <Flex justifyContent="end" alignItems="start">
@@ -118,6 +118,6 @@ export default function Assets() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-        </LoggedInLayout>
+        </Menu>
     )
 }

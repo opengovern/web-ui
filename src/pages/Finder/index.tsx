@@ -35,7 +35,7 @@ import {
     ExclamationCircleIcon,
 } from '@heroicons/react/24/solid'
 import { useLocation } from 'react-router-dom'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import Menu from '../../components/Menu'
 import QueryCard from '../../components/Cards/QueryCard'
 import {
     useInventoryApiV1QueryList,
@@ -155,7 +155,7 @@ export default function Finder() {
     }
 
     return (
-        <LoggedInLayout currentPage="finder">
+        <Menu currentPage="finder">
             {categoryLoading || queryLoading ? (
                 <Spinner className="mt-56" />
             ) : (
@@ -400,6 +400,6 @@ export default function Finder() {
                     </Flex>
                 </Flex>
             )}
-        </LoggedInLayout>
+        </Menu>
     )
 }

@@ -1,7 +1,7 @@
 import { Flex, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
-import LoggedInLayout from '../../../components/LoggedInLayout'
+import Menu from '../../../components/Menu'
 import {
     useOnboardApiV1ConnectionsSummaryList,
     useOnboardApiV1CredentialList,
@@ -811,7 +811,7 @@ export default function ConnectorDetail() {
         { name: connector, path: '', current: true },
     ]
     return (
-        <LoggedInLayout currentPage="integration">
+        <Menu currentPage="integration">
             <Flex flexDirection="col" alignItems="start">
                 <Flex className="mb-6">
                     <Breadcrumbs pages={breadcrumbsPages} />
@@ -863,6 +863,6 @@ export default function ConnectorDetail() {
                     </>
                 )}
             </Flex>
-        </LoggedInLayout>
+        </Menu>
     )
 }

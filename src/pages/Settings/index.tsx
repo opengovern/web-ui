@@ -8,7 +8,7 @@ import {
 import { Link, useParams } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import jwtDecode from 'jwt-decode'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import Menu from '../../components/Menu'
 import SettingsEntitlement from './Entitlement'
 import SettingsMembers from './Members'
 import SettingsWorkspaceAPIKeys from './APIKeys'
@@ -113,7 +113,7 @@ export default function Settings() {
     }
 
     return (
-        <LoggedInLayout currentPage="settings">
+        <Menu currentPage="settings">
             {isLoading || tokenLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
@@ -184,6 +184,6 @@ export default function Settings() {
                     </main>
                 </Flex>
             )}
-        </LoggedInLayout>
+        </Menu>
     )
 }

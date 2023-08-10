@@ -18,7 +18,7 @@ import { AgGridReact } from 'ag-grid-react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
-import LoggedInLayout from '../../../components/LoggedInLayout'
+import Menu from '../../../components/Menu'
 import {
     useComplianceApiV1InsightDetail,
     useComplianceApiV1InsightTrendDetail,
@@ -270,7 +270,7 @@ export default function InsightDetail() {
     }, [detailLoading])
 
     return (
-        <LoggedInLayout currentPage="insight">
+        <Menu currentPage="insight">
             {trendLoading || detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
@@ -423,6 +423,6 @@ export default function InsightDetail() {
                     </div>
                 </Flex>
             )}
-        </LoggedInLayout>
+        </Menu>
     )
 }

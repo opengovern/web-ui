@@ -22,7 +22,7 @@ import {
 } from 'ag-grid-community'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import DateRangePicker from '../../../components/DateRangePicker'
-import LoggedInLayout from '../../../components/LoggedInLayout'
+import Menu from '../../../components/Menu'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import { useInventoryApiV2AnalyticsSpendTableList } from '../../../api/inventory.gen'
 import { spendTimeAtom } from '../../../store'
@@ -246,7 +246,7 @@ export default function CostMetricsDetails() {
     }, [isLoading])
 
     return (
-        <LoggedInLayout currentPage="spend">
+        <Menu currentPage="spend">
             <Flex
                 flexDirection="row"
                 justifyContent="between"
@@ -277,6 +277,6 @@ export default function CostMetricsDetails() {
                     />
                 </div>
             </Card>
-        </LoggedInLayout>
+        </Menu>
     )
 }

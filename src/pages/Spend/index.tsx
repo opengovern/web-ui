@@ -11,7 +11,7 @@ import {
 import { useAtom, useAtomValue } from 'jotai'
 import { useNavigate, useLocation } from 'react-router-dom'
 import DateRangePicker from '../../components/DateRangePicker'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import Menu from '../../components/Menu'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsTagList,
@@ -157,7 +157,7 @@ export default function Spend() {
     }, [tab])
 
     return (
-        <LoggedInLayout currentPage="spend">
+        <Menu currentPage="spend">
             <Flex
                 flexDirection="row"
                 justifyContent="between"
@@ -199,6 +199,6 @@ export default function Spend() {
                     <TabPanel>{compositionTab}</TabPanel>
                 </TabPanels>
             </TabGroup>
-        </LoggedInLayout>
+        </Menu>
     )
 }
