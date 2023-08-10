@@ -1,10 +1,10 @@
 import { Button, Flex, Grid, Metric, Text } from '@tremor/react'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import Menu from '../../components/Menu'
 import stackImg from '../../icons/stack.png'
 
 export default function Stack() {
     return (
-        <LoggedInLayout currentPage="stack">
+        <Menu currentPage="stack">
             <Flex justifyContent="center" className="md:mt-32">
                 <Grid numItems={1} numItemsMd={2}>
                     <img src={stackImg} alt="stack" />
@@ -31,6 +31,6 @@ export default function Stack() {
                     </Flex>
                 </Grid>
             </Flex>
-        </LoggedInLayout>
+        </Menu>
     )
 }

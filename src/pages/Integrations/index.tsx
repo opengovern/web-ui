@@ -1,5 +1,5 @@
 import { Flex, Grid, Metric, Title } from '@tremor/react'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import Menu from '../../components/Menu'
 import {
     useOnboardApiV1CatalogMetricsList,
     useOnboardApiV1ConnectorList,
@@ -45,7 +45,7 @@ export default function Integrations() {
     const connectors = () => (isDemo() ? mockConnectors : responseConnectors)
 
     return (
-        <LoggedInLayout currentPage="integration">
+        <Menu currentPage="integration">
             <Metric>Integrations</Metric>
             <Grid numItems={2} numItemsLg={4} className="gap-4 mt-6 mb-10">
                 <SummaryCard
@@ -87,6 +87,6 @@ export default function Integrations() {
                     ))}
                 </Grid>
             )}
-        </LoggedInLayout>
+        </Menu>
     )
 }

@@ -11,7 +11,7 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import LoggedInLayout from '../../../components/LoggedInLayout'
+import Menu from '../../../components/Menu'
 import { filterAtom, timeAtom } from '../../../store'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import DateRangePicker from '../../../components/DateRangePicker'
@@ -65,7 +65,7 @@ export default function BenchmarkDetail() {
     }, [tabs])
 
     return (
-        <LoggedInLayout currentPage="benchmarks">
+        <Menu currentPage="benchmarks">
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (
@@ -136,6 +136,6 @@ export default function BenchmarkDetail() {
                     </TabGroup>
                 </>
             )}
-        </LoggedInLayout>
+        </Menu>
     )
 }

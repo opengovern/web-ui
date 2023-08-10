@@ -1,7 +1,7 @@
 import { Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
-import LoggedInLayout from '../../../../components/LoggedInLayout'
+import Menu from '../../../../components/Menu'
 import { filterAtom } from '../../../../store'
 import SingleAccount from './SingleAccount'
 import MultiAccount from './MultiAccount'
@@ -25,7 +25,7 @@ export default function AccountsDetails() {
     ]
 
     return (
-        <LoggedInLayout currentPage="assets">
+        <Menu currentPage="assets">
             <Flex>
                 <Breadcrumbs pages={breadcrumbsPages} />
                 <Flex justifyContent="end">
@@ -38,6 +38,6 @@ export default function AccountsDetails() {
             ) : (
                 <MultiAccount />
             )}
-        </LoggedInLayout>
+        </Menu>
     )
 }

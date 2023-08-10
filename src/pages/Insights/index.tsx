@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai/index'
 import { useNavigate, useLocation } from 'react-router-dom'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import Menu from '../../components/Menu'
 import InsightCategories from './InsightCategories'
 import {
     useComplianceApiV1InsightGroupList,
@@ -64,7 +64,7 @@ export default function Insights() {
     }, [tabs])
 
     return (
-        <LoggedInLayout currentPage="insight">
+        <Menu currentPage="insight">
             <Flex flexDirection="col">
                 <Flex
                     flexDirection="row"
@@ -211,6 +211,6 @@ export default function Insights() {
                     </TabPanels>
                 </TabGroup>
             </Flex>
-        </LoggedInLayout>
+        </Menu>
     )
 }

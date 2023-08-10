@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Flex, Grid, Title } from '@tremor/react'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import Menu from '../../components/Menu'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import CreateWorkspace from './CreateWorkspace'
@@ -18,7 +18,7 @@ export default function Workspaces() {
     })
 
     return (
-        <LoggedInLayout currentPage="assets" showSidebar={false}>
+        <Menu currentPage="assets" showSidebar={false}>
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
@@ -57,6 +57,6 @@ export default function Workspaces() {
                     </div>
                 </Flex>
             )}
-        </LoggedInLayout>
+        </Menu>
     )
 }

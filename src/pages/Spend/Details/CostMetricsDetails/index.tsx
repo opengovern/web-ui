@@ -27,7 +27,7 @@ import Spinner from '../../../../components/Spinner'
 import DateRangePicker from '../../../../components/DateRangePicker'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import LoggedInLayout from '../../../../components/LoggedInLayout'
+import Menu from '../../../../components/Menu'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import ConnectionList from '../../../../components/ConnectionList'
 import {
@@ -314,7 +314,7 @@ export default function CostMetricsDetails() {
     }, [tabs])
 
     return (
-        <LoggedInLayout currentPage="spend">
+        <Menu currentPage="spend">
             <Flex
                 flexDirection="row"
                 justifyContent="between"
@@ -388,6 +388,6 @@ export default function CostMetricsDetails() {
                     </div>
                 )}
             </Card>
-        </LoggedInLayout>
+        </Menu>
     )
 }

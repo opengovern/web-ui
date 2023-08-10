@@ -11,7 +11,7 @@ import {
 } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useState } from 'react'
-import LoggedInLayout from '../../components/LoggedInLayout'
+import Menu from '../../components/Menu'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import { numberDisplay, priceDisplay } from '../../utilities/numericDisplay'
 import {
@@ -123,7 +123,7 @@ export default function Home() {
     }
 
     return (
-        <LoggedInLayout currentPage="home">
+        <Menu currentPage="home">
             <Metric>Home</Metric>
             <Grid
                 numItems={1}
@@ -168,6 +168,6 @@ export default function Home() {
                 </Flex>
                 {renderChart(selectedType)}
             </Card>
-        </LoggedInLayout>
+        </Menu>
     )
 }

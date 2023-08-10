@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { filterAtom, timeAtom } from '../../../../store'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
-import LoggedInLayout from '../../../../components/LoggedInLayout'
+import Menu from '../../../../components/Menu'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import DateRangePicker from '../../../../components/DateRangePicker'
 import ConnectionList from '../../../../components/ConnectionList'
@@ -169,7 +169,7 @@ export default function ResourceMetricsDetails() {
     }
 
     return (
-        <LoggedInLayout currentPage="assets">
+        <Menu currentPage="assets">
             <Flex
                 flexDirection="row"
                 justifyContent="between"
@@ -197,6 +197,6 @@ export default function ResourceMetricsDetails() {
                     }}
                 />
             </Card>
-        </LoggedInLayout>
+        </Menu>
     )
 }

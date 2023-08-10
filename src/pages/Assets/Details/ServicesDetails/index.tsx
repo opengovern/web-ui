@@ -6,7 +6,7 @@ import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.
 import Summary from './Summary'
 import { filterAtom, timeAtom } from '../../../../store'
 import DateRangePicker from '../../../../components/DateRangePicker'
-import LoggedInLayout from '../../../../components/LoggedInLayout'
+import Menu from '../../../../components/Menu'
 import Breadcrumbs from '../../../../components/Breadcrumbs'
 import ConnectionList from '../../../../components/ConnectionList'
 import {
@@ -103,7 +103,7 @@ export default function ServicesDetails() {
         { name: 'Services detail', path: '', current: true },
     ]
     return (
-        <LoggedInLayout currentPage="assets">
+        <Menu currentPage="assets">
             <Flex
                 flexDirection="row"
                 justifyContent="between"
@@ -131,6 +131,6 @@ export default function ServicesDetails() {
                     }
                 }}
             />
-        </LoggedInLayout>
+        </Menu>
     )
 }
