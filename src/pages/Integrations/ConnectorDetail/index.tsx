@@ -804,7 +804,7 @@ export default function ConnectorDetail() {
         {
             name: 'Integrations',
             path: () => {
-                navigate('./..')
+                navigate('./../..')
             },
             current: false,
         },

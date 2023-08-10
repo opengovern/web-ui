@@ -185,7 +185,7 @@ export default function CostMetrics({
     return (
         <MetricsList
             name="Cost"
-            seeMoreUrl="spend-metrics"
+            seeMoreUrl="details"
             isLoading={
                 // eslint-disable-next-line no-nested-ternary
                 selectedScopeIdx === 0

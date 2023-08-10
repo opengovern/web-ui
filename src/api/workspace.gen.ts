@@ -41,6 +41,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
@@ -76,6 +77,7 @@ interface IuseWorkspaceApiV1OrganizationCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -166,6 +168,7 @@ interface IuseWorkspaceApiV1OrganizationDeleteState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -256,6 +259,7 @@ interface IuseWorkspaceApiV1WorkspaceCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -345,6 +349,7 @@ interface IuseWorkspaceApiV1WorkspaceCurrentListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -434,6 +439,7 @@ interface IuseWorkspaceApiV1WorkspaceDeleteState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -523,6 +529,7 @@ interface IuseWorkspaceApiV1WorkspaceNameCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -619,6 +626,7 @@ interface IuseWorkspaceApiV1WorkspaceOrganizationCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -715,6 +723,7 @@ interface IuseWorkspaceApiV1WorkspaceOwnerCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -811,6 +820,7 @@ interface IuseWorkspaceApiV1WorkspaceResumeCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -901,6 +911,7 @@ interface IuseWorkspaceApiV1WorkspaceSuspendCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -991,6 +1002,7 @@ interface IuseWorkspaceApiV1WorkspaceTierCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1087,6 +1099,7 @@ interface IuseWorkspaceApiV1WorkspacesListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1175,6 +1188,7 @@ interface IuseWorkspaceApiV1WorkspacesByidDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1265,6 +1279,7 @@ interface IuseWorkspaceApiV1WorkspacesLimitsByidDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1355,6 +1370,7 @@ interface IuseWorkspaceApiV1WorkspacesLimitsDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -1453,6 +1469,7 @@ interface IuseWorkspaceApiV1WorkspacesDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 

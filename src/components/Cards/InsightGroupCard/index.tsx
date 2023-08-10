@@ -16,26 +16,32 @@ import { useNavigate } from 'react-router-dom'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import dayjs from 'dayjs'
 import { numericDisplay } from '../../../utilities/numericDisplay'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup } from '../../../api/api'
 
 interface IInsightGroupCard {
-    metric: any
+    metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup
 }
 
-const calculatePercent = (inputData: any) => {
+const calculatePercent = (
+    inputData: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup
+) => {
     if (
         Number(inputData.oldTotalResultValue) &&
         Number(inputData.totalResultValue)
     ) {
         return (
-            ((inputData.totalResultValue - inputData.oldTotalResultValue) /
-                inputData.oldTotalResultValue) *
+            (((inputData.totalResultValue || 0) -
+                (inputData.oldTotalResultValue || 0)) /
+                (inputData.oldTotalResultValue || 0)) *
                 100 || 0
         )
     }
     return 0
 }
 
-const generateBadge = (met: any) => {
+const generateBadge = (
+    met: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup
+) => {
     if (!met?.totalResultValue && !met?.oldTotalResultValue) {
         return (
             <Callout
@@ -90,7 +96,7 @@ const generateBadge = (met: any) => {
 
 export default function InsightGroupCard({ metric }: IInsightGroupCard) {
     const navigate = useNavigate()
-    const navigateToAssetsInsightsDetails = (id: any) => {
+    const navigateToAssetsInsightsDetails = (id: number | undefined) => {
         navigate(`${id}`)
     }
 
@@ -125,8 +131,8 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
             </Flex>
             <List className="w-full">
                 {metric.insights
-                    .filter((insight: any, i: number) => i < 2)
-                    .map((insight: any) => (
+                    ?.filter((insight, i: number) => i < 2)
+                    .map((insight) => (
                         <ListItem
                             onClick={() =>
                                 (insight?.totalResultValue ||
@@ -145,8 +151,8 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                             </Text>
                             <Text
                                 color={
-                                    insight.totalResultValue -
-                                        insight.oldTotalResultValue >
+                                    (insight?.totalResultValue || 0) -
+                                        (insight?.oldTotalResultValue || 0) >
                                     0
                                         ? 'green'
                                         : 'red'
@@ -162,8 +168,8 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                 <AccordionBody className="p-0 w-full">
                     <List>
                         {metric.insights
-                            .filter((insight: any, i: number) => i > 1)
-                            .map((insight: any, i: number) => (
+                            ?.filter((insight, i: number) => i > 1)
+                            .map((insight, i: number) => (
                                 <ListItem
                                     onClick={() =>
                                         (insight?.totalResultValue ||
@@ -184,8 +190,9 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                     </Text>
                                     <Text
                                         color={
-                                            insight.totalResultValue -
-                                                insight.oldTotalResultValue >
+                                            (insight?.totalResultValue || 0) -
+                                                (insight?.oldTotalResultValue ||
+                                                    0) >
                                             0
                                                 ? 'green'
                                                 : 'red'
@@ -202,7 +209,7 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                 <AccordionHeader
                     color="blue"
                     className={`p-0 w-full pr-0.5 ${
-                        metric.insights.length > 2
+                        metric.insights?.length || 0 > 2
                             ? 'opacity-100'
                             : 'opacity-0 cursor-default'
                     }`}

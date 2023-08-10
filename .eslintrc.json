@@ -73,10 +73,9 @@
         "no-underscore-dangle": [
             "error",
             {
-                "allow": [
-                    "__RUNTIME_CONFIG__"
-                ]
+                "allow": ["__RUNTIME_CONFIG__"]
             }
         ]
+        // "@typescript-eslint/no-explicit-any": "error"
     }
 }

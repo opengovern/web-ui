@@ -24,8 +24,9 @@ import {
 import Spinner from '../../Spinner'
 
 type IProps = {
-    title?: any
-    tabs?: any
+    title?: string
+    tabs?: string[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any
     loading?: boolean
     listTitle?: string
@@ -37,6 +38,7 @@ type Item = {
     name:
         | boolean
         | Key
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         | ReactElement<any, string | JSXElementConstructor<any>>
         | Iterable<ReactNode>
         | null
@@ -93,7 +95,7 @@ export default function CardWithList({
                 className="mt-3"
             >
                 <TabList>
-                    {tabs.map((item: any) => (
+                    {tabs.map((item) => (
                         <Tab key={item}>{item}</Tab>
                     ))}
                 </TabList>

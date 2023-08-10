@@ -13,7 +13,10 @@ import dayjs from 'dayjs'
 import { useState } from 'react'
 import Menu from '../../components/Menu'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import { numberDisplay, priceDisplay } from '../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numberDisplay,
+} from '../../utilities/numericDisplay'
 import {
     useInventoryApiV2AnalyticsMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
@@ -102,7 +105,7 @@ export default function Home() {
                     showLegend={false}
                     data={fixTime(sortedTrend())}
                     showAnimation
-                    valueFormatter={priceDisplay}
+                    valueFormatter={exactPriceDisplay}
                 />
             )
         }

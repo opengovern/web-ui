@@ -41,6 +41,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
     GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
     GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
@@ -76,13 +77,14 @@ interface IuseScheduleApiV1DescribeTriggerUpdateState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
 export const useScheduleApiV1DescribeTriggerUpdate = (
     connectionId: string,
-    query: {
-        resource_type: string[]
+    query?: {
+        resource_type?: string[]
     },
     params: RequestParams = {},
     autoExecute = true
@@ -171,6 +173,7 @@ interface IuseScheduleApiV1StacksListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgDescribeApiStack[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -264,6 +267,7 @@ interface IuseScheduleApiV1StacksCreateCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgDescribeApiStack
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -360,6 +364,7 @@ interface IuseScheduleApiV1StacksResourceListState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgDescribeApiStack[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -452,6 +457,7 @@ interface IuseScheduleApiV1StacksDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgDescribeApiStack
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -541,6 +547,7 @@ interface IuseScheduleApiV1StacksDeleteState {
     isLoading: boolean
     isExecuted: boolean
     response?: void
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -630,6 +637,7 @@ interface IuseScheduleApiV1StacksFindingsCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -721,6 +729,7 @@ interface IuseScheduleApiV1StacksInsightDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
@@ -818,6 +827,7 @@ interface IuseScheduleApiV1StacksInsightsDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 

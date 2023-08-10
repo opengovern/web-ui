@@ -93,6 +93,7 @@ export default function Settings() {
 
     useEffect(() => {
         getAccessTokenSilently().then((e) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const decoded: any = jwtDecode(e)
             SetDecodedToken(decoded)
             setTokenLoading(false)

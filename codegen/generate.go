@@ -105,6 +105,7 @@ interface I%[6]sState {
 	isLoading: boolean
 	isExecuted: boolean
 	response?: %[3]s
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	error?: any
 }
 
@@ -202,7 +203,7 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
 	}
 	for k, v := range apiFiles {
 		apiFiles[k] = fmt.Sprintf(importFormat, ims) + v
-// 		apiFiles[k] = importFormat + v
+		// 		apiFiles[k] = importFormat + v
 		err = os.WriteFile(fmt.Sprintf("./src/api/%s.gen.ts", k), []byte(apiFiles[k]), os.ModePerm)
 		if err != nil {
 			panic(err)

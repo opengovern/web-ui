@@ -13,6 +13,7 @@ interface ConnectionTrend {
 }
 
 const apiV2AnalyticsSpendTrendList = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     api: Api<any>,
     connectionIDs?: string[],
     query?: {
@@ -48,6 +49,7 @@ interface IuseInventoryApiV2CostTrendConnectionsState {
     isLoading: boolean
     isExecuted: boolean
     response?: ConnectionTrend[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 

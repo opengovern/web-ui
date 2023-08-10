@@ -1,7 +1,7 @@
 import { Card, Flex, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
-import { priceDisplay } from '../../../../../utilities/numericDisplay'
+import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2AnalyticsSpendTrendList } from '../../../../../api/inventory.gen'
 import Spinner from '../../../../../components/Spinner'
 import Chart from '../../../../../components/Charts'
@@ -166,6 +166,7 @@ export default function GrowthTrend() {
     }
     const { response: costTrend, isLoading } =
         useInventoryApiV2AnalyticsSpendTrendList(query)
+
     const fixTime = (
         data:
             | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
@@ -234,7 +235,7 @@ export default function GrowthTrend() {
                     showLegend={false}
                     data={fixTime(sortedTrend()) || []}
                     showAnimation
-                    valueFormatter={priceDisplay}
+                    valueFormatter={exactPriceDisplay}
                 />
             )}
         </Card>
