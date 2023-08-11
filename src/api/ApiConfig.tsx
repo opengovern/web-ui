@@ -10,8 +10,8 @@ const isDemo = nodeEnv === 'demo'
 const instance = axios.create({
     baseURL:
         hostname === 'localhost' || hostname === '127.0.0.1'
-            ? `${BASE_URL}${isDemo ? '' : '/keibi/'}` // 'https://app.dev.keibi.io/keibi/'
-            : `${origin}${isDemo ? '' : '/keibi/'}`,
+            ? `${BASE_URL}${isDemo ? '' : '/kaytu/'}`
+            : `${origin}${isDemo ? '' : '/kaytu/'}`,
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -38,7 +38,7 @@ export const setWorkspace = (workspaceName?: string) => {
 
 export const getApiBaseURL = () => {
     return hostname === 'localhost' || hostname === '127.0.0.1'
-        ? `${BASE_URL}` // 'https://app.dev.keibi.io'
+        ? `${BASE_URL}`
         : origin
 }
 

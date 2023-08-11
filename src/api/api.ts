@@ -187,7 +187,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest {
 
 export enum GithubComKaytuIoKaytuEnginePkgAuthApiRole {
     InternalRole = 'internal',
-    KeibiAdminRole = 'keibi-admin',
+    KaytuAdminRole = 'kaytu-admin',
     AdminRole = 'admin',
     EditorRole = 'editor',
     ViewerRole = 'viewer',
@@ -1572,7 +1572,7 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage 
     maxResources?: number
     /** @example 100 */
     maxUsers?: number
-    /** @example "keibi" */
+    /** @example "kaytu" */
     name?: string
 }
 
@@ -1844,7 +1844,7 @@ export class HttpClient<SecurityDataType = unknown> {
     }: ApiConfig<SecurityDataType> = {}) {
         this.instance = axios.create({
             ...axiosConfig,
-            baseURL: axiosConfig.baseURL || 'https://dev-cluster.keibi.io',
+            baseURL: axiosConfig.baseURL || 'https://dev-cluster.kaytu.io',
         })
         this.secure = secure
         this.format = format
@@ -1956,9 +1956,9 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title Keibi Service API
+ * @title Kaytu Service API
  * @version 1.0
- * @baseUrl https://dev-cluster.keibi.io
+ * @baseUrl https://dev-cluster.kaytu.io
  * @contact
  */
 export class Api<
@@ -2187,7 +2187,7 @@ export class Api<
             }),
 
         /**
-         * @description Get all the RoleBindings of the workspace. RoleBinding defines the roles and actions a user can perform. There are currently three roles (admin, editor, viewer). The workspace path is based on the DNS such as (workspace1.app.keibi.io)
+         * @description Get all the RoleBindings of the workspace. RoleBinding defines the roles and actions a user can perform. There are currently three roles (admin, editor, viewer). The workspace path is based on the DNS such as (workspace1.app.kaytu.io)
          *
          * @tags users
          * @name ApiV1WorkspaceRoleBindingsList
@@ -3195,127 +3195,6 @@ export class Api<
             }),
 
         /**
-         * @description Retrieving the cost composition with respect to specified filters. Retrieving information such as the total cost for the given time range, and the top services by cost.
-         *
-         * @tags cost
-         * @name ApiV2CostCompositionList
-         * @summary List cost composition
-         * @request GET:/inventory/api/v2/cost/composition
-         * @secure
-         */
-        apiV2CostCompositionList: (
-            query?: {
-                /** Connector type to filter by */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
-                connectionId?: string[]
-                /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
-                /** How many top values to return default is 5 */
-                top?: number
-                /** timestamp for start in epoch seconds */
-                startTime?: string
-                /** timestamp for end in epoch seconds */
-                endTime?: string
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-                any
-            >({
-                path: `/inventory/api/v2/cost/composition`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving cost metrics with respect to specified filters. The API returns information such as the total cost and costs per each service based on the specified filters.
-         *
-         * @tags cost
-         * @name ApiV2CostMetricList
-         * @summary List cost metrics
-         * @request GET:/inventory/api/v2/cost/metric
-         * @secure
-         */
-        apiV2CostMetricList: (
-            query?: {
-                /** Connector type to filter by */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
-                connectionId?: string[]
-                /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
-                /** timestamp for start in epoch seconds */
-                startTime?: string
-                /** timestamp for end in epoch seconds */
-                endTime?: string
-                /** Sort by field - default is cost */
-                sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
-                /** page size - default is 20 */
-                pageSize?: number
-                /** page number - default is 1 */
-                pageNumber?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-                any
-            >({
-                path: `/inventory/api/v2/cost/metric`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
-         *
-         * @tags cost
-         * @name ApiV2CostTrendList
-         * @summary Get Cost Trend
-         * @request GET:/inventory/api/v2/cost/trend
-         * @secure
-         */
-        apiV2CostTrendList: (
-            query?: {
-                /** Connector type to filter by */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
-                connectionId?: string[]
-                /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
-                /** timestamp for start in epoch seconds */
-                startTime?: string
-                /** timestamp for end in epoch seconds */
-                endTime?: string
-                /** maximum number of datapoints to return, default is 30 */
-                datapointCount?: string
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
-                any
-            >({
-                path: `/inventory/api/v2/cost/trend`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Retrieving metrics for a specific resource type.
          *
          * @tags resource
@@ -3343,81 +3222,6 @@ export class Api<
                 any
             >({
                 path: `/inventory/api/v2/resources/metric/${resourceType}`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving a list of tag keys with their possible values for all resource types.
-         *
-         * @tags resource
-         * @name ApiV2ResourcesTagList
-         * @summary List resourcetype tags
-         * @request GET:/inventory/api/v2/resources/tag
-         * @secure
-         */
-        apiV2ResourcesTagList: (
-            query?: {
-                /** Connector type to filter by */
-                connector?: string[]
-                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
-                connectionId?: string[]
-                /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
-                /** Minimum number of resources with this tag value, default 1 */
-                minCount?: number
-                /** End time in unix timestamp format, default now */
-                endTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<Record<string, string[]>, any>({
-                path: `/inventory/api/v2/resources/tag`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving a list of costs over the course of the specified time frame for the given services. If startTime and endTime are empty, the API returns the last month trend.
-         *
-         * @tags cost
-         * @name ApiV2ServicesCostTrendList
-         * @summary Get Services Cost Trend
-         * @request GET:/inventory/api/v2/services/cost/trend
-         * @secure
-         */
-        apiV2ServicesCostTrendList: (
-            query?: {
-                /** Services to filter by */
-                services?: string[]
-                /** Connector type to filter by */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
-                connectionId?: string[]
-                /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
-                /** timestamp for start in epoch seconds */
-                startTime?: string
-                /** timestamp for end in epoch seconds */
-                endTime?: string
-                /** maximum number of datapoints to return, default is 30 */
-                datapointCount?: string
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
-                any
-            >({
-                path: `/inventory/api/v2/services/cost/trend`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -3589,6 +3393,10 @@ export class Api<
                 startTime?: number
                 /** end time in unix seconds */
                 endTime?: number
+                /** for quicker inquiry send this parameter as false, default: true */
+                needCost?: boolean
+                /** for quicker inquiry send this parameter as false, default: true */
+                needResourceCount?: boolean
                 /** column to sort by - default is cost */
                 sortBy?:
                     | 'onboard_date'

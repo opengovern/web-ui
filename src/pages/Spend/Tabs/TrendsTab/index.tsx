@@ -131,6 +131,7 @@ export default function TrendsTab({ categories }: IProps) {
             pageSize: 5,
             pageNumber: 1,
             sortBy: 'cost',
+            needResourceCount: false,
         })
 
     const {
@@ -150,6 +151,7 @@ export default function TrendsTab({ categories }: IProps) {
         pageSize: 5,
         pageNumber: 1,
         sortBy: 'cost_growth',
+        needResourceCount: false,
     })
 
     const { response: topServices, isLoading: isLoadingTopServices } =

@@ -94,7 +94,7 @@ export const useAuthApiV1KeyCreateCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseAuthApiV1KeyCreateCreateState>({
@@ -184,7 +184,7 @@ export const useAuthApiV1KeyDeleteDelete = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseAuthApiV1KeyDeleteDeleteState>({
@@ -273,7 +273,7 @@ export const useAuthApiV1KeysList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseAuthApiV1KeysListState>({
@@ -363,7 +363,7 @@ export const useAuthApiV1UserInviteCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseAuthApiV1UserInviteCreateState>({
@@ -453,7 +453,7 @@ export const useAuthApiV1UserRoleBindingUpdate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingUpdateState>(
@@ -547,7 +547,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingDeleteState>(
@@ -638,7 +638,7 @@ export const useAuthApiV1UserRoleBindingsList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingsListState>({
@@ -728,7 +728,7 @@ export const useAuthApiV1UserDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseAuthApiV1UserDetailState>({
@@ -818,7 +818,7 @@ export const useAuthApiV1UsersList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseAuthApiV1UsersListState>({
@@ -907,7 +907,7 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =

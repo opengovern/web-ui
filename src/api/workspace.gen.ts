@@ -94,7 +94,7 @@ export const useWorkspaceApiV1OrganizationCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -185,7 +185,7 @@ export const useWorkspaceApiV1OrganizationDelete = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -276,7 +276,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceCreateState>({
@@ -365,7 +365,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -456,7 +456,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceDeleteState>({
@@ -547,7 +547,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -644,7 +644,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -741,7 +741,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -837,7 +837,7 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -928,7 +928,7 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1020,7 +1020,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1115,7 +1115,7 @@ export const useWorkspaceApiV1WorkspacesList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesListState>({
@@ -1205,7 +1205,7 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1296,7 +1296,7 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1390,7 +1390,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1486,7 +1486,7 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesDetailState>(

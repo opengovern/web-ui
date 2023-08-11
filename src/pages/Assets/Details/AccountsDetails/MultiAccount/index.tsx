@@ -78,6 +78,7 @@ export default function MultiAccount() {
             endTime: activeTimeRange.end.unix(),
             pageSize: 10000,
             pageNumber: 1,
+            needCost: false,
         })
 
     return (

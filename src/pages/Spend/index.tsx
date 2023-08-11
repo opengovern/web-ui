@@ -92,6 +92,7 @@ export default function Spend() {
         pageSize: 5000,
         pageNumber: 1,
         sortBy: 'cost',
+        needResourceCount: false,
     })
 
     const categoryOptions = useMemo(() => {
