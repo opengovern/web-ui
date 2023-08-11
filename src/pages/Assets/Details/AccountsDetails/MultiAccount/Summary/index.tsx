@@ -43,6 +43,7 @@ export default function Summary() {
             pageSize: 5,
             pageNumber: 1,
             sortBy: 'resource_count',
+            needCost: false,
         })
 
     return (

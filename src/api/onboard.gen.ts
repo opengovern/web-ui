@@ -93,7 +93,7 @@ export const useOnboardApiV1CatalogMetricsList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseOnboardApiV1CatalogMetricsListState>(
@@ -187,7 +187,7 @@ export const useOnboardApiV1ConnectionGroupsList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -281,7 +281,7 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -387,6 +387,10 @@ export const useOnboardApiV1ConnectionsSummaryList = (
 
         endTime?: number
 
+        needCost?: boolean
+
+        needResourceCount?: boolean
+
         sortBy?:
             | 'onboard_date'
             | 'resource_count'
@@ -407,7 +411,7 @@ export const useOnboardApiV1ConnectionsSummaryList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -497,7 +501,7 @@ export const useOnboardApiV1ConnectorList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseOnboardApiV1ConnectorListState>({
@@ -602,7 +606,7 @@ export const useOnboardApiV1CredentialList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialListState>({
@@ -692,7 +696,7 @@ export const useOnboardApiV1CredentialCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialCreateState>({
@@ -782,7 +786,7 @@ export const useOnboardApiV1CredentialDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialDetailState>({
@@ -873,7 +877,7 @@ export const useOnboardApiV1CredentialUpdate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialUpdateState>({
@@ -968,7 +972,7 @@ export const useOnboardApiV1CredentialDelete = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseOnboardApiV1CredentialDeleteState>({
@@ -1058,7 +1062,7 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1149,7 +1153,7 @@ export const useOnboardApiV1SourceAwsCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseOnboardApiV1SourceAwsCreateState>({
@@ -1239,7 +1243,7 @@ export const useOnboardApiV1SourceAzureCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseOnboardApiV1SourceAzureCreateState>({
@@ -1329,7 +1333,7 @@ export const useOnboardApiV1SourceDelete = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseOnboardApiV1SourceDeleteState>({
@@ -1419,7 +1423,7 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =

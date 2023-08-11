@@ -22,6 +22,7 @@ export default function SummaryMetrics() {
                 endTime: activeTimeRange.end.unix(),
                 pageSize: 0,
                 pageNumber: 1,
+                needCost: false,
             },
             {
                 ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),

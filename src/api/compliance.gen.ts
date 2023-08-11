@@ -94,7 +94,7 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -186,7 +186,7 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -287,7 +287,7 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -393,7 +393,7 @@ export const useComplianceApiV1BenchmarksSummaryList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -491,7 +491,7 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -584,7 +584,7 @@ export const useComplianceApiV1BenchmarksTreeDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -684,7 +684,7 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -777,7 +777,7 @@ export const useComplianceApiV1FindingsCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseComplianceApiV1FindingsCreateState>({
@@ -876,7 +876,7 @@ export const useComplianceApiV1FindingsTopDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1001,7 +1001,7 @@ export const useComplianceApiV1InsightList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseComplianceApiV1InsightListState>({
@@ -1101,7 +1101,7 @@ export const useComplianceApiV1InsightGroupList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1199,7 +1199,7 @@ export const useComplianceApiV1InsightDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseComplianceApiV1InsightDetailState>({
@@ -1298,7 +1298,7 @@ export const useComplianceApiV1InsightTrendDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1389,7 +1389,7 @@ export const useComplianceApiV1MetadataInsightDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1479,7 +1479,7 @@ export const useComplianceApiV1MetadataTagInsightList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =
@@ -1569,7 +1569,7 @@ export const useComplianceApiV1QueriesSyncList = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseComplianceApiV1QueriesSyncListState>(

@@ -180,6 +180,7 @@ export default function TrendsTab({ categories }: IProps) {
             endTime: activeTimeRange.end.unix(),
             pageSize: 5,
             pageNumber: 1,
+            needCost: false,
             sortBy,
         }
     }
