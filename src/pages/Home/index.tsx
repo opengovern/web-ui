@@ -11,22 +11,20 @@ import {
 } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useState } from 'react'
+import ReactEcharts from 'echarts-for-react'
 import Menu from '../../components/Menu'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import {
-    exactPriceDisplay,
-    numberDisplay,
-} from '../../utilities/numericDisplay'
+import { numberDisplay } from '../../utilities/numericDisplay'
 import {
     useInventoryApiV2AnalyticsMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
     useInventoryApiV2AnalyticsTrendList,
 } from '../../api/inventory.gen'
 import Spinner from '../../components/Spinner'
-import Chart from '../../components/Charts'
 import { dateDisplay } from '../../utilities/dateDisplay'
 import { isDemo } from '../../utilities/demo'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
+import Chart from '../../components/Chart'
 
 export default function Home() {
     const [selectedType, setSelectedType] = useState('resource')
@@ -52,30 +50,48 @@ export default function Home() {
     const { response: costTrend, isLoading: costTrendLoading } =
         useInventoryApiV2AnalyticsSpendTrendList()
 
-    const resourceTrendData = () => {
-        return (
-            resourcesTrend?.map((item) => {
-                return {
-                    'Resource count': item.count,
-                    date: dateDisplay(item.date),
-                }
-            }) || []
-        )
+    const resourceTrendChart = () => {
+        const label = []
+        const data = []
+        if (resourcesTrend) {
+            for (let i = 0; i < resourcesTrend?.length; i += 1) {
+                label.push(dateDisplay(resourcesTrend[i]?.date))
+                data.push(resourcesTrend[i]?.count)
+            }
+        }
+        return {
+            label,
+            data,
+        }
+    }
+
+    const costTrendChart = () => {
+        const label = []
+        const data = []
+        if (costTrend) {
+            for (let i = 0; i < costTrend?.length; i += 1) {
+                label.push(dateDisplay(costTrend[i]?.date))
+                data.push(costTrend[i]?.count)
+            }
+        }
+        return {
+            label,
+            data,
+        }
     }
 
     const fixTime = (data: any) => {
         const result: any = []
-        if (data === undefined) {
-            return result
-        }
-        const keys = Object.keys(data)
-        for (let j = 1; j < keys.length; j += 1) {
-            const item = keys[j]
-            const temp: any = {}
-            const title = 'Spent on all accounts'
-            temp[title] = data[item].count
-            temp.date = dateDisplay(data[item].date)
-            result.push(temp)
+        if (data) {
+            const keys = Object.keys(data)
+            for (let j = 1; j < keys.length; j += 1) {
+                const item = keys[j]
+                const temp: any = {}
+                const title = 'Spent on all accounts'
+                temp[title] = data[item].count
+                temp.date = dateDisplay(data[item].date)
+                result.push(temp)
+            }
         }
         return result
     }
@@ -84,10 +100,7 @@ export default function Home() {
         return costTrend?.sort((a, b) => {
             const au = dayjs(a.date).unix()
             const bu = dayjs(b.date).unix()
-            if (au === bu) {
-                return 0
-            }
-            return au > bu ? 1 : -1
+            return au - bu
         })
     }
 
@@ -97,15 +110,10 @@ export default function Home() {
                 <Spinner className="h-80" />
             ) : (
                 <Chart
-                    className="mt-4"
-                    index="date"
-                    type="line"
-                    yAxisWidth={120}
-                    categories={['Spent on all accounts']}
-                    showLegend={false}
-                    data={fixTime(sortedTrend())}
-                    showAnimation
-                    valueFormatter={exactPriceDisplay}
+                    labels={costTrendChart().label}
+                    chartData={costTrendChart().data}
+                    chartType="line"
+                    isCost
                 />
             )
         }
@@ -113,14 +121,9 @@ export default function Home() {
             <Spinner className="h-80" />
         ) : (
             <Chart
-                className="mt-4"
-                index="date"
-                type="line"
-                yAxisWidth={120}
-                categories={['Resource count']}
-                showLegend={false}
-                showAnimation
-                data={resourceTrendData()}
+                labels={resourceTrendChart().label}
+                chartData={resourceTrendChart().data}
+                chartType="line"
             />
         )
     }
