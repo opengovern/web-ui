@@ -5,7 +5,7 @@ interface IChart {
     labels: string[]
     labelType?: 'category' | 'time' | 'value' | 'log'
     chartData: (string | number | undefined)[]
-    chartType: 'bar' | 'line' | 'area'
+    chartType: 'bar' | 'line' | 'area' | 'doughnut'
     isCost?: boolean
 }
 
@@ -28,6 +28,39 @@ export default function Chart({
                 data: chartData,
                 type: 'line',
                 areaStyle: {},
+            }
+        }
+        if (chartType === 'doughnut') {
+            return {
+                type: 'pie',
+                radius: ['50%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 8,
+                    borderColor: '#fff',
+                    borderWidth: 2,
+                },
+                label: {
+                    show: false,
+                    position: 'center',
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                    },
+                },
+                labelLine: {
+                    show: false,
+                },
+                data: [
+                    { value: 1048, name: 'Search Engine' },
+                    { value: 735, name: 'Direct' },
+                    { value: 580, name: 'Email' },
+                    { value: 484, name: 'Union Ads' },
+                    { value: 300, name: 'Video Ads' },
+                ],
             }
         }
         return undefined
@@ -56,12 +89,17 @@ export default function Chart({
                     show: true,
                     trigger: 'axis',
                 },
-                legend: {
-                    top: '5%',
-                    left: 'center',
+                grid: {
+                    left: 50,
+                    right: 0,
+                    top: 20,
+                    bottom: 40,
                 },
+                // legend: {
+                //     top: '0',
+                //     left: 'center',
+                // },
             }}
-            className="scale-110"
         />
     )
 }

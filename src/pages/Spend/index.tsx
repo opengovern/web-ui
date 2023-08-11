@@ -22,6 +22,7 @@ import { filterAtom, spendTimeAtom } from '../../store'
 import SummaryMetrics from './SummaryMetrics'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
+import { dateDisplay } from '../../utilities/dateDisplay'
 
 export default function Spend() {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
@@ -74,7 +75,20 @@ export default function Spend() {
         sortBy: 'cost',
     })
 
-    console.log(costTrend)
+    const costTrendChart = () => {
+        const label = []
+        const data = []
+        if (costTrend) {
+            for (let i = 0; i < costTrend?.length; i += 1) {
+                label.push(dateDisplay(costTrend[i]?.date))
+                data.push(costTrend[i]?.count)
+            }
+        }
+        return {
+            label,
+            data,
+        }
+    }
 
     return (
         <Menu currentPage="spend">
@@ -95,7 +109,7 @@ export default function Spend() {
                 serviceCostResponse={serviceCostResponse}
                 serviceCostLoading={serviceCostLoading}
             />
-            <Card>
+            <Card className="mb-4">
                 <Grid numItems={1} numItemsMd={3}>
                     <Col numColSpan={2}>
                         <Title className="font-semibold">Spend Trend</Title>
@@ -120,11 +134,28 @@ export default function Spend() {
                     </Select>
                 </Grid>
                 <Chart
-                    labels={['sample 1', 'sample 2']}
-                    chartData={[1, 2]}
+                    labels={costTrendChart().label}
+                    chartData={costTrendChart().data}
                     chartType={selectedChart}
+                    isCost
                 />
             </Card>
+            <Grid
+                numItems={1}
+                numItemsMd={2}
+                numItemsLg={3}
+                className="w-full gap-4"
+            >
+                <Card>
+                    <Chart labels={[]} chartData={[]} chartType="doughnut" />
+                </Card>
+                <Card>
+                    <Chart labels={[]} chartData={[]} chartType="doughnut" />
+                </Card>
+                <Card>
+                    <Chart labels={[]} chartData={[]} chartType="doughnut" />
+                </Card>
+            </Grid>
         </Menu>
     )
 }
