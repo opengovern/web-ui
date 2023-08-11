@@ -1,58 +1,35 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import {
+    Card,
+    Col,
     Flex,
+    Grid,
     Metric,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
+    Select,
+    SelectItem,
+    Text,
+    Title,
 } from '@tremor/react'
-import { useAtom, useAtomValue } from 'jotai'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
 import {
     useInventoryApiV2AnalyticsSpendMetricList,
-    useInventoryApiV2AnalyticsTagList,
+    useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
-import TrendsTab from './Tabs/TrendsTab'
-import CompositionTab from './Tabs/CompositionTab'
-import {
-    filterAtom,
-    selectedResourceCategoryAtom,
-    spendTimeAtom,
-} from '../../store'
+import { filterAtom, spendTimeAtom } from '../../store'
 import SummaryMetrics from './SummaryMetrics'
-import CostMetrics from './Tabs/CostMetrics'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
-import { isDemo } from '../../utilities/demo'
+import Chart from '../../components/Chart'
 
 export default function Spend() {
-    const navigate = useNavigate()
-    const tab = useLocation().hash
-    const [index, setIndex] = useState<number>(0)
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
+        'line'
+    )
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
-    const { response: inventoryCategories, isLoading: categoriesLoading } =
-        useInventoryApiV2AnalyticsTagList(
-            {
-                metricType: 'spend',
-            },
-            {
-                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-            }
-        )
-
-    const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
-        selectedResourceCategoryAtom
-    )
-    const activeCategory =
-        selectedResourceCategory === 'All Categories'
-            ? ''
-            : selectedResourceCategory
     const query = {
         ...(selectedConnections.provider !== '' && {
             connector: [selectedConnections.provider],
@@ -60,7 +37,6 @@ export default function Spend() {
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
         }),
-        ...(activeCategory && { tag: [`category=${activeCategory}`] }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix().toString(),
         }),
@@ -70,6 +46,10 @@ export default function Spend() {
         pageSize: 5000,
         pageNumber: 1,
     }
+
+    const { response: costTrend, isLoading } =
+        useInventoryApiV2AnalyticsSpendTrendList(query)
+
     const {
         response: serviceCostResponse,
         isLoading: serviceCostLoading,
@@ -94,67 +74,7 @@ export default function Spend() {
         sortBy: 'cost',
     })
 
-    const categoryOptions = useMemo(() => {
-        if (isDemo()) {
-            const output = [
-                { label: 'AI + ML', value: 'AI + ML' },
-                { label: 'App Platform', value: 'App Platform' },
-                {
-                    label: 'Application Integration',
-                    value: 'Application Integration',
-                },
-                { label: 'Compute', value: 'Compute' },
-                { label: 'DevOps', value: 'DevOps' },
-                { label: 'Governance', value: 'Governance' },
-                { label: 'Monitoring', value: 'Monitoring' },
-                { label: 'Network', value: 'Network' },
-                { label: 'Security', value: 'Security' },
-                { label: 'Serverless', value: 'Serverless' },
-                { label: 'Storage', value: 'Storage' },
-            ]
-            return output
-        }
-        if (categoriesLoading) {
-            return [{ label: 'Loading', value: 'Loading' }]
-        }
-        if (!inventoryCategories?.category)
-            return [{ label: 'no data', value: 'no data' }]
-        return [{ label: 'All Categories', value: 'All Categories' }].concat(
-            inventoryCategories.category.map((categoryName) => ({
-                label: categoryName,
-                value: categoryName,
-            }))
-        )
-    }, [inventoryCategories])
-
-    const [trendsTab, setTrendsTab] = useState<React.ReactNode>()
-    const [compositionTab, setCompositionTab] = useState<React.ReactNode>()
-
-    useEffect(() => {
-        if (index === 1 && trendsTab === undefined) {
-            setTrendsTab(<TrendsTab categories={categoryOptions} />)
-        }
-        if (index === 2 && compositionTab === undefined) {
-            setCompositionTab(<CompositionTab top={5} />)
-        }
-    }, [index])
-
-    useEffect(() => {
-        switch (tab) {
-            case '#summary':
-                setIndex(0)
-                break
-            case '#trends':
-                setIndex(1)
-                break
-            case '#breakdowns':
-                setIndex(2)
-                break
-            default:
-                setIndex(0)
-                break
-        }
-    }, [tab])
+    console.log(costTrend)
 
     return (
         <Menu currentPage="spend">
@@ -175,30 +95,36 @@ export default function Spend() {
                 serviceCostResponse={serviceCostResponse}
                 serviceCostLoading={serviceCostLoading}
             />
-            <TabGroup className="mt-3" index={index} onIndexChange={setIndex}>
-                <TabList>
-                    <Tab onClick={() => navigate('#summary')}>Summary</Tab>
-                    <Tab onClick={() => navigate('#trends')}>Trends</Tab>
-                    <Tab onClick={() => navigate('#breakdowns')}>Breakdown</Tab>
-                </TabList>
-                <TabPanels className="mt-6">
-                    <TabPanel>
-                        <CostMetrics
-                            categories={categoryOptions}
-                            accountCostResponse={accountCostResponse}
-                            serviceCostResponse={serviceCostResponse}
-                            accountCostLoading={accountCostLoading}
-                            serviceCostLoading={serviceCostLoading}
-                            accountCostError={accountCostError}
-                            accountCostSendNow={accountCostSendNow}
-                            serviceCostError={serviceCostError}
-                            serviceCostSendNow={serviceCostSendNow}
-                        />
-                    </TabPanel>
-                    <TabPanel>{trendsTab}</TabPanel>
-                    <TabPanel>{compositionTab}</TabPanel>
-                </TabPanels>
-            </TabGroup>
+            <Card>
+                <Grid numItems={1} numItemsMd={3}>
+                    <Col numColSpan={2}>
+                        <Title className="font-semibold">Spend Trend</Title>
+                    </Col>
+                    <Select
+                        value={selectedChart}
+                        onValueChange={(v) => {
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            setSelectedChart(v)
+                        }}
+                    >
+                        <SelectItem value="line">
+                            <Text>Line Chart</Text>
+                        </SelectItem>
+                        <SelectItem value="area">
+                            <Text>Area Chart</Text>
+                        </SelectItem>
+                        <SelectItem value="bar">
+                            <Text>Bar Chart</Text>
+                        </SelectItem>
+                    </Select>
+                </Grid>
+                <Chart
+                    labels={['sample 1', 'sample 2']}
+                    chartData={[1, 2]}
+                    chartType={selectedChart}
+                />
+            </Card>
         </Menu>
     )
 }

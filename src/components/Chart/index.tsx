@@ -5,7 +5,7 @@ interface IChart {
     labels: string[]
     labelType?: 'category' | 'time' | 'value' | 'log'
     chartData: (string | number | undefined)[]
-    chartType: 'bar' | 'line'
+    chartType: 'bar' | 'line' | 'area'
     isCost?: boolean
 }
 
@@ -16,6 +16,23 @@ export default function Chart({
     chartType,
     isCost = false,
 }: IChart) {
+    const seriesType = () => {
+        if (chartType === 'bar' || chartType === 'line') {
+            return {
+                data: chartData,
+                type: chartType,
+            }
+        }
+        if (chartType === 'area') {
+            return {
+                data: chartData,
+                type: 'line',
+                areaStyle: {},
+            }
+        }
+        return undefined
+    }
+
     return (
         <ReactEcharts
             option={{
@@ -34,15 +51,14 @@ export default function Chart({
                         },
                     },
                 },
-                series: [
-                    {
-                        data: chartData,
-                        type: chartType,
-                    },
-                ],
+                series: [seriesType()],
                 tooltip: {
                     show: true,
                     trigger: 'axis',
+                },
+                legend: {
+                    top: '5%',
+                    left: 'center',
                 },
             }}
             className="scale-110"

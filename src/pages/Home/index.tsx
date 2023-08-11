@@ -80,30 +80,6 @@ export default function Home() {
         }
     }
 
-    const fixTime = (data: any) => {
-        const result: any = []
-        if (data) {
-            const keys = Object.keys(data)
-            for (let j = 1; j < keys.length; j += 1) {
-                const item = keys[j]
-                const temp: any = {}
-                const title = 'Spent on all accounts'
-                temp[title] = data[item].count
-                temp.date = dateDisplay(data[item].date)
-                result.push(temp)
-            }
-        }
-        return result
-    }
-
-    const sortedTrend = () => {
-        return costTrend?.sort((a, b) => {
-            const au = dayjs(a.date).unix()
-            const bu = dayjs(b.date).unix()
-            return au - bu
-        })
-    }
-
     const renderChart = (type: string) => {
         if (type === 'spend') {
             return costTrendLoading ? (
