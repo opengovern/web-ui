@@ -23,6 +23,7 @@ import SummaryMetrics from './SummaryMetrics'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
 import { dateDisplay } from '../../utilities/dateDisplay'
+import CardWithList from '../../components/Cards/CardWithList'
 
 export default function Spend() {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
@@ -30,6 +31,121 @@ export default function Spend() {
     )
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
+
+    const MockData = {
+        growthData: {
+            accounts: [
+                {
+                    name: 'PODZ',
+                    value: '97.9 %',
+                },
+                {
+                    name: 'TARK-BALK',
+                    value: '75.6 %',
+                },
+                {
+                    name: 'KOZET',
+                    value: '50.8 %',
+                },
+                {
+                    name: 'Central Management',
+                    value: '49.0 %',
+                },
+                {
+                    name: 'MAGNUM',
+                    value: '10 %',
+                },
+            ],
+            services: [
+                {
+                    name: 'M-Verst',
+                    value: '100 %',
+                },
+                {
+                    name: 'DDEVOPS',
+                    value: '80 %',
+                },
+                {
+                    name: 'D-Search',
+                    value: '69.69 %',
+                },
+                {
+                    name: 'Chico',
+                    value: '51.2 %',
+                },
+                {
+                    name: 'Mango',
+                    value: '36.0 %',
+                },
+            ],
+        },
+        consumptionData: {
+            accounts: [
+                {
+                    name: 'Central Management',
+                    value: '1304549',
+                },
+                {
+                    name: 'PODZ',
+                    value: '504549',
+                },
+                {
+                    name: 'KOZET',
+                    value: '304549',
+                },
+                {
+                    name: 'MAGNUM',
+                    value: '104549',
+                },
+                {
+                    name: 'TARK-BALK',
+                    value: '4549',
+                },
+            ],
+            services: [
+                {
+                    name: 'DDEVOPS',
+                    value: '1,204,549',
+                },
+                {
+                    name: 'D-Search',
+                    value: '549,549',
+                },
+                {
+                    name: 'Mango',
+                    value: '314,420',
+                },
+                {
+                    name: 'Chico',
+                    value: '104,110',
+                },
+                {
+                    name: 'M-Verst',
+                    value: '4,420',
+                },
+            ],
+        },
+    }
+
+    const growthData = () => {
+        const AccountData = MockData.growthData.accounts
+        const ServiceData = MockData.growthData.services
+
+        return {
+            Accounts: AccountData,
+            Services: ServiceData,
+        }
+    }
+
+    const consumptionData = () => {
+        const AccountData = MockData.consumptionData.accounts
+        const ServiceData = MockData.consumptionData.services
+
+        return {
+            Accounts: AccountData,
+            Services: ServiceData,
+        }
+    }
 
     const query = {
         ...(selectedConnections.provider !== '' && {
@@ -149,12 +265,18 @@ export default function Spend() {
                 <Card>
                     <Chart labels={[]} chartData={[]} chartType="doughnut" />
                 </Card>
-                <Card>
-                    <Chart labels={[]} chartData={[]} chartType="doughnut" />
-                </Card>
-                <Card>
-                    <Chart labels={[]} chartData={[]} chartType="doughnut" />
-                </Card>
+                <CardWithList
+                    title="Top by Consumption"
+                    tabs={['Accounts', 'Services']}
+                    data={consumptionData()}
+                    valueIsPrice
+                />
+                <CardWithList
+                    title="Top by Growth"
+                    tabs={['Accounts', 'Services']}
+                    data={growthData()}
+                    isPercentage
+                />
             </Grid>
         </Menu>
     )
