@@ -34,9 +34,9 @@ export default function Header({ workspace }: IHeader) {
         }
     }
     return (
-        <div className="px-12 absolute top-0 lg:top-2 w-full z-40 flex h-16 shrink-0 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm sm:gap-x-6 lg:rounded-tl-2xl">
-            <Flex className="max-w-6xl">
-                <div className="-m-2.5 p-2.5 text-gray-900">
+        <div className="px-12 absolute top-2 w-full flex h-16 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm rounded-tl-2xl">
+            <Flex className="max-w-8xl">
+                <div className="text-gray-900">
                     <Title>
                         &#128075; Welcome back,{' '}
                         {user?.given_name || user?.email || ''}

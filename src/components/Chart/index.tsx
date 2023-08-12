@@ -63,13 +63,8 @@ export default function Chart({
                 series: [
                     {
                         type: 'pie',
-                        radius: ['50%', '70%'],
+                        radius: ['60%', '80%'],
                         avoidLabelOverlap: false,
-                        itemStyle: {
-                            borderRadius: 8,
-                            borderColor: '#fff',
-                            borderWidth: 2,
-                        },
                         label: {
                             show: false,
                             position: 'center',
@@ -79,20 +74,27 @@ export default function Chart({
                                 show: true,
                                 fontSize: 16,
                                 fontWeight: 'bold',
+                                // eslint-disable-next-line no-template-curly-in-string
+                                formatter: isCost ? '{b}\n\n ${c}' : '{c}',
                             },
                         },
                         labelLine: {
                             show: false,
                         },
-                        data: [
-                            { value: 1048, name: 'Search Engine' },
-                            { value: 735, name: 'Direct' },
-                            { value: 580, name: 'Email' },
-                            { value: 484, name: 'Union Ads' },
-                            { value: 300, name: 'Video Ads' },
-                        ],
+                        data: chartData,
                     },
                 ],
+                // left: 'left',
+                legend: {
+                    right: '0',
+                    top: 'center',
+                    icon: 'circle',
+                    orient: 'vertical',
+                    textStyle: {
+                        width: 140,
+                        overflow: 'truncate',
+                    },
+                },
             }
         }
         return undefined
@@ -105,6 +107,12 @@ export default function Chart({
                 tooltip: {
                     show: true,
                     trigger: 'axis',
+                    valueFormatter: (value: string | number) => {
+                        if (isCost) {
+                            return `$${Number(value).toFixed(2)}`
+                        }
+                        return value
+                    },
                 },
                 // legend: {
                 //     top: '0',

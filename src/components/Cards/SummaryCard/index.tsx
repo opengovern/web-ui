@@ -53,7 +53,7 @@ export default function SummaryCard({
             ) : (
                 <>
                     <Flex alignItems="start">
-                        <Text>{title}</Text>
+                        <Text className="mb-1.5">{title}</Text>
                         {delta && (
                             <BadgeDelta deltaType={deltaType}>
                                 {delta}

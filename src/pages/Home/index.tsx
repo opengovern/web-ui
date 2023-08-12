@@ -9,9 +9,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import dayjs from 'dayjs'
 import { useState } from 'react'
-import ReactEcharts from 'echarts-for-react'
 import Menu from '../../components/Menu'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import { numberDisplay } from '../../utilities/numericDisplay'

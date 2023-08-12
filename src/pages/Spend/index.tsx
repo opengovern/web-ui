@@ -8,12 +8,12 @@ import {
     Select,
     SelectItem,
     Text,
-    Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
 import {
+    useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../api/inventory.gen'
@@ -25,6 +25,7 @@ import { dateDisplay } from '../../utilities/dateDisplay'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import { exactPriceDisplay } from '../../utilities/numericDisplay'
 import TopListCard from '../../components/Cards/TopListCard'
+import { snakeCaseToLabel } from '../../utilities/labelMaker'
 
 const topServices = (metrics: any) => {
     const top = []
@@ -37,6 +38,36 @@ const topServices = (metrics: any) => {
         }
     }
     return top
+}
+
+const topAccounts = (metrics: any) => {
+    const top = []
+    if (metrics) {
+        for (let i = 0; i < metrics.length; i += 1) {
+            top.push({
+                name: metrics[i].metadata?.account_name,
+                value: metrics[i].cost,
+            })
+        }
+    }
+    return top
+}
+
+const pieData = (response: any) => {
+    const data: any = []
+    if (response) {
+        Object.entries(response?.top_values).map(([key, value]) =>
+            data.push({
+                name: snakeCaseToLabel(key),
+                value: Number(value).toFixed(2),
+            })
+        )
+        data.push({
+            name: 'Others',
+            value: Number(response.others).toFixed(2),
+        })
+    }
+    return data
 }
 
 export default function Spend() {
@@ -85,6 +116,23 @@ export default function Spend() {
         // @ts-ignore
     } = useOnboardApiV1ConnectionsSummaryList(query)
 
+    const { response: composition, isLoading: compositionLoading } =
+        useInventoryApiV2AnalyticsSpendCompositionList({
+            top: 5,
+            ...(selectedConnections.provider && {
+                connector: [selectedConnections.provider],
+            }),
+            ...(selectedConnections.connections && {
+                connectionId: selectedConnections.connections,
+            }),
+            ...(activeTimeRange.start && {
+                endTime: activeTimeRange.end.unix().toString(),
+            }),
+            ...(activeTimeRange.start && {
+                startTime: activeTimeRange.start.unix().toString(),
+            }),
+        })
+
     const costTrendChart = () => {
         const label = []
         const data = []
@@ -124,30 +172,28 @@ export default function Spend() {
                 </Flex>
             </Flex>
             <Card className="my-4">
-                <Grid numItems={1} numItemsMd={3} className="gap-4 mb-8">
-                    <SummaryCard
-                        title={`Spend across ${getConnections(
-                            selectedConnections
-                        )}`}
-                        metric={exactPriceDisplay(
-                            accountCostResponse?.totalCost
-                        )}
-                        loading={accountCostLoading}
-                        url="spend-metrics#accounts"
-                        border={false}
-                    />
-                    <SummaryCard
-                        title="Services"
-                        metric={Number(serviceCostResponse?.total_count)}
-                        loading={serviceCostLoading}
-                        url="spend-metrics#services"
-                        border={false}
-                    />
-                </Grid>
-                <Grid numItems={1} numItemsMd={3} className="gap-4">
-                    <Col numColSpan={2}>
-                        <Title className="font-semibold">Spend Trend</Title>
-                    </Col>
+                <Grid numItems={3} className="gap-4 mb-4">
+                    <Grid numItems={2} className="gap-4">
+                        <SummaryCard
+                            title={`Spend across ${getConnections(
+                                selectedConnections
+                            )}`}
+                            metric={exactPriceDisplay(
+                                accountCostResponse?.totalCost
+                            )}
+                            loading={accountCostLoading}
+                            url="spend-metrics#accounts"
+                            border={false}
+                        />
+                        <SummaryCard
+                            title="Services"
+                            metric={Number(serviceCostResponse?.total_count)}
+                            loading={serviceCostLoading}
+                            url="spend-metrics#services"
+                            border={false}
+                        />
+                    </Grid>
+                    <Col className="opacity-0">.</Col>
                     <Grid numItems={2} className="gap-4">
                         <Select>
                             <SelectItem value="line">
@@ -194,19 +240,26 @@ export default function Spend() {
                 className="w-full gap-4"
             >
                 <Card>
-                    <Chart labels={[]} chartData={[]} chartType="doughnut" />
+                    <Chart
+                        labels={[]}
+                        chartData={pieData(composition)}
+                        chartType="doughnut"
+                        isCost
+                    />
                 </Card>
                 <TopListCard
-                    title="Top Services"
+                    title="Top Accounts"
                     loading={serviceCostLoading}
-                    data={topServices(serviceCostResponse?.metrics)}
+                    data={topAccounts(serviceCostResponse?.metrics)}
                     count={7}
+                    isPrice
                 />
                 <TopListCard
                     title="Top Services"
                     loading={serviceCostLoading}
                     data={topServices(serviceCostResponse?.metrics)}
                     count={7}
+                    isPrice
                 />
             </Grid>
         </Menu>
