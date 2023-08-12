@@ -27,6 +27,8 @@ export default function Summary({ benchmark, loading }: ISummary) {
             endTime: activeTimeRange.end.unix(),
             pageSize: 10000,
             pageNumber: 1,
+            needCost: false,
+            needResourceCount: false,
         })
 
     const critical = benchmark?.totalChecks?.criticalCount || 0

@@ -118,7 +118,7 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] =

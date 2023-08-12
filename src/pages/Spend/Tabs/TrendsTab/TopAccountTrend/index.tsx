@@ -156,6 +156,7 @@ export default function TopAccountsTrend() {
             pageSize: 5,
             pageNumber: 1,
             sortBy: 'cost',
+            needResourceCount: false,
         })
 
     const { response: accountsTrends, isLoading: accountsTrendsLoading } =

@@ -94,7 +94,7 @@ export const useMetadataApiV1MetadataCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseMetadataApiV1MetadataCreateState>({
@@ -184,7 +184,7 @@ export const useMetadataApiV1MetadataDetail = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseMetadataApiV1MetadataDetailState>({

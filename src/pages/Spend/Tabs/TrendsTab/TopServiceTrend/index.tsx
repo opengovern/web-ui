@@ -203,7 +203,7 @@ export default function TopServicesTrend({ categories }: IProps) {
     const serviceNames = () => {
         const services: string[] = []
         const input = data()
-        if (input === undefined) {
+        if (input === undefined || input == null) {
             return services
         }
 
@@ -219,7 +219,7 @@ export default function TopServicesTrend({ categories }: IProps) {
     const trendData = () => {
         const result: object[] = []
         const input = data()
-        if (input === undefined) {
+        if (input === undefined || input == null) {
             return result
         }
 

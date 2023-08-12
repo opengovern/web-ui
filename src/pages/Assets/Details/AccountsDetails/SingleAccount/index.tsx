@@ -36,6 +36,7 @@ export default function SingleAccount() {
             endTime: activeTimeRange.end.unix(),
             pageSize: 1,
             pageNumber: 1,
+            needCost: false,
             sortBy: 'resource_count',
         })
 

@@ -94,7 +94,7 @@ export const useAiApiV1GptRunCreate = (
     if (workspace !== undefined && workspace.length > 0) {
         setWorkspace(workspace)
     } else {
-        setWorkspace('keibi')
+        setWorkspace('kaytu')
     }
 
     const [state, setState] = useState<IuseAiApiV1GptRunCreateState>({
