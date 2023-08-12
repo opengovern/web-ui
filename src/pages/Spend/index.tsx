@@ -1,58 +1,82 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import {
+    Card,
+    Col,
     Flex,
+    Grid,
     Metric,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
+    Select,
+    SelectItem,
+    Text,
 } from '@tremor/react'
-import { useAtom, useAtomValue } from 'jotai'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
 import {
+    useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendMetricList,
-    useInventoryApiV2AnalyticsTagList,
+    useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
-import TrendsTab from './Tabs/TrendsTab'
-import CompositionTab from './Tabs/CompositionTab'
-import {
-    filterAtom,
-    selectedResourceCategoryAtom,
-    spendTimeAtom,
-} from '../../store'
-import SummaryMetrics from './SummaryMetrics'
-import CostMetrics from './Tabs/CostMetrics'
+import { filterAtom, IFilter, spendTimeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
-import { isDemo } from '../../utilities/demo'
+import Chart from '../../components/Chart'
+import { dateDisplay } from '../../utilities/dateDisplay'
+import SummaryCard from '../../components/Cards/SummaryCard'
+import { exactPriceDisplay } from '../../utilities/numericDisplay'
+import TopListCard from '../../components/Cards/TopListCard'
+import { snakeCaseToLabel } from '../../utilities/labelMaker'
+
+const topServices = (metrics: any) => {
+    const top = []
+    if (metrics) {
+        for (let i = 0; i < metrics.length; i += 1) {
+            top.push({
+                name: metrics[i].cost_dimension_name,
+                value: metrics[i].total_cost,
+            })
+        }
+    }
+    return top
+}
+
+const topAccounts = (metrics: any) => {
+    const top = []
+    if (metrics) {
+        for (let i = 0; i < metrics.length; i += 1) {
+            top.push({
+                name: metrics[i].metadata?.account_name,
+                value: metrics[i].cost,
+            })
+        }
+    }
+    return top
+}
+
+const pieData = (response: any) => {
+    const data: any = []
+    if (response) {
+        Object.entries(response?.top_values).map(([key, value]) =>
+            data.push({
+                name: snakeCaseToLabel(key),
+                value: Number(value).toFixed(2),
+            })
+        )
+        data.push({
+            name: 'Others',
+            value: Number(response.others).toFixed(2),
+        })
+    }
+    return data
+}
 
 export default function Spend() {
-    const navigate = useNavigate()
-    const tab = useLocation().hash
-    const [index, setIndex] = useState<number>(0)
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
+        'line'
+    )
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
-    const { response: inventoryCategories, isLoading: categoriesLoading } =
-        useInventoryApiV2AnalyticsTagList(
-            {
-                metricType: 'spend',
-            },
-            {
-                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-            }
-        )
-
-    const [selectedResourceCategory, setSelectedResourceCategory] = useAtom(
-        selectedResourceCategoryAtom
-    )
-    const activeCategory =
-        selectedResourceCategory === 'All Categories'
-            ? ''
-            : selectedResourceCategory
     const query = {
         ...(selectedConnections.provider !== '' && {
             connector: [selectedConnections.provider],
@@ -60,7 +84,6 @@ export default function Spend() {
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
         }),
-        ...(activeCategory && { tag: [`category=${activeCategory}`] }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix().toString(),
         }),
@@ -69,12 +92,19 @@ export default function Spend() {
         }),
         pageSize: 5000,
         pageNumber: 1,
+        sortBy: 'cost',
     }
+
+    const { response: costTrend, isLoading } =
+        useInventoryApiV2AnalyticsSpendTrendList(query)
+
     const {
         response: serviceCostResponse,
         isLoading: serviceCostLoading,
         error: serviceCostError,
         sendNow: serviceCostSendNow,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
     } = useInventoryApiV2AnalyticsSpendMetricList(query)
 
     const {
@@ -82,80 +112,51 @@ export default function Spend() {
         isLoading: accountCostLoading,
         error: accountCostError,
         sendNow: accountCostSendNow,
-    } = useOnboardApiV1ConnectionsSummaryList({
-        ...(selectedConnections.provider !== '' && {
-            connector: [selectedConnections.provider],
-        }),
-        connectionId: selectedConnections.connections,
-        startTime: activeTimeRange.start.unix(),
-        endTime: activeTimeRange.end.unix(),
-        pageSize: 5000,
-        pageNumber: 1,
-        sortBy: 'cost',
-        needResourceCount: false,
-    })
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+    } = useOnboardApiV1ConnectionsSummaryList(query)
 
-    const categoryOptions = useMemo(() => {
-        if (isDemo()) {
-            const output = [
-                { label: 'AI + ML', value: 'AI + ML' },
-                { label: 'App Platform', value: 'App Platform' },
-                {
-                    label: 'Application Integration',
-                    value: 'Application Integration',
-                },
-                { label: 'Compute', value: 'Compute' },
-                { label: 'DevOps', value: 'DevOps' },
-                { label: 'Governance', value: 'Governance' },
-                { label: 'Monitoring', value: 'Monitoring' },
-                { label: 'Network', value: 'Network' },
-                { label: 'Security', value: 'Security' },
-                { label: 'Serverless', value: 'Serverless' },
-                { label: 'Storage', value: 'Storage' },
-            ]
-            return output
-        }
-        if (categoriesLoading) {
-            return [{ label: 'Loading', value: 'Loading' }]
-        }
-        if (!inventoryCategories?.category)
-            return [{ label: 'no data', value: 'no data' }]
-        return [{ label: 'All Categories', value: 'All Categories' }].concat(
-            inventoryCategories.category.map((categoryName) => ({
-                label: categoryName,
-                value: categoryName,
-            }))
-        )
-    }, [inventoryCategories])
+    const { response: composition, isLoading: compositionLoading } =
+        useInventoryApiV2AnalyticsSpendCompositionList({
+            top: 5,
+            ...(selectedConnections.provider && {
+                connector: [selectedConnections.provider],
+            }),
+            ...(selectedConnections.connections && {
+                connectionId: selectedConnections.connections,
+            }),
+            ...(activeTimeRange.start && {
+                endTime: activeTimeRange.end.unix().toString(),
+            }),
+            ...(activeTimeRange.start && {
+                startTime: activeTimeRange.start.unix().toString(),
+            }),
+        })
 
-    const [trendsTab, setTrendsTab] = useState<React.ReactNode>()
-    const [compositionTab, setCompositionTab] = useState<React.ReactNode>()
+    const costTrendChart = () => {
+        const label = []
+        const data = []
+        if (costTrend) {
+            for (let i = 0; i < costTrend?.length; i += 1) {
+                label.push(dateDisplay(costTrend[i]?.date))
+                data.push(costTrend[i]?.count)
+            }
+        }
+        return {
+            label,
+            data,
+        }
+    }
 
-    useEffect(() => {
-        if (index === 1 && trendsTab === undefined) {
-            setTrendsTab(<TrendsTab categories={categoryOptions} />)
+    const getConnections = (con: IFilter) => {
+        if (con.provider.length) {
+            return con.provider
         }
-        if (index === 2 && compositionTab === undefined) {
-            setCompositionTab(<CompositionTab top={5} />)
+        if (con.connections.length) {
+            return `${con.connections.length} accounts`
         }
-    }, [index])
-
-    useEffect(() => {
-        switch (tab) {
-            case '#summary':
-                setIndex(0)
-                break
-            case '#trends':
-                setIndex(1)
-                break
-            case '#breakdowns':
-                setIndex(2)
-                break
-            default:
-                setIndex(0)
-                break
-        }
-    }, [tab])
+        return 'all accounts'
+    }
 
     return (
         <Menu currentPage="spend">
@@ -170,36 +171,97 @@ export default function Spend() {
                     <ConnectionList />
                 </Flex>
             </Flex>
-            <SummaryMetrics
-                accountCostResponse={accountCostResponse}
-                accountCostLoading={accountCostLoading}
-                serviceCostResponse={serviceCostResponse}
-                serviceCostLoading={serviceCostLoading}
-            />
-            <TabGroup className="mt-3" index={index} onIndexChange={setIndex}>
-                <TabList>
-                    <Tab onClick={() => navigate('#summary')}>Summary</Tab>
-                    <Tab onClick={() => navigate('#trends')}>Trends</Tab>
-                    <Tab onClick={() => navigate('#breakdowns')}>Breakdown</Tab>
-                </TabList>
-                <TabPanels className="mt-6">
-                    <TabPanel>
-                        <CostMetrics
-                            categories={categoryOptions}
-                            accountCostResponse={accountCostResponse}
-                            serviceCostResponse={serviceCostResponse}
-                            accountCostLoading={accountCostLoading}
-                            serviceCostLoading={serviceCostLoading}
-                            accountCostError={accountCostError}
-                            accountCostSendNow={accountCostSendNow}
-                            serviceCostError={serviceCostError}
-                            serviceCostSendNow={serviceCostSendNow}
+            <Card className="my-4">
+                <Grid numItems={3} className="gap-4 mb-4">
+                    <Grid numItems={2} className="gap-4">
+                        <SummaryCard
+                            title={`Spend across ${getConnections(
+                                selectedConnections
+                            )}`}
+                            metric={exactPriceDisplay(
+                                accountCostResponse?.totalCost
+                            )}
+                            loading={accountCostLoading}
+                            url="spend-metrics#accounts"
+                            border={false}
                         />
-                    </TabPanel>
-                    <TabPanel>{trendsTab}</TabPanel>
-                    <TabPanel>{compositionTab}</TabPanel>
-                </TabPanels>
-            </TabGroup>
+                        <SummaryCard
+                            title="Services"
+                            metric={Number(serviceCostResponse?.total_count)}
+                            loading={serviceCostLoading}
+                            url="spend-metrics#services"
+                            border={false}
+                        />
+                    </Grid>
+                    <Col className="opacity-0">.</Col>
+                    <Grid numItems={2} className="gap-4">
+                        <Select>
+                            <SelectItem value="line">
+                                <Text>Daily</Text>
+                            </SelectItem>
+                            <SelectItem value="area">
+                                <Text>Monthly</Text>
+                            </SelectItem>
+                            <SelectItem value="bar">
+                                <Text>Yearly</Text>
+                            </SelectItem>
+                        </Select>
+                        <Select
+                            value={selectedChart}
+                            onValueChange={(v) => {
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                setSelectedChart(v)
+                            }}
+                        >
+                            <SelectItem value="line">
+                                <Text>Line Chart</Text>
+                            </SelectItem>
+                            <SelectItem value="area">
+                                <Text>Area Chart</Text>
+                            </SelectItem>
+                            <SelectItem value="bar">
+                                <Text>Bar Chart</Text>
+                            </SelectItem>
+                        </Select>
+                    </Grid>
+                </Grid>
+                <Chart
+                    labels={costTrendChart().label}
+                    chartData={costTrendChart().data}
+                    chartType={selectedChart}
+                    isCost
+                />
+            </Card>
+            <Grid
+                numItems={1}
+                numItemsMd={2}
+                numItemsLg={3}
+                className="w-full gap-4"
+            >
+                <Card>
+                    <Chart
+                        labels={[]}
+                        chartData={pieData(composition)}
+                        chartType="doughnut"
+                        isCost
+                    />
+                </Card>
+                <TopListCard
+                    title="Top Accounts"
+                    loading={serviceCostLoading}
+                    data={topAccounts(serviceCostResponse?.metrics)}
+                    count={7}
+                    isPrice
+                />
+                <TopListCard
+                    title="Top Services"
+                    loading={serviceCostLoading}
+                    data={topServices(serviceCostResponse?.metrics)}
+                    count={7}
+                    isPrice
+                />
+            </Grid>
         </Menu>
     )
 }
