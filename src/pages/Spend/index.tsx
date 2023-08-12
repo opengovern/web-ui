@@ -18,12 +18,26 @@ import {
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../api/inventory.gen'
 import ConnectionList from '../../components/ConnectionList'
-import { filterAtom, spendTimeAtom } from '../../store'
-import SummaryMetrics from './SummaryMetrics'
+import { filterAtom, IFilter, spendTimeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
 import { dateDisplay } from '../../utilities/dateDisplay'
-import CardWithList from '../../components/Cards/CardWithList'
+import SummaryCard from '../../components/Cards/SummaryCard'
+import { exactPriceDisplay } from '../../utilities/numericDisplay'
+import TopListCard from '../../components/Cards/TopListCard'
+
+const topServices = (metrics: any) => {
+    const top = []
+    if (metrics) {
+        for (let i = 0; i < metrics.length; i += 1) {
+            top.push({
+                name: metrics[i].cost_dimension_name,
+                value: metrics[i].total_cost,
+            })
+        }
+    }
+    return top
+}
 
 export default function Spend() {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
@@ -31,121 +45,6 @@ export default function Spend() {
     )
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
-
-    const MockData = {
-        growthData: {
-            accounts: [
-                {
-                    name: 'PODZ',
-                    value: '97.9 %',
-                },
-                {
-                    name: 'TARK-BALK',
-                    value: '75.6 %',
-                },
-                {
-                    name: 'KOZET',
-                    value: '50.8 %',
-                },
-                {
-                    name: 'Central Management',
-                    value: '49.0 %',
-                },
-                {
-                    name: 'MAGNUM',
-                    value: '10 %',
-                },
-            ],
-            services: [
-                {
-                    name: 'M-Verst',
-                    value: '100 %',
-                },
-                {
-                    name: 'DDEVOPS',
-                    value: '80 %',
-                },
-                {
-                    name: 'D-Search',
-                    value: '69.69 %',
-                },
-                {
-                    name: 'Chico',
-                    value: '51.2 %',
-                },
-                {
-                    name: 'Mango',
-                    value: '36.0 %',
-                },
-            ],
-        },
-        consumptionData: {
-            accounts: [
-                {
-                    name: 'Central Management',
-                    value: '1304549',
-                },
-                {
-                    name: 'PODZ',
-                    value: '504549',
-                },
-                {
-                    name: 'KOZET',
-                    value: '304549',
-                },
-                {
-                    name: 'MAGNUM',
-                    value: '104549',
-                },
-                {
-                    name: 'TARK-BALK',
-                    value: '4549',
-                },
-            ],
-            services: [
-                {
-                    name: 'DDEVOPS',
-                    value: '1,204,549',
-                },
-                {
-                    name: 'D-Search',
-                    value: '549,549',
-                },
-                {
-                    name: 'Mango',
-                    value: '314,420',
-                },
-                {
-                    name: 'Chico',
-                    value: '104,110',
-                },
-                {
-                    name: 'M-Verst',
-                    value: '4,420',
-                },
-            ],
-        },
-    }
-
-    const growthData = () => {
-        const AccountData = MockData.growthData.accounts
-        const ServiceData = MockData.growthData.services
-
-        return {
-            Accounts: AccountData,
-            Services: ServiceData,
-        }
-    }
-
-    const consumptionData = () => {
-        const AccountData = MockData.consumptionData.accounts
-        const ServiceData = MockData.consumptionData.services
-
-        return {
-            Accounts: AccountData,
-            Services: ServiceData,
-        }
-    }
 
     const query = {
         ...(selectedConnections.provider !== '' && {
@@ -162,6 +61,7 @@ export default function Spend() {
         }),
         pageSize: 5000,
         pageNumber: 1,
+        sortBy: 'cost',
     }
 
     const { response: costTrend, isLoading } =
@@ -172,6 +72,8 @@ export default function Spend() {
         isLoading: serviceCostLoading,
         error: serviceCostError,
         sendNow: serviceCostSendNow,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
     } = useInventoryApiV2AnalyticsSpendMetricList(query)
 
     const {
@@ -179,17 +81,9 @@ export default function Spend() {
         isLoading: accountCostLoading,
         error: accountCostError,
         sendNow: accountCostSendNow,
-    } = useOnboardApiV1ConnectionsSummaryList({
-        ...(selectedConnections.provider !== '' && {
-            connector: [selectedConnections.provider],
-        }),
-        connectionId: selectedConnections.connections,
-        startTime: activeTimeRange.start.unix(),
-        endTime: activeTimeRange.end.unix(),
-        pageSize: 5000,
-        pageNumber: 1,
-        sortBy: 'cost',
-    })
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+    } = useOnboardApiV1ConnectionsSummaryList(query)
 
     const costTrendChart = () => {
         const label = []
@@ -206,6 +100,16 @@ export default function Spend() {
         }
     }
 
+    const getConnections = (con: IFilter) => {
+        if (con.provider.length) {
+            return con.provider
+        }
+        if (con.connections.length) {
+            return `${con.connections.length} accounts`
+        }
+        return 'all accounts'
+    }
+
     return (
         <Menu currentPage="spend">
             <Flex
@@ -219,35 +123,62 @@ export default function Spend() {
                     <ConnectionList />
                 </Flex>
             </Flex>
-            <SummaryMetrics
-                accountCostResponse={accountCostResponse}
-                accountCostLoading={accountCostLoading}
-                serviceCostResponse={serviceCostResponse}
-                serviceCostLoading={serviceCostLoading}
-            />
-            <Card className="mb-4">
-                <Grid numItems={1} numItemsMd={3}>
+            <Card className="my-4">
+                <Grid numItems={1} numItemsMd={3} className="gap-4 mb-8">
+                    <SummaryCard
+                        title={`Spend across ${getConnections(
+                            selectedConnections
+                        )}`}
+                        metric={exactPriceDisplay(
+                            accountCostResponse?.totalCost
+                        )}
+                        loading={accountCostLoading}
+                        url="spend-metrics#accounts"
+                        border={false}
+                    />
+                    <SummaryCard
+                        title="Services"
+                        metric={Number(serviceCostResponse?.total_count)}
+                        loading={serviceCostLoading}
+                        url="spend-metrics#services"
+                        border={false}
+                    />
+                </Grid>
+                <Grid numItems={1} numItemsMd={3} className="gap-4">
                     <Col numColSpan={2}>
                         <Title className="font-semibold">Spend Trend</Title>
                     </Col>
-                    <Select
-                        value={selectedChart}
-                        onValueChange={(v) => {
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            setSelectedChart(v)
-                        }}
-                    >
-                        <SelectItem value="line">
-                            <Text>Line Chart</Text>
-                        </SelectItem>
-                        <SelectItem value="area">
-                            <Text>Area Chart</Text>
-                        </SelectItem>
-                        <SelectItem value="bar">
-                            <Text>Bar Chart</Text>
-                        </SelectItem>
-                    </Select>
+                    <Grid numItems={2} className="gap-4">
+                        <Select>
+                            <SelectItem value="line">
+                                <Text>Daily</Text>
+                            </SelectItem>
+                            <SelectItem value="area">
+                                <Text>Monthly</Text>
+                            </SelectItem>
+                            <SelectItem value="bar">
+                                <Text>Yearly</Text>
+                            </SelectItem>
+                        </Select>
+                        <Select
+                            value={selectedChart}
+                            onValueChange={(v) => {
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                setSelectedChart(v)
+                            }}
+                        >
+                            <SelectItem value="line">
+                                <Text>Line Chart</Text>
+                            </SelectItem>
+                            <SelectItem value="area">
+                                <Text>Area Chart</Text>
+                            </SelectItem>
+                            <SelectItem value="bar">
+                                <Text>Bar Chart</Text>
+                            </SelectItem>
+                        </Select>
+                    </Grid>
                 </Grid>
                 <Chart
                     labels={costTrendChart().label}
@@ -265,17 +196,17 @@ export default function Spend() {
                 <Card>
                     <Chart labels={[]} chartData={[]} chartType="doughnut" />
                 </Card>
-                <CardWithList
-                    title="Top by Consumption"
-                    tabs={['Accounts', 'Services']}
-                    data={consumptionData()}
-                    valueIsPrice
+                <TopListCard
+                    title="Top Services"
+                    loading={serviceCostLoading}
+                    data={topServices(serviceCostResponse?.metrics)}
+                    count={7}
                 />
-                <CardWithList
-                    title="Top by Growth"
-                    tabs={['Accounts', 'Services']}
-                    data={growthData()}
-                    isPercentage
+                <TopListCard
+                    title="Top Services"
+                    loading={serviceCostLoading}
+                    data={topServices(serviceCostResponse?.metrics)}
+                    count={7}
                 />
             </Grid>
         </Menu>

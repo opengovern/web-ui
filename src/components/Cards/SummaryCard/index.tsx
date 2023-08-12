@@ -22,6 +22,7 @@ type IProps = {
     areaChartData?: any[]
     url?: string
     loading?: boolean
+    border?: boolean
 }
 
 export default function SummaryCard({
@@ -33,6 +34,7 @@ export default function SummaryCard({
     areaChartData,
     url,
     loading = false,
+    border = true,
 }: IProps) {
     const navigate = useNavigate()
 
@@ -40,7 +42,9 @@ export default function SummaryCard({
         <Card
             key={title}
             onClick={() => (url ? navigate(url) : null)}
-            className={url ? 'cursor-pointer' : ''}
+            className={`${border ? '' : 'ring-0 shadow-transparent p-0'} ${
+                url ? 'cursor-pointer' : ''
+            }`}
         >
             {loading ? (
                 <div className="flex justify-center items-center h-14">
