@@ -8,6 +8,7 @@ import {
     Select,
     SelectItem,
     Text,
+    Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import DateRangePicker from '../../components/DateRangePicker'
@@ -45,7 +46,7 @@ const topAccounts = (metrics: any) => {
     if (metrics) {
         for (let i = 0; i < metrics.length; i += 1) {
             top.push({
-                name: metrics[i].metadata?.account_name,
+                name: metrics[i].providerConnectionName,
                 value: metrics[i].cost,
             })
         }
@@ -171,60 +172,78 @@ export default function Spend() {
                     <ConnectionList />
                 </Flex>
             </Flex>
-            <Card className="my-4">
-                <Grid numItems={3} className="gap-4 mb-4">
-                    <Grid numItems={2} className="gap-4">
-                        <SummaryCard
-                            title={`Spend across ${getConnections(
-                                selectedConnections
-                            )}`}
-                            metric={exactPriceDisplay(
-                                accountCostResponse?.totalCost
-                            )}
-                            loading={accountCostLoading}
-                            url="spend-metrics#accounts"
-                            border={false}
-                        />
-                        <SummaryCard
-                            title="Services"
-                            metric={Number(serviceCostResponse?.total_count)}
-                            loading={serviceCostLoading}
-                            url="spend-metrics#services"
-                            border={false}
-                        />
-                    </Grid>
-                    <Col className="opacity-0">.</Col>
-                    <Grid numItems={2} className="gap-4">
-                        <Select>
-                            <SelectItem value="line">
-                                <Text>Daily</Text>
-                            </SelectItem>
-                            <SelectItem value="area">
-                                <Text>Monthly</Text>
-                            </SelectItem>
-                            <SelectItem value="bar">
-                                <Text>Yearly</Text>
-                            </SelectItem>
-                        </Select>
-                        <Select
-                            value={selectedChart}
-                            onValueChange={(v) => {
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                setSelectedChart(v)
-                            }}
+            <Card className="mb-4 mt-6">
+                <Grid numItems={6} className="gap-4">
+                    <Col numColSpan={3}>
+                        <Flex>
+                            <SummaryCard
+                                title={`Spend across ${getConnections(
+                                    selectedConnections
+                                )}`}
+                                metric={exactPriceDisplay(
+                                    accountCostResponse?.totalCost
+                                )}
+                                loading={accountCostLoading}
+                                url="spend-metrics#accounts"
+                                border={false}
+                            />
+                            <Flex className="border-l border-l-gray-200 pl-4">
+                                <SummaryCard
+                                    title="Services"
+                                    metric={Number(
+                                        serviceCostResponse?.total_count
+                                    )}
+                                    loading={serviceCostLoading}
+                                    url="spend-metrics#services"
+                                    border={false}
+                                />
+                            </Flex>
+                        </Flex>
+                    </Col>
+                    <Col />
+                    <Col numColSpan={2}>
+                        <Flex
+                            flexDirection="col"
+                            alignItems="end"
+                            className="h-full"
                         >
-                            <SelectItem value="line">
-                                <Text>Line Chart</Text>
-                            </SelectItem>
-                            <SelectItem value="area">
-                                <Text>Area Chart</Text>
-                            </SelectItem>
-                            <SelectItem value="bar">
-                                <Text>Bar Chart</Text>
-                            </SelectItem>
-                        </Select>
-                    </Grid>
+                            <Grid numItems={2} className="gap-4">
+                                <Select>
+                                    <SelectItem value="line">
+                                        <Text>Daily</Text>
+                                    </SelectItem>
+                                    <SelectItem value="area">
+                                        <Text>Monthly</Text>
+                                    </SelectItem>
+                                    <SelectItem value="bar">
+                                        <Text>Yearly</Text>
+                                    </SelectItem>
+                                </Select>
+                                <Select
+                                    value={selectedChart}
+                                    onValueChange={(v) => {
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        // @ts-ignore
+                                        setSelectedChart(v)
+                                    }}
+                                >
+                                    <SelectItem value="line">
+                                        <Text>Line Chart</Text>
+                                    </SelectItem>
+                                    <SelectItem value="area">
+                                        <Text>Area Chart</Text>
+                                    </SelectItem>
+                                    <SelectItem value="bar">
+                                        <Text>Bar Chart</Text>
+                                    </SelectItem>
+                                </Select>
+                            </Grid>
+                            <Flex justifyContent="end" className="mt-6 gap-3">
+                                <div className="h-2.5 w-2.5 rounded-full bg-blue-950" />
+                                <Text>Accumulated Cost</Text>
+                            </Flex>
+                        </Flex>
+                    </Col>
                 </Grid>
                 <Chart
                     labels={costTrendChart().label}
@@ -240,6 +259,7 @@ export default function Spend() {
                 className="w-full gap-4"
             >
                 <Card>
+                    <Title className="font-semibold">Breakdown</Title>
                     <Chart
                         labels={[]}
                         chartData={pieData(composition)}
@@ -250,15 +270,15 @@ export default function Spend() {
                 <TopListCard
                     title="Top Accounts"
                     loading={serviceCostLoading}
-                    data={topAccounts(serviceCostResponse?.metrics)}
-                    count={7}
+                    data={topAccounts(accountCostResponse?.connections)}
+                    count={5}
                     isPrice
                 />
                 <TopListCard
                     title="Top Services"
                     loading={serviceCostLoading}
                     data={topServices(serviceCostResponse?.metrics)}
-                    count={7}
+                    count={5}
                     isPrice
                 />
             </Grid>

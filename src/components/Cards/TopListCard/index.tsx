@@ -1,5 +1,6 @@
 import { JSXElementConstructor, Key, ReactElement, ReactNode } from 'react'
-import { Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
+import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import {
     exactPriceDisplay,
     numericDisplay,
@@ -52,20 +53,37 @@ export default function TopListCard({
         </Card>
     ) : (
         <Card>
-            <Title className="font-semibold">{title}</Title>
-            <List>
-                {data?.map(
-                    (item: Item, i: number) =>
-                        i < count && (
-                            <ListItem className={`${i === 0 && 'pt-4'}`}>
-                                <Text className="w-4/5 truncate">
-                                    {item.name}
-                                </Text>
-                                {item.value && <Text>{value(item)}</Text>}
-                            </ListItem>
-                        )
-                )}
-            </List>
+            <Flex flexDirection="col" alignItems="start" className="h-full">
+                <Flex flexDirection="col" alignItems="start">
+                    <Title className="font-semibold">{title}</Title>
+                    <List>
+                        {data?.map(
+                            (item: Item, i: number) =>
+                                i < count && (
+                                    <ListItem
+                                        className={`${i === 0 && 'pt-4'}`}
+                                    >
+                                        <Text className="w-4/5 truncate">
+                                            {item.name}
+                                        </Text>
+                                        {item.value && (
+                                            <Text>{value(item)}</Text>
+                                        )}
+                                    </ListItem>
+                                )
+                        )}
+                    </List>
+                </Flex>
+                <Flex justifyContent="end">
+                    <Button
+                        variant="light"
+                        icon={ChevronRightIcon}
+                        iconPosition="right"
+                    >
+                        See more
+                    </Button>
+                </Flex>
+            </Flex>
         </Card>
     )
 }
