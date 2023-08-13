@@ -28,7 +28,7 @@ const columns: IColumn<any, any>[] = [
                     justifyContent="center"
                     className="w-full h-full"
                 >
-                    {params.data.connector === 'Azure' ? (
+                    {params.data?.connector === 'Azure' ? (
                         <AzureIcon />
                     ) : (
                         <AWSIcon />
