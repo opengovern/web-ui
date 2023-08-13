@@ -46,29 +46,28 @@ export default function SummaryCard({
                 url ? 'cursor-pointer' : ''
             }`}
         >
+            <Flex alignItems="start">
+                <Flex justifyContent="start">
+                    <Text className="mb-1.5">{title}</Text>
+                    {!border && url && (
+                        <ChevronRightIcon className="ml-1 h-4 text-blue-500" />
+                    )}
+                </Flex>
+                {delta && (
+                    <BadgeDelta deltaType={deltaType}>{delta}</BadgeDelta>
+                )}
+            </Flex>
             {loading ? (
-                <div className="flex justify-center items-center h-14">
+                <div className="w-fit">
                     <Spinner />
                 </div>
             ) : (
-                <>
-                    <Flex alignItems="start">
-                        <Text className="mb-1.5">{title}</Text>
-                        {delta && (
-                            <BadgeDelta deltaType={deltaType}>
-                                {delta}
-                            </BadgeDelta>
-                        )}
-                    </Flex>
-                    <Flex
-                        className="space-x-3 truncate"
-                        justifyContent="between"
-                        alignItems="baseline"
-                    >
-                        <div className="flex flex-row items-baseline space-x-3">
-                            <Metric>{metric}</Metric>
-                            {metricPrev && <Text>from {metricPrev}</Text>}
-                        </div>
+                <Flex justifyContent="between" alignItems="baseline">
+                    <div className="flex flex-row items-baseline space-x-3">
+                        <Metric>{metric}</Metric>
+                        {metricPrev && <Text>from {metricPrev}</Text>}
+                    </div>
+                    {border && (
                         <div className="justify-self-end">
                             {url && (
                                 <Button
@@ -81,22 +80,22 @@ export default function SummaryCard({
                                 </Button>
                             )}
                         </div>
-                    </Flex>
-                    {areaChartData && (
-                        <AreaChart
-                            className="mt-6 h-28"
-                            data={areaChartData}
-                            index="Month"
-                            categories={[title]}
-                            colors={['blue']}
-                            showXAxis
-                            showGridLines={false}
-                            startEndOnly
-                            showYAxis={false}
-                            showLegend={false}
-                        />
                     )}
-                </>
+                </Flex>
+            )}
+            {areaChartData && (
+                <AreaChart
+                    className="mt-6 h-28"
+                    data={areaChartData}
+                    index="Month"
+                    categories={[title]}
+                    colors={['blue']}
+                    showXAxis
+                    showGridLines={false}
+                    startEndOnly
+                    showYAxis={false}
+                    showLegend={false}
+                />
             )}
         </Card>
     )

@@ -16,7 +16,7 @@ export const spendTimeAtom = atom<{
     start: dayjs.Dayjs
     end: dayjs.Dayjs
 }>({
-    start: dayjs.utc().subtract(1, 'month'),
+    start: dayjs.utc().subtract(9, 'days'),
     end: dayjs.utc().subtract(2, 'day'),
 })
 

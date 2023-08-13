@@ -45,9 +45,9 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                 {label}
             </span>
             <div {...groupProps} ref={ref} className="flex group h-9">
-                <div className="flex bg-white dark:bg-gray-900 dark:text-gray-50 border border-gray-300 group-hover:border-gray-400 transition-colors rounded-l-md pr-10 group-focus-within:border-blue-600 group-focus-within:group-hover:border-blue-600 p-1 relative">
+                <div className="flex bg-white dark:bg-gray-900 dark:text-gray-50 border border-gray-300 group-hover:border-gray-400 transition-colors rounded-l-md pr-5 group-focus-within:border-blue-600 group-focus-within:group-hover:border-blue-600 p-1 relative">
                     <DateField {...startFieldProps} />
-                    <span aria-hidden="true" className="px-2">
+                    <span aria-hidden="true" className="px-1">
                         –
                     </span>
                     <DateField {...endFieldProps} />

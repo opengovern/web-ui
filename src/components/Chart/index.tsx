@@ -16,7 +16,7 @@ export default function Chart({
     chartType,
     isCost = false,
 }: IChart) {
-    const seriesType = () => {
+    const options = () => {
         if (
             chartType === 'bar' ||
             chartType === 'line' ||
@@ -56,6 +56,16 @@ export default function Chart({
                     top: 20,
                     bottom: 40,
                 },
+                tooltip: {
+                    show: true,
+                    trigger: 'axis',
+                    valueFormatter: (value: string | number) => {
+                        if (isCost) {
+                            return `$${Number(value).toFixed(2)}`
+                        }
+                        return value
+                    },
+                },
             }
         }
         if (chartType === 'doughnut') {
@@ -63,7 +73,7 @@ export default function Chart({
                 series: [
                     {
                         type: 'pie',
-                        radius: ['60%', '80%'],
+                        radius: ['55%', '80%'],
                         avoidLabelOverlap: false,
                         label: {
                             show: false,
@@ -78,22 +88,26 @@ export default function Chart({
                                 formatter: isCost ? '{b}\n\n ${c}' : '{c}',
                             },
                         },
-                        labelLine: {
-                            show: false,
+                        itemStyle: {
+                            borderRadius: 8,
+                            borderColor: '#fff',
+                            borderWidth: 2,
                         },
                         data: chartData,
+                        // left: 'center',
+                        // top: 0,
+                        // height: 300,
                     },
                 ],
-                // left: 'left',
                 legend: {
-                    right: '0',
-                    top: 'center',
+                    left: 0,
+                    bottom: 0,
                     icon: 'circle',
                     orient: 'vertical',
-                    textStyle: {
-                        width: 140,
-                        overflow: 'truncate',
-                    },
+                    // textStyle: {
+                    //     width: 140,
+                    //     overflow: 'truncate',
+                    // },
                 },
             }
         }
@@ -103,22 +117,17 @@ export default function Chart({
     return (
         <ReactEcharts
             option={{
-                ...seriesType(),
-                tooltip: {
-                    show: true,
-                    trigger: 'axis',
-                    valueFormatter: (value: string | number) => {
-                        if (isCost) {
-                            return `$${Number(value).toFixed(2)}`
-                        }
-                        return value
-                    },
-                },
-                // legend: {
-                //     top: '0',
-                //     left: 'center',
-                // },
+                ...options(),
+                color: [
+                    '#172554',
+                    '#1E40AE',
+                    '#2563EA',
+                    '#60A4F9',
+                    '#BEDAFD',
+                    '#D0D4DA',
+                ],
             }}
+            echarts={{ height: '100%' }}
         />
     )
 }
