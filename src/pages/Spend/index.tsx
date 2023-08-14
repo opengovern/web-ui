@@ -48,6 +48,7 @@ const topAccounts = (metrics: any) => {
             top.push({
                 name: metrics[i].providerConnectionName,
                 value: metrics[i].cost,
+                connector: metrics[i].connector,
             })
         }
     }
@@ -185,6 +186,7 @@ export default function Spend() {
                 startTime: activeTimeRange.start.unix(),
             }),
         })
+    console.log(accountCostResponse)
 
     return (
         <Menu currentPage="spend">
