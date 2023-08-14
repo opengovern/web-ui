@@ -95,7 +95,7 @@ export default function Chart({
                         },
                         data: chartData,
                         left: '-45%',
-                        // height: 300,
+                        // width: '50%',
                     },
                 ],
                 legend: {
@@ -103,10 +103,10 @@ export default function Chart({
                     top: 'middle',
                     icon: 'circle',
                     orient: 'vertical',
-                    // textStyle: {
-                    //     width: 140,
-                    //     overflow: 'truncate',
-                    // },
+                    textStyle: {
+                        width: 140,
+                        overflow: 'truncate',
+                    },
                 },
             }
         }
