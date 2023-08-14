@@ -133,10 +133,10 @@ export default function ResourceMetricsDetails() {
             connectionId: selectedConnections.connections,
         }),
         ...(activeTimeRange.start && {
-            startTime: activeTimeRange.start.unix().toString(),
+            startTime: activeTimeRange.start.unix(),
         }),
         ...(activeTimeRange.end && {
-            endTime: activeTimeRange.end.unix().toString(),
+            endTime: activeTimeRange.end.unix(),
         }),
         pageSize: 1000,
     }

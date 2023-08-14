@@ -37,7 +37,7 @@ export default function Summary({
             connectionId: selectedConnections?.connections,
             pageSize: 5,
             pageNumber: 1,
-            endTime: String(activeTimeRange.end.unix()),
+            endTime: activeTimeRange.end.unix(),
             sortBy: 'count',
         })
     const {
@@ -48,7 +48,7 @@ export default function Summary({
         connectionId: selectedConnections?.connections,
         pageSize: 5,
         pageNumber: 1,
-        endTime: String(activeTimeRange.end.unix()),
+        endTime: activeTimeRange.end.unix(),
         sortBy: 'growth_rate',
     })
 

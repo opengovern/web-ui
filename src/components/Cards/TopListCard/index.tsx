@@ -52,7 +52,7 @@ export default function TopListCard({
             </Flex>
         </Card>
     ) : (
-        <Card>
+        <Card className="h-full">
             <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Flex flexDirection="col" alignItems="start">
                     <Title className="font-semibold">{title}</Title>

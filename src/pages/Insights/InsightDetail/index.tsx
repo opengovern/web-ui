@@ -385,7 +385,7 @@ export default function InsightDetail() {
                     {detailsDate !== '' && (
                         <Flex
                             flexDirection="row"
-                            className="bg-blue-50 mt-2 rounded-md pr-6"
+                            className="bg-kaytu-50 mt-2 rounded-md pr-6"
                         >
                             <Callout
                                 title={`The available data for the result is exclusively limited to ${end().format(
@@ -396,7 +396,7 @@ export default function InsightDetail() {
                                 className="w-full text-xs leading-5 truncate max-w-full"
                             >
                                 <Flex flexDirection="row">
-                                    <Text className="text-blue-800">
+                                    <Text className="text-kaytu-800">
                                         The following results present you with a
                                         partial result based on the filter you
                                         have selected.

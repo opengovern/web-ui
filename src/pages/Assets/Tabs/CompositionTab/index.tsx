@@ -81,8 +81,8 @@ export default function CompositionTab({ top }: IProps) {
             connectionId: selectedConnections.connections,
         }),
         ...(activeTimeRange.end && {
-            startTime: String(activeTimeRange.start.unix()),
-            endTime: String(activeTimeRange.end.unix()),
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
         }),
     }
     const { response: composition, isLoading } =

@@ -86,7 +86,7 @@ export default function CLIMenu() {
                                         justifyContent="center"
                                         className={classNames(
                                             currentTab === tabIdx
-                                                ? 'bg-blue-50 text-blue-800 fill-blue-600'
+                                                ? 'bg-kaytu-50 text-kaytu-800 fill-blue-600'
                                                 : 'bg-gray-50 text-gray-600 fill-gray-600 hover:text-gray-700',
                                             tabIdx === 0 ? 'rounded-l-lg' : '',
                                             tabIdx === tabs.length - 1
@@ -115,7 +115,7 @@ export default function CLIMenu() {
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                <Button className="my-8 bg-blue-600">
+                                <Button className="my-8 bg-kaytu-600">
                                     Download for {getCurrentTab()?.name}
                                 </Button>
                             </a>
@@ -141,11 +141,11 @@ export default function CLIMenu() {
                                             flexDirection="col"
                                             className="h-5 w-5"
                                         >
-                                            <DocumentDuplicateIcon className="h-5 w-5 text-blue-600 cursor-pointer" />
+                                            <DocumentDuplicateIcon className="h-5 w-5 text-kaytu-600 cursor-pointer" />
                                             <Text
                                                 className={`${
                                                     showCopied ? '' : 'hidden'
-                                                } absolute -bottom-4 bg-blue-600 text-white rounded-md p-1`}
+                                                } absolute -bottom-4 bg-kaytu-600 text-white rounded-md p-1`}
                                             >
                                                 Copied!
                                             </Text>

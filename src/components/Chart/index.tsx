@@ -48,16 +48,16 @@ export default function Chart({
                     },
                 },
                 series: [
-                    chartType === 'area'
-                        ? {
-                              data: chartData,
-                              type: 'line',
-                              areaStyle: {},
-                          }
-                        : {
-                              data: chartData,
-                              type: chartType,
-                          },
+                    chartType === 'area' && {
+                        data: chartData,
+                        type: 'line',
+                        areaStyle: { opacity: 0.7 },
+                    },
+                    (chartType === 'bar' || chartType === 'line') && {
+                        data: chartData,
+                        type: chartType,
+                        areaStyle: { opacity: 0 },
+                    },
                 ],
                 grid: {
                     left: 50,
@@ -103,14 +103,13 @@ export default function Chart({
                             borderWidth: 2,
                         },
                         data: chartData,
-                        // left: 'center',
-                        // top: 0,
+                        left: '-45%',
                         // height: 300,
                     },
                 ],
                 legend: {
-                    left: 0,
-                    bottom: 0,
+                    right: 0,
+                    top: 'middle',
                     icon: 'circle',
                     orient: 'vertical',
                     // textStyle: {

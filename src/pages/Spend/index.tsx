@@ -26,7 +26,7 @@ import { dateDisplay } from '../../utilities/dateDisplay'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import { exactPriceDisplay } from '../../utilities/numericDisplay'
 import TopListCard from '../../components/Cards/TopListCard'
-import { snakeCaseToLabel } from '../../utilities/labelMaker'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../api/api'
 
 const topServices = (metrics: any) => {
     const top = []
@@ -54,6 +54,38 @@ const topAccounts = (metrics: any) => {
     return top
 }
 
+const costTrendChart = (
+    trend:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+        | undefined,
+    chart: 'line' | 'bar' | 'area'
+) => {
+    const label = []
+    const data: any = []
+    if (trend) {
+        if (chart === 'bar' || chart === 'line') {
+            for (let i = 0; i < trend?.length; i += 1) {
+                label.push(dateDisplay(trend[i]?.date))
+                data.push(trend[i]?.count)
+            }
+        }
+        if (chart === 'area') {
+            for (let i = 0; i < trend?.length; i += 1) {
+                label.push(dateDisplay(trend[i]?.date))
+                if (i === 0) {
+                    data.push(trend[i]?.count)
+                } else {
+                    data.push((trend[i]?.count || 0) + data[i - 1])
+                }
+            }
+        }
+    }
+    return {
+        label,
+        data,
+    }
+}
+
 const pieData = (response: any) => {
     const data: any = []
     if (response) {
@@ -71,14 +103,35 @@ const pieData = (response: any) => {
     return data
 }
 
+const getConnections = (con: IFilter) => {
+    if (con.provider.length) {
+        return con.provider
+    }
+    if (con.connections.length) {
+        return `${con.connections.length} accounts`
+    }
+    return 'all accounts'
+}
+
 export default function Spend() {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
+    const [selectedGranularity, setSelectedGranularity] = useState<
+        'monthly' | 'daily' | 'yearly'
+    >('daily')
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
-    const query = {
+    const query: {
+        pageSize: number
+        pageNumber: number
+        sortBy: 'cost' | undefined
+        endTime: number
+        startTime: number
+        connectionId: string[]
+        connector?: ('AWS' | 'Azure')[] | undefined
+    } = {
         ...(selectedConnections.provider !== '' && {
             connector: [selectedConnections.provider],
         }),
@@ -86,10 +139,10 @@ export default function Spend() {
             connectionId: selectedConnections.connections,
         }),
         ...(activeTimeRange.start && {
-            startTime: activeTimeRange.start.unix().toString(),
+            startTime: activeTimeRange.start.unix(),
         }),
         ...(activeTimeRange.end && {
-            endTime: activeTimeRange.end.unix().toString(),
+            endTime: activeTimeRange.end.unix(),
         }),
         pageSize: 5000,
         pageNumber: 1,
@@ -97,15 +150,16 @@ export default function Spend() {
     }
 
     const { response: costTrend, isLoading } =
-        useInventoryApiV2AnalyticsSpendTrendList(query)
+        useInventoryApiV2AnalyticsSpendTrendList({
+            ...query,
+            granularity: selectedGranularity,
+        })
 
     const {
         response: serviceCostResponse,
         isLoading: serviceCostLoading,
         error: serviceCostError,
         sendNow: serviceCostSendNow,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
     } = useInventoryApiV2AnalyticsSpendMetricList(query)
 
     const {
@@ -113,8 +167,6 @@ export default function Spend() {
         isLoading: accountCostLoading,
         error: accountCostError,
         sendNow: accountCostSendNow,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
     } = useOnboardApiV1ConnectionsSummaryList(query)
 
     const { response: composition, isLoading: compositionLoading } =
@@ -127,37 +179,12 @@ export default function Spend() {
                 connectionId: selectedConnections.connections,
             }),
             ...(activeTimeRange.start && {
-                endTime: activeTimeRange.end.unix().toString(),
+                endTime: activeTimeRange.end.unix(),
             }),
             ...(activeTimeRange.start && {
-                startTime: activeTimeRange.start.unix().toString(),
+                startTime: activeTimeRange.start.unix(),
             }),
         })
-
-    const costTrendChart = () => {
-        const label = []
-        const data = []
-        if (costTrend) {
-            for (let i = 0; i < costTrend?.length; i += 1) {
-                label.push(dateDisplay(costTrend[i]?.date))
-                data.push(costTrend[i]?.count)
-            }
-        }
-        return {
-            label,
-            data,
-        }
-    }
-
-    const getConnections = (con: IFilter) => {
-        if (con.provider.length) {
-            return con.provider
-        }
-        if (con.connections.length) {
-            return `${con.connections.length} accounts`
-        }
-        return 'all accounts'
-    }
 
     return (
         <Menu currentPage="spend">
@@ -208,14 +235,21 @@ export default function Spend() {
                             className="h-full"
                         >
                             <Grid numItems={2} className="gap-4">
-                                <Select>
-                                    <SelectItem value="line">
+                                <Select
+                                    value={selectedGranularity}
+                                    onValueChange={(v) => {
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        // @ts-ignore
+                                        setSelectedGranularity(v)
+                                    }}
+                                >
+                                    <SelectItem value="daily">
                                         <Text>Daily</Text>
                                     </SelectItem>
-                                    <SelectItem value="area">
+                                    <SelectItem value="monthly">
                                         <Text>Monthly</Text>
                                     </SelectItem>
-                                    <SelectItem value="bar">
+                                    <SelectItem value="yearly">
                                         <Text>Yearly</Text>
                                     </SelectItem>
                                 </Select>
@@ -238,49 +272,54 @@ export default function Spend() {
                                     </SelectItem>
                                 </Select>
                             </Grid>
-                            <Flex justifyContent="end" className="mt-6 gap-3">
-                                <div className="h-2.5 w-2.5 rounded-full bg-blue-950" />
-                                <Text>Accumulated Cost</Text>
+                            <Flex justifyContent="end" className="mt-6 gap-2.5">
+                                <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
+                                {selectedChart === 'area' ? (
+                                    <Text>Accumulated Cost</Text>
+                                ) : (
+                                    <Text>Spend</Text>
+                                )}
                             </Flex>
                         </Flex>
                     </Col>
                 </Grid>
                 <Chart
-                    labels={costTrendChart().label}
-                    chartData={costTrendChart().data}
+                    labels={costTrendChart(costTrend, selectedChart).label}
+                    chartData={costTrendChart(costTrend, selectedChart).data}
                     chartType={selectedChart}
                     isCost
                 />
             </Card>
-            <Grid
-                numItems={1}
-                numItemsMd={2}
-                numItemsLg={3}
-                className="w-full gap-4"
-            >
-                <Card>
-                    <Title className="font-semibold">Breakdown</Title>
-                    <Chart
-                        labels={[]}
-                        chartData={pieData(composition)}
-                        chartType="doughnut"
-                        isCost
-                    />
-                </Card>
-                <TopListCard
-                    title="Top Accounts"
-                    loading={serviceCostLoading}
-                    data={topAccounts(accountCostResponse?.connections)}
-                    count={5}
-                    isPrice
-                />
-                <TopListCard
-                    title="Top Services"
-                    loading={serviceCostLoading}
-                    data={topServices(serviceCostResponse?.metrics)}
-                    count={5}
-                    isPrice
-                />
+            <Grid numItems={5} className="w-full gap-4">
+                <Col numColSpan={2}>
+                    <Card className="pb-0">
+                        <Title className="font-semibold">Breakdown</Title>
+                        <Chart
+                            labels={[]}
+                            chartData={pieData(composition)}
+                            chartType="doughnut"
+                            isCost
+                        />
+                    </Card>
+                </Col>
+                <Col numColSpan={3} className="h-full">
+                    <Grid numItems={2} className="gap-4 h-full">
+                        <TopListCard
+                            title="Top Accounts"
+                            loading={serviceCostLoading}
+                            data={topAccounts(accountCostResponse?.connections)}
+                            count={5}
+                            isPrice
+                        />
+                        <TopListCard
+                            title="Top Services"
+                            loading={serviceCostLoading}
+                            data={topServices(serviceCostResponse?.metrics)}
+                            count={5}
+                            isPrice
+                        />
+                    </Grid>
+                </Col>
             </Grid>
         </Menu>
     )

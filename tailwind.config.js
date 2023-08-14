@@ -11,16 +11,29 @@ module.exports = {
     theme: {
         transparent: 'transparent',
         current: 'currentColor',
+        kaytu: {
+            50: '#EAF2FA',
+            100: '#C0D8F1',
+            200: '#96BEE8',
+            300: '#6DA4DF',
+            400: '#438AD6',
+            500: '#2970BC',
+            600: '#205792',
+            700: '#1D4F85',
+            800: '#15395F',
+            900: '#0D2239',
+            950: '#0D2239',
+        },
         extend: {
             colors: {
                 // light mode
                 tremor: {
                     brand: {
-                        faint: '#eff6ff', // blue-50
-                        muted: '#bfdbfe', // blue-200
-                        subtle: '#60a5fa', // blue-400
-                        DEFAULT: '#3b82f6', // blue-500
-                        emphasis: '#1d4ed8', // blue-700
+                        faint: '#EAF2FA', // blue-50
+                        muted: '#96BEE8', // blue-200
+                        subtle: '#438AD6', // blue-400
+                        DEFAULT: '#2970BC', // blue-500
+                        emphasis: '#1D4F85', // blue-700
                         inverted: '#ffffff', // white
                     },
                     background: {

@@ -68,10 +68,10 @@ export default function GrowthTrend({ categories }: IProps) {
             tag: activeCategory,
         }),
         ...(activeTimeRange.start && {
-            startTime: activeTimeRange.start.unix().toString(),
+            startTime: activeTimeRange.start.unix(),
         }),
         ...(activeTimeRange.end && {
-            endTime: activeTimeRange.end.unix().toString(),
+            endTime: activeTimeRange.end.unix(),
         }),
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
