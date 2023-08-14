@@ -103,6 +103,7 @@ export default function TopListCard({
                     </Flex>
                     <Flex
                         justifyContent="end"
+                        className="cursor-pointer"
                         onClick={() => (url ? navigate(url) : null)}
                     >
                         <Button
@@ -150,6 +151,7 @@ export default function TopListCard({
                         </Flex>
                         <Flex
                             justifyContent="end"
+                            className="cursor-pointer"
                             onClick={() => (url2 ? navigate(url2) : null)}
                         >
                             <Button
