@@ -91,7 +91,7 @@ export default function Spend() {
         ...(activeTimeRange.end && {
             endTime: activeTimeRange.end.unix().toString(),
         }),
-        pageSize: 5,
+        pageSize: 5000,
         pageNumber: 1,
         sortBy: 'cost',
     }
