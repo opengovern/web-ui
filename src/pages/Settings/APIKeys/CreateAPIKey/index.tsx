@@ -94,11 +94,11 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
                                         justifyContent="start"
                                         className="h-5 w-5"
                                     >
-                                        <DocumentDuplicateIcon className="h-5 w-5 text-blue-600 " />
+                                        <DocumentDuplicateIcon className="h-5 w-5 text-kaytu-600 " />
                                         <Text
                                             className={`${
                                                 showCopied ? '' : 'hidden'
-                                            } absolute mt-6 bg-blue-600 text-white rounded-md p-1`}
+                                            } absolute mt-6 bg-kaytu-600 text-white rounded-md p-1`}
                                         >
                                             Copied!
                                         </Text>

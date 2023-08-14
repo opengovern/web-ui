@@ -54,7 +54,12 @@ export default function CostMetricsDetails() {
         }
     }
     const [granularity, setGranularity] = useState<string>('daily')
-    const query = () => {
+    const query = (): {
+        startTime?: number | undefined
+        endTime?: number | undefined
+        granularity?: 'daily' | 'monthly' | 'yearly' | undefined
+        dimension?: 'metric' | 'connection' | undefined
+    } => {
         let dim: 'metric' | 'connection' = 'metric'
         if (dimension === 'connection') {
             dim = 'connection'
@@ -65,8 +70,8 @@ export default function CostMetricsDetails() {
             gra = 'monthly'
         }
         return {
-            startTime: activeTimeRange.start.unix().toString(),
-            endTime: activeTimeRange.end.unix().toString(),
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
             dimension: dim,
             granularity: gra,
         }

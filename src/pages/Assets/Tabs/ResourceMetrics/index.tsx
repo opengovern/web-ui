@@ -17,6 +17,7 @@ interface IProps {
     }[]
     pageSize: number
 }
+
 const resourceMetricsResponse2 = [
     {
         id: 'elastic_compute_cloud',
@@ -173,10 +174,10 @@ export default function ResourceMetrics({ pageSize, categories }: IProps) {
         }),
         ...(activeCategory && { tag: [`category=${activeCategory}`] }),
         ...(activeTimeRange.start && {
-            startTime: activeTimeRange.start.unix().toString(),
+            startTime: activeTimeRange.start.unix(),
         }),
         ...(activeTimeRange.end && {
-            endTime: activeTimeRange.end.unix().toString(),
+            endTime: activeTimeRange.end.unix(),
         }),
         ...(pageSize && { pageSize }),
     }

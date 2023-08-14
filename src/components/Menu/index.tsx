@@ -34,7 +34,7 @@ export default function Menu({
             )}
             <div
                 className="z-10 w-full h-full relative"
-                style={{ backgroundColor: '#0B2447' }}
+                style={{ backgroundColor: '#1F2737' }}
             >
                 <Header workspace={workspace} />
                 <Flex
@@ -44,7 +44,7 @@ export default function Menu({
                     id="kaytu-container"
                 >
                     <Flex justifyContent="center" className="px-12">
-                        <div className="max-w-6xl w-full py-8">{children}</div>
+                        <div className="max-w-7xl w-full py-8">{children}</div>
                     </Flex>
                     <Footer />
                 </Flex>

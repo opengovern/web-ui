@@ -38,7 +38,7 @@ export default function Breadcrumbs({ pages }: IProps) {
                     <Button
                         onClick={handleOnClick(pages[0].path)}
                         variant="light"
-                        className="text-sm font-medium hover:text-blue-600"
+                        className="text-sm font-medium hover:text-kaytu-600"
                         aria-current={pages[0].current ? 'page' : undefined}
                     >
                         {pages[0].name}
@@ -54,7 +54,7 @@ export default function Breadcrumbs({ pages }: IProps) {
                                 className={`${
                                     page.current
                                         ? 'text-black opacity-100'
-                                        : 'hover:text-blue-600'
+                                        : 'hover:text-kaytu-600'
                                 } ml-4 text-sm font-medium`}
                                 aria-current={page.current ? 'page' : undefined}
                                 disabled={page.current}

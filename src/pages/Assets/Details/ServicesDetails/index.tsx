@@ -88,7 +88,7 @@ export default function ServicesDetails() {
             connectionId: selectedConnections?.connections,
             pageSize: 1000,
             pageNumber: 1,
-            endTime: String(activeTimeRange.end.unix()),
+            endTime: activeTimeRange.end.unix(),
             sortBy: 'name',
         })
 

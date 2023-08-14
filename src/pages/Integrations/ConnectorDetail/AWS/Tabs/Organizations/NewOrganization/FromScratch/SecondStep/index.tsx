@@ -21,7 +21,7 @@ export default function SecondStep({ onNext, onPrevious }: IStep) {
                         <Text className="px-1.5 text-gray-800">
                             $ Brew Install kaytu
                         </Text>
-                        <DocumentDuplicateIcon className="h-5 w-5 text-blue-600 cursor-pointer" />
+                        <DocumentDuplicateIcon className="h-5 w-5 text-kaytu-600 cursor-pointer" />
                     </Flex>
                 </Card>
             </Flex>
