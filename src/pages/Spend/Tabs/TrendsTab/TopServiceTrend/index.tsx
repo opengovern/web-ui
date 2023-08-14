@@ -151,8 +151,6 @@ export default function TopServicesTrend({ categories }: IProps) {
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
-    // const [serviceNames, setServiceNames] = useState<string[]>([])
-    // const [trendData, setTrendData] = useState<object[]>([])
     const { response: metrics, isLoading } =
         useInventoryApiV2AnalyticsSpendMetricList({
             ...(selectedConnections.provider !== '' && {
@@ -178,7 +176,6 @@ export default function TopServicesTrend({ categories }: IProps) {
                     metrics?.metrics?.map(
                         (metric) => metric.cost_dimension_name || ''
                     ) || [],
-                datapointCount: '5',
                 ...(selectedConnections.provider && {
                     connector: [selectedConnections.provider],
                 }),

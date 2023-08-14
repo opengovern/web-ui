@@ -1,5 +1,8 @@
 import ReactEcharts from 'echarts-for-react'
+import { Flex, Metric, Text } from '@tremor/react'
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { numericDisplay } from '../../utilities/numericDisplay'
+import Spinner from '../Spinner'
 
 interface IChart {
     labels: string[]
@@ -7,6 +10,9 @@ interface IChart {
     chartData: (string | number | undefined)[]
     chartType: 'bar' | 'line' | 'area' | 'doughnut'
     isCost?: boolean
+    isLoading?: boolean
+    error?: string
+    onRefresh?: () => void
 }
 
 export default function Chart({
@@ -15,6 +21,9 @@ export default function Chart({
     chartData,
     chartType,
     isCost = false,
+    isLoading,
+    error,
+    onRefresh,
 }: IChart) {
     const options = () => {
         if (
@@ -112,6 +121,34 @@ export default function Chart({
             }
         }
         return undefined
+    }
+
+    if (isLoading) {
+        return <Spinner className="h-80" />
+    }
+
+    if (error !== undefined && error.length > 0) {
+        return (
+            <Flex
+                flexDirection="row"
+                justifyContent="center"
+                alignItems="center"
+                className="cursor-pointer w-full h-80"
+                onClick={onRefresh}
+            >
+                <Text className="text-gray-400 mr-2 w-auto">
+                    Error loading {error}
+                </Text>
+                <Flex
+                    flexDirection="row"
+                    justifyContent="end"
+                    className="w-auto"
+                >
+                    <ArrowPathIcon className="text-blue-500 w-4 h-4 mr-1" />
+                    <Text className="text-blue-500">Reload</Text>
+                </Flex>
+            </Flex>
+        )
     }
 
     return (

@@ -23,30 +23,47 @@ import { dateDisplay } from '../../utilities/dateDisplay'
 import { isDemo } from '../../utilities/demo'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
+import { getErrorMessage } from '../../types/apierror'
 
 export default function Home() {
     const [selectedType, setSelectedType] = useState('resource')
-    const { response: services, isLoading: servicesIsLoading } =
-        useInventoryApiV2AnalyticsMetricList(
-            {},
-            {
-                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-            }
-        )
-    const { response: summary, isLoading: limitsLoading } =
-        useOnboardApiV1ConnectionsSummaryList(
-            {
-                pageSize: 0,
-                pageNumber: 1,
-            },
-            {
-                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-            }
-        )
-    const { response: resourcesTrend, isLoading: resourceTrendLoading } =
-        useInventoryApiV2AnalyticsTrendList()
-    const { response: costTrend, isLoading: costTrendLoading } =
-        useInventoryApiV2AnalyticsSpendTrendList()
+    const {
+        response: services,
+        isLoading: servicesIsLoading,
+        error: servicesError,
+        sendNow: serviceRefresh,
+    } = useInventoryApiV2AnalyticsMetricList(
+        {},
+        {
+            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+        }
+    )
+    const {
+        response: summary,
+        isLoading: limitsLoading,
+        error: summaryError,
+        sendNow: summaryRefresh,
+    } = useOnboardApiV1ConnectionsSummaryList(
+        {
+            pageSize: 0,
+            pageNumber: 1,
+        },
+        {
+            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
+        }
+    )
+    const {
+        response: resourcesTrend,
+        isLoading: resourceTrendLoading,
+        error: trendError,
+        sendNow: refreshTrend,
+    } = useInventoryApiV2AnalyticsTrendList()
+    const {
+        response: costTrend,
+        isLoading: costTrendLoading,
+        error: costTrendError,
+        sendNow: refreshCostTrend,
+    } = useInventoryApiV2AnalyticsSpendTrendList()
 
     const resourceTrendChart = () => {
         const label = []
@@ -79,25 +96,28 @@ export default function Home() {
     }
 
     const renderChart = (type: string) => {
+        console.log(costTrendError, trendError)
         if (type === 'spend') {
-            return costTrendLoading ? (
-                <Spinner className="h-80" />
-            ) : (
+            return (
                 <Chart
                     labels={costTrendChart().label}
                     chartData={costTrendChart().data}
                     chartType="line"
                     isCost
+                    isLoading={costTrendLoading}
+                    error={getErrorMessage(costTrendError)}
+                    onRefresh={refreshCostTrend}
                 />
             )
         }
-        return resourceTrendLoading ? (
-            <Spinner className="h-80" />
-        ) : (
+        return (
             <Chart
                 labels={resourceTrendChart().label}
                 chartData={resourceTrendChart().data}
                 chartType="line"
+                isLoading={resourceTrendLoading}
+                error={getErrorMessage(trendError)}
+                onRefresh={refreshTrend}
             />
         )
     }
@@ -114,16 +134,22 @@ export default function Home() {
                     title="Cloud Accounts"
                     metric={numberDisplay(summary?.connectionCount, 0)}
                     loading={limitsLoading}
+                    error={getErrorMessage(summaryError)}
+                    onRefresh={summaryRefresh}
                 />
                 <SummaryCard
                     title="Services"
                     metric={numberDisplay(services?.total_metrics, 0)}
                     loading={servicesIsLoading}
+                    error={getErrorMessage(servicesError)}
+                    onRefresh={serviceRefresh}
                 />
                 <SummaryCard
                     title="Resource Count"
                     metric={numberDisplay(summary?.totalResourceCount, 0)}
                     loading={limitsLoading}
+                    error={getErrorMessage(summaryError)}
+                    onRefresh={summaryRefresh}
                 />
             </Grid>
             <Card>

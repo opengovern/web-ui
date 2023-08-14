@@ -1,5 +1,4 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { Navigate } from 'react-router-dom'
 
 export const CallbackPage = () => {
     const { error } = useAuth0()
@@ -7,6 +6,5 @@ export const CallbackPage = () => {
     if (error) {
         return <span>{error.message}</span>
     }
-
-    return <Navigate to="/" replace />
+    return null
 }
