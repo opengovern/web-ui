@@ -3017,8 +3017,8 @@ export class Api<
                 startTime?: string
                 /** timestamp for end in epoch seconds */
                 endTime?: string
-                /** maximum number of datapoints to return, default is 30 */
-                datapointCount?: string
+                /** Granularity of the table, default is daily */
+                granularity?: 'monthly' | 'daily' | 'yearly'
             },
             params: RequestParams = {}
         ) =>
@@ -3051,7 +3051,7 @@ export class Api<
                 /** timestamp for end in epoch seconds */
                 endTime?: string
                 /** Granularity of the table, default is daily */
-                granularity?: 'monthly' | 'daily'
+                granularity?: 'monthly' | 'daily' | 'yearly'
                 /** Dimension of the table, default is metric */
                 dimension?: 'connection' | 'metric'
             },

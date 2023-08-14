@@ -996,7 +996,7 @@ export const useInventoryApiV2AnalyticsSpendMetricsTrendList = (
 
         endTime?: string
 
-        datapointCount?: string
+        granularity?: 'monthly' | 'daily' | 'yearly'
     },
     params: RequestParams = {},
     autoExecute = true
@@ -1093,7 +1093,7 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
 
         endTime?: string
 
-        granularity?: 'monthly' | 'daily'
+        granularity?: 'monthly' | 'daily' | 'yearly'
 
         dimension?: 'connection' | 'metric'
     },

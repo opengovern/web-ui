@@ -59,7 +59,7 @@ const pieData = (response: any) => {
     if (response) {
         Object.entries(response?.top_values).map(([key, value]) =>
             data.push({
-                name: snakeCaseToLabel(key),
+                name: key,
                 value: Number(value).toFixed(2),
             })
         )
@@ -91,7 +91,7 @@ export default function Spend() {
         ...(activeTimeRange.end && {
             endTime: activeTimeRange.end.unix().toString(),
         }),
-        pageSize: 5000,
+        pageSize: 5,
         pageNumber: 1,
         sortBy: 'cost',
     }
