@@ -140,7 +140,7 @@ export default function TopListCard({
                                     {data2?.map(
                                         (item: Item, i: number) =>
                                             i < count && (
-                                                <ListItem className="py-3">
+                                                <ListItem className="py-3.5">
                                                     <Text className="w-4/5 truncate">
                                                         {item.name}
                                                     </Text>
