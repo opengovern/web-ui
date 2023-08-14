@@ -32,10 +32,7 @@ export default function Menu({
             {showSidebar && (
                 <Sidebar workspace={workspace} currentPage={currentPage} />
             )}
-            <div
-                className="z-10 w-full h-full relative"
-                style={{ backgroundColor: '#1F2737' }}
-            >
+            <div className="z-10 w-full h-full relative bg-kaytu-950">
                 <Header workspace={workspace} />
                 <Flex
                     flexDirection="col"
