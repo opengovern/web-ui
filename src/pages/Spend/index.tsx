@@ -150,7 +150,7 @@ export default function Spend() {
         sortBy: 'cost',
     }
 
-    const { response: costTrend, isLoading } =
+    const { response: costTrend, isLoading: costTrendLoading } =
         useInventoryApiV2AnalyticsSpendTrendList({
             ...query,
             granularity: selectedGranularity,
@@ -290,6 +290,7 @@ export default function Spend() {
                     chartData={costTrendChart(costTrend, selectedChart).data}
                     chartType={selectedChart}
                     isCost
+                    loading={costTrendLoading}
                 />
             </Card>
             <Grid numItems={5} className="w-full gap-4">
@@ -301,6 +302,7 @@ export default function Spend() {
                             chartData={pieData(composition)}
                             chartType="doughnut"
                             isCost
+                            loading={compositionLoading}
                         />
                     </Card>
                 </Col>
