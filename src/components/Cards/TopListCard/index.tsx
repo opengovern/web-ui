@@ -1,6 +1,7 @@
 import { JSXElementConstructor, Key, ReactElement, ReactNode } from 'react'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
 import {
     exactPriceDisplay,
     numericDisplay,
@@ -14,6 +15,7 @@ interface ITopListCard {
     isPrice?: boolean
     data: any
     count?: number
+    url?: string
 }
 
 interface Item {
@@ -34,7 +36,9 @@ export default function TopListCard({
     isPercentage = false,
     isPrice = false,
     count = 5,
+    url,
 }: ITopListCard) {
+    const navigate = useNavigate()
     const value = (item: Item) => {
         if (isPercentage) {
             return item.value
@@ -79,6 +83,7 @@ export default function TopListCard({
                         variant="light"
                         icon={ChevronRightIcon}
                         iconPosition="right"
+                        onClick={() => (url ? navigate(url) : null)}
                     >
                         See more
                     </Button>

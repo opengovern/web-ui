@@ -7,7 +7,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
@@ -30,6 +30,8 @@ import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 
 export default function CostMetricsDetails() {
     const navigate = useNavigate()
+    const { hash } = useLocation()
+
     const breadcrumbsPages = [
         {
             name: 'Spend',
@@ -38,11 +40,13 @@ export default function CostMetricsDetails() {
             },
             current: false,
         },
-        { name: 'Spend metrics', path: '', current: true },
+        { name: 'details', path: '', current: true },
     ]
 
     const activeTimeRange = useAtomValue(spendTimeAtom)
-    const [dimension, setDimension] = useState<string>('metric')
+    const [dimension, setDimension] = useState<string>(
+        hash === '#connections' ? 'connection' : 'metric'
+    )
     const dimensionName = () => {
         switch (dimension) {
             case 'metric':
@@ -104,7 +108,7 @@ export default function CostMetricsDetails() {
                     value={dimension}
                     onValueChange={(v) => setDimension(v)}
                 >
-                    <SelectItem value="metric">Metric</SelectItem>
+                    <SelectItem value="metric">Service</SelectItem>
                     <SelectItem value="connection">Connection</SelectItem>
                 </Select>
             </Flex>
@@ -261,7 +265,7 @@ export default function CostMetricsDetails() {
             </Flex>
             <Card className="mt-10">
                 <Flex>
-                    <Title className="font-semibold">Cost Metrics</Title>
+                    <Title className="font-semibold">Spend details</Title>
                     <Flex className="w-fit gap-3">
                         <Button
                             variant="secondary"

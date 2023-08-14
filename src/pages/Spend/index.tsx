@@ -211,7 +211,7 @@ export default function Spend() {
                                     accountCostResponse?.totalCost
                                 )}
                                 loading={accountCostLoading}
-                                url="spend-metrics#accounts"
+                                url="details#connections"
                                 border={false}
                             />
                             <Flex className="border-l border-l-gray-200 pl-4">
@@ -221,7 +221,7 @@ export default function Spend() {
                                         serviceCostResponse?.total_count
                                     )}
                                     loading={serviceCostLoading}
-                                    url="spend-metrics#services"
+                                    url="details#services"
                                     border={false}
                                 />
                             </Flex>
@@ -309,6 +309,7 @@ export default function Spend() {
                             loading={serviceCostLoading}
                             data={topAccounts(accountCostResponse?.connections)}
                             count={5}
+                            url="details#connections"
                             isPrice
                         />
                         <TopListCard
@@ -316,6 +317,7 @@ export default function Spend() {
                             loading={serviceCostLoading}
                             data={topServices(serviceCostResponse?.metrics)}
                             count={5}
+                            url="details#services"
                             isPrice
                         />
                     </Grid>
