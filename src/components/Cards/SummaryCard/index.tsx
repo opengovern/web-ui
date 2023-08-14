@@ -5,10 +5,11 @@ import {
     Card,
     DeltaType,
     Flex,
+    Grid,
     Metric,
     Text,
 } from '@tremor/react'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../Spinner'
 
@@ -23,6 +24,8 @@ type IProps = {
     url?: string
     loading?: boolean
     border?: boolean
+    error?: string
+    onRefresh?: () => void
 }
 
 export default function SummaryCard({
@@ -35,8 +38,42 @@ export default function SummaryCard({
     url,
     loading = false,
     border = true,
+    error,
+    onRefresh,
 }: IProps) {
     const navigate = useNavigate()
+
+    const value = () => {
+        if (error !== undefined && error.length > 0) {
+            return (
+                <Flex
+                    flexDirection="row"
+                    justifyContent="start"
+                    alignItems="start"
+                    className="cursor-pointer w-full"
+                    onClick={onRefresh}
+                >
+                    <Text className="text-gray-400 mr-2 w-auto">
+                        Error loading
+                    </Text>
+                    <Flex
+                        flexDirection="row"
+                        justifyContent="end"
+                        className="w-auto"
+                    >
+                        <ArrowPathIcon className="text-blue-500 w-4 h-4 mr-1" />
+                        <Text className="text-blue-500">Reload</Text>
+                    </Flex>
+                </Flex>
+            )
+        }
+        return (
+            <>
+                <Metric>{metric}</Metric>{' '}
+                {metricPrev && <Text>from {metricPrev}</Text>}
+            </>
+        )
+    }
 
     return (
         <Card
@@ -63,9 +100,8 @@ export default function SummaryCard({
                 </div>
             ) : (
                 <Flex justifyContent="between" alignItems="baseline">
-                    <div className="flex flex-row items-baseline space-x-3">
-                        <Metric>{metric}</Metric>
-                        {metricPrev && <Text>from {metricPrev}</Text>}
+                    <div className="flex flex-row items-baseline space-x-3 w-full">
+                        {value()}
                     </div>
                     {border && (
                         <div className="justify-self-end">

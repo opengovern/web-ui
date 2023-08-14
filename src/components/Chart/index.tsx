@@ -1,4 +1,6 @@
 import ReactEcharts from 'echarts-for-react'
+import { Flex, Text } from '@tremor/react'
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { numericDisplay } from '../../utilities/numericDisplay'
 
 interface IChart {
@@ -8,6 +10,8 @@ interface IChart {
     chartType: 'bar' | 'line' | 'area' | 'doughnut'
     isCost?: boolean
     loading?: boolean
+    error?: string
+    onRefresh?: () => void
 }
 
 export default function Chart({
@@ -17,6 +21,8 @@ export default function Chart({
     chartType,
     isCost = false,
     loading,
+    error,
+    onRefresh,
 }: IChart) {
     const options = () => {
         if (
@@ -113,6 +119,30 @@ export default function Chart({
             }
         }
         return undefined
+    }
+
+    if (error !== undefined && error.length > 0) {
+        return (
+            <Flex
+                flexDirection="row"
+                justifyContent="center"
+                alignItems="center"
+                className="cursor-pointer w-full h-80"
+                onClick={onRefresh}
+            >
+                <Text className="text-gray-400 mr-2 w-auto">
+                    Error loading {error}
+                </Text>
+                <Flex
+                    flexDirection="row"
+                    justifyContent="end"
+                    className="w-auto"
+                >
+                    <ArrowPathIcon className="text-kaytu-500 w-4 h-4 mr-1" />
+                    <Text className="text-kaytu-500">Reload</Text>
+                </Flex>
+            </Flex>
+        )
     }
 
     return (

@@ -1,6 +1,7 @@
 import { JSXElementConstructor, Key, ReactElement, ReactNode } from 'react'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
 import {
     exactPriceDisplay,
     numericDisplay,
@@ -20,6 +21,8 @@ interface ITopListCard {
     isPrice2?: boolean
     data2?: any
     count?: number
+    url?: string
+    url2?: string
     columns?: number
 }
 
@@ -47,8 +50,11 @@ export default function TopListCard({
     isPercentage2 = false,
     isPrice2 = false,
     count = 5,
+    url,
+    url2,
     columns = 1,
 }: ITopListCard) {
+    const navigate = useNavigate()
     const value = (item: Item) => {
         if (isPercentage) {
             return item.value
@@ -111,7 +117,11 @@ export default function TopListCard({
                             </List>
                         )}
                     </Flex>
-                    <Flex justifyContent="end">
+                    <Flex
+                        justifyContent="end"
+                        className="cursor-pointer"
+                        onClick={() => (url ? navigate(url) : null)}
+                    >
                         <Button
                             variant="light"
                             icon={ChevronRightIcon}
@@ -155,7 +165,11 @@ export default function TopListCard({
                                 </List>
                             )}
                         </Flex>
-                        <Flex justifyContent="end">
+                        <Flex
+                            justifyContent="end"
+                            className="cursor-pointer"
+                            onClick={() => (url2 ? navigate(url2) : null)}
+                        >
                             <Button
                                 variant="light"
                                 icon={ChevronRightIcon}
