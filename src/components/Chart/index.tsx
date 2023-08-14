@@ -155,11 +155,11 @@ export default function Chart({
             option={{
                 ...options(),
                 color: [
-                    '#172554',
-                    '#1E40AE',
-                    '#2563EA',
-                    '#60A4F9',
-                    '#BEDAFD',
+                    '#1D4F85',
+                    '#2970BC',
+                    '#6DA4DF',
+                    '#96BEE8',
+                    '#C0D8F1',
                     '#D0D4DA',
                 ],
             }}
