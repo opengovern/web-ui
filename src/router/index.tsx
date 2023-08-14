@@ -106,13 +106,8 @@ const authRoutes = [
         component: ConnectorDetail,
     },
     {
-        key: 'settings',
-        path: '/:ws/settings',
-        component: Settings,
-    },
-    {
         key: 'settings page',
-        path: '/:ws/settings/:settingsPage',
+        path: '/:ws/settings',
         component: Settings,
     },
     {
