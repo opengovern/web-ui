@@ -108,7 +108,7 @@ export default function MemberInvite({
                                             <input
                                                 name="roles"
                                                 type="radio"
-                                                className="h-4 w-4 border-gray-300 text-blue-600 focus:ring-indigo-600"
+                                                className="h-4 w-4 border-gray-300 text-kaytu-600 focus:ring-kaytu-700"
                                                 onClick={() => {
                                                     setRole(item.value)
                                                 }}

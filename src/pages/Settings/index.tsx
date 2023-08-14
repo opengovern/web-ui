@@ -154,7 +154,7 @@ export default function Settings() {
                                                                 (!currentSubPage &&
                                                                     item.page ===
                                                                         'entitlement')
-                                                                ? 'bg-blue-100 rounded-lg text-gray-800'
+                                                                ? 'bg-kaytu-100 rounded-lg text-gray-800'
                                                                 : 'text-gray-500',
                                                             'font-medium group flex gap-x-3 py-2 px-10'
                                                         )}

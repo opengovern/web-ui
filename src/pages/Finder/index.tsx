@@ -225,7 +225,7 @@ export default function Finder() {
                                                                 }
                                                                 className="opacity-0"
                                                             />
-                                                            <Text className="w-full truncate text-start py-2 cursor-pointer hover:text-blue-600">
+                                                            <Text className="w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
                                                                 {subCat}
                                                             </Text>
                                                         </Flex>

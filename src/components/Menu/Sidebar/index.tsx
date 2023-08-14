@@ -102,7 +102,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             flexDirection="col"
             alignItems="start"
             className="z-20 h-full w-fit pb-4"
-            style={{ backgroundColor: '#0B2447' }}
+            style={{ backgroundColor: '#1F2737' }}
         >
             <Flex flexDirection="col" className="h-full w-full gap-y-5">
                 <Flex
@@ -136,7 +136,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             }
                                         }}
                                     >
-                                        <AccordionHeader className="text-gray-300 bg-transparent pl-2 pr-3 py-2 my-0.5">
+                                        <AccordionHeader className="text-gray-50 bg-transparent pl-2 pr-3 py-2 my-0.5">
                                             <Flex
                                                 justifyContent="start"
                                                 className="h-full"
@@ -154,8 +154,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     className={`p-2 my-0.5 flex rounded-md text-sm  
                                                     ${
                                                         i.page === currentPage
-                                                            ? 'bg-blue-900/40 text-gray-200 font-semibold'
-                                                            : 'text-gray-300 hover:bg-blue-900/20'
+                                                            ? 'bg-kaytu-900/40 text-gray-200 font-semibold'
+                                                            : 'text-gray-50 hover:bg-kaytu-900/20'
                                                     }`}
                                                 >
                                                     <Text className="pl-7 text-inherit my-0.5">
@@ -173,8 +173,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         (item.id ||
                                                             item.page) ===
                                                         currentPage
-                                                            ? 'bg-blue-900/40 text-gray-200 font-semibold'
-                                                            : 'text-gray-300 hover:bg-blue-900/20'
+                                                            ? 'bg-kaytu-900/40 text-gray-200 font-semibold'
+                                                            : 'text-gray-50 hover:bg-kaytu-900/20'
                                                     }
                                                     ${
                                                         collapsed
@@ -270,8 +270,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                     relative p-2 group flex rounded-md text-sm my-0.5 ${
                                                                         child.page ===
                                                                         currentPage
-                                                                            ? 'bg-blue-900/40 text-gray-200 font-semibold'
-                                                                            : 'text-gray-300 hover:bg-blue-900/20'
+                                                                            ? 'bg-kaytu-900/40 text-gray-200 font-semibold'
+                                                                            : 'text-gray-300 hover:bg-kaytu-900/20'
                                                                     }`}
                                                                 >
                                                                     <Text className="ml-3 text-inherit w-48">
@@ -339,8 +339,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                     relative p-2 group flex rounded-md text-sm my-0.5 ${
                                                                         child.page ===
                                                                         currentPage
-                                                                            ? 'bg-blue-900/40 text-gray-200 font-semibold'
-                                                                            : 'text-gray-300 hover:bg-blue-900/20'
+                                                                            ? 'bg-kaytu-900/40 text-gray-200 font-semibold'
+                                                                            : 'text-gray-300 hover:bg-kaytu-900/20'
                                                                     }`}
                                                                 >
                                                                     <Text className="ml-3 text-inherit w-48">
@@ -362,12 +362,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     {collapsed ? (
                         <ChevronDoubleRightIcon
                             onClick={() => setCollapsed(false)}
-                            className="p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-blue-900/50 h-8 w-8 shrink-0"
+                            className="p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-kaytu-900/50 h-8 w-8 shrink-0"
                         />
                     ) : (
                         <ChevronDoubleLeftIcon
                             onClick={() => setCollapsed(true)}
-                            className="self-end p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-blue-900/50 h-8 w-8 shrink-0"
+                            className="self-end p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-kaytu-900/50 h-8 w-8 shrink-0"
                         />
                     )}
                 </nav>

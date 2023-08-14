@@ -13,7 +13,9 @@ export default function QueryCard({ title, description, onClick }: IQueryCard) {
             <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Flex flexDirection="col">
                     <Title className="line-clamp-1">{title}</Title>
-                    <Text className="line-clamp-3 mt-2 mb-3">{title}</Text>
+                    <Text className="line-clamp-3 mt-2 mb-3">
+                        {description}
+                    </Text>
                 </Flex>
                 <Button variant="light" icon={PlayCircleIcon} size="sm">
                     Use Query

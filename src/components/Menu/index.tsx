@@ -34,7 +34,7 @@ export default function Menu({
             )}
             <div
                 className="z-10 w-full h-full relative"
-                style={{ backgroundColor: '#0B2447' }}
+                style={{ backgroundColor: '#1F2737' }}
             >
                 <Header workspace={workspace} />
                 <Flex

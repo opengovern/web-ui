@@ -50,7 +50,7 @@ export default function SummaryCard({
                 <Flex justifyContent="start">
                     <Text className="mb-1.5">{title}</Text>
                     {!border && url && (
-                        <ChevronRightIcon className="ml-1 h-4 text-blue-500" />
+                        <ChevronRightIcon className="ml-1 h-4 text-kaytu-500" />
                     )}
                 </Flex>
                 {delta && (

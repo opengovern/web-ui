@@ -273,7 +273,7 @@ export default function Spend() {
                                 </Select>
                             </Grid>
                             <Flex justifyContent="end" className="mt-6 gap-2.5">
-                                <div className="h-2.5 w-2.5 rounded-full bg-blue-950" />
+                                <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
                                 {selectedChart === 'area' ? (
                                     <Text>Accumulated Cost</Text>
                                 ) : (

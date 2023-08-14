@@ -18,7 +18,7 @@ export default function SettingsOrganization() {
         {
             key: 'Website',
             value: (
-                <a className="text-blue-600" href={link}>
+                <a className="text-kaytu-600" href={link}>
                     {response?.organization?.url}
                 </a>
             ),
