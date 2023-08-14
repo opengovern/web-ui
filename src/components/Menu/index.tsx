@@ -44,7 +44,7 @@ export default function Menu({
                     id="kaytu-container"
                 >
                     <Flex justifyContent="center" className="px-12">
-                        <div className="max-w-6xl w-full py-8">{children}</div>
+                        <div className="max-w-7xl w-full py-8">{children}</div>
                     </Flex>
                     <Footer />
                 </Flex>

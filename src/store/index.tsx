@@ -16,7 +16,7 @@ export const spendTimeAtom = atom<{
     start: dayjs.Dayjs
     end: dayjs.Dayjs
 }>({
-    start: dayjs.utc().subtract(9, 'days'),
+    start: dayjs.utc().subtract(1, 'month'),
     end: dayjs.utc().subtract(2, 'day'),
 })
 
@@ -24,6 +24,7 @@ export interface IFilter {
     provider: '' | 'AWS' | 'Azure'
     connections: string[]
 }
+
 export const filterAtom = atom<IFilter>({
     provider: '',
     connections: [],

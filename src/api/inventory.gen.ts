@@ -2,30 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
     GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
@@ -42,32 +18,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -457,9 +407,9 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
 
         connectionGroup?: string
 
-        endTime?: string
+        endTime?: number
 
-        startTime?: string
+        startTime?: number
     },
     params: RequestParams = {},
     autoExecute = true
@@ -564,9 +514,9 @@ export const useInventoryApiV2AnalyticsMetricList = (
 
         metricIDs?: string[]
 
-        endTime?: string
+        endTime?: number
 
-        startTime?: string
+        startTime?: number
 
         minCount?: number
 
@@ -782,9 +732,9 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
 
         top?: number
 
-        startTime?: string
+        startTime?: number
 
-        endTime?: string
+        endTime?: number
     },
     params: RequestParams = {},
     autoExecute = true
@@ -883,9 +833,9 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
 
         connectionGroup?: string
 
-        startTime?: string
+        startTime?: number
 
-        endTime?: string
+        endTime?: number
 
         sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
 
@@ -992,9 +942,9 @@ export const useInventoryApiV2AnalyticsSpendMetricsTrendList = (
 
         connectionGroup?: string
 
-        startTime?: string
+        startTime?: number
 
-        endTime?: string
+        endTime?: number
 
         granularity?: 'monthly' | 'daily' | 'yearly'
     },
@@ -1089,9 +1039,9 @@ interface IuseInventoryApiV2AnalyticsSpendTableListState {
 
 export const useInventoryApiV2AnalyticsSpendTableList = (
     query?: {
-        startTime?: string
+        startTime?: number
 
-        endTime?: string
+        endTime?: number
 
         granularity?: 'monthly' | 'daily' | 'yearly'
 
@@ -1196,11 +1146,11 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
 
         connectionGroup?: string
 
-        startTime?: string
+        startTime?: number
 
-        endTime?: string
+        endTime?: number
 
-        datapointCount?: string
+        granularity?: 'monthly' | 'daily' | 'yearly'
     },
     params: RequestParams = {},
     autoExecute = true
@@ -1411,9 +1361,9 @@ export const useInventoryApiV2AnalyticsTrendList = (
 
         connectionGroup?: string
 
-        startTime?: string
+        startTime?: number
 
-        endTime?: string
+        endTime?: number
 
         datapointCount?: string
     },
@@ -1513,9 +1463,9 @@ export const useInventoryApiV2ResourcesMetricDetail = (
 
         connectionGroup?: string
 
-        endTime?: string
+        endTime?: number
 
-        startTime?: string
+        startTime?: number
     },
     params: RequestParams = {},
     autoExecute = true

@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -2799,9 +2800,9 @@ export class Api<
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string
                 /** timestamp for resource count in epoch seconds */
-                endTime?: string
+                endTime?: number
                 /** timestamp for resource count change comparison in epoch seconds */
-                startTime?: string
+                startTime?: number
             },
             params: RequestParams = {}
         ) =>
@@ -2842,9 +2843,9 @@ export class Api<
                 /** Metric IDs */
                 metricIDs?: string[]
                 /** timestamp for resource count in epoch seconds */
-                endTime?: string
+                endTime?: number
                 /** timestamp for resource count change comparison in epoch seconds */
-                startTime?: string
+                startTime?: number
                 /** Minimum number of resources with this tag value, default 1 */
                 minCount?: number
                 /** Sort by field - default is count */
@@ -2932,9 +2933,9 @@ export class Api<
                 /** How many top values to return default is 5 */
                 top?: number
                 /** timestamp for start in epoch seconds */
-                startTime?: string
+                startTime?: number
                 /** timestamp for end in epoch seconds */
-                endTime?: string
+                endTime?: number
             },
             params: RequestParams = {}
         ) =>
@@ -2969,9 +2970,9 @@ export class Api<
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string
                 /** timestamp for start in epoch seconds */
-                startTime?: string
+                startTime?: number
                 /** timestamp for end in epoch seconds */
-                endTime?: string
+                endTime?: number
                 /** Sort by field - default is cost */
                 sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
                 /** page size - default is 20 */
@@ -3014,9 +3015,9 @@ export class Api<
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string
                 /** timestamp for start in epoch seconds */
-                startTime?: string
+                startTime?: number
                 /** timestamp for end in epoch seconds */
-                endTime?: string
+                endTime?: number
                 /** Granularity of the table, default is daily */
                 granularity?: 'monthly' | 'daily' | 'yearly'
             },
@@ -3047,9 +3048,9 @@ export class Api<
         apiV2AnalyticsSpendTableList: (
             query?: {
                 /** timestamp for start in epoch seconds */
-                startTime?: string
+                startTime?: number
                 /** timestamp for end in epoch seconds */
-                endTime?: string
+                endTime?: number
                 /** Granularity of the table, default is daily */
                 granularity?: 'monthly' | 'daily' | 'yearly'
                 /** Dimension of the table, default is metric */
@@ -3090,11 +3091,11 @@ export class Api<
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string
                 /** timestamp for start in epoch seconds */
-                startTime?: string
+                startTime?: number
                 /** timestamp for end in epoch seconds */
-                endTime?: string
-                /** maximum number of datapoints to return, default is 30 */
-                datapointCount?: string
+                endTime?: number
+                /** Granularity of the table, default is daily */
+                granularity?: 'monthly' | 'daily' | 'yearly'
             },
             params: RequestParams = {}
         ) =>
@@ -3173,9 +3174,9 @@ export class Api<
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string
                 /** timestamp for start in epoch seconds */
-                startTime?: string
+                startTime?: number
                 /** timestamp for end in epoch seconds */
-                endTime?: string
+                endTime?: number
                 /** maximum number of datapoints to return, default is 30 */
                 datapointCount?: string
             },
@@ -3211,9 +3212,9 @@ export class Api<
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string
                 /** timestamp for resource count in epoch seconds */
-                endTime?: string
+                endTime?: number
                 /** timestamp for resource count change comparison in epoch seconds */
-                startTime?: string
+                startTime?: number
             },
             params: RequestParams = {}
         ) =>

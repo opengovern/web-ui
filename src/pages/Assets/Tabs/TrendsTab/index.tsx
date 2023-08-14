@@ -209,8 +209,8 @@ export default function TrendsTab({ categories }: IProps) {
         return {
             connector: [selectedConnections.provider],
             connectionId: selectedConnections.connections,
-            startTime: activeTimeRange.start.unix().toString(),
-            endTime: activeTimeRange.end.unix().toString(),
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
             pageSize: 5,
             pageNumber: 1,
             sortBy,
