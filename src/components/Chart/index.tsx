@@ -7,6 +7,7 @@ interface IChart {
     chartData: (string | number | undefined)[]
     chartType: 'bar' | 'line' | 'area' | 'doughnut'
     isCost?: boolean
+    loading?: boolean
 }
 
 export default function Chart({
@@ -15,6 +16,7 @@ export default function Chart({
     chartData,
     chartType,
     isCost = false,
+    loading,
 }: IChart) {
     const options = () => {
         if (
@@ -126,7 +128,7 @@ export default function Chart({
                     '#D0D4DA',
                 ],
             }}
-            echarts={{ height: '100%' }}
+            showLoading={loading}
         />
     )
 }
