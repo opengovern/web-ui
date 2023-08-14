@@ -14,8 +14,15 @@ interface ITopListCard {
     isPercentage?: boolean
     isPrice?: boolean
     data: any
+    title2?: string
+    loading2?: boolean
+    isPercentage2?: boolean
+    isPrice2?: boolean
+    data2?: any
     count?: number
     url?: string
+    url2?: string
+    columns?: number
 }
 
 interface Item {
@@ -35,8 +42,15 @@ export default function TopListCard({
     loading,
     isPercentage = false,
     isPrice = false,
+    title2,
+    data2,
+    loading2,
+    isPercentage2 = false,
+    isPrice2 = false,
     count = 5,
     url,
+    url2,
+    columns = 1,
 }: ITopListCard) {
     const navigate = useNavigate()
     const value = (item: Item) => {
@@ -49,45 +63,105 @@ export default function TopListCard({
         return numericDisplay(item.value)
     }
 
-    return loading ? (
-        <Card>
-            <Flex className="h-56">
-                <Spinner />
-            </Flex>
-        </Card>
-    ) : (
+    const value2 = (item: Item) => {
+        if (isPercentage2) {
+            return item.value
+        }
+        if (isPrice2) {
+            return exactPriceDisplay(item.value)
+        }
+        return numericDisplay(item.value)
+    }
+
+    return (
         <Card className="h-full">
-            <Flex flexDirection="col" alignItems="start" className="h-full">
-                <Flex flexDirection="col" alignItems="start">
-                    <Title className="font-semibold">{title}</Title>
-                    <List>
-                        {data?.map(
-                            (item: Item, i: number) =>
-                                i < count && (
-                                    <ListItem
-                                        className={`${i === 0 && 'pt-4'}`}
-                                    >
-                                        <Text className="w-4/5 truncate">
-                                            {item.name}
-                                        </Text>
-                                        {item.value && (
-                                            <Text>{value(item)}</Text>
-                                        )}
-                                    </ListItem>
-                                )
+            <Flex className="h-full gap-8">
+                <Flex flexDirection="col" alignItems="start" className="h-full">
+                    <Flex flexDirection="col" alignItems="start">
+                        <Title className="font-semibold mb-2">{title}</Title>
+                        {loading ? (
+                            <Flex className="h-56">
+                                <Spinner />
+                            </Flex>
+                        ) : (
+                            <List>
+                                {data?.map(
+                                    (item: Item, i: number) =>
+                                        i < count && (
+                                            <ListItem className="py-3">
+                                                <Text className="w-4/5 truncate">
+                                                    {item.name}
+                                                </Text>
+                                                {item.value && (
+                                                    <Text>{value(item)}</Text>
+                                                )}
+                                            </ListItem>
+                                        )
+                                )}
+                            </List>
                         )}
-                    </List>
-                </Flex>
-                <Flex justifyContent="end">
-                    <Button
-                        variant="light"
-                        icon={ChevronRightIcon}
-                        iconPosition="right"
+                    </Flex>
+                    <Flex
+                        justifyContent="end"
                         onClick={() => (url ? navigate(url) : null)}
                     >
-                        See more
-                    </Button>
+                        <Button
+                            variant="light"
+                            icon={ChevronRightIcon}
+                            iconPosition="right"
+                        >
+                            See more
+                        </Button>
+                    </Flex>
                 </Flex>
+                {columns > 1 && (
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        className="h-full"
+                    >
+                        <Flex flexDirection="col" alignItems="start">
+                            <Title className="font-semibold mb-2">
+                                {title2}
+                            </Title>
+                            {loading2 ? (
+                                <Flex className="h-56">
+                                    <Spinner />
+                                </Flex>
+                            ) : (
+                                <List>
+                                    {data2?.map(
+                                        (item: Item, i: number) =>
+                                            i < count && (
+                                                <ListItem className="py-3">
+                                                    <Text className="w-4/5 truncate">
+                                                        {item.name}
+                                                    </Text>
+                                                    {item.value && (
+                                                        <Text>
+                                                            {value2(item)}
+                                                        </Text>
+                                                    )}
+                                                </ListItem>
+                                            )
+                                    )}
+                                </List>
+                            )}
+                        </Flex>
+                        <Flex
+                            justifyContent="end"
+                            onClick={() => (url2 ? navigate(url2) : null)}
+                        >
+                            <Button
+                                variant="light"
+                                icon={ChevronRightIcon}
+                                iconPosition="right"
+                            >
+                                See more
+                            </Button>
+                        </Flex>
+                    </Flex>
+                )}
             </Flex>
         </Card>
     )

@@ -303,24 +303,20 @@ export default function Spend() {
                     </Card>
                 </Col>
                 <Col numColSpan={3} className="h-full">
-                    <Grid numItems={2} className="gap-4 h-full">
-                        <TopListCard
-                            title="Top Accounts"
-                            loading={serviceCostLoading}
-                            data={topAccounts(accountCostResponse?.connections)}
-                            count={5}
-                            url="details#connections"
-                            isPrice
-                        />
-                        <TopListCard
-                            title="Top Services"
-                            loading={serviceCostLoading}
-                            data={topServices(serviceCostResponse?.metrics)}
-                            count={5}
-                            url="details#services"
-                            isPrice
-                        />
-                    </Grid>
+                    <TopListCard
+                        columns={2}
+                        count={5}
+                        title="Top Accounts"
+                        loading={serviceCostLoading}
+                        data={topAccounts(accountCostResponse?.connections)}
+                        isPrice
+                        title2="Top Services"
+                        loading2={serviceCostLoading}
+                        data2={topServices(serviceCostResponse?.metrics)}
+                        isPrice2
+                        url="details#connections"
+                        url2="details#services"
+                    />
                 </Col>
             </Grid>
         </Menu>

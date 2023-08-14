@@ -101,8 +101,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         <Flex
             flexDirection="col"
             alignItems="start"
-            className="z-20 h-full w-fit pb-4"
-            style={{ backgroundColor: '#1F2737' }}
+            className="z-20 h-full w-fit pb-4 bg-kaytu-950"
         >
             <Flex flexDirection="col" className="h-full w-full gap-y-5">
                 <Flex
@@ -155,7 +154,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     ${
                                                         i.page === currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
-                                                            : 'text-gray-50 hover:bg-kaytu-300'
+                                                            : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
                                                 >
                                                     <Text className="pl-7 text-inherit my-0.5">
@@ -174,7 +173,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             item.page) ===
                                                         currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
-                                                            : 'text-gray-50 hover:bg-kaytu-300'
+                                                            : 'text-gray-50 hover:bg-kaytu-800'
                                                     }
                                                     ${
                                                         collapsed
@@ -271,7 +270,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                         child.page ===
                                                                         currentPage
                                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
-                                                                            : 'text-gray-300 hover:bg-kaytu-300'
+                                                                            : 'text-gray-300 hover:bg-kaytu-800'
                                                                     }`}
                                                                 >
                                                                     <Text className="ml-3 text-inherit w-48">
@@ -325,11 +324,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 >
                                                     <Flex
                                                         flexDirection="col"
-                                                        className="rounded-md py-2 px-1"
-                                                        style={{
-                                                            backgroundColor:
-                                                                '#0B2447',
-                                                        }}
+                                                        className="rounded-md py-2 px-1 bg-kaytu-950"
                                                     >
                                                         {item.children?.map(
                                                             (child) => (
@@ -340,7 +335,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                         child.page ===
                                                                         currentPage
                                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
-                                                                            : 'text-gray-300 hover:bg-kaytu-300'
+                                                                            : 'text-gray-300 hover:bg-kaytu-800'
                                                                     }`}
                                                                 >
                                                                     <Text className="ml-3 text-inherit w-48">
@@ -362,12 +357,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     {collapsed ? (
                         <ChevronDoubleRightIcon
                             onClick={() => setCollapsed(false)}
-                            className="p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-kaytu-300 h-8 w-8 shrink-0"
+                            className="p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-kaytu-800 h-8 w-8 shrink-0"
                         />
                     ) : (
                         <ChevronDoubleLeftIcon
                             onClick={() => setCollapsed(true)}
-                            className="self-end p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-kaytu-300 h-8 w-8 shrink-0"
+                            className="self-end p-2 group flex rounded-md text-sm leading-6 font-semibold text-gray-300 hover:bg-kaytu-800 h-8 w-8 shrink-0"
                         />
                     )}
                 </nav>

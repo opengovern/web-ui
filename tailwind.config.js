@@ -11,21 +11,21 @@ module.exports = {
     theme: {
         transparent: 'transparent',
         current: 'currentColor',
-        kaytu: {
-            50: '#EAF2FA',
-            100: '#C0D8F1',
-            200: '#96BEE8',
-            300: '#6DA4DF',
-            400: '#438AD6',
-            500: '#2970BC',
-            600: '#205792',
-            700: '#1D4F85',
-            800: '#15395F',
-            900: '#0D2239',
-            950: '#0D2239',
-        },
         extend: {
             colors: {
+                kaytu: {
+                    50: '#EAF2FA',
+                    100: '#C0D8F1',
+                    200: '#96BEE8',
+                    300: '#6DA4DF',
+                    400: '#438AD6',
+                    500: '#2970BC',
+                    600: '#205792',
+                    700: '#1D4F85',
+                    800: '#15395F',
+                    900: '#0D2239',
+                    950: '#0D2239',
+                },
                 // light mode
                 tremor: {
                     brand: {
