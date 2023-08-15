@@ -1,10 +1,7 @@
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import {
-    exactPriceDisplay,
-    numericDisplay,
-} from '../../../utilities/numericDisplay'
+import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { getConnectorIcon } from '../ConnectorCard'
 import { SourceType } from '../../../api/api'
@@ -64,7 +61,7 @@ export default function TopListCard({
             return item.value
         }
         if (accountsIsPrice) {
-            return exactPriceDisplay(item.value)
+            return `$${numericDisplay(item.value)}`
         }
         return numericDisplay(item.value)
     }
@@ -74,7 +71,7 @@ export default function TopListCard({
             return item.value
         }
         if (servicesIsPrice) {
-            return exactPriceDisplay(item.value)
+            return `$${numericDisplay(item.value)}`
         }
         return numericDisplay(item.value)
     }
@@ -101,12 +98,14 @@ export default function TopListCard({
                                                 getConnectorIcon(
                                                     item.connector[0]
                                                 )}
-                                            <Text className="w-4/5 truncate">
+                                            <Text className="truncate">
                                                 {item.name}
                                             </Text>
                                         </Flex>
                                         {item.value && (
-                                            <Text>{value(item)}</Text>
+                                            <Text className="pl-10">
+                                                {value(item)}
+                                            </Text>
                                         )}
                                     </ListItem>
                                 ))}
@@ -151,12 +150,14 @@ export default function TopListCard({
                                                 getConnectorIcon(
                                                     String(item.connector)
                                                 )}
-                                            <Text className="w-4/5 truncate">
+                                            <Text className="truncate">
                                                 {item.name}
                                             </Text>
                                         </Flex>
                                         {item.value && (
-                                            <Text>{value2(item)}</Text>
+                                            <Text className="pl-10">
+                                                {value2(item)}
+                                            </Text>
                                         )}
                                     </ListItem>
                                 ))}

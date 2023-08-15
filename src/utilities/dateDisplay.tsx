@@ -1,14 +1,16 @@
 import dayjs, { Dayjs } from 'dayjs'
 
 export const dateDisplay = (
-    date: Dayjs | Date | number | string | undefined
+    date: Dayjs | Date | number | string | undefined,
+    substract?: number
 ) => {
+    const s = substract || 0
     if ((typeof date).toString() === 'Dayjs') {
-        return (date as Dayjs).format('DD MMM, YYYY')
+        return (date as Dayjs).subtract(s, 'day').format('MMM DD, YYYY')
     }
 
     if (date !== undefined) {
-        return dayjs(date).format('DD MMM, YYYY')
+        return dayjs(date).subtract(s, 'day').format('MMM DD, YYYY')
     }
     return ''
 }
