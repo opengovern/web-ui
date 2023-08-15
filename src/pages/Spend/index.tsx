@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
+    Button,
     Card,
     Col,
     Flex,
@@ -7,10 +8,15 @@ import {
     Metric,
     Select,
     SelectItem,
+    Tab,
+    TabGroup,
+    TabList,
     Text,
     Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
 import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
 import {
@@ -33,6 +39,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     SourceType,
 } from '../../api/api'
+import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
 
 const topServices = (
     input:
@@ -81,7 +88,7 @@ const topAccounts = (
                 connector: input.connections[i].connector,
             })
         }
-        top.total = input.totalResourceCount
+        top.total = input.totalDiscoveredCount
     }
     return top
 }
@@ -128,9 +135,11 @@ const pieData = (
         Object.entries(response?.top_values).map(([key, value]) =>
             data.push({
                 name: `${key} - ${Math.abs(
-                    (value / (response.total_cost_value || 1)) * 100.0
+                    (Math.round(value) /
+                        Math.round(response.total_cost_value || 1)) *
+                        100
                 ).toFixed(1)}%`,
-                value: Number(value).toFixed(2),
+                value: Number(value).toFixed(0),
             })
         )
         data.sort((a, b) => {
@@ -138,10 +147,11 @@ const pieData = (
         })
         data.push({
             name: `Others - ${Math.abs(
-                ((response.others || 0) / (response.total_cost_value || 1)) *
-                    100.0
+                (Math.round(response.others || 0) /
+                    Math.round(response.total_cost_value || 1)) *
+                    100
             ).toFixed(1)}%`,
-            value: Number(response.others).toFixed(2),
+            value: Number(response.others).toFixed(0),
         })
     }
     return data
@@ -161,11 +171,19 @@ export default function Spend() {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >('daily')
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (selectedIndex === 0) setSelectedChart('line')
+        if (selectedIndex === 1) setSelectedChart('area')
+        if (selectedIndex === 2) setSelectedChart('bar')
+    }, [selectedIndex])
 
     const query: {
         pageSize: number
@@ -215,7 +233,7 @@ export default function Spend() {
 
     const { response: composition, isLoading: compositionLoading } =
         useInventoryApiV2AnalyticsSpendCompositionList({
-            top: 5,
+            top: 4,
             ...(selectedConnections.provider && {
                 connector: [selectedConnections.provider],
             }),
@@ -229,7 +247,7 @@ export default function Spend() {
                 startTime: activeTimeRange.start.unix(),
             }),
         })
-    console.log(serviceCostResponse)
+    console.log(accountCostResponse)
 
     return (
         <Menu currentPage="spend">
@@ -277,7 +295,7 @@ export default function Spend() {
                             alignItems="end"
                             className="h-full"
                         >
-                            <Grid numItems={2} className="gap-4">
+                            <Flex justifyContent="end" className="gap-4">
                                 <Select
                                     value={selectedGranularity}
                                     onValueChange={(v) => {
@@ -285,6 +303,7 @@ export default function Spend() {
                                         // @ts-ignore
                                         setSelectedGranularity(v)
                                     }}
+                                    className="w-10"
                                 >
                                     <SelectItem value="daily">
                                         <Text>Daily</Text>
@@ -296,25 +315,24 @@ export default function Spend() {
                                         <Text>Yearly</Text>
                                     </SelectItem>
                                 </Select>
-                                <Select
-                                    value={selectedChart}
-                                    onValueChange={(v) => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        setSelectedChart(v)
-                                    }}
+                                <TabGroup
+                                    index={selectedIndex}
+                                    onIndexChange={setSelectedIndex}
+                                    className="w-fit rounded-lg"
                                 >
-                                    <SelectItem value="line">
-                                        <Text>Line Chart</Text>
-                                    </SelectItem>
-                                    <SelectItem value="area">
-                                        <Text>Area Chart</Text>
-                                    </SelectItem>
-                                    <SelectItem value="bar">
-                                        <Text>Bar Chart</Text>
-                                    </SelectItem>
-                                </Select>
-                            </Grid>
+                                    <TabList variant="solid">
+                                        <Tab value="line">
+                                            <LineChartIcon className="h-5" />
+                                        </Tab>
+                                        <Tab value="area">
+                                            <AreaChartIcon className="h-5" />
+                                        </Tab>
+                                        <Tab value="bar">
+                                            <BarChartIcon className="h-5" />
+                                        </Tab>
+                                    </TabList>
+                                </TabGroup>
+                            </Flex>
                             <Flex justifyContent="end" className="mt-6 gap-2.5">
                                 <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
                                 {selectedChart === 'area' ? (
@@ -336,8 +354,33 @@ export default function Spend() {
             </Card>
             <Grid numItems={5} className="w-full gap-4">
                 <Col numColSpan={2}>
-                    <Card className="pb-0">
-                        <Title className="font-semibold">Breakdown</Title>
+                    <Card className="pb-0 relative">
+                        <Flex>
+                            <Title className="font-semibold">Breakdown</Title>
+                            <TabGroup
+                                index={selectedIndex}
+                                onIndexChange={setSelectedIndex}
+                                className="w-fit rounded-lg"
+                            >
+                                <TabList variant="solid">
+                                    <Tab className="pt-0.5 pb-1">
+                                        <Text>
+                                            {dateDisplay(
+                                                activeTimeRange.end.toString(),
+                                                1
+                                            )}
+                                        </Text>
+                                    </Tab>
+                                    <Tab className="pt-0.5 pb-1">
+                                        <Text>
+                                            {dateDisplay(
+                                                activeTimeRange.start.toString()
+                                            )}
+                                        </Text>
+                                    </Tab>
+                                </TabList>
+                            </TabGroup>
+                        </Flex>
                         <Chart
                             labels={[]}
                             chartData={pieData(composition)}
@@ -345,6 +388,15 @@ export default function Spend() {
                             isCost
                             loading={compositionLoading}
                         />
+                        <Button
+                            variant="light"
+                            icon={ChevronRightIcon}
+                            iconPosition="right"
+                            className="absolute bottom-6 right-6"
+                            onClick={() => navigate('details')}
+                        >
+                            see more
+                        </Button>
                     </Card>
                 </Col>
                 <Col numColSpan={3} className="h-full">
