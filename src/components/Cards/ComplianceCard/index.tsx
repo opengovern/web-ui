@@ -4,6 +4,7 @@ import {
     CategoryBar,
     Flex,
     Icon,
+    Subtitle,
     Text,
     Title,
 } from '@tremor/react'
@@ -62,9 +63,9 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                     {((passed / total || 0) * 100).toFixed(2)}%
                 </Badge>
             </Flex>
-            <Text className="line-clamp-2 mb-6 mt-2">
+            <Subtitle className="line-clamp-2 mb-6 mt-2 text-gray-600">
                 {benchmark?.description}
-            </Text>
+            </Subtitle>
             <CategoryBar
                 className={`w-full mb-2 ${total ? '' : 'hidden'}`}
                 values={[

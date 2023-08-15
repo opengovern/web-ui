@@ -1,7 +1,12 @@
 import ReactEcharts from 'echarts-for-react'
 import { Flex, Text } from '@tremor/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import { numericDisplay } from '../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numberDisplay,
+    numberGroupedDisplay,
+    numericDisplay,
+} from '../../utilities/numericDisplay'
 
 interface IChart {
     labels: string[]
@@ -42,7 +47,7 @@ export default function Chart({
                             if (isCost) {
                                 return `$${numericDisplay(value)}`
                             }
-                            return value
+                            return numberGroupedDisplay(value)
                         },
                     },
                 },

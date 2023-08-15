@@ -143,7 +143,9 @@ export default function InsightCard({ metric }: IInsightsCard) {
                         </Flex>
                         {generateBadge(metric)}
                     </Flex>
-                    <Text>{metric?.description}</Text>
+                    <Subtitle className="text-gray-600">
+                        {metric?.description}
+                    </Subtitle>
                 </Flex>
                 <Flex className="mt-3">
                     {getConnectorIcon(metric?.connector)}

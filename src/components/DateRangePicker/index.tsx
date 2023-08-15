@@ -110,7 +110,7 @@ export default function DateRangePicker({ isSpend = false }: DatePickerProps) {
             value={currentValue()}
             onChange={(value) => {
                 setActiveTimeRange({
-                    start: dayjs.utc(value.start.toString()),
+                    start: dayjs.utc(value.start.toString()).startOf('day'),
                     end: dayjs.utc(value.end.toString()).endOf('day'),
                 })
             }}

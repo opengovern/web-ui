@@ -22,21 +22,25 @@ import {
     useInventoryApiV2AnalyticsSpendTrendList,
     useInventoryApiV2AnalyticsTrendList,
 } from '../../api/inventory.gen'
-import Spinner from '../../components/Spinner'
 import { dateDisplay } from '../../utilities/dateDisplay'
-import { isDemo } from '../../utilities/demo'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
 import { getErrorMessage } from '../../types/apierror'
 
 export default function Home() {
+    const start = dayjs.utc().subtract(2, 'week').startOf('day')
+    const end = dayjs.utc().endOf('day')
+
     const [selectedType, setSelectedType] = useState('resource')
     const {
         response: services,
         isLoading: servicesIsLoading,
         error: servicesError,
         sendNow: serviceRefresh,
-    } = useInventoryApiV2AnalyticsMetricList({})
+    } = useInventoryApiV2AnalyticsMetricList({
+        startTime: start.unix(),
+        endTime: end.unix(),
+    })
     const {
         response: summary,
         isLoading: limitsLoading,
@@ -45,21 +49,27 @@ export default function Home() {
     } = useOnboardApiV1ConnectionsSummaryList({
         pageSize: 0,
         pageNumber: 1,
-        startTime: dayjs.utc().subtract(1, 'week').unix(),
-        endTime: dayjs.utc().unix(),
+        startTime: start.unix(),
+        endTime: end.unix(),
     })
     const {
         response: resourcesTrend,
         isLoading: resourceTrendLoading,
         error: trendError,
         sendNow: refreshTrend,
-    } = useInventoryApiV2AnalyticsTrendList()
+    } = useInventoryApiV2AnalyticsTrendList({
+        startTime: start.unix(),
+        endTime: end.unix(),
+    })
     const {
         response: costTrend,
         isLoading: costTrendLoading,
         error: costTrendError,
         sendNow: refreshCostTrend,
-    } = useInventoryApiV2AnalyticsSpendTrendList()
+    } = useInventoryApiV2AnalyticsSpendTrendList({
+        startTime: start.unix(),
+        endTime: end.unix(),
+    })
 
     const resourceTrendChart = () => {
         const label = []

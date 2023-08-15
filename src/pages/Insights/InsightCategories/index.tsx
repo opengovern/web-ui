@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Tab, TabGroup, TabList } from '@tremor/react'
+import { Subtitle, Tab, TabGroup, TabList } from '@tremor/react'
 import { useComplianceApiV1MetadataTagInsightList } from '../../../api/compliance.gen'
 
 interface IInsightCategories {
@@ -39,7 +39,9 @@ export default function InsightCategories({
                         className="border-none"
                         onClick={() => handleClick(category)}
                     >
-                        {category}
+                        <Subtitle className="text-gray-600">
+                            {category}
+                        </Subtitle>
                     </Tab>
                 ))}
             </TabList>
