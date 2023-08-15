@@ -24,7 +24,10 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
 import { dateDisplay } from '../../utilities/dateDisplay'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import { exactPriceDisplay } from '../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numericDisplay,
+} from '../../utilities/numericDisplay'
 import TopListCard from '../../components/Cards/TopListCard'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../api/api'
 
@@ -88,7 +91,7 @@ const costTrendChart = (
 }
 
 const pieData = (response: any) => {
-    const data: any = []
+    const data: any[] = []
     if (response) {
         Object.entries(response?.top_values).map(([key, value]) =>
             data.push({
@@ -96,6 +99,9 @@ const pieData = (response: any) => {
                 value: Number(value).toFixed(2),
             })
         )
+        data.sort((a, b) => {
+            return b.value - a.value
+        })
         data.push({
             name: 'Others',
             value: Number(response.others).toFixed(2),
