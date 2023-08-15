@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Button,
     Card,
@@ -39,6 +39,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     SourceType,
 } from '../../api/api'
+import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
 
 const topServices = (
     input:
@@ -178,6 +179,12 @@ export default function Spend() {
     const selectedConnections = useAtomValue(filterAtom)
     const navigate = useNavigate()
 
+    useEffect(() => {
+        if (selectedIndex === 0) setSelectedChart('line')
+        if (selectedIndex === 1) setSelectedChart('area')
+        if (selectedIndex === 2) setSelectedChart('bar')
+    }, [selectedIndex])
+
     const query: {
         pageSize: number
         pageNumber: number
@@ -288,7 +295,7 @@ export default function Spend() {
                             alignItems="end"
                             className="h-full"
                         >
-                            <Grid numItems={2} className="gap-4">
+                            <Flex justifyContent="end" className="gap-4">
                                 <Select
                                     value={selectedGranularity}
                                     onValueChange={(v) => {
@@ -296,6 +303,7 @@ export default function Spend() {
                                         // @ts-ignore
                                         setSelectedGranularity(v)
                                     }}
+                                    className="w-10"
                                 >
                                     <SelectItem value="daily">
                                         <Text>Daily</Text>
@@ -307,25 +315,24 @@ export default function Spend() {
                                         <Text>Yearly</Text>
                                     </SelectItem>
                                 </Select>
-                                <Select
-                                    value={selectedChart}
-                                    onValueChange={(v) => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        setSelectedChart(v)
-                                    }}
+                                <TabGroup
+                                    index={selectedIndex}
+                                    onIndexChange={setSelectedIndex}
+                                    className="w-fit rounded-lg"
                                 >
-                                    <SelectItem value="line">
-                                        <Text>Line Chart</Text>
-                                    </SelectItem>
-                                    <SelectItem value="area">
-                                        <Text>Area Chart</Text>
-                                    </SelectItem>
-                                    <SelectItem value="bar">
-                                        <Text>Bar Chart</Text>
-                                    </SelectItem>
-                                </Select>
-                            </Grid>
+                                    <TabList variant="solid">
+                                        <Tab value="line">
+                                            <LineChartIcon className="h-5" />
+                                        </Tab>
+                                        <Tab value="area">
+                                            <AreaChartIcon className="h-5" />
+                                        </Tab>
+                                        <Tab value="bar">
+                                            <BarChartIcon className="h-5" />
+                                        </Tab>
+                                    </TabList>
+                                </TabGroup>
+                            </Flex>
                             <Flex justifyContent="end" className="mt-6 gap-2.5">
                                 <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
                                 {selectedChart === 'area' ? (
