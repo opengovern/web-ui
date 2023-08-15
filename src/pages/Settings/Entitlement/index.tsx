@@ -97,8 +97,8 @@ export default function SettingsEntitlement() {
             <Spinner />
         </Flex>
     ) : (
-        <>
-            <Grid numItemsSm={2} numItemsLg={4} className="gap-4">
+        <Flex flexDirection="col">
+            <Grid numItemsSm={2} numItemsLg={4} className="gap-4 w-full">
                 <Card key="activeUsers">
                     <Text>Active users</Text>
                     <Metric>{numericDisplay(currentUsers)}</Metric>
@@ -139,7 +139,7 @@ export default function SettingsEntitlement() {
                     <ProgressBar value={hostsPercentage} className="mt-2" />
                 </Card>
             </Grid>
-            <Card key="summary" className="mt-3">
+            <Card key="summary" className="mt-3 w-full">
                 <Title>Summary</Title>
                 <List className="mt-3">
                     {wsDetails.map((item) => (
@@ -152,6 +152,6 @@ export default function SettingsEntitlement() {
                     ))}
                 </List>
             </Card>
-        </>
+        </Flex>
     )
 }

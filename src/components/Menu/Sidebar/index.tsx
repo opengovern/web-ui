@@ -65,10 +65,10 @@ const navigation = [
     {
         name: 'Administration',
         id: 'settings',
-        page: 'settings/entitlement',
+        page: 'settings',
         icon: Cog6ToothIcon,
         children: [
-            { name: 'Settings', page: 'settings/entitlement' },
+            { name: 'Settings', page: 'settings' },
             { name: 'Integrations', page: 'integration' },
         ],
     },

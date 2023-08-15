@@ -1,8 +1,7 @@
 import ReactEcharts from 'echarts-for-react'
-import { Flex, Metric, Text } from '@tremor/react'
+import { Flex, Text } from '@tremor/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { numericDisplay } from '../../utilities/numericDisplay'
-import Spinner from '../Spinner'
 
 interface IChart {
     labels: string[]
@@ -10,7 +9,7 @@ interface IChart {
     chartData: (string | number | undefined)[]
     chartType: 'bar' | 'line' | 'area' | 'doughnut'
     isCost?: boolean
-    isLoading?: boolean
+    loading?: boolean
     error?: string
     onRefresh?: () => void
 }
@@ -21,7 +20,7 @@ export default function Chart({
     chartData,
     chartType,
     isCost = false,
-    isLoading,
+    loading,
     error,
     onRefresh,
 }: IChart) {
@@ -104,7 +103,7 @@ export default function Chart({
                         },
                         data: chartData,
                         left: '-45%',
-                        // height: 300,
+                        // width: '50%',
                     },
                 ],
                 legend: {
@@ -112,18 +111,14 @@ export default function Chart({
                     top: 'middle',
                     icon: 'circle',
                     orient: 'vertical',
-                    // textStyle: {
-                    //     width: 140,
-                    //     overflow: 'truncate',
-                    // },
+                    textStyle: {
+                        width: 140,
+                        overflow: 'truncate',
+                    },
                 },
             }
         }
         return undefined
-    }
-
-    if (isLoading) {
-        return <Spinner className="h-80" />
     }
 
     if (error !== undefined && error.length > 0) {
@@ -143,8 +138,8 @@ export default function Chart({
                     justifyContent="end"
                     className="w-auto"
                 >
-                    <ArrowPathIcon className="text-blue-500 w-4 h-4 mr-1" />
-                    <Text className="text-blue-500">Reload</Text>
+                    <ArrowPathIcon className="text-kaytu-500 w-4 h-4 mr-1" />
+                    <Text className="text-kaytu-500">Reload</Text>
                 </Flex>
             </Flex>
         )
@@ -163,7 +158,7 @@ export default function Chart({
                     '#D0D4DA',
                 ],
             }}
-            echarts={{ height: '100%' }}
+            showLoading={loading}
         />
     )
 }

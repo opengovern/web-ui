@@ -7,6 +7,7 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
+import { AWSIcon, AzureIcon } from '../../../icons/icons'
 
 interface ITopListCard {
     title: string
@@ -34,6 +35,7 @@ interface Item {
         | null
         | undefined
     value: string | number | undefined
+    connector?: any
 }
 
 export default function TopListCard({
@@ -89,9 +91,23 @@ export default function TopListCard({
                                     (item: Item, i: number) =>
                                         i < count && (
                                             <ListItem className="py-3">
-                                                <Text className="w-4/5 truncate">
-                                                    {item.name}
-                                                </Text>
+                                                <Flex justifyContent="start">
+                                                    {item.connector && (
+                                                        <img
+                                                            src={
+                                                                item.connector ===
+                                                                'Azure'
+                                                                    ? AzureIcon
+                                                                    : AWSIcon
+                                                            }
+                                                            alt="connector"
+                                                            className="w-6 h-6 mr-1"
+                                                        />
+                                                    )}
+                                                    <Text className="w-4/5 truncate">
+                                                        {item.name}
+                                                    </Text>
+                                                </Flex>
                                                 {item.value && (
                                                     <Text>{value(item)}</Text>
                                                 )}
@@ -134,7 +150,7 @@ export default function TopListCard({
                                     {data2?.map(
                                         (item: Item, i: number) =>
                                             i < count && (
-                                                <ListItem className="py-3">
+                                                <ListItem className="py-3.5">
                                                     <Text className="w-4/5 truncate">
                                                         {item.name}
                                                     </Text>
