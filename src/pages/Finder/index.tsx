@@ -9,6 +9,7 @@ import {
     Grid,
     Icon,
     Metric,
+    Subtitle,
     Tab,
     TabGroup,
     TabList,
@@ -307,7 +308,11 @@ export default function Finder() {
                             onIndexChange={setSelectedIndex}
                         >
                             <TabList className="bg-gray-100 dark:bg-gray-900">
-                                <Tab>Get Started</Tab>
+                                <Tab>
+                                    <Subtitle className="text-gray-600 text-base">
+                                        Get Started
+                                    </Subtitle>
+                                </Tab>
                                 <Tab
                                     className={
                                         queryResponse?.query?.length &&
@@ -316,7 +321,9 @@ export default function Finder() {
                                             : 'hidden'
                                     }
                                 >
-                                    Result
+                                    <Subtitle className="text-gray-600 text-base">
+                                        Result
+                                    </Subtitle>
                                 </Tab>
                             </TabList>
                             <TabPanels className="mt-6">

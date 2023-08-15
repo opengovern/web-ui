@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, Metric, Text } from '@tremor/react'
+import { Button, Flex, Grid, Metric, Subtitle, Text } from '@tremor/react'
 import Menu from '../../components/Menu'
 import stackImg from '../../icons/stack.png'
 
@@ -14,11 +14,11 @@ export default function Stack() {
                         justifyContent="center"
                         className="p-12"
                     >
-                        <Metric>Remain calm</Metric>
-                        <Text className="mt-3 mb-6">
+                        <Metric>Under Construction</Metric>
+                        <Subtitle className="mt-3 mb-6 text-gray-600">
                             We are working on it, check out the CLI for working
                             stacks
-                        </Text>
+                        </Subtitle>
                         <Button
                             onClick={() =>
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

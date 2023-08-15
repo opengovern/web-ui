@@ -289,7 +289,6 @@ export default function SettingsGitRepositories() {
                     <Flex justifyContent="end" className="truncate space-x-4">
                         <Button
                             variant="secondary"
-                            color="amber"
                             disabled={saveLoading()}
                             loading={executeSyncQueries && loadingSyncQueries}
                             onClick={syncQueries}
