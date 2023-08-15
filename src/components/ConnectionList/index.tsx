@@ -130,6 +130,7 @@ export default function ConnectionList() {
         pageNumber: 1,
         pageSize: 10000,
         needCost: false,
+        needResourceCount: false,
     })
 
     const updateSelectionByProvider = (

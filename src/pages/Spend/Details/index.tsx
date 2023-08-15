@@ -2,6 +2,8 @@ import {
     Button,
     Card,
     Flex,
+    MultiSelect,
+    MultiSelectItem,
     Select,
     SelectItem,
     Text,
@@ -24,13 +26,29 @@ import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import DateRangePicker from '../../../components/DateRangePicker'
 import Menu from '../../../components/Menu'
 import Breadcrumbs from '../../../components/Breadcrumbs'
-import { useInventoryApiV2AnalyticsSpendTableList } from '../../../api/inventory.gen'
+import {
+    useInventoryApiV2AnalyticsMetricsListList,
+    useInventoryApiV2AnalyticsSpendMetricList,
+    useInventoryApiV2AnalyticsSpendTableList,
+} from '../../../api/inventory.gen'
 import { spendTimeAtom } from '../../../store'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 
 export default function CostMetricsDetails() {
     const navigate = useNavigate()
     const { hash } = useLocation()
+
+    const { response: connections, isLoading: connectionsLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            pageNumber: 1,
+            pageSize: 10000,
+            needCost: false,
+            needResourceCount: false,
+        })
+
+    const { response: services, isLoading: servicesLoading } =
+        useInventoryApiV2AnalyticsMetricsListList({ metricType: 'spend' })
 
     const breadcrumbsPages = [
         {
@@ -57,12 +75,15 @@ export default function CostMetricsDetails() {
                 return ''
         }
     }
+    const [filter, setFilter] = useState<string[]>([])
     const [granularity, setGranularity] = useState<string>('daily')
     const query = (): {
         startTime?: number | undefined
         endTime?: number | undefined
         granularity?: 'daily' | 'monthly' | 'yearly' | undefined
         dimension?: 'metric' | 'connection' | undefined
+        connectionId?: string[]
+        metricIds?: string[]
     } => {
         let dim: 'metric' | 'connection' = 'metric'
         if (dimension === 'connection') {
@@ -73,11 +94,23 @@ export default function CostMetricsDetails() {
         if (granularity === 'monthly') {
             gra = 'monthly'
         }
+
+        let connectionIdFilter: string[] | undefined
+        let metricIdsFilter: string[] | undefined
+
+        if (dim === 'connection') {
+            metricIdsFilter = filter
+        } else {
+            connectionIdFilter = filter
+        }
+
         return {
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),
             dimension: dim,
             granularity: gra,
+            connectionId: connectionIdFilter,
+            metricIds: metricIdsFilter,
         }
     }
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
@@ -111,6 +144,23 @@ export default function CostMetricsDetails() {
                     <SelectItem value="metric">Service</SelectItem>
                     <SelectItem value="connection">Connection</SelectItem>
                 </Select>
+                <Text className="m-3">
+                    Filter by{' '}
+                    {dimension === 'connection' ? 'Service' : 'Connection'}
+                </Text>
+                <MultiSelect value={filter} onValueChange={(v) => setFilter(v)}>
+                    {dimension !== 'connection'
+                        ? (connections?.connections || []).map((item) => (
+                              <MultiSelectItem value={item.id || ''}>
+                                  {item.providerConnectionName}
+                              </MultiSelectItem>
+                          ))
+                        : (services || []).map((item) => (
+                              <MultiSelectItem value={item.id || ''}>
+                                  {item.name}
+                              </MultiSelectItem>
+                          ))}
+                </MultiSelect>
             </Flex>
         )
     }
@@ -130,7 +180,7 @@ export default function CostMetricsDetails() {
             ],
             defaultToolPanel: '',
         })
-    }, [granularity, dimension])
+    }, [granularity, dimension, filter, connections, services])
 
     function getContextMenuItems(
         params: GetContextMenuItemsParams
