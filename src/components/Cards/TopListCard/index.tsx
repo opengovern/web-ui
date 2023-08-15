@@ -120,7 +120,7 @@ export default function TopListCard({
                             accountsUrl ? navigate(accountsUrl) : null
                         }
                     >
-                        {accounts && (
+                        {!!accounts.total && (
                             <Button
                                 variant="light"
                                 icon={ChevronRightIcon}
@@ -170,7 +170,7 @@ export default function TopListCard({
                             servicesUrl ? navigate(servicesUrl) : null
                         }
                     >
-                        {services && (
+                        {!!services.total && (
                             <Button
                                 variant="light"
                                 icon={ChevronRightIcon}

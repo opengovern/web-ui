@@ -8,7 +8,7 @@ import {
     TabPanels,
 } from '@tremor/react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
 import { useInventoryApiV2AnalyticsTagList } from '../../api/inventory.gen'
