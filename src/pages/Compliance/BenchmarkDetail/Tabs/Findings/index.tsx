@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { Badge, Flex, Title } from '@tremor/react'
 import { useComplianceApiV1FindingsCreate } from '../../../../../api/compliance.gen'
-import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../components/RenderObject'
 import Table, { IColumn } from '../../../../../components/Table'
+import { getConnectorIcon } from '../../../../../components/Cards/ConnectorCard'
 
 interface IFinder {
     id: string | undefined
@@ -42,11 +42,7 @@ const columns: IColumn<any, any>[] = [
                     justifyContent="center"
                     className="w-full h-full"
                 >
-                    {params.data?.connector === 'Azure' ? (
-                        <AzureIcon key="azure" />
-                    ) : (
-                        <AWSIcon key="aws" />
-                    )}
+                    {getConnectorIcon(params.data?.connector)}
                 </Flex>
             )
         },

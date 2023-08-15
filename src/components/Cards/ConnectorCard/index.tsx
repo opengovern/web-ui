@@ -13,8 +13,13 @@ interface IConnectorCard {
 }
 
 export const getConnectorIcon = (connector: string | undefined) => {
-    if (connector === 'AWS') return <AWSIcon key="aws" />
-    return <AzureIcon key="azure" />
+    return (
+        <img
+            src={connector === 'Azure' ? AzureIcon : AWSIcon}
+            alt="connector"
+            className="w-8 h-8 mr-1"
+        />
+    )
 }
 
 const getBadgeColor = (status: string | undefined) => {

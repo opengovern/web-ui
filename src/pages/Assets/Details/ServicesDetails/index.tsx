@@ -14,8 +14,8 @@ import {
     percentageByChange,
 } from '../../../../utilities/deltaType'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
-import { AWSIcon, AzureIcon } from '../../../../icons/icons'
 import Table, { IColumn } from '../../../../components/Table'
+import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -30,9 +30,7 @@ const columns: IColumn<any, any>[] = [
                 alignItems="center"
                 className="w-full h-full"
             >
-                {params.data?.connectors?.map((item) =>
-                    item === 'Azure' ? <AzureIcon /> : <AWSIcon />
-                )}
+                {params.data?.connectors?.map((item) => getConnectorIcon(item))}
             </Flex>
         ),
     },

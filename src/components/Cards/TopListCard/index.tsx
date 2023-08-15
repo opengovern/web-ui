@@ -7,7 +7,7 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
-import { AWSIcon, AzureIcon } from '../../../icons/icons'
+import { getConnectorIcon } from '../ConnectorCard'
 
 interface ITopListCard {
     title: string
@@ -92,18 +92,10 @@ export default function TopListCard({
                                         i < count && (
                                             <ListItem className="py-3">
                                                 <Flex justifyContent="start">
-                                                    {item.connector && (
-                                                        <img
-                                                            src={
-                                                                item.connector ===
-                                                                'Azure'
-                                                                    ? AzureIcon
-                                                                    : AWSIcon
-                                                            }
-                                                            alt="connector"
-                                                            className="w-6 h-6 mr-1"
-                                                        />
-                                                    )}
+                                                    {item.connector &&
+                                                        getConnectorIcon(
+                                                            item.connector
+                                                        )}
                                                     <Text className="w-4/5 truncate">
                                                         {item.name}
                                                     </Text>

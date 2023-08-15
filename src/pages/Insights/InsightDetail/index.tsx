@@ -37,8 +37,8 @@ import {
     percentageByChange,
 } from '../../../utilities/deltaType'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
-import { AWSIcon, AzureIcon } from '../../../icons/icons'
 import { dateDisplay } from '../../../utilities/dateDisplay'
+import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 
 const chartData = (inputData: any) => {
     const data = []
@@ -301,10 +301,8 @@ export default function InsightDetail() {
                                         flexDirection="row"
                                         justifyContent="start"
                                     >
-                                        {insightDetail?.connector === 'AWS' ? (
-                                            <AWSIcon />
-                                        ) : (
-                                            <AzureIcon />
+                                        {getConnectorIcon(
+                                            insightDetail?.connector
                                         )}
                                         <Flex
                                             flexDirection="col"

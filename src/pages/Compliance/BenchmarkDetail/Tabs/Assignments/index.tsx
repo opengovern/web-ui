@@ -6,9 +6,9 @@ import {
     useComplianceApiV1AssignmentsConnectionCreate,
     useComplianceApiV1AssignmentsConnectionDelete,
 } from '../../../../../api/compliance.gen'
-import { AWSIcon, AzureIcon } from '../../../../../icons/icons'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource } from '../../../../../api/api'
 import Table, { IColumn } from '../../../../../components/Table'
+import { getConnectorIcon } from '../../../../../components/Cards/ConnectorCard'
 
 interface IAssignments {
     id: string | undefined
@@ -28,11 +28,7 @@ const columns: IColumn<any, any>[] = [
                     justifyContent="center"
                     className="w-full h-full"
                 >
-                    {params.data?.connector === 'Azure' ? (
-                        <AzureIcon />
-                    ) : (
-                        <AWSIcon />
-                    )}
+                    {getConnectorIcon(params.data?.connector)}
                 </Flex>
             )
         },

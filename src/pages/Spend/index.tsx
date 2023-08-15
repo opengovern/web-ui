@@ -29,7 +29,11 @@ import {
     numericDisplay,
 } from '../../utilities/numericDisplay'
 import TopListCard from '../../components/Cards/TopListCard'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+} from '../../api/api'
+import { percentageByChange } from '../../utilities/deltaType'
 
 const topServices = (metrics: any) => {
     const top = []
@@ -90,12 +94,18 @@ const costTrendChart = (
     }
 }
 
-const pieData = (response: any) => {
+const pieData = (
+    response:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
+        | undefined
+) => {
     const data: any[] = []
-    if (response) {
+    if (response && response.top_values) {
         Object.entries(response?.top_values).map(([key, value]) =>
             data.push({
-                name: key,
+                name: `${key} - ${Math.abs(
+                    (value / (response.total_cost_value || 1)) * 100.0
+                ).toFixed(1)}%`,
                 value: Number(value).toFixed(2),
             })
         )
@@ -103,7 +113,10 @@ const pieData = (response: any) => {
             return b.value - a.value
         })
         data.push({
-            name: 'Others',
+            name: `Others - ${Math.abs(
+                ((response.others || 0) / (response.total_cost_value || 1)) *
+                    100.0
+            ).toFixed(1)}%`,
             value: Number(response.others).toFixed(2),
         })
     }

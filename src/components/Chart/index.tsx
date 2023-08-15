@@ -74,6 +74,14 @@ export default function Chart({
                         return value
                     },
                 },
+                color: [
+                    '#1D4F85',
+                    '#2970BC',
+                    '#6DA4DF',
+                    '#96BEE8',
+                    '#C0D8F1',
+                    '#D0D4DA',
+                ],
             }
         }
         if (chartType === 'doughnut') {
@@ -116,6 +124,14 @@ export default function Chart({
                         overflow: 'truncate',
                     },
                 },
+                color: [
+                    '#0D2239',
+                    '#1D4F85',
+                    '#1E7CE0',
+                    '#6DA4DF',
+                    '#C0D8F1',
+                    '#D0D4DA',
+                ],
             }
         }
         return undefined
@@ -145,20 +161,5 @@ export default function Chart({
         )
     }
 
-    return (
-        <ReactEcharts
-            option={{
-                ...options(),
-                color: [
-                    '#1D4F85',
-                    '#2970BC',
-                    '#6DA4DF',
-                    '#96BEE8',
-                    '#C0D8F1',
-                    '#D0D4DA',
-                ],
-            }}
-            showLoading={loading}
-        />
-    )
+    return <ReactEcharts option={options()} showLoading={loading} />
 }

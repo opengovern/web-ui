@@ -17,7 +17,7 @@ import DrawerPanel from '../DrawerPanel'
 import Spinner from '../Spinner'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import { filterAtom } from '../../store'
-import { AWSIcon, AzureIcon } from '../../icons/icons'
+import { getConnectorIcon } from '../Cards/ConnectorCard'
 
 interface IConnection {
     id: string
@@ -41,11 +41,7 @@ const columns: ColDef[] = [
         cellRenderer: (params: ICellRendererParams<IConnection>) => {
             return (
                 <div className="flex justify-center items-center w-full h-full">
-                    {params.data?.connector === 'Azure' ? (
-                        <AzureIcon />
-                    ) : (
-                        <AWSIcon />
-                    )}
+                    {getConnectorIcon(params.data?.connector)}
                 </div>
             )
         },

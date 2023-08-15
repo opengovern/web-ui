@@ -24,7 +24,7 @@ import {
     percentageByChange,
 } from '../../../../../../utilities/deltaType'
 import { filterAtom, timeAtom } from '../../../../../../store'
-import { AWSIcon, AzureIcon } from '../../../../../../icons/icons'
+import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
 
 export default function Summary() {
     const activeTimeRange = useAtomValue(timeAtom)
@@ -125,10 +125,8 @@ export default function Summary() {
                                     {topAccounts?.connections?.map((item) => (
                                         <ListItem className="p-1">
                                             <Flex justifyContent="start">
-                                                {item?.connector === 'Azure' ? (
-                                                    <AzureIcon />
-                                                ) : (
-                                                    <AWSIcon />
+                                                {getConnectorIcon(
+                                                    item?.connector
                                                 )}
                                                 <Text className="ml-4">
                                                     {

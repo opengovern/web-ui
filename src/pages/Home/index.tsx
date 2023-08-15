@@ -10,9 +10,13 @@ import {
     Title,
 } from '@tremor/react'
 import { useState } from 'react'
+import dayjs from 'dayjs'
 import Menu from '../../components/Menu'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import { numberDisplay } from '../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numberDisplay,
+} from '../../utilities/numericDisplay'
 import {
     useInventoryApiV2AnalyticsMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
@@ -32,26 +36,18 @@ export default function Home() {
         isLoading: servicesIsLoading,
         error: servicesError,
         sendNow: serviceRefresh,
-    } = useInventoryApiV2AnalyticsMetricList(
-        {},
-        {
-            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-        }
-    )
+    } = useInventoryApiV2AnalyticsMetricList({})
     const {
         response: summary,
         isLoading: limitsLoading,
         error: summaryError,
         sendNow: summaryRefresh,
-    } = useOnboardApiV1ConnectionsSummaryList(
-        {
-            pageSize: 0,
-            pageNumber: 1,
-        },
-        {
-            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-        }
-    )
+    } = useOnboardApiV1ConnectionsSummaryList({
+        pageSize: 0,
+        pageNumber: 1,
+        startTime: dayjs.utc().subtract(1, 'week').unix(),
+        endTime: dayjs.utc().unix(),
+    })
     const {
         response: resourcesTrend,
         isLoading: resourceTrendLoading,
@@ -127,7 +123,7 @@ export default function Home() {
             <Metric>Home</Metric>
             <Grid
                 numItems={1}
-                numItemsMd={3}
+                numItemsMd={4}
                 className="gap-4 w-full mt-6 mb-4"
             >
                 <SummaryCard
@@ -136,6 +132,7 @@ export default function Home() {
                     loading={limitsLoading}
                     error={getErrorMessage(summaryError)}
                     onRefresh={summaryRefresh}
+                    blueBorder
                 />
                 <SummaryCard
                     title="Services"
@@ -143,6 +140,7 @@ export default function Home() {
                     loading={servicesIsLoading}
                     error={getErrorMessage(servicesError)}
                     onRefresh={serviceRefresh}
+                    blueBorder
                 />
                 <SummaryCard
                     title="Resource Count"
@@ -150,6 +148,15 @@ export default function Home() {
                     loading={limitsLoading}
                     error={getErrorMessage(summaryError)}
                     onRefresh={summaryRefresh}
+                    blueBorder
+                />
+                <SummaryCard
+                    title="Total Spend"
+                    metric={exactPriceDisplay(summary?.totalCost, 0)}
+                    loading={limitsLoading}
+                    error={getErrorMessage(summaryError)}
+                    onRefresh={summaryRefresh}
+                    blueBorder
                 />
             </Grid>
             <Card>
