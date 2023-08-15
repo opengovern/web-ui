@@ -1,4 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs'
+import LocalizedFormat from 'dayjs/plugin/localizedFormat'
+
+dayjs.extend(LocalizedFormat)
 
 export const dateDisplay = (
     date: Dayjs | Date | number | string | undefined,
@@ -6,15 +9,15 @@ export const dateDisplay = (
 ) => {
     const s = subtract || 0
     if ((typeof date).toString() === 'Dayjs') {
-        return (date as Dayjs).subtract(s, 'day').format('MMM DD, YYYY')
+        return (date as Dayjs).subtract(s, 'day').format('ll')
     }
 
     if (date !== undefined) {
-        return dayjs(date).subtract(s, 'day').format('MMM DD, YYYY')
+        return dayjs(date).subtract(s, 'day').format('ll')
     }
     return ''
 }
 
 export const dateTimeDisplay = (date: Date) => {
-    return dayjs(date).format('DD MMM, YYYY HH:mm:ss Z')
+    return dayjs(date).format('lll')
 }
