@@ -104,7 +104,7 @@ export default function Home() {
                     chartData={costTrendChart().data}
                     chartType="line"
                     isCost
-                    isLoading={costTrendLoading}
+                    loading={costTrendLoading}
                     error={getErrorMessage(costTrendError)}
                     onRefresh={refreshCostTrend}
                 />
@@ -115,7 +115,7 @@ export default function Home() {
                 labels={resourceTrendChart().label}
                 chartData={resourceTrendChart().data}
                 chartType="line"
-                isLoading={resourceTrendLoading}
+                loading={resourceTrendLoading}
                 error={getErrorMessage(trendError)}
                 onRefresh={refreshTrend}
             />
