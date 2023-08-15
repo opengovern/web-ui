@@ -10,60 +10,66 @@ import {
     Title,
 } from '@tremor/react'
 import { useState } from 'react'
+import dayjs from 'dayjs'
 import Menu from '../../components/Menu'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import { numberDisplay } from '../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numberDisplay,
+} from '../../utilities/numericDisplay'
 import {
     useInventoryApiV2AnalyticsMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
     useInventoryApiV2AnalyticsTrendList,
 } from '../../api/inventory.gen'
-import Spinner from '../../components/Spinner'
 import { dateDisplay } from '../../utilities/dateDisplay'
-import { isDemo } from '../../utilities/demo'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
 import { getErrorMessage } from '../../types/apierror'
 
 export default function Home() {
+    const start = dayjs.utc().subtract(2, 'week').startOf('day')
+    const end = dayjs.utc().endOf('day')
+
     const [selectedType, setSelectedType] = useState('resource')
     const {
         response: services,
         isLoading: servicesIsLoading,
         error: servicesError,
         sendNow: serviceRefresh,
-    } = useInventoryApiV2AnalyticsMetricList(
-        {},
-        {
-            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-        }
-    )
+    } = useInventoryApiV2AnalyticsMetricList({
+        startTime: start.unix(),
+        endTime: end.unix(),
+    })
     const {
         response: summary,
         isLoading: limitsLoading,
         error: summaryError,
         sendNow: summaryRefresh,
-    } = useOnboardApiV1ConnectionsSummaryList(
-        {
-            pageSize: 0,
-            pageNumber: 1,
-        },
-        {
-            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-        }
-    )
+    } = useOnboardApiV1ConnectionsSummaryList({
+        pageSize: 0,
+        pageNumber: 1,
+        startTime: start.unix(),
+        endTime: end.unix(),
+    })
     const {
         response: resourcesTrend,
         isLoading: resourceTrendLoading,
         error: trendError,
         sendNow: refreshTrend,
-    } = useInventoryApiV2AnalyticsTrendList()
+    } = useInventoryApiV2AnalyticsTrendList({
+        startTime: start.unix(),
+        endTime: end.unix(),
+    })
     const {
         response: costTrend,
         isLoading: costTrendLoading,
         error: costTrendError,
         sendNow: refreshCostTrend,
-    } = useInventoryApiV2AnalyticsSpendTrendList()
+    } = useInventoryApiV2AnalyticsSpendTrendList({
+        startTime: start.unix(),
+        endTime: end.unix(),
+    })
 
     const resourceTrendChart = () => {
         const label = []
@@ -126,7 +132,7 @@ export default function Home() {
             <Metric>Home</Metric>
             <Grid
                 numItems={1}
-                numItemsMd={3}
+                numItemsMd={4}
                 className="gap-4 w-full mt-6 mb-4"
             >
                 <SummaryCard
@@ -135,6 +141,7 @@ export default function Home() {
                     loading={limitsLoading}
                     error={getErrorMessage(summaryError)}
                     onRefresh={summaryRefresh}
+                    blueBorder
                 />
                 <SummaryCard
                     title="Services"
@@ -142,6 +149,7 @@ export default function Home() {
                     loading={servicesIsLoading}
                     error={getErrorMessage(servicesError)}
                     onRefresh={serviceRefresh}
+                    blueBorder
                 />
                 <SummaryCard
                     title="Resource Count"
@@ -149,6 +157,15 @@ export default function Home() {
                     loading={limitsLoading}
                     error={getErrorMessage(summaryError)}
                     onRefresh={summaryRefresh}
+                    blueBorder
+                />
+                <SummaryCard
+                    title="Total Spend"
+                    metric={exactPriceDisplay(summary?.totalCost, 0)}
+                    loading={limitsLoading}
+                    error={getErrorMessage(summaryError)}
+                    onRefresh={summaryRefresh}
+                    blueBorder
                 />
             </Grid>
             <Card>

@@ -24,9 +24,16 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
 import { dateDisplay } from '../../utilities/dateDisplay'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import { exactPriceDisplay } from '../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numericDisplay,
+} from '../../utilities/numericDisplay'
 import TopListCard from '../../components/Cards/TopListCard'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint } from '../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+} from '../../api/api'
+import { percentageByChange } from '../../utilities/deltaType'
 
 const topServices = (metrics: any) => {
     const top = []
@@ -87,17 +94,29 @@ const costTrendChart = (
     }
 }
 
-const pieData = (response: any) => {
-    const data: any = []
-    if (response) {
+const pieData = (
+    response:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
+        | undefined
+) => {
+    const data: any[] = []
+    if (response && response.top_values) {
         Object.entries(response?.top_values).map(([key, value]) =>
             data.push({
-                name: key,
+                name: `${key} - ${Math.abs(
+                    (value / (response.total_cost_value || 1)) * 100.0
+                ).toFixed(1)}%`,
                 value: Number(value).toFixed(2),
             })
         )
+        data.sort((a, b) => {
+            return b.value - a.value
+        })
         data.push({
-            name: 'Others',
+            name: `Others - ${Math.abs(
+                ((response.others || 0) / (response.total_cost_value || 1)) *
+                    100.0
+            ).toFixed(1)}%`,
             value: Number(response.others).toFixed(2),
         })
     }
@@ -145,7 +164,7 @@ export default function Spend() {
         ...(activeTimeRange.end && {
             endTime: activeTimeRange.end.unix(),
         }),
-        pageSize: 5000,
+        pageSize: 5,
         pageNumber: 1,
         sortBy: 'cost',
     }
@@ -311,7 +330,7 @@ export default function Spend() {
                         columns={2}
                         count={5}
                         title="Top Accounts"
-                        loading={serviceCostLoading}
+                        loading={accountCostLoading}
                         data={topAccounts(accountCostResponse?.connections)}
                         isPrice
                         title2="Top Services"

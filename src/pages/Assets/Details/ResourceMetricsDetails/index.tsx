@@ -14,7 +14,7 @@ import {
     SourceType,
 } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
-import { AWSIcon, AzureIcon } from '../../../../icons/icons'
+import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -27,10 +27,10 @@ const columns: IColumn<any, any>[] = [
         ) =>
             params.data?.name && (
                 <Flex justifyContent="center" alignItems="center">
-                    {params.value.includes('AWS' as SourceType) && <AWSIcon />}
-                    {params.value.includes('Azure' as SourceType) && (
-                        <AzureIcon />
-                    )}
+                    {params.value.includes('AWS' as SourceType) &&
+                        getConnectorIcon('AWS')}
+                    {params.value.includes('Azure' as SourceType) &&
+                        getConnectorIcon('Azure')}
                 </Flex>
             ),
     },

@@ -24,6 +24,7 @@ type IProps = {
     url?: string
     loading?: boolean
     border?: boolean
+    blueBorder?: boolean
     error?: string
     onRefresh?: () => void
 }
@@ -38,6 +39,7 @@ export default function SummaryCard({
     url,
     loading = false,
     border = true,
+    blueBorder = false,
     error,
     onRefresh,
 }: IProps) {
@@ -81,7 +83,7 @@ export default function SummaryCard({
             onClick={() => (url ? navigate(url) : null)}
             className={`${border ? '' : 'ring-0 shadow-transparent p-0'} ${
                 url ? 'cursor-pointer' : ''
-            }`}
+            } ${blueBorder ? 'border-l-kaytu-500 border-l-2' : ''}`}
         >
             <Flex alignItems="start">
                 <Flex justifyContent="start">

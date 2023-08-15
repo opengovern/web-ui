@@ -100,6 +100,8 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
         navigate(`${id}`)
     }
 
+    console.log(metric.insights?.length, metric.insights?.length || 0 > 2)
+
     return (
         <Card key={metric.id}>
             <Title className="font-semibold mb-2 w-full truncate">
@@ -122,10 +124,10 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                 </Flex>
                 {generateBadge(metric)}
             </Flex>
-            <Text className="line-clamp-2 h-[2.5em]">
+            <Subtitle className="line-clamp-2 h-14 text-gray-600 text-base">
                 {metric?.description}
-            </Text>
-            <Flex className="mt-6 mb-3">
+            </Subtitle>
+            <Flex className="mt-2 mb-3">
                 <Text className="font-semibold">Insight</Text>
                 <Text className="font-semibold">Total</Text>
             </Flex>
@@ -146,21 +148,21 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                     : 'bg-slate-50'
                             }`}
                         >
-                            <Text className="truncate w-3/4">
+                            <Subtitle className="truncate text-base w-3/4 text-gray-600">
                                 {insight.shortTitle}
-                            </Text>
-                            <Text
-                                color={
+                            </Subtitle>
+                            <Subtitle
+                                className={`font-semibold ${
                                     (insight?.totalResultValue || 0) -
                                         (insight?.oldTotalResultValue || 0) >
                                     0
-                                        ? 'green'
-                                        : 'red'
-                                }
+                                        ? 'text-green-600'
+                                        : 'text-rose-600'
+                                }`}
                             >
                                 {numericDisplay(insight.totalResultValue) ||
                                     'N/A'}
-                            </Text>
+                            </Subtitle>
                         </ListItem>
                     ))}
             </List>
@@ -185,18 +187,18 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                                             : 'bg-slate-50'
                                     } ${i === 0 && 'border-t border-gray-200'}`}
                                 >
-                                    <Text className="truncate w-3/4">
+                                    <Text className="truncate text-base w-3/4 text-gray-600">
                                         {insight.shortTitle}
                                     </Text>
                                     <Text
-                                        color={
+                                        className={`font-semibold ${
                                             (insight?.totalResultValue || 0) -
                                                 (insight?.oldTotalResultValue ||
                                                     0) >
                                             0
-                                                ? 'green'
-                                                : 'red'
-                                        }
+                                                ? 'text-green-600'
+                                                : 'text-rose-600'
+                                        }`}
                                     >
                                         {numericDisplay(
                                             insight.totalResultValue
@@ -209,7 +211,7 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
                 <AccordionHeader
                     color="blue"
                     className={`p-0 w-full pr-0.5 ${
-                        metric.insights?.length || 0 > 2
+                        (metric.insights?.length || 0) > 2
                             ? 'opacity-100'
                             : 'opacity-0 cursor-default'
                     }`}

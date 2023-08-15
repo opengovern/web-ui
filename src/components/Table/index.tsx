@@ -17,12 +17,12 @@ import { useRef } from 'react'
 import { Button, Flex, Title } from '@tremor/react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import dayjs from 'dayjs'
-import { AWSIcon, AzureIcon } from '../../icons/icons'
 import {
     exactPriceDisplay,
     numberGroupedDisplay,
 } from '../../utilities/numericDisplay'
 import { agGridDateComparator } from '../../utilities/dateComparator'
+import { getConnectorIcon } from '../Cards/ConnectorCard'
 
 export interface IColumn<TData, TValue> {
     type: 'string' | 'number' | 'price' | 'date' | 'connector'
@@ -151,15 +151,8 @@ export default function Table<TData = any, TValue = any>({
             } else if (item.type === 'connector') {
                 v.width = 50
                 v.cellStyle = { padding: 0 }
-                v.cellRenderer = (params: ICellRendererParams<TData>) => (
-                    <Flex
-                        justifyContent="center"
-                        alignItems="center"
-                        className="w-full h-full"
-                    >
-                        {params.value === 'Azure' ? <AzureIcon /> : <AWSIcon />}
-                    </Flex>
-                )
+                v.cellRenderer = (params: ICellRendererParams<TData>) =>
+                    getConnectorIcon(params.value)
             }
             return v
         })

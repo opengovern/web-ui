@@ -90,7 +90,7 @@ export default function Header({ workspace }: IHeader) {
                                     <Menu.Item key="Your profile">
                                         {({ active }) => (
                                             <Link
-                                                to={`/${workspace}/settings/profile`}
+                                                to={`/${workspace}/settings#profile`}
                                                 className={`
                                                     ${
                                                         active

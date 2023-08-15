@@ -4,6 +4,7 @@ import {
     Flex,
     Grid,
     Metric,
+    Subtitle,
     Tab,
     TabGroup,
     TabList,
@@ -78,10 +79,14 @@ export default function Insights() {
                 <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                     <TabList className="mb-6">
                         <Tab onClick={() => navigate('#list')}>
-                            Insight list
+                            <Subtitle className="text-gray-600">
+                                Insight list
+                            </Subtitle>
                         </Tab>
                         <Tab onClick={() => navigate('#groups')}>
-                            Insight groups
+                            <Subtitle className="text-gray-600">
+                                Insight groups
+                            </Subtitle>
                         </Tab>
                     </TabList>
                     <Grid numItems={3} className="gap-4 mb-6">

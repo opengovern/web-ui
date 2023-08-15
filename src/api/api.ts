@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -12,6 +11,11 @@
 
 export interface EchoHTTPError {
     message?: any
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgAnalyticsDbMetricType {
+    MetricTypeAssets = 'assets',
+    MetricTypeSpend = 'spend',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest {
@@ -831,6 +835,25 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesRe
     categoryResourceType?: Record<string, string[]>
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric {
+    connectors?: SourceType[]
+    finderQuery?: string
+    id?: string
+    name?: string
+    query?: string
+    tables?: string[]
+    tags?: Record<string, string[]>
+    type?: GithubComKaytuIoKaytuEnginePkgAnalyticsDbMetricType
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow {
+    /** @example "compute" */
+    dimensionId?: string
+    /** @example "Compute" */
+    dimensionName?: string
+    resourceCount?: Record<string, number>
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
     /** @example ["Azure"] */
     connector?: SourceType[]
@@ -1113,6 +1136,12 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQuerySortItem {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow {
+    /** @example "1239042" */
+    accountID?: string
+    /** @example "Compute" */
+    category?: string
+    /** @example "AWS" */
+    connector?: SourceType
     costValue?: Record<string, number>
     /** @example "compute" */
     dimensionId?: string
@@ -2871,6 +2900,37 @@ export class Api<
             }),
 
         /**
+         * @description Returns list of metrics
+         *
+         * @tags analytics
+         * @name ApiV2AnalyticsMetricsListList
+         * @summary List metrics
+         * @request GET:/inventory/api/v2/analytics/metrics/list
+         * @secure
+         */
+        apiV2AnalyticsMetricsListList: (
+            query?: {
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Metric type, default: assets */
+                metricType?: 'assets' | 'spend'
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric[],
+                any
+            >({
+                path: `/inventory/api/v2/analytics/metrics/list`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving list of regions analytics summary
          *
          * @tags analytics
@@ -3055,6 +3115,10 @@ export class Api<
                 granularity?: 'monthly' | 'daily' | 'yearly'
                 /** Dimension of the table, default is metric */
                 dimension?: 'connection' | 'metric'
+                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
+                connectionId?: string[]
+                /** Metrics IDs */
+                metricIds?: string[]
             },
             params: RequestParams = {}
         ) =>
@@ -3104,6 +3168,41 @@ export class Api<
                 any
             >({
                 path: `/inventory/api/v2/analytics/spend/trend`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns asset table with respect to the dimension and granularity
+         *
+         * @tags inventory
+         * @name ApiV2AnalyticsTableList
+         * @summary Get Assets Table
+         * @request GET:/inventory/api/v2/analytics/table
+         * @secure
+         */
+        apiV2AnalyticsTableList: (
+            query?: {
+                /** timestamp for start in epoch seconds */
+                startTime?: number
+                /** timestamp for end in epoch seconds */
+                endTime?: number
+                /** Granularity of the table, default is daily */
+                granularity?: 'monthly' | 'daily' | 'yearly'
+                /** Dimension of the table, default is metric */
+                dimension?: 'connection' | 'metric'
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow[],
+                any
+            >({
+                path: `/inventory/api/v2/analytics/table`,
                 method: 'GET',
                 query: query,
                 secure: true,

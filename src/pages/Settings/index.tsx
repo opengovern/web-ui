@@ -159,7 +159,7 @@ export default function Settings() {
                                         <li key={item.name}>
                                             <Flex
                                                 justifyContent="start"
-                                                className="text-gray-500 font-semibold group gap-x-3 p-1"
+                                                className="text-gray-800 font-semibold group gap-x-3 p-1"
                                             >
                                                 {item.icon && (
                                                     <item.icon className="h-4 w-4 shrink-0" />
@@ -174,10 +174,10 @@ export default function Settings() {
                                                             currentSubPage ||
                                                         (!currentSubPage &&
                                                             child.page ===
-                                                                'entitlement')
+                                                                '#entitlement')
                                                             ? 'bg-kaytu-100 rounded-lg text-gray-800'
-                                                            : 'text-gray-500'
-                                                    } group flex gap-x-3 py-2 px-10`}
+                                                            : 'text-gray-600'
+                                                    } group flex gap-x-3 py-2 px-10 font-medium`}
                                                 >
                                                     {child.name}
                                                 </Link>

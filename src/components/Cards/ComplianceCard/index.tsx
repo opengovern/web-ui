@@ -4,13 +4,15 @@ import {
     CategoryBar,
     Flex,
     Icon,
+    Subtitle,
     Text,
     Title,
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
-import { AWSIcon, AzureIcon, CisIcon, HipaaIcon } from '../../../icons/icons'
+import { CisIcon, HipaaIcon } from '../../../icons/icons'
+import { getConnectorIcon } from '../ConnectorCard'
 
 interface IComplianceCard {
     benchmark:
@@ -30,6 +32,16 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
 
     const total = critical + high + medium + low + passed + unknown
     const failed = critical + high + medium + low
+
+    const connector = () => {
+        if (benchmark?.tags?.plugin) {
+            if (benchmark?.tags?.plugin[0] === 'azure') {
+                return 'Azure'
+            }
+            return 'AWS'
+        }
+        return undefined
+    }
 
     return (
         <Card
@@ -51,9 +63,9 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                     {((passed / total || 0) * 100).toFixed(2)}%
                 </Badge>
             </Flex>
-            <Text className="line-clamp-2 mb-6 mt-2">
+            <Subtitle className="line-clamp-2 mb-6 mt-2 text-gray-600">
                 {benchmark?.description}
-            </Text>
+            </Subtitle>
             <CategoryBar
                 className={`w-full mb-2 ${total ? '' : 'hidden'}`}
                 values={[
@@ -89,14 +101,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
             </Flex>
             <Flex>
                 <Flex justifyContent="start" className="h-fit gap-x-1">
-                    {!!(
-                        benchmark?.tags?.plugin &&
-                        benchmark?.tags?.plugin[0] === 'azure'
-                    ) && <AzureIcon />}
-                    {!!(
-                        benchmark?.tags?.plugin &&
-                        benchmark?.tags?.plugin[0] === 'aws'
-                    ) && <AWSIcon />}
+                    {getConnectorIcon(connector())}
                     {!!benchmark?.tags?.cis && (
                         <CisIcon className="w-10 h-10" />
                     )}
