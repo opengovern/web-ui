@@ -38,7 +38,7 @@ export function FieldButton(props: AriaButtonProps & { isPressed?: boolean }) {
             type="button"
             {...buttonProps}
             ref={ref}
-            className={`px-2 -ml-px border transition-colors rounded-r-md group-focus-within:border-kaytu-600 group-focus-within:group-hover:border-blue-600 outline-none ${
+            className={`px-2 -ml-px border transition-colors rounded-r-lg group-focus-within:border-kaytu-600 group-focus-within:group-hover:border-blue-600 outline-none ${
                 isPressed || props?.isPressed
                     ? 'bg-gray-200 border-gray-400 dark:bg-gray-900'
                     : 'bg-gray-50 border-gray-300 dark:bg-gray-900 group-hover:border-gray-400'

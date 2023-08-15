@@ -100,8 +100,6 @@ export default function InsightGroupCard({ metric }: IInsightGroupCard) {
         navigate(`${id}`)
     }
 
-    console.log(metric.insights?.length, metric.insights?.length || 0 > 2)
-
     return (
         <Card key={metric.id}>
             <Title className="font-semibold mb-2 w-full truncate">
