@@ -144,7 +144,7 @@ export default function Spend() {
         ...(activeTimeRange.end && {
             endTime: activeTimeRange.end.unix(),
         }),
-        pageSize: 5000,
+        pageSize: 5,
         pageNumber: 1,
         sortBy: 'cost',
     }
@@ -307,7 +307,7 @@ export default function Spend() {
                         columns={2}
                         count={5}
                         title="Top Accounts"
-                        loading={serviceCostLoading}
+                        loading={accountCostLoading}
                         data={topAccounts(accountCostResponse?.connections)}
                         isPrice
                         title2="Top Services"
