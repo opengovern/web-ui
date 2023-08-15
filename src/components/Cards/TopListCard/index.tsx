@@ -1,75 +1,79 @@
-import { JSXElementConstructor, Key, ReactElement, ReactNode } from 'react'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import {
     exactPriceDisplay,
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { getConnectorIcon } from '../ConnectorCard'
+import { SourceType } from '../../../api/api'
 
 interface ITopListCard {
-    title: string
-    loading: boolean
-    isPercentage?: boolean
-    isPrice?: boolean
-    data: any
-    title2?: string
-    loading2?: boolean
-    isPercentage2?: boolean
-    isPrice2?: boolean
-    data2?: any
-    count?: number
-    url?: string
-    url2?: string
-    columns?: number
+    accountsTitle: string
+    accountsLoading: boolean
+    accountsIsPercentage?: boolean
+    accountsIsPrice?: boolean
+    accounts: {
+        data: {
+            name: string | undefined
+            value: number | undefined
+            connector: SourceType | undefined
+        }[]
+        total: number | undefined
+    }
+    accountsUrl?: string
+    servicesTitle: string
+    servicesLoading: boolean
+    servicesIsPercentage?: boolean
+    servicesIsPrice?: boolean
+    services: {
+        data: {
+            name: string | undefined
+            value: number | undefined
+            connector: SourceType[] | undefined
+        }[]
+        total: number | undefined
+    }
+    servicesUrl?: string
 }
 
 interface Item {
-    name:
-        | boolean
-        | Key
-        | ReactElement<any, string | JSXElementConstructor<any>>
-        | Iterable<ReactNode>
-        | null
-        | undefined
-    value: string | number | undefined
-    connector?: any
+    name: string | undefined
+    value: number | undefined
+    connector?: SourceType[] | SourceType | undefined
 }
 
 export default function TopListCard({
-    title,
-    data,
-    loading,
-    isPercentage = false,
-    isPrice = false,
-    title2,
-    data2,
-    loading2,
-    isPercentage2 = false,
-    isPrice2 = false,
-    count = 5,
-    url,
-    url2,
-    columns = 1,
+    accountsTitle,
+    accounts,
+    accountsLoading,
+    accountsIsPercentage = false,
+    accountsIsPrice = false,
+    servicesTitle,
+    services,
+    servicesLoading,
+    servicesIsPercentage = false,
+    servicesIsPrice = false,
+    accountsUrl,
+    servicesUrl,
 }: ITopListCard) {
     const navigate = useNavigate()
     const value = (item: Item) => {
-        if (isPercentage) {
+        if (accountsIsPercentage) {
             return item.value
         }
-        if (isPrice) {
+        if (accountsIsPrice) {
             return exactPriceDisplay(item.value)
         }
         return numericDisplay(item.value)
     }
 
     const value2 = (item: Item) => {
-        if (isPercentage2) {
+        if (servicesIsPercentage) {
             return item.value
         }
-        if (isPrice2) {
+        if (servicesIsPrice) {
             return exactPriceDisplay(item.value)
         }
         return numericDisplay(item.value)
@@ -80,98 +84,105 @@ export default function TopListCard({
             <Flex className="h-full gap-8">
                 <Flex flexDirection="col" alignItems="start" className="h-full">
                     <Flex flexDirection="col" alignItems="start">
-                        <Title className="font-semibold mb-2">{title}</Title>
-                        {loading ? (
+                        <Title className="font-semibold mb-2">
+                            {accountsTitle}
+                        </Title>
+                        {accountsLoading ? (
                             <Flex className="h-56">
                                 <Spinner />
                             </Flex>
                         ) : (
                             <List>
-                                {data?.map(
-                                    (item: Item, i: number) =>
-                                        i < count && (
-                                            <ListItem className="py-3">
-                                                <Flex justifyContent="start">
-                                                    {item.connector &&
-                                                        getConnectorIcon(
-                                                            item.connector
-                                                        )}
-                                                    <Text className="w-4/5 truncate">
-                                                        {item.name}
-                                                    </Text>
-                                                </Flex>
-                                                {item.value && (
-                                                    <Text>{value(item)}</Text>
+                                {accounts?.data.map((item: Item) => (
+                                    <ListItem>
+                                        <Flex justifyContent="start">
+                                            {item.connector &&
+                                                item.connector[0] &&
+                                                getConnectorIcon(
+                                                    item.connector[0]
                                                 )}
-                                            </ListItem>
-                                        )
-                                )}
+                                            <Text className="w-4/5 truncate">
+                                                {item.name}
+                                            </Text>
+                                        </Flex>
+                                        {item.value && (
+                                            <Text>{value(item)}</Text>
+                                        )}
+                                    </ListItem>
+                                ))}
                             </List>
                         )}
                     </Flex>
                     <Flex
                         justifyContent="end"
                         className="cursor-pointer"
-                        onClick={() => (url ? navigate(url) : null)}
+                        onClick={() =>
+                            accountsUrl ? navigate(accountsUrl) : null
+                        }
                     >
-                        <Button
-                            variant="light"
-                            icon={ChevronRightIcon}
-                            iconPosition="right"
-                        >
-                            See more
-                        </Button>
-                    </Flex>
-                </Flex>
-                {columns > 1 && (
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        className="h-full"
-                    >
-                        <Flex flexDirection="col" alignItems="start">
-                            <Title className="font-semibold mb-2">
-                                {title2}
-                            </Title>
-                            {loading2 ? (
-                                <Flex className="h-56">
-                                    <Spinner />
-                                </Flex>
-                            ) : (
-                                <List>
-                                    {data2?.map(
-                                        (item: Item, i: number) =>
-                                            i < count && (
-                                                <ListItem className="py-3.5">
-                                                    <Text className="w-4/5 truncate">
-                                                        {item.name}
-                                                    </Text>
-                                                    {item.value && (
-                                                        <Text>
-                                                            {value2(item)}
-                                                        </Text>
-                                                    )}
-                                                </ListItem>
-                                            )
-                                    )}
-                                </List>
-                            )}
-                        </Flex>
-                        <Flex
-                            justifyContent="end"
-                            className="cursor-pointer"
-                            onClick={() => (url2 ? navigate(url2) : null)}
-                        >
+                        {!!accounts.total && (
                             <Button
                                 variant="light"
                                 icon={ChevronRightIcon}
                                 iconPosition="right"
                             >
-                                See more
+                                {`+ ${numericDisplay(
+                                    (accounts.total || 0) - 5
+                                )} more`}
                             </Button>
-                        </Flex>
+                        )}
                     </Flex>
-                )}
+                </Flex>
+                <Flex flexDirection="col" alignItems="start" className="h-full">
+                    <Flex flexDirection="col" alignItems="start">
+                        <Title className="font-semibold mb-2">
+                            {servicesTitle}
+                        </Title>
+                        {servicesLoading ? (
+                            <Flex className="h-56">
+                                <Spinner />
+                            </Flex>
+                        ) : (
+                            <List>
+                                {services.data.map((item: Item) => (
+                                    <ListItem>
+                                        <Flex justifyContent="start">
+                                            {item.connector &&
+                                                getConnectorIcon(
+                                                    String(item.connector)
+                                                )}
+                                            <Text className="w-4/5 truncate">
+                                                {item.name}
+                                            </Text>
+                                        </Flex>
+                                        {item.value && (
+                                            <Text>{value2(item)}</Text>
+                                        )}
+                                    </ListItem>
+                                ))}
+                            </List>
+                        )}
+                    </Flex>
+                    <Flex
+                        justifyContent="end"
+                        className="cursor-pointer"
+                        onClick={() =>
+                            servicesUrl ? navigate(servicesUrl) : null
+                        }
+                    >
+                        {!!services.total && (
+                            <Button
+                                variant="light"
+                                icon={ChevronRightIcon}
+                                iconPosition="right"
+                            >
+                                {`+ ${numericDisplay(
+                                    (services.total || 0) - 5
+                                )} more`}
+                            </Button>
+                        )}
+                    </Flex>
+                </Flex>
             </Flex>
         </Card>
     )

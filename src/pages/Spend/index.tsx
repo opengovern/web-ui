@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
     Card,
     Col,
@@ -24,40 +24,64 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
 import { dateDisplay } from '../../utilities/dateDisplay'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import {
-    exactPriceDisplay,
-    numericDisplay,
-} from '../../utilities/numericDisplay'
+import { exactPriceDisplay } from '../../utilities/numericDisplay'
 import TopListCard from '../../components/Cards/TopListCard'
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    SourceType,
 } from '../../api/api'
-import { percentageByChange } from '../../utilities/deltaType'
 
-const topServices = (metrics: any) => {
-    const top = []
-    if (metrics) {
-        for (let i = 0; i < metrics.length; i += 1) {
-            top.push({
-                name: metrics[i].cost_dimension_name,
-                value: metrics[i].total_cost,
+const topServices = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse
+        | undefined
+) => {
+    const top: {
+        data: {
+            name: string | undefined
+            value: number | undefined
+            connector: SourceType[] | undefined
+        }[]
+        total: number | undefined
+    } = { data: [], total: 0 }
+    if (input && input.metrics) {
+        for (let i = 0; i < input.metrics.length; i += 1) {
+            top.data.push({
+                name: input.metrics[i].cost_dimension_name,
+                value: input.metrics[i].total_cost,
+                connector: input.metrics[i]?.connector,
             })
         }
+        top.total = input.total_count
     }
     return top
 }
 
-const topAccounts = (metrics: any) => {
-    const top = []
-    if (metrics) {
-        for (let i = 0; i < metrics.length; i += 1) {
-            top.push({
-                name: metrics[i].providerConnectionName,
-                value: metrics[i].cost,
-                connector: metrics[i].connector,
+const topAccounts = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | undefined
+) => {
+    const top: {
+        data: {
+            name: string | undefined
+            value: number | undefined
+            connector: SourceType | undefined
+        }[]
+        total: number | undefined
+    } = { data: [], total: 0 }
+    if (input && input.connections) {
+        for (let i = 0; i < input.connections.length; i += 1) {
+            top.data.push({
+                name: input.connections[i].providerConnectionName,
+                value: input.connections[i].cost,
+                connector: input.connections[i].connector,
             })
         }
+        top.total = input.totalResourceCount
     }
     return top
 }
@@ -205,7 +229,7 @@ export default function Spend() {
                 startTime: activeTimeRange.start.unix(),
             }),
         })
-    console.log(accountCostResponse)
+    console.log(serviceCostResponse)
 
     return (
         <Menu currentPage="spend">
@@ -222,33 +246,31 @@ export default function Spend() {
             </Flex>
             <Card className="mb-4 mt-6">
                 <Grid numItems={6} className="gap-4">
-                    <Col numColSpan={3}>
-                        <Flex>
-                            <SummaryCard
-                                title={`Spend across ${getConnections(
-                                    selectedConnections
-                                )}`}
-                                metric={exactPriceDisplay(
-                                    accountCostResponse?.totalCost
-                                )}
-                                loading={accountCostLoading}
-                                url="details#connections"
-                                border={false}
-                            />
-                            <Flex className="border-l border-l-gray-200 pl-4">
-                                <SummaryCard
-                                    title="Services"
-                                    metric={Number(
-                                        serviceCostResponse?.total_count
-                                    )}
-                                    loading={serviceCostLoading}
-                                    url="details#services"
-                                    border={false}
-                                />
-                            </Flex>
-                        </Flex>
+                    <Col numColSpan={1}>
+                        <SummaryCard
+                            title={`Spend across ${getConnections(
+                                selectedConnections
+                            )}`}
+                            metric={exactPriceDisplay(
+                                accountCostResponse?.totalCost
+                            )}
+                            loading={accountCostLoading}
+                            url="details#connections"
+                            border={false}
+                        />
+                        {/* <Flex className="border-l border-l-gray-200 pl-4"> */}
+                        {/*    <SummaryCard */}
+                        {/*        title="Services" */}
+                        {/*        metric={Number( */}
+                        {/*            serviceCostResponse?.total_count */}
+                        {/*        )} */}
+                        {/*        loading={serviceCostLoading} */}
+                        {/*        url="details#services" */}
+                        {/*        border={false} */}
+                        {/*    /> */}
+                        {/* </Flex> */}
                     </Col>
-                    <Col />
+                    <Col numColSpan={3} />
                     <Col numColSpan={2}>
                         <Flex
                             flexDirection="col"
@@ -327,18 +349,16 @@ export default function Spend() {
                 </Col>
                 <Col numColSpan={3} className="h-full">
                     <TopListCard
-                        columns={2}
-                        count={5}
-                        title="Top Accounts"
-                        loading={accountCostLoading}
-                        data={topAccounts(accountCostResponse?.connections)}
-                        isPrice
-                        title2="Top Services"
-                        loading2={serviceCostLoading}
-                        data2={topServices(serviceCostResponse?.metrics)}
-                        isPrice2
-                        url="details#connections"
-                        url2="details#services"
+                        accountsTitle="Top Accounts"
+                        accountsLoading={accountCostLoading}
+                        accounts={topAccounts(accountCostResponse)}
+                        accountsIsPrice
+                        servicesTitle="Top Services"
+                        servicesLoading={serviceCostLoading}
+                        services={topServices(serviceCostResponse)}
+                        servicesIsPrice
+                        accountsUrl="details#connections"
+                        servicesUrl="details#services"
                     />
                 </Col>
             </Grid>

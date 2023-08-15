@@ -102,7 +102,6 @@ export default function Home() {
     }
 
     const renderChart = (type: string) => {
-        console.log(costTrendError, trendError)
         if (type === 'spend') {
             return (
                 <Chart

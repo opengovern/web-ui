@@ -2,8 +2,6 @@ import ReactEcharts from 'echarts-for-react'
 import { Flex, Text } from '@tremor/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import {
-    exactPriceDisplay,
-    numberDisplay,
     numberGroupedDisplay,
     numericDisplay,
 } from '../../utilities/numericDisplay'
