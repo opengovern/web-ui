@@ -2,6 +2,8 @@ import ReactEcharts from 'echarts-for-react'
 import { Flex, Text } from '@tremor/react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import {
+    exactPriceDisplay,
+    numberDisplay,
     numberGroupedDisplay,
     numericDisplay,
 } from '../../utilities/numericDisplay'
@@ -72,7 +74,7 @@ export default function Chart({
                     trigger: 'axis',
                     valueFormatter: (value: string | number) => {
                         if (isCost) {
-                            return `$${Number(value).toFixed(2)}`
+                            return `$${numberDisplay(Number(value), 2)}`
                         }
                         return value
                     },
@@ -103,8 +105,15 @@ export default function Chart({
                                 show: true,
                                 fontSize: 16,
                                 fontWeight: 'bold',
-                                // eslint-disable-next-line no-template-curly-in-string
-                                formatter: isCost ? '{b}\n\n ${c}' : '{c}',
+                                formatter: (params: any) => {
+                                    return `${params.data.name}\n\n${
+                                        isCost
+                                            ? exactPriceDisplay(
+                                                  params.data.value
+                                              )
+                                            : numberDisplay(params.data.value)
+                                    }`
+                                },
                             },
                         },
                         itemStyle: {

@@ -2,9 +2,9 @@ import dayjs, { Dayjs } from 'dayjs'
 
 export const dateDisplay = (
     date: Dayjs | Date | number | string | undefined,
-    substract?: number
+    subtract?: number
 ) => {
-    const s = substract || 0
+    const s = subtract || 0
     if ((typeof date).toString() === 'Dayjs') {
         return (date as Dayjs).subtract(s, 'day').format('MMM DD, YYYY')
     }

@@ -88,7 +88,7 @@ const topAccounts = (
                 connector: input.connections[i].connector,
             })
         }
-        top.total = input.totalResourceCount
+        top.total = input.totalDiscoveredCount
     }
     return top
 }
@@ -247,7 +247,7 @@ export default function Spend() {
                 startTime: activeTimeRange.start.unix(),
             }),
         })
-    console.log(composition)
+    console.log(accountCostResponse)
 
     return (
         <Menu currentPage="spend">
