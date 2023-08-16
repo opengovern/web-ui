@@ -16,15 +16,22 @@ import { useEffect, useState } from 'react'
 import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
 import ConnectionList from '../../components/ConnectionList'
-import { filterAtom, spendTimeAtom } from '../../store'
+import { filterAtom, timeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../utilities/numericDisplay'
 import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
-import { useInventoryApiV2AnalyticsTrendList } from '../../api/inventory.gen'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint } from '../../api/api'
+import {
+    useInventoryApiV2AnalyticsCompositionDetail,
+    useInventoryApiV2AnalyticsTrendList,
+} from '../../api/inventory.gen'
+import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+} from '../../api/api'
 import { dateDisplay } from '../../utilities/dateDisplay'
 import Chart from '../../components/Chart'
+import Breakdown from '../../components/Breakdown'
 
 const resourceTrendChart = (
     trend:
@@ -58,6 +65,60 @@ const resourceTrendChart = (
     }
 }
 
+const pieData = (
+    response:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse
+        | undefined
+) => {
+    const newData: any[] = []
+    const oldData: any[] = []
+
+    if (response && response.top_values) {
+        // eslint-disable-next-line array-callback-return
+        Object.entries(response?.top_values).map(([key, value]) => {
+            newData.push({
+                name: `${key} - ${Math.abs(
+                    (Math.round(value.count || 0) /
+                        Math.round(response.total_count || 1)) *
+                        100
+                ).toFixed(1)}%`,
+                value: Number(value.count).toFixed(0),
+            })
+            oldData.push({
+                name: `${key} - ${Math.abs(
+                    (Math.round(value.old_count || 0) /
+                        Math.round(response.total_count || 1)) *
+                        100
+                ).toFixed(1)}%`,
+                value: Number(value.old_count).toFixed(0),
+            })
+        })
+        newData.sort((a, b) => {
+            return b.value - a.value
+        })
+        oldData.sort((a, b) => {
+            return b.value - a.value
+        })
+        newData.push({
+            name: `Others - ${Math.abs(
+                (Math.round(response?.others?.count || 0) /
+                    Math.round(response.total_count || 1)) *
+                    100
+            ).toFixed(1)}%`,
+            value: Number(response.others?.count).toFixed(0),
+        })
+        oldData.push({
+            name: `Others - ${Math.abs(
+                (Math.round(response?.others?.old_count || 0) /
+                    Math.round(response.total_count || 1)) *
+                    100
+            ).toFixed(1)}%`,
+            value: Number(response.others?.old_count).toFixed(0),
+        })
+    }
+    return { newData, oldData }
+}
+
 export default function Assets() {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
@@ -66,7 +127,7 @@ export default function Assets() {
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >('daily')
-    const activeTimeRange = useAtomValue(spendTimeAtom)
+    const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
     useEffect(() => {
@@ -75,29 +136,33 @@ export default function Assets() {
         if (selectedIndex === 2) setSelectedChart('bar')
     }, [selectedIndex])
 
+    const query = {
+        ...(selectedConnections.provider !== '' && {
+            connector: [selectedConnections.provider],
+        }),
+        connectionId: selectedConnections.connections,
+        startTime: activeTimeRange.start.unix(),
+        endTime: activeTimeRange.end.unix(),
+    }
+
     const { response: accounts, isLoading: accountIsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            ...(selectedConnections.provider !== '' && {
-                connector: [selectedConnections.provider],
-            }),
-            connectionId: selectedConnections.connections,
-            startTime: activeTimeRange.start.unix(),
-            endTime: activeTimeRange.end.unix(),
+            ...query,
             pageSize: 0,
             pageNumber: 1,
             needCost: false,
         })
     const { response: resourceTrend, isLoading: resourceTrendLoading } =
         useInventoryApiV2AnalyticsTrendList({
-            ...(selectedConnections.provider !== '' && {
-                connector: [selectedConnections.provider],
-            }),
-            connectionId: selectedConnections.connections,
-            startTime: activeTimeRange.start.unix(),
-            endTime: activeTimeRange.end.unix(),
+            ...query,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             granularity: selectedGranularity,
+        })
+    const { response: composition, isLoading: compositionLoading } =
+        useInventoryApiV2AnalyticsCompositionDetail('category', {
+            ...query,
+            top: 4,
         })
 
     return (
@@ -187,6 +252,17 @@ export default function Assets() {
                     loading={resourceTrendLoading}
                 />
             </Card>
+            <Grid numItems={5} className="w-full gap-4">
+                <Col numColSpan={2}>
+                    <Breakdown
+                        chartData={pieData(composition).newData}
+                        oldChartData={pieData(composition).oldData}
+                        activeTime={activeTimeRange}
+                        loading={compositionLoading}
+                        seeMore="details"
+                    />
+                </Col>
+            </Grid>
         </Menu>
     )
 }

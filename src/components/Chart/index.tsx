@@ -10,7 +10,7 @@ import {
 interface IChart {
     labels: string[]
     labelType?: 'category' | 'time' | 'value' | 'log'
-    chartData: (string | number | undefined)[]
+    chartData: (string | number | undefined)[] | undefined
     chartType: 'bar' | 'line' | 'area' | 'doughnut'
     isCost?: boolean
     loading?: boolean

@@ -18,15 +18,19 @@ import { dateDisplay } from '../../utilities/dateDisplay'
 interface IBreakdown {
     activeTime?: { start: Dayjs; end: Dayjs }
     chartData: (string | number | undefined)[]
+    oldChartData?: (string | number | undefined)[]
     seeMore?: string
+    isCost?: boolean
     loading: boolean
 }
 
 export default function Breakdown({
     chartData,
+    oldChartData,
     loading,
     activeTime,
     seeMore,
+    isCost = false,
 }: IBreakdown) {
     const navigate = useNavigate()
     const [selectedIndex, setSelectedIndex] = useState(0)
@@ -58,9 +62,11 @@ export default function Breakdown({
             </Flex>
             <Chart
                 labels={[]}
-                chartData={chartData}
+                chartData={
+                    activeTime && selectedIndex === 0 ? oldChartData : chartData
+                }
                 chartType="doughnut"
-                isCost
+                isCost={isCost}
                 loading={loading}
             />
             {!!seeMore && (

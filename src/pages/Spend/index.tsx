@@ -338,6 +338,7 @@ export default function Spend() {
                         chartData={pieData(composition)}
                         loading={compositionLoading}
                         seeMore="details"
+                        isCost
                     />
                 </Col>
                 <Col numColSpan={3} className="h-full">
