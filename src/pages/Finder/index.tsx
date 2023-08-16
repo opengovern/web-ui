@@ -19,7 +19,9 @@ import {
     TextInput,
 } from '@tremor/react'
 import {
+    ChevronDoubleLeftIcon,
     CommandLineIcon,
+    FunnelIcon,
     MagnifyingGlassIcon,
     PlayCircleIcon,
     TableCellsIcon,
@@ -29,8 +31,7 @@ import { highlight, languages } from 'prismjs' // eslint-disable-next-line impor
 import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
 import Editor from 'react-simple-code-editor'
-import { GridOptions, RowClickedEvent } from 'ag-grid-community'
-import { AgGridReact } from 'ag-grid-react'
+import { RowClickedEvent } from 'ag-grid-community'
 import {
     CheckCircleIcon,
     ExclamationCircleIcon,
@@ -48,15 +49,17 @@ import { snakeCaseToLabel } from '../../utilities/labelMaker'
 import { getErrorMessage } from '../../types/apierror'
 import DrawerPanel from '../../components/DrawerPanel'
 import { RenderObject } from '../../components/RenderObject'
+import Table, { IColumn } from '../../components/Table'
 
 const getTable = (headers: any, details: any) => {
-    const columns = []
-    const rows = []
+    const columns: IColumn<any, any>[] = []
+    const rows: any[] = []
     if (headers && headers.length) {
         for (let i = 0; i < headers.length; i += 1) {
             columns.push({
                 field: headers[i],
                 headerName: snakeCaseToLabel(headers[i]),
+                type: 'string',
                 sortable: true,
                 resizable: true,
                 filter: true,
@@ -96,9 +99,9 @@ export default function Finder() {
         useInventoryApiV2AnalyticsCategoriesList()
     const { response: queries, isLoading: queryLoading } =
         useInventoryApiV1QueryList({})
-    // const { response: history } = useInventoryApiV1QueryRunHistoryCreate()
     const [selectedRow, setSelectedRow] = useState({})
     const [openDrawer, setOpenDrawer] = useState(false)
+    const [openSearch, setOpenSearch] = useState(true)
 
     const {
         response: queryResponse,
@@ -114,16 +117,6 @@ export default function Finder() {
         {},
         false
     )
-    const gridOptions: GridOptions = {
-        pagination: true,
-        animateRows: true,
-        paginationPageSize: 25,
-        getRowHeight: (params) => 50,
-        onRowClicked(event: RowClickedEvent<any>) {
-            setSelectedRow(event.data)
-            setOpenDrawer(true)
-        },
-    }
 
     useEffect(() => {
         if (queryResponse?.query?.length) {
@@ -151,95 +144,125 @@ export default function Finder() {
         })
     }
 
-    const v = () => {
-        const arr = recordToArray(categories?.categoryResourceType)
-    }
-
     return (
         <Menu currentPage="finder">
+            <Metric className="mb-6">Finder</Metric>
             {categoryLoading || queryLoading ? (
                 <Spinner className="mt-56" />
             ) : (
-                <Flex alignItems="start" className="gap-x-6">
+                <Flex alignItems="start">
                     <DrawerPanel
                         open={openDrawer}
                         onClose={() => setOpenDrawer(false)}
                     >
                         <RenderObject obj={selectedRow} />
                     </DrawerPanel>
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        className="w-64 border-r border-gray-300 pr-6"
-                    >
-                        <Metric>Finder</Metric>
-                        <TextInput
-                            className="w-56 mt-6 mb-2"
-                            icon={MagnifyingGlassIcon}
-                            placeholder="Search..."
-                            value={searchCategory}
-                            onChange={(e) => setSearchCategory(e.target.value)}
-                        />
-                        {recordToArray(categories?.categoryResourceType).map(
-                            (cat) =>
-                                !!cat.resource_types?.filter((catt) =>
-                                    catt
-                                        .toLowerCase()
-                                        .includes(searchCategory.toLowerCase())
-                                ).length && (
-                                    <Accordion className="w-56 border-0 rounded-none bg-transparent">
-                                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                                            <Flex
-                                                justifyContent="start"
-                                                className="w-full"
-                                            >
-                                                <Icon icon={TableCellsIcon} />
-                                                <Text className="w-3/4 truncate text-start font-semibold">
-                                                    {cat.value}
-                                                </Text>
-                                            </Flex>
-                                        </AccordionHeader>
-                                        <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
-                                            <Flex
-                                                flexDirection="col"
-                                                justifyContent="start"
-                                            >
-                                                {cat.resource_types
-                                                    ?.filter((catt) =>
-                                                        catt
-                                                            .toLowerCase()
-                                                            .includes(
-                                                                searchCategory.toLowerCase()
-                                                            )
-                                                    )
-                                                    .map((subCat) => (
-                                                        <Flex
-                                                            onClick={() =>
-                                                                setCode(
-                                                                    `select * from kaytu_resources where resource_type = '${subCat}'`
+                    {openSearch ? (
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            className="w-64 pr-6"
+                        >
+                            <TextInput
+                                className="w-56 mt-6 mb-2"
+                                icon={MagnifyingGlassIcon}
+                                placeholder="Search..."
+                                value={searchCategory}
+                                onChange={(e) =>
+                                    setSearchCategory(e.target.value)
+                                }
+                            />
+                            {recordToArray(
+                                categories?.categoryResourceType
+                            ).map(
+                                (cat) =>
+                                    !!cat.resource_types?.filter((catt) =>
+                                        catt
+                                            .toLowerCase()
+                                            .includes(
+                                                searchCategory.toLowerCase()
+                                            )
+                                    ).length && (
+                                        <Accordion className="w-56 border-0 rounded-none bg-transparent">
+                                            <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="w-full"
+                                                >
+                                                    <Icon
+                                                        icon={TableCellsIcon}
+                                                    />
+                                                    <Text className="w-3/4 truncate text-start font-semibold">
+                                                        {cat.value}
+                                                    </Text>
+                                                </Flex>
+                                            </AccordionHeader>
+                                            <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                                                <Flex
+                                                    flexDirection="col"
+                                                    justifyContent="start"
+                                                >
+                                                    {cat.resource_types
+                                                        ?.filter((catt) =>
+                                                            catt
+                                                                .toLowerCase()
+                                                                .includes(
+                                                                    searchCategory.toLowerCase()
                                                                 )
-                                                            }
-                                                        >
-                                                            <Icon
-                                                                icon={
-                                                                    TableCellsIcon
+                                                        )
+                                                        .map((subCat) => (
+                                                            <Flex
+                                                                onClick={() =>
+                                                                    setCode(
+                                                                        `select * from kaytu_resources where resource_type = '${subCat}'`
+                                                                    )
                                                                 }
-                                                                className="opacity-0"
-                                                            />
-                                                            <Text className="w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
-                                                                {subCat}
-                                                            </Text>
-                                                        </Flex>
-                                                    ))}
-                                            </Flex>
-                                        </AccordionBody>
-                                    </Accordion>
-                                )
-                        )}
-                    </Flex>
+                                                            >
+                                                                <Icon
+                                                                    icon={
+                                                                        TableCellsIcon
+                                                                    }
+                                                                    className="opacity-0"
+                                                                />
+                                                                <Text className="w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                                                    {subCat}
+                                                                </Text>
+                                                            </Flex>
+                                                        ))}
+                                                </Flex>
+                                            </AccordionBody>
+                                        </Accordion>
+                                    )
+                            )}
+                            <Flex justifyContent="end" className="mt-12">
+                                <Button
+                                    variant="light"
+                                    onClick={() => setOpenSearch(false)}
+                                >
+                                    <ChevronDoubleLeftIcon className="h-4" />
+                                </Button>
+                            </Flex>
+                        </Flex>
+                    ) : (
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="center"
+                            className="min-h-full w-fit pr-6"
+                        >
+                            <Button
+                                variant="light"
+                                onClick={() => setOpenSearch(true)}
+                            >
+                                <Flex flexDirection="col" className="gap-4 w-4">
+                                    <FunnelIcon />
+                                    <Text className="rotate-90">Filters</Text>
+                                </Flex>
+                            </Button>
+                        </Flex>
+                    )}
                     <Flex
                         flexDirection="col"
-                        className="w-full h-full max-h-full overflow-hidden overflow-y-scroll px-1 pt-1"
+                        className="w-full border-l border-l-gray-300 pl-6"
                     >
                         <Card className="relative overflow-hidden">
                             <Editor
@@ -367,7 +390,10 @@ export default function Finder() {
                                                     title={q.title}
                                                     description={q.description}
                                                     onClick={() => {
-                                                        setCode(q.query || '')
+                                                        setCode(
+                                                            `-- ${q.title}\n-- ${q.description}\n\n${q.query}` ||
+                                                                ''
+                                                        )
                                                         document
                                                             .getElementById(
                                                                 'kaytu-container'
@@ -383,24 +409,29 @@ export default function Finder() {
                                     </Grid>
                                 </TabPanel>
                                 <TabPanel>
-                                    <div className="ag-theme-alpine w-full">
-                                        <AgGridReact
-                                            domLayout="autoHeight"
-                                            gridOptions={gridOptions}
-                                            columnDefs={
-                                                getTable(
-                                                    queryResponse?.headers,
-                                                    queryResponse?.result
-                                                ).columns
-                                            }
-                                            rowData={
-                                                getTable(
-                                                    queryResponse?.headers,
-                                                    queryResponse?.result
-                                                ).rows
-                                            }
-                                        />
-                                    </div>
+                                    <Table
+                                        title="Query results"
+                                        id="finder_table"
+                                        columns={
+                                            getTable(
+                                                queryResponse?.headers,
+                                                queryResponse?.result
+                                            ).columns
+                                        }
+                                        rowData={
+                                            getTable(
+                                                queryResponse?.headers,
+                                                queryResponse?.result
+                                            ).rows
+                                        }
+                                        downloadable
+                                        onRowClicked={(
+                                            event: RowClickedEvent
+                                        ) => {
+                                            setSelectedRow(event.data)
+                                            setOpenDrawer(true)
+                                        }}
+                                    />
                                 </TabPanel>
                             </TabPanels>
                         </TabGroup>

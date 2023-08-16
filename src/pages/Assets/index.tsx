@@ -20,7 +20,7 @@ import { filterAtom, timeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../utilities/numericDisplay'
-import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
+import { BarChartIcon, LineChartIcon } from '../../icons/icons'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
     useInventoryApiV2AnalyticsMetricList,
@@ -36,32 +36,19 @@ import {
 import { dateDisplay } from '../../utilities/dateDisplay'
 import Chart from '../../components/Chart'
 import Breakdown from '../../components/Breakdown'
-import TopListCard from '../../components/Cards/TopListCard'
+import SingleTopListCard from '../../components/Cards/SingleTopListCard'
 
 const resourceTrendChart = (
     trend:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
-        | undefined,
-    chart: 'line' | 'bar' | 'area'
+        | undefined
 ) => {
     const label = []
     const data: any = []
     if (trend) {
-        if (chart === 'bar' || chart === 'line') {
-            for (let i = 0; i < trend?.length; i += 1) {
-                label.push(dateDisplay(trend[i]?.date))
-                data.push(trend[i]?.count)
-            }
-        }
-        if (chart === 'area') {
-            for (let i = 0; i < trend?.length; i += 1) {
-                label.push(dateDisplay(trend[i]?.date))
-                if (i === 0) {
-                    data.push(trend[i]?.count)
-                } else {
-                    data.push((trend[i]?.count || 0) + data[i - 1])
-                }
-            }
+        for (let i = 0; i < trend?.length; i += 1) {
+            label.push(dateDisplay(trend[i]?.date))
+            data.push(trend[i]?.count)
         }
     }
     return {
@@ -191,8 +178,7 @@ export default function Assets() {
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
-        if (selectedIndex === 1) setSelectedChart('area')
-        if (selectedIndex === 2) setSelectedChart('bar')
+        if (selectedIndex === 1) setSelectedChart('bar')
     }, [selectedIndex])
 
     const query = {
@@ -231,6 +217,7 @@ export default function Assets() {
             needCost: false,
             sortBy: 'resource_count',
         })
+    console.log(accountsResponse)
     const { response: servicesResponse, isLoading: servicesResponseLoading } =
         useInventoryApiV2AnalyticsMetricList({
             ...query,
@@ -295,9 +282,6 @@ export default function Assets() {
                                         <Tab value="line">
                                             <LineChartIcon className="h-5" />
                                         </Tab>
-                                        <Tab value="area">
-                                            <AreaChartIcon className="h-5" />
-                                        </Tab>
                                         <Tab value="bar">
                                             <BarChartIcon className="h-5" />
                                         </Tab>
@@ -306,28 +290,20 @@ export default function Assets() {
                             </Flex>
                             <Flex justifyContent="end" className="mt-6 gap-2.5">
                                 <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                                {selectedChart === 'area' ? (
-                                    <Text>Accumulated resources</Text>
-                                ) : (
-                                    <Text>Resources</Text>
-                                )}
+                                <Text>Resources</Text>
                             </Flex>
                         </Flex>
                     </Col>
                 </Grid>
                 <Chart
-                    labels={
-                        resourceTrendChart(resourceTrend, selectedChart).label
-                    }
-                    chartData={
-                        resourceTrendChart(resourceTrend, selectedChart).data
-                    }
+                    labels={resourceTrendChart(resourceTrend).label}
+                    chartData={resourceTrendChart(resourceTrend).data}
                     chartType={selectedChart}
                     loading={resourceTrendLoading}
                 />
             </Card>
-            <Grid numItems={5} className="w-full gap-4">
-                <Col numColSpan={2}>
+            <Grid numItems={1} numItemsLg={5} className="w-full gap-4">
+                <Col numColSpan={1} numColSpanLg={2}>
                     <Breakdown
                         chartData={pieData(composition).newData}
                         oldChartData={pieData(composition).oldData}
@@ -336,17 +312,23 @@ export default function Assets() {
                         seeMore="resource-metrics"
                     />
                 </Col>
-                <Col numColSpan={3} className="h-full">
-                    <TopListCard
-                        accountsTitle="Top Accounts"
-                        accountsLoading={accountsResponseLoading}
-                        accounts={topAccounts(accountsResponse)}
-                        servicesTitle="Top Services"
-                        servicesLoading={servicesResponseLoading}
-                        services={topServices(servicesResponse)}
-                        accountsUrl="accounts-detail"
-                        servicesUrl="services-detail"
-                    />
+                <Col numColSpan={1} numColSpanLg={3} className="h-full">
+                    <Grid numItems={2} className="w-full h-full gap-4">
+                        <SingleTopListCard
+                            title="Top Accounts"
+                            loading={accountsResponseLoading}
+                            items={topAccounts(accountsResponse)}
+                            url="accounts-detail"
+                            type="account"
+                        />
+                        <SingleTopListCard
+                            title="Top Services"
+                            loading={servicesResponseLoading}
+                            items={topServices(servicesResponse)}
+                            url="services-detail"
+                            type="service"
+                        />
+                    </Grid>
                 </Col>
             </Grid>
         </Menu>
