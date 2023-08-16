@@ -23,15 +23,20 @@ import { numericDisplay } from '../../utilities/numericDisplay'
 import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
+    useInventoryApiV2AnalyticsMetricList,
     useInventoryApiV2AnalyticsTrendList,
 } from '../../api/inventory.gen'
 import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    SourceType,
 } from '../../api/api'
 import { dateDisplay } from '../../utilities/dateDisplay'
 import Chart from '../../components/Chart'
 import Breakdown from '../../components/Breakdown'
+import TopListCard from '../../components/Cards/TopListCard'
 
 const resourceTrendChart = (
     trend:
@@ -119,6 +124,58 @@ const pieData = (
     return { newData, oldData }
 }
 
+const topAccounts = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | undefined
+) => {
+    const top: {
+        data: {
+            name: string | undefined
+            value: number | undefined
+            connector: SourceType | undefined
+        }[]
+        total: number | undefined
+    } = { data: [], total: 0 }
+    if (input && input.connections) {
+        for (let i = 0; i < input.connections.length; i += 1) {
+            top.data.push({
+                name: input.connections[i].providerConnectionName,
+                value: input.connections[i].resourceCount,
+                connector: input.connections[i].connector,
+            })
+        }
+        top.total = input.totalDiscoveredCount
+    }
+    return top
+}
+
+const topServices = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse
+        | undefined
+) => {
+    const top: {
+        data: {
+            name: string | undefined
+            value: number | undefined
+            connector: SourceType[] | undefined
+        }[]
+        total: number | undefined
+    } = { data: [], total: 0 }
+    if (input && input.metrics) {
+        for (let i = 0; i < input.metrics.length; i += 1) {
+            top.data.push({
+                name: input.metrics[i].name,
+                value: input.metrics[i].count,
+                connector: input.metrics[i]?.connectors,
+            })
+        }
+        top.total = input.total_metrics
+    }
+    return top
+}
+
 export default function Assets() {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
@@ -164,6 +221,22 @@ export default function Assets() {
             ...query,
             top: 4,
         })
+    const { response: accountsResponse, isLoading: accountsResponseLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            ...query,
+            pageSize: 5,
+            pageNumber: 1,
+            needCost: false,
+            sortBy: 'resource_count',
+        })
+    const { response: servicesResponse, isLoading: servicesResponseLoading } =
+        useInventoryApiV2AnalyticsMetricList({
+            ...query,
+            pageSize: 5,
+            pageNumber: 1,
+            sortBy: 'count',
+        })
+    console.log(servicesResponse)
 
     return (
         <Menu currentPage="assets">
@@ -259,7 +332,21 @@ export default function Assets() {
                         oldChartData={pieData(composition).oldData}
                         activeTime={activeTimeRange}
                         loading={compositionLoading}
-                        seeMore="details"
+                        // seeMore="details"
+                    />
+                </Col>
+                <Col numColSpan={3} className="h-full">
+                    <TopListCard
+                        accountsTitle="Top Accounts"
+                        accountsLoading={accountsResponseLoading}
+                        accounts={topAccounts(accountsResponse)}
+                        accountsIsPrice
+                        servicesTitle="Top Services"
+                        servicesLoading={servicesResponseLoading}
+                        services={topServices(servicesResponse)}
+                        servicesIsPrice
+                        accountsUrl="accounts-detail"
+                        servicesUrl="services-detail"
                     />
                 </Col>
             </Grid>

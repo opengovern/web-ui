@@ -110,7 +110,10 @@ export default function Chart({
                                             ? exactPriceDisplay(
                                                   params.data.value
                                               )
-                                            : numberDisplay(params.data.value)
+                                            : numberDisplay(
+                                                  params.data.value,
+                                                  0
+                                              )
                                     }`
                                 },
                             },
