@@ -20,7 +20,7 @@ import { filterAtom, timeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../utilities/numericDisplay'
-import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
+import { BarChartIcon, LineChartIcon } from '../../icons/icons'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
     useInventoryApiV2AnalyticsMetricList,
@@ -41,27 +41,14 @@ import TopListCard from '../../components/Cards/TopListCard'
 const resourceTrendChart = (
     trend:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
-        | undefined,
-    chart: 'line' | 'bar' | 'area'
+        | undefined
 ) => {
     const label = []
     const data: any = []
     if (trend) {
-        if (chart === 'bar' || chart === 'line') {
-            for (let i = 0; i < trend?.length; i += 1) {
-                label.push(dateDisplay(trend[i]?.date))
-                data.push(trend[i]?.count)
-            }
-        }
-        if (chart === 'area') {
-            for (let i = 0; i < trend?.length; i += 1) {
-                label.push(dateDisplay(trend[i]?.date))
-                if (i === 0) {
-                    data.push(trend[i]?.count)
-                } else {
-                    data.push((trend[i]?.count || 0) + data[i - 1])
-                }
-            }
+        for (let i = 0; i < trend?.length; i += 1) {
+            label.push(dateDisplay(trend[i]?.date))
+            data.push(trend[i]?.count)
         }
     }
     return {
@@ -191,8 +178,7 @@ export default function Assets() {
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
-        if (selectedIndex === 1) setSelectedChart('area')
-        if (selectedIndex === 2) setSelectedChart('bar')
+        if (selectedIndex === 1) setSelectedChart('bar')
     }, [selectedIndex])
 
     const query = {
@@ -303,22 +289,14 @@ export default function Assets() {
                             </Flex>
                             <Flex justifyContent="end" className="mt-6 gap-2.5">
                                 <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                                {selectedChart === 'area' ? (
-                                    <Text>Accumulated resources</Text>
-                                ) : (
-                                    <Text>Resources</Text>
-                                )}
+                                <Text>Resources</Text>
                             </Flex>
                         </Flex>
                     </Col>
                 </Grid>
                 <Chart
-                    labels={
-                        resourceTrendChart(resourceTrend, selectedChart).label
-                    }
-                    chartData={
-                        resourceTrendChart(resourceTrend, selectedChart).data
-                    }
+                    labels={resourceTrendChart(resourceTrend).label}
+                    chartData={resourceTrendChart(resourceTrend).data}
                     chartType={selectedChart}
                     loading={resourceTrendLoading}
                 />
