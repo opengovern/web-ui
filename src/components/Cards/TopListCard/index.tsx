@@ -16,6 +16,7 @@ interface ITopListCard {
             name: string | undefined
             value: number | undefined
             connector: SourceType | undefined
+            id?: string | undefined
         }[]
         total: number | undefined
     }
@@ -29,6 +30,7 @@ interface ITopListCard {
             name: string | undefined
             value: number | undefined
             connector: SourceType[] | undefined
+            id?: string | undefined
         }[]
         total: number | undefined
     }
@@ -39,6 +41,7 @@ interface Item {
     name: string | undefined
     value: number | undefined
     connector?: SourceType[] | SourceType | undefined
+    id?: string | undefined
 }
 
 export default function TopListCard({
@@ -91,23 +94,47 @@ export default function TopListCard({
                         ) : (
                             <List>
                                 {accounts?.data.map((item: Item) => (
-                                    <ListItem>
-                                        <Flex justifyContent="start">
-                                            {item.connector &&
-                                                item.connector[0] &&
-                                                getConnectorIcon(
-                                                    item.connector[0]
-                                                )}
-                                            <Text className="truncate">
-                                                {item.name}
-                                            </Text>
+                                    <div
+                                        key={item.name}
+                                        className="group relative cursor-pointer"
+                                    >
+                                        <Flex className="absolute invisible bottom-0 left-0 group-hover:visible w-full h-full bg-white text-black">
+                                            <Flex
+                                                flexDirection="col"
+                                                alignItems="start"
+                                            >
+                                                <Text className="text-gray-800">
+                                                    {item.name}
+                                                </Text>
+                                                <Text className="truncate">
+                                                    id: {item.id}
+                                                </Text>
+                                            </Flex>
+                                            {item.value && (
+                                                <Text>{value(item)}</Text>
+                                            )}
                                         </Flex>
-                                        {item.value && (
-                                            <Text className="pl-10">
-                                                {value(item)}
-                                            </Text>
-                                        )}
-                                    </ListItem>
+                                        <ListItem
+                                            data-tooltip-style="light"
+                                            data-tooltip-target={item.name}
+                                        >
+                                            <Flex justifyContent="start">
+                                                {item.connector &&
+                                                    item.connector[0] &&
+                                                    getConnectorIcon(
+                                                        item.connector[0]
+                                                    )}
+                                                <Text className="truncate">
+                                                    {item.name}
+                                                </Text>
+                                            </Flex>
+                                            {item.value && (
+                                                <Text className="pl-10">
+                                                    {value(item)}
+                                                </Text>
+                                            )}
+                                        </ListItem>
+                                    </div>
                                 ))}
                             </List>
                         )}
@@ -144,7 +171,7 @@ export default function TopListCard({
                         ) : (
                             <List>
                                 {services.data.map((item: Item) => (
-                                    <ListItem>
+                                    <ListItem key={item.name}>
                                         <Flex justifyContent="start">
                                             {item.connector &&
                                                 getConnectorIcon(
