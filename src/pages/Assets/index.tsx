@@ -134,6 +134,7 @@ const topAccounts = (
             name: string | undefined
             value: number | undefined
             connector: SourceType | undefined
+            id: string | undefined
         }[]
         total: number | undefined
     } = { data: [], total: 0 }
@@ -143,6 +144,7 @@ const topAccounts = (
                 name: input.connections[i].providerConnectionName,
                 value: input.connections[i].resourceCount,
                 connector: input.connections[i].connector,
+                id: input.connections[i].providerConnectionID,
             })
         }
         top.total = input.totalDiscoveredCount
@@ -236,7 +238,6 @@ export default function Assets() {
             pageNumber: 1,
             sortBy: 'count',
         })
-    console.log(servicesResponse)
 
     return (
         <Menu currentPage="assets">
@@ -332,7 +333,7 @@ export default function Assets() {
                         oldChartData={pieData(composition).oldData}
                         activeTime={activeTimeRange}
                         loading={compositionLoading}
-                        // seeMore="details"
+                        seeMore="resource-metrics"
                     />
                 </Col>
                 <Col numColSpan={3} className="h-full">

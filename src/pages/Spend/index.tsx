@@ -74,6 +74,7 @@ const topAccounts = (
             name: string | undefined
             value: number | undefined
             connector: SourceType | undefined
+            id: string | undefined
         }[]
         total: number | undefined
     } = { data: [], total: 0 }
@@ -83,6 +84,7 @@ const topAccounts = (
                 name: input.connections[i].providerConnectionName,
                 value: input.connections[i].cost,
                 connector: input.connections[i].connector,
+                id: input.connections[i].id,
             })
         }
         top.total = input.totalDiscoveredCount
@@ -213,19 +215,11 @@ export default function Spend() {
             granularity: selectedGranularity,
         })
 
-    const {
-        response: serviceCostResponse,
-        isLoading: serviceCostLoading,
-        error: serviceCostError,
-        sendNow: serviceCostSendNow,
-    } = useInventoryApiV2AnalyticsSpendMetricList(query)
+    const { response: serviceCostResponse, isLoading: serviceCostLoading } =
+        useInventoryApiV2AnalyticsSpendMetricList(query)
 
-    const {
-        response: accountCostResponse,
-        isLoading: accountCostLoading,
-        error: accountCostError,
-        sendNow: accountCostSendNow,
-    } = useOnboardApiV1ConnectionsSummaryList(query)
+    const { response: accountCostResponse, isLoading: accountCostLoading } =
+        useOnboardApiV1ConnectionsSummaryList(query)
 
     const { response: composition, isLoading: compositionLoading } =
         useInventoryApiV2AnalyticsSpendCompositionList({
