@@ -135,7 +135,7 @@ export default function SingleTopListCard({
                                     <ListItem>
                                         <Flex justifyContent="start">
                                             {item.connector &&
-                                                (type === 'account'
+                                                (item.connector[0].length > 1
                                                     ? item.connector[0] &&
                                                       getConnectorIcon(
                                                           item.connector[0]
