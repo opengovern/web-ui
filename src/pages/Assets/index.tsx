@@ -340,11 +340,9 @@ export default function Assets() {
                         accountsTitle="Top Accounts"
                         accountsLoading={accountsResponseLoading}
                         accounts={topAccounts(accountsResponse)}
-                        accountsIsPrice
                         servicesTitle="Top Services"
                         servicesLoading={servicesResponseLoading}
                         services={topServices(servicesResponse)}
-                        servicesIsPrice
                         accountsUrl="accounts-detail"
                         servicesUrl="services-detail"
                     />
