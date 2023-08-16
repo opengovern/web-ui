@@ -96,7 +96,6 @@ export default function Finder() {
         useInventoryApiV2AnalyticsCategoriesList()
     const { response: queries, isLoading: queryLoading } =
         useInventoryApiV1QueryList({})
-    // const { response: history } = useInventoryApiV1QueryRunHistoryCreate()
     const [selectedRow, setSelectedRow] = useState({})
     const [openDrawer, setOpenDrawer] = useState(false)
 
@@ -149,10 +148,6 @@ export default function Finder() {
                 resource_types: record[key],
             }
         })
-    }
-
-    const v = () => {
-        const arr = recordToArray(categories?.categoryResourceType)
     }
 
     return (
@@ -367,7 +362,10 @@ export default function Finder() {
                                                     title={q.title}
                                                     description={q.description}
                                                     onClick={() => {
-                                                        setCode(q.query || '')
+                                                        setCode(
+                                                            `-- ${q.title}\n-- ${q.description}\n\n${q.query}` ||
+                                                                ''
+                                                        )
                                                         document
                                                             .getElementById(
                                                                 'kaytu-container'
