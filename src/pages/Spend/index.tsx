@@ -13,7 +13,6 @@ import {
     Text,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useNavigate } from 'react-router-dom'
 import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
 import {
@@ -272,17 +271,6 @@ export default function Spend() {
                             url="details#connections"
                             border={false}
                         />
-                        {/* <Flex className="border-l border-l-gray-200 pl-4"> */}
-                        {/*    <SummaryCard */}
-                        {/*        title="Services" */}
-                        {/*        metric={Number( */}
-                        {/*            serviceCostResponse?.total_count */}
-                        {/*        )} */}
-                        {/*        loading={serviceCostLoading} */}
-                        {/*        url="details#services" */}
-                        {/*        border={false} */}
-                        {/*    /> */}
-                        {/* </Flex> */}
                     </Col>
                     <Col numColSpan={3} />
                     <Col numColSpan={2}>
