@@ -4,7 +4,6 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import {
     exactPriceDisplay,
     numberDisplay,
-    numberGroupedDisplay,
     numericDisplay,
 } from '../../utilities/numericDisplay'
 
@@ -47,7 +46,7 @@ export default function Chart({
                             if (isCost) {
                                 return `$${numericDisplay(value)}`
                             }
-                            return numberGroupedDisplay(value)
+                            return numericDisplay(value)
                         },
                     },
                 },
@@ -64,7 +63,7 @@ export default function Chart({
                     },
                 ],
                 grid: {
-                    left: 50,
+                    left: 45,
                     right: 0,
                     top: 20,
                     bottom: 40,
@@ -76,7 +75,7 @@ export default function Chart({
                         if (isCost) {
                             return `$${numberDisplay(Number(value), 2)}`
                         }
-                        return value
+                        return numberDisplay(Number(value), 0)
                     },
                 },
                 color: [

@@ -246,11 +246,7 @@ export default function Spend() {
 
     return (
         <Menu currentPage="spend">
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                alignItems="center"
-            >
+            <Flex>
                 <Metric>Spend</Metric>
                 <Flex flexDirection="row" justifyContent="end">
                     <DateRangePicker isSpend />
