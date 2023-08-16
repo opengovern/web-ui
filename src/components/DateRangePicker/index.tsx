@@ -140,8 +140,8 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         <Flex
                             onClick={() =>
                                 setActiveTimeRange({
-                                    start: dayjs().utc().subtract(1, 'week'),
-                                    end: dayjs().utc().endOf('day'),
+                                    start: dayjs().subtract(1, 'week'),
+                                    end: dayjs().endOf('day'),
                                 })
                             }
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
@@ -157,8 +157,8 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         <Flex
                             onClick={() =>
                                 setActiveTimeRange({
-                                    start: dayjs().utc().subtract(1, 'month'),
-                                    end: dayjs().utc().endOf('day'),
+                                    start: dayjs().subtract(1, 'month'),
+                                    end: dayjs().endOf('day'),
                                 })
                             }
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
@@ -175,8 +175,8 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         <Flex
                             onClick={() =>
                                 setActiveTimeRange({
-                                    start: dayjs().utc().startOf('month'),
-                                    end: dayjs().utc().endOf('day'),
+                                    start: dayjs().startOf('month'),
+                                    end: dayjs().endOf('day'),
                                 })
                             }
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
@@ -193,8 +193,8 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         <Flex
                             onClick={() =>
                                 setActiveTimeRange({
-                                    start: dayjs().utc().startOf('year'),
-                                    end: dayjs().utc().endOf('day'),
+                                    start: dayjs().startOf('year'),
+                                    end: dayjs().endOf('day'),
                                 })
                             }
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
@@ -230,10 +230,13 @@ export default function DateRangePicker({ isSpend = false }: DatePickerProps) {
     const currentValue = () => {
         return {
             start: parseDate(
-                activeTimeRange.start.local().format('YYYY-MM-DD')
+                activeTimeRange.start
+                    .local()
+                    .startOf('day')
+                    .format('YYYY-MM-DD')
             ),
             end: parseDate(
-                activeTimeRange.end.startOf('day').local().format('YYYY-MM-DD')
+                activeTimeRange.end.local().endOf('day').format('YYYY-MM-DD')
             ),
         }
     }
