@@ -27,7 +27,6 @@ import Chart from '../../components/Chart'
 import { dateDisplay } from '../../utilities/dateDisplay'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import { exactPriceDisplay } from '../../utilities/numericDisplay'
-import TopListCard from '../../components/Cards/TopListCard'
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
@@ -37,6 +36,7 @@ import {
 } from '../../api/api'
 import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
 import Breakdown from '../../components/Breakdown'
+import SingleTopListCard from '../../components/Cards/SingleTopListCard'
 
 const topServices = (
     input:
@@ -336,18 +336,24 @@ export default function Spend() {
                     />
                 </Col>
                 <Col numColSpan={3} className="h-full">
-                    <TopListCard
-                        accountsTitle="Top Accounts"
-                        accountsLoading={accountCostLoading}
-                        accounts={topAccounts(accountCostResponse)}
-                        accountsIsPrice
-                        servicesTitle="Top Services"
-                        servicesLoading={serviceCostLoading}
-                        services={topServices(serviceCostResponse)}
-                        servicesIsPrice
-                        accountsUrl="details#connections"
-                        servicesUrl="details#services"
-                    />
+                    <Grid numItems={2} className="w-full h-full gap-4">
+                        <SingleTopListCard
+                            title="Top Accounts"
+                            loading={accountCostLoading}
+                            items={topAccounts(accountCostResponse)}
+                            url="details#connections"
+                            type="account"
+                            isPrice
+                        />
+                        <SingleTopListCard
+                            title="Top Services"
+                            loading={serviceCostLoading}
+                            items={topServices(serviceCostResponse)}
+                            url="details#services"
+                            type="service"
+                            isPrice
+                        />
+                    </Grid>
                 </Col>
             </Grid>
         </Menu>

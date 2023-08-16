@@ -36,7 +36,7 @@ import {
 import { dateDisplay } from '../../utilities/dateDisplay'
 import Chart from '../../components/Chart'
 import Breakdown from '../../components/Breakdown'
-import TopListCard from '../../components/Cards/TopListCard'
+import SingleTopListCard from '../../components/Cards/SingleTopListCard'
 
 const resourceTrendChart = (
     trend:
@@ -217,6 +217,7 @@ export default function Assets() {
             needCost: false,
             sortBy: 'resource_count',
         })
+    console.log(accountsResponse)
     const { response: servicesResponse, isLoading: servicesResponseLoading } =
         useInventoryApiV2AnalyticsMetricList({
             ...query,
@@ -301,8 +302,8 @@ export default function Assets() {
                     loading={resourceTrendLoading}
                 />
             </Card>
-            <Grid numItems={5} className="w-full gap-4">
-                <Col numColSpan={2}>
+            <Grid numItems={1} numItemsLg={5} className="w-full gap-4">
+                <Col numColSpan={1} numColSpanLg={2}>
                     <Breakdown
                         chartData={pieData(composition).newData}
                         oldChartData={pieData(composition).oldData}
@@ -311,17 +312,23 @@ export default function Assets() {
                         seeMore="resource-metrics"
                     />
                 </Col>
-                <Col numColSpan={3} className="h-full">
-                    <TopListCard
-                        accountsTitle="Top Accounts"
-                        accountsLoading={accountsResponseLoading}
-                        accounts={topAccounts(accountsResponse)}
-                        servicesTitle="Top Services"
-                        servicesLoading={servicesResponseLoading}
-                        services={topServices(servicesResponse)}
-                        accountsUrl="accounts-detail"
-                        servicesUrl="services-detail"
-                    />
+                <Col numColSpan={1} numColSpanLg={3} className="h-full">
+                    <Grid numItems={2} className="w-full h-full gap-4">
+                        <SingleTopListCard
+                            title="Top Accounts"
+                            loading={accountsResponseLoading}
+                            items={topAccounts(accountsResponse)}
+                            url="accounts-detail"
+                            type="account"
+                        />
+                        <SingleTopListCard
+                            title="Top Services"
+                            loading={servicesResponseLoading}
+                            items={topServices(servicesResponse)}
+                            url="services-detail"
+                            type="service"
+                        />
+                    </Grid>
                 </Col>
             </Grid>
         </Menu>
