@@ -176,6 +176,19 @@ export default function AccountInfo({
                     </Flex>
                     <Divider />
                     <Flex>
+                        <Text>Health state</Text>
+                        <Badge
+                            color={
+                                data?.healthState === 'healthy'
+                                    ? 'emerald'
+                                    : 'rose'
+                            }
+                        >
+                            {data?.healthState}
+                        </Badge>
+                    </Flex>
+                    <Divider />
+                    <Flex>
                         <Text>AWS account lifecycle state</Text>
                         <Badge
                             color={
@@ -292,7 +305,7 @@ export default function AccountInfo({
                     </Flex>
                     {renderMetadata(type, data)}
                 </Flex>
-                <Flex justifyContent="end" className="mt-6">
+                <Flex justifyContent="end" className="my-6">
                     <Button
                         variant="secondary"
                         color="rose"

@@ -130,6 +130,17 @@ const columns: IColumn<any, any>[] = [
         sortable: true,
         filter: true,
         resizable: true,
+        hide: true,
+        flex: 1,
+    },
+    {
+        field: 'healthState',
+        type: 'string',
+        headerName: 'Health state',
+        enableRowGroup: true,
+        sortable: true,
+        filter: true,
+        resizable: true,
         flex: 1,
     },
     {
