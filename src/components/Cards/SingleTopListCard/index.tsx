@@ -112,7 +112,7 @@ export default function SingleTopListCard({
                                                                   )
                                                               )
                                                     }}`
-                                                )
+                                                ).then(() => alert('Copied!'))
                                             }
                                             className="absolute invisible bottom-0 left-0 group-hover:visible w-full h-full bg-white text-black"
                                         >
