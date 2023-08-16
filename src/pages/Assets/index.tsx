@@ -295,9 +295,6 @@ export default function Assets() {
                                         <Tab value="line">
                                             <LineChartIcon className="h-5" />
                                         </Tab>
-                                        <Tab value="area">
-                                            <AreaChartIcon className="h-5" />
-                                        </Tab>
                                         <Tab value="bar">
                                             <BarChartIcon className="h-5" />
                                         </Tab>
