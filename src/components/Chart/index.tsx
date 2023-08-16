@@ -4,14 +4,13 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import {
     exactPriceDisplay,
     numberDisplay,
-    numberGroupedDisplay,
     numericDisplay,
 } from '../../utilities/numericDisplay'
 
 interface IChart {
     labels: string[]
     labelType?: 'category' | 'time' | 'value' | 'log'
-    chartData: (string | number | undefined)[]
+    chartData: (string | number | undefined)[] | undefined
     chartType: 'bar' | 'line' | 'area' | 'doughnut'
     isCost?: boolean
     loading?: boolean
@@ -47,7 +46,7 @@ export default function Chart({
                             if (isCost) {
                                 return `$${numericDisplay(value)}`
                             }
-                            return numberGroupedDisplay(value)
+                            return numericDisplay(value)
                         },
                     },
                 },
@@ -64,7 +63,7 @@ export default function Chart({
                     },
                 ],
                 grid: {
-                    left: 50,
+                    left: 45,
                     right: 0,
                     top: 20,
                     bottom: 40,
@@ -76,7 +75,7 @@ export default function Chart({
                         if (isCost) {
                             return `$${numberDisplay(Number(value), 2)}`
                         }
-                        return value
+                        return numberDisplay(Number(value), 0)
                     },
                 },
                 color: [
@@ -111,7 +110,10 @@ export default function Chart({
                                             ? exactPriceDisplay(
                                                   params.data.value
                                               )
-                                            : numberDisplay(params.data.value)
+                                            : numberDisplay(
+                                                  params.data.value,
+                                                  0
+                                              )
                                     }`
                                 },
                             },

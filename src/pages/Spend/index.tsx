@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import {
-    Button,
     Card,
     Col,
     Flex,
@@ -12,11 +11,8 @@ import {
     TabGroup,
     TabList,
     Text,
-    Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
 import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
 import {
@@ -40,6 +36,7 @@ import {
     SourceType,
 } from '../../api/api'
 import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
+import Breakdown from '../../components/Breakdown'
 
 const topServices = (
     input:
@@ -177,7 +174,6 @@ export default function Spend() {
     >('daily')
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
-    const navigate = useNavigate()
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
@@ -250,11 +246,7 @@ export default function Spend() {
 
     return (
         <Menu currentPage="spend">
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                alignItems="center"
-            >
+            <Flex>
                 <Metric>Spend</Metric>
                 <Flex flexDirection="row" justifyContent="end">
                     <DateRangePicker isSpend />
@@ -275,17 +267,6 @@ export default function Spend() {
                             url="details#connections"
                             border={false}
                         />
-                        {/* <Flex className="border-l border-l-gray-200 pl-4"> */}
-                        {/*    <SummaryCard */}
-                        {/*        title="Services" */}
-                        {/*        metric={Number( */}
-                        {/*            serviceCostResponse?.total_count */}
-                        {/*        )} */}
-                        {/*        loading={serviceCostLoading} */}
-                        {/*        url="details#services" */}
-                        {/*        border={false} */}
-                        {/*    /> */}
-                        {/* </Flex> */}
                     </Col>
                     <Col numColSpan={3} />
                     <Col numColSpan={2}>
@@ -353,50 +334,12 @@ export default function Spend() {
             </Card>
             <Grid numItems={5} className="w-full gap-4">
                 <Col numColSpan={2}>
-                    <Card className="pb-0 relative">
-                        <Flex>
-                            <Title className="font-semibold">Breakdown</Title>
-                            <TabGroup
-                                index={selectedIndex}
-                                onIndexChange={setSelectedIndex}
-                                className="w-fit rounded-lg"
-                            >
-                                <TabList variant="solid">
-                                    <Tab className="pt-0.5 pb-1">
-                                        <Text>
-                                            {dateDisplay(
-                                                activeTimeRange.end.toString(),
-                                                1
-                                            )}
-                                        </Text>
-                                    </Tab>
-                                    <Tab className="pt-0.5 pb-1">
-                                        <Text>
-                                            {dateDisplay(
-                                                activeTimeRange.start.toString()
-                                            )}
-                                        </Text>
-                                    </Tab>
-                                </TabList>
-                            </TabGroup>
-                        </Flex>
-                        <Chart
-                            labels={[]}
-                            chartData={pieData(composition)}
-                            chartType="doughnut"
-                            isCost
-                            loading={compositionLoading}
-                        />
-                        <Button
-                            variant="light"
-                            icon={ChevronRightIcon}
-                            iconPosition="right"
-                            className="absolute bottom-6 right-6"
-                            onClick={() => navigate('details')}
-                        >
-                            see more
-                        </Button>
-                    </Card>
+                    <Breakdown
+                        chartData={pieData(composition)}
+                        loading={compositionLoading}
+                        seeMore="details"
+                        isCost
+                    />
                 </Col>
                 <Col numColSpan={3} className="h-full">
                     <TopListCard
