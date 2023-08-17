@@ -1,3 +1,5 @@
+import dayjs, { Dayjs } from 'dayjs'
+
 export const agGridDateComparator = (
     filterLocalDateAtMidnight: Date,
     cellValue: string
@@ -21,4 +23,29 @@ export const agGridDateComparator = (
         return 1
     }
     return 0
+}
+
+export const checkGranularity = (start: Dayjs, end: Dayjs) => {
+    let daily = true
+    let monthly = true
+    let yearly = true
+
+    if (dayjs(start).diff(dayjs(end), 'month', true) > 2) {
+        daily = false
+    }
+    if (
+        dayjs(start).month() === dayjs(end).month() &&
+        dayjs(start).diff(dayjs(end), 'month', true) > 11
+    ) {
+        monthly = false
+    }
+    if (dayjs(start).year() === dayjs(end).year()) {
+        yearly = false
+    }
+
+    return {
+        daily,
+        monthly,
+        yearly,
+    }
 }
