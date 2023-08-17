@@ -217,7 +217,6 @@ export default function Assets() {
             needCost: false,
             sortBy: 'resource_count',
         })
-    console.log(accountsResponse)
     const { response: servicesResponse, isLoading: servicesResponseLoading } =
         useInventoryApiV2AnalyticsMetricList({
             ...query,

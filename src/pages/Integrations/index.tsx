@@ -1,4 +1,4 @@
-import { Flex, Grid, Metric, Title } from '@tremor/react'
+import { Col, Flex, Grid, Metric, Title } from '@tremor/react'
 import Menu from '../../components/Menu'
 import {
     useOnboardApiV1CatalogMetricsList,
@@ -9,6 +9,7 @@ import { numberDisplay } from '../../utilities/numericDisplay'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 import { isDemo } from '../../utilities/demo'
+import OnboardCard from '../../components/Cards/OnboardCard'
 
 export default function Integrations() {
     const { response: topMetrics, isLoading: metricsLoading } =
@@ -47,25 +48,16 @@ export default function Integrations() {
     return (
         <Menu currentPage="integration">
             <Metric>Integrations</Metric>
-            <Grid numItems={2} numItemsLg={4} className="gap-4 mt-6 mb-10">
+            <Grid numItems={2} className="gap-4 mt-6 mb-10">
                 <SummaryCard
                     title="Discovered Cloud Connection"
                     metric={numberDisplay(topMetrics?.totalConnections, 0)}
                     loading={metricsLoading}
                 />
-                <SummaryCard
+                <OnboardCard
                     title="Onboarded Cloud Connection"
-                    metric={numberDisplay(topMetrics?.connectionsEnabled, 0)}
-                    loading={metricsLoading}
-                />
-                <SummaryCard
-                    title="Healthy Connections"
-                    metric={numberDisplay(topMetrics?.unhealthyConnections, 0)}
-                    loading={metricsLoading}
-                />
-                <SummaryCard
-                    title="Unhealthy Connections"
-                    metric={numberDisplay(topMetrics?.healthyConnections, 0)}
+                    healthy={topMetrics?.healthyConnections}
+                    unhealthy={topMetrics?.unhealthyConnections}
                     loading={metricsLoading}
                 />
             </Grid>
