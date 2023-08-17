@@ -22,27 +22,6 @@ interface IAccountList {
     loading: boolean
 }
 
-const getType = (
-    account: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
-) => {
-    if (account) {
-        if (account.credentialType === 'auto-aws') {
-            return 'Standalone Account'
-        }
-        if (
-            account.credentialType === 'manual-aws-org' &&
-            account.providerConnectionID ===
-                account?.metadata?.account_organization.MasterAccountId
-        ) {
-            return 'Organization Management Account'
-        }
-        if (account.credentialType === 'manual-aws-org') {
-            return 'Organization Member Account'
-        }
-    }
-    return ''
-}
-
 function getBadgeColor(status: string) {
     switch (status) {
         case 'NOT_ONBOARD':
@@ -74,26 +53,6 @@ function getBadgeText(status: string) {
 }
 
 const columns: IColumn<any, any>[] = [
-    // {
-    //     field: 'connector',
-    //     headerName: 'Connector',
-    //     type: 'string',
-    //     width: 50,
-    //     sortable: true,
-    //     filter: true,
-    //     cellStyle: { padding: 0 },
-    //     cellRenderer: (params: ICellRendererParams) => {
-    //         return (
-    //             <Flex
-    //                 alignItems="center"
-    //                 justifyContent="center"
-    //                 className="w-full h-full"
-    //             >
-    //                 <AWSIcon id="acc" />
-    //             </Flex>
-    //         )
-    //     },
-    // },
     {
         field: 'providerConnectionName',
         headerName: 'Name',
@@ -275,7 +234,9 @@ export default function AccountList({
             {notification && <Notification text={notification} />}
             <AccountInfo
                 data={accData}
-                type={getType(accData)}
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                type={accData?.type}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
                 notification={setNotification}

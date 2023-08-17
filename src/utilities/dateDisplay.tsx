@@ -18,6 +18,6 @@ export const dateDisplay = (
     return ''
 }
 
-export const dateTimeDisplay = (date: Date) => {
+export const dateTimeDisplay = (date: Date | string | undefined) => {
     return dayjs(date).format('lll')
 }
