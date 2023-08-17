@@ -123,7 +123,8 @@ export default function Chart({
                 series: [
                     {
                         type: 'pie',
-                        radius: ['55%', '80%'],
+                        radius: ['50%', '75%'],
+                        center: ['50%', '50%'],
                         avoidLabelOverlap: false,
                         label: {
                             show: false,
@@ -154,7 +155,7 @@ export default function Chart({
                             borderWidth: 2,
                         },
                         data: chartData,
-                        left: '-45%',
+                        // left: '-45%',
                         // width: '50%',
                     },
                 ],
