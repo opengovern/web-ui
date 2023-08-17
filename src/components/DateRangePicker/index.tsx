@@ -6,12 +6,15 @@ import { useDateRangePicker } from 'react-aria'
 import { CalendarIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { AriaDateRangePickerProps, DateValue } from '@react-aria/datepicker'
 import dayjs from 'dayjs'
+import quarterOfYear from 'dayjs/plugin/quarterOfYear'
 import { Flex, Text, Title } from '@tremor/react'
 import { spendTimeAtom, timeAtom } from '../../store'
 import { FieldButton } from './Button'
 import { RangeCalendar } from './Calendar/RangeCalendar'
 import { Popover } from './Popover'
 import { Dialog } from './Dialog'
+
+dayjs.extend(quarterOfYear)
 
 interface DatePickerProps {
     isSpend?: boolean
@@ -186,9 +189,70 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                                 {renderText(dayjs().startOf('month'), dayjs())}
                             </Text>
                         </Flex>
-                        <Flex className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50">
+                        <Flex
+                            onClick={() =>
+                                setActiveTimeRange({
+                                    start: dayjs()
+                                        .subtract(1, 'month')
+                                        .startOf('month'),
+                                    end: dayjs()
+                                        .subtract(1, 'month')
+                                        .endOf('month'),
+                                })
+                            }
+                            className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                        >
+                            <Text className="text-gray-800">Last month</Text>
+                            <Text>
+                                {renderText(
+                                    dayjs()
+                                        .subtract(1, 'month')
+                                        .startOf('month'),
+                                    dayjs().subtract(1, 'month').endOf('month')
+                                )}
+                            </Text>
+                        </Flex>
+                        <Flex
+                            onClick={() =>
+                                setActiveTimeRange({
+                                    start: dayjs().startOf('quarter'),
+                                    end: dayjs(),
+                                })
+                            }
+                            className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                        >
                             <Text className="text-gray-800">This quarter</Text>
-                            <Text>?</Text>
+                            <Text>
+                                {renderText(
+                                    dayjs().startOf('quarter'),
+                                    dayjs()
+                                )}
+                            </Text>
+                        </Flex>
+                        <Flex
+                            onClick={() =>
+                                setActiveTimeRange({
+                                    start: dayjs()
+                                        .subtract(1, 'quarter')
+                                        .startOf('quarter'),
+                                    end: dayjs()
+                                        .subtract(1, 'quarter')
+                                        .endOf('quarter'),
+                                })
+                            }
+                            className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                        >
+                            <Text className="text-gray-800">Last quarter</Text>
+                            <Text>
+                                {renderText(
+                                    dayjs()
+                                        .subtract(1, 'quarter')
+                                        .startOf('quarter'),
+                                    dayjs()
+                                        .subtract(1, 'quarter')
+                                        .endOf('quarter')
+                                )}
+                            </Text>
                         </Flex>
                         <Flex
                             onClick={() =>
