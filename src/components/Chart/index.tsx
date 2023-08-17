@@ -10,8 +10,38 @@ import {
 interface IChart {
     labels: string[]
     labelType?: 'category' | 'time' | 'value' | 'log'
-    chartData: (string | number | undefined)[] | undefined
-    chartType: 'bar' | 'line' | 'area' | 'doughnut'
+    chartData:
+        | (string | number | undefined)[]
+        | (
+              | {
+                    name: string
+                    value: string
+                    itemStyle?: undefined
+                    label?: undefined
+                }
+              | {
+                    value: number
+                    name: string
+                    itemStyle: { color: string; decal: { symbol: string } }
+                    label: { show: boolean }
+                }
+          )[]
+        | (
+              | {
+                    name: string
+                    value: number | undefined
+                    itemStyle?: undefined
+                    label?: undefined
+                }
+              | {
+                    value: number
+                    name: string
+                    itemStyle: { color: string; decal: { symbol: string } }
+                    label: { show: boolean }
+                }
+          )[]
+        | undefined
+    chartType: 'bar' | 'line' | 'area' | 'doughnut' | 'half-doughnut'
     isCost?: boolean
     loading?: boolean
     error?: string
@@ -93,7 +123,8 @@ export default function Chart({
                 series: [
                     {
                         type: 'pie',
-                        radius: ['55%', '80%'],
+                        radius: ['50%', '75%'],
+                        // center: ['50%', '50%'],
                         avoidLabelOverlap: false,
                         label: {
                             show: false,
@@ -148,6 +179,32 @@ export default function Chart({
                 ],
             }
         }
+        if (chartType === 'half-doughnut') {
+            return {
+                tooltip: {
+                    trigger: 'item',
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: ['30%', '50%'],
+                        center: ['40%', '63%'],
+                        // adjust the start angle
+                        startAngle: 180,
+                        label: {
+                            show: false,
+                        },
+                        data: chartData,
+                    },
+                ],
+                itemStyle: {
+                    borderRadius: 4,
+                    borderColor: '#fff',
+                    borderWidth: 2,
+                },
+                color: ['#C0D8F1', '#0D2239'],
+            }
+        }
         return undefined
     }
 
@@ -175,5 +232,11 @@ export default function Chart({
         )
     }
 
-    return <ReactEcharts option={options()} showLoading={loading} />
+    return (
+        <ReactEcharts
+            option={options()}
+            showLoading={loading}
+            className="w-full"
+        />
+    )
 }

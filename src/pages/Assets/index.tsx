@@ -13,6 +13,7 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai/index'
 import { useEffect, useState } from 'react'
+import { Dayjs } from 'dayjs'
 import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
 import ConnectionList from '../../components/ConnectionList'
@@ -37,6 +38,8 @@ import { dateDisplay } from '../../utilities/dateDisplay'
 import Chart from '../../components/Chart'
 import Breakdown from '../../components/Breakdown'
 import SingleTopListCard from '../../components/Cards/SingleTopListCard'
+import { checkGranularity } from '../../utilities/dateComparator'
+import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 
 const resourceTrendChart = (
     trend:
@@ -165,16 +168,43 @@ const topServices = (
     return top
 }
 
+const generateItems = (s: Dayjs, e: Dayjs) => {
+    return (
+        <>
+            {checkGranularity(s, e).daily && (
+                <SelectItem value="daily">
+                    <Text>Daily</Text>
+                </SelectItem>
+            )}
+            {checkGranularity(s, e).monthly && (
+                <SelectItem value="monthly">
+                    <Text>Monthly</Text>
+                </SelectItem>
+            )}
+            {checkGranularity(s, e).yearly && (
+                <SelectItem value="yearly">
+                    <Text>Yearly</Text>
+                </SelectItem>
+            )}
+        </>
+    )
+}
+
 export default function Assets() {
+    const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
+
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
-    >('daily')
-    const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    >(
+        checkGranularity(activeTimeRange.start, activeTimeRange.end).daily
+            ? 'daily'
+            : 'monthly'
+    )
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
@@ -217,7 +247,6 @@ export default function Assets() {
             needCost: false,
             sortBy: 'resource_count',
         })
-    console.log(accountsResponse)
     const { response: servicesResponse, isLoading: servicesResponseLoading } =
         useInventoryApiV2AnalyticsMetricList({
             ...query,
@@ -256,6 +285,9 @@ export default function Assets() {
                             <Flex justifyContent="end" className="gap-4">
                                 <Select
                                     value={selectedGranularity}
+                                    placeholder={capitalizeFirstLetter(
+                                        selectedGranularity
+                                    )}
                                     onValueChange={(v) => {
                                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                         // @ts-ignore
@@ -263,15 +295,10 @@ export default function Assets() {
                                     }}
                                     className="w-10"
                                 >
-                                    <SelectItem value="daily">
-                                        <Text>Daily</Text>
-                                    </SelectItem>
-                                    <SelectItem value="monthly">
-                                        <Text>Monthly</Text>
-                                    </SelectItem>
-                                    <SelectItem value="yearly">
-                                        <Text>Yearly</Text>
-                                    </SelectItem>
+                                    {generateItems(
+                                        activeTimeRange.start,
+                                        activeTimeRange.end
+                                    )}
                                 </Select>
                                 <TabGroup
                                     index={selectedIndex}

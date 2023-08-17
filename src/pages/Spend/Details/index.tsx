@@ -28,7 +28,6 @@ import Menu from '../../../components/Menu'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import {
     useInventoryApiV2AnalyticsMetricsListList,
-    useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTableList,
 } from '../../../api/inventory.gen'
 import { spendTimeAtom } from '../../../store'
@@ -43,7 +42,7 @@ export default function CostMetricsDetails() {
         useOnboardApiV1ConnectionsSummaryList({
             pageNumber: 1,
             pageSize: 10000,
-            needCost: false,
+            needCost: true,
             needResourceCount: false,
         })
 
@@ -124,7 +123,7 @@ export default function CostMetricsDetails() {
                 flexDirection="col"
                 justifyContent="start"
                 alignItems="start"
-                className="w-full"
+                className="w-full px-6"
             >
                 <Text className="m-3">Date filter</Text>
                 <DateRangePicker isSpend />
@@ -328,7 +327,7 @@ export default function CostMetricsDetails() {
                         </Button>
                     </Flex>
                 </Flex>
-                <div className="ag-theme-alpine mt-10">
+                <div className="ag-theme-alpine mt-4">
                     <AgGridReact
                         ref={gridRef}
                         domLayout="autoHeight"
