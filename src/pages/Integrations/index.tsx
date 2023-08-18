@@ -1,4 +1,4 @@
-import { Col, Flex, Grid, Metric, Title } from '@tremor/react'
+import { Flex, Grid, Title } from '@tremor/react'
 import Menu from '../../components/Menu'
 import {
     useOnboardApiV1CatalogMetricsList,
@@ -10,6 +10,7 @@ import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 import { isDemo } from '../../utilities/demo'
 import OnboardCard from '../../components/Cards/OnboardCard'
+import Header from '../../components/Header'
 
 export default function Integrations() {
     const { response: topMetrics, isLoading: metricsLoading } =
@@ -47,8 +48,8 @@ export default function Integrations() {
 
     return (
         <Menu currentPage="integration">
-            <Metric>Integrations</Metric>
-            <Grid numItems={2} className="gap-4 mt-6 mb-10">
+            <Header title="Integrations" />
+            <Grid numItems={2} className="gap-4 mb-10">
                 <SummaryCard
                     title="Discovered Cloud Connection"
                     metric={numberDisplay(topMetrics?.totalConnections, 0)}

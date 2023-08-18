@@ -16,10 +16,6 @@ import { Dialog } from './Dialog'
 
 dayjs.extend(quarterOfYear)
 
-interface DatePickerProps {
-    isSpend?: boolean
-}
-
 const renderText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
     const s = st
     const e = en
@@ -287,7 +283,8 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
     )
 }
 
-export default function DateRangePicker({ isSpend = false }: DatePickerProps) {
+export default function DateRangePicker() {
+    const isSpend = window.location.pathname.split('/')[2] === 'spend'
     const [activeTimeRange, setActiveTimeRange] = useAtom(
         isSpend ? spendTimeAtom : timeAtom
     )

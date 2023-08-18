@@ -4,7 +4,6 @@ import {
     Divider,
     Flex,
     Grid,
-    Metric,
     TextInput,
     Title,
 } from '@tremor/react'
@@ -16,6 +15,7 @@ import { useComplianceApiV1BenchmarksSummaryList } from '../../api/compliance.ge
 import Spinner from '../../components/Spinner'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../api/api'
 import ComplianceCard from '../../components/Cards/ComplianceCard'
+import Header from '../../components/Header'
 
 const benchmarkList = (ben: any) => {
     const connected = []
@@ -51,8 +51,8 @@ export default function Compliance() {
 
     return (
         <Menu currentPage="benchmarks">
+            <Header title="Compliance" />
             <Flex flexDirection="col" alignItems="start">
-                <Metric>Compliance</Metric>
                 <Summary benchmark={benchmarks} loading={isLoading} />
                 <Grid
                     numItems={1}

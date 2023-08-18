@@ -45,7 +45,7 @@ export default function Summary({ benchmark, loading }: ISummary) {
             numItems={1}
             numItemsMd={2}
             numItemsLg={3}
-            className="w-full gap-4 mt-6 mb-10"
+            className="w-full gap-4 mb-10"
         >
             <SummaryCard
                 title="Number of active alarms"

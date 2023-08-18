@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Flex, Metric } from '@tremor/react'
+import { Flex } from '@tremor/react'
 import {
     BuildingOfficeIcon,
     FolderIcon,
@@ -18,6 +18,7 @@ import SettingsGitRepositories from './GitRepositories'
 import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
 import { isDemo } from '../../utilities/demo'
+import Header from '../../components/Header'
 
 const navigation = [
     {
@@ -134,6 +135,7 @@ export default function Settings() {
 
     return (
         <Menu currentPage="settings">
+            <Header title="Settings" />
             {isLoading || tokenLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
@@ -143,9 +145,8 @@ export default function Settings() {
                     <Flex
                         flexDirection="col"
                         alignItems="start"
-                        className="gap-y-5 w-fit"
+                        className="w-fit"
                     >
-                        <Metric className="text-gray-800">Settings</Metric>
                         <nav className="w-56 text-sm">
                             <ul className="space-y-1.5">
                                 {navigation.map((item: any) => {
@@ -159,10 +160,10 @@ export default function Settings() {
                                         <li key={item.name}>
                                             <Flex
                                                 justifyContent="start"
-                                                className="text-gray-800 font-semibold group gap-x-3 p-1"
+                                                className="text-gray-800 font-semibold group gap-x-3 mb-2"
                                             >
                                                 {item.icon && (
-                                                    <item.icon className="h-4 w-4 shrink-0" />
+                                                    <item.icon className="h-5 w-5 shrink-0" />
                                                 )}
                                                 {item.name}
                                             </Flex>
@@ -188,17 +189,7 @@ export default function Settings() {
                             </ul>
                         </nav>
                     </Flex>
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        justifyContent="start"
-                        className="w-full h-full pl-6"
-                    >
-                        <Metric className="text-gray-800 mb-1 opacity-0">
-                            Settings
-                        </Metric>
-                        {selectedTab}
-                    </Flex>
+                    <Flex className="w-full h-full pl-6">{selectedTab}</Flex>
                 </Flex>
             )}
         </Menu>

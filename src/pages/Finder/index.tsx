@@ -8,7 +8,6 @@ import {
     Flex,
     Grid,
     Icon,
-    Metric,
     Subtitle,
     Tab,
     TabGroup,
@@ -50,6 +49,7 @@ import { getErrorMessage } from '../../types/apierror'
 import DrawerPanel from '../../components/DrawerPanel'
 import { RenderObject } from '../../components/RenderObject'
 import Table, { IColumn } from '../../components/Table'
+import Header from '../../components/Header'
 
 const getTable = (headers: any, details: any) => {
     const columns: IColumn<any, any>[] = []
@@ -146,7 +146,7 @@ export default function Finder() {
 
     return (
         <Menu currentPage="finder">
-            <Metric className="mb-6">Finder</Metric>
+            <Header title="Finder" />
             {categoryLoading || queryLoading ? (
                 <Spinner className="mt-56" />
             ) : (
