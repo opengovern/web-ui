@@ -45,6 +45,7 @@ const columns: IColumn<any, any>[] = [
         enableRowGroup: true,
         headerName: 'Category',
         type: 'string',
+        hide: true,
     },
     {
         field: 'count',

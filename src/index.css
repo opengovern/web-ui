@@ -12,5 +12,20 @@ body {
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-        monospace;
+    monospace;
+}
+
+.ag-theme-alpine {
+    font-family: 'Lato', sans-serif !important;
+    --ag-row-border-color: #e5e7eb !important;
+    --ag-border-color: #e5e7eb !important;
+    --ag-header-background-color: #f9fafb !important;
+    --ag-checkbox-unchecked-color: #e5e7eb !important;
+    --ag-odd-row-background-color: #f9fafb !important;
+    --ag-control-panel-background-color: #f9fafb !important;
+    --ag-chip-background-color: #e5e7eb !important;
+}
+
+.ag-root-wrapper {
+    border-radius: 8px !important;
 }
