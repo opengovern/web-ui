@@ -2,7 +2,6 @@ import {
     Card,
     Flex,
     Grid,
-    Metric,
     Tab,
     TabGroup,
     TabList,
@@ -26,6 +25,7 @@ import { dateDisplay } from '../../utilities/dateDisplay'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
 import { getErrorMessage } from '../../types/apierror'
+import Header from '../../components/Header'
 
 export default function Home() {
     const start = dayjs.utc().subtract(2, 'week').startOf('day')
@@ -129,7 +129,7 @@ export default function Home() {
 
     return (
         <Menu currentPage="home">
-            <Metric>Home</Metric>
+            <Header title="Home" />
             <Grid
                 numItems={1}
                 numItemsMd={4}

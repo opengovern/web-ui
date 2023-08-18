@@ -4,7 +4,6 @@ import {
     Col,
     Flex,
     Grid,
-    Metric,
     Select,
     SelectItem,
     Tab,
@@ -14,14 +13,12 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { Dayjs } from 'dayjs'
-import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../api/inventory.gen'
-import ConnectionList from '../../components/ConnectionList'
 import { filterAtom, IFilter, spendTimeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
@@ -37,9 +34,10 @@ import {
 } from '../../api/api'
 import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
 import Breakdown from '../../components/Breakdown'
-import SingleTopListCard from '../../components/Cards/SingleTopListCard'
+import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity } from '../../utilities/dateComparator'
 import { capitalizeFirstLetter } from '../../utilities/labelMaker'
+import Header from '../../components/Header'
 
 const topServices = (
     input:
@@ -270,14 +268,8 @@ export default function Spend() {
 
     return (
         <Menu currentPage="spend">
-            <Flex>
-                <Metric>Spend</Metric>
-                <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker isSpend />
-                    <ConnectionList />
-                </Flex>
-            </Flex>
-            <Card className="mb-4 mt-6">
+            <Header title="Spend" datePicker connectionFilter />
+            <Card className="mb-4">
                 <Grid numItems={6} className="gap-4">
                     <Col numColSpan={1}>
                         <SummaryCard
@@ -365,7 +357,7 @@ export default function Spend() {
                 </Col>
                 <Col numColSpan={3} className="h-full">
                     <Grid numItems={2} className="w-full h-full gap-4">
-                        <SingleTopListCard
+                        <ListCard
                             title="Top Accounts"
                             loading={accountCostLoading}
                             items={topAccounts(accountCostResponse)}
@@ -373,7 +365,7 @@ export default function Spend() {
                             type="account"
                             isPrice
                         />
-                        <SingleTopListCard
+                        <ListCard
                             title="Top Services"
                             loading={serviceCostLoading}
                             items={topServices(serviceCostResponse)}

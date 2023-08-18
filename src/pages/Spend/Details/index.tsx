@@ -126,7 +126,7 @@ export default function CostMetricsDetails() {
                 className="w-full px-6"
             >
                 <Text className="m-3">Date filter</Text>
-                <DateRangePicker isSpend />
+                <DateRangePicker />
                 <Text className="m-3">Granularity</Text>
                 <Select
                     value={granularity}

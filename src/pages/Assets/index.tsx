@@ -3,7 +3,6 @@ import {
     Col,
     Flex,
     Grid,
-    Metric,
     Select,
     SelectItem,
     Tab,
@@ -14,9 +13,7 @@ import {
 import { useAtomValue } from 'jotai/index'
 import { useEffect, useState } from 'react'
 import { Dayjs } from 'dayjs'
-import DateRangePicker from '../../components/DateRangePicker'
 import Menu from '../../components/Menu'
-import ConnectionList from '../../components/ConnectionList'
 import { filterAtom, timeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import SummaryCard from '../../components/Cards/SummaryCard'
@@ -37,9 +34,10 @@ import {
 import { dateDisplay } from '../../utilities/dateDisplay'
 import Chart from '../../components/Chart'
 import Breakdown from '../../components/Breakdown'
-import SingleTopListCard from '../../components/Cards/SingleTopListCard'
+import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity } from '../../utilities/dateComparator'
 import { capitalizeFirstLetter } from '../../utilities/labelMaker'
+import Header from '../../components/Header'
 
 const resourceTrendChart = (
     trend:
@@ -257,13 +255,7 @@ export default function Assets() {
 
     return (
         <Menu currentPage="assets">
-            <Flex>
-                <Metric>Assets</Metric>
-                <Flex justifyContent="end" alignItems="start">
-                    <DateRangePicker />
-                    <ConnectionList />
-                </Flex>
-            </Flex>
+            <Header title="Assets" datePicker connectionFilter />
             <Card className="mb-4 mt-6">
                 <Grid numItems={6} className="gap-4">
                     <Col numColSpan={1}>
@@ -341,14 +333,14 @@ export default function Assets() {
                 </Col>
                 <Col numColSpan={1} numColSpanLg={3} className="h-full">
                     <Grid numItems={2} className="w-full h-full gap-4">
-                        <SingleTopListCard
+                        <ListCard
                             title="Top Accounts"
                             loading={accountsResponseLoading}
                             items={topAccounts(accountsResponse)}
                             url="accounts-detail"
                             type="account"
                         />
-                        <SingleTopListCard
+                        <ListCard
                             title="Top Services"
                             loading={servicesResponseLoading}
                             items={topServices(servicesResponse)}

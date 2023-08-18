@@ -3,7 +3,6 @@ import {
     Col,
     Flex,
     Grid,
-    Metric,
     Subtitle,
     Tab,
     TabGroup,
@@ -15,7 +14,7 @@ import {
 import { useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai/index'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Menu from '../../components/Menu'
 import InsightCategories from './InsightCategories'
 import {
@@ -23,10 +22,10 @@ import {
     useComplianceApiV1InsightList,
 } from '../../api/compliance.gen'
 import InsightCard from '../../components/Cards/InsightCard'
-import DateRangePicker from '../../components/DateRangePicker'
 import { timeAtom } from '../../store'
 import Spinner from '../../components/Spinner'
 import InsightGroupCard from '../../components/Cards/InsightGroupCard'
+import Header from '../../components/Header'
 
 export default function Insights() {
     const navigate = useNavigate()
@@ -66,16 +65,8 @@ export default function Insights() {
 
     return (
         <Menu currentPage="insight">
+            <Header title="Insights" datePicker />
             <Flex flexDirection="col">
-                <Flex
-                    flexDirection="row"
-                    justifyContent="between"
-                    alignItems="center"
-                    className="mb-6"
-                >
-                    <Metric>Insights</Metric>
-                    <DateRangePicker />
-                </Flex>
                 <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                     <TabList className="mb-6">
                         <Tab onClick={() => navigate('#list')}>
