@@ -20,7 +20,6 @@ import BenchmarkDetail from '../pages/Compliance/BenchmarkDetail'
 import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
-import BreakDownDetail from '../pages/Spend/BreakDownDetail'
 
 const routes = [
     {
@@ -80,11 +79,6 @@ const authRoutes = [
         key: 'spend',
         path: '/:ws/spend',
         component: Spend,
-    },
-    {
-        key: 'spend',
-        path: '/:ws/spend/breakdown',
-        component: BreakDownDetail,
     },
     {
         key: 'spend metrics',

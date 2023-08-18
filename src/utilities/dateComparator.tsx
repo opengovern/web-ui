@@ -1,4 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs'
+import { SelectItem, Text } from '@tremor/react'
 
 export const agGridDateComparator = (
     filterLocalDateAtMidnight: Date,
@@ -48,4 +49,26 @@ export const checkGranularity = (start: Dayjs, end: Dayjs) => {
         monthly,
         yearly,
     }
+}
+
+export const generateItems = (s: Dayjs, e: Dayjs) => {
+    return (
+        <>
+            {checkGranularity(s, e).daily && (
+                <SelectItem value="daily">
+                    <Text>Daily</Text>
+                </SelectItem>
+            )}
+            {checkGranularity(s, e).monthly && (
+                <SelectItem value="monthly">
+                    <Text>Monthly</Text>
+                </SelectItem>
+            )}
+            {checkGranularity(s, e).yearly && (
+                <SelectItem value="yearly">
+                    <Text>Yearly</Text>
+                </SelectItem>
+            )}
+        </>
+    )
 }
