@@ -1,133 +1,105 @@
 {
-    "name": "front-end-v2",
-    "version": "0.1.0",
-    "private": true,
-    "dependencies": {
-        "@auth0/auth0-react": "^2.0.0",
-        "@azure/msal-browser": "^2.37.1",
-        "@azure/msal-react": "^1.5.8",
-        "@headlessui/react": "^1.7.15",
-        "@heroicons/react": "^2.0.18",
-        "@internationalized/date": "^3.3.0",
-        "@react-aria/calendar": "^3.4.0",
-        "@react-aria/datepicker": "^3.5.0",
-        "@react-aria/overlays": "^3.15.0",
-        "@react-spectrum/view": "^3.6.0",
-        "@sentry/react": "^7.60.0",
-        "@tailwindcss/forms": "^0.5.3",
-        "@testing-library/jest-dom": "^5.16.5",
-        "@testing-library/react": "^13.4.0",
-        "@testing-library/user-event": "^13.5.0",
-        "@tremor/react": "^3.0.1",
-        "@types/jest": "^27.5.2",
-        "@types/node": "^16.18.36",
-        "@types/react": "^18.2.12",
-        "@types/react-dom": "^18.2.5",
-        "ag-grid-community": "^30.0.2",
-        "ag-grid-enterprise": "^30.0.2",
-        "ag-grid-react": "^30.0.2",
-        "axios": "^1.4.0",
-        "clipboard-copy": "^4.0.1",
-        "dayjs": "^1.11.8",
-        "echarts": "^5.4.3",
-        "echarts-for-react": "^3.0.2",
-        "jotai": "^2.2.0",
-        "jwt-decode": "^3.1.2",
-        "prismjs": "^1.29.0",
-        "react": "^18.2.0",
-        "react-aria": "^3.26.0",
-        "react-csv": "^2.2.2",
-        "react-dom": "^18.2.0",
-        "react-router-dom": "^6.12.1",
-        "react-scripts": "5.0.1",
-        "react-simple-code-editor": "^0.13.1",
-        "react-stately": "^3.24.0",
-        "runtime-env-cra": "^0.2.4",
-        "swagger-typescript-api": "^12.0.4",
-        "swr": "^2.1.5",
-        "typescript": "^4.9.5",
-        "web-vitals": "^2.1.4"
-    },
-    "scripts": {
-        "start": "NODE_ENV=development runtime-env-cra --config-name=./public/env-config.js && react-scripts start",
-        "start-demo": "NODE_ENV=development runtime-env-cra --config-name=./public/env-demo-config.js && react-scripts start",
-        "start-local-win": "SET NODE_ENV=development runtime-env-cra --config-name=./public/env-config.js && react-scripts start",
-        "start-demo-local-win": "SET NODE_ENV=demo runtime-env-cra --config-name=./public/env-demo-config.js && react-scripts start",
-        "build": "react-scripts build",
-        "build:stg": "env-cmd -f stg.env react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "lint": "eslint .",
-        "lint:fix": "eslint --fix .",
-        "format": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\"",
-        "storybook": "storybook dev -p 6006 -s public",
-        "build-storybook": "storybook build -s public",
-        "chromatic": "npx chromatic --project-token=2ae656df246a --allow-console-errors",
-        "codegen": "npx swagger-typescript-api --axios -p https://swagger.kaytu.dev/swagger/doc.json -o ./src/api -n api.ts && go run codegen/generate.go",
-        "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sentry --project kaytu ./build && sentry-cli --url https://sen.kaytu.dev/ sourcemaps upload --org sentry --release v1.0.0 --project kaytu ./build"
-    },
-    "eslintConfig": {
-        "overrides": [
-            {
-                "files": [
-                    "**/*.stories.*"
-                ],
-                "rules": {
-                    "import/no-anonymous-default-export": "off",
-                    "react/no-unstable-nested-components": [
-                        "error",
-                        {
-                            "allowAsProps": true
-                        }
-                    ]
-                }
-            }
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "@storybook/addon-essentials": "^7.0.20",
-        "@storybook/addon-interactions": "^7.0.20",
-        "@storybook/addon-links": "^7.0.20",
-        "@storybook/blocks": "^7.0.20",
-        "@storybook/preset-create-react-app": "^7.0.20",
-        "@storybook/react": "^7.0.20",
-        "@storybook/react-webpack5": "^7.0.20",
-        "@storybook/testing-library": "^0.0.14-next.2",
-        "@types/prismjs": "^1.26.0",
-        "babel-plugin-named-exports-order": "^0.0.2",
-        "chromatic": "^6.19.5",
-        "eslint": "^8.42.0",
-        "eslint-config-airbnb": "^19.0.4",
-        "eslint-config-prettier": "^8.8.0",
-        "eslint-import-resolver-typescript": "^3.5.5",
-        "eslint-plugin-import": "^2.27.5",
-        "eslint-plugin-jsx-a11y": "^6.7.1",
-        "eslint-plugin-prettier": "^4.2.1",
-        "eslint-plugin-react": "^7.32.2",
-        "eslint-plugin-react-hooks": "^4.6.0",
-        "eslint-plugin-storybook": "^0.6.12",
-        "husky": "^8.0.3",
-        "prettier": "^2.8.8",
-        "prop-types": "^15.8.1",
-        "storybook": "^7.0.20",
-        "tailwindcss": "^3.3.2",
-        "webpack": "^5.86.0"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "npm run lint && npm run format"
-        }
+  "name": "front-end-v2",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@auth0/auth0-react": "^2.0.0",
+    "@azure/msal-browser": "^2.37.1",
+    "@azure/msal-react": "^1.5.8",
+    "@headlessui/react": "^1.7.15",
+    "@heroicons/react": "^2.0.18",
+    "@internationalized/date": "^3.3.0",
+    "@react-aria/calendar": "^3.4.0",
+    "@react-aria/datepicker": "^3.5.0",
+    "@react-aria/overlays": "^3.15.0",
+    "@react-spectrum/view": "^3.6.0",
+    "@sentry/react": "^7.60.0",
+    "@tailwindcss/forms": "^0.5.3",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@tremor/react": "^3.0.1",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.36",
+    "@types/react": "^18.2.12",
+    "@types/react-dom": "^18.2.5",
+    "ag-grid-community": "^30.0.2",
+    "ag-grid-enterprise": "^30.0.2",
+    "ag-grid-react": "^30.0.2",
+    "axios": "^1.4.0",
+    "clipboard-copy": "^4.0.1",
+    "dayjs": "^1.11.8",
+    "echarts": "^5.4.3",
+    "echarts-for-react": "^3.0.2",
+    "jotai": "^2.2.0",
+    "jwt-decode": "^3.1.2",
+    "prismjs": "^1.29.0",
+    "react": "^18.2.0",
+    "react-aria": "^3.26.0",
+    "react-csv": "^2.2.2",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.12.1",
+    "react-scripts": "5.0.1",
+    "react-simple-code-editor": "^0.13.1",
+    "react-stately": "^3.24.0",
+    "runtime-env-cra": "^0.2.4",
+    "swagger-typescript-api": "^12.0.4",
+    "swr": "^2.1.5",
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "NODE_ENV=development runtime-env-cra --config-name=./public/env-config.js && react-scripts start",
+    "start-demo": "NODE_ENV=development runtime-env-cra --config-name=./public/env-demo-config.js && react-scripts start",
+    "start-local-win": "SET NODE_ENV=development runtime-env-cra --config-name=./public/env-config.js && react-scripts start",
+    "start-demo-local-win": "SET NODE_ENV=demo runtime-env-cra --config-name=./public/env-demo-config.js && react-scripts start",
+    "build": "react-scripts build",
+    "build:stg": "env-cmd -f stg.env react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\"",
+    "chromatic": "npx chromatic --project-token=2ae656df246a --allow-console-errors",
+    "codegen": "npx swagger-typescript-api --axios -p https://swagger.kaytu.dev/swagger/doc.json -o ./src/api -n api.ts && go run codegen/generate.go",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sentry --project kaytu ./build && sentry-cli --url https://sen.kaytu.dev/ sourcemaps upload --org sentry --release v1.0.0 --project kaytu ./build"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/prismjs": "^1.26.0",
+    "babel-plugin-named-exports-order": "^0.0.2",
+    "chromatic": "^6.19.5",
+    "eslint": "^8.42.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-storybook": "^0.6.12",
+    "husky": "^8.0.3",
+    "prettier": "^2.8.8",
+    "prop-types": "^15.8.1",
+    "storybook": "^7.0.20",
+    "tailwindcss": "^3.3.2",
+    "webpack": "^5.86.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run format"
     }
+  }
 }

@@ -53,7 +53,11 @@ export default function OnboardCard({
                         </Metric>
                     )}
                 </Flex>
-                <Flex className="max-h-[50px] relative">
+                <Flex
+                    className={`max-h-[50px] relative ${
+                        loading ? 'opacity-0' : ''
+                    }`}
+                >
                     <Chart
                         labels={[]}
                         chartData={chartData(healthy, unhealthy)}
