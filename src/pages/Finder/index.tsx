@@ -437,6 +437,13 @@ export default function Finder() {
                                             onGridReady={(params) => {
                                                 if (isLoading) {
                                                     params.api.showLoadingOverlay()
+                                                } else {
+                                                    params.api.setRowData(
+                                                        getTable(
+                                                            queryResponse?.headers,
+                                                            queryResponse?.result
+                                                        ).rows
+                                                    )
                                                 }
                                             }}
                                         />
