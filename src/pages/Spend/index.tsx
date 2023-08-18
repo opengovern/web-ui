@@ -5,14 +5,12 @@ import {
     Flex,
     Grid,
     Select,
-    SelectItem,
     Tab,
     TabGroup,
     TabList,
     Text,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { Dayjs } from 'dayjs'
 import Menu from '../../components/Menu'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
@@ -35,7 +33,7 @@ import {
 import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
 import Breakdown from '../../components/Breakdown'
 import ListCard from '../../components/Cards/ListCard'
-import { checkGranularity } from '../../utilities/dateComparator'
+import { checkGranularity, generateItems } from '../../utilities/dateComparator'
 import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 import Header from '../../components/Header'
 
@@ -165,28 +163,6 @@ const getConnections = (con: IFilter) => {
         return `${con.connections.length} accounts`
     }
     return 'all accounts'
-}
-
-const generateItems = (s: Dayjs, e: Dayjs) => {
-    return (
-        <>
-            {checkGranularity(s, e).daily && (
-                <SelectItem value="daily">
-                    <Text>Daily</Text>
-                </SelectItem>
-            )}
-            {checkGranularity(s, e).monthly && (
-                <SelectItem value="monthly">
-                    <Text>Monthly</Text>
-                </SelectItem>
-            )}
-            {checkGranularity(s, e).yearly && (
-                <SelectItem value="yearly">
-                    <Text>Yearly</Text>
-                </SelectItem>
-            )}
-        </>
-    )
 }
 
 export default function Spend() {
@@ -351,7 +327,7 @@ export default function Spend() {
                     <Breakdown
                         chartData={pieData(composition)}
                         loading={compositionLoading}
-                        seeMore="breakdown"
+                        seeMore="details#category"
                         isCost
                     />
                 </Col>

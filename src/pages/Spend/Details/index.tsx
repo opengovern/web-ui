@@ -33,6 +33,10 @@ import {
 import { spendTimeAtom } from '../../../store'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import {
+    checkGranularity,
+    generateItems,
+} from '../../../utilities/dateComparator'
 
 export default function CostMetricsDetails() {
     const navigate = useNavigate()
@@ -60,22 +64,35 @@ export default function CostMetricsDetails() {
         { name: 'details', path: '', current: true },
     ]
 
+    const page = () => {
+        switch (hash) {
+            case '#connections':
+                return 'connection'
+            case '#servises':
+                return 'metric'
+            default:
+                return 'category'
+        }
+    }
+
     const activeTimeRange = useAtomValue(spendTimeAtom)
-    const [dimension, setDimension] = useState<string>(
-        hash === '#connections' ? 'connection' : 'metric'
-    )
+    const [dimension, setDimension] = useState<string>(page())
     const dimensionName = () => {
         switch (dimension) {
             case 'metric':
                 return 'Service Name'
-            case 'connection':
-                return 'Connection Name'
             default:
-                return ''
+                return 'Connection Name'
         }
     }
     const [filter, setFilter] = useState<string[]>([])
-    const [granularity, setGranularity] = useState<string>('daily')
+    const [selectedGranularity, setSelectedGranularity] = useState<
+        'monthly' | 'daily' | 'yearly'
+    >(
+        checkGranularity(activeTimeRange.start, activeTimeRange.end).daily
+            ? 'daily'
+            : 'monthly'
+    )
     const query = (): {
         startTime?: number | undefined
         endTime?: number | undefined
@@ -90,7 +107,7 @@ export default function CostMetricsDetails() {
         }
 
         let gra: 'monthly' | 'daily' = 'daily'
-        if (granularity === 'monthly') {
+        if (selectedGranularity === 'monthly') {
             gra = 'monthly'
         }
 
@@ -129,11 +146,14 @@ export default function CostMetricsDetails() {
                 <DateRangePicker />
                 <Text className="m-3">Granularity</Text>
                 <Select
-                    value={granularity}
-                    onValueChange={(v) => setGranularity(v)}
+                    value={selectedGranularity}
+                    onValueChange={(v) =>
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        setSelectedGranularity(v)
+                    }
                 >
-                    <SelectItem value="daily">Daily</SelectItem>
-                    <SelectItem value="monthly">Monthly</SelectItem>
+                    {generateItems(activeTimeRange.start, activeTimeRange.end)}
                 </Select>
                 <Text className="m-3">Group by</Text>
                 <Select
@@ -179,7 +199,7 @@ export default function CostMetricsDetails() {
             ],
             defaultToolPanel: '',
         })
-    }, [granularity, dimension, filter, connections, services])
+    }, [selectedGranularity, dimension, filter, connections, services])
 
     function getContextMenuItems(
         params: GetContextMenuItemsParams
@@ -197,6 +217,15 @@ export default function CostMetricsDetails() {
         paginationPageSize: 25,
         suppressExcelExport: true,
         animateRows: true,
+        enableGroupEdit: true,
+        columnTypes: {
+            dimension: {
+                enableRowGroup: true,
+                enablePivot: true,
+            },
+        },
+        rowGroupPanelShow: page() === 'category' ? 'always' : 'never',
+        groupAllowUnbalanced: true,
         getRowHeight: () => 50,
         onGridReady: (e) => {
             if (isLoading) {
@@ -246,7 +275,20 @@ export default function CostMetricsDetails() {
                     floatingFilter: true,
                     resizable: true,
                     pivot: false,
-                    pinned: true,
+                    pinned: page() === 'connection' || page() === 'metric',
+                },
+                {
+                    field: 'category',
+                    headerName: 'Category',
+                    rowGroup: page() === 'category',
+                    enableRowGroup: true,
+                    hide: true,
+                    sortable: true,
+                    filter: 'agTextColumnFilter',
+                    suppressMenu: true,
+                    floatingFilter: true,
+                    resizable: true,
+                    pivot: false,
                 },
             ]
 
@@ -275,7 +317,9 @@ export default function CostMetricsDetails() {
                         resizable: true,
                         pivot: false,
                         valueFormatter: (param) => {
-                            return exactPriceDisplay(param.value)
+                            return param.value
+                                ? exactPriceDisplay(param.value)
+                                : ''
                         },
                     }
                     return v
@@ -292,10 +336,11 @@ export default function CostMetricsDetails() {
                         dimension: row.dimensionName
                             ? row.dimensionName
                             : row.dimensionId,
+                        category: row.category,
                         ...temp,
                     }
                 }) || []
-
+            console.log(response)
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(rows)
         } else {
