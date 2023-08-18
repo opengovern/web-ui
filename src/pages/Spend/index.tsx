@@ -34,7 +34,7 @@ import {
 } from '../../api/api'
 import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
 import Breakdown from '../../components/Breakdown'
-import SingleTopListCard from '../../components/Cards/SingleTopListCard'
+import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity } from '../../utilities/dateComparator'
 import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 import Header from '../../components/Header'
@@ -357,7 +357,7 @@ export default function Spend() {
                 </Col>
                 <Col numColSpan={3} className="h-full">
                     <Grid numItems={2} className="w-full h-full gap-4">
-                        <SingleTopListCard
+                        <ListCard
                             title="Top Accounts"
                             loading={accountCostLoading}
                             items={topAccounts(accountCostResponse)}
@@ -365,7 +365,7 @@ export default function Spend() {
                             type="account"
                             isPrice
                         />
-                        <SingleTopListCard
+                        <ListCard
                             title="Top Services"
                             loading={serviceCostLoading}
                             items={topServices(serviceCostResponse)}

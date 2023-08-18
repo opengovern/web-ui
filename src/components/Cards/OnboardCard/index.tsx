@@ -39,7 +39,7 @@ export default function OnboardCard({
     loading,
 }: IOnBoardCard) {
     return (
-        <Card>
+        <Card className="overflow-hidden">
             <Flex className="h-full">
                 <Flex flexDirection="col" alignItems="start" className="w-fit">
                     <Text className="mb-1.5 whitespace-nowrap">{title}</Text>

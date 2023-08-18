@@ -34,7 +34,7 @@ import {
 import { dateDisplay } from '../../utilities/dateDisplay'
 import Chart from '../../components/Chart'
 import Breakdown from '../../components/Breakdown'
-import SingleTopListCard from '../../components/Cards/SingleTopListCard'
+import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity } from '../../utilities/dateComparator'
 import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 import Header from '../../components/Header'
@@ -333,14 +333,14 @@ export default function Assets() {
                 </Col>
                 <Col numColSpan={1} numColSpanLg={3} className="h-full">
                     <Grid numItems={2} className="w-full h-full gap-4">
-                        <SingleTopListCard
+                        <ListCard
                             title="Top Accounts"
                             loading={accountsResponseLoading}
                             items={topAccounts(accountsResponse)}
                             url="accounts-detail"
                             type="account"
                         />
-                        <SingleTopListCard
+                        <ListCard
                             title="Top Services"
                             loading={servicesResponseLoading}
                             items={topServices(servicesResponse)}

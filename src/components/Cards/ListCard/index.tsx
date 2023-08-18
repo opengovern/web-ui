@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
-import { useAtomValue } from 'jotai/index'
+import { useAtomValue } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
 import dayjs from 'dayjs'
 import { SourceType } from '../../../api/api'
@@ -36,7 +36,7 @@ interface Item {
     id?: string | undefined
 }
 
-export default function SingleTopListCard({
+export default function ListCard({
     title,
     loading,
     isPrice,
