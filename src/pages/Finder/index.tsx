@@ -409,29 +409,38 @@ export default function Finder() {
                                     </Grid>
                                 </TabPanel>
                                 <TabPanel>
-                                    <Table
-                                        title="Query results"
-                                        id="finder_table"
-                                        columns={
-                                            getTable(
-                                                queryResponse?.headers,
-                                                queryResponse?.result
-                                            ).columns
-                                        }
-                                        rowData={
-                                            getTable(
-                                                queryResponse?.headers,
-                                                queryResponse?.result
-                                            ).rows
-                                        }
-                                        downloadable
-                                        onRowClicked={(
-                                            event: RowClickedEvent
-                                        ) => {
-                                            setSelectedRow(event.data)
-                                            setOpenDrawer(true)
-                                        }}
-                                    />
+                                    {isLoading ? (
+                                        <Spinner className="mt-56" />
+                                    ) : (
+                                        <Table
+                                            title="Query results"
+                                            id="finder_table"
+                                            columns={
+                                                getTable(
+                                                    queryResponse?.headers,
+                                                    queryResponse?.result
+                                                ).columns
+                                            }
+                                            rowData={
+                                                getTable(
+                                                    queryResponse?.headers,
+                                                    queryResponse?.result
+                                                ).rows
+                                            }
+                                            downloadable
+                                            onRowClicked={(
+                                                event: RowClickedEvent
+                                            ) => {
+                                                setSelectedRow(event.data)
+                                                setOpenDrawer(true)
+                                            }}
+                                            onGridReady={(params) => {
+                                                if (isLoading) {
+                                                    params.api.showLoadingOverlay()
+                                                }
+                                            }}
+                                        />
+                                    )}
                                 </TabPanel>
                             </TabPanels>
                         </TabGroup>
