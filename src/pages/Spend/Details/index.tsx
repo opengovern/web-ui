@@ -9,7 +9,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
@@ -20,7 +20,9 @@ import {
     ColDef,
     GetContextMenuItemsParams,
     GridOptions,
+    ICellRendererParams,
     MenuItemDef,
+    ValueFormatterParams,
 } from 'ag-grid-community'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import DateRangePicker from '../../../components/DateRangePicker'
@@ -37,9 +39,9 @@ import {
     generateItems,
 } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
+import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 
 export default function CostMetricsDetails() {
-    const navigate = useNavigate()
     const { hash } = useLocation()
 
     const { response: connections, isLoading: connectionsLoading } =
@@ -57,7 +59,7 @@ export default function CostMetricsDetails() {
         switch (hash) {
             case '#connections':
                 return 'connection'
-            case '#servises':
+            case '#services':
                 return 'metric'
             default:
                 return 'category'
@@ -68,10 +70,10 @@ export default function CostMetricsDetails() {
     const [dimension, setDimension] = useState<string>(page())
     const dimensionName = () => {
         switch (dimension) {
-            case 'metric':
-                return 'Service Name'
-            default:
+            case 'connection':
                 return 'Connection Name'
+            default:
+                return 'Service Name'
         }
     }
     const [filter, setFilter] = useState<string[]>([])
@@ -121,6 +123,7 @@ export default function CostMetricsDetails() {
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
         query()
     )
+    console.log(response)
 
     const gridRef = useRef<AgGridReact>(null)
     const filterPanel = () => {
@@ -263,31 +266,22 @@ export default function CostMetricsDetails() {
         getContextMenuItems,
     }
 
-    useEffect(() => {
-        if (!isLoading) {
-            const defaultCols: ColDef[] = [
+    // eslint-disable-next-line consistent-return
+    const categoryOptions = () => {
+        if (page() === 'category') {
+            return [
                 {
-                    field: 'dimension',
-                    headerName: dimensionName(),
+                    field: 'percent',
+                    headerName: '%',
                     sortable: true,
-                    filter: 'agTextColumnFilter',
-                    suppressMenu: true,
-                    floatingFilter: true,
-                    resizable: true,
-                    pivot: false,
-                    pinned: page() === 'connection' || page() === 'metric',
-                },
-                {
-                    field: 'totalCost',
-                    headerName: 'Total Cost',
                     aggFunc: 'sum',
                     suppressMenu: true,
                     filter: 'agTextColumnFilter',
                     floatingFilter: true,
                     resizable: true,
                     pivot: false,
-                    valueFormatter: (param) => {
-                        return param.value ? exactPriceDisplay(param.value) : ''
+                    valueFormatter: (param: ValueFormatterParams<any, any>) => {
+                        return param.value ? `${param.value.toFixed(2)}%` : ''
                     },
                 },
                 {
@@ -303,6 +297,52 @@ export default function CostMetricsDetails() {
                     resizable: true,
                     pivot: false,
                 },
+            ]
+        }
+        return []
+    }
+
+    useEffect(() => {
+        if (!isLoading) {
+            const defaultCols: ColDef[] = [
+                {
+                    field: 'connector',
+                    headerName: 'Connector',
+                    filter: 'agTextColumnFilter',
+                    suppressMenu: true,
+                    floatingFilter: true,
+                    resizable: true,
+                    pivot: false,
+                    cellRenderer: (params: ICellRendererParams) => {
+                        return params.value && getConnectorIcon(params.value)
+                    },
+                },
+                {
+                    field: 'dimension',
+                    headerName: dimensionName(),
+                    sortable: true,
+                    filter: 'agTextColumnFilter',
+                    suppressMenu: true,
+                    floatingFilter: true,
+                    resizable: true,
+                    pivot: false,
+                    pinned: page() === 'connection' || page() === 'metric',
+                },
+                {
+                    field: 'totalCost',
+                    headerName: 'Total Cost',
+                    sortable: true,
+                    aggFunc: 'sum',
+                    suppressMenu: true,
+                    filter: 'agTextColumnFilter',
+                    floatingFilter: true,
+                    resizable: true,
+                    pivot: false,
+                    valueFormatter: (param: ValueFormatterParams<any, any>) => {
+                        return param.value ? exactPriceDisplay(param.value) : ''
+                    },
+                },
+                ...categoryOptions(),
             ]
 
             const columnNames =
@@ -355,29 +395,24 @@ export default function CostMetricsDetails() {
                             ? row.dimensionName
                             : row.dimensionId,
                         category: row.category,
+                        connector: row.connector,
                         totalCost,
                         ...temp,
                     }
                 }) || []
-            // const newRows = []
-            // for (let i = 0; i < rows.length; i += 1) {
-            //     let total = 0
-            //     const value = rows.filter(
-            //         (r) => r.category === rows[i].category
-            //     )
-            //     for (let j = 0; j < value.length; j += 1) {
-            //         total += value[j].totalCost
-            //     }
-            //     newRows.push({
-            //         ...rows[i],
-            //         category: `${rows[i].category} (${exactPriceDisplay(
-            //             total
-            //         )})`,
-            //         categoryCost: total,
-            //     })
-            // }
+            let sum = 0
+            const newRow = []
+            for (let i = 0; i < rows.length; i += 1) {
+                sum += rows[i].totalCost
+            }
+            for (let i = 0; i < rows.length; i += 1) {
+                newRow.push({
+                    ...rows[i],
+                    percent: (rows[i].totalCost / sum) * 100,
+                })
+            }
             gridRef.current?.api?.setColumnDefs(cols)
-            gridRef.current?.api?.setRowData(rows)
+            gridRef.current?.api?.setRowData(newRow)
         } else {
             gridRef.current?.api?.showLoadingOverlay()
         }
