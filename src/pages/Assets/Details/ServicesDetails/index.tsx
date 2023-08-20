@@ -5,10 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
 import Summary from './Summary'
 import { filterAtom, timeAtom } from '../../../../store'
-import DateRangePicker from '../../../../components/DateRangePicker'
 import Menu from '../../../../components/Menu'
-import Breadcrumbs from '../../../../components/Breadcrumbs'
-import ConnectionList from '../../../../components/ConnectionList'
 import {
     badgeTypeByDelta,
     percentageByChange,
@@ -16,6 +13,7 @@ import {
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
+import Header from '../../../../components/Header'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -90,29 +88,14 @@ export default function ServicesDetails() {
             sortBy: 'name',
         })
 
-    const breadcrumbsPages = [
-        {
-            name: 'Assets',
-            path: () => {
-                navigate('./..')
-            },
-            current: false,
-        },
-        { name: 'Services detail', path: '', current: true },
-    ]
     return (
         <Menu currentPage="assets">
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                alignItems="center"
-            >
-                <Breadcrumbs pages={breadcrumbsPages} />
-                <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker />
-                    <ConnectionList />
-                </Flex>
-            </Flex>
+            <Header
+                title="Assets"
+                breadCrumb={['Services Detail']}
+                connectionFilter
+                datePicker
+            />
             <Summary
                 totalServices={serviceList?.total_metrics}
                 totalServicesLoading={isServiceListLoading}

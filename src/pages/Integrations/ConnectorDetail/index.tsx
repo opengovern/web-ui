@@ -1,12 +1,11 @@
 import { Flex, Title } from '@tremor/react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import Menu from '../../../components/Menu'
 import {
     useOnboardApiV1ConnectionsSummaryList,
     useOnboardApiV1CredentialList,
 } from '../../../api/onboard.gen'
-import Breadcrumbs from '../../../components/Breadcrumbs'
 import { timeAtom } from '../../../store'
 import AWSTabs from './AWS/Tabs'
 import AWSSummary from './AWS/Summary'
@@ -23,6 +22,7 @@ import {
     SourceType,
 } from '../../../api/api'
 import { isDemo } from '../../../utilities/demo'
+import Header from '../../../components/Header'
 
 const MockAWS: {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -780,7 +780,6 @@ const MockAzure: {
     ],
 }
 export default function ConnectorDetail() {
-    const navigate = useNavigate()
     const { connector } = useParams()
 
     const activeTimeRange = useAtomValue(timeAtom)
@@ -800,22 +799,10 @@ export default function ConnectorDetail() {
             connector: provider,
         })
 
-    const breadcrumbsPages = [
-        {
-            name: 'Integrations',
-            path: () => {
-                navigate('./../..')
-            },
-            current: false,
-        },
-        { name: connector, path: '', current: true },
-    ]
     return (
         <Menu currentPage="integration">
             <Flex flexDirection="col" alignItems="start">
-                <Flex className="mb-6">
-                    <Breadcrumbs pages={breadcrumbsPages} />
-                </Flex>
+                <Header title="Integrations" breadCrumb={[connector]} />
                 <Title className="font-semibold">{connector}</Title>
                 {connector === 'AWS' ? (
                     <>
