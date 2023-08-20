@@ -280,6 +280,7 @@ export default function CostMetricsDetails() {
                 {
                     field: 'totalCost',
                     headerName: 'Total Cost',
+                    aggFunc: 'sum',
                     suppressMenu: true,
                     filter: 'agTextColumnFilter',
                     floatingFilter: true,
@@ -358,27 +359,25 @@ export default function CostMetricsDetails() {
                         ...temp,
                     }
                 }) || []
-            const newRows = []
-            for (let i = 0; i < rows.length; i += 1) {
-                let total = 0
-                const value = rows.filter(
-                    (r) => r.category === rows[i].category
-                )
-                for (let j = 0; j < value.length; j += 1) {
-                    total += value[j].totalCost
-                }
-                newRows.push({
-                    ...rows[i],
-                    category: `${rows[i].category} (${exactPriceDisplay(
-                        total
-                    )})`,
-                    categoryCost: total,
-                })
-            }
+            // const newRows = []
+            // for (let i = 0; i < rows.length; i += 1) {
+            //     let total = 0
+            //     const value = rows.filter(
+            //         (r) => r.category === rows[i].category
+            //     )
+            //     for (let j = 0; j < value.length; j += 1) {
+            //         total += value[j].totalCost
+            //     }
+            //     newRows.push({
+            //         ...rows[i],
+            //         category: `${rows[i].category} (${exactPriceDisplay(
+            //             total
+            //         )})`,
+            //         categoryCost: total,
+            //     })
+            // }
             gridRef.current?.api?.setColumnDefs(cols)
-            gridRef.current?.api?.setRowData(
-                newRows.sort((a, b) => b.categoryCost - a.categoryCost)
-            )
+            gridRef.current?.api?.setRowData(rows)
         } else {
             gridRef.current?.api?.showLoadingOverlay()
         }
