@@ -13,16 +13,14 @@ import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import Menu from '../../../components/Menu'
 import { filterAtom, timeAtom } from '../../../store'
-import Breadcrumbs from '../../../components/Breadcrumbs'
-import DateRangePicker from '../../../components/DateRangePicker'
 import Summary from './Tabs/Summary'
 import { useComplianceApiV1BenchmarksSummaryDetail } from '../../../api/compliance.gen'
-import ConnectionList from '../../../components/ConnectionList'
 import Assignments from './Tabs/Assignments'
 import Policies from './Tabs/Policies'
 import Findings from './Tabs/Findings'
 import Spinner from '../../../components/Spinner'
 import { dateDisplay } from '../../../utilities/dateDisplay'
+import Header from '../../../components/Header'
 
 export default function BenchmarkDetail() {
     const [selectedTab, setSelectedTab] = useState(0)
@@ -35,17 +33,6 @@ export default function BenchmarkDetail() {
 
     const { response: benchmarkDetail, isLoading } =
         useComplianceApiV1BenchmarksSummaryDetail(String(id))
-
-    const breadcrumbsPages = [
-        {
-            name: 'Compliance',
-            path: () => {
-                navigate('./..')
-            },
-            current: false,
-        },
-        { name: 'Benchmark Detail', path: '', current: true },
-    ]
 
     useEffect(() => {
         switch (tabs) {
@@ -70,13 +57,12 @@ export default function BenchmarkDetail() {
                 <Spinner className="mt-56" />
             ) : (
                 <>
-                    <Flex className="mb-6">
-                        <Breadcrumbs pages={breadcrumbsPages} />
-                        <Flex justifyContent="end">
-                            <DateRangePicker />
-                            <ConnectionList />
-                        </Flex>
-                    </Flex>
+                    <Header
+                        title="Compliance"
+                        breadCrumb={['Benchmark Detail']}
+                        connectionFilter
+                        datePicker
+                    />
                     <Flex
                         flexDirection="col"
                         alignItems="start"

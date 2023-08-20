@@ -25,7 +25,6 @@ import {
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import DateRangePicker from '../../../components/DateRangePicker'
 import Menu from '../../../components/Menu'
-import Breadcrumbs from '../../../components/Breadcrumbs'
 import {
     useInventoryApiV2AnalyticsMetricsListList,
     useInventoryApiV2AnalyticsSpendTableList,
@@ -37,6 +36,7 @@ import {
     checkGranularity,
     generateItems,
 } from '../../../utilities/dateComparator'
+import Header from '../../../components/Header'
 
 export default function CostMetricsDetails() {
     const navigate = useNavigate()
@@ -52,17 +52,6 @@ export default function CostMetricsDetails() {
 
     const { response: services, isLoading: servicesLoading } =
         useInventoryApiV2AnalyticsMetricsListList({ metricType: 'spend' })
-
-    const breadcrumbsPages = [
-        {
-            name: 'Spend',
-            path: () => {
-                navigate('./..')
-            },
-            current: false,
-        },
-        { name: 'details', path: '', current: true },
-    ]
 
     const page = () => {
         switch (hash) {
@@ -397,13 +386,12 @@ export default function CostMetricsDetails() {
 
     return (
         <Menu currentPage="spend">
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                alignItems="center"
-            >
-                <Breadcrumbs pages={breadcrumbsPages} />
-            </Flex>
+            <Header
+                title="Spend"
+                breadCrumb={['Spend Detail']}
+                connectionFilter
+                datePicker
+            />
             <Card className="mt-10">
                 <Flex>
                     <Title className="font-semibold">Spend details</Title>

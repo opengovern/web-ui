@@ -5,9 +5,6 @@ import { GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { filterAtom, timeAtom } from '../../../../store'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
 import Menu from '../../../../components/Menu'
-import Breadcrumbs from '../../../../components/Breadcrumbs'
-import DateRangePicker from '../../../../components/DateRangePicker'
-import ConnectionList from '../../../../components/ConnectionList'
 import { badgeDelta, badgeTypeByDelta } from '../../../../utilities/deltaType'
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiMetric,
@@ -15,6 +12,7 @@ import {
 } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
+import Header from '../../../../components/Header'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -145,17 +143,6 @@ export default function ResourceMetricsDetails() {
     const { response: metrics, isLoading: metricsLoading } =
         useInventoryApiV2AnalyticsMetricList(query)
 
-    const breadcrumbsPages = [
-        {
-            name: 'Assets',
-            path: () => {
-                navigate('./..')
-            },
-            current: false,
-        },
-        { name: 'Resource metrics', path: '', current: true },
-    ]
-
     const options: GridOptions = {
         enableGroupEdit: true,
         columnTypes: {
@@ -171,18 +158,12 @@ export default function ResourceMetricsDetails() {
 
     return (
         <Menu currentPage="assets">
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                alignItems="center"
-            >
-                <Breadcrumbs pages={breadcrumbsPages} />
-
-                <Flex flexDirection="row" justifyContent="end">
-                    <DateRangePicker />
-                    <ConnectionList />
-                </Flex>
-            </Flex>
+            <Header
+                title="Assets"
+                breadCrumb={['Resource Metrics']}
+                connectionFilter
+                datePicker
+            />
             <Card className="mt-4">
                 <Table
                     options={options}

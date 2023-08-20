@@ -26,8 +26,6 @@ import {
 import { timeAtom } from '../../../store'
 import Downloader from './Downloader'
 import { numberGroupedDisplay } from '../../../utilities/numericDisplay'
-import Breadcrumbs from '../../../components/Breadcrumbs'
-import DateRangePicker from '../../../components/DateRangePicker'
 import Spinner from '../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
@@ -39,6 +37,7 @@ import {
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
+import Header from '../../../components/Header'
 
 const chartData = (inputData: any) => {
     const data = []
@@ -53,12 +52,6 @@ const chartData = (inputData: any) => {
         }
     }
     return data
-}
-
-const generateType = (input: any) => {
-    if (Number(Date.parse(input))) return 'date'
-    if (Number(input)) return 'number'
-    return 'string'
 }
 
 const insightsHeadersToColumns = (headers: any) => {
@@ -237,17 +230,6 @@ export default function InsightDetail() {
         ? insightDetail?.result[0].details
         : undefined
 
-    const breadcrumbsPages = [
-        {
-            name: 'Insights',
-            path: () => {
-                navigate('./..')
-            },
-            current: false,
-        },
-        { name: 'Insight Detail', path: '', current: true },
-    ]
-
     const trendDates = () => {
         return (
             insightTrend?.map((item) => {
@@ -277,15 +259,11 @@ export default function InsightDetail() {
                 </Flex>
             ) : (
                 <Flex flexDirection="col">
-                    <Flex
-                        flexDirection="row"
-                        justifyContent="between"
-                        alignItems="center"
-                        className="mb-6"
-                    >
-                        <Breadcrumbs pages={breadcrumbsPages} />
-                        <DateRangePicker />
-                    </Flex>
+                    <Header
+                        title="Insights"
+                        breadCrumb={['Insight Detail']}
+                        datePicker
+                    />
                     <Flex flexDirection="col">
                         <Flex flexDirection="row">
                             {detailLoading ? (
