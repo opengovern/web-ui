@@ -183,6 +183,7 @@ export default function CostMetricsDetails() {
             </Flex>
         )
     }
+
     useEffect(() => {
         gridRef.current?.api?.setSideBar({
             toolPanels: [
@@ -224,8 +225,18 @@ export default function CostMetricsDetails() {
                 enablePivot: true,
             },
         },
-        rowGroupPanelShow: page() === 'category' ? 'always' : 'never',
+        rowGroupPanelShow: 'never',
         groupAllowUnbalanced: true,
+        autoGroupColumnDef: {
+            headerName: 'Category',
+            flex: 2,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            cellRendererParams: {
+                suppressCount: true,
+            },
+        },
         getRowHeight: () => 50,
         onGridReady: (e) => {
             if (isLoading) {
@@ -276,6 +287,18 @@ export default function CostMetricsDetails() {
                     resizable: true,
                     pivot: false,
                     pinned: page() === 'connection' || page() === 'metric',
+                },
+                {
+                    field: 'totalCost',
+                    headerName: 'Total Cost',
+                    suppressMenu: true,
+                    filter: 'agTextColumnFilter',
+                    floatingFilter: true,
+                    resizable: true,
+                    pivot: false,
+                    valueFormatter: (param) => {
+                        return param.value ? exactPriceDisplay(param.value) : ''
+                    },
                 },
                 {
                     field: 'category',
@@ -329,20 +352,44 @@ export default function CostMetricsDetails() {
             const rows =
                 response?.map((row) => {
                     let temp = {}
+                    let totalCost = 0
                     if (row.costValue) {
                         temp = Object.fromEntries(Object.entries(row.costValue))
                     }
+                    Object.values(temp).map(
+                        // eslint-disable-next-line no-return-assign
+                        (v: number | unknown) => (totalCost += Number(v))
+                    )
                     return {
                         dimension: row.dimensionName
                             ? row.dimensionName
                             : row.dimensionId,
                         category: row.category,
+                        totalCost,
                         ...temp,
                     }
                 }) || []
-            console.log(response)
+            const newRows = []
+            for (let i = 0; i < rows.length; i += 1) {
+                let total = 0
+                const value = rows.filter(
+                    (r) => r.category === rows[i].category
+                )
+                for (let j = 0; j < value.length; j += 1) {
+                    total += value[j].totalCost
+                }
+                newRows.push({
+                    ...rows[i],
+                    category: `${rows[i].category} (${exactPriceDisplay(
+                        total
+                    )})`,
+                    categoryCost: total,
+                })
+            }
             gridRef.current?.api?.setColumnDefs(cols)
-            gridRef.current?.api?.setRowData(rows)
+            gridRef.current?.api?.setRowData(
+                newRows.sort((a, b) => b.categoryCost - a.categoryCost)
+            )
         } else {
             gridRef.current?.api?.showLoadingOverlay()
         }
@@ -360,17 +407,15 @@ export default function CostMetricsDetails() {
             <Card className="mt-10">
                 <Flex>
                     <Title className="font-semibold">Spend details</Title>
-                    <Flex className="w-fit gap-3">
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                gridRef.current?.api?.exportDataAsCsv()
-                            }}
-                            icon={ArrowDownOnSquareIcon}
-                        >
-                            Download
-                        </Button>
-                    </Flex>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            gridRef.current?.api?.exportDataAsCsv()
+                        }}
+                        icon={ArrowDownOnSquareIcon}
+                    >
+                        Download
+                    </Button>
                 </Flex>
                 <div className="ag-theme-alpine mt-4">
                     <AgGridReact
