@@ -63,7 +63,6 @@ const getTable = (headers: any, details: any) => {
                 sortable: true,
                 resizable: true,
                 filter: true,
-                flex: 1,
             })
         }
     }
@@ -94,14 +93,14 @@ export default function Finder() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchedQuery, setSearchedQuery] = useState('')
     const [searchCategory, setSearchCategory] = useState('')
+    const [selectedRow, setSelectedRow] = useState({})
+    const [openDrawer, setOpenDrawer] = useState(false)
+    const [openSearch, setOpenSearch] = useState(true)
 
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
     const { response: queries, isLoading: queryLoading } =
         useInventoryApiV1QueryList({})
-    const [selectedRow, setSelectedRow] = useState({})
-    const [openDrawer, setOpenDrawer] = useState(false)
-    const [openSearch, setOpenSearch] = useState(true)
 
     const {
         response: queryResponse,
@@ -164,7 +163,7 @@ export default function Finder() {
                             className="w-64 pr-6"
                         >
                             <TextInput
-                                className="w-56 mt-6 mb-2"
+                                className="w-56 mb-2"
                                 icon={MagnifyingGlassIcon}
                                 placeholder="Search..."
                                 value={searchCategory}
@@ -428,23 +427,14 @@ export default function Finder() {
                                                 ).rows
                                             }
                                             downloadable
+                                            options={{
+                                                isFullWidthRow: () => true,
+                                            }}
                                             onRowClicked={(
                                                 event: RowClickedEvent
                                             ) => {
                                                 setSelectedRow(event.data)
                                                 setOpenDrawer(true)
-                                            }}
-                                            onGridReady={(params) => {
-                                                if (isLoading) {
-                                                    params.api.showLoadingOverlay()
-                                                } else {
-                                                    params.api.setRowData(
-                                                        getTable(
-                                                            queryResponse?.headers,
-                                                            queryResponse?.result
-                                                        ).rows
-                                                    )
-                                                }
                                             }}
                                         />
                                     )}

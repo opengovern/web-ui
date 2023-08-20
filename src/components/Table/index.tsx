@@ -85,6 +85,7 @@ export default function Table<TData = any, TValue = any>({
             }
         }
     }
+    console.log(rowData)
 
     const saveVisibility = () => {
         if (visibility.current) {
