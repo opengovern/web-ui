@@ -27,7 +27,7 @@ export default function AWSSummary({
     return (
         <Grid numItems={3} className="w-full gap-4 mt-6 mb-10">
             <OnboardCard
-                title="Onboarded AWS Accounts"
+                title="Active AWS Accounts"
                 healthy={
                     (accountsSummary?.connectionCount || 0) -
                     (accountsSummary?.totalUnhealthyCount || 0)
