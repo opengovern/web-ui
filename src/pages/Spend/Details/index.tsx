@@ -123,7 +123,6 @@ export default function CostMetricsDetails() {
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
         query()
     )
-    console.log(response)
 
     const gridRef = useRef<AgGridReact>(null)
     const filterPanel = () => {
@@ -180,6 +179,13 @@ export default function CostMetricsDetails() {
         gridRef.current?.api?.setSideBar({
             toolPanels: [
                 {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
                     id: 'filters',
                     labelDefault: 'Filters',
                     labelKey: 'filters',
@@ -220,6 +226,7 @@ export default function CostMetricsDetails() {
         rowGroupPanelShow: 'never',
         groupAllowUnbalanced: true,
         autoGroupColumnDef: {
+            pinned: true,
             headerName: 'Category',
             flex: 2,
             sortable: true,
@@ -247,6 +254,13 @@ export default function CostMetricsDetails() {
         sideBar: {
             toolPanels: [
                 {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
                     id: 'filters',
                     labelDefault: 'Filters',
                     labelKey: 'filters',
@@ -257,7 +271,7 @@ export default function CostMetricsDetails() {
                     toolPanel: filterPanel,
                 },
             ],
-            defaultToolPanel: 'filters',
+            defaultToolPanel: '',
         },
         statusBar: {
             statusPanels: [{ statusPanel: 'agAggregationComponent' }],
@@ -273,6 +287,7 @@ export default function CostMetricsDetails() {
                 {
                     field: 'percent',
                     headerName: '%',
+                    pinned: true,
                     sortable: true,
                     aggFunc: 'sum',
                     suppressMenu: true,
@@ -313,6 +328,7 @@ export default function CostMetricsDetails() {
                     floatingFilter: true,
                     resizable: true,
                     pivot: false,
+                    pinned: true,
                     cellRenderer: (params: ICellRendererParams) => {
                         return params.value && getConnectorIcon(params.value)
                     },
@@ -326,7 +342,7 @@ export default function CostMetricsDetails() {
                     floatingFilter: true,
                     resizable: true,
                     pivot: false,
-                    pinned: page() === 'connection' || page() === 'metric',
+                    pinned: true,
                 },
                 {
                     field: 'totalCost',
@@ -338,6 +354,7 @@ export default function CostMetricsDetails() {
                     floatingFilter: true,
                     resizable: true,
                     pivot: false,
+                    pinned: true,
                     valueFormatter: (param: ValueFormatterParams<any, any>) => {
                         return param.value ? exactPriceDisplay(param.value) : ''
                     },
