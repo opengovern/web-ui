@@ -42,27 +42,29 @@ export default function OnboardCard({
                 showLabels={false}
                 colors={['slate', 'amber', 'emerald']}
             />
-            <Flex justifyContent="start" className="gap-4">
-                <Flex className="gap-2.5 w-fit">
+            <Flex justifyContent="start" className="gap-3">
+                <Flex alignItems="start" className="gap-2 w-fit">
                     <div
-                        className="h-2.5 w-2.5 rounded-full"
+                        className="mt-1.5 h-2.5 w-2.5 rounded-full"
                         style={{ backgroundColor: '#64748b' }}
                     />
-                    <Text>In progress</Text>
+                    <Text>{`In progress (${
+                        (allCount || 0) - onBoarded
+                    })`}</Text>
                 </Flex>
-                <Flex className="gap-2.5 w-fit">
+                <Flex alignItems="start" className="gap-2 w-fit">
                     <div
-                        className="h-2.5 w-2.5 rounded-full"
-                        style={{ backgroundColor: '#f59e0b' }}
-                    />
-                    <Text>Unhealthy</Text>
-                </Flex>
-                <Flex className="gap-2.5 w-fit">
-                    <div
-                        className="h-2.5 w-2.5 rounded-full"
+                        className="mt-1.5 h-2.5 w-2.5 rounded-full"
                         style={{ backgroundColor: '#10b981' }}
                     />
-                    <Text>Healthy</Text>
+                    <Text>{`Healthy (${healthy})`}</Text>
+                </Flex>
+                <Flex alignItems="start" className="gap-2 w-fit">
+                    <div
+                        className="mt-1.5 h-2.5 w-2.5 rounded-full"
+                        style={{ backgroundColor: '#f59e0b' }}
+                    />
+                    <Text>{`Unhealthy (${unhealthy})`}</Text>
                 </Flex>
             </Flex>
         </Card>
