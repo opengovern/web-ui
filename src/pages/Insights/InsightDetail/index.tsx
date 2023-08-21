@@ -10,11 +10,10 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useAtomValue } from 'jotai/index'
+import { useParams } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
-import { useEffect, useRef, useState } from 'react'
-import { AgGridReact } from 'ag-grid-react'
+import { useState } from 'react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
@@ -24,12 +23,10 @@ import {
     useComplianceApiV1InsightTrendDetail,
 } from '../../../api/compliance.gen'
 import { timeAtom } from '../../../store'
-import Downloader from './Downloader'
 import { numberGroupedDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
-import Chart from '../../../components/Charts'
 import {
     badgeTypeByDelta,
     percentageByChange,
@@ -38,61 +35,59 @@ import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 import Header from '../../../components/Header'
+import Table, { IColumn } from '../../../components/Table'
+import Chart from '../../../components/Chart'
 
 const chartData = (inputData: any) => {
+    const label = []
     const data = []
     if (inputData) {
-        for (let i = 0; i < inputData.length; i += 1) {
-            data.push({
-                count: inputData[i].value,
-                date: dayjs
-                    .unix(inputData[i].timestamp)
-                    .format('MMM DD, YYYY - HH:mm'),
+        for (let i = 0; i < inputData?.length; i += 1) {
+            label.push(dateDisplay((inputData[i]?.timestamp || 0) * 1000))
+            data.push(inputData[i]?.value)
+        }
+    }
+    return {
+        label,
+        data,
+    }
+}
+
+const getTable = (header: any, details: any) => {
+    const columns: IColumn<any, any>[] = []
+    const row: any[] = []
+    if (header && header.length) {
+        for (let i = 0; i < header.length; i += 1) {
+            columns.push({
+                field: header[i],
+                headerName: snakeCaseToLabel(header[i]),
+                type: 'string',
+                sortable: true,
+                resizable: true,
+                filter: true,
+                flex: 1,
             })
         }
     }
-    return data
-}
-
-const insightsHeadersToColumns = (headers: any) => {
-    if (headers && headers.length) {
-        return headers.map((header: any) => ({
-            field: header,
-            headerName: snakeCaseToLabel(header),
-            sortable: true,
-            resizable: true,
-            filter: true,
-            flex: 1,
-        }))
-    }
-    return []
-}
-
-const insightsResultToRows = (details: any) => {
-    if (!details) {
-        return []
-    }
     const { rows, headers } = details
-    return (
-        rows?.map((array: any, i: any) => {
-            const object = Object.fromEntries(
-                headers.map((key: any, index: any) => [
-                    key,
-                    typeof array[index] === 'string'
-                        ? array[index]
-                        : JSON.stringify(array[index]),
-                ])
-            )
-            return { id: i, ...object }
-        }) || []
-    )
+    for (let i = 0; i < rows.length; i += 1) {
+        const object = Object.fromEntries(
+            headers.map((key: any, index: any) => [
+                key,
+                typeof rows[i][index] === 'string'
+                    ? rows[i][index]
+                    : JSON.stringify(rows[i][index]),
+            ])
+        )
+        row.push({ id: i, ...object })
+    }
+    return {
+        columns,
+        row,
+    }
 }
 
 const gridOptions: GridOptions = {
-    pagination: true,
-    animateRows: true,
-    paginationPageSize: 25,
-    getRowHeight: (params: any) => 50,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     sideBar: {
@@ -174,11 +169,8 @@ const generateBadge = (
 }
 
 export default function InsightDetail() {
-    const gridRef = useRef<AgGridReact>(null)
-    const navigate = useNavigate()
     const { id } = useParams()
     const activeTimeRange = useAtomValue(timeAtom)
-
     const [detailsDate, setDetailsDate] = useState<string>('')
 
     const start = () => {
@@ -244,12 +236,6 @@ export default function InsightDetail() {
             }) || []
         )
     }
-
-    useEffect(() => {
-        if (detailLoading) {
-            gridRef.current?.api.showLoadingOverlay()
-        }
-    }, [detailLoading])
 
     return (
         <Menu currentPage="insight">
@@ -325,39 +311,14 @@ export default function InsightDetail() {
                             )}
                         </Flex>
                     </Flex>
-                    <Card>
+                    <Card className="mb-4 gap-4">
                         <Title className="font-semibold">Insight count</Title>
                         <Chart
-                            className="mt-4 h-80"
-                            index="date"
-                            type="line"
-                            yAxisWidth={60}
-                            categories={['count']}
-                            data={chartData(insightTrend)}
-                            // curveType="natural"
+                            labels={chartData(insightTrend).label}
+                            chartData={chartData(insightTrend).data}
+                            chartType="line"
                         />
                     </Card>
-                    <Flex flexDirection="row" className="mt-6">
-                        <Title className="font-semibold">Results</Title>
-                        <Flex className="w-1/3">
-                            <Select
-                                className="mr-4"
-                                onValueChange={setDetailsDate}
-                                placeholder={
-                                    detailsDate === ''
-                                        ? 'Latest'
-                                        : end().format('MMM DD, YYYY')
-                                }
-                            >
-                                <>{trendDates()}</>
-                            </Select>
-                            <Downloader
-                                Headers={columns}
-                                Rows={rows?.rows ? rows.rows : []}
-                                Name={insightDetail?.shortTitle}
-                            />
-                        </Flex>
-                    </Flex>
                     {detailsDate !== '' && (
                         <Flex
                             flexDirection="row"
@@ -387,16 +348,31 @@ export default function InsightDetail() {
                             </Button>
                         </Flex>
                     )}
-
-                    <div className="w-full mt-3 ag-theme-alpine">
-                        <AgGridReact
-                            ref={gridRef}
-                            domLayout="autoHeight"
-                            gridOptions={gridOptions}
-                            columnDefs={insightsHeadersToColumns(columns)}
-                            rowData={insightsResultToRows(rows)}
-                        />
-                    </div>
+                    <Table
+                        title="Results"
+                        id="insight_detail"
+                        columns={getTable(columns, rows).columns}
+                        rowData={getTable(columns, rows).row}
+                        downloadable
+                        options={gridOptions}
+                        onGridReady={(e) => {
+                            if (detailLoading) {
+                                e.api.showLoadingOverlay()
+                            }
+                        }}
+                    >
+                        <Select
+                            className="h-full"
+                            onValueChange={setDetailsDate}
+                            placeholder={
+                                detailsDate === ''
+                                    ? 'Latest'
+                                    : end().format('MMM DD, YYYY')
+                            }
+                        >
+                            {trendDates()}
+                        </Select>
+                    </Table>
                 </Flex>
             )}
         </Menu>

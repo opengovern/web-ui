@@ -102,7 +102,7 @@ const authRoutes = [
     },
     {
         key: 'connector detail',
-        path: '/:ws/integration/connector/:connector',
+        path: '/:ws/integration/:connector',
         component: ConnectorDetail,
     },
     {

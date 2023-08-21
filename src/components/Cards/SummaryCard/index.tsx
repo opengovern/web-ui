@@ -5,7 +5,6 @@ import {
     Card,
     DeltaType,
     Flex,
-    Grid,
     Metric,
     Text,
 } from '@tremor/react'
@@ -19,8 +18,6 @@ type IProps = {
     metricPrev?: string
     delta?: string
     deltaType?: DeltaType
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    areaChartData?: any[]
     url?: string
     loading?: boolean
     border?: boolean
@@ -35,7 +32,6 @@ export default function SummaryCard({
     metricPrev,
     delta,
     deltaType,
-    areaChartData,
     url,
     loading = false,
     border = true,
@@ -120,20 +116,6 @@ export default function SummaryCard({
                         </div>
                     )}
                 </Flex>
-            )}
-            {areaChartData && (
-                <AreaChart
-                    className="mt-6 h-28"
-                    data={areaChartData}
-                    index="Month"
-                    categories={[title]}
-                    colors={['blue']}
-                    showXAxis
-                    showGridLines={false}
-                    startEndOnly
-                    showYAxis={false}
-                    showLegend={false}
-                />
             )}
         </Card>
     )

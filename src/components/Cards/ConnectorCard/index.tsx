@@ -42,7 +42,7 @@ export default function ConnectorCard({
         <Card
             key={connector}
             className="cursor-pointer"
-            onClick={() => navigate(`connector/${connector}`)}
+            onClick={() => navigate(`${connector}`)}
         >
             <Flex flexDirection="row" className="mb-3">
                 {getConnectorIcon(connector)}
