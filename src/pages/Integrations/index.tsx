@@ -4,8 +4,6 @@ import {
     useOnboardApiV1CatalogMetricsList,
     useOnboardApiV1ConnectorList,
 } from '../../api/onboard.gen'
-import SummaryCard from '../../components/Cards/SummaryCard'
-import { numberDisplay } from '../../utilities/numericDisplay'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 import { isDemo } from '../../utilities/demo'
@@ -49,16 +47,12 @@ export default function Integrations() {
     return (
         <Menu currentPage="integration">
             <Header title="Integrations" />
-            <Grid numItems={2} className="gap-4 mb-10">
-                <SummaryCard
-                    title="Discovered Cloud Connection"
-                    metric={numberDisplay(topMetrics?.totalConnections, 0)}
-                    loading={metricsLoading}
-                />
+            <Grid numItems={3} className="gap-4 mb-10">
                 <OnboardCard
-                    title="Onboarded Cloud Connection"
+                    title="Active Accounts"
                     healthy={topMetrics?.healthyConnections}
                     unhealthy={topMetrics?.unhealthyConnections}
+                    allCount={topMetrics?.totalConnections}
                     loading={metricsLoading}
                 />
             </Grid>

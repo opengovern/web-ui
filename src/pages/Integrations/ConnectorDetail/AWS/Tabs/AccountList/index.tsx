@@ -78,6 +78,7 @@ const columns: IColumn<any, any>[] = [
         rowGroup: true,
         enableRowGroup: true,
         sortable: true,
+        hide: true,
         filter: true,
         resizable: true,
         flex: 1,
@@ -202,6 +203,16 @@ export default function AccountList({
         groupDefaultExpanded: -1,
         rowGroupPanelShow: 'always',
         groupAllowUnbalanced: true,
+        autoGroupColumnDef: {
+            headerName: 'Account Type',
+            flex: 2,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            // cellRendererParams: {
+            //     suppressCount: true,
+            // },
+        },
     }
 
     return (

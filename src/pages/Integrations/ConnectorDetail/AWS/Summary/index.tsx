@@ -1,4 +1,4 @@
-import { Col, Grid } from '@tremor/react'
+import { Grid } from '@tremor/react'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import {
@@ -25,12 +25,15 @@ export default function AWSSummary({
     credentialLoading,
 }: IAWSSummary) {
     return (
-        <Grid numItems={2} numItemsLg={4} className="w-full gap-4 mt-6 mb-10">
-            <SummaryCard
-                title="Discovered AWS Accounts"
-                metric={String(
-                    numericDisplay(accountsSummary?.totalDiscoveredCount)
-                )}
+        <Grid numItems={3} className="w-full gap-4 mt-6 mb-10">
+            <OnboardCard
+                title="Onboarded AWS Accounts"
+                healthy={
+                    (accountsSummary?.connectionCount || 0) -
+                    (accountsSummary?.totalUnhealthyCount || 0)
+                }
+                allCount={accountsSummary?.totalDiscoveredCount}
+                unhealthy={accountsSummary?.totalUnhealthyCount}
                 loading={accountLoading}
             />
             <SummaryCard
@@ -40,17 +43,6 @@ export default function AWSSummary({
                 )}
                 loading={credentialLoading}
             />
-            <Col numColSpan={2}>
-                <OnboardCard
-                    title="Onboarded AWS Accounts"
-                    healthy={
-                        (accountsSummary?.connectionCount || 0) -
-                        (accountsSummary?.totalUnhealthyCount || 0)
-                    }
-                    unhealthy={accountsSummary?.totalUnhealthyCount}
-                    loading={accountLoading}
-                />
-            </Col>
         </Grid>
     )
 }
