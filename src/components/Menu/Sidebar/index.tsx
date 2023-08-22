@@ -13,6 +13,7 @@ import {
     ChevronDoubleRightIcon,
     Cog6ToothIcon,
     DocumentChartBarIcon,
+    DocumentDuplicateIcon,
     HomeIcon,
     MagnifyingGlassIcon,
     ServerStackIcon,
@@ -63,15 +64,25 @@ const navigation = [
         icon: MagnifyingGlassIcon,
     },
     {
-        name: 'Administration',
-        id: 'settings',
+        name: 'Integrations',
+        page: 'integration',
+        icon: DocumentDuplicateIcon,
+    },
+    {
+        name: 'Settings',
         page: 'settings',
         icon: Cog6ToothIcon,
-        children: [
-            { name: 'Settings', page: 'settings' },
-            { name: 'Integrations', page: 'integration' },
-        ],
     },
+    // {
+    //     name: 'Administration',
+    //     id: 'settings',
+    //     page: 'settings',
+    //     icon: Cog6ToothIcon,
+    //     children: [
+    //         { name: 'Settings', page: 'settings' },
+    //         { name: 'Integrations', page: 'integration' },
+    //     ],
+    // },
 ]
 
 interface ISidebar {
@@ -169,8 +180,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         to={`/${workspace}/${item.page}`}
                                         className={`relative p-2 group flex rounded-md text-sm my-0.5
                                                     ${
-                                                        (item.id ||
-                                                            item.page) ===
+                                                        item.page ===
                                                         currentPage
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
