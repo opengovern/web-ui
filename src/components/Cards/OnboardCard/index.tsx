@@ -57,14 +57,14 @@ export default function OnboardCard({
                         className="mt-1.5 h-2.5 w-2.5 rounded-full"
                         style={{ backgroundColor: '#10b981' }}
                     />
-                    <Text>{`Healthy (${healthy})`}</Text>
+                    <Text>{`Active (${healthy || 0})`}</Text>
                 </Flex>
                 <Flex alignItems="start" className="gap-2 w-fit">
                     <div
                         className="mt-1.5 h-2.5 w-2.5 rounded-full"
                         style={{ backgroundColor: '#f59e0b' }}
                     />
-                    <Text>{`Unhealthy (${unhealthy})`}</Text>
+                    <Text>{`Inactive (${unhealthy || 0})`}</Text>
                 </Flex>
             </Flex>
         </Card>

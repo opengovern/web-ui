@@ -1,14 +1,5 @@
-import {
-    BadgeDelta,
-    Callout,
-    Card,
-    Flex,
-    Subtitle,
-    Text,
-    Title,
-} from '@tremor/react'
+import { BadgeDelta, Card, Flex, Subtitle, Text, Title } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
-import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import {
@@ -46,34 +37,34 @@ const generateBadge = (
 ) => {
     if (!met?.totalResultValue && !met?.oldTotalResultValue) {
         return (
-            <Callout
-                title="Time period is not covered by insight"
-                color="rose"
-                icon={ExclamationCircleIcon}
-                className="w-full border-0 text-xs leading-5 truncate max-w-full"
-            />
+            <Text
+                color="orange"
+                className="w-full border-0 text-xs truncate max-w-full mb-1"
+            >
+                (Time period is not covered by insight)
+            </Text>
         )
     }
     if (!met?.totalResultValue) {
         return (
-            <Callout
-                title="End value is not available"
-                color="rose"
-                icon={ExclamationCircleIcon}
-                className="border-0 text-xs leading-5 truncate max-w-full"
-            />
+            <Text
+                color="orange"
+                className="w-full border-0 text-xs truncate max-w-full mb-1"
+            >
+                (End value is not available)
+            </Text>
         )
     }
     if (!met?.oldTotalResultValue) {
         return (
-            <Callout
-                title={`Data is available after ${dateDisplay(
+            <Text
+                color="orange"
+                className="w-full border-0 text-xs truncate max-w-full mb-1"
+            >
+                {`Data is available after ${dateDisplay(
                     met.firstOldResultDate
                 )}`}
-                color="rose"
-                icon={ExclamationCircleIcon}
-                className="border-0 text-xs leading-5 truncate max-w-full"
-            />
+            </Text>
         )
     }
     return (
@@ -82,7 +73,7 @@ const generateBadge = (
                 met.oldTotalResultValue,
                 met.totalResultValue
             )}
-            className="cursor-pointer my-2"
+            className="cursor-pointer"
         >
             {`${percentageByChange(
                 met.oldTotalResultValue,
@@ -110,42 +101,32 @@ export default function InsightCard({ metric }: IInsightsCard) {
                 navigateToAssetsInsightsDetails(metric.id)
             }
         >
-            <Flex
-                flexDirection="col"
-                alignItems="start"
-                justifyContent="between"
-                className="h-full"
-            >
+            <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Flex flexDirection="col" alignItems="start">
                     <Title className="font-semibold mb-2 truncate max-w-full">
                         {metric?.shortTitle}
                     </Title>
-                    <Flex className="mb-2">
-                        <Flex
-                            flexDirection="row"
-                            alignItems="end"
-                            className="w-fit"
-                        >
-                            {!!metric?.totalResultValue && (
-                                <Title className="font-semibold mr-1">
-                                    {numericDisplay(
-                                        metric?.totalResultValue || 0
-                                    )}
-                                </Title>
-                            )}
-                            {!!metric?.oldTotalResultValue && (
-                                <Subtitle className="text-sm mb-0.5">
-                                    {`from ${numericDisplay(
-                                        metric?.oldTotalResultValue || 0
-                                    )}`}
-                                </Subtitle>
-                            )}
+                    <Flex alignItems="end" className="mb-2">
+                        <Flex alignItems="end" className="w-fit">
+                            <Title className="font-semibold mr-1">
+                                {metric?.totalResultValue
+                                    ? numericDisplay(
+                                          metric?.totalResultValue || 0
+                                      )
+                                    : 'N/A'}
+                            </Title>
+                            <Subtitle className="text-sm whitespace-nowrap mb-0.5 mr-1">
+                                {`from ${
+                                    metric?.oldTotalResultValue
+                                        ? numericDisplay(
+                                              metric?.oldTotalResultValue || 0
+                                          )
+                                        : 'N/A'
+                                }`}
+                            </Subtitle>
                         </Flex>
                         {generateBadge(metric)}
                     </Flex>
-                    <Subtitle className="text-gray-600">
-                        {metric?.description}
-                    </Subtitle>
                 </Flex>
                 <Flex className="mt-3">
                     {getConnectorIcon(metric?.connector)}

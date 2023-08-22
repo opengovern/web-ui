@@ -29,7 +29,7 @@ export default function AWSSummary({
             <OnboardCard
                 title="Active AWS Accounts"
                 healthy={
-                    (accountsSummary?.connectionCount || 0) -
+                    (accountsSummary?.totalDiscoveredCount || 0) -
                     (accountsSummary?.totalUnhealthyCount || 0)
                 }
                 allCount={accountsSummary?.totalDiscoveredCount}

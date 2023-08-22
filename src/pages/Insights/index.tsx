@@ -1,20 +1,6 @@
-import {
-    Button,
-    Col,
-    Flex,
-    Grid,
-    Subtitle,
-    Tab,
-    TabGroup,
-    TabList,
-    TabPanel,
-    TabPanels,
-    TextInput,
-} from '@tremor/react'
-import { useEffect, useState } from 'react'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import { useAtomValue } from 'jotai/index'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Button, Col, Flex, Grid, Select, SelectItem } from '@tremor/react'
+import { useState } from 'react'
+import { useAtomValue } from 'jotai'
 import Menu from '../../components/Menu'
 import InsightCategories from './InsightCategories'
 import {
@@ -24,16 +10,17 @@ import {
 import InsightCard from '../../components/Cards/InsightCard'
 import { timeAtom } from '../../store'
 import Spinner from '../../components/Spinner'
-import InsightGroupCard from '../../components/Cards/InsightGroupCard'
 import Header from '../../components/Header'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup } from '../../api/api'
 
 export default function Insights() {
-    const navigate = useNavigate()
-    const tabs = useLocation().hash
     const [selectedCategory, setSelectedCategory] = useState('')
+    const [selectedGroup, setSelectedGroup] = useState('')
+    const [selectedGroupObj, setSelectedGroupObj] = useState<
+        GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup | undefined
+    >(undefined)
     const activeTimeRange = useAtomValue(timeAtom)
-    const [searchQuery, setSearchQuery] = useState('')
-    const [selectedTab, setSelectedTab] = useState(0)
+
     const query = {
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
@@ -42,6 +29,7 @@ export default function Insights() {
             endTime: activeTimeRange.end.unix(),
         }),
     }
+
     const {
         response: insightList,
         isLoading: listLoading,
@@ -55,157 +43,116 @@ export default function Insights() {
         error: insightGroupError,
     } = useComplianceApiV1InsightGroupList(query)
 
-    useEffect(() => {
-        if (tabs === '#groups') {
-            setSelectedTab(1)
-        } else {
-            setSelectedTab(0)
-        }
-    }, [tabs])
+    const generateGroupSelect = () => {
+        return (
+            <Select
+                value={selectedGroup}
+                onChange={(v) =>
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    setSelectedGroup(v)
+                }
+                placeholder={`${
+                    selectedGroup.length
+                        ? selectedGroup
+                        : 'Select insight group...'
+                }`}
+            >
+                <>
+                    <SelectItem
+                        value=""
+                        onClick={() => setSelectedGroupObj(undefined)}
+                    >
+                        Show all insights
+                    </SelectItem>
+                    {insightGroup?.map((insight) => (
+                        <SelectItem
+                            key={insight.id}
+                            value={insight.shortTitle || ''}
+                            onClick={() => setSelectedGroupObj(insight)}
+                        >
+                            {insight.shortTitle}
+                        </SelectItem>
+                    ))}
+                </>
+            </Select>
+        )
+    }
 
     return (
         <Menu currentPage="insight">
             <Header title="Insights" datePicker />
             <Flex flexDirection="col">
-                <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
-                    <TabList className="mb-6">
-                        <Tab onClick={() => navigate('#list')}>
-                            <Subtitle className="text-gray-600">
-                                Insight list
-                            </Subtitle>
-                        </Tab>
-                        <Tab onClick={() => navigate('#groups')}>
-                            <Subtitle className="text-gray-600">
-                                Insight groups
-                            </Subtitle>
-                        </Tab>
-                    </TabList>
-                    <Grid numItems={3} className="gap-4 mb-6">
-                        <Col numColSpan={2}>
-                            <InsightCategories
-                                selected={selectedTab + 1}
-                                onChange={(category: string) =>
-                                    setSelectedCategory(() => category)
-                                }
-                            />
-                        </Col>
-                        <Col>
-                            <TextInput
-                                icon={MagnifyingGlassIcon}
-                                placeholder="Search Insights"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                        </Col>
+                <Grid numItems={3} className="w-full gap-4 mb-6">
+                    <Col numColSpan={2}>
+                        <InsightCategories
+                            selected={1}
+                            onChange={(category: string) =>
+                                setSelectedCategory(() => category)
+                            }
+                        />
+                    </Col>
+                    <Col>{generateGroupSelect()}</Col>
+                </Grid>
+                {/* eslint-disable-next-line no-nested-ternary */}
+                {listLoading ? (
+                    <Flex justifyContent="center" className="mt-56">
+                        <Spinner />
+                    </Flex>
+                ) : insightError === undefined ? (
+                    <Grid
+                        numItems={1}
+                        numItemsMd={2}
+                        numItemsLg={3}
+                        className="gap-4 w-full"
+                    >
+                        {selectedGroupObj
+                            ? selectedGroupObj.insights
+                                  ?.sort(
+                                      (a, b) =>
+                                          (b.totalResultValue || 0) -
+                                          (a.totalResultValue || 0)
+                                  )
+                                  .filter((insight) => {
+                                      if (
+                                          selectedCategory.length &&
+                                          selectedCategory !== 'All'
+                                      )
+                                          return insight.tags?.category.includes(
+                                              selectedCategory
+                                          )
+                                      return insight
+                                  })
+                                  .map((insight) => (
+                                      <Col numColSpan={1}>
+                                          <InsightCard metric={insight} />
+                                      </Col>
+                                  ))
+                            : insightList
+                                  ?.sort(
+                                      (a, b) =>
+                                          (b.totalResultValue || 0) -
+                                          (a.totalResultValue || 0)
+                                  )
+                                  .filter((insight) => {
+                                      if (
+                                          selectedCategory.length &&
+                                          selectedCategory !== 'All'
+                                      )
+                                          return insight.tags?.category.includes(
+                                              selectedCategory
+                                          )
+                                      return insight
+                                  })
+                                  .map((insight) => (
+                                      <Col numColSpan={1}>
+                                          <InsightCard metric={insight} />
+                                      </Col>
+                                  ))}
                     </Grid>
-                    <TabPanels>
-                        <TabPanel>
-                            {/* eslint-disable-next-line no-nested-ternary */}
-                            {listLoading ? (
-                                <Flex justifyContent="center" className="mt-56">
-                                    <Spinner />
-                                </Flex>
-                            ) : insightError === undefined ? (
-                                <Grid
-                                    numItems={1}
-                                    numItemsMd={2}
-                                    numItemsLg={3}
-                                    className="gap-4 w-full"
-                                >
-                                    {insightList
-                                        ?.filter(
-                                            (insight) =>
-                                                insight.shortTitle
-                                                    ?.toLowerCase()
-                                                    .includes(
-                                                        searchQuery.toLowerCase()
-                                                    ) ||
-                                                insight.longTitle
-                                                    ?.toLowerCase()
-                                                    .includes(
-                                                        searchQuery.toLowerCase()
-                                                    )
-                                        )
-                                        ?.sort(
-                                            (a, b) =>
-                                                (b.totalResultValue || 0) -
-                                                (a.totalResultValue || 0)
-                                        )
-                                        .filter((insight) => {
-                                            if (
-                                                selectedCategory.length &&
-                                                selectedCategory !== 'All'
-                                            )
-                                                return insight.tags?.category.includes(
-                                                    selectedCategory
-                                                )
-                                            return insight
-                                        })
-                                        .map((insight) => (
-                                            <Col numColSpan={1}>
-                                                <InsightCard metric={insight} />
-                                            </Col>
-                                        ))}
-                                </Grid>
-                            ) : (
-                                <Button onClick={() => insightSendNow()}>
-                                    Retry
-                                </Button>
-                            )}
-                        </TabPanel>
-                        <TabPanel>
-                            {/* eslint-disable-next-line no-nested-ternary */}
-                            {groupLoading ? (
-                                <Flex justifyContent="center" className="mt-56">
-                                    <Spinner />
-                                </Flex>
-                            ) : insightGroupError === undefined ? (
-                                <Grid
-                                    numItems={1}
-                                    numItemsMd={2}
-                                    numItemsLg={3}
-                                    className="gap-4 w-full"
-                                >
-                                    {insightGroup
-                                        ?.filter(
-                                            (insight) =>
-                                                insight.shortTitle
-                                                    ?.toLowerCase()
-                                                    .includes(
-                                                        searchQuery.toLowerCase()
-                                                    ) ||
-                                                insight.longTitle
-                                                    ?.toLowerCase()
-                                                    .includes(
-                                                        searchQuery.toLowerCase()
-                                                    )
-                                        )
-                                        ?.filter((insight) => {
-                                            if (
-                                                selectedCategory.length &&
-                                                selectedCategory !== 'All'
-                                            )
-                                                return insight.tags?.category.includes(
-                                                    selectedCategory
-                                                )
-                                            return insight
-                                        })
-                                        .map((insight) => (
-                                            <Col numColSpan={1}>
-                                                <InsightGroupCard
-                                                    metric={insight}
-                                                />
-                                            </Col>
-                                        ))}
-                                </Grid>
-                            ) : (
-                                <Button onClick={() => insightGroupSendNow()}>
-                                    Retry
-                                </Button>
-                            )}
-                        </TabPanel>
-                    </TabPanels>
-                </TabGroup>
+                ) : (
+                    <Button onClick={() => insightSendNow()}>Retry</Button>
+                )}
             </Flex>
         </Menu>
     )
