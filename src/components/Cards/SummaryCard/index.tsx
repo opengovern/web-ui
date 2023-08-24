@@ -14,8 +14,8 @@ import Spinner from '../../Spinner'
 
 type IProps = {
     title: string
-    metric: string | number
-    metricPrev?: string
+    metric: string | number | undefined
+    metricPrev?: string | number | undefined
     delta?: string
     deltaType?: DeltaType
     url?: string
@@ -83,7 +83,7 @@ export default function SummaryCard({
         >
             <Flex alignItems="start">
                 <Flex justifyContent="start">
-                    <Text className="mb-1.5">{title}</Text>
+                    <Text className="font-medium mb-1.5">{title}</Text>
                     {!border && url && (
                         <ChevronRightIcon className="ml-1 h-4 text-kaytu-500" />
                     )}

@@ -1,12 +1,11 @@
 import {
-    BadgeDelta,
     Button,
     Callout,
     Card,
     Flex,
+    Grid,
     Select,
     SelectItem,
-    Subtitle,
     Text,
     Title,
 } from '@tremor/react'
@@ -23,7 +22,6 @@ import {
     useComplianceApiV1InsightTrendDetail,
 } from '../../../api/compliance.gen'
 import { timeAtom } from '../../../store'
-import { numberGroupedDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../utilities/labelMaker'
@@ -31,12 +29,11 @@ import {
     badgeTypeByDelta,
     percentageByChange,
 } from '../../../utilities/deltaType'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { dateDisplay } from '../../../utilities/dateDisplay'
-import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 import Header from '../../../components/Header'
 import Table, { IColumn } from '../../../components/Table'
 import Chart from '../../../components/Chart'
+import SummaryCard from '../../../components/Cards/SummaryCard'
 
 const chartData = (inputData: any) => {
     const label = []
@@ -117,57 +114,6 @@ const gridOptions: GridOptions = {
     },
 }
 
-const generateBadge = (
-    met: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight | undefined
-) => {
-    if (!met?.totalResultValue && !met?.oldTotalResultValue) {
-        return (
-            <Callout
-                title="Time period is not covered by insight"
-                color="rose"
-                icon={ExclamationCircleIcon}
-                className="ml-3 border-0 text-xs leading-5 w-96 drop-shadow-sm"
-            />
-        )
-    }
-    if (!met?.totalResultValue) {
-        return (
-            <Callout
-                title="End value is not available"
-                color="rose"
-                icon={ExclamationCircleIcon}
-                className="ml-3 border-0 text-xs leading-5 w-96 drop-shadow-sm"
-            />
-        )
-    }
-    if (!met?.oldTotalResultValue) {
-        return (
-            <Callout
-                title={`Data is available after ${dateDisplay(
-                    met.firstOldResultDate
-                )}`}
-                color="rose"
-                icon={ExclamationCircleIcon}
-                className="ml-3 border-0 text-xs leading-5 w-96 drop-shadow-sm"
-            />
-        )
-    }
-    return (
-        <BadgeDelta
-            deltaType={badgeTypeByDelta(
-                met.oldTotalResultValue,
-                met.totalResultValue
-            )}
-            className="cursor-pointer my-2"
-        >
-            {`${percentageByChange(
-                met.oldTotalResultValue,
-                met.totalResultValue
-            )}%`}
-        </BadgeDelta>
-    )
-}
-
 export default function InsightDetail() {
     const { id } = useParams()
     const activeTimeRange = useAtomValue(timeAtom)
@@ -189,6 +135,7 @@ export default function InsightDetail() {
         d.setUTCSeconds(parseInt(detailsDate, 10) + 1)
         return dayjs(d)
     }
+
     const query = {
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
@@ -201,15 +148,15 @@ export default function InsightDetail() {
                   endTime: activeTimeRange.start.unix(),
               }),
     }
-    const { response: insightTrend, isLoading: trendLoading } =
-        useComplianceApiV1InsightTrendDetail(String(id), query)
-
     const detailsQuery = {
         ...(activeTimeRange.start && {
             startTime: start().unix(),
             endTime: end().unix(),
         }),
     }
+
+    const { response: insightTrend, isLoading: trendLoading } =
+        useComplianceApiV1InsightTrendDetail(String(id), query)
     const { response: insightDetail, isLoading: detailLoading } =
         useComplianceApiV1InsightDetail(String(id), detailsQuery)
 
@@ -217,7 +164,6 @@ export default function InsightDetail() {
         insightDetail?.result && insightDetail?.result[0]?.details
             ? insightDetail?.result[0].details.headers
             : []
-
     const rows = insightDetail?.result
         ? insightDetail?.result[0].details
         : undefined
@@ -250,66 +196,27 @@ export default function InsightDetail() {
                         breadCrumb={['Insight Detail']}
                         datePicker
                     />
-                    <Flex flexDirection="col">
-                        <Flex flexDirection="row">
-                            {detailLoading ? (
-                                <Spinner className="my-6" />
-                            ) : (
-                                <Flex
-                                    flexDirection="row"
-                                    justifyContent="between"
-                                    alignItems="start"
-                                    className="mb-4"
-                                >
-                                    <Flex
-                                        flexDirection="row"
-                                        justifyContent="start"
-                                    >
-                                        {getConnectorIcon(
-                                            insightDetail?.connector
-                                        )}
-                                        <Flex
-                                            flexDirection="col"
-                                            alignItems="start"
-                                            className="ml-3"
-                                        >
-                                            <Title className="font-semibold whitespace-nowrap">
-                                                {insightDetail?.shortTitle}
-                                            </Title>
-                                            <Text>
-                                                {insightDetail?.description}
-                                            </Text>
-                                        </Flex>
-                                    </Flex>
-                                    <Flex flexDirection="row">
-                                        <Flex
-                                            flexDirection="row"
-                                            alignItems="end"
-                                            justifyContent="end"
-                                            className="m-3"
-                                        >
-                                            {!!insightDetail?.totalResultValue && (
-                                                <Title className="font-semibold mr-1">
-                                                    {numberGroupedDisplay(
-                                                        insightDetail?.totalResultValue ||
-                                                            0
-                                                    )}
-                                                </Title>
-                                            )}
-                                            {!!insightDetail?.oldTotalResultValue && (
-                                                <Subtitle className="text-sm mb-0.5">
-                                                    {`from ${numberGroupedDisplay(
-                                                        insightDetail?.oldTotalResultValue ||
-                                                            0
-                                                    )}`}
-                                                </Subtitle>
-                                            )}
-                                        </Flex>
-                                        {generateBadge(insightDetail)}
-                                    </Flex>
-                                </Flex>
-                            )}
-                        </Flex>
+                    <Flex flexDirection="col" alignItems="start">
+                        <Title className="font-semibold whitespace-nowrap">
+                            {insightDetail?.shortTitle}
+                        </Title>
+                        <Text>{insightDetail?.description}</Text>
+                        <Grid numItems={3} className="w-full my-4">
+                            <SummaryCard
+                                title="Total result"
+                                metric={insightDetail?.totalResultValue}
+                                metricPrev={insightDetail?.oldTotalResultValue}
+                                loading={detailLoading}
+                                deltaType={badgeTypeByDelta(
+                                    insightDetail?.oldTotalResultValue,
+                                    insightDetail?.totalResultValue
+                                )}
+                                delta={`${percentageByChange(
+                                    insightDetail?.oldTotalResultValue,
+                                    insightDetail?.totalResultValue
+                                )}%`}
+                            />
+                        </Grid>
                     </Flex>
                     <Card className="mb-4 gap-4">
                         <Title className="font-semibold">Insight count</Title>
@@ -322,7 +229,7 @@ export default function InsightDetail() {
                     {detailsDate !== '' && (
                         <Flex
                             flexDirection="row"
-                            className="bg-kaytu-50 mt-2 rounded-md pr-6"
+                            className="bg-kaytu-50 my-2 rounded-md pr-6"
                         >
                             <Callout
                                 title={`The available data for the result is exclusively limited to ${end().format(
