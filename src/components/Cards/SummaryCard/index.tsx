@@ -45,7 +45,6 @@ export default function SummaryCard({
         if (error !== undefined && error.length > 0) {
             return (
                 <Flex
-                    flexDirection="row"
                     justifyContent="start"
                     alignItems="start"
                     className="cursor-pointer w-full"
@@ -83,7 +82,7 @@ export default function SummaryCard({
         >
             <Flex alignItems="start">
                 <Flex justifyContent="start">
-                    <Text className="font-medium mb-1.5">{title}</Text>
+                    <Text className="font-semibold mb-1.5">{title}</Text>
                     {!border && url && (
                         <ChevronRightIcon className="ml-1 h-4 text-kaytu-500" />
                     )}
