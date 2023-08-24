@@ -1,6 +1,16 @@
-import { Badge, Button, Divider, Flex, Text, Title } from '@tremor/react'
+import {
+    Accordion,
+    AccordionBody,
+    AccordionHeader,
+    Badge,
+    Button,
+    Divider,
+    Flex,
+    Text,
+    Title,
+} from '@tremor/react'
 import { useEffect } from 'react'
-import dayjs from 'dayjs'
+import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
 import {
     useOnboardApiV1SourceDelete,
     useOnboardApiV1SourceHealthcheckDetail,
@@ -8,6 +18,9 @@ import {
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
 import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/schedule.gen'
+import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
+import Tag from '../../../../../../../components/Tag'
+import { snakeCaseToLabel } from '../../../../../../../utilities/labelMaker'
 
 interface ISubscriptionInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
@@ -35,6 +48,7 @@ export default function SubscriptionInfo({
     open,
     onClose,
 }: ISubscriptionInfo) {
+    console.log(data)
     const {
         isExecuted: isDeleteExecuted,
         isLoading: isDeleteLoading,
@@ -91,7 +105,7 @@ export default function SubscriptionInfo({
         >
             <Flex flexDirection="col" className="h-full">
                 <Flex flexDirection="col" alignItems="start">
-                    <Title>Info</Title>
+                    <Title>Summary</Title>
                     <Divider />
                     <Flex>
                         <Text>Name</Text>
@@ -108,7 +122,34 @@ export default function SubscriptionInfo({
                     </Flex>
                     <Divider />
                     <Flex>
-                        <Text>Subscription Lifecycle State</Text>
+                        <Text>Health state</Text>
+                        <Flex className="w-fit gap-4">
+                            <Button
+                                loading={
+                                    isHealthCheckExecuted &&
+                                    isHealthCheckLoading
+                                }
+                                variant="light"
+                                disabled={buttonsDisabled}
+                                onClick={runHealthCheckNow}
+                                icon={ArrowPathRoundedSquareIcon}
+                            >
+                                Trigger health check
+                            </Button>
+                            <Badge
+                                color={
+                                    data?.healthState === 'healthy'
+                                        ? 'emerald'
+                                        : 'rose'
+                                }
+                            >
+                                {data?.healthState}
+                            </Badge>
+                        </Flex>
+                    </Flex>
+                    <Divider />
+                    <Flex className="mb-6">
+                        <Text>Lifecycle state</Text>
                         <Badge
                             color={
                                 data?.lifecycleState === 'ONBOARD'
@@ -119,24 +160,71 @@ export default function SubscriptionInfo({
                             {getBadgeText(data?.lifecycleState || '')}
                         </Badge>
                     </Flex>
-                    <Divider />
-                    <Flex>
-                        <Text>Last Inventory</Text>
-                        <Text className="text-black">
-                            {dayjs(data?.lastInventory).format(
-                                'MMM DD, YYYY HH:mm'
-                            )}
-                        </Text>
-                    </Flex>
-                    <Divider />
-                    <Flex>
-                        <Text>Last Health Check</Text>
-                        <Text className="text-black">
-                            {dayjs(data?.lastHealthCheckTime).format(
-                                'MMM DD, YYYY HH:mm'
-                            )}
-                        </Text>
-                    </Flex>
+                    <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
+                        <AccordionHeader className="w-full p-0 py-6 border-0">
+                            <Title>Additional details</Title>
+                        </AccordionHeader>
+                        <AccordionBody className="w-full p-0 border-0">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="border-t border-t-gray-200 py-6"
+                            >
+                                <Flex>
+                                    <Text>Subscription Type</Text>
+                                    <Text className="text-black">
+                                        {snakeCaseToLabel(
+                                            data?.credentialType || ''
+                                        )}
+                                    </Text>
+                                </Flex>
+                                <Divider />
+                                <Flex>
+                                    <Text>Last inventory</Text>
+                                    <Text className="text-black">
+                                        {dateTimeDisplay(data?.lastInventory)}
+                                    </Text>
+                                </Flex>
+                                <Divider />
+                                <Flex>
+                                    <Text>Last health check</Text>
+                                    <Text className="text-black">
+                                        {dateTimeDisplay(
+                                            data?.lastHealthCheckTime
+                                        )}
+                                    </Text>
+                                </Flex>
+                                <Divider />
+                                <Flex>
+                                    <Text>Onboard date</Text>
+                                    <Text className="text-black">
+                                        {dateTimeDisplay(data?.onboardDate)}
+                                    </Text>
+                                </Flex>
+                                {data?.metadata?.subscription_tags && (
+                                    <>
+                                        <Divider />
+                                        <Flex alignItems="start">
+                                            <Text className="w-fit">Tags</Text>
+                                            <Flex
+                                                justifyContent="end"
+                                                className="max-w-full flex-wrap gap-2"
+                                            >
+                                                {Object.entries(
+                                                    data?.metadata
+                                                        ?.subscription_tags
+                                                ).map(([name, value]) => (
+                                                    <Tag
+                                                        text={`${name}: ${value}`}
+                                                    />
+                                                ))}
+                                            </Flex>
+                                        </Flex>
+                                    </>
+                                )}
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
                 </Flex>
                 <Flex justifyContent="end">
                     <Button
@@ -147,14 +235,6 @@ export default function SubscriptionInfo({
                         onClick={deleteNow}
                     >
                         Delete
-                    </Button>
-                    <Button
-                        className="ml-3"
-                        loading={isHealthCheckExecuted && isHealthCheckLoading}
-                        disabled={buttonsDisabled}
-                        onClick={runHealthCheckNow}
-                    >
-                        Trigger Health Check
                     </Button>
                     <Button
                         className="ml-3"

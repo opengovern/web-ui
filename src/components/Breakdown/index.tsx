@@ -36,7 +36,7 @@ export default function Breakdown({
     const [selectedIndex, setSelectedIndex] = useState(0)
 
     return (
-        <Card className="pb-0 relative">
+        <Card className="pb-0 relative h-full">
             <Flex>
                 <Title className="font-semibold">Breakdown</Title>
                 {!!activeTime && (

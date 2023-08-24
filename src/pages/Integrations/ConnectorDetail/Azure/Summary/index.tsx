@@ -8,7 +8,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
 } from '../../../../../api/api'
-import { isDemo } from '../../../../../utilities/demo'
+import OnboardCard from '../../../../../components/Cards/OnboardCard'
 
 interface IAzureSummary {
     principalsSummary:
@@ -28,62 +28,28 @@ export default function AzureSummary({
     subscriptionsLoading,
 }: IAzureSummary) {
     return (
-        <Grid numItems={2} numItemsLg={3} className="w-full gap-4 mt-6 mb-10">
-            <SummaryCard
-                title="Discovered Azure Subscriptions"
-                metric={String(
-                    numericDisplay(
-                        isDemo()
-                            ? 10
-                            : subscriptionsSummary?.totalDiscoveredCount
-                    )
-                )}
+        <Grid numItems={3} className="w-full gap-4 mt-6 mb-10">
+            <OnboardCard
+                title="Active supscriptions"
+                healthy={
+                    (subscriptionsSummary?.totalDiscoveredCount || 0) -
+                    (subscriptionsSummary?.totalUnhealthyCount || 0)
+                }
+                unhealthy={subscriptionsSummary?.totalUnhealthyCount}
                 loading={subscriptionsLoading}
-            />
-            <SummaryCard
-                title="Onboarded Azure Subscriptions"
-                metric={String(
-                    numericDisplay(
-                        isDemo() ? 10 : subscriptionsSummary?.connectionCount
-                    )
-                )}
-                loading={subscriptionsLoading}
+                allCount={subscriptionsSummary?.totalDiscoveredCount}
             />
             <SummaryCard
                 title="Service Principals"
                 metric={String(
-                    numericDisplay(
-                        isDemo() ? 1 : principalsSummary?.totalCredentialCount
-                    )
+                    numericDisplay(principalsSummary?.totalCredentialCount)
                 )}
                 loading={principalsLoading}
             />
             <SummaryCard
                 title="Billing Accounts"
-                metric={`$${numberDisplay(
-                    isDemo() ? 10 : subscriptionsSummary?.totalCost,
-                    0
-                )}`}
-                loading={principalsLoading}
-            />
-            <SummaryCard
-                title="Healthy Connections"
-                metric={numberDisplay(
-                    isDemo()
-                        ? 10
-                        : (subscriptionsSummary?.connectionCount || 0) -
-                              (subscriptionsSummary?.totalUnhealthyCount || 0),
-                    0
-                )}
-                loading={principalsLoading}
-            />
-            <SummaryCard
-                title="Unhealthy Connections"
-                metric={numberDisplay(
-                    isDemo() ? 0 : subscriptionsSummary?.totalUnhealthyCount,
-                    0
-                )}
-                loading={principalsLoading}
+                metric={`$${numberDisplay(subscriptionsSummary?.totalCost, 0)}`}
+                loading={subscriptionsLoading}
             />
         </Grid>
     )
