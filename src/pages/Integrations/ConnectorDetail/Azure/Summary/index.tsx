@@ -49,7 +49,7 @@ export default function AzureSummary({
             <SummaryCard
                 title="Billing Accounts"
                 metric={`$${numberDisplay(subscriptionsSummary?.totalCost, 0)}`}
-                loading={principalsLoading}
+                loading={subscriptionsLoading}
             />
         </Grid>
     )

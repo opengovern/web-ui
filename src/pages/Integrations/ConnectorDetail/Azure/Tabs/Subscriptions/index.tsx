@@ -80,6 +80,17 @@ const columns: IColumn<any, any>[] = [
         flex: 1,
     },
     {
+        field: 'credentialType',
+        headerName: 'Subscription Type',
+        type: 'string',
+        hide: true,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        valueFormatter: (param) => snakeCaseToLabel(param.value),
+        flex: 1,
+    },
+    {
         field: 'credentialID',
         headerName: 'Parent SPN ID',
         type: 'string',
@@ -107,6 +118,16 @@ const columns: IColumn<any, any>[] = [
             )
         },
         hide: true,
+    },
+    {
+        field: 'healthState',
+        type: 'string',
+        headerName: 'Health state',
+        enableRowGroup: true,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
     },
     {
         field: 'id',
