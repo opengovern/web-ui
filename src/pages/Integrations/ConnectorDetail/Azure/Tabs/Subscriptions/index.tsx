@@ -52,26 +52,6 @@ function getBadgeText(status: string) {
 }
 
 const columns: IColumn<any, any>[] = [
-    // {
-    //     field: 'connector',
-    //     headerName: 'Connector',
-    //     type: 'string',
-    //     width: 50,
-    //     sortable: true,
-    //     filter: true,
-    //     cellStyle: { padding: 0 },
-    //     cellRenderer: (params: ICellRendererParams) => {
-    //         return (
-    //             <Flex
-    //                 alignItems="center"
-    //                 justifyContent="center"
-    //                 className="w-full h-full"
-    //             >
-    //                 <AzureIcon key={params.data.id} />
-    //             </Flex>
-    //         )
-    //     },
-    // },
     {
         field: 'providerConnectionName',
         headerName: 'Name',
@@ -126,6 +106,7 @@ const columns: IColumn<any, any>[] = [
                 </Badge>
             )
         },
+        hide: true,
     },
     {
         field: 'id',
@@ -197,6 +178,16 @@ export default function Subscriptions({
         groupDefaultExpanded: -1,
         rowGroupPanelShow: 'always',
         groupAllowUnbalanced: true,
+        autoGroupColumnDef: {
+            headerName: 'State',
+            flex: 2,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            // cellRendererParams: {
+            //     suppressCount: true,
+            // },
+        },
     }
 
     return (
