@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
 import DateRangePicker from '../DateRangePicker'
-import ConnectionList from '../ConnectionList'
+import Filters from '../ConnectionList'
 
 interface IHeader {
     title: string
@@ -54,7 +54,7 @@ export default function Header({
             <Flex justifyContent="end" alignItems="start">
                 {children}
                 {datePicker && <DateRangePicker />}
-                {connectionFilter && <ConnectionList />}
+                {connectionFilter && <Filters />}
             </Flex>
         </Flex>
     )
