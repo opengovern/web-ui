@@ -1,15 +1,22 @@
-import { useEffect, useRef, useState } from 'react'
-import { AgGridReact } from 'ag-grid-react'
+import { useState } from 'react'
 import {
-    ColDef,
-    GridApi,
-    GridOptions,
-    ICellRendererParams,
-    IRowNode,
-} from 'ag-grid-community'
-import { Button, Flex, Text } from '@tremor/react'
+    Button,
+    Card,
+    Divider,
+    Flex,
+    List,
+    ListItem,
+    Select,
+    SelectItem,
+    Text,
+    TextInput,
+    Title,
+} from '@tremor/react'
 import { FunnelIcon as FunnelIconSolid } from '@heroicons/react/24/solid'
-import { FunnelIcon as FunnelIconOutline } from '@heroicons/react/24/outline'
+import {
+    FunnelIcon as FunnelIconOutline,
+    MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline'
 import { useAtom } from 'jotai'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
@@ -18,108 +25,14 @@ import Spinner from '../Spinner'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import { filterAtom } from '../../store'
 import { getConnectorIcon } from '../Cards/ConnectorCard'
+import Tag from '../Tag'
 
-interface IConnection {
-    id: string
-    connector: string
-    providerConnectionID: string
-    providerConnectionName: string
-    lifecycleState: string
-    onboardDate: string
-    lastInventory: string
-}
-
-const columns: ColDef[] = [
-    {
-        field: 'connector',
-        headerName: 'Connector',
-        width: 50,
-        sortable: true,
-        filter: true,
-        floatingFilter: true,
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams<IConnection>) => {
-            return (
-                <div className="flex justify-center items-center w-full h-full">
-                    {getConnectorIcon(params.data?.connector)}
-                </div>
-            )
-        },
-    },
-    {
-        field: 'providerConnectionName',
-        headerName: 'Name',
-        sortable: true,
-        filter: 'agTextColumnFilter',
-        floatingFilter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'providerConnectionID',
-        headerName: 'ID',
-        sortable: true,
-        filter: 'agTextColumnFilter',
-        floatingFilter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'lifecycleState',
-        headerName: 'State',
-        sortable: true,
-        filter: true,
-        floatingFilter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'id',
-        headerName: 'Kaytu Connection ID',
-        sortable: true,
-        filter: 'agTextColumnFilter',
-        floatingFilter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'lastInventory',
-        headerName: 'Last Inventory',
-        sortable: true,
-        filter: 'agDateColumnFilter',
-        floatingFilter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'onboardDate',
-        headerName: 'Onboard Date',
-        sortable: true,
-        filter: 'agDateColumnFilter',
-        floatingFilter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-]
-
-const tags = [
-    { label: 'All', value: 'All' },
-    { label: 'AWS', value: 'AWS' },
-    { label: 'Azure', value: 'Azure' },
-]
-
-export default function ConnectionList() {
-    const gridRef = useRef<AgGridReact<IConnection>>(null)
-    const [isConnectionSelected, setIsConnectionSelected] = useState(false)
+export default function Filters() {
     const [openDrawer, setOpenDrawer] = useState(false)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
-    const [selectedProvider, setSelectedProvider] = useState({
-        label: 'All',
-        value: '',
-    })
+    const [selectedFilters, setSelectedFilters] = useAtom(filterAtom)
+    const [provider, setProvider] = useState(selectedFilters.provider)
+    const [connections, setConnections] = useState(selectedFilters.connections)
+    const [search, setSearch] = useState('')
 
     const { response, isLoading } = useOnboardApiV1ConnectionsSummaryList({
         connector: [],
@@ -129,179 +42,19 @@ export default function ConnectionList() {
         needResourceCount: false,
     })
 
-    const updateSelectionByProvider = (
-        api: GridApi | undefined,
-        newValue: string
-    ) => {
-        if (newValue.length) {
-            if (newValue === 'All') {
-                api?.deselectAll()
-                setIsConnectionSelected(false)
-                setSelectedProvider({ label: 'All', value: '' })
-                return
-            }
-
-            api?.forEachNode((node: IRowNode) => {
-                if (node.data?.connector === newValue) {
-                    node.setSelected(true, false, 'checkboxSelected')
-                } else {
-                    node.setSelected(false, false, 'checkboxSelected')
-                }
-            })
-        }
-    }
-
-    const initializeSelectedConnections = (api: GridApi) => {
-        if (selectedConnections === undefined) {
-            return
-        }
-
-        if (
-            selectedConnections.provider !== undefined &&
-            selectedConnections.provider.length > 0
-        ) {
-            const selectedTag = tags.find(
-                (item) => item.value === selectedConnections.provider
-            )
-            if (selectedTag !== undefined) {
-                setSelectedProvider(selectedTag)
-                updateSelectionByProvider(api, selectedTag.value)
-            } else {
-                console.error("couldn't find tag", selectedConnections.provider)
-            }
-        } else {
-            api?.forEachNode((node: IRowNode) => {
-                const item = selectedConnections.connections?.find(
-                    (data: string) => data === node.data?.id
-                )
-
-                if (item) {
-                    node.setSelected(true, false, 'checkboxSelected')
-                } else {
-                    node.setSelected(false, false, 'checkboxSelected')
-                }
-            })
-        }
-    }
-
-    const selectionText = (api: GridApi | undefined) => {
-        if (api === undefined) {
-            return ''
-        }
-
-        const conns =
-            selectedProvider.value === ''
-                ? api.getSelectedNodes().map((data: IRowNode) => data.data?.id)
-                : []
-
-        if (selectedProvider.value === '') {
-            if (conns !== undefined && conns.length > 0) {
-                return `${conns.length} connections selected`
-            }
-        } else {
-            return `All ${selectedProvider.value} connections selected`
-        }
-        return 'All connections are selected'
-    }
-
-    const gridOptions: GridOptions = {
-        rowData: response?.connections || [],
-        columnDefs: columns,
-        paginationPageSize: 25,
-        pagination: true,
-        rowSelection: 'multiple',
-        animateRows: true,
-        sideBar: {
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    toolPanel: 'agFiltersToolPanel',
-                },
-            ],
-            defaultToolPanel: '',
-        },
-        onGridReady: (params) => {
-            initializeSelectedConnections(params.api)
-            setSelectedProvider({ ...selectedProvider })
-        },
-        onSelectionChanged: (params) => {
-            if (params.source === 'checkboxSelected') {
-                return
-            }
-
-            const selected = params.api.getSelectedNodes()
-            if (selected.length > 20) {
-                for (let i = 20; i < selected.length; i += 1) {
-                    selected.at(i)?.setSelected(false, false)
-                }
-            }
-            setIsConnectionSelected(selected.length > 0)
-            setSelectedProvider({ label: 'All', value: '' })
-        },
-        getRowHeight: (params) => 50,
-        isRowSelectable: (rowNode) => {
-            return rowNode.data
-                ? rowNode.data.lifecycleState === 'ONBOARD'
-                : false
-        },
-        getRowStyle: (params) => {
-            if (params.data.lifecycleState !== 'ONBOARD') {
-                return { opacity: 0.4 }
-            }
-            return { opacity: 1 }
-        },
-    }
-
-    useEffect(() => {
-        updateSelectionByProvider(gridRef.current?.api, selectedProvider.value)
-    }, [selectedProvider])
-
-    const getProvider = (provider: string) => {
-        if (provider === 'AWS') {
-            return 'AWS'
-        }
-        if (provider === 'Azure') {
-            return 'Azure'
-        }
-        return ''
-    }
-
-    const getConnections = (): string[] => {
-        const conns =
-            selectedProvider.value === ''
-                ? gridRef.current?.api
-                      .getSelectedNodes()
-                      .map((data) => data.data?.id || '')
-                : []
-        return conns || []
-    }
-
-    const handleClose = () => {
-        if (openDrawer) {
-            setSelectedConnections({
-                provider: getProvider(selectedProvider.value),
-                connections: getConnections(),
-            })
-            setOpenDrawer(false)
-        }
+    const connectionList = response?.connections
+    console.log(connectionList)
+    const restFilters = () => {
+        setProvider(selectedFilters.provider)
+        setConnections(selectedFilters.connections)
     }
 
     const filterText = () => {
-        if (selectedConnections.connections.length > 0) {
-            return `${selectedConnections.connections.length} Filters`
+        if (selectedFilters.connections.length > 0) {
+            return `${selectedFilters.connections.length} Filters`
         }
-        if (selectedConnections.provider !== '') {
-            return selectedConnections.provider
+        if (selectedFilters.provider !== '') {
+            return selectedFilters.provider
         }
         return 'Filters'
     }
@@ -313,8 +66,8 @@ export default function ConnectionList() {
                 className="ml-4 h-9"
                 onClick={() => setOpenDrawer(true)}
                 icon={
-                    selectedConnections.connections.length > 0 ||
-                    selectedConnections.provider !== ''
+                    selectedFilters.connections.length > 0 ||
+                    selectedFilters.provider !== ''
                         ? FunnelIconSolid
                         : FunnelIconOutline
                 }
@@ -323,11 +76,15 @@ export default function ConnectionList() {
             </Button>
             <DrawerPanel
                 open={openDrawer}
-                onClose={() => handleClose()}
-                title="Connections"
+                onClose={() => {
+                    setOpenDrawer(false)
+                    restFilters()
+                    setSearch('')
+                }}
+                title="Filters"
             >
                 {isLoading ? (
-                    <Flex justifyContent="center" className="mt-56">
+                    <Flex className="mt-56">
                         <Spinner />
                     </Flex>
                 ) : (
@@ -336,38 +93,232 @@ export default function ConnectionList() {
                         alignItems="start"
                         className="h-full w-full"
                     >
-                        <Flex justifyContent="start" className="mb-4">
-                            {tags.map((tag) => (
-                                <Button
-                                    size="xs"
-                                    variant={
-                                        selectedProvider.label === tag.label
-                                            ? 'primary'
-                                            : 'secondary'
-                                    }
-                                    onClick={() => {
-                                        if (selectedProvider === tag)
-                                            setSelectedProvider({
-                                                label: 'All',
-                                                value: '',
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            justifyContent="start"
+                        >
+                            <Flex
+                                justifyContent="start"
+                                className="flex-wrap gap-2 mb-6"
+                            >
+                                {provider.length ? (
+                                    <Tag text={`Provider: ${provider}`} />
+                                ) : (
+                                    <Flex
+                                        justifyContent="start"
+                                        className="gap-2"
+                                    >
+                                        <Tag text="Provider: AWS" />
+                                        <Tag text="Provider: Azure" />
+                                    </Flex>
+                                )}
+                                {connections.map((c) => (
+                                    <Tag
+                                        key={c}
+                                        text={`Connection ID: ${c}`}
+                                        onClick={() => {
+                                            setConnections((prevState) => {
+                                                const arr = prevState
+                                                arr.splice(
+                                                    arr.indexOf(
+                                                        String(
+                                                            arr.find(
+                                                                (s) => s === c
+                                                            )
+                                                        )
+                                                    ),
+                                                    1
+                                                )
+                                                return arr
                                             })
-                                        else setSelectedProvider(tag)
-                                    }}
-                                    className="mr-2 w-14"
+                                        }}
+                                    />
+                                ))}
+                            </Flex>
+                            <Title className="font-semibold mb-3">
+                                Provider
+                            </Title>
+                            <Flex justifyContent="start" className="gap-4">
+                                <label
+                                    htmlFor="aws"
+                                    className="flex items-center"
                                 >
-                                    {tag.label}
-                                </Button>
-                            ))}
+                                    <input
+                                        id="aws"
+                                        type="checkbox"
+                                        value="AWS"
+                                        checked={
+                                            provider === 'AWS' ||
+                                            provider === ''
+                                        }
+                                        onClick={() => {
+                                            if (provider === 'AWS') {
+                                                setProvider('Azure')
+                                            } else if (provider === 'Azure') {
+                                                setProvider('')
+                                            } else {
+                                                setProvider('AWS')
+                                            }
+                                        }}
+                                        className="w-4 h-4 mr-2 text-blue-600 bg-gray-100 border-gray-300 rounded dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                                    />
+                                    <Text className="font-semibold">AWS</Text>
+                                </label>
+                                <label
+                                    htmlFor="azure"
+                                    className="flex items-center"
+                                >
+                                    <input
+                                        id="azure"
+                                        type="checkbox"
+                                        value="Azure"
+                                        checked={
+                                            provider === 'Azure' ||
+                                            provider === ''
+                                        }
+                                        onClick={() => {
+                                            if (provider === 'AWS') {
+                                                setProvider('')
+                                            } else if (provider === 'Azure') {
+                                                setProvider('AWS')
+                                            } else {
+                                                setProvider('Azure')
+                                            }
+                                        }}
+                                        className="w-4 h-4 mr-2 text-blue-600 bg-gray-100 border-gray-300 rounded dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                                    />
+                                    <Text className="font-semibold">Azure</Text>
+                                </label>
+                            </Flex>
+                            <Divider />
+                            <Title className="font-semibold mb-3">
+                                Connection Group
+                            </Title>
+                            <Select>
+                                <SelectItem value="1">Group 1</SelectItem>
+                            </Select>
+                            <Divider />
+                            <Flex justifyContent="start" className="gap-2">
+                                <Title className="font-semibold mb-3">
+                                    Connection
+                                </Title>
+                                {!!connections.length && (
+                                    <Text className="mb-2.5">
+                                        ({connections.length})
+                                    </Text>
+                                )}
+                            </Flex>
+                            <Flex className="relative">
+                                <TextInput
+                                    icon={MagnifyingGlassIcon}
+                                    placeholder="Select connection by ID or name..."
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                />
+                                {!!search.length && (
+                                    <Card className="absolute top-full mt-1.5 shadow-lg py-2 px-3 max-h-[228px] overflow-y-scroll">
+                                        <List>
+                                            {connectionList
+                                                ?.filter(
+                                                    (c) =>
+                                                        c?.providerConnectionName
+                                                            ?.toLowerCase()
+                                                            .includes(
+                                                                search.toLowerCase()
+                                                            ) ||
+                                                        c?.providerConnectionID
+                                                            ?.toLowerCase()
+                                                            .includes(
+                                                                search.toLowerCase()
+                                                            )
+                                                )
+                                                .map((connection) => (
+                                                    <ListItem
+                                                        className="py-1"
+                                                        key={connection.id}
+                                                    >
+                                                        <Flex
+                                                            justifyContent="start"
+                                                            className="py-1 cursor-pointer hover:bg-kaytu-50/50 rounded-lg"
+                                                            onClick={() => {
+                                                                if (
+                                                                    !connections.includes(
+                                                                        String(
+                                                                            connection.providerConnectionID
+                                                                        )
+                                                                    )
+                                                                ) {
+                                                                    setConnections(
+                                                                        (
+                                                                            prevState
+                                                                        ) => [
+                                                                            ...prevState,
+                                                                            connection.providerConnectionID ||
+                                                                                '',
+                                                                        ]
+                                                                    )
+                                                                }
+                                                            }}
+                                                        >
+                                                            {getConnectorIcon(
+                                                                connection.connector
+                                                            )}
+                                                            <Flex
+                                                                flexDirection="col"
+                                                                alignItems="start"
+                                                            >
+                                                                <Text className="text-gray-800">
+                                                                    {
+                                                                        connection.providerConnectionName
+                                                                    }
+                                                                </Text>
+                                                                <Text className="text-xs">
+                                                                    {
+                                                                        connection.providerConnectionID
+                                                                    }
+                                                                </Text>
+                                                            </Flex>
+                                                        </Flex>
+                                                    </ListItem>
+                                                ))}
+                                        </List>
+                                    </Card>
+                                )}
+                            </Flex>
                         </Flex>
-                        <Text className="mb-2">
-                            {selectionText(gridRef.current?.api)}
-                        </Text>
-                        <div className="ag-theme-alpine h-full w-full">
-                            <AgGridReact
-                                ref={gridRef}
-                                gridOptions={gridOptions}
-                            />
-                        </div>
+                        <Flex>
+                            <Button
+                                variant="light"
+                                onClick={() => restFilters()}
+                            >
+                                Reset filters
+                            </Button>
+                            <Flex justifyContent="end" className="gap-4">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        restFilters()
+                                        setOpenDrawer(false)
+                                        setSearch('')
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        setSelectedFilters({
+                                            provider,
+                                            connections,
+                                        })
+                                        setOpenDrawer(false)
+                                        setSearch('')
+                                    }}
+                                >
+                                    Apply
+                                </Button>
+                            </Flex>
+                        </Flex>
                     </Flex>
                 )}
             </DrawerPanel>
