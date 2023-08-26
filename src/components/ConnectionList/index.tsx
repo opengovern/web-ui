@@ -43,7 +43,7 @@ export default function Filters() {
     })
 
     const connectionList = response?.connections
-    console.log(connectionList)
+
     const restFilters = () => {
         setProvider(selectedFilters.provider)
         setConnections(selectedFilters.connections)
@@ -51,7 +51,7 @@ export default function Filters() {
 
     const filterText = () => {
         if (selectedFilters.connections.length > 0) {
-            return `${selectedFilters.connections.length} Filters`
+            return `${selectedFilters.connections.length} filters`
         }
         if (selectedFilters.provider !== '') {
             return selectedFilters.provider
