@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -1167,6 +1168,11 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadataType {
     ConfigMetadataTypeJSON = 'json',
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter {
+    kayValue?: Record<string, string>
+    name?: string
+}
+
 export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyWorkspaceOwnership = 'workspace_ownership',
     MetadataKeyWorkspaceID = 'workspace_id',
@@ -1372,6 +1378,12 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
+    /**
+     * @min 0
+     * @max 1000
+     * @example 0
+     */
+    archived_connections?: number
     /** @example false */
     autoOnboardEnabled?: boolean
     config?: any
@@ -1382,18 +1394,18 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
     credentialType?: GithubComKaytuIoKaytuEnginePkgOnboardApiCredentialType
     /**
      * @min 0
+     * @max 1000
+     * @example 0
+     */
+    disabled_connections?: number
+    /**
+     * @min 0
      * @max 100
      * @example 50
      */
     discovered_connections?: number
     /** @example true */
     enabled?: boolean
-    /**
-     * @min 0
-     * @max 1000
-     * @example 250
-     */
-    enabled_connections?: number
     /** @example "" */
     healthReason?: string
     /** @example "healthy" */
@@ -1413,6 +1425,12 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
      * @example "2023-06-03T12:21:33.406928Z"
      */
     onboardDate?: string
+    /**
+     * @min 0
+     * @max 1000
+     * @example 250
+     */
+    onboard_connections?: number
     /**
      * @min 0
      * @max 1000
@@ -1444,10 +1462,10 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryRe
     connections?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
     /**
      * @min 0
-     * @max 1000
+     * @max 100
      * @example 10
      */
-    oldConnectionCount?: number
+    totalArchivedCount?: number
     /**
      * @min 0
      * @max 10000000
@@ -1472,6 +1490,13 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryRe
      * @example 100
      */
     totalOldResourceCount?: number
+    /**
+     * Also includes in-progress
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalOnboardedCount?: number
     /**
      * @min 0
      * @max 1000000
@@ -3332,6 +3357,49 @@ export class Api<
     }
     metadata = {
         /**
+         * No description
+         *
+         * @tags metadata
+         * @name ApiV1FilterList
+         * @summary list filters
+         * @request GET:/metadata/api/v1/filter
+         * @secure
+         */
+        apiV1FilterList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter[],
+                any
+            >({
+                path: `/metadata/api/v1/filter`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags metadata
+         * @name ApiV1FilterCreate
+         * @summary add filter
+         * @request POST:/metadata/api/v1/filter
+         * @secure
+         */
+        apiV1FilterCreate: (
+            req: GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/metadata/api/v1/filter`,
+                method: 'POST',
+                body: req,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
          * @description Sets the config metadata for the given key
          *
          * @tags metadata
@@ -3787,6 +3855,13 @@ export class Api<
          */
         apiV1SourceHealthcheckDetail: (
             sourceId: string,
+            query?: {
+                /**
+                 * Whether to update metadata or not
+                 * @default true
+                 */
+                updateMetadata?: boolean
+            },
             params: RequestParams = {}
         ) =>
             this.request<
@@ -3795,6 +3870,7 @@ export class Api<
             >({
                 path: `/onboard/api/v1/source/${sourceId}/healthcheck`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 format: 'json',
                 ...params,

@@ -74,7 +74,7 @@ export default function AccountInfo({
         isExecuted: isHealthCheckExecuted,
         isLoading: isHealthCheckLoading,
         sendNow: runHealthCheckNow,
-    } = useOnboardApiV1SourceHealthcheckDetail(data?.id || '', {}, false)
+    } = useOnboardApiV1SourceHealthcheckDetail(data?.id || '', {})
 
     const {
         isExecuted: isDiscoverExecuted,

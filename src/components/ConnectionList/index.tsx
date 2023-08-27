@@ -22,7 +22,10 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import DrawerPanel from '../DrawerPanel'
 import Spinner from '../Spinner'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
+import {
+    useOnboardApiV1ConnectionGroupsList,
+    useOnboardApiV1ConnectionsSummaryList,
+} from '../../api/onboard.gen'
 import { filterAtom } from '../../store'
 import { getConnectorIcon } from '../Cards/ConnectorCard'
 import Tag from '../Tag'
@@ -32,7 +35,11 @@ export default function Filters() {
     const [selectedFilters, setSelectedFilters] = useAtom(filterAtom)
     const [provider, setProvider] = useState(selectedFilters.provider)
     const [connections, setConnections] = useState(selectedFilters.connections)
+    const [connectionGroup, setConnectionGroup] = useState(
+        selectedFilters.connectionGroup
+    )
     const [search, setSearch] = useState('')
+    const { response: groupList } = useOnboardApiV1ConnectionGroupsList()
 
     const { response, isLoading } = useOnboardApiV1ConnectionsSummaryList({
         connector: [],
@@ -43,7 +50,7 @@ export default function Filters() {
     })
 
     const connectionList = response?.connections
-    console.log(connectionList)
+
     const restFilters = () => {
         setProvider(selectedFilters.provider)
         setConnections(selectedFilters.connections)
@@ -51,7 +58,7 @@ export default function Filters() {
 
     const filterText = () => {
         if (selectedFilters.connections.length > 0) {
-            return `${selectedFilters.connections.length} Filters`
+            return `${selectedFilters.connections.length} filters`
         }
         if (selectedFilters.provider !== '') {
             return selectedFilters.provider
@@ -112,6 +119,12 @@ export default function Filters() {
                                         <Tag text="Provider: AWS" />
                                         <Tag text="Provider: Azure" />
                                     </Flex>
+                                )}
+                                {!!connectionGroup.length && (
+                                    <Tag
+                                        text={`Connection Group: ${connectionGroup}`}
+                                        onClick={() => setConnectionGroup('')}
+                                    />
                                 )}
                                 {connections.map((c) => (
                                     <Tag
@@ -195,8 +208,34 @@ export default function Filters() {
                             <Title className="font-semibold mb-3">
                                 Connection Group
                             </Title>
-                            <Select>
-                                <SelectItem value="1">Group 1</SelectItem>
+                            <Select
+                                value={connectionGroup}
+                                placeholder={
+                                    connectionGroup.length
+                                        ? connectionGroup
+                                        : 'Select connection group...'
+                                }
+                            >
+                                <>
+                                    <SelectItem
+                                        value=""
+                                        onClick={() => setConnectionGroup('')}
+                                    >
+                                        Select none
+                                    </SelectItem>
+                                    {groupList?.map((cg) => (
+                                        <SelectItem
+                                            value={cg.name || ''}
+                                            onClick={() =>
+                                                setConnectionGroup(
+                                                    cg.name || ''
+                                                )
+                                            }
+                                        >
+                                            {cg.name}
+                                        </SelectItem>
+                                    ))}
+                                </>
                             </Select>
                             <Divider />
                             <Flex justifyContent="start" className="gap-2">
@@ -212,7 +251,7 @@ export default function Filters() {
                             <Flex className="relative">
                                 <TextInput
                                     icon={MagnifyingGlassIcon}
-                                    placeholder="Select connection by ID or name..."
+                                    placeholder="Search connection by ID or name..."
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                 />
@@ -257,6 +296,9 @@ export default function Filters() {
                                                                             connection.providerConnectionID ||
                                                                                 '',
                                                                         ]
+                                                                    )
+                                                                    setSearch(
+                                                                        ''
                                                                     )
                                                                 }
                                                             }}
@@ -310,6 +352,7 @@ export default function Filters() {
                                         setSelectedFilters({
                                             provider,
                                             connections,
+                                            connectionGroup,
                                         })
                                         setOpenDrawer(false)
                                         setSearch('')

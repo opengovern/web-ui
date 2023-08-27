@@ -427,9 +427,6 @@ export default function Finder() {
                                                 ).rows
                                             }
                                             downloadable
-                                            options={{
-                                                isFullWidthRow: () => true,
-                                            }}
                                             onRowClicked={(
                                                 event: RowClickedEvent
                                             ) => {
