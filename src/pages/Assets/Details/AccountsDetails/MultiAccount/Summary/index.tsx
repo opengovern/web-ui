@@ -12,7 +12,6 @@ import {
     Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import dayjs from 'dayjs'
 import { numericDisplay } from '../../../../../../utilities/numericDisplay'
 import {
     useOnboardApiV1CatalogMetricsList,
@@ -59,12 +58,12 @@ export default function Summary() {
                                 {!topAccountLoading && (
                                     <BadgeDelta
                                         deltaType={badgeTypeByDelta(
-                                            topAccounts?.oldConnectionCount,
+                                            topAccounts?.totalOldResourceCount,
                                             topAccounts?.connectionCount
                                         )}
                                     >
                                         {percentageByChange(
-                                            topAccounts?.oldConnectionCount,
+                                            topAccounts?.totalOldResourceCount,
                                             topAccounts?.connectionCount
                                         )}
                                         %
@@ -83,7 +82,8 @@ export default function Summary() {
                                         {topAccounts?.connectionCount}
                                     </Metric>
                                     <Text className="truncate">
-                                        from {topAccounts?.oldConnectionCount}
+                                        from{' '}
+                                        {topAccounts?.totalOldResourceCount}
                                     </Text>
                                 </Flex>
                             )}

@@ -48,7 +48,6 @@ export default function SubscriptionInfo({
     open,
     onClose,
 }: ISubscriptionInfo) {
-    console.log(data)
     const {
         isExecuted: isDeleteExecuted,
         isLoading: isDeleteLoading,
@@ -59,7 +58,7 @@ export default function SubscriptionInfo({
         isExecuted: isHealthCheckExecuted,
         isLoading: isHealthCheckLoading,
         sendNow: runHealthCheckNow,
-    } = useOnboardApiV1SourceHealthcheckDetail(data?.id || '', {}, false)
+    } = useOnboardApiV1SourceHealthcheckDetail(data?.id || '', {})
 
     const {
         isExecuted: isDiscoverExecuted,
