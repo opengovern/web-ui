@@ -23,14 +23,15 @@ export const spendTimeAtom = atom<{
 export interface IFilter {
     provider: '' | 'AWS' | 'Azure'
     connections: string[]
+    connectionGroup: string
 }
 
 export const filterAtom = atom<IFilter>({
     provider: '',
     connections: [],
+    connectionGroup: '',
 })
 
-export const selectedResourceCategoryAtom = atom('All Categories')
 export const sideBarCollapsedAtom = atom(false)
 export const assetOpenAtom = atom(false)
 export const administrationOpenAtom = atom(false)
