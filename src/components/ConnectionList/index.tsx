@@ -258,6 +258,9 @@ export default function Filters() {
                                                                                 '',
                                                                         ]
                                                                     )
+                                                                    setSearch(
+                                                                        ''
+                                                                    )
                                                                 }
                                                             }}
                                                         >
