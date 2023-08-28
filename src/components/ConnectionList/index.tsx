@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Button,
     Card,
@@ -34,13 +34,11 @@ export default function Filters() {
     const [openDrawer, setOpenDrawer] = useState(false)
     const [selectedFilters, setSelectedFilters] = useAtom(filterAtom)
     const [provider, setProvider] = useState(selectedFilters.provider)
-    const [connections, setConnections] = useState(selectedFilters.connections)
     const [connectionGroup, setConnectionGroup] = useState(
         selectedFilters.connectionGroup
     )
     const [search, setSearch] = useState('')
     const { response: groupList } = useOnboardApiV1ConnectionGroupsList()
-
     const { response, isLoading } = useOnboardApiV1ConnectionsSummaryList({
         connector: [],
         pageNumber: 1,
@@ -48,12 +46,36 @@ export default function Filters() {
         needCost: false,
         needResourceCount: false,
     })
+    const findConnections = () => {
+        const conn = []
+        if (response) {
+            for (let i = 0; i < selectedFilters.connections.length; i += 1) {
+                conn.push(
+                    response?.connections?.find(
+                        (c) => c.id === selectedFilters.connections[i]
+                    )
+                )
+            }
+        }
+        return conn
+    }
+    const [connections, setConnections] = useState(findConnections)
+
+    const connectionID = (list: any) => {
+        const idList = []
+        if (list) {
+            for (let i = 0; i < list.length; i += 1) {
+                idList.push(list[i].id)
+            }
+        }
+        return idList
+    }
 
     const connectionList = response?.connections
 
     const restFilters = () => {
         setProvider(selectedFilters.provider)
-        setConnections(selectedFilters.connections)
+        setConnections(findConnections)
     }
 
     const filterText = () => {
@@ -128,17 +150,16 @@ export default function Filters() {
                                 )}
                                 {connections.map((c) => (
                                     <Tag
-                                        key={c}
-                                        text={`Connection ID: ${c}`}
+                                        key={c?.id}
+                                        text={`Connection: ${c?.providerConnectionName}`}
                                         onClick={() => {
                                             setConnections((prevState) => {
                                                 const arr = prevState
                                                 arr.splice(
                                                     arr.indexOf(
-                                                        String(
-                                                            arr.find(
-                                                                (s) => s === c
-                                                            )
+                                                        arr.find(
+                                                            (s) =>
+                                                                s?.id === c?.id
                                                         )
                                                     ),
                                                     1
@@ -283,9 +304,7 @@ export default function Filters() {
                                                             onClick={() => {
                                                                 if (
                                                                     !connections.includes(
-                                                                        String(
-                                                                            connection.providerConnectionID
-                                                                        )
+                                                                        connection
                                                                     )
                                                                 ) {
                                                                     setConnections(
@@ -293,8 +312,7 @@ export default function Filters() {
                                                                             prevState
                                                                         ) => [
                                                                             ...prevState,
-                                                                            connection.providerConnectionID ||
-                                                                                '',
+                                                                            connection,
                                                                         ]
                                                                     )
                                                                     setSearch(
@@ -351,7 +369,8 @@ export default function Filters() {
                                     onClick={() => {
                                         setSelectedFilters({
                                             provider,
-                                            connections,
+                                            connections:
+                                                connectionID(connections),
                                             connectionGroup,
                                         })
                                         setOpenDrawer(false)

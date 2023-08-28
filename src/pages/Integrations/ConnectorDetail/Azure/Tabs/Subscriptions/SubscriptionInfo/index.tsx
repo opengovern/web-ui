@@ -38,6 +38,8 @@ function getBadgeText(status: string) {
             return 'Onboarded'
         case 'UNHEALTHY':
             return 'Unhealthy'
+        case 'DISCOVERED':
+            return 'Discovered'
         default:
             return 'Archived'
     }
@@ -83,7 +85,7 @@ export default function SubscriptionInfo({
         if (isHealthCheckExecuted && !isHealthCheckLoading) {
             onClose()
         }
-    }, [isHealthCheckLoading])
+    }, [isHealthCheckExecuted])
 
     useEffect(() => {
         if (isDiscoverExecuted && !isDiscoverLoading) {

@@ -142,14 +142,12 @@ export default function ListCard({
                                                     : getConnectorIcon(
                                                           String(item.connector)
                                                       ))}
-                                            <Text className="truncate">
+                                            <Text className="w-4/5 truncate">
                                                 {item.name}
                                             </Text>
                                         </Flex>
                                         {item.value && (
-                                            <Text className="pl-10">
-                                                {value(item)}
-                                            </Text>
+                                            <Text>{value(item)}</Text>
                                         )}
                                     </ListItem>
                                 </div>

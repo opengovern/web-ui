@@ -46,6 +46,8 @@ function getBadgeText(status: string) {
             return 'Onboarded'
         case 'UNHEALTHY':
             return 'Unhealthy'
+        case 'DISCOVERED':
+            return 'Discovered'
         default:
             return 'Archived'
     }
