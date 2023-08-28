@@ -11,6 +11,7 @@ import {
 import { ArrowPathIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../Spinner'
+import { numberDisplay } from '../../../utilities/numericDisplay'
 
 type IProps = {
     title: string
@@ -66,8 +67,8 @@ export default function SummaryCard({
         }
         return (
             <>
-                <Metric>{metric}</Metric>{' '}
-                {metricPrev && <Text>from {metricPrev}</Text>}
+                <Metric>{numberDisplay(metric, 0)}</Metric>{' '}
+                {metricPrev && <Text>from {numberDisplay(metricPrev, 0)}</Text>}
             </>
         )
     }
