@@ -38,7 +38,6 @@ export default function Filters() {
         selectedFilters.connectionGroup
     )
     const [search, setSearch] = useState('')
-
     const { response: groupList } = useOnboardApiV1ConnectionGroupsList()
     const { response, isLoading } = useOnboardApiV1ConnectionsSummaryList({
         connector: [],
@@ -47,7 +46,6 @@ export default function Filters() {
         needCost: false,
         needResourceCount: false,
     })
-
     const findConnections = () => {
         const conn = []
         if (response) {

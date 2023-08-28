@@ -41,6 +41,8 @@ function getBadgeText(status: string) {
             return 'Onboarded'
         case 'UNHEALTHY':
             return 'Unhealthy'
+        case 'DISCOVERED':
+            return 'Discovered'
         default:
             return 'Archived'
     }
@@ -100,7 +102,7 @@ export default function AccountInfo({
             notification('Health check triggered')
             onClose()
         }
-    }, [isHealthCheckLoading])
+    }, [isHealthCheckExecuted])
 
     useEffect(() => {
         if (isDiscoverExecuted && !isDiscoverLoading) {
@@ -112,8 +114,6 @@ export default function AccountInfo({
         (isDeleteExecuted && isDeleteLoading) ||
         (isHealthCheckExecuted && isHealthCheckLoading) ||
         (isDiscoverExecuted && isDiscoverLoading)
-
-    console.log(data)
 
     return (
         <DrawerPanel title="AWS Account" open={open} onClose={() => onClose()}>
