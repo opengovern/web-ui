@@ -67,8 +67,15 @@ export default function SummaryCard({
         }
         return (
             <>
-                <Metric>{numberDisplay(metric, 0)}</Metric>{' '}
-                {metricPrev && <Text>from {numberDisplay(metricPrev, 0)}</Text>}
+                <Metric>
+                    {Number(metric) ? numberDisplay(metric, 0) : metric}
+                </Metric>
+                {metricPrev && (
+                    <Text>
+                        from{' '}
+                        {Number(metric) ? numberDisplay(metricPrev, 0) : metric}
+                    </Text>
+                )}
             </>
         )
     }
