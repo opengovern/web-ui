@@ -6,7 +6,7 @@ const instance = axios.create({
     baseURL:
         hostname === 'localhost' || hostname === '127.0.0.1'
             ? `${BASE_URL}${'/kaytu/'}`
-            : `${origin}${'/kaytu/'}`,
+            : `${origin.replace('demo.', '')}${'/kaytu/'}`,
     headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

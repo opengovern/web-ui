@@ -4,12 +4,15 @@ import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
 import dayjs from 'dayjs'
+import { maskPassword } from 'maskdata'
 import { SourceType } from '../../../api/api'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { getConnectorIcon } from '../ConnectorCard'
 import { spendTimeAtom, timeAtom } from '../../../store'
 import { dateDisplay } from '../../../utilities/dateDisplay'
+import { isDemo } from '../../../utilities/demo'
+import { maskStringConfig } from '../../../utilities/maskConfig'
 
 interface ITopListCard {
     title: string
@@ -121,10 +124,17 @@ export default function ListCard({
                                                 alignItems="start"
                                             >
                                                 <Text className="text-gray-800">
-                                                    {item.name}
+                                                    {isDemo()
+                                                        ? maskPassword(
+                                                              item.name
+                                                          )
+                                                        : item.name}
                                                 </Text>
                                                 <Text className="truncate">
-                                                    id: {item.id}
+                                                    id:{' '}
+                                                    {isDemo()
+                                                        ? maskPassword(item.id)
+                                                        : item.id}
                                                 </Text>
                                             </Flex>
                                             {item.value && (
@@ -143,7 +153,12 @@ export default function ListCard({
                                                           String(item.connector)
                                                       ))}
                                             <Text className="w-4/5 truncate">
-                                                {item.name}
+                                                {type === 'account' && isDemo()
+                                                    ? maskPassword(
+                                                          item.name,
+                                                          maskStringConfig
+                                                      )
+                                                    : item.name}
                                             </Text>
                                         </Flex>
                                         {item.value && (

@@ -17,11 +17,13 @@ import {
     ReactNode,
     useState,
 } from 'react'
+import { maskPassword, maskString } from 'maskdata'
 import {
     exactPriceDisplay,
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
+import { isDemo } from '../../../utilities/demo'
 
 type IProps = {
     title?: string
@@ -71,7 +73,9 @@ export default function CardWithList({
         try {
             return data[tab]?.map((item: Item, i: number) => (
                 <ListItem className={`${i === 0 && 'pt-4'}`}>
-                    <Text className="w-4/5 truncate">{item.name}</Text>
+                    <Text className="w-4/5 truncate">
+                        {isDemo() ? maskPassword(String(item.name)) : item.name}
+                    </Text>
                     {item.value && <Text>{value(item)}</Text>}
                 </ListItem>
             ))
