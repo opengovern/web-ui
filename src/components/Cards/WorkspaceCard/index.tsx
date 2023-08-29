@@ -11,9 +11,7 @@ import {
 } from '@tremor/react'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import dayjs from 'dayjs'
 import { ArrowPathIcon, ArrowSmallRightIcon } from '@heroicons/react/24/solid'
-import { useAtomValue } from 'jotai'
 import {
     useWorkspaceApiV1WorkspaceDelete,
     useWorkspaceApiV1WorkspaceResumeCreate,
@@ -23,7 +21,6 @@ import {
 import ConfirmModal from '../../Modal/ConfirmModal'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
-import { isDemo } from '../../../utilities/demo'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse } from '../../../api/api'
 
@@ -78,13 +75,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
         useState<boolean>(false)
 
     const { response: workspaceDetail, isLoading: workspaceLoading } =
-        useWorkspaceApiV1WorkspacesLimitsDetail(
-            workspace.name || '',
-            {},
-            {
-                ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-            }
-        )
+        useWorkspaceApiV1WorkspacesLimitsDetail(workspace.name || '', {})
     const {
         isLoading: suspendLoading,
         sendNow: callSuspend,

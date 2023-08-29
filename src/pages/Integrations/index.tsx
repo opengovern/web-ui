@@ -12,13 +12,9 @@ import Header from '../../components/Header'
 
 export default function Integrations() {
     const { response: topMetrics, isLoading: metricsLoading } =
-        useOnboardApiV1CatalogMetricsList({
-            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-        })
+        useOnboardApiV1CatalogMetricsList()
     const { response: responseConnectors, isLoading: connectorsLoading } =
-        useOnboardApiV1ConnectorList({
-            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-        })
+        useOnboardApiV1ConnectorList()
 
     const mockConnectors = [
         {
