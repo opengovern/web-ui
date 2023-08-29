@@ -14,9 +14,7 @@ export default function Workspaces() {
         response: workspaces,
         isLoading,
         sendNow: refreshList,
-    } = useWorkspaceApiV1WorkspacesList({
-        ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-    })
+    } = useWorkspaceApiV1WorkspacesList()
 
     return (
         <Menu currentPage="assets" showSidebar={false}>

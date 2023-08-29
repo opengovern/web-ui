@@ -80,9 +80,7 @@ export default function Settings() {
     const [tokenLoading, setTokenLoading] = useState(true)
     const { getAccessTokenSilently } = useAuth0()
     const { response: curWorkspace, isLoading } =
-        useWorkspaceApiV1WorkspaceCurrentList({
-            ...(isDemo() && { headers: { prefer: 'dynamic=false' } }),
-        })
+        useWorkspaceApiV1WorkspaceCurrentList()
     const workspace = useParams<{ ws: string }>().ws
     const currentSubPage = useLocation().hash
 
