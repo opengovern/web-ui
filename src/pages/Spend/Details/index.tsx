@@ -326,12 +326,9 @@ export default function CostMetricsDetails() {
                     filter: 'agTextColumnFilter',
                     suppressMenu: true,
                     floatingFilter: true,
-                    resizable: true,
-                    pivot: false,
+                    type: 'connector',
+                    width: 50,
                     pinned: true,
-                    cellRenderer: (params: ICellRendererParams) => {
-                        return params.value && getConnectorIcon(params.value)
-                    },
                 },
                 {
                     field: 'dimension',

@@ -1,36 +1,22 @@
 import { ICellRendererParams } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
-import { BadgeDelta, Flex } from '@tremor/react'
-import { useNavigate } from 'react-router-dom'
+import { BadgeDelta, Card, Flex } from '@tremor/react'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
-import Summary from './Summary'
 import { filterAtom, timeAtom } from '../../../../store'
 import Menu from '../../../../components/Menu'
 import {
     badgeTypeByDelta,
     percentageByChange,
 } from '../../../../utilities/deltaType'
-import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
-import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import Header from '../../../../components/Header'
 
 const columns: IColumn<any, any>[] = [
     {
         field: 'connectors',
-        headerName: 'Cloud Providers',
-        type: 'string',
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
-        ) => (
-            <Flex
-                justifyContent="center"
-                alignItems="center"
-                className="w-full h-full"
-            >
-                {params.data?.connectors?.map((item) => getConnectorIcon(item))}
-            </Flex>
-        ),
+        headerName: 'Connector',
+        type: 'connector',
+        width: 50,
     },
     {
         field: 'name',
@@ -73,8 +59,6 @@ const columns: IColumn<any, any>[] = [
 ]
 
 export default function ServicesDetails() {
-    const navigate = useNavigate()
-
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
@@ -82,6 +66,7 @@ export default function ServicesDetails() {
         useInventoryApiV2AnalyticsMetricList({
             connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
+            connectionGroup: selectedConnections?.connectionGroup,
             pageSize: 1000,
             pageNumber: 1,
             endTime: activeTimeRange.end.unix(),
@@ -96,22 +81,24 @@ export default function ServicesDetails() {
                 connectionFilter
                 datePicker
             />
-            <Summary
+            {/* <Summary
                 totalServices={serviceList?.total_metrics}
                 totalServicesLoading={isServiceListLoading}
-            />
-            <Table
-                title="Services"
-                downloadable
-                id="asset_service_details"
-                columns={columns}
-                rowData={serviceList?.metrics || []}
-                onGridReady={(params) => {
-                    if (isServiceListLoading) {
-                        params.api.showLoadingOverlay()
-                    }
-                }}
-            />
+            /> */}
+            <Card>
+                <Table
+                    title="Services"
+                    downloadable
+                    id="asset_service_details"
+                    columns={columns}
+                    rowData={serviceList?.metrics || []}
+                    onGridReady={(params) => {
+                        if (isServiceListLoading) {
+                            params.api.showLoadingOverlay()
+                        }
+                    }}
+                />
+            </Card>
         </Menu>
     )
 }

@@ -23,18 +23,7 @@ const columns: ColDef[] = [
         width: 50,
         sortable: true,
         filter: true,
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="w-full h-full"
-                >
-                    <AWSIcon />
-                </Flex>
-            )
-        },
+        type: 'connector',
     },
     {
         field: 'providerConnectionName',

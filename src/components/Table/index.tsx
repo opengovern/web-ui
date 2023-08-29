@@ -109,7 +109,7 @@ export default function Table<TData = any, TValue = any>({
                 enableRowGroup: item.enableRowGroup || false,
                 hide: item.hide || false,
                 cellRenderer: item.cellRenderer,
-                flex: item.flex || 1,
+                flex: item.width ? 0 : item.flex || 1,
             }
 
             if (

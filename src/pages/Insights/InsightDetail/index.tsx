@@ -17,6 +17,7 @@ import { useState } from 'react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
+import { maskPassword } from 'maskdata'
 import Menu from '../../../components/Menu'
 import {
     useComplianceApiV1InsightDetail,
@@ -35,6 +36,7 @@ import Header from '../../../components/Header'
 import Table, { IColumn } from '../../../components/Table'
 import Chart from '../../../components/Chart'
 import SummaryCard from '../../../components/Cards/SummaryCard'
+import { isDemo } from '../../../utilities/demo'
 
 const chartData = (inputData: any) => {
     const label = []
@@ -72,12 +74,21 @@ const getTable = (header: any, details: any) => {
         if (rows && rows.length) {
             for (let i = 0; i < rows.length; i += 1) {
                 const object = Object.fromEntries(
-                    headers.map((key: any, index: any) => [
-                        key,
-                        typeof rows[i][index] === 'string'
-                            ? rows[i][index]
-                            : JSON.stringify(rows[i][index]),
-                    ])
+                    isDemo()
+                        ? headers.map((key: any, index: any) => [
+                              key,
+                              typeof rows[i][index] === 'string'
+                                  ? maskPassword(rows[i][index])
+                                  : maskPassword(
+                                        JSON.stringify(rows[i][index])
+                                    ),
+                          ])
+                        : headers.map((key: any, index: any) => [
+                              key,
+                              typeof rows[i][index] === 'string'
+                                  ? rows[i][index]
+                                  : JSON.stringify(rows[i][index]),
+                          ])
                 )
                 row.push({ id: i, ...object })
             }

@@ -1,8 +1,7 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useAtomValue } from 'jotai'
-import { GridApi } from 'ag-grid-community'
+import { Card } from '@tremor/react'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
-import Summary from './Summary'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import { filterAtom, timeAtom } from '../../../../../store'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../api/api'
@@ -14,6 +13,9 @@ const columns: IColumn<any, any>[] = [
         field: 'connector',
         headerName: 'Connector',
         type: 'connector',
+        width: 50,
+        sortable: true,
+        filter: true,
     },
     {
         field: 'providerConnectionName',
@@ -29,11 +31,6 @@ const columns: IColumn<any, any>[] = [
         field: 'lifecycleState',
         headerName: 'State',
         type: 'string',
-    },
-    {
-        field: 'cost',
-        headerName: 'Cost',
-        type: 'price',
     },
     {
         field: 'resourceCount',
@@ -60,7 +57,6 @@ const columns: IColumn<any, any>[] = [
 ]
 
 export default function MultiAccount() {
-    const gridRef = useRef<GridApi | null>(null)
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
@@ -83,26 +79,27 @@ export default function MultiAccount() {
 
     return (
         <>
-            <Summary />
-            <Table
-                title="Accounts"
-                downloadable
-                id="asset_multiaccount"
-                columns={columns}
-                rowData={accounts?.connections || []}
-                onGridReady={(e) => {
-                    gridRef.current = e.api
-                    if (isAccountsLoading) {
-                        e.api?.showLoadingOverlay()
-                    }
-                }}
-                onCellClicked={(event) => {
-                    if (event.data !== null) {
-                        setSelectedConnection(event.data)
-                        setDrawerOpen(true)
-                    }
-                }}
-            />
+            {/* <Summary /> */}
+            <Card>
+                <Table
+                    title="Accounts"
+                    downloadable
+                    id="asset_multiaccount"
+                    columns={columns}
+                    rowData={accounts?.connections || []}
+                    onGridReady={(e) => {
+                        if (isAccountsLoading) {
+                            e.api?.showLoadingOverlay()
+                        }
+                    }}
+                    onCellClicked={(event) => {
+                        if (event.data !== null) {
+                            setSelectedConnection(event.data)
+                            setDrawerOpen(true)
+                        }
+                    }}
+                />
+            </Card>
             <DrawerPanel
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
