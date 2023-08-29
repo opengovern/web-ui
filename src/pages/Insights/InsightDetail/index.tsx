@@ -39,7 +39,7 @@ import SummaryCard from '../../../components/Cards/SummaryCard'
 const chartData = (inputData: any) => {
     const label = []
     const data = []
-    if (inputData) {
+    if (inputData && inputData.length) {
         for (let i = 0; i < inputData?.length; i += 1) {
             label.push(dateDisplay((inputData[i]?.timestamp || 0) * 1000))
             data.push(inputData[i]?.value)
@@ -67,17 +67,21 @@ const getTable = (header: any, details: any) => {
             })
         }
     }
-    const { rows, headers } = details
-    for (let i = 0; i < rows.length; i += 1) {
-        const object = Object.fromEntries(
-            headers.map((key: any, index: any) => [
-                key,
-                typeof rows[i][index] === 'string'
-                    ? rows[i][index]
-                    : JSON.stringify(rows[i][index]),
-            ])
-        )
-        row.push({ id: i, ...object })
+    if (details) {
+        const { rows, headers } = details
+        if (rows && rows.length) {
+            for (let i = 0; i < rows.length; i += 1) {
+                const object = Object.fromEntries(
+                    headers.map((key: any, index: any) => [
+                        key,
+                        typeof rows[i][index] === 'string'
+                            ? rows[i][index]
+                            : JSON.stringify(rows[i][index]),
+                    ])
+                )
+                row.push({ id: i, ...object })
+            }
+        }
     }
     return {
         columns,
