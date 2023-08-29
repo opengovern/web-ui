@@ -35,6 +35,7 @@ export default function Summary({
         useInventoryApiV2AnalyticsMetricList({
             connector: [selectedConnections?.provider],
             connectionId: selectedConnections?.connections,
+            connectionGroup: selectedConnections?.connectionGroup,
             pageSize: 5,
             pageNumber: 1,
             endTime: activeTimeRange.end.unix(),
@@ -46,6 +47,7 @@ export default function Summary({
     } = useInventoryApiV2AnalyticsMetricList({
         connector: [selectedConnections?.provider],
         connectionId: selectedConnections?.connections,
+        connectionGroup: selectedConnections?.connectionGroup,
         pageSize: 5,
         pageNumber: 1,
         endTime: activeTimeRange.end.unix(),

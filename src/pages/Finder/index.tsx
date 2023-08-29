@@ -36,6 +36,7 @@ import {
     ExclamationCircleIcon,
 } from '@heroicons/react/24/solid'
 import { useLocation } from 'react-router-dom'
+import { maskPassword } from 'maskdata'
 import Menu from '../../components/Menu'
 import QueryCard from '../../components/Cards/QueryCard'
 import {
@@ -50,6 +51,7 @@ import DrawerPanel from '../../components/DrawerPanel'
 import { RenderObject } from '../../components/RenderObject'
 import Table, { IColumn } from '../../components/Table'
 import Header from '../../components/Header'
+import { isDemo } from '../../utilities/demo'
 
 const getTable = (headers: any, details: any) => {
     const columns: IColumn<any, any>[] = []
@@ -69,14 +71,23 @@ const getTable = (headers: any, details: any) => {
     if (details && details.length) {
         for (let i = 0; i < details.length; i += 1) {
             const row: any = {}
-            for (let j = 0; j < columns.length; j += 1) {
-                row[headers[j]] = details[i][j]
-                row[headers[j]] =
-                    typeof details[i][j] === 'string'
-                        ? details[i][j]
-                        : JSON.stringify(details[i][j])
+            if (isDemo()) {
+                for (let j = 0; j < columns.length; j += 1) {
+                    row[headers[j]] =
+                        typeof details[i][j] === 'string'
+                            ? maskPassword(details[i][j])
+                            : maskPassword(JSON.stringify(details[i][j]))
+                }
+                rows.push(row)
+            } else {
+                for (let j = 0; j < columns.length; j += 1) {
+                    row[headers[j]] =
+                        typeof details[i][j] === 'string'
+                            ? details[i][j]
+                            : JSON.stringify(details[i][j])
+                }
+                rows.push(row)
             }
-            rows.push(row)
         }
     }
     return {

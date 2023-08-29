@@ -18,7 +18,7 @@ const columns: IColumn<any, any>[] = [
     {
         headerName: 'Connectors',
         field: 'connectors',
-        type: 'string',
+        type: 'connector',
         enableRowGroup: true,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>

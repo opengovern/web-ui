@@ -12,7 +12,6 @@ import { getConnectorIcon } from '../ConnectorCard'
 import { spendTimeAtom, timeAtom } from '../../../store'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { isDemo } from '../../../utilities/demo'
-import { maskStringConfig } from '../../../utilities/maskConfig'
 
 interface ITopListCard {
     title: string
@@ -154,10 +153,7 @@ export default function ListCard({
                                                       ))}
                                             <Text className="w-4/5 truncate">
                                                 {type === 'account' && isDemo()
-                                                    ? maskPassword(
-                                                          item.name,
-                                                          maskStringConfig
-                                                      )
+                                                    ? maskPassword(item.name)
                                                     : item.name}
                                             </Text>
                                         </Flex>
