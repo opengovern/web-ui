@@ -12,6 +12,7 @@ import { timeAtom } from '../../store'
 import Spinner from '../../components/Spinner'
 import Header from '../../components/Header'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup } from '../../api/api'
+import Carousel from '../../components/Carousel'
 
 export default function Insights() {
     const [selectedCategory, setSelectedCategory] = useState('')
@@ -100,12 +101,7 @@ export default function Insights() {
                         <Spinner />
                     </Flex>
                 ) : insightError === undefined ? (
-                    <Grid
-                        numItems={1}
-                        numItemsMd={2}
-                        numItemsLg={3}
-                        className="gap-4 w-full"
-                    >
+                    <Carousel pageSize={12}>
                         {selectedGroupObj
                             ? selectedGroupObj.insights
                                   ?.sort(
@@ -149,7 +145,7 @@ export default function Insights() {
                                           <InsightCard metric={insight} />
                                       </Col>
                                   ))}
-                    </Grid>
+                    </Carousel>
                 ) : (
                     <Button onClick={() => insightSendNow()}>Retry</Button>
                 )}

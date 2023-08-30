@@ -20,7 +20,6 @@ import {
     ColDef,
     GetContextMenuItemsParams,
     GridOptions,
-    ICellRendererParams,
     MenuItemDef,
     ValueFormatterParams,
 } from 'ag-grid-community'
@@ -39,7 +38,6 @@ import {
     generateItems,
 } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
-import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 
 export default function CostMetricsDetails() {
     const { hash } = useLocation()
