@@ -212,19 +212,19 @@ export default function InsightDetail() {
                         breadCrumb={['Insight Detail']}
                         datePicker
                     />
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        justifyContent="start"
+                        className="mb-6"
+                    >
+                        <Title className="font-semibold whitespace-nowrap">
+                            {insightDetail?.shortTitle}
+                        </Title>
+                        <Text>{insightDetail?.description}</Text>
+                    </Flex>
                     <Card className="mb-4 gap-4">
-                        <Grid numItems={4} className="w-full gap-4">
-                            <Flex
-                                flexDirection="col"
-                                alignItems="start"
-                                justifyContent="start"
-                            >
-                                <Title className="font-semibold whitespace-nowrap">
-                                    {insightDetail?.shortTitle}
-                                </Title>
-                                <Text>{insightDetail?.description}</Text>
-                            </Flex>
-                            <Col />
+                        <Grid numItems={4} className="w-full gap-4 mb-4">
                             <SummaryCard
                                 border={false}
                                 title="Total result"
@@ -240,25 +240,18 @@ export default function InsightDetail() {
                                     insightDetail?.totalResultValue
                                 )}%`}
                             />
-                            <Flex
-                                flexDirection="col"
-                                justifyContent="start"
-                                alignItems="start"
-                            >
+                            <Flex className="pl-4 border-l border-l-gray-200">
                                 <SummaryCard
                                     border={false}
                                     title="Evaluated"
                                     metric={10}
                                 />
-                                <Flex
-                                    justifyContent="end"
-                                    className="mt-2 gap-2.5"
-                                >
-                                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                                    <Text>Insight count</Text>
-                                </Flex>
                             </Flex>
                         </Grid>
+                        <Flex justifyContent="end" className="gap-2.5">
+                            <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
+                            <Text>Insight count</Text>
+                        </Flex>
                         <Chart
                             labels={chartData(insightTrend).label}
                             chartData={chartData(insightTrend).data}

@@ -242,7 +242,6 @@ export default function Spend() {
             }),
         })
 
-    console.log(topAccounts(accountCostResponse))
     return (
         <Menu currentPage="spend">
             <Header title="Spend" datePicker connectionFilter />
