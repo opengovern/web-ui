@@ -83,7 +83,7 @@ const topAccounts = (
                 name: input.connections[i].providerConnectionName,
                 value: input.connections[i].cost,
                 connector: input.connections[i].connector,
-                id: input.connections[i].id,
+                id: input.connections[i].providerConnectionID,
             })
         }
         top.total = input.totalDiscoveredCount
@@ -157,12 +157,12 @@ const pieData = (
 
 const getConnections = (con: IFilter) => {
     if (con.provider.length) {
-        return con.provider
+        return `Spend across ${con.provider}`
     }
     if (con.connections.length) {
-        return `${con.connections.length} accounts`
+        return `Spend across ${con.connections.length} accounts`
     }
-    return 'all accounts'
+    return 'Total cost'
 }
 
 export default function Spend() {
@@ -170,9 +170,9 @@ export default function Spend() {
     const selectedConnections = useAtomValue(filterAtom)
 
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
-        'line'
+        'area'
     )
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [selectedIndex, setSelectedIndex] = useState(1)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
@@ -242,6 +242,7 @@ export default function Spend() {
             }),
         })
 
+    console.log(topAccounts(accountCostResponse))
     return (
         <Menu currentPage="spend">
             <Header title="Spend" datePicker connectionFilter />
@@ -249,9 +250,7 @@ export default function Spend() {
                 <Grid numItems={6} className="gap-4">
                     <Col numColSpan={1}>
                         <SummaryCard
-                            title={`Spend across ${getConnections(
-                                selectedConnections
-                            )}`}
+                            title={getConnections(selectedConnections)}
                             metric={exactPriceDisplay(
                                 accountCostResponse?.totalCost
                             )}
