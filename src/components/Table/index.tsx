@@ -35,6 +35,11 @@ export interface IColumn<TData, TValue> {
     cellRenderer?: any
     rowGroup?: boolean
     enableRowGroup?: boolean
+    pinned?: boolean
+    aggFunc?: string
+    suppressMenu?: boolean
+    floatingFilter?: boolean
+    pivot?: boolean
 
     hide?: boolean
     filter?: boolean
@@ -110,6 +115,11 @@ export default function Table<TData = any, TValue = any>({
                 hide: item.hide || false,
                 cellRenderer: item.cellRenderer,
                 flex: item.width ? 0 : item.flex || 1,
+                pinned: item.pinned || false,
+                aggFunc: item.aggFunc,
+                suppressMenu: item.suppressMenu || false,
+                floatingFilter: item.floatingFilter || false,
+                pivot: item.pivot || false,
             }
 
             if (

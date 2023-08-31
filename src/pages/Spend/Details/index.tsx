@@ -173,31 +173,6 @@ export default function CostMetricsDetails() {
         )
     }
 
-    useEffect(() => {
-        gridRef.current?.api?.setSideBar({
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    minWidth: 300,
-                    maxWidth: 300,
-                    width: 300,
-                    toolPanel: filterPanel,
-                },
-            ],
-            defaultToolPanel: '',
-        })
-    }, [selectedGranularity, dimension, filter, connections, services])
-
     function getContextMenuItems(
         params: GetContextMenuItemsParams
     ): (string | MenuItemDef)[] {
@@ -221,18 +196,15 @@ export default function CostMetricsDetails() {
                 enablePivot: true,
             },
         },
-        rowGroupPanelShow: 'never',
+        rowGroupPanelShow: 'always',
         groupAllowUnbalanced: true,
         autoGroupColumnDef: {
             pinned: true,
-            headerName: 'Category',
+            // headerName: 'Category',
             flex: 2,
             sortable: true,
             filter: true,
             resizable: true,
-            cellRendererParams: {
-                suppressCount: true,
-            },
         },
         getRowHeight: () => 50,
         onGridReady: (e) => {
@@ -288,8 +260,7 @@ export default function CostMetricsDetails() {
                     pinned: true,
                     sortable: true,
                     aggFunc: 'sum',
-                    suppressMenu: true,
-                    filter: 'agTextColumnFilter',
+                    hide: true,
                     floatingFilter: true,
                     resizable: true,
                     pivot: false,
@@ -304,11 +275,9 @@ export default function CostMetricsDetails() {
                     enableRowGroup: true,
                     hide: true,
                     sortable: true,
-                    filter: 'agTextColumnFilter',
-                    suppressMenu: true,
-                    floatingFilter: true,
                     resizable: true,
                     pivot: false,
+                    pinned: true,
                 },
             ]
         }
@@ -321,20 +290,17 @@ export default function CostMetricsDetails() {
                 {
                     field: 'connector',
                     headerName: 'Connector',
-                    filter: 'agTextColumnFilter',
-                    suppressMenu: true,
-                    floatingFilter: true,
                     type: 'connector',
-                    width: 50,
+                    enableRowGroup: true,
+                    resizable: true,
+                    sortable: true,
                     pinned: true,
+                    hide: true,
                 },
                 {
                     field: 'dimension',
                     headerName: dimensionName(),
                     sortable: true,
-                    filter: 'agTextColumnFilter',
-                    suppressMenu: true,
-                    floatingFilter: true,
                     resizable: true,
                     pivot: false,
                     pinned: true,
@@ -344,9 +310,6 @@ export default function CostMetricsDetails() {
                     headerName: 'Total Cost',
                     sortable: true,
                     aggFunc: 'sum',
-                    suppressMenu: true,
-                    filter: 'agTextColumnFilter',
-                    floatingFilter: true,
                     resizable: true,
                     pivot: false,
                     pinned: true,
@@ -376,9 +339,7 @@ export default function CostMetricsDetails() {
                         field: colName,
                         headerName: colName,
                         sortable: true,
-                        filter: 'agNumberColumnFilter',
                         suppressMenu: true,
-                        floatingFilter: true,
                         resizable: true,
                         pivot: false,
                         valueFormatter: (param) => {
@@ -407,6 +368,7 @@ export default function CostMetricsDetails() {
                             ? row.dimensionName
                             : row.dimensionId,
                         category: row.category,
+                        accountId: row.accountID,
                         connector: row.connector,
                         totalCost,
                         ...temp,
@@ -425,8 +387,6 @@ export default function CostMetricsDetails() {
             }
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(newRow)
-        } else {
-            gridRef.current?.api?.showLoadingOverlay()
         }
     }, [isLoading])
 

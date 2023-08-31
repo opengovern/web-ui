@@ -172,7 +172,7 @@ export default function Spend() {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'area'
     )
-    const [selectedIndex, setSelectedIndex] = useState(1)
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
@@ -182,8 +182,8 @@ export default function Spend() {
     )
 
     useEffect(() => {
-        if (selectedIndex === 0) setSelectedChart('line')
-        if (selectedIndex === 1) setSelectedChart('area')
+        if (selectedIndex === 0) setSelectedChart('area')
+        if (selectedIndex === 1) setSelectedChart('line')
         if (selectedIndex === 2) setSelectedChart('bar')
     }, [selectedIndex])
 
@@ -289,11 +289,11 @@ export default function Spend() {
                                     className="w-fit rounded-lg"
                                 >
                                     <TabList variant="solid">
-                                        <Tab value="line">
-                                            <LineChartIcon className="h-5" />
-                                        </Tab>
                                         <Tab value="area">
                                             <AreaChartIcon className="h-5" />
+                                        </Tab>
+                                        <Tab value="line">
+                                            <LineChartIcon className="h-5" />
                                         </Tab>
                                         <Tab value="bar">
                                             <BarChartIcon className="h-5" />
