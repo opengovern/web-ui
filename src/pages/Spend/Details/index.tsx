@@ -306,6 +306,14 @@ export default function CostMetricsDetails() {
                     pinned: true,
                 },
                 {
+                    field: 'accountId',
+                    headerName: 'Provider ID',
+                    sortable: true,
+                    resizable: true,
+                    pivot: false,
+                    pinned: true,
+                },
+                {
                     field: 'totalCost',
                     headerName: 'Total Cost',
                     sortable: true,
