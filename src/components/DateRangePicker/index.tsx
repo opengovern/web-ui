@@ -55,15 +55,8 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
         setOpen: () => setShowList(true),
     }
 
-    const {
-        groupProps,
-        labelProps,
-        startFieldProps,
-        endFieldProps,
-        buttonProps,
-        dialogProps,
-        calendarProps,
-    } = useDateRangePicker(props, state, ref)
+    const { groupProps, labelProps, buttonProps, dialogProps, calendarProps } =
+        useDateRangePicker(props, state, ref)
 
     const { label } = props
     const { value } = props
@@ -93,21 +86,12 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                 className="flex group h-[38px] rounded-r-lg overflow-hidden"
             >
                 <div className="flex items-center bg-white dark:bg-gray-900 dark:text-gray-50 border border-gray-300 group-hover:border-gray-400 transition-colors rounded-l-lg px-5 group-focus-within:border-kaytu-600 group-focus-within:group-hover:border-kaytu-600 p-1 relative">
-                    {/* <DateField {...startFieldProps} />
-                    <span aria-hidden="true" className="px-1">
-                        –
-                    </span>
-                    <DateField {...endFieldProps} />
-                    {state.validationState === 'invalid' && (
-                        <ExclamationTriangleIcon className="w-6 h-6 text-red-500 absolute right-1" />
-                    )} */}
                     <Text className="text-gray-800">
                         {renderText(start(), end())}
                     </Text>
                     <button
                         type="button"
                         className="absolute w-full h-full left-0 opacity-0"
-                        // onClick={() => state.setOpen(true)}
                         onClick={() => listState.setOpen()}
                     >
                         open datepicker

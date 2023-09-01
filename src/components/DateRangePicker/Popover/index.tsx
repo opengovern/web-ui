@@ -1,8 +1,8 @@
-import * as React from 'react'
 import { DismissButton, Overlay, usePopover } from '@react-aria/overlays'
+import { useRef } from 'react'
 
 export function Popover(props: any) {
-    const ref = React.useRef(null)
+    const ref = useRef(null)
     const { state, children } = props
 
     const { popoverProps, underlayProps } = usePopover(

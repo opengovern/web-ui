@@ -1,14 +1,4 @@
-import {
-    Button,
-    Card,
-    Flex,
-    MultiSelect,
-    MultiSelectItem,
-    Select,
-    SelectItem,
-    Text,
-    Title,
-} from '@tremor/react'
+import { Button, Card, Flex, Select, SelectItem, Title } from '@tremor/react'
 import { useLocation } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
@@ -24,15 +14,10 @@ import {
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
-import DateRangePicker from '../../../components/DateRangePicker'
 import Menu from '../../../components/Menu'
-import {
-    useInventoryApiV2AnalyticsMetricsListList,
-    useInventoryApiV2AnalyticsSpendTableList,
-} from '../../../api/inventory.gen'
-import { spendTimeAtom } from '../../../store'
+import { useInventoryApiV2AnalyticsSpendTableList } from '../../../api/inventory.gen'
+import { filterAtom, spendTimeAtom } from '../../../store'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import {
     checkGranularity,
     generateItems,
@@ -41,18 +26,6 @@ import Header from '../../../components/Header'
 
 export default function CostMetricsDetails() {
     const { hash } = useLocation()
-
-    const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
-            pageNumber: 1,
-            pageSize: 10000,
-            needCost: true,
-            needResourceCount: false,
-        })
-
-    const { response: services, isLoading: servicesLoading } =
-        useInventoryApiV2AnalyticsMetricsListList({ metricType: 'spend' })
-
     const page = () => {
         switch (hash) {
             case '#connections':
@@ -65,6 +38,7 @@ export default function CostMetricsDetails() {
     }
 
     const activeTimeRange = useAtomValue(spendTimeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
     const [dimension, setDimension] = useState<string>(page())
     const dimensionName = () => {
         switch (dimension) {
@@ -74,13 +48,12 @@ export default function CostMetricsDetails() {
                 return 'Service Name'
         }
     }
-    const [filter, setFilter] = useState<string[]>([])
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
-        checkGranularity(activeTimeRange.start, activeTimeRange.end).daily
-            ? 'daily'
-            : 'monthly'
+        checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
+            ? 'monthly'
+            : 'daily'
     )
     const query = (): {
         startTime?: number | undefined
@@ -100,22 +73,12 @@ export default function CostMetricsDetails() {
             gra = 'monthly'
         }
 
-        let connectionIdFilter: string[] | undefined
-        let metricIdsFilter: string[] | undefined
-
-        if (dim === 'connection') {
-            metricIdsFilter = filter
-        } else {
-            connectionIdFilter = filter
-        }
-
         return {
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),
             dimension: dim,
             granularity: gra,
-            connectionId: connectionIdFilter,
-            metricIds: metricIdsFilter,
+            connectionId: selectedConnections.connections,
         }
     }
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
@@ -123,55 +86,6 @@ export default function CostMetricsDetails() {
     )
 
     const gridRef = useRef<AgGridReact>(null)
-    const filterPanel = () => {
-        return (
-            <Flex
-                flexDirection="col"
-                justifyContent="start"
-                alignItems="start"
-                className="w-full px-6"
-            >
-                <Text className="m-3">Date filter</Text>
-                <DateRangePicker />
-                <Text className="m-3">Granularity</Text>
-                <Select
-                    value={selectedGranularity}
-                    onValueChange={(v) =>
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        setSelectedGranularity(v)
-                    }
-                >
-                    {generateItems(activeTimeRange.start, activeTimeRange.end)}
-                </Select>
-                <Text className="m-3">Group by</Text>
-                <Select
-                    value={dimension}
-                    onValueChange={(v) => setDimension(v)}
-                >
-                    <SelectItem value="metric">Service</SelectItem>
-                    <SelectItem value="connection">Connection</SelectItem>
-                </Select>
-                <Text className="m-3">
-                    Filter by{' '}
-                    {dimension === 'connection' ? 'Service' : 'Connection'}
-                </Text>
-                <MultiSelect value={filter} onValueChange={(v) => setFilter(v)}>
-                    {dimension !== 'connection'
-                        ? (connections?.connections || []).map((item) => (
-                              <MultiSelectItem value={item.id || ''}>
-                                  {item.providerConnectionName}
-                              </MultiSelectItem>
-                          ))
-                        : (services || []).map((item) => (
-                              <MultiSelectItem value={item.id || ''}>
-                                  {item.name}
-                              </MultiSelectItem>
-                          ))}
-                </MultiSelect>
-            </Flex>
-        )
-    }
 
     function getContextMenuItems(
         params: GetContextMenuItemsParams
@@ -229,16 +143,6 @@ export default function CostMetricsDetails() {
                     labelKey: 'columns',
                     iconKey: 'columns',
                     toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    minWidth: 300,
-                    maxWidth: 300,
-                    width: 300,
-                    toolPanel: filterPanel,
                 },
             ],
             defaultToolPanel: '',
@@ -321,7 +225,7 @@ export default function CostMetricsDetails() {
                     resizable: true,
                     pivot: false,
                     pinned: true,
-                    valueFormatter: (param: ValueFormatterParams<any, any>) => {
+                    valueFormatter: (param: ValueFormatterParams) => {
                         return param.value ? exactPriceDisplay(param.value) : ''
                     },
                 },
@@ -406,18 +310,44 @@ export default function CostMetricsDetails() {
                 connectionFilter
                 datePicker
             />
-            <Card className="mt-10">
+            <Card>
                 <Flex>
                     <Title className="font-semibold">Spend details</Title>
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            gridRef.current?.api?.exportDataAsCsv()
-                        }}
-                        icon={ArrowDownOnSquareIcon}
-                    >
-                        Download
-                    </Button>
+                    <Flex className="gap-4 w-fit">
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                gridRef.current?.api?.exportDataAsCsv()
+                            }}
+                            icon={ArrowDownOnSquareIcon}
+                        >
+                            Download
+                        </Button>
+                        <Select
+                            value={selectedGranularity}
+                            onValueChange={(v) =>
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                setSelectedGranularity(v)
+                            }
+                            placeholder={selectedGranularity}
+                        >
+                            {generateItems(
+                                activeTimeRange.start,
+                                activeTimeRange.end
+                            )}
+                        </Select>
+                        <Select
+                            value={dimension}
+                            onValueChange={(v) => setDimension(v)}
+                            placeholder={dimension}
+                        >
+                            <SelectItem value="metric">Service</SelectItem>
+                            <SelectItem value="connection">
+                                Connection
+                            </SelectItem>
+                        </Select>
+                    </Flex>
                 </Flex>
                 <div className="ag-theme-alpine mt-4">
                     <AgGridReact
