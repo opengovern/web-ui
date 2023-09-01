@@ -51,9 +51,9 @@ export default function CostMetricsDetails() {
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
-        checkGranularity(activeTimeRange.start, activeTimeRange.end).daily
-            ? 'daily'
-            : 'monthly'
+        checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
+            ? 'monthly'
+            : 'daily'
     )
     const query = (): {
         startTime?: number | undefined
