@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react'
 import {
     Button,
     Card,
-    Divider,
     Flex,
     List,
     ListItem,
     Select,
     SelectItem,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
     Text,
     TextInput,
     Title,
@@ -20,8 +24,6 @@ import {
 import { useAtom } from 'jotai'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
-import DrawerPanel from '../DrawerPanel'
-import Spinner from '../Spinner'
 import {
     useOnboardApiV1ConnectionGroupsList,
     useOnboardApiV1ConnectionsSummaryList,
@@ -46,6 +48,7 @@ export default function Filters() {
         needCost: false,
         needResourceCount: false,
     })
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const findConnections = () => {
         const conn = []
         if (response) {
@@ -78,6 +81,12 @@ export default function Filters() {
         setConnections(findConnections)
     }
 
+    useEffect(() => {
+        restFilters()
+    }, [selectedIndex])
+
+    useEffect(() => setSelectedIndex(0), [openDrawer])
+
     const filterText = () => {
         if (selectedFilters.connections.length > 0) {
             return `${selectedFilters.connections.length} filters`
@@ -89,7 +98,7 @@ export default function Filters() {
     }
 
     return (
-        <>
+        <div className="relative">
             <Button
                 variant="secondary"
                 className="ml-4 h-9"
@@ -103,258 +112,286 @@ export default function Filters() {
             >
                 {filterText()}
             </Button>
-            <DrawerPanel
-                open={openDrawer}
-                onClose={() => {
-                    setOpenDrawer(false)
-                    restFilters()
-                    setSearch('')
-                }}
-                title="Filters"
-            >
-                {isLoading ? (
-                    <Flex className="mt-56">
-                        <Spinner />
-                    </Flex>
-                ) : (
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        className="h-full w-full"
+            {openDrawer && (
+                <>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            restFilters()
+                            setOpenDrawer(false)
+                            setSearch('')
+                        }}
+                        className="top-0 left-0 z-10 fixed w-screen h-screen"
                     >
-                        <Flex
-                            flexDirection="col"
-                            alignItems="start"
-                            justifyContent="start"
+                        hi
+                    </button>
+                    <Card className="w-fit border border-gray-300 shadow-lg mt-2.5 p-4 z-20 absolute top-full right-0">
+                        <TabGroup
+                            index={selectedIndex}
+                            onIndexChange={setSelectedIndex}
+                            className="w-fit rounded-lg"
                         >
-                            <Flex
-                                justifyContent="start"
-                                className="flex-wrap gap-2 mb-6"
-                            >
-                                {provider.length ? (
-                                    <Tag text={`Provider: ${provider}`} />
-                                ) : (
+                            <TabList variant="solid" className="mb-4">
+                                <Tab className="pt-0.5 pb-1">
+                                    <Text>Provider</Text>
+                                </Tab>
+                                <Tab className="pt-0.5 pb-1">
+                                    <Text>Group</Text>
+                                </Tab>
+                                <Tab className="pt-0.5 pb-1">
+                                    <Text>Connection</Text>
+                                </Tab>
+                                <Tab className="pt-0.5 pb-1" disabled>
+                                    <Text>Saved</Text>
+                                </Tab>
+                            </TabList>
+                            <TabPanels className="px-2">
+                                <TabPanel>
+                                    <Title className="mb-3">Provider</Title>
                                     <Flex
                                         justifyContent="start"
-                                        className="gap-2"
+                                        className="gap-6"
                                     >
-                                        <Tag text="Provider: AWS" />
-                                        <Tag text="Provider: Azure" />
-                                    </Flex>
-                                )}
-                                {!!connectionGroup.length && (
-                                    <Tag
-                                        text={`Connection Group: ${connectionGroup}`}
-                                        onClick={() => setConnectionGroup('')}
-                                    />
-                                )}
-                                {connections.map((c) => (
-                                    <Tag
-                                        key={c?.id}
-                                        text={`Connection: ${c?.providerConnectionName}`}
-                                        onClick={() => {
-                                            setConnections((prevState) => {
-                                                const arr = prevState
-                                                arr.splice(
-                                                    arr.indexOf(
-                                                        arr.find(
-                                                            (s) =>
-                                                                s?.id === c?.id
-                                                        )
-                                                    ),
-                                                    1
-                                                )
-                                                return arr
-                                            })
-                                        }}
-                                    />
-                                ))}
-                            </Flex>
-                            <Title className="font-semibold mb-3">
-                                Provider
-                            </Title>
-                            <Flex justifyContent="start" className="gap-4">
-                                <label
-                                    htmlFor="aws"
-                                    className="flex items-center"
-                                >
-                                    <input
-                                        id="aws"
-                                        type="checkbox"
-                                        value="AWS"
-                                        checked={
-                                            provider === 'AWS' ||
-                                            provider === ''
-                                        }
-                                        onClick={() => {
-                                            if (provider === 'AWS') {
-                                                setProvider('Azure')
-                                            } else if (provider === 'Azure') {
-                                                setProvider('')
-                                            } else {
-                                                setProvider('AWS')
-                                            }
-                                        }}
-                                        className="w-4 h-4 mr-2 text-blue-600 bg-gray-100 border-gray-300 rounded dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                                    />
-                                    <Text className="font-semibold">AWS</Text>
-                                </label>
-                                <label
-                                    htmlFor="azure"
-                                    className="flex items-center"
-                                >
-                                    <input
-                                        id="azure"
-                                        type="checkbox"
-                                        value="Azure"
-                                        checked={
-                                            provider === 'Azure' ||
-                                            provider === ''
-                                        }
-                                        onClick={() => {
-                                            if (provider === 'AWS') {
-                                                setProvider('')
-                                            } else if (provider === 'Azure') {
-                                                setProvider('AWS')
-                                            } else {
-                                                setProvider('Azure')
-                                            }
-                                        }}
-                                        className="w-4 h-4 mr-2 text-blue-600 bg-gray-100 border-gray-300 rounded dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                                    />
-                                    <Text className="font-semibold">Azure</Text>
-                                </label>
-                            </Flex>
-                            <Divider />
-                            <Title className="font-semibold mb-3">
-                                Connection Group
-                            </Title>
-                            <Select
-                                value={connectionGroup}
-                                placeholder={
-                                    connectionGroup.length
-                                        ? connectionGroup
-                                        : 'Select connection group...'
-                                }
-                            >
-                                <>
-                                    <SelectItem
-                                        value=""
-                                        onClick={() => setConnectionGroup('')}
-                                    >
-                                        Select none
-                                    </SelectItem>
-                                    {groupList?.map((cg) => (
-                                        <SelectItem
-                                            value={cg.name || ''}
-                                            onClick={() =>
-                                                setConnectionGroup(
-                                                    cg.name || ''
-                                                )
-                                            }
+                                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
+                                        <label
+                                            onClick={() => setProvider('')}
+                                            htmlFor="all"
+                                            className="flex items-center gap-2"
                                         >
-                                            {cg.name}
-                                        </SelectItem>
-                                    ))}
-                                </>
-                            </Select>
-                            <Divider />
-                            <Flex justifyContent="start" className="gap-2">
-                                <Title className="font-semibold mb-3">
-                                    Connection
-                                </Title>
-                                {!!connections.length && (
-                                    <Text className="mb-2.5">
-                                        ({connections.length})
-                                    </Text>
-                                )}
-                            </Flex>
-                            <Flex className="relative">
-                                <TextInput
-                                    icon={MagnifyingGlassIcon}
-                                    placeholder="Search connection by ID or name..."
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                                {!!search.length && (
-                                    <Card className="absolute top-full mt-1.5 shadow-lg py-2 px-3 max-h-[228px] overflow-y-scroll">
-                                        <List>
-                                            {connectionList
-                                                ?.filter(
-                                                    (c) =>
-                                                        c?.providerConnectionName
-                                                            ?.toLowerCase()
-                                                            .includes(
-                                                                search.toLowerCase()
-                                                            ) ||
-                                                        c?.providerConnectionID
-                                                            ?.toLowerCase()
-                                                            .includes(
-                                                                search.toLowerCase()
-                                                            )
-                                                )
-                                                .map((connection) => (
-                                                    <ListItem
-                                                        className="py-1"
-                                                        key={connection.id}
-                                                    >
-                                                        <Flex
-                                                            justifyContent="start"
-                                                            className="py-1 cursor-pointer hover:bg-kaytu-50/50 rounded-lg"
-                                                            onClick={() => {
-                                                                if (
-                                                                    !connections.includes(
-                                                                        connection
+                                            <input
+                                                id="all"
+                                                type="radio"
+                                                checked={provider === ''}
+                                            />
+                                            <Text>All</Text>
+                                        </label>
+                                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
+                                        <label
+                                            onClick={() => setProvider('AWS')}
+                                            htmlFor="aws"
+                                            className="flex items-center gap-2"
+                                        >
+                                            <input
+                                                id="aws"
+                                                type="radio"
+                                                checked={provider === 'AWS'}
+                                            />
+                                            <Text>AWS</Text>
+                                        </label>
+                                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
+                                        <label
+                                            onClick={() => setProvider('Azure')}
+                                            htmlFor="azure"
+                                            className="flex items-center gap-2"
+                                        >
+                                            <input
+                                                id="azure"
+                                                type="radio"
+                                                checked={provider === 'Azure'}
+                                            />
+                                            <Text>Azure</Text>
+                                        </label>
+                                    </Flex>
+                                </TabPanel>
+                                <TabPanel>
+                                    <Flex
+                                        justifyContent="start"
+                                        alignItems="end"
+                                        className="gap-1 mb-3"
+                                    >
+                                        <Title>Connection Groups</Title>
+                                        <Text className="mb-0.5">
+                                            ( up to 3 groups )
+                                        </Text>
+                                    </Flex>
+                                    <Select
+                                        value={connectionGroup}
+                                        placeholder={
+                                            connectionGroup.length
+                                                ? `${
+                                                      connectionGroup.length
+                                                  } group${
+                                                      connectionGroup.length > 1
+                                                          ? 's'
+                                                          : ''
+                                                  } selected`
+                                                : 'Select connection group...'
+                                        }
+                                        className="mb-6"
+                                    >
+                                        <>
+                                            <SelectItem
+                                                value=""
+                                                onClick={() =>
+                                                    setConnectionGroup('')
+                                                }
+                                            >
+                                                Select none
+                                            </SelectItem>
+                                            {groupList?.map((cg) => (
+                                                <SelectItem
+                                                    value={cg.name || ''}
+                                                    onClick={() =>
+                                                        setConnectionGroup(
+                                                            cg.name || ''
+                                                        )
+                                                    }
+                                                >
+                                                    {cg.name}
+                                                </SelectItem>
+                                            ))}
+                                        </>
+                                    </Select>
+                                    <Flex
+                                        justifyContent="start"
+                                        className="gap-3 flex-wrap"
+                                    >
+                                        {!!connectionGroup.length && (
+                                            <Tag
+                                                text={connectionGroup}
+                                                onClick={() =>
+                                                    setConnectionGroup('')
+                                                }
+                                            />
+                                        )}
+                                    </Flex>
+                                </TabPanel>
+                                <TabPanel>
+                                    <Flex
+                                        justifyContent="start"
+                                        alignItems="end"
+                                        className="gap-1 mb-3"
+                                    >
+                                        <Title>Connections</Title>
+                                        <Text className="mb-0.5">
+                                            ( up to 20 connections )
+                                        </Text>
+                                    </Flex>
+                                    <Flex className="relative">
+                                        <TextInput
+                                            icon={MagnifyingGlassIcon}
+                                            placeholder="Search connection by ID or name..."
+                                            value={search}
+                                            onChange={(e) =>
+                                                setSearch(e.target.value)
+                                            }
+                                        />
+                                        {!!search.length && (
+                                            <Card className="absolute top-full mt-1.5 shadow-lg py-2 px-3 max-h-[228px] overflow-y-scroll">
+                                                <List>
+                                                    {connectionList
+                                                        ?.filter(
+                                                            (c) =>
+                                                                c?.providerConnectionName
+                                                                    ?.toLowerCase()
+                                                                    .includes(
+                                                                        search.toLowerCase()
+                                                                    ) ||
+                                                                c?.providerConnectionID
+                                                                    ?.toLowerCase()
+                                                                    .includes(
+                                                                        search.toLowerCase()
                                                                     )
-                                                                ) {
-                                                                    setConnections(
-                                                                        (
-                                                                            prevState
-                                                                        ) => [
-                                                                            ...prevState,
-                                                                            connection,
-                                                                        ]
-                                                                    )
-                                                                    setSearch(
-                                                                        ''
-                                                                    )
+                                                        )
+                                                        .map((connection) => (
+                                                            <ListItem
+                                                                className="py-1"
+                                                                key={
+                                                                    connection.id
                                                                 }
-                                                            }}
-                                                        >
-                                                            {getConnectorIcon(
-                                                                connection.connector
-                                                            )}
-                                                            <Flex
-                                                                flexDirection="col"
-                                                                alignItems="start"
                                                             >
-                                                                <Text className="text-gray-800">
-                                                                    {
-                                                                        connection.providerConnectionName
-                                                                    }
-                                                                </Text>
-                                                                <Text className="text-xs">
-                                                                    {
-                                                                        connection.providerConnectionID
-                                                                    }
-                                                                </Text>
-                                                            </Flex>
-                                                        </Flex>
-                                                    </ListItem>
-                                                ))}
-                                        </List>
-                                    </Card>
-                                )}
-                            </Flex>
-                        </Flex>
-                        <Flex>
+                                                                <Flex
+                                                                    justifyContent="start"
+                                                                    className="py-1 cursor-pointer hover:bg-kaytu-50/50 rounded-lg"
+                                                                    onClick={() => {
+                                                                        if (
+                                                                            !connections.includes(
+                                                                                connection
+                                                                            )
+                                                                        ) {
+                                                                            setConnections(
+                                                                                (
+                                                                                    prevState
+                                                                                ) => [
+                                                                                    ...prevState,
+                                                                                    connection,
+                                                                                ]
+                                                                            )
+                                                                            setSearch(
+                                                                                ''
+                                                                            )
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    {getConnectorIcon(
+                                                                        connection.connector
+                                                                    )}
+                                                                    <Flex
+                                                                        flexDirection="col"
+                                                                        alignItems="start"
+                                                                    >
+                                                                        <Text className="text-gray-800">
+                                                                            {
+                                                                                connection.providerConnectionName
+                                                                            }
+                                                                        </Text>
+                                                                        <Text className="text-xs">
+                                                                            {
+                                                                                connection.providerConnectionID
+                                                                            }
+                                                                        </Text>
+                                                                    </Flex>
+                                                                </Flex>
+                                                            </ListItem>
+                                                        ))}
+                                                </List>
+                                            </Card>
+                                        )}
+                                    </Flex>
+                                    {connections.length > 0 && (
+                                        <div className="mt-6" />
+                                    )}
+                                    <Flex
+                                        justifyContent="start"
+                                        className="gap-3 flex-wrap"
+                                    >
+                                        {connections.map((c) => (
+                                            <Tag
+                                                key={c?.id}
+                                                text={c?.providerConnectionName}
+                                                onClick={() => {
+                                                    setConnections(
+                                                        (prevState) => {
+                                                            const arr =
+                                                                prevState
+                                                            arr.splice(
+                                                                arr.indexOf(
+                                                                    arr.find(
+                                                                        (s) =>
+                                                                            s?.id ===
+                                                                            c?.id
+                                                                    )
+                                                                ),
+                                                                1
+                                                            )
+                                                            return arr
+                                                        }
+                                                    )
+                                                }}
+                                            />
+                                        ))}
+                                    </Flex>
+                                </TabPanel>
+                            </TabPanels>
+                        </TabGroup>
+                        <Flex className="mt-8">
                             <Button
                                 variant="light"
                                 onClick={() => restFilters()}
                             >
                                 Reset filters
                             </Button>
-                            <Flex justifyContent="end" className="gap-4">
+                            <Flex className="w-fit gap-2">
                                 <Button
                                     variant="secondary"
                                     onClick={() => {
@@ -381,9 +418,9 @@ export default function Filters() {
                                 </Button>
                             </Flex>
                         </Flex>
-                    </Flex>
-                )}
-            </DrawerPanel>
-        </>
+                    </Card>
+                </>
+            )}
+        </div>
     )
 }
