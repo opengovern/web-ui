@@ -121,9 +121,9 @@ export default function Filters() {
                             setOpenDrawer(false)
                             setSearch('')
                         }}
-                        className="top-0 left-0 z-10 fixed w-screen h-screen"
+                        className="cursor-default opacity-0 top-0 left-0 z-10 fixed w-screen h-screen"
                     >
-                        hi
+                        filters
                     </button>
                     <Card className="w-fit border border-gray-300 shadow-lg mt-2.5 p-4 z-20 absolute top-full right-0">
                         <TabGroup
