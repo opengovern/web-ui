@@ -45,7 +45,7 @@ const navigation = [
         icon: ServerStackIcon,
         children: [
             { name: 'Summary', page: 'assets' },
-            { name: 'Stack', page: 'stack' },
+            { name: 'Development', page: 'development' },
         ],
     },
     {
@@ -73,16 +73,6 @@ const navigation = [
         page: 'settings',
         icon: Cog6ToothIcon,
     },
-    // {
-    //     name: 'Administration',
-    //     id: 'settings',
-    //     page: 'settings',
-    //     icon: Cog6ToothIcon,
-    //     children: [
-    //         { name: 'Settings', page: 'settings' },
-    //         { name: 'Integrations', page: 'integration' },
-    //     ],
-    // },
 ]
 
 interface ISidebar {
