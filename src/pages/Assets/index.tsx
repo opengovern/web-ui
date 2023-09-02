@@ -4,7 +4,6 @@ import {
     Flex,
     Grid,
     Select,
-    SelectItem,
     Tab,
     TabGroup,
     TabList,
@@ -12,7 +11,6 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai/index'
 import { useEffect, useState } from 'react'
-import { Dayjs } from 'dayjs'
 import Menu from '../../components/Menu'
 import { filterAtom, timeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
@@ -82,7 +80,7 @@ const pieData = (
                     (Math.round(value.old_count || 0) /
                         Math.round(response.total_count || 1)) *
                         100
-                ).toFixed(1)}%`,
+                ).toFixed(1)} %`,
                 value: Number(value.old_count).toFixed(0),
             })
         })
@@ -97,7 +95,7 @@ const pieData = (
                 (Math.round(response?.others?.count || 0) /
                     Math.round(response.total_count || 1)) *
                     100
-            ).toFixed(1)}%`,
+            ).toFixed(1)} %`,
             value: Number(response.others?.count).toFixed(0),
         })
         oldData.push({

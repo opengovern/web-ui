@@ -43,6 +43,7 @@ interface IChart {
         | undefined
     chartType: 'bar' | 'line' | 'area' | 'doughnut' | 'half-doughnut'
     isCost?: boolean
+    isPercent?: boolean
     loading?: boolean
     error?: string
     onRefresh?: () => void
@@ -54,6 +55,7 @@ export default function Chart({
     chartData,
     chartType,
     isCost = false,
+    isPercent = false,
     loading,
     error,
     onRefresh,
@@ -75,6 +77,9 @@ export default function Chart({
                         formatter: (value: string | number) => {
                             if (isCost) {
                                 return `$${numericDisplay(value)}`
+                            }
+                            if (isPercent) {
+                                return `${numericDisplay(value)} %`
                             }
                             return numericDisplay(value)
                         },

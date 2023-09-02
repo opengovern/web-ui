@@ -1,14 +1,26 @@
-import { BarChart, Card, Flex, Grid, Title } from '@tremor/react'
+import {
+    BarChart,
+    Card,
+    Flex,
+    Grid,
+    Tab,
+    TabGroup,
+    TabList,
+    Text,
+    Title,
+} from '@tremor/react'
 import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
 import CardWithList from '../../../../../components/Cards/CardWithList'
-import Chart from '../../../../../components/Charts'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../../../api/api'
 import {
     useComplianceApiV1BenchmarksTrendDetail,
     useComplianceApiV1FindingsTopDetail,
 } from '../../../../../api/compliance.gen'
 import { dateDisplay } from '../../../../../utilities/dateDisplay'
+import Chart from '../../../../../components/Chart'
+import { BarChartIcon, LineChartIcon } from '../../../../../icons/icons'
 
 interface ISummary {
     detail:
@@ -38,12 +50,13 @@ const generateBarData = (input: any) => {
 }
 
 const generateLineData = (input: any) => {
-    const list = []
+    const data = []
+    const label = []
     if (input) {
         for (let i = 0; i < input.length; i += 1) {
-            list.push({
-                date: dateDisplay(input[i].timestamp * 1000),
-                Score: (
+            label.push(dateDisplay(input[i].timestamp * 1000))
+            data.push(
+                (
                     ((input[i].checks?.passedCount || 0) /
                         ((input[i].checks?.criticalCount || 0) +
                             (input[i].checks?.highCount || 0) +
@@ -52,11 +65,11 @@ const generateLineData = (input: any) => {
                             (input[i].checks?.passedCount || 0) +
                             (input[i].checks?.unknownCount || 0))) *
                         100 || 0
-                ).toFixed(2),
-            })
+                ).toFixed(2)
+            )
         }
     }
-    return list
+    return { data, label }
 }
 
 export default function Summary({
@@ -65,6 +78,15 @@ export default function Summary({
     connections,
     timeRange,
 }: ISummary) {
+    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
+        'line'
+    )
+    useEffect(() => {
+        if (selectedIndex === 0) setSelectedChart('line')
+        if (selectedIndex === 1) setSelectedChart('bar')
+    }, [selectedIndex])
+
     const query = {
         ...(connections.provider && {
             connector: [connections.provider],
@@ -160,14 +182,14 @@ export default function Summary({
                     metric={`${(
                         (alarm / (ok + info + error + alarm + skip)) *
                         100
-                    ).toFixed(2)}%`}
+                    ).toFixed(2)} %`}
                 />
                 <SummaryCard
                     title="Coverage"
                     metric={`${(
                         (ok / (ok + info + error + skip + alarm)) *
                         100
-                    ).toFixed(2)}%`}
+                    ).toFixed(2)} %`}
                 />
             </Grid>
             <Grid numItems={1} numItemsMd={2} className="w-full gap-4 mb-4">
@@ -209,16 +231,36 @@ export default function Summary({
                 </Card>
             </Grid>
             <Card>
-                <Title className="font-semibold">
-                    Compliance Security Score Trend
-                </Title>
+                <Flex>
+                    <Title className="font-semibold">
+                        Compliance Security Score Trend
+                    </Title>
+                    <Flex className="w-fit gap-4">
+                        <TabGroup
+                            index={selectedIndex}
+                            onIndexChange={setSelectedIndex}
+                            className="w-fit rounded-lg"
+                        >
+                            <TabList variant="solid">
+                                <Tab value="line">
+                                    <LineChartIcon className="h-5" />
+                                </Tab>
+                                <Tab value="bar">
+                                    <BarChartIcon className="h-5" />
+                                </Tab>
+                            </TabList>
+                        </TabGroup>
+                    </Flex>
+                </Flex>
+                <Flex justifyContent="end" className="mt-6 gap-2.5">
+                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
+                    <Text>Score</Text>
+                </Flex>
                 <Chart
-                    className="mt-4"
-                    index="date"
-                    type="line"
-                    categories={['Score']}
-                    valueFormatter={(value) => `${value}%`}
-                    data={generateLineData(benchmarkTrend)}
+                    labels={generateLineData(benchmarkTrend).label}
+                    chartData={generateLineData(benchmarkTrend).data}
+                    chartType={selectedChart}
+                    isPercent
                 />
             </Card>
         </Flex>
