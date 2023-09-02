@@ -1,4 +1,12 @@
-import { Button, Card, Flex, Select, SelectItem, Title } from '@tremor/react'
+import {
+    Button,
+    Card,
+    Flex,
+    Select,
+    SelectItem,
+    Text,
+    Title,
+} from '@tremor/react'
 import { useLocation } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
@@ -23,6 +31,7 @@ import {
     generateItems,
 } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
+import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
 
 export default function CostMetricsDetails() {
     const { hash } = useLocation()
@@ -98,6 +107,64 @@ export default function CostMetricsDetails() {
         return result
     }
 
+    const filterPanel = () => {
+        return (
+            <Flex
+                flexDirection="col"
+                justifyContent="start"
+                alignItems="start"
+                className="w-full px-6"
+            >
+                <Text className="m-3">Granularity</Text>
+                <Select
+                    value={selectedGranularity}
+                    onValueChange={(v) =>
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        setSelectedGranularity(v)
+                    }
+                    placeholder={capitalizeFirstLetter(selectedGranularity)}
+                >
+                    {generateItems(activeTimeRange.start, activeTimeRange.end)}
+                </Select>
+                <Text className="m-3">Show by</Text>
+                <Select
+                    value={dimension}
+                    onValueChange={(v) => setDimension(v)}
+                >
+                    <SelectItem value="metric">Service</SelectItem>
+                    <SelectItem value="connection">Connection</SelectItem>
+                    <SelectItem value="category">Category</SelectItem>
+                </Select>
+            </Flex>
+        )
+    }
+
+    useEffect(() => {
+        gridRef.current?.api?.setSideBar({
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Options',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    minWidth: 300,
+                    maxWidth: 300,
+                    width: 300,
+                    toolPanel: filterPanel,
+                },
+            ],
+            defaultToolPanel: '',
+        })
+    }, [selectedGranularity, dimension])
+
     const gridOptions: GridOptions = {
         pagination: true,
         paginationPageSize: 25,
@@ -114,7 +181,6 @@ export default function CostMetricsDetails() {
         groupAllowUnbalanced: true,
         autoGroupColumnDef: {
             pinned: true,
-            // headerName: 'Category',
             flex: 2,
             sortable: true,
             filter: true,
@@ -126,15 +192,6 @@ export default function CostMetricsDetails() {
                 e.api.showLoadingOverlay()
             }
         },
-        onRowDataUpdated: (e) => {
-            window.setTimeout(() => {
-                try {
-                    e.columnApi?.autoSizeAllColumns(false)
-                } catch (err) {
-                    //
-                }
-            }, 100)
-        },
         sideBar: {
             toolPanels: [
                 {
@@ -143,6 +200,16 @@ export default function CostMetricsDetails() {
                     labelKey: 'columns',
                     iconKey: 'columns',
                     toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Options',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    minWidth: 300,
+                    maxWidth: 300,
+                    width: 300,
+                    toolPanel: filterPanel,
                 },
             ],
             defaultToolPanel: '',
@@ -156,7 +223,7 @@ export default function CostMetricsDetails() {
 
     // eslint-disable-next-line consistent-return
     const categoryOptions = () => {
-        if (page() === 'category') {
+        if (dimension === 'category') {
             return [
                 {
                     field: 'percent',
@@ -164,23 +231,20 @@ export default function CostMetricsDetails() {
                     pinned: true,
                     sortable: true,
                     aggFunc: 'sum',
-                    hide: true,
-                    floatingFilter: true,
+                    // hide: true,
                     resizable: true,
-                    pivot: false,
-                    valueFormatter: (param: ValueFormatterParams<any, any>) => {
+                    valueFormatter: (param: ValueFormatterParams) => {
                         return param.value ? `${param.value.toFixed(2)}%` : ''
                     },
                 },
                 {
                     field: 'category',
                     headerName: 'Category',
-                    rowGroup: page() === 'category',
+                    rowGroup: dimension === 'category',
                     enableRowGroup: true,
-                    hide: true,
+                    // hide: true,
                     sortable: true,
                     resizable: true,
-                    pivot: false,
                     pinned: true,
                 },
             ]
@@ -300,7 +364,7 @@ export default function CostMetricsDetails() {
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(newRow)
         }
-    }, [isLoading])
+    }, [isLoading, dimension])
 
     return (
         <Menu currentPage="spend">
@@ -323,30 +387,6 @@ export default function CostMetricsDetails() {
                         >
                             Download
                         </Button>
-                        <Select
-                            value={selectedGranularity}
-                            onValueChange={(v) =>
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                setSelectedGranularity(v)
-                            }
-                            placeholder={selectedGranularity}
-                        >
-                            {generateItems(
-                                activeTimeRange.start,
-                                activeTimeRange.end
-                            )}
-                        </Select>
-                        <Select
-                            value={dimension}
-                            onValueChange={(v) => setDimension(v)}
-                            placeholder={dimension}
-                        >
-                            <SelectItem value="metric">Service</SelectItem>
-                            <SelectItem value="connection">
-                                Connection
-                            </SelectItem>
-                        </Select>
                     </Flex>
                 </Flex>
                 <div className="ag-theme-alpine mt-4">
