@@ -7,13 +7,16 @@ import {
     Grid,
     Select,
     SelectItem,
+    Tab,
+    TabGroup,
+    TabList,
     Text,
     Title,
 } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
@@ -37,6 +40,7 @@ import Table, { IColumn } from '../../../components/Table'
 import Chart from '../../../components/Chart'
 import SummaryCard from '../../../components/Cards/SummaryCard'
 import { isDemo } from '../../../utilities/demo'
+import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 
 const chartData = (inputData: any) => {
     const label = []
@@ -134,6 +138,14 @@ export default function InsightDetail() {
     const { id } = useParams()
     const activeTimeRange = useAtomValue(timeAtom)
     const [detailsDate, setDetailsDate] = useState<string>('')
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
+        'line'
+    )
+    const [selectedIndex, setSelectedIndex] = useState(0)
+    useEffect(() => {
+        if (selectedIndex === 0) setSelectedChart('line')
+        if (selectedIndex === 1) setSelectedChart('bar')
+    }, [selectedIndex])
 
     const start = () => {
         if (detailsDate === '') {
@@ -247,6 +259,24 @@ export default function InsightDetail() {
                                     metric={10}
                                 />
                             </Flex>
+                            <Col numColSpan={2}>
+                                <Flex justifyContent="end" alignItems="start">
+                                    <TabGroup
+                                        index={selectedIndex}
+                                        onIndexChange={setSelectedIndex}
+                                        className="w-fit rounded-lg"
+                                    >
+                                        <TabList variant="solid">
+                                            <Tab value="line">
+                                                <LineChartIcon className="h-5" />
+                                            </Tab>
+                                            <Tab value="bar">
+                                                <BarChartIcon className="h-5" />
+                                            </Tab>
+                                        </TabList>
+                                    </TabGroup>
+                                </Flex>
+                            </Col>
                         </Grid>
                         <Flex justifyContent="end" className="gap-2.5">
                             <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
@@ -255,7 +285,7 @@ export default function InsightDetail() {
                         <Chart
                             labels={chartData(insightTrend).label}
                             chartData={chartData(insightTrend).data}
-                            chartType="line"
+                            chartType={selectedChart}
                         />
                     </Card>
                     {detailsDate !== '' && (

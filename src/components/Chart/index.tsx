@@ -43,6 +43,7 @@ interface IChart {
         | undefined
     chartType: 'bar' | 'line' | 'area' | 'doughnut' | 'half-doughnut'
     isCost?: boolean
+    isPercent?: boolean
     loading?: boolean
     error?: string
     onRefresh?: () => void
@@ -54,6 +55,7 @@ export default function Chart({
     chartData,
     chartType,
     isCost = false,
+    isPercent = false,
     loading,
     error,
     onRefresh,
@@ -75,6 +77,9 @@ export default function Chart({
                         formatter: (value: string | number) => {
                             if (isCost) {
                                 return `$${numericDisplay(value)}`
+                            }
+                            if (isPercent) {
+                                return `${numericDisplay(value)} %`
                             }
                             return numericDisplay(value)
                         },
@@ -123,7 +128,7 @@ export default function Chart({
                 series: [
                     {
                         type: 'pie',
-                        radius: ['50%', '75%'],
+                        radius: ['50%', '70%'],
                         // center: ['50%', '50%'],
                         avoidLabelOverlap: false,
                         label: {
@@ -155,8 +160,8 @@ export default function Chart({
                             borderWidth: 2,
                         },
                         data: chartData,
-                        left: '-45%',
-                        // width: '50%',
+                        left: '-5%',
+                        width: '70%',
                     },
                 ],
                 legend: {
