@@ -217,7 +217,6 @@ export default function Filters() {
                                                   } selected`
                                                 : 'Select connection group...'
                                         }
-                                        className="mb-6"
                                     >
                                         <>
                                             <SelectItem
@@ -242,6 +241,9 @@ export default function Filters() {
                                             ))}
                                         </>
                                     </Select>
+                                    {!!connectionGroup.length && (
+                                        <div className="mt-6" />
+                                    )}
                                     <Flex
                                         justifyContent="start"
                                         className="gap-3 flex-wrap"
@@ -348,7 +350,7 @@ export default function Filters() {
                                             </Card>
                                         )}
                                     </Flex>
-                                    {connections.length > 0 && (
+                                    {!!connections.length && (
                                         <div className="mt-6" />
                                     )}
                                     <Flex
@@ -385,13 +387,30 @@ export default function Filters() {
                             </TabPanels>
                         </TabGroup>
                         <Flex className="mt-8">
-                            <Button
-                                variant="light"
-                                onClick={() => restFilters()}
-                            >
-                                Reset filters
-                            </Button>
-                            <Flex className="w-fit gap-2">
+                            {(!!selectedFilters.provider.length ||
+                                !!selectedFilters.connections.length ||
+                                !!selectedFilters.connectionGroup.length) && (
+                                <Button
+                                    variant="light"
+                                    onClick={() => {
+                                        setProvider('')
+                                        setConnections([])
+                                        setConnectionGroup('')
+                                        setSelectedFilters({
+                                            provider,
+                                            connections:
+                                                connectionID(connections),
+                                            connectionGroup,
+                                        })
+                                        setOpenDrawer(false)
+                                        setSearch('')
+                                    }}
+                                    className="whitespace-nowrap"
+                                >
+                                    Reset filters
+                                </Button>
+                            )}
+                            <Flex justifyContent="end" className="gap-2">
                                 <Button
                                     variant="secondary"
                                     onClick={() => {

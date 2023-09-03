@@ -110,6 +110,9 @@ export default function Chart({
                         if (isCost) {
                             return `$${numberDisplay(Number(value), 2)}`
                         }
+                        if (isPercent) {
+                            return `${numericDisplay(value)} %`
+                        }
                         return numberDisplay(Number(value), 0)
                     },
                 },
