@@ -9,7 +9,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import Menu from '../../../components/Menu'
 import { useComplianceApiV1InsightList } from '../../../api/compliance.gen'
-import { timeAtom } from '../../../store'
+import { filterAtom, timeAtom } from '../../../store'
 import Spinner from '../../../components/Spinner'
 import Header from '../../../components/Header'
 import Table, { IColumn } from '../../../components/Table'
@@ -88,7 +88,7 @@ export default function InsightList() {
     const [selectedProvider, setSelectedProvider] = useState<string[]>([])
     const [selectedPersona, setSelectedPersona] = useState<string[]>([])
     const [notification, setNotification] = useState('')
-
+    const selectedConnections = useAtomValue(filterAtom)
     const navigate = useNavigate()
     const navigateToAssetsInsightsDetails = (id: number | undefined) => {
         navigate(`${id}`)
@@ -115,30 +115,17 @@ export default function InsightList() {
         // groupDefaultExpanded: -1,
         rowGroupPanelShow: 'always',
         groupAllowUnbalanced: true,
+        // eslint-disable-next-line consistent-return
         onRowClicked: (event: RowClickedEvent) => {
+            setNotification('')
             if (
                 event.data?.totalResultValue ||
                 event.data?.oldTotalResultValue
             ) {
                 navigateToAssetsInsightsDetails(event.data?.id)
-                return ''
-            }
-            if (
-                !event.data?.totalResultValue &&
-                !event.data?.oldTotalResultValue
-            ) {
+            } else {
                 setNotification('Time period is not covered by insight')
-            } else if (!event.data?.totalResultValue) {
-                setNotification('End value is not available')
-            } else if (!event.data?.oldTotalResultValue) {
-                setNotification(
-                    `Data is available after ${dateDisplay(
-                        event.data.firstOldResultDate
-                    )}`
-                )
             }
-            alert(notification)
-            return notification
         },
         isRowSelectable: (param) =>
             param.data?.totalResultValue || param.data?.oldTotalResultValue,
@@ -154,7 +141,7 @@ export default function InsightList() {
     return (
         <Menu currentPage="insight">
             <Header title="Insight List" datePicker filter />
-            <Notification text={notification} />
+            {!!notification.length && <Notification text={notification} />}
             <Flex className="gap-6" alignItems="start">
                 {/* <Filters
                     onProviderChange={(p) => setSelectedProvider(p)}
@@ -182,20 +169,20 @@ export default function InsightList() {
 )
 .filter((insight) => {
 if (selectedProvider.length) {
-    for (
-      let i = 0;
-      i < selectedProvider.length;
-      i += 1
-    ) {
-        if (
-          insight.connector?.includes(
-            selectedProvider[i]
-          )
-        ) {
-            return insight
-        }
-    }
-    return null
+for (
+let i = 0;
+i < selectedProvider.length;
+i += 1
+) {
+if (
+insight.connector?.includes(
+  selectedProvider[i]
+)
+) {
+  return insight
+}
+}
+return null
 }
 return insight
 })
