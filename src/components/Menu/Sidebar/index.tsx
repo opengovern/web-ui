@@ -40,7 +40,7 @@ const navigation = [
         icon: DocumentChartBarIcon,
         children: [
             { name: 'Key Insights', page: 'key-insights' },
-            { name: 'Insight List', page: 'insight' },
+            { name: 'All Insights', page: 'insight' },
         ],
     },
     {

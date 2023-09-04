@@ -32,7 +32,7 @@ export default function Notification({ text }: INotification) {
                 onClick={() => {
                     setShow(false)
                 }}
-                className="cursor-pointer fixed right-12 top-24 w-full max-w-sm p-4 rounded-md bg-kaytu-50 shadow-md ring-1 ring-kaytu-100"
+                className="cursor-pointer z-50 fixed right-12 top-24 w-full max-w-sm p-4 rounded-md bg-kaytu-50 shadow-md ring-1 ring-kaytu-100"
             >
                 <Text className="text-kaytu-500">{text}</Text>
                 <XMarkIcon className="h-5 w-5" />
