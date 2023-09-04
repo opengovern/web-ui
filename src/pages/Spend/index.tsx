@@ -244,7 +244,7 @@ export default function Spend() {
 
     return (
         <Menu currentPage="spend">
-            <Header title="Spend" datePicker connectionFilter />
+            <Header title="Spend" datePicker filter />
             <Card className="mb-4">
                 <Grid numItems={6} className="gap-4">
                     <Col numColSpan={1}>

@@ -2,7 +2,6 @@ import { GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Badge, Flex } from '@tremor/react'
 import { useComplianceApiV1BenchmarksTreeDetail } from '../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
-import { dateDisplay } from '../../../../../utilities/dateDisplay'
 import Table, { IColumn } from '../../../../../components/Table'
 
 interface IPolicies {

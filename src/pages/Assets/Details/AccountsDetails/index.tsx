@@ -13,7 +13,7 @@ export default function AccountsDetails() {
             <Header
                 title="Assets"
                 breadCrumb={['Account Detail']}
-                connectionFilter
+                filter
                 datePicker
             />
             {selectedConnections.connections.length === 1 ? (

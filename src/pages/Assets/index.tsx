@@ -231,7 +231,7 @@ export default function Assets() {
 
     return (
         <Menu currentPage="assets">
-            <Header title="Assets" datePicker connectionFilter />
+            <Header title="Assets" datePicker filter />
             <Card className="mb-4 mt-6">
                 <Grid numItems={6} className="gap-4">
                     <Col numColSpan={1}>

@@ -371,7 +371,7 @@ export default function CostMetricsDetails() {
             <Header
                 title="Spend"
                 breadCrumb={['Spend Detail']}
-                connectionFilter
+                filter
                 datePicker
             />
             <Card>
