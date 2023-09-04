@@ -3,7 +3,7 @@ import Assets from '../pages/Assets'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
 import { CallbackPage } from '../pages/Callback'
-import Insights from '../pages/Insights'
+import InsightList from '../pages/Insights/InsightList'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
@@ -20,6 +20,7 @@ import BenchmarkDetail from '../pages/Compliance/BenchmarkDetail'
 import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
+import KeyInsights from '../pages/Insights/KeyInsights'
 
 const routes = [
     {
@@ -86,9 +87,14 @@ const authRoutes = [
         component: CostMetricsDetails,
     },
     {
-        key: 'insights',
+        key: 'insight list',
         path: '/:ws/insight',
-        component: Insights,
+        component: InsightList,
+    },
+    {
+        key: 'key insights',
+        path: '/:ws/key-insights',
+        component: KeyInsights,
     },
     {
         key: 'insight detail',

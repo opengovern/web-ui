@@ -38,6 +38,10 @@ const navigation = [
         name: 'Insights',
         page: 'insight',
         icon: DocumentChartBarIcon,
+        children: [
+            { name: 'Key Insights', page: 'key-insights' },
+            { name: 'Insight List', page: 'insight' },
+        ],
     },
     {
         name: 'Assets',
@@ -83,18 +87,16 @@ interface ISidebar {
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom)
-    const [administrationOpen, setAdministrationOpen] = useAtom(
-        administrationOpenAtom
-    )
+    const [insightOpen, setInsightOpen] = useAtom(administrationOpenAtom)
     const [assetHover, setAssetHover] = useState(false)
-    const [administrationHover, setAdministrationHover] = useState(false)
+    const [insightHover, setInsightHover] = useState(false)
 
     const isOpen = (item: any) => {
         if (item.name === 'Assets') {
             return assetOpen
         }
-        if (item.name === 'Administration') {
-            return administrationOpen
+        if (item.name === 'Insights') {
+            return insightOpen
         }
         return false
     }
@@ -119,7 +121,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     <ul className="w-full">
                         {navigation.map((item) => (
                             <li key={item.name}>
-                                {item.children?.length && !collapsed ? (
+                                {item.children && !collapsed ? (
                                     <Accordion
                                         className="bg-transparent border-0"
                                         defaultOpen={isOpen(item)}
@@ -127,12 +129,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             if (item.name === 'Assets') {
                                                 setAssetOpen(!assetOpen)
                                             }
-                                            if (
-                                                item.name === 'Administration'
-                                            ) {
-                                                setAdministrationOpen(
-                                                    !administrationOpen
-                                                )
+                                            if (item.name === 'Insights') {
+                                                setInsightOpen(!insightOpen)
                                             }
                                         }}
                                     >
@@ -184,20 +182,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             if (item.name === 'Assets') {
                                                 setAssetHover(true)
                                             }
-                                            if (
-                                                item.name === 'Administration'
-                                            ) {
-                                                setAdministrationHover(true)
+                                            if (item.name === 'Insights') {
+                                                setInsightHover(true)
                                             }
                                         }}
                                         onMouseLeave={() => {
                                             if (item.name === 'Assets') {
                                                 setAssetHover(false)
                                             }
-                                            if (
-                                                item.name === 'Administration'
-                                            ) {
-                                                setAdministrationHover(false)
+                                            if (item.name === 'Insights') {
+                                                setInsightHover(false)
                                             }
                                         }}
                                     >
@@ -229,9 +223,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         }
                                                         if (
                                                             item.name ===
-                                                            'Administrator'
+                                                            'Insights'
                                                         ) {
-                                                            setAdministrationHover(
+                                                            setInsightHover(
                                                                 true
                                                             )
                                                         }
@@ -245,9 +239,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         }
                                                         if (
                                                             item.name ===
-                                                            'Administration'
+                                                            'Insights'
                                                         ) {
-                                                            setAdministrationHover(
+                                                            setInsightHover(
                                                                 false
                                                             )
                                                         }
@@ -285,8 +279,8 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 </div>
                                             )}
                                         {collapsed &&
-                                            administrationHover &&
-                                            item.name === 'Administration' && (
+                                            insightHover &&
+                                            item.name === 'Insights' && (
                                                 <div
                                                     className="pl-6 absolute -top-2 left-full"
                                                     onMouseEnter={() => {
@@ -298,9 +292,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         }
                                                         if (
                                                             item.name ===
-                                                            'Administrator'
+                                                            'Insights'
                                                         ) {
-                                                            setAdministrationHover(
+                                                            setInsightHover(
                                                                 true
                                                             )
                                                         }
@@ -314,9 +308,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         }
                                                         if (
                                                             item.name ===
-                                                            'Administrator'
+                                                            'Insights'
                                                         ) {
-                                                            setAdministrationHover(
+                                                            setInsightHover(
                                                                 false
                                                             )
                                                         }

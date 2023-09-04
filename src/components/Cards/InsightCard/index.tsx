@@ -61,9 +61,9 @@ const generateBadge = (
                 color="orange"
                 className="w-full border-0 text-xs truncate max-w-full mb-1"
             >
-                {`Data is available after ${dateDisplay(
+                {`(Data is available after ${dateDisplay(
                     met.firstOldResultDate
-                )}`}
+                )})`}
             </Text>
         )
     }
