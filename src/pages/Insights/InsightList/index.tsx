@@ -1,4 +1,4 @@
-import { Button, Col, Flex, Grid } from '@tremor/react'
+import { Button, Flex, Grid } from '@tremor/react'
 import { useState } from 'react'
 import { useAtomValue } from 'jotai'
 import Menu from '../../../components/Menu'
@@ -7,10 +7,12 @@ import InsightCard from '../../../components/Cards/InsightCard'
 import { timeAtom } from '../../../store'
 import Spinner from '../../../components/Spinner'
 import Header from '../../../components/Header'
-import Carousel from '../../../components/Carousel'
+import Filters from './Filters'
 
 export default function InsightList() {
-    const [selectedCategory, setSelectedCategory] = useState('')
+    const [selectedProvider, setSelectedProvider] = useState<string[]>([])
+    const [selectedPersona, setSelectedPersona] = useState<string[]>([])
+
     const activeTimeRange = useAtomValue(timeAtom)
 
     const query = {
@@ -32,7 +34,11 @@ export default function InsightList() {
     return (
         <Menu currentPage="insight">
             <Header title="Insight List" datePicker />
-            <Flex>
+            <Flex className="gap-6" alignItems="start">
+                <Filters
+                    onProviderChange={(p) => setSelectedProvider(p)}
+                    onPersonaChange={(p) => setSelectedPersona(p)}
+                />
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {listLoading ? (
                     <Flex justifyContent="center" className="mt-56">
@@ -47,13 +53,22 @@ export default function InsightList() {
                                     (a.totalResultValue || 0)
                             )
                             .filter((insight) => {
-                                if (
-                                    selectedCategory.length &&
-                                    selectedCategory !== 'All'
-                                )
-                                    return insight.tags?.category.includes(
-                                        selectedCategory
-                                    )
+                                if (selectedProvider.length) {
+                                    for (
+                                        let i = 0;
+                                        i < selectedProvider.length;
+                                        i += 1
+                                    ) {
+                                        if (
+                                            insight.connector?.includes(
+                                                selectedProvider[i]
+                                            )
+                                        ) {
+                                            return insight
+                                        }
+                                    }
+                                    return null
+                                }
                                 return insight
                             })
                             .map((insight) => (

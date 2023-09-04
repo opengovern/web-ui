@@ -5,6 +5,7 @@ import {
     badgeTypeByDelta,
     percentageByChange,
 } from '../../../utilities/deltaType'
+import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IConnectorCard {
     title: string | undefined
@@ -39,7 +40,12 @@ export default function InsightGroupCard({
                             {`${percentageByChange(prevCount, count)} %`}
                         </BadgeDelta>
                     </Flex>
-                    <Title className="font-semibold mb-1">{title}</Title>
+                    <Flex alignItems="start" className="mb-1">
+                        <Title className="font-semibold">{title}</Title>
+                        <Title className="font-semibold">
+                            {numericDisplay(count)}
+                        </Title>
+                    </Flex>
                     <Subtitle>{description}</Subtitle>
                 </Flex>
                 <Flex justifyContent="end">
