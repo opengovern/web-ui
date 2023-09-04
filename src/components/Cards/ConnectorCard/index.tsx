@@ -17,7 +17,7 @@ export const getConnectorIcon = (connector: string | undefined) => {
         <img
             src={connector === 'Azure' ? AzureIcon : AWSIcon}
             alt="connector"
-            className="w-9 h-9 mr-1.5"
+            className="w-9 h-9 mr-1"
         />
     )
 }

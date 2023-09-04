@@ -78,7 +78,7 @@ export default function ServicesDetails() {
             <Header
                 title="Assets"
                 breadCrumb={['Services Detail']}
-                connectionFilter
+                filter
                 datePicker
             />
             {/* <Summary

@@ -51,7 +51,7 @@ export interface IColumn<TData, TValue> {
 interface IProps<TData, TValue> {
     id: string
     columns: IColumn<TData, TValue>[]
-    rowData: TData[] | null
+    rowData: TData[] | undefined
     onGridReady?: (event: GridReadyEvent<TData>) => void
     onCellClicked?: (event: CellClickedEvent<TData>) => void
     onRowClicked?: (event: RowClickedEvent<TData>) => void

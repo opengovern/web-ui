@@ -70,7 +70,7 @@ export default function SummaryCard({
                 <Metric>
                     {Number(metric) ? numberDisplay(metric, 0) : metric}
                 </Metric>
-                {metricPrev && (
+                {!!metricPrev && (
                     <Text>
                         from{' '}
                         {Number(metricPrev)

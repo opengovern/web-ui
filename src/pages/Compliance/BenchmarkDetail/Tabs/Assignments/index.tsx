@@ -16,22 +16,11 @@ interface IAssignments {
 
 const columns: IColumn<any, any>[] = [
     {
-        flex: 0.5,
+        width: 50,
         sortable: true,
         filter: true,
-        type: 'string',
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="w-full h-full"
-                >
-                    {getConnectorIcon(params.data?.connector)}
-                </Flex>
-            )
-        },
+        type: 'connector',
+        field: 'connectors',
     },
     {
         field: 'providerConnectionName',

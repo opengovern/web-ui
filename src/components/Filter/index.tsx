@@ -32,7 +32,7 @@ import { filterAtom } from '../../store'
 import { getConnectorIcon } from '../Cards/ConnectorCard'
 import Tag from '../Tag'
 
-export default function Filters() {
+export default function Filter() {
     const [openDrawer, setOpenDrawer] = useState(false)
     const [selectedFilters, setSelectedFilters] = useAtom(filterAtom)
     const [provider, setProvider] = useState(selectedFilters.provider)

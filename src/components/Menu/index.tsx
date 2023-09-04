@@ -10,6 +10,7 @@ type IProps = {
     currentPage:
         | 'home'
         | 'insight'
+        | 'key-insights'
         | 'assets'
         | 'spend'
         | 'integration'

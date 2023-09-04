@@ -6,12 +6,8 @@ import { filterAtom, timeAtom } from '../../../../store'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
 import Menu from '../../../../components/Menu'
 import { badgeDelta, badgeTypeByDelta } from '../../../../utilities/deltaType'
-import {
-    GithubComKaytuIoKaytuEnginePkgInventoryApiMetric,
-    SourceType,
-} from '../../../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
-import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import Header from '../../../../components/Header'
 
 const columns: IColumn<any, any>[] = [
@@ -20,17 +16,6 @@ const columns: IColumn<any, any>[] = [
         field: 'connectors',
         type: 'connector',
         enableRowGroup: true,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
-        ) =>
-            params.data?.name && (
-                <Flex justifyContent="center" alignItems="center">
-                    {params.value.includes('AWS' as SourceType) &&
-                        getConnectorIcon('AWS')}
-                    {params.value.includes('Azure' as SourceType) &&
-                        getConnectorIcon('Azure')}
-                </Flex>
-            ),
     },
     {
         field: 'name',
@@ -96,7 +81,7 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
-const rowGenerator = (data: any) => {
+export const rowGenerator = (data: any) => {
     const rows = []
     if (data) {
         for (let i = 0; i < data.length; i += 1) {
@@ -161,7 +146,7 @@ export default function ResourceMetricsDetails() {
             <Header
                 title="Assets"
                 breadCrumb={['Resource Metrics']}
-                connectionFilter
+                filter
                 datePicker
             />
             <Card className="mt-4">

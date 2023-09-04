@@ -33,19 +33,7 @@ const columns: IColumn<any, any>[] = [
         width: 50,
         sortable: true,
         filter: true,
-        type: 'string',
-        cellStyle: { padding: 0 },
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="w-full h-full"
-                >
-                    {getConnectorIcon(params.data?.connector)}
-                </Flex>
-            )
-        },
+        type: 'connector',
     },
     {
         field: 'policyID',

@@ -3,11 +3,11 @@ import { ReactNode } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
 import DateRangePicker from '../DateRangePicker'
-import Filters from '../ConnectionList'
+import Filter from '../Filter'
 
 interface IHeader {
     title: string
-    connectionFilter?: boolean
+    filter?: boolean
     datePicker?: boolean
     children?: ReactNode
     breadCrumb?: (string | undefined)[]
@@ -15,7 +15,7 @@ interface IHeader {
 
 export default function Header({
     title,
-    connectionFilter = false,
+    filter = false,
     datePicker = false,
     children,
     breadCrumb,
@@ -54,7 +54,7 @@ export default function Header({
             <Flex justifyContent="end" alignItems="start">
                 {children}
                 {datePicker && <DateRangePicker />}
-                {connectionFilter && <Filters />}
+                {filter && <Filter />}
             </Flex>
         </Flex>
     )
