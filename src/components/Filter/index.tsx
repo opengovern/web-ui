@@ -34,13 +34,9 @@ import Tag from '../Tag'
 
 export default function Filter() {
     const [openDrawer, setOpenDrawer] = useState(false)
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedFilters, setSelectedFilters] = useAtom(filterAtom)
-    const [provider, setProvider] = useState(selectedFilters.provider)
-    const [connectionGroup, setConnectionGroup] = useState(
-        selectedFilters.connectionGroup
-    )
-    const [search, setSearch] = useState('')
-    const { response: groupList } = useOnboardApiV1ConnectionGroupsList()
+
     const { response, isLoading } = useOnboardApiV1ConnectionsSummaryList({
         connector: [],
         pageNumber: 1,
@@ -48,7 +44,6 @@ export default function Filter() {
         needCost: false,
         needResourceCount: false,
     })
-    const [selectedIndex, setSelectedIndex] = useState(0)
     const findConnections = () => {
         const conn = []
         if (response) {
@@ -63,6 +58,28 @@ export default function Filter() {
         return conn
     }
     const [connections, setConnections] = useState(findConnections)
+    const [provider, setProvider] = useState(selectedFilters.provider)
+    const [connectionGroup, setConnectionGroup] = useState(
+        selectedFilters.connectionGroup
+    )
+
+    useEffect(() => {
+        if (connections.length) {
+            setProvider('')
+            setConnectionGroup('')
+        }
+        if (provider.length) {
+            setConnections([])
+            setConnectionGroup('')
+        }
+        if (connectionGroup.length) {
+            setConnections([])
+            setProvider('')
+        }
+    }, [connections, provider, connectionGroup])
+
+    const [search, setSearch] = useState('')
+    const { response: groupList } = useOnboardApiV1ConnectionGroupsList()
 
     const connectionID = (list: any) => {
         const idList = []
@@ -85,11 +102,29 @@ export default function Filter() {
         restFilters()
     }, [selectedIndex])
 
-    useEffect(() => setSelectedIndex(0), [openDrawer])
+    useEffect(() => {
+        switch (true) {
+            case provider.length > 0:
+                return setSelectedIndex(0)
+            case connectionGroup.length > 0:
+                return setSelectedIndex(1)
+            case connections.length > 0:
+                return setSelectedIndex(2)
+            default:
+                return setSelectedIndex(0)
+        }
+    }, [openDrawer])
 
     const filterText = () => {
         if (selectedFilters.connections.length > 0) {
-            return `${selectedFilters.connections.length} filters`
+            return `${selectedFilters.connections.length} connection${
+                selectedFilters.connections.length > 1 ? 's' : ''
+            }`
+        }
+        if (selectedFilters.connectionGroup.length > 0) {
+            return `${selectedFilters.connectionGroup.length} group${
+                selectedFilters.connectionGroup.length > 1 ? 's' : ''
+            }`
         }
         if (selectedFilters.provider !== '') {
             return selectedFilters.provider
