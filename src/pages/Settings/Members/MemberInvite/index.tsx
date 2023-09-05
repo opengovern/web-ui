@@ -8,22 +8,21 @@ import {
     Text,
     TextInput,
 } from '@tremor/react'
+import { useSetAtom } from 'jotai/index'
 import { useAuthApiV1UserInviteCreate } from '../../../../api/auth.gen'
+import { notificationAtom } from '../../../../store'
 
 interface MemberInviteProps {
     close: (refresh: boolean) => void
-    notification: (text: string) => void
 }
 
-export default function MemberInvite({
-    close,
-    notification,
-}: MemberInviteProps) {
+export default function MemberInvite({ close }: MemberInviteProps) {
     const [email, setEmail] = useState<string>('')
     const [role, setRole] = useState<string>('viewer')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
         'viewer'
     )
+    const setNotification = useSetAtom(notificationAtom)
 
     const {
         isExecuted,
@@ -43,7 +42,10 @@ export default function MemberInvite({
 
     useEffect(() => {
         if (isExecuted && !isLoading) {
-            notification('User successfully added')
+            setNotification({
+                text: 'User successfully added',
+                type: 'success',
+            })
             close(true)
         }
     }, [isLoading])

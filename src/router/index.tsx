@@ -132,8 +132,8 @@ const authRoutes = [
         component: Home,
     },
     {
-        key: 'development',
-        path: '/:ws/development',
+        key: 'deployment',
+        path: '/:ws/deployment',
         component: Stack,
     },
     {

@@ -2,29 +2,27 @@ import { useEffect, useState } from 'react'
 import { Badge, Button, Flex, List, ListItem, Text } from '@tremor/react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import dayjs from 'dayjs'
+import { useSetAtom } from 'jotai'
 import {
     useAuthApiV1UserRoleBindingDelete,
     useAuthApiV1UserRoleBindingUpdate,
 } from '../../../../api/auth.gen'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../../../api/api'
 import ConfirmModal from '../../../../components/Modal/ConfirmModal'
+import { notificationAtom } from '../../../../store'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
-    notification: (text: string) => void
     close: () => void
 }
 
-export default function MemberDetails({
-    user,
-    close,
-    notification,
-}: IMemberDetails) {
+export default function MemberDetails({ user, close }: IMemberDetails) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const [role, setRole] = useState<string>(user?.roleName || 'viewer')
     const [roleValue, setRoleValue] = useState<'viewer' | 'editor' | 'admin'>(
         'viewer'
     )
+    const setNotification = useSetAtom(notificationAtom)
 
     const {
         isExecuted,
@@ -55,9 +53,15 @@ export default function MemberDetails({
     useEffect(() => {
         if ((isExecuted && !isLoading) || (deleteExecuted && !deleteLoading)) {
             if (isExecuted) {
-                notification('User successfully updated')
+                setNotification({
+                    text: 'User successfully updated',
+                    type: 'success',
+                })
             } else {
-                notification('User successfully deleted')
+                setNotification({
+                    text: 'User successfully deleted',
+                    type: 'success',
+                })
             }
             close()
         }

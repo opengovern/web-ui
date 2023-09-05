@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
+import Notification from '../Notification'
 
 type IProps = {
     children: ReactNode
@@ -28,6 +29,7 @@ export default function Menu({
     showSidebar = true,
 }: IProps) {
     const workspace = useParams<{ ws: string }>().ws
+
     return (
         <Flex flexDirection="row" className="h-screen overflow-hidden">
             {showSidebar && (
@@ -41,6 +43,7 @@ export default function Menu({
                     className="mt-16 bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll"
                     id="kaytu-container"
                 >
+                    <Notification />
                     <Flex justifyContent="center" className="px-12">
                         <div className="max-w-7xl w-full py-8">{children}</div>
                     </Flex>

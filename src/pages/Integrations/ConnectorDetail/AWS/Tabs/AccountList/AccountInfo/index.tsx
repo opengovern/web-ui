@@ -12,6 +12,7 @@ import {
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
+import { useSetAtom } from 'jotai'
 import {
     useOnboardApiV1CredentialDetail,
     useOnboardApiV1SourceDelete,
@@ -22,13 +23,13 @@ import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../
 import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/schedule.gen'
 import Tag from '../../../../../../../components/Tag'
 import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
+import { notificationAtom } from '../../../../../../../store'
 
 interface IAccInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
     open: boolean
     type: string
     onClose: () => void
-    notification: (text: string) => void
 }
 
 function getBadgeText(status: string) {
@@ -48,13 +49,7 @@ function getBadgeText(status: string) {
     }
 }
 
-export default function AccountInfo({
-    data,
-    open,
-    type,
-    onClose,
-    notification,
-}: IAccInfo) {
+export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
     const { response: credential } = useOnboardApiV1CredentialDetail(
         data?.credentialID || '',
         {},
@@ -65,6 +60,7 @@ export default function AccountInfo({
     const [ekey, seteKey] = useState(false)
     const [secret, setSecret] = useState('')
     const [esecret, seteSecret] = useState(false)
+    const setNotification = useSetAtom(notificationAtom)
 
     const {
         isExecuted: isDeleteExecuted,
@@ -99,7 +95,7 @@ export default function AccountInfo({
 
     useEffect(() => {
         if (isHealthCheckExecuted && !isHealthCheckLoading) {
-            notification('Health check triggered')
+            setNotification({ text: 'Health check triggered', type: 'info' })
             onClose()
         }
     }, [isHealthCheckExecuted])

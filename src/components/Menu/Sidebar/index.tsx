@@ -40,7 +40,7 @@ const navigation = [
         icon: DocumentChartBarIcon,
         children: [
             { name: 'Key Insights', page: 'key-insights' },
-            { name: 'Insight List', page: 'insight' },
+            { name: 'All Insights', page: 'insight' },
         ],
     },
     {
@@ -49,7 +49,7 @@ const navigation = [
         icon: ServerStackIcon,
         children: [
             { name: 'Summary', page: 'assets' },
-            { name: 'Development', page: 'development' },
+            { name: 'Deployment', page: 'deployment' },
         ],
     },
     {

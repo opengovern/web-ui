@@ -152,7 +152,7 @@ export default function CostMetricsDetails() {
                 },
                 {
                     id: 'filters',
-                    labelDefault: 'Options',
+                    labelDefault: 'Filters',
                     labelKey: 'filters',
                     iconKey: 'filter',
                     minWidth: 300,
@@ -203,7 +203,7 @@ export default function CostMetricsDetails() {
                 },
                 {
                     id: 'filters',
-                    labelDefault: 'Options',
+                    labelDefault: 'Filters',
                     labelKey: 'filters',
                     iconKey: 'filter',
                     minWidth: 300,

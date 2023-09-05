@@ -1,25 +1,54 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect } from 'react'
 import { Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/20/solid'
-import { Flex, Text } from '@tremor/react'
+import { Flex } from '@tremor/react'
+import { useAtom } from 'jotai'
+import {
+    ExclamationCircleIcon,
+    QuestionMarkCircleIcon,
+    XMarkIcon,
+    CheckCircleIcon,
+} from '@heroicons/react/24/outline'
+import { notificationAtom } from '../../store'
 
-interface INotification {
-    text: string
-}
-
-export default function Notification({ text }: INotification) {
-    const [show, setShow] = useState(!!text.length)
+export default function Notification() {
+    const [notif, setNotif] = useAtom(notificationAtom)
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setShow(false)
+            setNotif({ text: undefined, type: undefined })
         }, 5000)
         return () => clearTimeout(timer)
-    }, [show])
+    }, [notif.text])
+
+    const color = () => {
+        switch (notif.type) {
+            case 'success':
+                return 'text-emerald-500 bg-emerald-50 ring-emerald-100'
+            case 'warning':
+                return 'text-amber-500 bg-amber-50 ring-amber-100'
+            case 'error':
+                return 'text-rose-500 bg-rose-50 ring-rose-100'
+            default:
+                return 'text-kaytu-500 bg-kaytu-50 ring-kaytu-100'
+        }
+    }
+
+    const icon = () => {
+        switch (notif.type) {
+            case 'success':
+                return <CheckCircleIcon className="h-6" />
+            case 'warning':
+                return <QuestionMarkCircleIcon className="h-6" />
+            case 'error':
+                return <XMarkIcon className="h-6" />
+            default:
+                return <ExclamationCircleIcon className="h-6" />
+        }
+    }
 
     return (
         <Transition
-            show={show}
+            show={!!notif.text && !!notif.type}
             as={Fragment}
             enter="transform ease-out duration-300 transition"
             enterFrom="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
@@ -29,13 +58,11 @@ export default function Notification({ text }: INotification) {
             leaveTo="opacity-0"
         >
             <Flex
-                onClick={() => {
-                    setShow(false)
-                }}
-                className="cursor-pointer fixed right-12 top-24 w-full max-w-sm p-4 rounded-md bg-kaytu-50 shadow-md ring-1 ring-kaytu-100"
+                justifyContent="start"
+                className={`gap-2 z-50 fixed right-12 top-24 w-full max-w-sm p-4 rounded-md shadow-md ring-1 ${color()}`}
             >
-                <Text className="text-kaytu-500">{text}</Text>
-                <XMarkIcon className="h-5 w-5" />
+                {icon()}
+                <span>{notif.text}</span>
             </Flex>
         </Transition>
     )

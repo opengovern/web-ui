@@ -1,6 +1,7 @@
 import { Flex, Text } from '@tremor/react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey } from '../../../../api/api'
 import {
     useAuthApiV1KeyDeleteDelete,
@@ -9,11 +10,11 @@ import {
 import ConfirmModal from '../../../../components/Modal/ConfirmModal'
 import InformationModal from '../../../../components/Modal/InformationModal'
 import Spinner from '../../../../components/Spinner'
+import { notificationAtom } from '../../../../store'
 
 interface APIKeyRecordProps {
     item: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey
     refresh: () => void
-    showNotification: (text: string) => void
 }
 
 const fixRole = (role: string) => {
@@ -29,15 +30,12 @@ const fixRole = (role: string) => {
     }
 }
 
-export default function APIKeyRecord({
-    item,
-    refresh,
-    showNotification,
-}: APIKeyRecordProps) {
+export default function APIKeyRecord({ item, refresh }: APIKeyRecordProps) {
     const [deleteConfirmation, setDeleteConfirmation] = useState<boolean>(false)
     const { response, isLoading } = useAuthApiV1UserDetail(
         item.creatorUserID || ''
     )
+    const setNotification = useSetAtom(notificationAtom)
     const {
         response: responseDelete,
         isLoading: deleteIsLoading,
@@ -48,7 +46,10 @@ export default function APIKeyRecord({
 
     useEffect(() => {
         if (!deleteIsLoading && deleteIsExecuted) {
-            showNotification('API Key successfully deleted')
+            setNotification({
+                text: 'API Key successfully deleted',
+                type: 'success',
+            })
             refresh()
         }
     }, [deleteIsLoading])

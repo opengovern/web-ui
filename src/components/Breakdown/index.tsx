@@ -33,7 +33,7 @@ export default function Breakdown({
     isCost = false,
 }: IBreakdown) {
     const navigate = useNavigate()
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [selectedIndex, setSelectedIndex] = useState(1)
 
     return (
         <Card className="pb-0 relative h-full">
@@ -48,12 +48,12 @@ export default function Breakdown({
                         <TabList variant="solid">
                             <Tab className="pt-0.5 pb-1">
                                 <Text>
-                                    {dateDisplay(activeTime?.end.toString(), 1)}
+                                    {dateDisplay(activeTime?.start.toString())}
                                 </Text>
                             </Tab>
                             <Tab className="pt-0.5 pb-1">
                                 <Text>
-                                    {dateDisplay(activeTime?.start.toString())}
+                                    {dateDisplay(activeTime?.end.toString())}
                                 </Text>
                             </Tab>
                         </TabList>
