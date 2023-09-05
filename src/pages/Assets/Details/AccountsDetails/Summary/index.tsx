@@ -12,18 +12,18 @@ import {
     Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { numericDisplay } from '../../../../../../utilities/numericDisplay'
+import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import {
     useOnboardApiV1CatalogMetricsList,
     useOnboardApiV1ConnectionsSummaryList,
-} from '../../../../../../api/onboard.gen'
-import Spinner from '../../../../../../components/Spinner'
+} from '../../../../../api/onboard.gen'
+import Spinner from '../../../../../components/Spinner'
 import {
     badgeTypeByDelta,
     percentageByChange,
-} from '../../../../../../utilities/deltaType'
-import { filterAtom, timeAtom } from '../../../../../../store'
-import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
+} from '../../../../../utilities/deltaType'
+import { filterAtom, timeAtom } from '../../../../../store'
+import { getConnectorIcon } from '../../../../../components/Cards/ConnectorCard'
 
 export default function Summary() {
     const activeTimeRange = useAtomValue(timeAtom)

@@ -9,11 +9,25 @@ import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../ap
 import Table, { IColumn } from '../../../../components/Table'
 import Header from '../../../../components/Header'
 
+const options: GridOptions = {
+    enableGroupEdit: true,
+    columnTypes: {
+        dimension: {
+            enableRowGroup: true,
+            enablePivot: true,
+        },
+    },
+    groupDefaultExpanded: -1,
+    rowGroupPanelShow: 'always',
+    groupAllowUnbalanced: true,
+}
+
 export const resourceTableColumns: IColumn<any, any>[] = [
     {
         headerName: 'Connectors',
         field: 'connectors',
-        type: 'connector',
+        type: 'string',
+        width: 120,
         enableRowGroup: true,
     },
     {
@@ -124,19 +138,6 @@ export default function ResourceMetricsDetails() {
 
     const { response: metrics, isLoading: metricsLoading } =
         useInventoryApiV2AnalyticsMetricList(query)
-
-    const options: GridOptions = {
-        enableGroupEdit: true,
-        columnTypes: {
-            dimension: {
-                enableRowGroup: true,
-                enablePivot: true,
-            },
-        },
-        groupDefaultExpanded: -1,
-        rowGroupPanelShow: 'always',
-        groupAllowUnbalanced: true,
-    }
 
     return (
         <Menu currentPage="assets">
