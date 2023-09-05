@@ -10,7 +10,6 @@ import Logout from '../pages/Logout'
 import InsightDetail from '../pages/Insights/InsightDetail'
 import AccountsDetails from '../pages/Assets/Details/AccountsDetails'
 import Spend from '../pages/Spend'
-import ServicesDetails from '../pages/Assets/Details/ServicesDetails'
 import ResourceMetricsDetails from '../pages/Assets/Details/ResourceMetricsDetails'
 import Integrations from '../pages/Integrations'
 import CostMetricsDetails from '../pages/Spend/Details'
@@ -65,11 +64,6 @@ const authRoutes = [
         key: 'accounts detail',
         path: '/:ws/assets/accounts-detail',
         component: AccountsDetails,
-    },
-    {
-        key: 'services detail',
-        path: '/:ws/assets/services-detail',
-        component: ServicesDetails,
     },
     {
         key: 'resource metrics',

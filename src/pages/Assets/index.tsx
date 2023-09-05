@@ -335,10 +335,10 @@ export default function Assets() {
                                     type="account"
                                 />
                                 <ListCard
-                                    title="Top Services"
+                                    title="Top Resources"
                                     loading={servicesResponseLoading}
                                     items={topServices(servicesResponse)}
-                                    url="services-detail"
+                                    url="resource-metrics"
                                     type="service"
                                 />
                             </Grid>
