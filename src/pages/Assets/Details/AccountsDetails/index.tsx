@@ -1,12 +1,9 @@
-import { useState } from 'react'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { Card } from '@tremor/react'
 import { GridOptions } from 'ag-grid-community'
+import { useNavigate } from 'react-router-dom'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import DrawerPanel from '../../../../components/DrawerPanel'
 import { filterAtom, timeAtom } from '../../../../store'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../api/api'
-import { RenderObject } from '../../../../components/RenderObject'
 import Table, { IColumn } from '../../../../components/Table'
 import Header from '../../../../components/Header'
 import Menu from '../../../../components/Menu'
@@ -41,7 +38,6 @@ const columns: IColumn<any, any>[] = [
         type: 'string',
         sortable: true,
         filter: true,
-        rowGroup: true,
         enableRowGroup: true,
     },
     {
@@ -85,12 +81,9 @@ const options: GridOptions = {
 }
 
 export default function AccountsDetails() {
+    const navigate = useNavigate()
     const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
-
-    const [drawerOpen, setDrawerOpen] = useState(false)
-    const [selectedConnection, setSelectedConnection] =
-        useState<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>()
+    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
 
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -128,20 +121,17 @@ export default function AccountsDetails() {
                     }}
                     onCellClicked={(event) => {
                         if (event.data !== null) {
-                            setSelectedConnection(event.data)
-                            setDrawerOpen(true)
+                            setSelectedConnections({
+                                provider: '',
+                                connections: [event.data.id],
+                                connectionGroup: '',
+                            })
+                            navigate('./..')
                         }
                     }}
                     options={options}
                 />
             </Card>
-            <DrawerPanel
-                open={drawerOpen}
-                onClose={() => setDrawerOpen(false)}
-                title="Connection details"
-            >
-                <RenderObject obj={selectedConnection} />
-            </DrawerPanel>
         </Menu>
     )
 }
