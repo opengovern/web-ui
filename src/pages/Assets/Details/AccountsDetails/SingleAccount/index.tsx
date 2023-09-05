@@ -9,7 +9,6 @@ import {
     Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import dayjs from 'dayjs'
 import {
     useOnboardApiV1CatalogMetricsList,
     useOnboardApiV1ConnectionsSummaryList,
@@ -55,90 +54,85 @@ export default function SingleAccount() {
     const connection = topAccounts?.connections?.at(0)
 
     return (
-        <main>
-            <Flex
-                flexDirection="col"
-                alignItems="start"
-                className="w-full my-3 gap-y-3"
+        <Flex
+            flexDirection="col"
+            alignItems="start"
+            className="w-full my-3 gap-y-3"
+        >
+            <Title>
+                {connection?.providerConnectionName ||
+                    connection?.providerConnectionID ||
+                    connection?.id ||
+                    ''}
+            </Title>
+            <Grid
+                numItemsMd={2}
+                numItemsLg={3}
+                className="gap-4 mt-6 mb-10 w-full"
             >
-                <Title>
-                    {connection?.providerConnectionName ||
-                        connection?.providerConnectionID ||
-                        connection?.id ||
-                        ''}
-                </Title>
-                <Grid
-                    numItemsMd={2}
-                    numItemsLg={3}
-                    className="gap-4 mt-6 mb-10 w-full"
-                >
-                    <SummaryCard
-                        title="Resource Count"
-                        metric={String(
-                            numericDisplay(topAccounts?.totalResourceCount)
-                        )}
-                        loading={topAccountLoading}
-                    />
-                    <SummaryCard
-                        title="Total Accounts"
-                        metric={String(
-                            numericDisplay(topMetrics?.totalConnections)
-                        )}
-                        loading={metricsLoading}
-                    />
-                    <SummaryCard
-                        title="Total Unhealthy Accounts"
-                        metric={String(
-                            numericDisplay(topMetrics?.unhealthyConnections)
-                        )}
-                        loading={metricsLoading}
-                    />
-                </Grid>
-
-                <Card className="w-full">
-                    <Title>Main Data</Title>
-                    <List className="mt-2">
-                        <ListItem>
-                            <Text>Account ID</Text>
-                            <Text>
-                                <Bold>{connection?.id}</Bold>
-                            </Text>
-                        </ListItem>
-                        <ListItem>
-                            <Text>Onboard Date</Text>
-                            <Text>
-                                <Bold>
-                                    {connection?.onboardDate &&
-                                        new Date(
-                                            Date.parse(connection?.onboardDate)
-                                        ).toLocaleDateString()}
-                                </Bold>
-                            </Text>
-                        </ListItem>
-                        <ListItem>
-                            <Text>Last Inventory</Text>
-                            <Text>
-                                <Bold>
-                                    {connection?.lastInventory &&
-                                        new Date(
-                                            Date.parse(
-                                                connection?.lastInventory
-                                            )
-                                        ).toLocaleDateString()}
-                                </Bold>
-                            </Text>
-                        </ListItem>
-                    </List>
-                </Card>
-                <Card className="w-full">
-                    <Title>Meta Data</Title>
-                    {connection?.metadata ? (
-                        <RenderObject obj={connection.metadata} />
-                    ) : (
-                        <Spinner />
+                <SummaryCard
+                    title="Resource Count"
+                    metric={String(
+                        numericDisplay(topAccounts?.totalResourceCount)
                     )}
-                </Card>
-            </Flex>
-        </main>
+                    loading={topAccountLoading}
+                />
+                <SummaryCard
+                    title="Total Accounts"
+                    metric={String(
+                        numericDisplay(topMetrics?.totalConnections)
+                    )}
+                    loading={metricsLoading}
+                />
+                <SummaryCard
+                    title="Total Unhealthy Accounts"
+                    metric={String(
+                        numericDisplay(topMetrics?.unhealthyConnections)
+                    )}
+                    loading={metricsLoading}
+                />
+            </Grid>
+            <Card className="w-full">
+                <Title>Main Data</Title>
+                <List className="mt-2">
+                    <ListItem>
+                        <Text>Account ID</Text>
+                        <Text>
+                            <Bold>{connection?.id}</Bold>
+                        </Text>
+                    </ListItem>
+                    <ListItem>
+                        <Text>Onboard Date</Text>
+                        <Text>
+                            <Bold>
+                                {connection?.onboardDate &&
+                                    new Date(
+                                        Date.parse(connection?.onboardDate)
+                                    ).toLocaleDateString()}
+                            </Bold>
+                        </Text>
+                    </ListItem>
+                    <ListItem>
+                        <Text>Last Inventory</Text>
+                        <Text>
+                            <Bold>
+                                {connection?.lastInventory &&
+                                    new Date(
+                                        Date.parse(connection?.lastInventory)
+                                    ).toLocaleDateString()}
+                            </Bold>
+                        </Text>
+                    </ListItem>
+                </List>
+            </Card>
+            <Card className="w-full">
+                <Title>Meta Data</Title>
+                {connection?.metadata ? (
+                    <RenderObject obj={connection.metadata} />
+                ) : (
+                    <Spinner />
+                )}
+            </Card>
+        </Flex>
     )
 }

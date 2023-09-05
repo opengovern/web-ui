@@ -1,4 +1,4 @@
-import { Bold, List, ListItem, Text, Title } from '@tremor/react'
+import { List, ListItem, Text, Title } from '@tremor/react'
 import { snakeCaseToLabel } from '../../utilities/labelMaker'
 
 export function RenderObject({ obj }: any) {

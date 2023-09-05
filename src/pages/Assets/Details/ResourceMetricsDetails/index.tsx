@@ -1,6 +1,5 @@
 import { BadgeDelta, Card, Flex } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useNavigate } from 'react-router-dom'
 import { GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { filterAtom, timeAtom } from '../../../../store'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../../api/inventory.gen'
@@ -10,7 +9,7 @@ import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../ap
 import Table, { IColumn } from '../../../../components/Table'
 import Header from '../../../../components/Header'
 
-const columns: IColumn<any, any>[] = [
+export const resourceTableColumns: IColumn<any, any>[] = [
     {
         headerName: 'Connectors',
         field: 'connectors',
@@ -104,8 +103,6 @@ export const rowGenerator = (data: any) => {
 }
 
 export default function ResourceMetricsDetails() {
-    const navigate = useNavigate()
-
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
@@ -156,7 +153,7 @@ export default function ResourceMetricsDetails() {
                     downloadable
                     id="asset_resource_metrics"
                     rowData={rowGenerator(metrics?.metrics)}
-                    columns={columns}
+                    columns={resourceTableColumns}
                     onGridReady={(params) => {
                         if (metricsLoading) {
                             params.api.showLoadingOverlay()

@@ -49,7 +49,7 @@ const navigation = [
         icon: ServerStackIcon,
         children: [
             { name: 'Summary', page: 'assets' },
-            { name: 'Development', page: 'development' },
+            { name: 'Deployment', page: 'deployment' },
         ],
     },
     {
