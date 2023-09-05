@@ -10,7 +10,6 @@ import Notification from '../../../components/Notification'
 
 export default function SettingsWorkspaceAPIKeys() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-    const [notification, setNotification] = useState<string>('')
 
     const { response, isLoading, sendNow } = useAuthApiV1KeysList()
 
@@ -23,7 +22,6 @@ export default function SettingsWorkspaceAPIKeys() {
     }
 
     const openCreateMenu = () => {
-        setNotification('')
         setDrawerOpen(true)
     }
 
@@ -33,7 +31,6 @@ export default function SettingsWorkspaceAPIKeys() {
         </Flex>
     ) : (
         <>
-            {notification && <Notification text={notification} />}
             <DrawerPanel
                 open={drawerOpen}
                 title="Create new API Key"
@@ -77,7 +74,6 @@ export default function SettingsWorkspaceAPIKeys() {
                         refresh={() => {
                             sendNow()
                         }}
-                        showNotification={setNotification}
                     />
                 ))}
             </Card>

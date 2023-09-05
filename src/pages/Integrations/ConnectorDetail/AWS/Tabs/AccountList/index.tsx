@@ -192,7 +192,6 @@ export default function AccountList({
     >(undefined)
     const [openInfo, setOpenInfo] = useState(false)
     const [open, setOpen] = useState(false)
-    const [notification, setNotification] = useState<string>('')
 
     const options: GridOptions = {
         enableGroupEdit: true,
@@ -244,7 +243,6 @@ export default function AccountList({
                     </Button>
                 </Table>
             </Card>
-            {notification && <Notification text={notification} />}
             <AccountInfo
                 data={accData}
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -252,7 +250,6 @@ export default function AccountList({
                 type={accData?.type}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
-                notification={setNotification}
             />
             <NewAWSAccount
                 accounts={accounts}

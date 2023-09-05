@@ -24,7 +24,6 @@ const fixRole = (role: string) => {
 export default function SettingsMembers() {
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
     const [drawerParam, setDrawerParam] = useState<string>('')
-    const [notification, setNotification] = useState<string>('')
 
     const {
         response,
@@ -33,12 +32,10 @@ export default function SettingsMembers() {
     } = useAuthApiV1WorkspaceRoleBindingsList()
 
     const userDetail = (userId: string) => {
-        setNotification('')
         setDrawerParam(userId)
         setDrawerOpen(true)
     }
     const openInviteMember = () => {
-        setNotification('')
         setDrawerParam('openInviteMember')
         setDrawerOpen(true)
     }
@@ -49,7 +46,6 @@ export default function SettingsMembers() {
         </Flex>
     ) : (
         <>
-            {notification && <Notification text={notification} />}
             <DrawerPanel
                 open={drawerOpen}
                 title={
@@ -70,7 +66,6 @@ export default function SettingsMembers() {
                                 refreshRoleBindings()
                             }
                         }}
-                        notification={setNotification}
                     />
                 ) : (
                     <MemberDetails
@@ -81,7 +76,6 @@ export default function SettingsMembers() {
                             setDrawerOpen(false)
                             refreshRoleBindings()
                         }}
-                        notification={setNotification}
                     />
                 )}
             </DrawerPanel>

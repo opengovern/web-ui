@@ -1,6 +1,6 @@
 import { Button, Flex, Select, SelectItem, Text } from '@tremor/react'
 import { useState } from 'react'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import {
     GridOptions,
     ICellRendererParams,
@@ -9,15 +9,13 @@ import {
 import { useNavigate } from 'react-router-dom'
 import Menu from '../../../components/Menu'
 import { useComplianceApiV1InsightList } from '../../../api/compliance.gen'
-import { filterAtom, timeAtom } from '../../../store'
+import { filterAtom, notificationAtom, timeAtom } from '../../../store'
 import Spinner from '../../../components/Spinner'
 import Header from '../../../components/Header'
 import Table, { IColumn } from '../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { badgeDelta } from '../../../utilities/deltaType'
-import Notification from '../../../components/Notification'
 import { rowGenerator } from '../../Assets/Details/ResourceMetricsDetails'
-import { generateItems } from '../../../utilities/dateComparator'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -91,7 +89,7 @@ export default function InsightList() {
     const [selectedResourceType, setSelectedResourceType] = useState<string>('')
     const [selectedObjective, setSelectedObjective] = useState<string>('')
 
-    const [notification, setNotification] = useState('')
+    const setNotification = useSetAtom(notificationAtom)
 
     const selectedConnections = useAtomValue(filterAtom)
     const activeTimeRange = useAtomValue(timeAtom)
@@ -192,14 +190,16 @@ export default function InsightList() {
         groupAllowUnbalanced: true,
         // eslint-disable-next-line consistent-return
         onRowClicked: (event: RowClickedEvent) => {
-            setNotification('')
             if (
                 event.data?.totalResultValue ||
                 event.data?.oldTotalResultValue
             ) {
                 navigateToAssetsInsightsDetails(event.data?.id)
             } else {
-                setNotification('Time period is not covered by insight')
+                setNotification({
+                    text: 'Time period is not covered by insight',
+                    type: 'warning',
+                })
             }
         },
         isRowSelectable: (param) =>
@@ -231,7 +231,6 @@ export default function InsightList() {
     return (
         <Menu currentPage="insight">
             <Header title="All Insights" datePicker filter />
-            {!!notification.length && <Notification text={notification} />}
             <Flex className="gap-6" alignItems="start">
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {listLoading ? (

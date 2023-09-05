@@ -32,6 +32,16 @@ export const filterAtom = atom<IFilter>({
     connectionGroup: '',
 })
 
+interface INotification {
+    text: string | undefined
+    type: 'success' | 'warning' | 'error' | 'info' | undefined
+}
+
+export const notificationAtom = atom<INotification>({
+    text: undefined,
+    type: undefined,
+})
+
 export const sideBarCollapsedAtom = atom(false)
 export const assetOpenAtom = atom(false)
 export const administrationOpenAtom = atom(false)
