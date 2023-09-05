@@ -103,7 +103,7 @@ export default function MultiAccount() {
             <DrawerPanel
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
-                title="Connection Details"
+                title="Connection details"
             >
                 <RenderObject obj={selectedConnection} />
             </DrawerPanel>

@@ -97,7 +97,7 @@ export default function SingleConnection({
                     >
                         <Flex flexDirection="col" alignItems="start">
                             <Title className="font-semibold">
-                                Connection info
+                                Connection details
                             </Title>
                             {accountInfoLoading ? (
                                 <Spinner className="mt-28" />
@@ -155,7 +155,7 @@ export default function SingleConnection({
                             </Button>
                         </Flex>
                         <DrawerPanel
-                            title="Connection info"
+                            title="Connection details"
                             open={openDrawer}
                             onClose={() => setOpenDrawer(false)}
                         >
