@@ -12,7 +12,7 @@ import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import 'ag-grid-enterprise'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import {
     ColDef,
@@ -24,7 +24,7 @@ import {
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import Menu from '../../../components/Menu'
 import { useInventoryApiV2AnalyticsSpendTableList } from '../../../api/inventory.gen'
-import { filterAtom, notificationAtom, spendTimeAtom } from '../../../store'
+import { filterAtom, spendTimeAtom } from '../../../store'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import {
     checkGranularity,
