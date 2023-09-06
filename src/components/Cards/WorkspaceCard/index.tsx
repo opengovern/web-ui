@@ -1,14 +1,4 @@
-import {
-    Badge,
-    Button,
-    Card,
-    Col,
-    Flex,
-    Grid,
-    Metric,
-    Text,
-    Title,
-} from '@tremor/react'
+import { Badge, Button, Card, Flex, Grid, Text, Title } from '@tremor/react'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowPathIcon, ArrowSmallRightIcon } from '@heroicons/react/24/solid'
@@ -23,6 +13,7 @@ import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse } from '../../../api/api'
+import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
 
 interface IWorkSpace {
     workspace: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse
@@ -162,7 +153,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                             color={getBadgeColor(workspace.status || '')}
                             className="ml-2"
                         >
-                            {workspace.status}
+                            {capitalizeFirstLetter(workspace.status || '')}
                         </Badge>
                     </Flex>
                     <Flex flexDirection="row" className="w-fit">
@@ -190,18 +181,19 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                 </Flex>
                 <Grid numItems={2} numItemsLg={4} className="gap-6 mb-6">
                     {Object.entries(details).map(([name, value]) => (
-                        <Col>
-                            <Card>
-                                <Flex flexDirection="col">
-                                    <Text color="slate" className="mb-3">
-                                        {name}
-                                    </Text>
-                                    <Title>
-                                        {workspaceLoading ? <Spinner /> : value}
-                                    </Title>
-                                </Flex>
-                            </Card>
-                        </Col>
+                        <Card>
+                            <Text color="slate" className="font-semibold mb-3">
+                                {name}
+                            </Text>
+                            <Title>
+                                {/* eslint-disable-next-line no-nested-ternary */}
+                                {workspaceLoading ? (
+                                    <Spinner />
+                                ) : (
+                                    capitalizeFirstLetter(String(value))
+                                )}
+                            </Title>
+                        </Card>
                     ))}
                 </Grid>
                 <Flex flexDirection="row">
