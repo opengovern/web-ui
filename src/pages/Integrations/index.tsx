@@ -41,7 +41,7 @@ export default function Integrations() {
     const connectors = () => (isDemo() ? mockConnectors : responseConnectors)
 
     return (
-        <Menu currentPage="integration">
+        <Menu currentPage="integrations">
             <Header />
             <Grid numItems={3} className="gap-4 mb-10">
                 <OnboardCard

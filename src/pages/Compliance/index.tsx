@@ -50,7 +50,7 @@ export default function Compliance() {
     const [search, setSearch] = useState('')
 
     return (
-        <Menu currentPage="benchmarks">
+        <Menu currentPage="compliance">
             <Header />
             <Flex flexDirection="col" alignItems="start">
                 <Summary benchmark={benchmarks} loading={isLoading} />

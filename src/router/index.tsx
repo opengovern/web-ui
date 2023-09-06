@@ -62,7 +62,12 @@ const authRoutes = [
     },
     {
         key: 'accounts detail',
-        path: '/:ws/assets/accounts-detail',
+        path: '/:ws/assets/accounts',
+        component: AccountsDetails,
+    },
+    {
+        key: 'accounts detail',
+        path: '/:ws/assets/accounts',
         component: AccountsDetails,
     },
     {
@@ -77,12 +82,12 @@ const authRoutes = [
     },
     {
         key: 'spend metrics',
-        path: '/:ws/spend/details',
+        path: '/:ws/spend/spend-details',
         component: CostMetricsDetails,
     },
     {
         key: 'insight list',
-        path: '/:ws/insight',
+        path: '/:ws/all-insights',
         component: InsightList,
     },
     {
@@ -92,17 +97,17 @@ const authRoutes = [
     },
     {
         key: 'insight detail',
-        path: '/:ws/insight/:id',
+        path: '/:ws/all-insights/:id',
         component: InsightDetail,
     },
     {
         key: 'integrations',
-        path: '/:ws/integration',
+        path: '/:ws/integrations',
         component: Integrations,
     },
     {
         key: 'connector detail',
-        path: '/:ws/integration/:connector',
+        path: '/:ws/integrations/:connector',
         component: ConnectorDetail,
     },
     {
@@ -112,12 +117,12 @@ const authRoutes = [
     },
     {
         key: 'compliance',
-        path: '/:ws/benchmarks',
+        path: '/:ws/compliance',
         component: Compliance,
     },
     {
         key: 'benchmark detail',
-        path: '/:ws/benchmarks/:id',
+        path: '/:ws/compliance/:id',
         component: BenchmarkDetail,
     },
     {

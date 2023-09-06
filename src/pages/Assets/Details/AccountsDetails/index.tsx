@@ -1,9 +1,9 @@
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { Card } from '@tremor/react'
-import { GridOptions } from 'ag-grid-community'
+import { GridOptions, RowClickedEvent } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import { filterAtom, timeAtom } from '../../../../store'
+import { filterAtom, notificationAtom, timeAtom } from '../../../../store'
 import Table, { IColumn } from '../../../../components/Table'
 import Header from '../../../../components/Header'
 import Menu from '../../../../components/Menu'
@@ -38,6 +38,7 @@ const columns: IColumn<any, any>[] = [
         type: 'string',
         sortable: true,
         filter: true,
+        rowGroup: true,
         enableRowGroup: true,
     },
     {
@@ -84,6 +85,7 @@ export default function AccountsDetails() {
     const navigate = useNavigate()
     const activeTimeRange = useAtomValue(timeAtom)
     const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const setNotification = useSetAtom(notificationAtom)
 
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -101,27 +103,33 @@ export default function AccountsDetails() {
     return (
         <Menu currentPage="assets">
             <Header breadCrumb={['Accounts']} filter datePicker />
-            {/* <Summary /> */}
             <Card>
                 <Table
                     title="Accounts"
                     downloadable
                     id="asset_multiaccount"
                     columns={columns}
-                    rowData={accounts?.connections || []}
+                    rowData={accounts?.connections}
                     onGridReady={(e) => {
                         if (isAccountsLoading) {
                             e.api?.showLoadingOverlay()
                         }
                     }}
-                    onCellClicked={(event) => {
+                    onRowClicked={(event: RowClickedEvent) => {
                         if (event.data !== null) {
-                            setSelectedConnections({
-                                provider: '',
-                                connections: [event.data.id],
-                                connectionGroup: '',
-                            })
-                            navigate('./..')
+                            if (event.data.lifecycleState === 'ONBOARD') {
+                                setSelectedConnections({
+                                    provider: '',
+                                    connections: [event.data.id],
+                                    connectionGroup: '',
+                                })
+                                navigate('./..')
+                            } else {
+                                setNotification({
+                                    text: 'Account is not onboarded',
+                                    type: 'warning',
+                                })
+                            }
                         }
                     }}
                     options={options}

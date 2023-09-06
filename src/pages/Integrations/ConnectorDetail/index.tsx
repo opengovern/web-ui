@@ -35,7 +35,7 @@ export default function ConnectorDetail() {
         })
 
     return (
-        <Menu currentPage="integration">
+        <Menu currentPage="integrations">
             <Flex flexDirection="col" alignItems="start">
                 <Header breadCrumb={[connector]} />
                 <Title className="font-semibold">{connector}</Title>

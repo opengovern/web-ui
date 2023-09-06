@@ -212,7 +212,7 @@ export default function InsightDetail() {
     }
 
     return (
-        <Menu currentPage="insight">
+        <Menu currentPage="all-insights">
             {trendLoading || detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />

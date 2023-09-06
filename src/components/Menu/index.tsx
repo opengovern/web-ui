@@ -10,12 +10,12 @@ type IProps = {
     children: ReactNode
     currentPage:
         | 'home'
-        | 'insight'
+        | 'all-insights'
         | 'key-insights'
         | 'assets'
         | 'spend'
-        | 'integration'
-        | 'benchmarks'
+        | 'integrations'
+        | 'compliance'
         | 'settings'
         | 'stack'
         | 'finder'
