@@ -12,12 +12,13 @@ import { GridOptions } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { useAtomValue } from 'jotai'
+import { useParams } from 'react-router-dom'
 import Breakdown from '../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
     useInventoryApiV2AnalyticsMetricList,
 } from '../../../api/inventory.gen'
-import { filterAtom, timeAtom } from '../../../store'
+import { timeAtom } from '../../../store'
 import Table from '../../../components/Table'
 import {
     resourceTableColumns,
@@ -30,6 +31,7 @@ import DrawerPanel from '../../../components/DrawerPanel'
 import { RenderObject } from '../../../components/RenderObject'
 import { pieData } from '../index'
 import Menu from '../../../components/Menu'
+import Header from '../../../components/Header'
 
 const options: GridOptions = {
     enableGroupEdit: true,
@@ -46,15 +48,12 @@ const options: GridOptions = {
 
 export default function SingleConnection() {
     const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const { id } = useParams()
     const [openDrawer, setOpenDrawer] = useState(false)
 
     const query = {
-        ...(selectedConnections.provider && {
-            connector: [selectedConnections.provider],
-        }),
-        ...(selectedConnections.connections && {
-            connectionId: selectedConnections.connections,
+        ...(id && {
+            connectionId: [id],
         }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
@@ -81,6 +80,7 @@ export default function SingleConnection() {
 
     return (
         <Menu currentPage="assets">
+            <Header breadCrumb={['Single account detail']} datePicker />
             <Grid numItems={2} className="w-full gap-4">
                 <Breakdown
                     chartData={pieData(composition).newData}

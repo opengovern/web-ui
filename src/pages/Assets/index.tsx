@@ -121,12 +121,14 @@ const topAccounts = (
             value: number | undefined
             connector: SourceType | undefined
             id: string | undefined
+            kaytuId: string | undefined
         }[]
         total: number | undefined
     } = { data: [], total: 0 }
     if (input && input.connections) {
         for (let i = 0; i < input.connections.length; i += 1) {
             top.data.push({
+                kaytuId: input.connections[i].id,
                 name: input.connections[i].providerConnectionName,
                 value: input.connections[i].resourceCount,
                 connector: input.connections[i].connector,
@@ -313,7 +315,7 @@ export default function Assets() {
                             title="Top Accounts"
                             loading={accountsResponseLoading}
                             items={topAccounts(accountsResponse)}
-                            url="accounts-detail"
+                            url="accounts"
                             type="account"
                         />
                         <ListCard

@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { Card } from '@tremor/react'
 import { GridOptions, RowClickedEvent } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
@@ -79,12 +79,13 @@ const options: GridOptions = {
     // groupDefaultExpanded: -1,
     rowGroupPanelShow: 'always',
     groupAllowUnbalanced: true,
+    animateRows: false,
 }
 
 export default function AccountsDetails() {
     const navigate = useNavigate()
     const activeTimeRange = useAtomValue(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const selectedConnections = useAtomValue(filterAtom)
     const setNotification = useSetAtom(notificationAtom)
 
     const { response: accounts, isLoading: isAccountsLoading } =
@@ -116,14 +117,9 @@ export default function AccountsDetails() {
                         }
                     }}
                     onRowClicked={(event: RowClickedEvent) => {
-                        if (event.data !== null) {
+                        if (event.data) {
                             if (event.data.lifecycleState === 'ONBOARD') {
-                                setSelectedConnections({
-                                    provider: '',
-                                    connections: [event.data.id],
-                                    connectionGroup: '',
-                                })
-                                navigate('./..')
+                                navigate(`${event.data.id}`)
                             } else {
                                 setNotification({
                                     text: 'Account is not onboarded',

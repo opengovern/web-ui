@@ -39,6 +39,7 @@ interface Item {
     value: number | undefined
     connector?: SourceType[] | SourceType | undefined
     id?: string | undefined
+    kaytuId?: string | undefined
 }
 
 export default function ListCard({
@@ -90,6 +91,9 @@ export default function ListCard({
                                             <Flex
                                                 flexDirection="col"
                                                 alignItems="start"
+                                                onClick={() =>
+                                                    navigate(`${item.kaytuId}`)
+                                                }
                                             >
                                                 <Text className="text-gray-800">
                                                     {isDemo()

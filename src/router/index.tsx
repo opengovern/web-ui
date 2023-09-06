@@ -20,6 +20,7 @@ import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
 import KeyInsights from '../pages/Insights/KeyInsights'
+import SingleConnection from '../pages/Assets/SingleConnection'
 
 const routes = [
     {
@@ -61,9 +62,19 @@ const authRoutes = [
         component: Assets,
     },
     {
+        key: 'assets',
+        path: '/:ws/assets/:id',
+        component: SingleConnection,
+    },
+    {
         key: 'accounts detail',
         path: '/:ws/assets/accounts',
         component: AccountsDetails,
+    },
+    {
+        key: 'assets',
+        path: '/:ws/assets/accounts/:id',
+        component: SingleConnection,
     },
     {
         key: 'accounts detail',

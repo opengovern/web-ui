@@ -34,27 +34,54 @@ export default function Header({
         return pages
     }
 
+    const goBack = (n: number) => {
+        let temp = '.'
+        for (let i = 0; i < n; i += 1) {
+            temp += '/..'
+        }
+        return temp
+    }
+
     return (
         <Flex className="mb-6 h-[38px]">
             {subPages().length > 0 ? (
                 <Flex justifyContent="start">
                     <Button
-                        onClick={() => navigate('./..')}
+                        onClick={() =>
+                            navigate(
+                                goBack(
+                                    subPages().length > 1
+                                        ? subPages().length
+                                        : 1
+                                )
+                            )
+                        }
                         variant="light"
                         className="text-lg mr-2 hover:text-kaytu-600"
                     >
                         {mainPage()}
                     </Button>
                     {subPages().map((page, i) => (
-                        <Flex key={page} justifyContent="start">
+                        <Flex
+                            key={page}
+                            justifyContent="start"
+                            className="w-fit mr-2"
+                        >
                             <ChevronRightIcon className="h-5 w-5 text-gray-600" />
                             <Button
-                                onClick={() => navigate('./..')}
+                                onClick={() => navigate(goBack(i + 1))}
                                 variant="light"
-                                className="text-black opacity-100 ml-2 text-lg"
+                                className={`${
+                                    i === subPages().length - 1
+                                        ? 'text-black'
+                                        : ''
+                                } opacity-100 ml-2 text-lg`}
                                 disabled={i === subPages().length - 1}
                             >
-                                {Number(page) ? breadCrumb : page}
+                                {i === subPages().length - 1 &&
+                                breadCrumb?.length
+                                    ? breadCrumb
+                                    : page}
                             </Button>
                         </Flex>
                     ))}
