@@ -7,23 +7,24 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import 'ag-grid-enterprise'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import {
     ColDef,
     GridOptions,
     MenuItemDef,
+    RowClickedEvent,
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import Menu from '../../../components/Menu'
 import { useInventoryApiV2AnalyticsSpendTableList } from '../../../api/inventory.gen'
-import { filterAtom, spendTimeAtom } from '../../../store'
+import { filterAtom, notificationAtom, spendTimeAtom } from '../../../store'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import {
     checkGranularity,
@@ -33,6 +34,7 @@ import Header from '../../../components/Header'
 import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
 
 export default function CostMetricsDetails() {
+    const navigate = useNavigate()
     const { hash } = useLocation()
     const page = () => {
         switch (hash) {
@@ -219,6 +221,11 @@ export default function CostMetricsDetails() {
         getContextMenuItems,
         groupIncludeFooter: true,
         groupIncludeTotalFooter: true,
+        onRowClicked(event: RowClickedEvent) {
+            if (event.data && dimension === 'connection') {
+                navigate(`${event.data.id}`)
+            }
+        },
     }
 
     // eslint-disable-next-line consistent-return
@@ -344,6 +351,7 @@ export default function CostMetricsDetails() {
                         category: row.category,
                         accountId: row.accountID,
                         connector: row.connector,
+                        id: row.dimensionId,
                         totalCost,
                         ...temp,
                     }
