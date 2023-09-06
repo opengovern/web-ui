@@ -21,6 +21,7 @@ import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
 import KeyInsights from '../pages/Insights/KeyInsights'
 import SingleConnection from '../pages/Assets/SingleConnection'
+import SpendSingleConnection from '../pages/Spend/SingleConnection'
 
 const routes = [
     {
@@ -62,7 +63,7 @@ const authRoutes = [
         component: Assets,
     },
     {
-        key: 'assets',
+        key: 'assets single account',
         path: '/:ws/assets/:id',
         component: SingleConnection,
     },
@@ -72,14 +73,9 @@ const authRoutes = [
         component: AccountsDetails,
     },
     {
-        key: 'assets',
+        key: 'assets single account 2',
         path: '/:ws/assets/accounts/:id',
         component: SingleConnection,
-    },
-    {
-        key: 'accounts detail',
-        path: '/:ws/assets/accounts',
-        component: AccountsDetails,
     },
     {
         key: 'resource metrics',
@@ -92,9 +88,19 @@ const authRoutes = [
         component: Spend,
     },
     {
+        key: 'spend single account',
+        path: '/:ws/spend/:id',
+        component: SpendSingleConnection,
+    },
+    {
         key: 'spend metrics',
         path: '/:ws/spend/spend-details',
         component: CostMetricsDetails,
+    },
+    {
+        key: 'spend single account 2',
+        path: '/:ws/spend/spend-details/:id',
+        component: SpendSingleConnection,
     },
     {
         key: 'insight list',

@@ -2,60 +2,47 @@ import {
     Button,
     Card,
     Flex,
+    Grid,
+    List,
+    ListItem,
     Select,
-    SelectItem,
     Text,
     Title,
 } from '@tremor/react'
-import { useLocation } from 'react-router-dom'
-import { AgGridReact } from 'ag-grid-react'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-alpine.css'
-import 'ag-grid-enterprise'
-import { useAtomValue } from 'jotai'
-import { useEffect, useRef, useState } from 'react'
+import { ColDef, GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import {
-    ColDef,
-    GridOptions,
-    MenuItemDef,
-    ValueFormatterParams,
-} from 'ag-grid-community'
-import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
+    ArrowDownOnSquareIcon,
+    ChevronRightIcon,
+} from '@heroicons/react/24/outline'
+import { useEffect, useRef, useState } from 'react'
+import { useAtomValue } from 'jotai'
+import { useParams } from 'react-router-dom'
+import { AgGridReact } from 'ag-grid-react'
+import Breakdown from '../../../components/Breakdown'
+import {
+    useInventoryApiV2AnalyticsSpendCompositionList,
+    useInventoryApiV2AnalyticsSpendTableList,
+} from '../../../api/inventory.gen'
+import { timeAtom } from '../../../store'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import { dateTimeDisplay } from '../../../utilities/dateDisplay'
+import Spinner from '../../../components/Spinner'
+import DrawerPanel from '../../../components/DrawerPanel'
+import { RenderObject } from '../../../components/RenderObject'
+import { pieData } from '../index'
 import Menu from '../../../components/Menu'
-import { useInventoryApiV2AnalyticsSpendTableList } from '../../../api/inventory.gen'
-import { filterAtom, spendTimeAtom } from '../../../store'
-import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import Header from '../../../components/Header'
 import {
     checkGranularity,
     generateItems,
 } from '../../../utilities/dateComparator'
-import Header from '../../../components/Header'
 import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
+import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 
-export default function CostMetricsDetails() {
-    const { hash } = useLocation()
-    const page = () => {
-        switch (hash) {
-            case '#connections':
-                return 'connection'
-            case '#services':
-                return 'metric'
-            default:
-                return 'category'
-        }
-    }
-
-    const activeTimeRange = useAtomValue(spendTimeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
-    const [dimension, setDimension] = useState<string>(page())
-    const dimensionName = () => {
-        switch (dimension) {
-            case 'connection':
-                return 'Connection Name'
-            default:
-                return 'Service Name'
-        }
-    }
+export default function SpendSingleConnection() {
+    const activeTimeRange = useAtomValue(timeAtom)
+    const { id } = useParams()
+    const [openDrawer, setOpenDrawer] = useState(false)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
@@ -63,7 +50,7 @@ export default function CostMetricsDetails() {
             ? 'monthly'
             : 'daily'
     )
-    const query = (): {
+    const tableQuery = (): {
         startTime?: number | undefined
         endTime?: number | undefined
         granularity?: 'daily' | 'monthly' | 'yearly' | undefined
@@ -71,12 +58,7 @@ export default function CostMetricsDetails() {
         connectionId?: string[]
         metricIds?: string[]
     } => {
-        let dim: 'metric' | 'connection' = 'metric'
-        if (dimension === 'connection') {
-            dim = 'connection'
-        }
-
-        let gra: 'monthly' | 'daily' = 'daily'
+        let gra: 'monthly' | 'daily' | 'yearly' = 'daily'
         if (selectedGranularity === 'monthly') {
             gra = 'monthly'
         }
@@ -84,20 +66,16 @@ export default function CostMetricsDetails() {
         return {
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),
-            dimension: dim,
+            dimension: 'metric',
             granularity: gra,
-            connectionId: selectedConnections.connections,
+            connectionId: [String(id)],
         }
     }
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
-        query()
+        tableQuery()
     )
 
     const gridRef = useRef<AgGridReact>(null)
-
-    function getContextMenuItems(): (string | MenuItemDef)[] {
-        return ['copy', 'separator', 'chartRange']
-    }
 
     const filterPanel = () => {
         return (
@@ -118,15 +96,6 @@ export default function CostMetricsDetails() {
                     placeholder={capitalizeFirstLetter(selectedGranularity)}
                 >
                     {generateItems(activeTimeRange.start, activeTimeRange.end)}
-                </Select>
-                <Text className="m-3">Show by</Text>
-                <Select
-                    value={dimension}
-                    onValueChange={(v) => setDimension(v)}
-                >
-                    <SelectItem value="metric">Service</SelectItem>
-                    <SelectItem value="connection">Connection</SelectItem>
-                    <SelectItem value="category">Category</SelectItem>
                 </Select>
             </Flex>
         )
@@ -155,7 +124,7 @@ export default function CostMetricsDetails() {
             ],
             defaultToolPanel: '',
         })
-    }, [selectedGranularity, dimension])
+    }, [selectedGranularity])
 
     const gridOptions: GridOptions = {
         pagination: true,
@@ -216,39 +185,11 @@ export default function CostMetricsDetails() {
             defaultToolPanel: '',
         },
         enableRangeSelection: true,
-        getContextMenuItems,
         groupIncludeFooter: true,
         groupIncludeTotalFooter: true,
     }
 
     // eslint-disable-next-line consistent-return
-    const categoryOptions = () => {
-        if (dimension === 'category') {
-            return [
-                {
-                    field: 'percent',
-                    headerName: '%',
-                    pinned: true,
-                    sortable: true,
-                    aggFunc: 'sum',
-                    resizable: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? `${param.value.toFixed(2)}%` : ''
-                    },
-                },
-                {
-                    field: 'category',
-                    headerName: 'Category',
-                    rowGroup: dimension === 'category',
-                    enableRowGroup: true,
-                    sortable: true,
-                    resizable: true,
-                    pinned: true,
-                },
-            ]
-        }
-        return []
-    }
 
     useEffect(() => {
         if (!isLoading) {
@@ -265,7 +206,7 @@ export default function CostMetricsDetails() {
                 },
                 {
                     field: 'dimension',
-                    headerName: dimensionName(),
+                    headerName: 'Service name',
                     sortable: true,
                     resizable: true,
                     pivot: false,
@@ -281,7 +222,7 @@ export default function CostMetricsDetails() {
                 },
                 {
                     field: 'totalCost',
-                    headerName: 'Total Cost',
+                    headerName: 'Total cost',
                     sortable: true,
                     aggFunc: 'sum',
                     resizable: true,
@@ -291,7 +232,26 @@ export default function CostMetricsDetails() {
                         return param.value ? exactPriceDisplay(param.value) : ''
                     },
                 },
-                ...categoryOptions(),
+                {
+                    field: 'percent',
+                    headerName: '%',
+                    pinned: true,
+                    sortable: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? `${param.value.toFixed(2)}%` : ''
+                    },
+                },
+                {
+                    field: 'category',
+                    headerName: 'Category',
+                    rowGroup: true,
+                    enableRowGroup: true,
+                    sortable: true,
+                    resizable: true,
+                    pinned: true,
+                },
             ]
 
             const columnNames =
@@ -362,12 +322,118 @@ export default function CostMetricsDetails() {
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(newRow)
         }
-    }, [isLoading, dimension])
+    }, [isLoading])
+    const query = {
+        ...(id && {
+            connectionId: [id],
+        }),
+        ...(activeTimeRange.start && {
+            startTime: activeTimeRange.start.unix(),
+        }),
+        ...(activeTimeRange.end && {
+            endTime: activeTimeRange.end.unix(),
+        }),
+    }
+
+    const { response: composition, isLoading: compositionLoading } =
+        useInventoryApiV2AnalyticsSpendCompositionList({
+            ...query,
+            top: 4,
+        })
+    const { response: accountInfo, isLoading: accountInfoLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            ...query,
+            pageSize: 1,
+            needCost: false,
+        })
+    const connection = accountInfo?.connections?.at(0)
 
     return (
-        <Menu currentPage="spend">
-            <Header breadCrumb={['Spend detail']} filter datePicker />
-            <Card>
+        <Menu currentPage="assets">
+            <Header breadCrumb={['Single account detail']} datePicker />
+            <Grid numItems={2} className="w-full gap-4">
+                <Breakdown
+                    chartData={pieData(composition)}
+                    activeTime={activeTimeRange}
+                    loading={compositionLoading}
+                    seeMore="resource-metrics"
+                />
+                <Card className="w-full">
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        className="h-full"
+                    >
+                        <Flex flexDirection="col" alignItems="start">
+                            <Title className="font-semibold">
+                                Connection details
+                            </Title>
+                            {accountInfoLoading ? (
+                                <Spinner className="mt-28" />
+                            ) : (
+                                <List className="mt-2">
+                                    <ListItem>
+                                        <Text>Account ID</Text>
+                                        <Text>
+                                            {connection?.providerConnectionID}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Account name</Text>
+                                        <Text>
+                                            {connection?.providerConnectionName}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Health state</Text>
+                                        <Text>{connection?.healthState}</Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Lifecycle state</Text>
+                                        <Text>
+                                            {connection?.lifecycleState}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Onboard date</Text>
+                                        <Text>
+                                            {dateTimeDisplay(
+                                                connection?.onboardDate
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Last inventory</Text>
+                                        <Text>
+                                            {dateTimeDisplay(
+                                                connection?.lastInventory
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                </List>
+                            )}
+                        </Flex>
+                        <Flex justifyContent="end">
+                            <Button
+                                variant="light"
+                                icon={ChevronRightIcon}
+                                iconPosition="right"
+                                onClick={() => setOpenDrawer(true)}
+                            >
+                                see more
+                            </Button>
+                        </Flex>
+                        <DrawerPanel
+                            title="Connection details"
+                            open={openDrawer}
+                            onClose={() => setOpenDrawer(false)}
+                        >
+                            <RenderObject obj={connection} />
+                        </DrawerPanel>
+                    </Flex>
+                </Card>
+            </Grid>
+            <Card className="mt-4">
                 <Flex>
                     <Title className="font-semibold">Spend</Title>
                     <Flex className="gap-4 w-fit">

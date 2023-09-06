@@ -74,6 +74,7 @@ const topAccounts = (
             value: number | undefined
             connector: SourceType | undefined
             id: string | undefined
+            kaytuId: string | undefined
         }[]
         total: number | undefined
     } = { data: [], total: 0 }
@@ -84,6 +85,7 @@ const topAccounts = (
                 value: input.connections[i].cost,
                 connector: input.connections[i].connector,
                 id: input.connections[i].providerConnectionID,
+                kaytuId: input.connections[i].id,
             })
         }
         top.total = input.totalDiscoveredCount
@@ -123,7 +125,7 @@ const costTrendChart = (
     }
 }
 
-const pieData = (
+export const pieData = (
     response:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
         | undefined
