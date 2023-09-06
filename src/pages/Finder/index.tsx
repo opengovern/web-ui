@@ -65,6 +65,7 @@ const getTable = (headers: any, details: any) => {
                 sortable: true,
                 resizable: true,
                 filter: true,
+                width: 170,
             })
         }
     }

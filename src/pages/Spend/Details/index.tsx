@@ -185,6 +185,15 @@ export default function CostMetricsDetails() {
             sortable: true,
             filter: true,
             resizable: true,
+            cellRendererParams: {
+                footerValueGetter: (params: any) => {
+                    const isRootLevel = params.node.level === -1
+                    if (isRootLevel) {
+                        return 'Grand Total'
+                    }
+                    return `Sub Total (${params.value})`
+                },
+            },
         },
         getRowHeight: () => 50,
         onGridReady: (e) => {
@@ -214,11 +223,10 @@ export default function CostMetricsDetails() {
             ],
             defaultToolPanel: '',
         },
-        statusBar: {
-            statusPanels: [{ statusPanel: 'agAggregationComponent' }],
-        },
         enableRangeSelection: true,
         getContextMenuItems,
+        groupIncludeFooter: true,
+        groupIncludeTotalFooter: true,
     }
 
     // eslint-disable-next-line consistent-return
@@ -368,10 +376,10 @@ export default function CostMetricsDetails() {
 
     return (
         <Menu currentPage="spend">
-            <Header breadCrumb={['Spend Detail']} filter datePicker />
+            <Header breadCrumb={['Spend detail']} filter datePicker />
             <Card>
                 <Flex>
-                    <Title className="font-semibold">Spend details</Title>
+                    <Title className="font-semibold">Spend</Title>
                     <Flex className="gap-4 w-fit">
                         <Button
                             variant="secondary"

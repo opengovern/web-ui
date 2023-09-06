@@ -325,7 +325,7 @@ export default function Spend() {
                     <Breakdown
                         chartData={pieData(composition)}
                         loading={compositionLoading}
-                        seeMore="details#category"
+                        seeMore="spend-details#category"
                         isCost
                     />
                 </Col>
@@ -335,7 +335,7 @@ export default function Spend() {
                             title="Top Accounts"
                             loading={accountCostLoading}
                             items={topAccounts(accountCostResponse)}
-                            url="details#connections"
+                            url="spend-details#connections"
                             type="account"
                             isPrice
                         />
@@ -343,7 +343,7 @@ export default function Spend() {
                             title="Top Services"
                             loading={serviceCostLoading}
                             items={topServices(serviceCostResponse)}
-                            url="details#services"
+                            url="spend-details#services"
                             type="service"
                             isPrice
                         />
