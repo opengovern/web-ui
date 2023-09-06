@@ -156,7 +156,7 @@ export default function Finder() {
 
     return (
         <Menu currentPage="finder">
-            <Header title="Finder" />
+            <Header />
             {categoryLoading || queryLoading ? (
                 <Spinner className="mt-56" />
             ) : (

@@ -232,7 +232,7 @@ export default function Assets() {
 
     return (
         <Menu currentPage="assets">
-            <Header title="Assets" datePicker filter />
+            <Header datePicker filter />
             {selectedConnections.connections.length === 1 ? (
                 <SingleConnection
                     composition={pieData(composition)}

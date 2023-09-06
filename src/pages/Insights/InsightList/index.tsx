@@ -230,7 +230,7 @@ export default function InsightList() {
 
     return (
         <Menu currentPage="insight">
-            <Header title="All Insights" datePicker filter />
+            <Header datePicker filter />
             <Flex className="gap-6" alignItems="start">
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {listLoading ? (

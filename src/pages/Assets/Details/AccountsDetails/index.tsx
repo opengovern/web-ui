@@ -100,12 +100,7 @@ export default function AccountsDetails() {
 
     return (
         <Menu currentPage="assets">
-            <Header
-                title="Assets"
-                breadCrumb={['Accounts']}
-                filter
-                datePicker
-            />
+            <Header breadCrumb={['Accounts']} filter datePicker />
             {/* <Summary /> */}
             <Card>
                 <Table

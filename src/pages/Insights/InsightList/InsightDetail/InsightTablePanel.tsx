@@ -1,7 +1,7 @@
 import { IToolPanelParams } from 'ag-grid-community'
 import { useEffect, useState } from 'react'
 import { Flex, Text } from '@tremor/react'
-import { snakeCaseToLabel } from '../../../utilities/labelMaker'
+import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
 
 interface UniqueCount {
     name: string

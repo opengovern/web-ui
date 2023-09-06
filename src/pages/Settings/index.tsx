@@ -133,7 +133,7 @@ export default function Settings() {
 
     return (
         <Menu currentPage="settings">
-            <Header title="Settings" />
+            <Header />
             {isLoading || tokenLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />

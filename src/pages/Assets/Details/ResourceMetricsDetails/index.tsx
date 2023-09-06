@@ -141,12 +141,7 @@ export default function ResourceMetricsDetails() {
 
     return (
         <Menu currentPage="assets">
-            <Header
-                title="Assets"
-                breadCrumb={['Resource Metrics']}
-                filter
-                datePicker
-            />
+            <Header breadCrumb={['Resource Metrics']} filter datePicker />
             <Card className="mt-4">
                 <Table
                     options={options}

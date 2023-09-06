@@ -51,7 +51,7 @@ export default function Compliance() {
 
     return (
         <Menu currentPage="benchmarks">
-            <Header title="Compliance" />
+            <Header />
             <Flex flexDirection="col" alignItems="start">
                 <Summary benchmark={benchmarks} loading={isLoading} />
                 <Grid

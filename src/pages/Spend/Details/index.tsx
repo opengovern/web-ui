@@ -368,12 +368,7 @@ export default function CostMetricsDetails() {
 
     return (
         <Menu currentPage="spend">
-            <Header
-                title="Spend"
-                breadCrumb={['Spend Detail']}
-                filter
-                datePicker
-            />
+            <Header breadCrumb={['Spend Detail']} filter datePicker />
             <Card>
                 <Flex>
                     <Title className="font-semibold">Spend details</Title>

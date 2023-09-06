@@ -58,7 +58,6 @@ export default function BenchmarkDetail() {
             ) : (
                 <>
                     <Header
-                        title="Compliance"
                         breadCrumb={['Benchmark Detail']}
                         filter
                         datePicker

@@ -21,26 +21,26 @@ import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import { maskPassword } from 'maskdata'
-import Menu from '../../../components/Menu'
+import Menu from '../../../../components/Menu'
 import {
     useComplianceApiV1InsightDetail,
     useComplianceApiV1InsightTrendDetail,
-} from '../../../api/compliance.gen'
-import { timeAtom } from '../../../store'
-import Spinner from '../../../components/Spinner'
+} from '../../../../api/compliance.gen'
+import { timeAtom } from '../../../../store'
+import Spinner from '../../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
-import { snakeCaseToLabel } from '../../../utilities/labelMaker'
+import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
 import {
     badgeTypeByDelta,
     percentageByChange,
-} from '../../../utilities/deltaType'
-import { dateDisplay } from '../../../utilities/dateDisplay'
-import Header from '../../../components/Header'
-import Table, { IColumn } from '../../../components/Table'
-import Chart from '../../../components/Chart'
-import SummaryCard from '../../../components/Cards/SummaryCard'
-import { isDemo } from '../../../utilities/demo'
-import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
+} from '../../../../utilities/deltaType'
+import { dateDisplay } from '../../../../utilities/dateDisplay'
+import Header from '../../../../components/Header'
+import Table, { IColumn } from '../../../../components/Table'
+import Chart from '../../../../components/Chart'
+import SummaryCard from '../../../../components/Cards/SummaryCard'
+import { isDemo } from '../../../../utilities/demo'
+import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 
 const chartData = (inputData: any) => {
     const label = []
@@ -219,11 +219,7 @@ export default function InsightDetail() {
                 </Flex>
             ) : (
                 <Flex flexDirection="col">
-                    <Header
-                        title="Insights"
-                        breadCrumb={['Insight Detail']}
-                        datePicker
-                    />
+                    <Header breadCrumb={['Insight detail']} datePicker />
                     <Flex
                         flexDirection="col"
                         alignItems="start"

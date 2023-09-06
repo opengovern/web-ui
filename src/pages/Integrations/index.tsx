@@ -42,7 +42,7 @@ export default function Integrations() {
 
     return (
         <Menu currentPage="integration">
-            <Header title="Integrations" />
+            <Header />
             <Grid numItems={3} className="gap-4 mb-10">
                 <OnboardCard
                     title="Active Accounts"

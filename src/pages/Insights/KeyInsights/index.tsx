@@ -29,7 +29,7 @@ export default function KeyInsights() {
     console.log(insightList)
     return (
         <Menu currentPage="key-insights">
-            <Header title="Key Insights" datePicker />
+            <Header datePicker />
             {/* eslint-disable-next-line no-nested-ternary */}
             {listLoading ? (
                 <Flex justifyContent="center" className="mt-56">

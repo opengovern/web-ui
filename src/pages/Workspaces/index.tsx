@@ -25,7 +25,7 @@ export default function Workspaces() {
             ) : (
                 <Flex justifyContent="center" flexDirection="row">
                     <div className="max-w-6xl w-2/3">
-                        <Header title="Your workspaces">
+                        <Header>
                             <Button
                                 variant="secondary"
                                 onClick={() => setOpenDrawer(true)}

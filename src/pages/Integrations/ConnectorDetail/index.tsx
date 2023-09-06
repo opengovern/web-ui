@@ -37,7 +37,7 @@ export default function ConnectorDetail() {
     return (
         <Menu currentPage="integration">
             <Flex flexDirection="col" alignItems="start">
-                <Header title="Integrations" breadCrumb={[connector]} />
+                <Header breadCrumb={[connector]} />
                 <Title className="font-semibold">{connector}</Title>
                 {connector === 'AWS' ? (
                     <>
