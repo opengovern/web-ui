@@ -52,14 +52,13 @@ export default function BenchmarkDetail() {
     }, [tabs])
 
     return (
-        <Menu currentPage="benchmarks">
+        <Menu currentPage="compliance">
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (
                 <>
                     <Header
-                        title="Compliance"
-                        breadCrumb={['Benchmark Detail']}
+                        breadCrumb={['Benchmark detail']}
                         filter
                         datePicker
                     />

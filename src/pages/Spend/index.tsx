@@ -74,6 +74,7 @@ const topAccounts = (
             value: number | undefined
             connector: SourceType | undefined
             id: string | undefined
+            kaytuId: string | undefined
         }[]
         total: number | undefined
     } = { data: [], total: 0 }
@@ -84,6 +85,7 @@ const topAccounts = (
                 value: input.connections[i].cost,
                 connector: input.connections[i].connector,
                 id: input.connections[i].providerConnectionID,
+                kaytuId: input.connections[i].id,
             })
         }
         top.total = input.totalDiscoveredCount
@@ -123,7 +125,7 @@ const costTrendChart = (
     }
 }
 
-const pieData = (
+export const pieData = (
     response:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse
         | undefined
@@ -244,7 +246,7 @@ export default function Spend() {
 
     return (
         <Menu currentPage="spend">
-            <Header title="Spend" datePicker filter />
+            <Header datePicker filter />
             <Card className="mb-4">
                 <Grid numItems={6} className="gap-4">
                     <Col numColSpan={1}>
@@ -325,7 +327,7 @@ export default function Spend() {
                     <Breakdown
                         chartData={pieData(composition)}
                         loading={compositionLoading}
-                        seeMore="details#category"
+                        seeMore="spend-details#category"
                         isCost
                     />
                 </Col>
@@ -335,7 +337,7 @@ export default function Spend() {
                             title="Top Accounts"
                             loading={accountCostLoading}
                             items={topAccounts(accountCostResponse)}
-                            url="details#connections"
+                            url="spend-details#connections"
                             type="account"
                             isPrice
                         />
@@ -343,7 +345,7 @@ export default function Spend() {
                             title="Top Services"
                             loading={serviceCostLoading}
                             items={topServices(serviceCostResponse)}
-                            url="details#services"
+                            url="spend-details#services"
                             type="service"
                             isPrice
                         />

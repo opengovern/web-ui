@@ -36,11 +36,11 @@ const navigation = [
     },
     {
         name: 'Insights',
-        page: 'insight',
+        page: 'all-insights',
         icon: DocumentChartBarIcon,
         children: [
             { name: 'Key Insights', page: 'key-insights' },
-            { name: 'All Insights', page: 'insight' },
+            { name: 'All Insights', page: 'all-insights' },
         ],
     },
     {
@@ -59,7 +59,7 @@ const navigation = [
     },
     {
         name: 'Compliance',
-        page: 'benchmarks',
+        page: 'compliance',
         icon: ShieldCheckIcon,
     },
     {
@@ -69,7 +69,7 @@ const navigation = [
     },
     {
         name: 'Integrations',
-        page: 'integration',
+        page: 'integrations',
         icon: DocumentDuplicateIcon,
     },
     {

@@ -189,19 +189,6 @@ export default function InsightList() {
         rowGroupPanelShow: 'always',
         groupAllowUnbalanced: true,
         // eslint-disable-next-line consistent-return
-        onRowClicked: (event: RowClickedEvent) => {
-            if (
-                event.data?.totalResultValue ||
-                event.data?.oldTotalResultValue
-            ) {
-                navigateToAssetsInsightsDetails(event.data?.id)
-            } else {
-                setNotification({
-                    text: 'Time period is not covered by insight',
-                    type: 'warning',
-                })
-            }
-        },
         isRowSelectable: (param) =>
             param.data?.totalResultValue || param.data?.oldTotalResultValue,
         sideBar: {
@@ -229,8 +216,8 @@ export default function InsightList() {
     }
 
     return (
-        <Menu currentPage="insight">
-            <Header title="All Insights" datePicker filter />
+        <Menu currentPage="all-insights">
+            <Header datePicker filter />
             <Flex className="gap-6" alignItems="start">
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {listLoading ? (
@@ -250,6 +237,19 @@ export default function InsightList() {
                             return i
                         })}
                         options={options}
+                        onRowClicked={(event: RowClickedEvent) => {
+                            if (
+                                event.data?.totalResultValue ||
+                                event.data?.oldTotalResultValue
+                            ) {
+                                navigateToAssetsInsightsDetails(event.data?.id)
+                            } else {
+                                setNotification({
+                                    text: 'Time period is not covered by insight',
+                                    type: 'warning',
+                                })
+                            }
+                        }}
                     />
                 ) : (
                     <Button onClick={() => insightSendNow()}>Retry</Button>

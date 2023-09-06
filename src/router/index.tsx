@@ -7,7 +7,7 @@ import InsightList from '../pages/Insights/InsightList'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
-import InsightDetail from '../pages/Insights/InsightDetail'
+import InsightDetail from '../pages/Insights/InsightList/InsightDetail'
 import AccountsDetails from '../pages/Assets/Details/AccountsDetails'
 import Spend from '../pages/Spend'
 import ResourceMetricsDetails from '../pages/Assets/Details/ResourceMetricsDetails'
@@ -20,6 +20,8 @@ import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
 import KeyInsights from '../pages/Insights/KeyInsights'
+import SingleConnection from '../pages/Assets/SingleConnection'
+import SpendSingleConnection from '../pages/Spend/SingleConnection'
 
 const routes = [
     {
@@ -61,9 +63,19 @@ const authRoutes = [
         component: Assets,
     },
     {
+        key: 'assets single account',
+        path: '/:ws/assets/:id',
+        component: SingleConnection,
+    },
+    {
         key: 'accounts detail',
-        path: '/:ws/assets/accounts-detail',
+        path: '/:ws/assets/accounts',
         component: AccountsDetails,
+    },
+    {
+        key: 'assets single account 2',
+        path: '/:ws/assets/accounts/:id',
+        component: SingleConnection,
     },
     {
         key: 'resource metrics',
@@ -76,13 +88,23 @@ const authRoutes = [
         component: Spend,
     },
     {
+        key: 'spend single account',
+        path: '/:ws/spend/:id',
+        component: SpendSingleConnection,
+    },
+    {
         key: 'spend metrics',
-        path: '/:ws/spend/details',
+        path: '/:ws/spend/spend-details',
         component: CostMetricsDetails,
     },
     {
+        key: 'spend single account 2',
+        path: '/:ws/spend/spend-details/:id',
+        component: SpendSingleConnection,
+    },
+    {
         key: 'insight list',
-        path: '/:ws/insight',
+        path: '/:ws/all-insights',
         component: InsightList,
     },
     {
@@ -92,17 +114,17 @@ const authRoutes = [
     },
     {
         key: 'insight detail',
-        path: '/:ws/insight/:id',
+        path: '/:ws/all-insights/:id',
         component: InsightDetail,
     },
     {
         key: 'integrations',
-        path: '/:ws/integration',
+        path: '/:ws/integrations',
         component: Integrations,
     },
     {
         key: 'connector detail',
-        path: '/:ws/integration/:connector',
+        path: '/:ws/integrations/:connector',
         component: ConnectorDetail,
     },
     {
@@ -112,12 +134,12 @@ const authRoutes = [
     },
     {
         key: 'compliance',
-        path: '/:ws/benchmarks',
+        path: '/:ws/compliance',
         component: Compliance,
     },
     {
         key: 'benchmark detail',
-        path: '/:ws/benchmarks/:id',
+        path: '/:ws/compliance/:id',
         component: BenchmarkDetail,
     },
     {

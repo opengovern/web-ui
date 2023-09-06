@@ -1,6 +1,4 @@
-import { Dayjs } from 'dayjs'
 import {
-    Bold,
     Button,
     Card,
     Flex,
@@ -13,9 +11,14 @@ import {
 import { GridOptions } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
+import { useAtomValue } from 'jotai'
+import { useParams } from 'react-router-dom'
 import Breakdown from '../../../components/Breakdown'
-import { useInventoryApiV2AnalyticsMetricList } from '../../../api/inventory.gen'
-import { IFilter } from '../../../store'
+import {
+    useInventoryApiV2AnalyticsCompositionDetail,
+    useInventoryApiV2AnalyticsMetricList,
+} from '../../../api/inventory.gen'
+import { timeAtom } from '../../../store'
 import Table from '../../../components/Table'
 import {
     resourceTableColumns,
@@ -26,13 +29,9 @@ import { dateTimeDisplay } from '../../../utilities/dateDisplay'
 import Spinner from '../../../components/Spinner'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { RenderObject } from '../../../components/RenderObject'
-
-interface ISingleConnection {
-    composition: { oldData: any[]; newData: any[] }
-    compositionLoading: boolean
-    activeTimeRange: { start: Dayjs; end: Dayjs }
-    selectedConnections: IFilter
-}
+import { pieData } from '../index'
+import Menu from '../../../components/Menu'
+import Header from '../../../components/Header'
 
 const options: GridOptions = {
     enableGroupEdit: true,
@@ -47,20 +46,14 @@ const options: GridOptions = {
     groupAllowUnbalanced: true,
 }
 
-export default function SingleConnection({
-    composition,
-    compositionLoading,
-    activeTimeRange,
-    selectedConnections,
-}: ISingleConnection) {
+export default function SingleConnection() {
+    const activeTimeRange = useAtomValue(timeAtom)
+    const { id } = useParams()
     const [openDrawer, setOpenDrawer] = useState(false)
 
     const query = {
-        ...(selectedConnections.provider && {
-            connector: [selectedConnections.provider],
-        }),
-        ...(selectedConnections.connections && {
-            connectionId: selectedConnections.connections,
+        ...(id && {
+            connectionId: [id],
         }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
@@ -70,6 +63,11 @@ export default function SingleConnection({
         }),
     }
 
+    const { response: composition, isLoading: compositionLoading } =
+        useInventoryApiV2AnalyticsCompositionDetail('category', {
+            ...query,
+            top: 4,
+        })
     const { response: metrics, isLoading: metricsLoading } =
         useInventoryApiV2AnalyticsMetricList({ ...query, pageSize: 1000 })
     const { response: accountInfo, isLoading: accountInfoLoading } =
@@ -81,13 +79,15 @@ export default function SingleConnection({
     const connection = accountInfo?.connections?.at(0)
 
     return (
-        <>
+        <Menu currentPage="assets">
+            <Header breadCrumb={['Single account detail']} datePicker />
             <Grid numItems={2} className="w-full gap-4">
                 <Breakdown
-                    chartData={composition.newData}
-                    oldChartData={composition.oldData}
+                    chartData={pieData(composition).newData}
+                    oldChartData={pieData(composition).oldData}
                     activeTime={activeTimeRange}
                     loading={compositionLoading}
+                    seeMore="resource-metrics"
                 />
                 <Card className="w-full">
                     <Flex
@@ -179,6 +179,6 @@ export default function SingleConnection({
                     }}
                 />
             </Card>
-        </>
+        </Menu>
     )
 }

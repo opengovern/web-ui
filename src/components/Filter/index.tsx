@@ -37,7 +37,7 @@ export default function Filter() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedFilters, setSelectedFilters] = useAtom(filterAtom)
 
-    const { response, isLoading } = useOnboardApiV1ConnectionsSummaryList({
+    const { response } = useOnboardApiV1ConnectionsSummaryList({
         connector: [],
         pageNumber: 1,
         pageSize: 10000,
@@ -96,6 +96,22 @@ export default function Filter() {
     const restFilters = () => {
         setProvider(selectedFilters.provider)
         setConnections(findConnections)
+    }
+
+    const btnDisable = () => {
+        switch (selectedIndex) {
+            case 0:
+                return provider === selectedFilters.provider
+            case 1:
+                return connectionGroup === selectedFilters.connectionGroup
+            case 2:
+                return (
+                    connections === selectedFilters.connections ||
+                    connections.length < 2
+                )
+            default:
+                return true
+        }
     }
 
     useEffect(() => {
@@ -314,7 +330,7 @@ export default function Filter() {
                                             }
                                         />
                                         {!!search.length && (
-                                            <Card className="absolute top-full mt-1.5 shadow-lg py-2 px-3 max-h-[228px] overflow-y-scroll">
+                                            <Card className="absolute z-10 top-full mt-1.5 shadow-lg py-2 px-3 max-h-[228px] overflow-y-scroll">
                                                 <List>
                                                     {connectionList
                                                         ?.filter(
@@ -467,6 +483,7 @@ export default function Filter() {
                                         setOpenDrawer(false)
                                         setSearch('')
                                     }}
+                                    disabled={btnDisable()}
                                 >
                                     Apply
                                 </Button>

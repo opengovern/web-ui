@@ -58,6 +58,7 @@ export default function Notification() {
             leaveTo="opacity-0"
         >
             <Flex
+                onClick={() => setNotif({ text: undefined, type: undefined })}
                 justifyContent="start"
                 className={`gap-2 z-50 fixed right-12 top-24 w-full max-w-sm p-4 rounded-md shadow-md ring-1 ${color()}`}
             >

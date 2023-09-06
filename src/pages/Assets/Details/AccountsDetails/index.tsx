@@ -1,9 +1,9 @@
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { Card } from '@tremor/react'
-import { GridOptions } from 'ag-grid-community'
+import { GridOptions, RowClickedEvent } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import { filterAtom, timeAtom } from '../../../../store'
+import { filterAtom, notificationAtom, timeAtom } from '../../../../store'
 import Table, { IColumn } from '../../../../components/Table'
 import Header from '../../../../components/Header'
 import Menu from '../../../../components/Menu'
@@ -38,6 +38,7 @@ const columns: IColumn<any, any>[] = [
         type: 'string',
         sortable: true,
         filter: true,
+        rowGroup: true,
         enableRowGroup: true,
     },
     {
@@ -78,12 +79,14 @@ const options: GridOptions = {
     // groupDefaultExpanded: -1,
     rowGroupPanelShow: 'always',
     groupAllowUnbalanced: true,
+    animateRows: false,
 }
 
 export default function AccountsDetails() {
     const navigate = useNavigate()
     const activeTimeRange = useAtomValue(timeAtom)
-    const [selectedConnections, setSelectedConnections] = useAtom(filterAtom)
+    const selectedConnections = useAtomValue(filterAtom)
+    const setNotification = useSetAtom(notificationAtom)
 
     const { response: accounts, isLoading: isAccountsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -100,33 +103,29 @@ export default function AccountsDetails() {
 
     return (
         <Menu currentPage="assets">
-            <Header
-                title="Assets"
-                breadCrumb={['Accounts']}
-                filter
-                datePicker
-            />
-            {/* <Summary /> */}
+            <Header breadCrumb={['Accounts']} filter datePicker />
             <Card>
                 <Table
                     title="Accounts"
                     downloadable
                     id="asset_multiaccount"
                     columns={columns}
-                    rowData={accounts?.connections || []}
+                    rowData={accounts?.connections}
                     onGridReady={(e) => {
                         if (isAccountsLoading) {
                             e.api?.showLoadingOverlay()
                         }
                     }}
-                    onCellClicked={(event) => {
-                        if (event.data !== null) {
-                            setSelectedConnections({
-                                provider: '',
-                                connections: [event.data.id],
-                                connectionGroup: '',
-                            })
-                            navigate('./..')
+                    onRowClicked={(event: RowClickedEvent) => {
+                        if (event.data) {
+                            if (event.data.lifecycleState === 'ONBOARD') {
+                                navigate(`${event.data.id}`)
+                            } else {
+                                setNotification({
+                                    text: 'Account is not onboarded',
+                                    type: 'warning',
+                                })
+                            }
                         }
                     }}
                     options={options}

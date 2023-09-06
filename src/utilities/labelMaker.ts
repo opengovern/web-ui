@@ -7,3 +7,9 @@ export const snakeCaseToLabel = (string: string) =>
             .toLowerCase()
             .replace(/([-_][a-z])/g, (group) => group.replace('_', ' '))
     )
+export const kebabCaseToLabel = (string: string) =>
+    capitalizeFirstLetter(
+        string
+            .toLowerCase()
+            .replace(/([-_][a-z])/g, (group) => group.replace('-', ' '))
+    )

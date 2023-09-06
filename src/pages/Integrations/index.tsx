@@ -16,8 +16,8 @@ export default function Integrations() {
         useOnboardApiV1ConnectorList()
 
     return (
-        <Menu currentPage="integration">
-            <Header title="Integrations" />
+        <Menu currentPage="integrations">
+            <Header />
             <Grid numItems={3} className="gap-4 mb-10">
                 <OnboardCard
                     title="Active Accounts"

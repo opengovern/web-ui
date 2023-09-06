@@ -129,7 +129,7 @@ export default function Home() {
 
     return (
         <Menu currentPage="home">
-            <Header title="Home" />
+            <Header />
             <Grid
                 numItems={1}
                 numItemsMd={4}
