@@ -154,7 +154,9 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
             <Card key={workspace.name}>
                 <Flex flexDirection="row" className="mb-6">
                     <Flex flexDirection="row" className="w-fit">
-                        <Metric>{workspace.name}</Metric>
+                        <Title className="font-semibold">
+                            {workspace.name}
+                        </Title>
                         <Badge
                             size="md"
                             color={getBadgeColor(workspace.status || '')}

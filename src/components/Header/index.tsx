@@ -23,7 +23,7 @@ export default function Header({
     const url = window.location.pathname.split('/')
 
     const mainPage = () => {
-        return kebabCaseToLabel(url[2])
+        return url[2] ? kebabCaseToLabel(url[2]) : 'Workspaces'
     }
 
     const subPages = () => {
