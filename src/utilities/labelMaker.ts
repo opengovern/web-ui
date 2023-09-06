@@ -1,5 +1,5 @@
 export const capitalizeFirstLetter = (string: string) =>
-    string.charAt(0).toUpperCase() + string.slice(1)
+    string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
 
 export const snakeCaseToLabel = (string: string) =>
     capitalizeFirstLetter(
