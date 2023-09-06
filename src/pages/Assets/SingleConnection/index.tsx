@@ -1,6 +1,5 @@
 import { Dayjs } from 'dayjs'
 import {
-    Bold,
     Button,
     Card,
     Flex,

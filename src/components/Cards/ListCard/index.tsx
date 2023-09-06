@@ -1,17 +1,20 @@
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import {
+    ChevronRightIcon,
+    DocumentDuplicateIcon,
+} from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
-import { useAtomValue } from 'jotai'
-import clipboardCopy from 'clipboard-copy'
-import dayjs from 'dayjs'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { maskPassword } from 'maskdata'
+import dayjs from 'dayjs'
+import clipboardCopy from 'clipboard-copy'
 import { SourceType } from '../../../api/api'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { getConnectorIcon } from '../ConnectorCard'
-import { spendTimeAtom, timeAtom } from '../../../store'
-import { dateDisplay } from '../../../utilities/dateDisplay'
+import { notificationAtom, spendTimeAtom, timeAtom } from '../../../store'
 import { isDemo } from '../../../utilities/demo'
+import { dateDisplay } from '../../../utilities/dateDisplay'
 
 interface ITopListCard {
     title: string
@@ -50,6 +53,7 @@ export default function ListCard({
     const navigate = useNavigate()
     const isSpend = window.location.pathname.split('/')[2] === 'spend'
     const activeTimeRange = useAtomValue(isSpend ? spendTimeAtom : timeAtom)
+    const setNotification = useSetAtom(notificationAtom)
 
     const value = (item: Item) => {
         if (isPercentage) {
@@ -82,42 +86,7 @@ export default function ListCard({
                                     }`}
                                 >
                                     {type === 'account' && (
-                                        <Flex
-                                            onClick={() =>
-                                                clipboardCopy(
-                                                    `{connector: ${
-                                                        item.connector
-                                                    }\nname: ${
-                                                        item.name
-                                                    },\nid: ${item.id}\n${
-                                                        isSpend
-                                                            ? 'cost:'
-                                                            : 'resources:'
-                                                    } ${value(item)}\n${
-                                                        isSpend
-                                                            ? 'timePeriod:'
-                                                            : 'date:'
-                                                    } ${
-                                                        isSpend
-                                                            ? `${dateDisplay(
-                                                                  dayjs(
-                                                                      activeTimeRange.start
-                                                                  )
-                                                              )} - ${dateDisplay(
-                                                                  dayjs(
-                                                                      activeTimeRange.end
-                                                                  )
-                                                              )}`
-                                                            : dateDisplay(
-                                                                  dayjs(
-                                                                      activeTimeRange.end
-                                                                  )
-                                                              )
-                                                    }}`
-                                                ).then(() => alert('Copied!'))
-                                            }
-                                            className="absolute invisible bottom-0 left-0 group-hover:visible w-full h-full bg-white text-black"
-                                        >
+                                        <Flex className="absolute invisible bottom-0 left-0 group-hover:visible w-full h-full bg-white text-black">
                                             <Flex
                                                 flexDirection="col"
                                                 alignItems="start"
@@ -136,9 +105,47 @@ export default function ListCard({
                                                         : item.id}
                                                 </Text>
                                             </Flex>
-                                            {item.value && (
-                                                <Text>{value(item)}</Text>
-                                            )}
+                                            <DocumentDuplicateIcon
+                                                onClick={() =>
+                                                    clipboardCopy(
+                                                        `{connector: ${
+                                                            item.connector
+                                                        }\nname: ${
+                                                            item.name
+                                                        },\nid: ${item.id}\n${
+                                                            isSpend
+                                                                ? 'cost:'
+                                                                : 'resources:'
+                                                        } ${value(item)}\n${
+                                                            isSpend
+                                                                ? 'timePeriod:'
+                                                                : 'date:'
+                                                        } ${
+                                                            isSpend
+                                                                ? `${dateDisplay(
+                                                                      dayjs(
+                                                                          activeTimeRange.start
+                                                                      )
+                                                                  )} - ${dateDisplay(
+                                                                      dayjs(
+                                                                          activeTimeRange.end
+                                                                      )
+                                                                  )}`
+                                                                : dateDisplay(
+                                                                      dayjs(
+                                                                          activeTimeRange.end
+                                                                      )
+                                                                  )
+                                                        }}`
+                                                    ).then(() =>
+                                                        setNotification({
+                                                            text: 'Account copied to clipboard',
+                                                            type: 'info',
+                                                        })
+                                                    )
+                                                }
+                                                className="h-8 p-0.5 text-gray-500 border border-gray-400 rounded-md hover:text-kaytu-500 hover:border-kaytu-400"
+                                            />
                                         </Flex>
                                     )}
                                     <ListItem>
