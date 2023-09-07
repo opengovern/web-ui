@@ -2,30 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
     GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
     GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
@@ -36,7 +12,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -44,33 +19,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
     GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -458,7 +406,7 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
 
         connectionId?: string[]
 
-        connectionGroup?: string
+        connectionGroup?: string[]
 
         endTime?: number
 
@@ -563,7 +511,7 @@ export const useInventoryApiV2AnalyticsMetricList = (
 
         connectionId?: string[]
 
-        connectionGroup?: string
+        connectionGroup?: string[]
 
         metricIDs?: string[]
 
@@ -755,113 +703,6 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseInventoryApiV2AnalyticsRegionsSummaryListState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    error?: any
-}
-
-export const useInventoryApiV2AnalyticsRegionsSummaryList = (
-    query?: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        connectionGroup?: string
-
-        startTime?: number
-
-        endTime?: number
-
-        sortBy?: 'resource_count' | 'growth' | 'growth_rate'
-
-        pageSize?: number
-
-        pageNumber?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
-    const [state, setState] =
-        useState<IuseInventoryApiV2AnalyticsRegionsSummaryListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.inventory
-                .apiV2AnalyticsRegionsSummaryList(query, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
 interface IuseInventoryApiV2AnalyticsSpendCompositionListState {
     isLoading: boolean
     isExecuted: boolean
@@ -876,7 +717,7 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
 
         connectionId?: string[]
 
-        connectionGroup?: string
+        connectionGroup?: string[]
 
         top?: number
 
@@ -975,6 +816,8 @@ interface IuseInventoryApiV2AnalyticsSpendMetricListState {
 
 export const useInventoryApiV2AnalyticsSpendMetricList = (
     query?: {
+        filter?: string
+
         connector?: ('' | 'AWS' | 'Azure')[]
 
         connectionId?: string[]
@@ -1088,7 +931,7 @@ export const useInventoryApiV2AnalyticsSpendMetricsTrendList = (
 
         metricIds?: string[]
 
-        connectionGroup?: string
+        connectionGroup?: string[]
 
         startTime?: number
 
@@ -1296,7 +1139,7 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
 
         metricIds?: string[]
 
-        connectionGroup?: string
+        connectionGroup?: string[]
 
         startTime?: number
 
@@ -1498,7 +1341,7 @@ export const useInventoryApiV2AnalyticsTagList = (
 
         connectionId?: string[]
 
-        connectionGroup?: string
+        connectionGroup?: string[]
 
         minCount?: number
 
@@ -1610,7 +1453,7 @@ export const useInventoryApiV2AnalyticsTrendList = (
 
         connectionId?: string[]
 
-        connectionGroup?: string
+        connectionGroup?: string[]
 
         startTime?: number
 
@@ -1712,7 +1555,7 @@ export const useInventoryApiV2ResourcesMetricDetail = (
     query?: {
         connectionId?: string[]
 
-        connectionGroup?: string
+        connectionGroup?: string[]
 
         endTime?: number
 

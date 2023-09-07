@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/api/ai.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/ai.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/auth.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/auth.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/compliance.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/compliance.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/inventory.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/inventory.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/metadata.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/metadata.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/onboard.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/onboard.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/schedule.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/schedule.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/workspace.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/workspace.gen.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2RWGWnqbyNaP2a2v3yxxZohrcCi" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "bug-fix",
+    "last_opened_file_path": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/src/icons",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.stylelint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/prettier",
+    "settings.editor.selected.configurable": "settings.javascript.prettier",
+    "ts.external.directory.path": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/icons" />
+      <recent name="$PROJECT_DIR$/src/assets/icons" />
+      <recent name="$PROJECT_DIR$/src/pages/Insights/InsightDetail" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/Insights/InsightList" />
+      <recent name="$PROJECT_DIR$/src/pages/Assets/Details/AccountsDetails" />
+      <recent name="$PROJECT_DIR$/src/components/Cards" />
+      <recent name="$PROJECT_DIR$/src/pages/Assets" />
+      <recent name="$PROJECT_DIR$/src/pages/Assets/Tabs" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>$USER_HOME$/.subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="" />
+      <created>1687358458084</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1687358458084</updated>
+      <workItem from="1687358459102" duration="968000" />
+      <workItem from="1687437932324" duration="6257000" />
+      <workItem from="1687445665681" duration="33000" />
+      <workItem from="1687445703121" duration="1108000" />
+      <workItem from="1687520653643" duration="15201000" />
+      <workItem from="1687851239092" duration="8754000" />
+      <workItem from="1687861293112" duration="13824000" />
+      <workItem from="1687936917575" duration="21820000" />
+      <workItem from="1688025500048" duration="48079000" />
+      <workItem from="1688288500341" duration="22023000" />
+      <workItem from="1688315353936" duration="6628000" />
+      <workItem from="1688325065014" duration="124000" />
+      <workItem from="1688375350379" duration="17308000" />
+      <workItem from="1688470647731" duration="470000" />
+      <workItem from="1688471122401" duration="13394000" />
+      <workItem from="1688551674553" duration="13320000" />
+      <workItem from="1688723018976" duration="27102000" />
+      <workItem from="1688895136817" duration="34637000" />
+      <workItem from="1689161173196" duration="12000" />
+      <workItem from="1689161191756" duration="16750000" />
+      <workItem from="1689262447914" duration="25222000" />
+      <workItem from="1689502002334" duration="16681000" />
+      <workItem from="1689592323608" duration="7330000" />
+      <workItem from="1689634191350" duration="13000" />
+      <workItem from="1689674042346" duration="20647000" />
+      <workItem from="1689763651345" duration="17802000" />
+      <workItem from="1689840645408" duration="18415000" />
+      <workItem from="1689942799116" duration="4000" />
+      <workItem from="1689942818263" duration="7774000" />
+      <workItem from="1690103805743" duration="21162000" />
+      <workItem from="1690195775541" duration="3482000" />
+      <workItem from="1690243874027" duration="87000" />
+      <workItem from="1690243979570" duration="135000" />
+      <workItem from="1690244119122" duration="75000" />
+      <workItem from="1690244198204" duration="27000" />
+      <workItem from="1690244229031" duration="63000" />
+      <workItem from="1690244296383" duration="1315000" />
+      <workItem from="1690273469616" duration="18671000" />
+      <workItem from="1690368385760" duration="194000" />
+      <workItem from="1690372850711" duration="1600000" />
+      <workItem from="1690375570970" duration="1233000" />
+      <workItem from="1690377892680" duration="202000" />
+      <workItem from="1690384393130" duration="448000" />
+      <workItem from="1690385891284" duration="4903000" />
+      <workItem from="1690480769319" duration="652000" />
+      <workItem from="1690577442145" duration="1780000" />
+      <workItem from="1690717798467" duration="1210000" />
+      <workItem from="1690728054944" duration="4457000" />
+      <workItem from="1690802728401" duration="1356000" />
+      <workItem from="1690884949410" duration="30737000" />
+      <workItem from="1691028440252" duration="12424000" />
+      <workItem from="1691329373634" duration="13907000" />
+      <workItem from="1691577530443" duration="69000" />
+      <workItem from="1691577603675" duration="6118000" />
+      <workItem from="1691672478548" duration="6819000" />
+      <workItem from="1691751751993" duration="10171000" />
+      <workItem from="1691870771828" duration="8197000" />
+      <workItem from="1691879372855" duration="1198000" />
+      <workItem from="1691926409656" duration="24579000" />
+      <workItem from="1692014594722" duration="3478000" />
+      <workItem from="1692019373351" duration="7856000" />
+      <workItem from="1692099467384" duration="20000" />
+      <workItem from="1692099493964" duration="42781000" />
+      <workItem from="1692269591655" duration="16169000" />
+      <workItem from="1692361843023" duration="8808000" />
+      <workItem from="1692372136176" duration="4555000" />
+      <workItem from="1692524591683" duration="34805000" />
+      <workItem from="1692863979538" duration="3852000" />
+      <workItem from="1692890076170" duration="15029000" />
+      <workItem from="1693165707130" duration="2838000" />
+      <workItem from="1693217103296" duration="11502000" />
+      <workItem from="1693326601723" duration="9597000" />
+      <workItem from="1693379453893" duration="15732000" />
+      <workItem from="1693476892208" duration="888000" />
+      <workItem from="1693483657191" duration="18306000" />
+      <workItem from="1693732208306" duration="4297000" />
+      <workItem from="1693819066758" duration="23286000" />
+      <workItem from="1693909150146" duration="13564000" />
+      <workItem from="1694004568063" duration="27097000" />
+      <workItem from="1694101095079" duration="758000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/api/api.ts</url>
+          <line>501</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/pages/Assets/Tabs/TrendsTab/GrowthTrend/index.tsx</url>
+          <line>66</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
