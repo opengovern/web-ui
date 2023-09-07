@@ -306,7 +306,7 @@ export default function Assets() {
                         oldChartData={pieData(composition).oldData}
                         activeTime={activeTimeRange}
                         loading={compositionLoading}
-                        seeMore="resource-metrics"
+                        seeMore="asset-details#category"
                     />
                 </Col>
                 <Col numColSpan={1} numColSpanLg={3} className="h-full">
@@ -315,14 +315,14 @@ export default function Assets() {
                             title="Top Accounts"
                             loading={accountsResponseLoading}
                             items={topAccounts(accountsResponse)}
-                            url="accounts"
+                            url="asset-details#connections"
                             type="account"
                         />
                         <ListCard
                             title="Top Resources"
                             loading={servicesResponseLoading}
                             items={topServices(servicesResponse)}
-                            url="resource-metrics"
+                            url="asset-details#resources"
                             type="service"
                         />
                     </Grid>
