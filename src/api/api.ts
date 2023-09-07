@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -960,25 +961,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrend
     serviceName?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse {
-    /**
-     * Region
-     * @example "na-west"
-     */
-    location?: string
-    /**
-     * Number of resources in the region
-     * @min 0
-     * @example 100
-     */
-    resourceCount?: number
-    /**
-     * @min 0
-     * @example 50
-     */
-    resourceOldCount?: number
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiMetric {
     /**
      * Cloud Provider
@@ -1011,12 +993,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiMetric {
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiPage {
     no?: number
     size?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse {
-    regions?: GithubComKaytuIoKaytuEnginePkgInventoryApiLocationResponse[]
-    /** @min 0 */
-    totalCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType {
@@ -2298,20 +2274,26 @@ export class Api<
          * @tags benchmarks_assignment
          * @name ApiV1AssignmentsConnectionCreate
          * @summary Create benchmark assignment
-         * @request POST:/compliance/api/v1/assignments/{benchmark_id}/connection/{connection_id}
+         * @request POST:/compliance/api/v1/assignments/{benchmark_id}/connection
          * @secure
          */
         apiV1AssignmentsConnectionCreate: (
             benchmarkId: string,
-            connectionId: string,
+            query?: {
+                /** Connection ID or 'all' for everything */
+                connectionId?: string[]
+                /** Connection group  */
+                connectionGroup?: string[]
+            },
             params: RequestParams = {}
         ) =>
             this.request<
                 GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[],
                 any
             >({
-                path: `/compliance/api/v1/assignments/${benchmarkId}/connection/${connectionId}`,
+                path: `/compliance/api/v1/assignments/${benchmarkId}/connection`,
                 method: 'POST',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -2324,17 +2306,23 @@ export class Api<
          * @tags benchmarks_assignment
          * @name ApiV1AssignmentsConnectionDelete
          * @summary Delete benchmark assignment
-         * @request DELETE:/compliance/api/v1/assignments/{benchmark_id}/connection/{connection_id}
+         * @request DELETE:/compliance/api/v1/assignments/{benchmark_id}/connection
          * @secure
          */
         apiV1AssignmentsConnectionDelete: (
             benchmarkId: string,
-            connectionId: string,
+            query?: {
+                /** Connection ID or 'all' for everything */
+                connectionId?: string[]
+                /** Connection Group  */
+                connectionGroup?: string[]
+            },
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
-                path: `/compliance/api/v1/assignments/${benchmarkId}/connection/${connectionId}`,
+                path: `/compliance/api/v1/assignments/${benchmarkId}/connection`,
                 method: 'DELETE',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 ...params,
@@ -2353,6 +2341,8 @@ export class Api<
             query?: {
                 /** Connection IDs to filter by */
                 connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** timestamp for values in epoch seconds */
@@ -2387,6 +2377,8 @@ export class Api<
             query?: {
                 /** Connection IDs to filter by */
                 connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** timestamp for values in epoch seconds */
@@ -2446,6 +2438,8 @@ export class Api<
             query?: {
                 /** Connection IDs to filter by */
                 connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** timestamp for start of the chart in epoch seconds */
@@ -2510,6 +2504,8 @@ export class Api<
             query?: {
                 /** Connection IDs to filter by */
                 connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Severities to filter by */
@@ -2547,6 +2543,8 @@ export class Api<
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** filter the result by source id */
                 connectionId?: string[]
+                /** filter the result by connection group  */
+                connectionGroup?: string[]
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -2583,6 +2581,8 @@ export class Api<
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** filter the result by source id */
                 connectionId?: string[]
+                /** filter the result by connection group */
+                connectionGroup?: string[]
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -2604,6 +2604,78 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving the specified insight group with ID. Returns "all:provider" job results if connectionId is not defined.
+         *
+         * @tags insights
+         * @name ApiV1InsightGroupDetail
+         * @summary Get insight group
+         * @request GET:/compliance/api/v1/insight/group/{insightGroupId}
+         * @secure
+         */
+        apiV1InsightGroupDetail: (
+            insightGroupId: string,
+            query?: {
+                /** filter the result by source id */
+                connectionId?: string[]
+                /** filter the result by connection group */
+                connectionGroup?: string[]
+                /** unix seconds for the start time of the trend */
+                startTime?: number
+                /** unix seconds for the end time of the trend */
+                endTime?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+                any
+            >({
+                path: `/compliance/api/v1/insight/group/${insightGroupId}`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving insight group results datapoints for a specified connection during a specified time period. Returns "all:provider" job results if connectionId is not defined.
+         *
+         * @tags insights
+         * @name ApiV1InsightGroupTrendDetail
+         * @summary Get insight group trend
+         * @request GET:/compliance/api/v1/insight/group/{insightGroupId}/trend
+         * @secure
+         */
+        apiV1InsightGroupTrendDetail: (
+            insightGroupId: string,
+            query?: {
+                /** filter the result by source id */
+                connectionId?: string[]
+                /** filter the result by connection group */
+                connectionGroup?: string[]
+                /** unix seconds for the start time of the trend */
+                startTime?: number
+                /** unix seconds for the end time of the trend */
+                endTime?: number
+                /** number of datapoints to return */
+                datapointCount?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[],
+                any
+            >({
+                path: `/compliance/api/v1/insight/group/${insightGroupId}/trend`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving the specified insight with ID. Provides details of the insight, including results during the specified time period for the specified connection. Returns "all:provider" job results if connectionId is not defined.
          *
          * @tags insights
@@ -2617,6 +2689,8 @@ export class Api<
             query?: {
                 /** filter the result by source id */
                 connectionId?: string[]
+                /** filter the result by connection group */
+                connectionGroup?: string[]
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -2650,6 +2724,8 @@ export class Api<
             query?: {
                 /** filter the result by source id */
                 connectionId?: string[]
+                /** filter the result by connection group */
+                connectionGroup?: string[]
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -2856,7 +2932,7 @@ export class Api<
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
+                connectionGroup?: string[]
                 /** timestamp for resource count in epoch seconds */
                 endTime?: number
                 /** timestamp for resource count change comparison in epoch seconds */
@@ -2897,7 +2973,7 @@ export class Api<
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
+                connectionGroup?: string[]
                 /** Metric IDs */
                 metricIDs?: string[]
                 /** timestamp for resource count in epoch seconds */
@@ -2960,49 +3036,6 @@ export class Api<
             }),
 
         /**
-         * @description Retrieving list of regions analytics summary
-         *
-         * @tags analytics
-         * @name ApiV2AnalyticsRegionsSummaryList
-         * @summary List Regions Summary
-         * @request GET:/inventory/api/v2/analytics/regions/summary
-         * @secure
-         */
-        apiV2AnalyticsRegionsSummaryList: (
-            query?: {
-                /** Connector type to filter by */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
-                connectionId?: string[]
-                /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
-                /** start time in unix seconds - default is now */
-                startTime?: number
-                /** end time in unix seconds - default is one week ago */
-                endTime?: number
-                /** column to sort by - default is resource_count */
-                sortBy?: 'resource_count' | 'growth' | 'growth_rate'
-                /** page size - default is 20 */
-                pageSize?: number
-                /** page number - default is 1 */
-                pageNumber?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
-                any
-            >({
-                path: `/inventory/api/v2/analytics/regions/summary`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Retrieving the cost composition with respect to specified filters. Retrieving information such as the total cost for the given time range, and the top services by cost.
          *
          * @tags analytics
@@ -3018,7 +3051,7 @@ export class Api<
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
+                connectionGroup?: string[]
                 /** How many top values to return default is 5 */
                 top?: number
                 /** timestamp for start in epoch seconds */
@@ -3052,6 +3085,8 @@ export class Api<
          */
         apiV2AnalyticsSpendMetricList: (
             query?: {
+                /** Filter costs */
+                filter?: string
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
@@ -3102,7 +3137,7 @@ export class Api<
                 /** Metrics IDs */
                 metricIds?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
+                connectionGroup?: string[]
                 /** timestamp for start in epoch seconds */
                 startTime?: number
                 /** timestamp for end in epoch seconds */
@@ -3182,7 +3217,7 @@ export class Api<
                 /** Metrics IDs */
                 metricIds?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
+                connectionGroup?: string[]
                 /** timestamp for start in epoch seconds */
                 startTime?: number
                 /** timestamp for end in epoch seconds */
@@ -3256,7 +3291,7 @@ export class Api<
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
+                connectionGroup?: string[]
                 /** Minimum number of resources/spend with this tag value, default 1 */
                 minCount?: number
                 /** Start time in unix timestamp format, default now - 1 month */
@@ -3300,7 +3335,7 @@ export class Api<
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
+                connectionGroup?: string[]
                 /** timestamp for start in epoch seconds */
                 startTime?: number
                 /** timestamp for end in epoch seconds */
@@ -3338,7 +3373,7 @@ export class Api<
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
+                connectionGroup?: string[]
                 /** timestamp for resource count in epoch seconds */
                 endTime?: number
                 /** timestamp for resource count change comparison in epoch seconds */
@@ -3551,10 +3586,14 @@ export class Api<
          */
         apiV1ConnectionsSummaryList: (
             query?: {
+                /** Filter costs */
+                filter?: string
                 /** Connector */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Connection IDs */
                 connectionId?: string[]
+                /** Connection Groups */
+                connectionGroups?: string[]
                 /** lifecycle state filter */
                 lifecycleState?:
                     | 'DISABLED'
@@ -3955,7 +3994,7 @@ export class Api<
         apiV1StacksCreateCreate: (
             data: {
                 /**
-                 * File to upload
+                 * ُTerraform StateFile full path
                  * @format binary
                  */
                 terraformFile: File

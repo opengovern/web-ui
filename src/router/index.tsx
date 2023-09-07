@@ -21,6 +21,7 @@ import KeyInsights from '../pages/Insights/KeyInsights'
 import SingleConnection from '../pages/Assets/SingleConnection'
 import SpendSingleConnection from '../pages/Spend/SingleConnection'
 import AssetDetail from '../pages/Assets/Details'
+import InsightGroupDetail from '../pages/Insights/KeyInsights/InsightGroupDetail'
 
 const routes = [
     {
@@ -102,13 +103,23 @@ const authRoutes = [
         component: InsightList,
     },
     {
+        key: 'insight detail',
+        path: '/:ws/all-insights/:id',
+        component: InsightDetail,
+    },
+    {
         key: 'key insights',
         path: '/:ws/key-insights',
         component: KeyInsights,
     },
     {
-        key: 'insight detail',
-        path: '/:ws/all-insights/:id',
+        key: 'insight group detail',
+        path: '/:ws/key-insights/:id',
+        component: InsightGroupDetail,
+    },
+    {
+        key: 'insight group detail',
+        path: '/:ws/key-insights/:idd/:id',
         component: InsightDetail,
     },
     {

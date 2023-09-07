@@ -2,16 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
@@ -24,53 +14,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRegionsResourceCountResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -177,7 +120,11 @@ interface IuseComplianceApiV1AssignmentsConnectionCreateState {
 
 export const useComplianceApiV1AssignmentsConnectionCreate = (
     benchmarkId: string,
-    connectionId: string,
+    query?: {
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -198,7 +145,7 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, connectionId, params, autoExecute])
+        JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -210,11 +157,7 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
         })
         try {
             api.compliance
-                .apiV1AssignmentsConnectionCreate(
-                    benchmarkId,
-                    connectionId,
-                    params
-                )
+                .apiV1AssignmentsConnectionCreate(benchmarkId, query, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -244,12 +187,9 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
     }
 
     if (
-        JSON.stringify([benchmarkId, connectionId, params, autoExecute]) !==
-        lastInput
+        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
     ) {
-        setLastInput(
-            JSON.stringify([benchmarkId, connectionId, params, autoExecute])
-        )
+        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -278,7 +218,11 @@ interface IuseComplianceApiV1AssignmentsConnectionDeleteState {
 
 export const useComplianceApiV1AssignmentsConnectionDelete = (
     benchmarkId: string,
-    connectionId: string,
+    query?: {
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -299,7 +243,7 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, connectionId, params, autoExecute])
+        JSON.stringify([benchmarkId, query, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -311,11 +255,7 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
         })
         try {
             api.compliance
-                .apiV1AssignmentsConnectionDelete(
-                    benchmarkId,
-                    connectionId,
-                    params
-                )
+                .apiV1AssignmentsConnectionDelete(benchmarkId, query, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -345,12 +285,9 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
     }
 
     if (
-        JSON.stringify([benchmarkId, connectionId, params, autoExecute]) !==
-        lastInput
+        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
     ) {
-        setLastInput(
-            JSON.stringify([benchmarkId, connectionId, params, autoExecute])
-        )
+        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -380,6 +317,8 @@ interface IuseComplianceApiV1BenchmarksSummaryListState {
 export const useComplianceApiV1BenchmarksSummaryList = (
     query?: {
         connectionId?: string[]
+
+        connectionGroup?: string[]
 
         connector?: ('' | 'AWS' | 'Azure')[]
 
@@ -478,6 +417,8 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
     benchmarkId: string,
     query?: {
         connectionId?: string[]
+
+        connectionGroup?: string[]
 
         connector?: ('' | 'AWS' | 'Azure')[]
 
@@ -669,6 +610,8 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
     benchmarkId: string,
     query?: {
         connectionId?: string[]
+
+        connectionGroup?: string[]
 
         connector?: ('' | 'AWS' | 'Azure')[]
 
@@ -864,6 +807,8 @@ export const useComplianceApiV1FindingsTopDetail = (
     query?: {
         connectionId?: string[]
 
+        connectionGroup?: string[]
+
         connector?: ('' | 'AWS' | 'Azure')[]
 
         severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
@@ -989,6 +934,8 @@ export const useComplianceApiV1InsightList = (
 
         connectionId?: string[]
 
+        connectionGroup?: string[]
+
         startTime?: number
 
         endTime?: number
@@ -1089,6 +1036,8 @@ export const useComplianceApiV1InsightGroupList = (
 
         connectionId?: string[]
 
+        connectionGroup?: string[]
+
         startTime?: number
 
         endTime?: number
@@ -1174,6 +1123,218 @@ export const useComplianceApiV1InsightGroupList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
+interface IuseComplianceApiV1InsightGroupDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useComplianceApiV1InsightGroupDetail = (
+    insightGroupId: string,
+    query?: {
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        startTime?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('kaytu')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1InsightGroupDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([insightGroupId, query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.compliance
+                .apiV1InsightGroupDetail(insightGroupId, query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (
+        JSON.stringify([insightGroupId, query, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([insightGroupId, query, params, autoExecute])
+        )
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseComplianceApiV1InsightGroupTrendDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useComplianceApiV1InsightGroupTrendDetail = (
+    insightGroupId: string,
+    query?: {
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        startTime?: number
+
+        endTime?: number
+
+        datapointCount?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('kaytu')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1InsightGroupTrendDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([insightGroupId, query, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.compliance
+                .apiV1InsightGroupTrendDetail(insightGroupId, query, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (
+        JSON.stringify([insightGroupId, query, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([insightGroupId, query, params, autoExecute])
+        )
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
 interface IuseComplianceApiV1InsightDetailState {
     isLoading: boolean
     isExecuted: boolean
@@ -1186,6 +1347,8 @@ export const useComplianceApiV1InsightDetail = (
     insightId: string,
     query?: {
         connectionId?: string[]
+
+        connectionGroup?: string[]
 
         startTime?: number
 
@@ -1283,6 +1446,8 @@ export const useComplianceApiV1InsightTrendDetail = (
     insightId: string,
     query?: {
         connectionId?: string[]
+
+        connectionGroup?: string[]
 
         startTime?: number
 

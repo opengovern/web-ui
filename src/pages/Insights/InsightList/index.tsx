@@ -95,7 +95,7 @@ export default function InsightList() {
     const activeTimeRange = useAtomValue(timeAtom)
     const navigate = useNavigate()
 
-    const navigateToAssetsInsightsDetails = (id: number | undefined) => {
+    const navigateToInsightsDetails = (id: number | undefined) => {
         navigate(`${id}`)
     }
 
@@ -242,7 +242,7 @@ export default function InsightList() {
                                 event.data?.totalResultValue ||
                                 event.data?.oldTotalResultValue
                             ) {
-                                navigateToAssetsInsightsDetails(event.data?.id)
+                                navigateToInsightsDetails(event.data?.id)
                             } else {
                                 setNotification({
                                     text: 'Time period is not covered by insight',

@@ -1,5 +1,5 @@
 import { BadgeDelta, Card, Flex, Icon, Subtitle, Title } from '@tremor/react'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ChevronRightIcon, ListBulletIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import {
     badgeTypeByDelta,
@@ -12,6 +12,7 @@ interface IConnectorCard {
     description: string | undefined
     prevCount: number | undefined
     count: number | undefined
+    id: string | number | undefined
 }
 
 export default function InsightGroupCard({
@@ -19,6 +20,7 @@ export default function InsightGroupCard({
     prevCount,
     count,
     description,
+    id,
 }: IConnectorCard) {
     const navigate = useNavigate()
 
@@ -26,14 +28,14 @@ export default function InsightGroupCard({
         <Card
             key={title}
             className="cursor-pointer"
-            // onClick={() => navigate(`${connector}`)}
+            onClick={() => navigate(`${id}`)}
         >
             <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Flex flexDirection="col" alignItems="start" className="h-fit">
                     <Flex className="mb-3">
-                        <div className="bg-gray-300 rounded-full h-10 w-10">
-                            .
-                        </div>
+                        <Flex className="bg-kaytu-200 rounded-full h-10 w-10 p-2">
+                            <ListBulletIcon className="text-kaytu-500" />
+                        </Flex>
                         <BadgeDelta
                             deltaType={badgeTypeByDelta(prevCount, count)}
                         >
