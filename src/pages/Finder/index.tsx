@@ -4,9 +4,7 @@ import {
     AccordionHeader,
     Button,
     Card,
-    Col,
     Flex,
-    Grid,
     Icon,
     Subtitle,
     Tab,
@@ -38,7 +36,6 @@ import {
 import { useLocation } from 'react-router-dom'
 import { maskPassword } from 'maskdata'
 import Menu from '../../components/Menu'
-import QueryCard from '../../components/Cards/QueryCard'
 import {
     useInventoryApiV1QueryList,
     useInventoryApiV1QueryRunCreate,
@@ -362,62 +359,33 @@ export default function Finder() {
                             </TabList>
                             <TabPanels className="mt-6">
                                 <TabPanel>
-                                    <Grid
-                                        numItems={1}
-                                        numItemsMd={2}
-                                        numItemsLg={3}
-                                        className="gap-4 mb-4"
-                                    >
-                                        <Col numColSpan={2}>
-                                            <Flex className="h-full">
-                                                <Text>Smart Queries</Text>
-                                            </Flex>
-                                        </Col>
-                                        <TextInput
-                                            icon={MagnifyingGlassIcon}
-                                            placeholder="Search..."
-                                            value={searchedQuery}
-                                            onChange={(e) =>
-                                                setSearchedQuery(e.target.value)
-                                            }
-                                        />
-                                    </Grid>
-                                    <Grid
-                                        numItems={1}
-                                        numItemsMd={2}
-                                        numItemsLg={3}
-                                        className="w-full gap-4"
-                                    >
-                                        {queries
-                                            ?.filter((q) =>
-                                                q.title
-                                                    ?.toLowerCase()
-                                                    .includes(
-                                                        searchedQuery.toLowerCase()
-                                                    )
+                                    <Table
+                                        title="Queries"
+                                        id="query_table"
+                                        columns={[
+                                            {
+                                                field: 'title',
+                                                headerName: 'Title',
+                                                type: 'string',
+                                                sortable: true,
+                                            },
+                                        ]}
+                                        rowData={queries}
+                                        onRowClicked={(e) => {
+                                            setCode(
+                                                `-- ${e.data?.title}\n-- ${e.data?.description}\n\n${e.data?.query}` ||
+                                                    ''
                                             )
-                                            .map((q) => (
-                                                <QueryCard
-                                                    title={q.title}
-                                                    description={q.description}
-                                                    onClick={() => {
-                                                        setCode(
-                                                            `-- ${q.title}\n-- ${q.description}\n\n${q.query}` ||
-                                                                ''
-                                                        )
-                                                        document
-                                                            .getElementById(
-                                                                'kaytu-container'
-                                                            )
-                                                            ?.scrollTo({
-                                                                top: 0,
-                                                                behavior:
-                                                                    'smooth',
-                                                            })
-                                                    }}
-                                                />
-                                            ))}
-                                    </Grid>
+                                            document
+                                                .getElementById(
+                                                    'kaytu-container'
+                                                )
+                                                ?.scrollTo({
+                                                    top: 0,
+                                                    behavior: 'smooth',
+                                                })
+                                        }}
+                                    />
                                 </TabPanel>
                                 <TabPanel>
                                     {isLoading ? (
