@@ -1,11 +1,10 @@
 import { useAtomValue } from 'jotai'
-import { Button, Col, Flex, Grid } from '@tremor/react'
+import { Button, Flex, Grid } from '@tremor/react'
 import Menu from '../../../components/Menu'
 import Header from '../../../components/Header'
 import { useComplianceApiV1InsightGroupList } from '../../../api/compliance.gen'
 import { timeAtom } from '../../../store'
 import Spinner from '../../../components/Spinner'
-import InsightCard from '../../../components/Cards/InsightCard'
 import InsightGroupCard from '../../../components/Cards/InsightGroupCard'
 
 export default function KeyInsights() {
@@ -26,7 +25,7 @@ export default function KeyInsights() {
         sendNow: insightSendNow,
         error: insightError,
     } = useComplianceApiV1InsightGroupList(query)
-    console.log(insightList)
+
     return (
         <Menu currentPage="key-insights">
             <Header datePicker />
@@ -45,6 +44,7 @@ export default function KeyInsights() {
                         )
                         .map((insight) => (
                             <InsightGroupCard
+                                id={insight.id}
                                 title={insight.shortTitle}
                                 description={insight.longTitle}
                                 count={insight.totalResultValue}

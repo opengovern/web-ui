@@ -25,6 +25,7 @@ code {
     --ag-control-panel-background-color: #f9fafb !important;
     --ag-chip-background-color: #e5e7eb !important;
     --ag-foreground-color: #6B7280 !important;
+    --ag-icon-font-family: 'agGridMaterial' !important;
 }
 
 .ag-root-wrapper {

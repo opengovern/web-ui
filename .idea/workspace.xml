@@ -5,15 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/api/ai.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/ai.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/auth.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/auth.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/compliance.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/compliance.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/inventory.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/inventory.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/metadata.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/metadata.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/onboard.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/onboard.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/schedule.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/schedule.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/workspace.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/workspace.gen.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Insights/KeyInsights/InsightGroupDetail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Cards/InsightGroupCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Cards/InsightGroupCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Table/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Insights/InsightList/InsightDetail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Insights/InsightList/InsightDetail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Insights/InsightList/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Insights/InsightList/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Insights/KeyInsights/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Insights/KeyInsights/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Spend/Details/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Spend/Details/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +49,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
@@ -172,7 +174,7 @@
       <workItem from="1693819066758" duration="23286000" />
       <workItem from="1693909150146" duration="13564000" />
       <workItem from="1694004568063" duration="27097000" />
-      <workItem from="1694101095079" duration="758000" />
+      <workItem from="1694101095079" duration="4565000" />
     </task>
     <servers />
   </component>

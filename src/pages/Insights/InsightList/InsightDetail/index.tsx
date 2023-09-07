@@ -42,7 +42,7 @@ import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { isDemo } from '../../../../utilities/demo'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 
-const chartData = (inputData: any) => {
+export const chartData = (inputData: any) => {
     const label = []
     const data = []
     if (inputData && inputData.length) {
