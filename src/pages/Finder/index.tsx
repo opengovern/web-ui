@@ -49,6 +49,7 @@ import { RenderObject } from '../../components/RenderObject'
 import Table, { IColumn } from '../../components/Table'
 import Header from '../../components/Header'
 import { isDemo } from '../../utilities/demo'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../api/api'
 
 const getTable = (headers: any, details: any) => {
     const columns: IColumn<any, any>[] = []
@@ -94,13 +95,41 @@ const getTable = (headers: any, details: any) => {
     }
 }
 
+const columns: IColumn<
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    any
+>[] = [
+    {
+        field: 'title',
+        headerName: 'Smart Queries',
+        type: 'string',
+        sortable: true,
+        resizable: false,
+    },
+    {
+        type: 'string',
+        width: 130,
+        resizable: false,
+        sortable: false,
+        cellRenderer: (params: any) => (
+            <Flex
+                justifyContent="center"
+                alignItems="center"
+                className="h-full"
+            >
+                <PlayCircleIcon className="h-5 text-kaytu-500 mr-1" />
+                <Text className="text-kaytu-500">Run query</Text>
+            </Flex>
+        ),
+    },
+]
+
 export default function Finder() {
     const queryParams = useLocation().search
     const query = new URLSearchParams(queryParams).get('q')
     const [loaded, setLoaded] = useState(false)
     const [code, setCode] = useState(query || '')
     const [selectedIndex, setSelectedIndex] = useState(0)
-    const [searchedQuery, setSearchedQuery] = useState('')
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] = useState({})
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -360,16 +389,8 @@ export default function Finder() {
                             <TabPanels className="mt-6">
                                 <TabPanel>
                                     <Table
-                                        title="Queries"
                                         id="query_table"
-                                        columns={[
-                                            {
-                                                field: 'title',
-                                                headerName: 'Title',
-                                                type: 'string',
-                                                sortable: true,
-                                            },
-                                        ]}
+                                        columns={columns}
                                         rowData={queries}
                                         onRowClicked={(e) => {
                                             setCode(
