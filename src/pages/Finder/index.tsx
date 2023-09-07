@@ -130,7 +130,6 @@ export default function Finder() {
     const [loaded, setLoaded] = useState(false)
     const [code, setCode] = useState(query || '')
     const [selectedIndex, setSelectedIndex] = useState(0)
-    const [searchedQuery, setSearchedQuery] = useState('')
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] = useState({})
     const [openDrawer, setOpenDrawer] = useState(false)
