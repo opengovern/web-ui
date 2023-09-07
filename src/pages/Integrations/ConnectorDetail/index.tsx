@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import Menu from '../../../components/Menu'
 import {
+    useOnboardApiV1CatalogMetricsList,
     useOnboardApiV1ConnectionsSummaryList,
     useOnboardApiV1CredentialList,
 } from '../../../api/onboard.gen'
@@ -33,6 +34,10 @@ export default function ConnectorDetail() {
         useOnboardApiV1CredentialList({
             connector: provider,
         })
+    const { response: topMetrics, isLoading: metricsLoading } =
+        useOnboardApiV1CatalogMetricsList({
+            connector: provider !== '' ? [provider] : [],
+        })
 
     return (
         <Menu currentPage="integrations">
@@ -42,8 +47,8 @@ export default function ConnectorDetail() {
                 {connector === 'AWS' ? (
                     <>
                         <AWSSummary
-                            accountsSummary={accounts}
-                            accountLoading={isAccountsLoading}
+                            metrics={topMetrics}
+                            metricsLoading={metricsLoading}
                             credential={credentials}
                             credentialLoading={isCredentialLoading}
                         />
@@ -57,6 +62,8 @@ export default function ConnectorDetail() {
                     <>
                         <AzureSummary
                             principalsSummary={credentials}
+                            metrics={topMetrics}
+                            metricsLoading={metricsLoading}
                             principalsLoading={isCredentialLoading}
                             subscriptionsSummary={accounts}
                             subscriptionsLoading={isAccountsLoading}

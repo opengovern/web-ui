@@ -8,14 +8,7 @@ import (
 	"strings"
 )
 
-func main() {
-	bytes, err := os.ReadFile("./src/api/api.ts")
-	if err != nil {
-		panic(err)
-	}
-
-	content := string(bytes)
-
+func RemoveComments(content string) string {
 	for {
 		idxStart := strings.Index(content, "/*")
 		if idxStart < 0 {
@@ -30,6 +23,17 @@ func main() {
 
 		content = content[:idxStart] + content[idxStart+idxEnd+2:]
 	}
+	return content
+}
+
+func main() {
+	bytes, err := os.ReadFile("./src/api/api.ts")
+	if err != nil {
+		panic(err)
+	}
+
+	content := string(bytes)
+	content = RemoveComments(content)
 
 	r, err := regexp.Compile(`([\w\d]+):\s+\(([\w\n\|\[\]\(\)\-\?\'\d\s:,=\{\}]+)\)\s+=>[\s\n]+this.request<([\w\s\,\<\>\[\]\d]+),\s+([\w\<\>\[\]\d\n\s]+)>`)
 	if err != nil {
@@ -95,7 +99,6 @@ import AxiosAPI, { setWorkspace } from './ApiConfig'
 				!strings.HasPrefix(imp, "Record<") && !strings.Contains(imp, "{") && !strings.Contains(imp, "|") {
 				imports[fmt.Sprintf("    %s,", imp)] = struct{}{}
 			}
-
 			params = append(params, v)
 		}
 		pmr := strings.Join(params, ",")
