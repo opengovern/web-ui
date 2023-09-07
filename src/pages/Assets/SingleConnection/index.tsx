@@ -20,10 +20,7 @@ import {
 } from '../../../api/inventory.gen'
 import { timeAtom } from '../../../store'
 import Table from '../../../components/Table'
-import {
-    resourceTableColumns,
-    rowGenerator,
-} from '../Details/ResourceMetricsDetails'
+import { resourceTableColumns, rowGenerator } from '../Details'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
 import Spinner from '../../../components/Spinner'

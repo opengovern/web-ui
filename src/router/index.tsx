@@ -8,9 +8,7 @@ import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
 import InsightDetail from '../pages/Insights/InsightList/InsightDetail'
-import AccountsDetails from '../pages/Assets/Details/AccountsDetails'
 import Spend from '../pages/Spend'
-import ResourceMetricsDetails from '../pages/Assets/Details/ResourceMetricsDetails'
 import Integrations from '../pages/Integrations'
 import CostMetricsDetails from '../pages/Spend/Details'
 import ConnectorDetail from '../pages/Integrations/ConnectorDetail'
@@ -22,6 +20,7 @@ import Finder from '../pages/Finder'
 import KeyInsights from '../pages/Insights/KeyInsights'
 import SingleConnection from '../pages/Assets/SingleConnection'
 import SpendSingleConnection from '../pages/Spend/SingleConnection'
+import AssetDetail from '../pages/Assets/Details'
 
 const routes = [
     {
@@ -68,19 +67,14 @@ const authRoutes = [
         component: SingleConnection,
     },
     {
-        key: 'accounts detail',
-        path: '/:ws/assets/accounts',
-        component: AccountsDetails,
+        key: 'assets metrics',
+        path: '/:ws/assets/asset-details',
+        component: AssetDetail,
     },
     {
         key: 'assets single account 2',
-        path: '/:ws/assets/accounts/:id',
+        path: '/:ws/assets/asset-details/:id',
         component: SingleConnection,
-    },
-    {
-        key: 'resource metrics',
-        path: '/:ws/assets/resource-metrics',
-        component: ResourceMetricsDetails,
     },
     {
         key: 'spend',
