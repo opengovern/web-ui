@@ -2,8 +2,9 @@ import {
     Button,
     Card,
     Flex,
-    Select,
-    SelectItem,
+    Tab,
+    TabGroup,
+    TabList,
     Text,
     Title,
 } from '@tremor/react'
@@ -16,6 +17,7 @@ import { useAtomValue } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import {
     ColDef,
+    FilterChangedEvent,
     GridOptions,
     MenuItemDef,
     RowClickedEvent,
@@ -26,13 +28,11 @@ import Menu from '../../../components/Menu'
 import { useInventoryApiV2AnalyticsSpendTableList } from '../../../api/inventory.gen'
 import { filterAtom, spendTimeAtom } from '../../../store'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
-import {
-    checkGranularity,
-    generateItems,
-} from '../../../utilities/dateComparator'
+import { checkGranularity } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
 import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
-import Spinner from '../../../components/Spinner'
+
+const dimensionList = ['connection', 'metric', 'category']
 
 export default function CostMetricsDetails() {
     const navigate = useNavigate()
@@ -59,6 +59,7 @@ export default function CostMetricsDetails() {
                 return 'Service Name'
         }
     }
+    const [selectedIndex, setSelectedIndex] = useState(1)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
@@ -66,6 +67,22 @@ export default function CostMetricsDetails() {
             ? 'monthly'
             : 'daily'
     )
+    useEffect(() => {
+        switch (selectedIndex) {
+            case 0:
+                setSelectedGranularity('daily')
+                break
+            case 1:
+                setSelectedGranularity('monthly')
+                break
+            case 2:
+                setSelectedGranularity('yearly')
+                break
+            default:
+                setSelectedGranularity('monthly')
+                break
+        }
+    }, [selectedIndex])
     const query = (): {
         startTime?: number | undefined
         endTime?: number | undefined
@@ -110,27 +127,52 @@ export default function CostMetricsDetails() {
                 alignItems="start"
                 className="w-full px-6"
             >
-                <Text className="m-3">Granularity</Text>
-                <Select
-                    value={selectedGranularity}
-                    onValueChange={(v) =>
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        setSelectedGranularity(v)
-                    }
-                    placeholder={capitalizeFirstLetter(selectedGranularity)}
+                <Text className="my-3">Granularity</Text>
+                <TabGroup
+                    index={selectedIndex}
+                    onIndexChange={setSelectedIndex}
+                    className="w-fit rounded-lg"
                 >
-                    {generateItems(activeTimeRange.start, activeTimeRange.end)}
-                </Select>
-                <Text className="m-3">Show by</Text>
-                <Select
-                    value={dimension}
-                    onValueChange={(v) => setDimension(v)}
-                >
-                    <SelectItem value="metric">Service</SelectItem>
-                    <SelectItem value="connection">Connection</SelectItem>
-                    <SelectItem value="category">Category</SelectItem>
-                </Select>
+                    <TabList variant="solid">
+                        <Tab>Daily</Tab>
+                        <Tab
+                            disabled={
+                                !checkGranularity(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                ).monthly
+                            }
+                        >
+                            Monthly
+                        </Tab>
+                        <Tab
+                            disabled={
+                                !checkGranularity(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                ).yearly
+                            }
+                        >
+                            Yearly
+                        </Tab>
+                    </TabList>
+                </TabGroup>
+                <Text className="my-3">Show by</Text>
+                {dimensionList.map((d) => (
+                    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions
+                    <label
+                        onClick={() => setDimension(d)}
+                        htmlFor={d}
+                        className="flex items-center gap-2 mb-1.5"
+                    >
+                        <input id={d} type="radio" checked={dimension === d} />
+                        <Text>
+                            {d === 'metric'
+                                ? 'Services'
+                                : capitalizeFirstLetter(d)}
+                        </Text>
+                    </label>
+                ))}
             </Flex>
         )
     }
@@ -192,6 +234,11 @@ export default function CostMetricsDetails() {
         },
         getRowHeight: () => 50,
         onGridReady: (e) => {
+            if (isLoading) {
+                e.api.showLoadingOverlay()
+            }
+        },
+        onFilterChanged(e: FilterChangedEvent<any>) {
             if (isLoading) {
                 e.api.showLoadingOverlay()
             }
@@ -379,7 +426,7 @@ export default function CostMetricsDetails() {
             }
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(newRow)
-        }
+        } else gridRef.current?.api?.showLoadingOverlay()
     }, [isLoading, dimension])
 
     return (
