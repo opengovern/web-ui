@@ -75,6 +75,67 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
         return dayjs(new Date(year, month - 1, day))
     }
 
+    const last7Days = () => {
+        return {
+            start: dayjs.utc().subtract(1, 'week').startOf('day'),
+            end: dayjs.utc().endOf('day'),
+        }
+    }
+
+    const last30Days = () => {
+        return {
+            start: dayjs.utc().subtract(1, 'month').startOf('day'),
+            end: dayjs.utc().endOf('day'),
+        }
+    }
+
+    const thisMonth = () => {
+        return {
+            start: dayjs.utc().startOf('month').startOf('day'),
+            end: dayjs.utc().endOf('day'),
+        }
+    }
+
+    const lastMonth = () => {
+        return {
+            start: dayjs
+                .utc()
+                .subtract(1, 'month')
+                .startOf('month')
+                .startOf('day'),
+            end: dayjs.utc().subtract(1, 'month').endOf('month').endOf('day'),
+        }
+    }
+
+    const thisQuarter = () => {
+        return {
+            start: dayjs.utc().startOf('quarter').startOf('day'),
+            end: dayjs.utc().endOf('day'),
+        }
+    }
+
+    const lastQuarter = () => {
+        return {
+            start: dayjs
+                .utc()
+                .subtract(1, 'quarter')
+                .startOf('quarter')
+                .startOf('day'),
+            end: dayjs
+                .utc()
+                .subtract(1, 'quarter')
+                .endOf('quarter')
+                .endOf('day'),
+        }
+    }
+
+    const thisYear = () => {
+        return {
+            start: dayjs.utc().startOf('year').startOf('day'),
+            end: dayjs.utc().endOf('day'),
+        }
+    }
+
     return (
         <div className="relative inline-flex flex-col text-left">
             <span {...labelProps} className="text-sm text-gray-800">
@@ -121,131 +182,76 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                     >
                         <Title>Relative dates</Title>
                         <Flex
-                            onClick={() =>
-                                setActiveTimeRange({
-                                    start: dayjs().subtract(1, 'week'),
-                                    end: dayjs().endOf('day'),
-                                })
-                            }
+                            onClick={() => setActiveTimeRange(last7Days())}
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">Last 7 days</Text>
                             <Text>
-                                {renderText(
-                                    dayjs().subtract(1, 'week'),
-                                    dayjs()
-                                )}
+                                {renderText(last7Days().start, last7Days().end)}
                             </Text>
                         </Flex>
                         <Flex
-                            onClick={() =>
-                                setActiveTimeRange({
-                                    start: dayjs().subtract(1, 'month'),
-                                    end: dayjs().endOf('day'),
-                                })
-                            }
+                            onClick={() => setActiveTimeRange(last30Days())}
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">Last 30 days</Text>
                             <Text>
                                 {renderText(
-                                    dayjs().subtract(1, 'month'),
-                                    dayjs()
+                                    last30Days().start,
+                                    last30Days().end
                                 )}
                             </Text>
                         </Flex>
                         <Title className="mt-3">Calender months</Title>
                         <Flex
-                            onClick={() =>
-                                setActiveTimeRange({
-                                    start: dayjs().startOf('month'),
-                                    end: dayjs().endOf('day'),
-                                })
-                            }
+                            onClick={() => setActiveTimeRange(thisMonth())}
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">This month</Text>
                             <Text>
-                                {renderText(dayjs().startOf('month'), dayjs())}
+                                {renderText(thisMonth().start, thisMonth().end)}
                             </Text>
                         </Flex>
                         <Flex
-                            onClick={() =>
-                                setActiveTimeRange({
-                                    start: dayjs()
-                                        .subtract(1, 'month')
-                                        .startOf('month'),
-                                    end: dayjs()
-                                        .subtract(1, 'month')
-                                        .endOf('month'),
-                                })
-                            }
+                            onClick={() => setActiveTimeRange(lastMonth())}
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">Last month</Text>
                             <Text>
-                                {renderText(
-                                    dayjs()
-                                        .subtract(1, 'month')
-                                        .startOf('month'),
-                                    dayjs().subtract(1, 'month').endOf('month')
-                                )}
+                                {renderText(lastMonth().start, lastMonth().end)}
                             </Text>
                         </Flex>
                         <Flex
-                            onClick={() =>
-                                setActiveTimeRange({
-                                    start: dayjs().startOf('quarter'),
-                                    end: dayjs(),
-                                })
-                            }
+                            onClick={() => setActiveTimeRange(thisQuarter())}
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">This quarter</Text>
                             <Text>
                                 {renderText(
-                                    dayjs().startOf('quarter'),
-                                    dayjs()
+                                    thisQuarter().start,
+                                    thisQuarter().end
                                 )}
                             </Text>
                         </Flex>
                         <Flex
-                            onClick={() =>
-                                setActiveTimeRange({
-                                    start: dayjs()
-                                        .subtract(1, 'quarter')
-                                        .startOf('quarter'),
-                                    end: dayjs()
-                                        .subtract(1, 'quarter')
-                                        .endOf('quarter'),
-                                })
-                            }
+                            onClick={() => setActiveTimeRange(lastQuarter())}
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">Last quarter</Text>
                             <Text>
                                 {renderText(
-                                    dayjs()
-                                        .subtract(1, 'quarter')
-                                        .startOf('quarter'),
-                                    dayjs()
-                                        .subtract(1, 'quarter')
-                                        .endOf('quarter')
+                                    lastQuarter().start,
+                                    lastQuarter().end
                                 )}
                             </Text>
                         </Flex>
                         <Flex
-                            onClick={() =>
-                                setActiveTimeRange({
-                                    start: dayjs().startOf('year'),
-                                    end: dayjs().endOf('day'),
-                                })
-                            }
+                            onClick={() => setActiveTimeRange(thisYear())}
                             className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">This year</Text>
                             <Text>
-                                {renderText(dayjs().startOf('year'), dayjs())}
+                                {renderText(thisYear().start, thisYear().end)}
                             </Text>
                         </Flex>
                         <Flex
@@ -275,13 +281,10 @@ export default function DateRangePicker() {
     const currentValue = () => {
         return {
             start: parseDate(
-                activeTimeRange.start
-                    .local()
-                    .startOf('day')
-                    .format('YYYY-MM-DD')
+                activeTimeRange.start.startOf('day').format('YYYY-MM-DD')
             ),
             end: parseDate(
-                activeTimeRange.end.local().endOf('day').format('YYYY-MM-DD')
+                activeTimeRange.end.endOf('day').format('YYYY-MM-DD')
             ),
         }
     }
@@ -291,9 +294,9 @@ export default function DateRangePicker() {
     }
     const maxValue = () => {
         if (isSpend) {
-            return today(getLocalTimeZone()).subtract({ days: 2 })
+            return today('UTC').subtract({ days: 2 })
         }
-        return today(getLocalTimeZone())
+        return today('UTC')
     }
     return (
         <CustomDatePicker

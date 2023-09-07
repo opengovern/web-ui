@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -1237,6 +1236,11 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics {
      * @example 15
      */
     healthyConnections?: number
+    /**
+     * @min 0
+     * @example 5
+     */
+    inProgressConnections?: number
     /**
      * @min 0
      * @example 20
@@ -3124,7 +3128,7 @@ export class Api<
         /**
          * @description Returns spend table with respect to the dimension and granularity
          *
-         * @tags inventory
+         * @tags analytics
          * @name ApiV2AnalyticsSpendTableList
          * @summary Get Spend Trend
          * @request GET:/inventory/api/v2/analytics/spend/table
@@ -3204,7 +3208,7 @@ export class Api<
         /**
          * @description Returns asset table with respect to the dimension and granularity
          *
-         * @tags inventory
+         * @tags analytics
          * @name ApiV2AnalyticsTableList
          * @summary Get Assets Table
          * @request GET:/inventory/api/v2/analytics/table
@@ -3452,13 +3456,20 @@ export class Api<
          * @request GET:/onboard/api/v1/catalog/metrics
          * @secure
          */
-        apiV1CatalogMetricsList: (params: RequestParams = {}) =>
+        apiV1CatalogMetricsList: (
+            query?: {
+                /** Connector */
+                connector?: ('' | 'AWS' | 'Azure')[]
+            },
+            params: RequestParams = {}
+        ) =>
             this.request<
                 GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
                 any
             >({
                 path: `/onboard/api/v1/catalog/metrics`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 format: 'json',
                 ...params,

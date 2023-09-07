@@ -5,6 +5,7 @@ import {
     numericDisplay,
 } from '../../../../../utilities/numericDisplay'
 import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
 } from '../../../../../api/api'
@@ -15,14 +16,18 @@ interface IAzureSummary {
         | GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse
         | undefined
     principalsLoading: boolean
+    metricsLoading: boolean
     subscriptionsSummary:
         | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
         | undefined
     subscriptionsLoading: boolean
+    metrics: GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics | undefined
 }
 
 export default function AzureSummary({
     principalsSummary,
+    metricsLoading,
+    metrics,
     principalsLoading,
     subscriptionsSummary,
     subscriptionsLoading,
@@ -31,13 +36,11 @@ export default function AzureSummary({
         <Grid numItems={3} className="w-full gap-4 mt-6 mb-10">
             <OnboardCard
                 title="Active supscriptions"
-                healthy={
-                    (subscriptionsSummary?.totalDiscoveredCount || 0) -
-                    (subscriptionsSummary?.totalUnhealthyCount || 0)
-                }
-                unhealthy={subscriptionsSummary?.totalUnhealthyCount}
-                loading={subscriptionsLoading}
-                allCount={subscriptionsSummary?.totalDiscoveredCount}
+                active={metrics?.connectionsEnabled}
+                inProgress={metrics?.inProgressConnections}
+                healthy={metrics?.healthyConnections}
+                unhealthy={metrics?.unhealthyConnections}
+                loading={metricsLoading}
             />
             <SummaryCard
                 title="Service Principals"

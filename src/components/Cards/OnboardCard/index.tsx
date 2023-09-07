@@ -4,20 +4,22 @@ import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IOnBoardCard {
     title: string
+    active: number | undefined
+    inProgress: number | undefined
     healthy: number | undefined
     unhealthy: number | undefined
     loading: boolean
-    allCount: number | undefined
 }
 
 export default function OnboardCard({
     title,
+    active,
     healthy,
     unhealthy,
-    allCount,
+    inProgress,
     loading,
 }: IOnBoardCard) {
-    const onBoarded = (healthy || 0) + (unhealthy || 0)
+    const total = (healthy || 0) + (unhealthy || 0) + (inProgress || 0)
     return (
         <Card className="overflow-hidden">
             <Flex flexDirection="col" alignItems="start" className="w-fit">
@@ -27,18 +29,19 @@ export default function OnboardCard({
                         <Spinner />
                     </div>
                 ) : (
-                    <Metric>{numericDisplay(allCount || 0)}</Metric>
+                    <Metric>{numericDisplay(active || 0)}</Metric>
                 )}
             </Flex>
             <CategoryBar
                 className="w-full mt-4 mb-2"
                 values={[
-                    (((allCount || 0) - onBoarded) / (allCount || 1)) * 100 ||
-                        0,
-                    ((unhealthy || 0) / (allCount || 1)) * 100 || 0,
-                    ((healthy || 0) / (allCount || 1)) * 100 || 0,
+                    ((inProgress || 0) / (total || 1)) * 100,
+                    ((healthy || 0) / (total || 1)) * 100,
+                    ((unhealthy || 0) / (total || 1)) * 100,
                 ]}
-                markerValue={101 - ((healthy || 0) / (allCount || 1)) * 100}
+                markerValue={
+                    (((inProgress || 0) + (healthy || 0)) / (total || 1)) * 100
+                }
                 showLabels={false}
                 colors={['slate', 'amber', 'emerald']}
             />
@@ -48,23 +51,21 @@ export default function OnboardCard({
                         className="mt-1.5 h-2.5 w-2.5 rounded-full"
                         style={{ backgroundColor: '#64748b' }}
                     />
-                    <Text>{`In progress (${
-                        (allCount || 0) - onBoarded
-                    })`}</Text>
+                    <Text>{`In progress (${inProgress || 0})`}</Text>
                 </Flex>
                 <Flex alignItems="start" className="gap-2 w-fit">
                     <div
                         className="mt-1.5 h-2.5 w-2.5 rounded-full"
                         style={{ backgroundColor: '#10b981' }}
                     />
-                    <Text>{`Active (${healthy || 0})`}</Text>
+                    <Text>{`Healthy (${healthy || 0})`}</Text>
                 </Flex>
                 <Flex alignItems="start" className="gap-2 w-fit">
                     <div
                         className="mt-1.5 h-2.5 w-2.5 rounded-full"
                         style={{ backgroundColor: '#f59e0b' }}
                     />
-                    <Text>{`Inactive (${unhealthy || 0})`}</Text>
+                    <Text>{`Unhealthy (${unhealthy || 0})`}</Text>
                 </Flex>
             </Flex>
         </Card>

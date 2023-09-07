@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { isDemo } from '../utilities/demo'
 
 const { hostname, origin } = window.location
 const BASE_URL = process.env.REACT_APP_BASE_URL as string
@@ -9,6 +10,7 @@ const instance = axios.create({
             : `${origin.replace('demo.', '')}${'/kaytu/'}`,
     headers: {
         'Content-Type': 'application/json',
+        'X-Kaytu-Demo': isDemo() ? 'true' : 'false',
         Accept: 'application/json',
     },
 })
