@@ -32,6 +32,7 @@ import {
 } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
 import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
+import Spinner from '../../../components/Spinner'
 
 export default function CostMetricsDetails() {
     const navigate = useNavigate()
@@ -257,6 +258,22 @@ export default function CostMetricsDetails() {
         return []
     }
 
+    const accountOptions = () => {
+        if (dimension === 'connection') {
+            return [
+                {
+                    field: 'accountId',
+                    headerName: 'Provider ID',
+                    sortable: true,
+                    resizable: true,
+                    pivot: false,
+                    pinned: true,
+                },
+            ]
+        }
+        return []
+    }
+
     useEffect(() => {
         if (!isLoading) {
             const defaultCols: ColDef[] = [
@@ -278,14 +295,7 @@ export default function CostMetricsDetails() {
                     pivot: false,
                     pinned: true,
                 },
-                {
-                    field: 'accountId',
-                    headerName: 'Provider ID',
-                    sortable: true,
-                    resizable: true,
-                    pivot: false,
-                    pinned: true,
-                },
+                ...accountOptions(),
                 {
                     field: 'totalCost',
                     headerName: 'Total Cost',
