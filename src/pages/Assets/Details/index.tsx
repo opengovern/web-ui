@@ -1,4 +1,4 @@
-import { BadgeDelta, Card, Flex } from '@tremor/react'
+import { BadgeDelta, Button, Card, Flex, Text, Title } from '@tremor/react'
 import {
     GridOptions,
     ICellRendererParams,
@@ -6,29 +6,18 @@ import {
 } from 'ag-grid-community'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
+import { AgGridReact } from 'ag-grid-react'
 import Header from '../../../components/Header'
-import Table, { IColumn } from '../../../components/Table'
+import { IColumn } from '../../../components/Table'
 import Menu from '../../../components/Menu'
 import { filterAtom, notificationAtom, timeAtom } from '../../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../api/api'
 import { badgeDelta, badgeTypeByDelta } from '../../../utilities/deltaType'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../api/inventory.gen'
-
-const options: GridOptions = {
-    enableGroupEdit: true,
-    columnTypes: {
-        dimension: {
-            enableRowGroup: true,
-            enablePivot: true,
-        },
-    },
-    // groupDefaultExpanded: -1,
-    rowGroupPanelShow: 'always',
-    groupAllowUnbalanced: true,
-    animateRows: false,
-}
+import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
 
 export const resourceTableColumns: IColumn<any, any>[] = [
     {
@@ -40,16 +29,14 @@ export const resourceTableColumns: IColumn<any, any>[] = [
     },
     {
         field: 'name',
-        headerName: 'Service name',
+        headerName: 'Resource name',
         type: 'string',
     },
     {
         field: 'category',
-        rowGroup: true,
         enableRowGroup: true,
         headerName: 'Category',
         type: 'string',
-        hide: true,
     },
     {
         field: 'count',
@@ -156,6 +143,8 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
+const dimensionList = ['connection', 'resource', 'category']
+
 export const rowGenerator = (data: any) => {
     const rows = []
     if (data) {
@@ -180,9 +169,12 @@ export const rowGenerator = (data: any) => {
 
 export default function AssetDetail() {
     const navigate = useNavigate()
+    const gridRef = useRef<AgGridReact>(null)
+
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const setNotification = useSetAtom(notificationAtom)
+
     const { hash } = useLocation()
     const page = () => {
         switch (hash) {
@@ -195,6 +187,30 @@ export default function AssetDetail() {
         }
     }
     const [dimension, setDimension] = useState<string>(page())
+
+    const filterPanel = () => {
+        return (
+            <Flex
+                flexDirection="col"
+                justifyContent="start"
+                alignItems="start"
+                className="w-full px-6"
+            >
+                <Text className="my-3">Show by</Text>
+                {dimensionList.map((d) => (
+                    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions
+                    <label
+                        onClick={() => setDimension(d)}
+                        htmlFor={d}
+                        className="flex items-center gap-2 mb-1.5"
+                    >
+                        <input id={d} type="radio" checked={dimension === d} />
+                        <Text>{capitalizeFirstLetter(d)}</Text>
+                    </label>
+                ))}
+            </Flex>
+        )
+    }
 
     const query = {
         ...(selectedConnections.provider && {
@@ -219,43 +235,139 @@ export default function AssetDetail() {
     const { response: metrics, isLoading: metricsLoading } =
         useInventoryApiV2AnalyticsMetricList(query)
 
+    const RT = () => {
+        const temp = resourceTableColumns
+        if (dimension === 'category') {
+            temp[2].rowGroup = true
+        }
+        return temp
+    }
+
+    const options: GridOptions = {
+        pagination: true,
+        paginationPageSize: 25,
+        enableGroupEdit: true,
+        rowGroupPanelShow: 'always',
+        groupAllowUnbalanced: true,
+        autoGroupColumnDef: {
+            width: 200,
+            sortable: true,
+            filter: true,
+            resizable: true,
+        },
+        getRowHeight: () => 50,
+        onGridReady: (e) => {
+            if (dimension === 'connection' && isAccountsLoading) {
+                e.api.showLoadingOverlay()
+            }
+            if (dimension !== 'connection' && metricsLoading) {
+                e.api.showLoadingOverlay()
+            }
+        },
+        onFilterChanged(e) {
+            if (dimension === 'connection' && isAccountsLoading) {
+                e.api.showLoadingOverlay()
+            }
+            if (dimension !== 'connection' && metricsLoading) {
+                e.api.showLoadingOverlay()
+            }
+        },
+        sideBar: {
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Options',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    minWidth: 300,
+                    maxWidth: 300,
+                    width: 300,
+                    toolPanel: filterPanel,
+                },
+            ],
+            defaultToolPanel: '',
+        },
+        onRowClicked(event: RowClickedEvent) {
+            if (event.data && dimension === 'connection') {
+                if (event.data.lifecycleState === 'ONBOARD') {
+                    navigate(`${event.data.id}`)
+                } else {
+                    setNotification({
+                        text: 'Account is not onboarded',
+                        type: 'warning',
+                    })
+                }
+            }
+        },
+    }
+
+    useEffect(() => {
+        gridRef.current?.api?.setSideBar({
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Options',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    minWidth: 300,
+                    maxWidth: 300,
+                    width: 300,
+                    toolPanel: filterPanel,
+                },
+            ],
+            defaultToolPanel: '',
+        })
+    }, [dimension])
+
+    useEffect(() => {
+        if (dimension === 'connection') {
+            gridRef.current?.api?.setColumnDefs(columns)
+            gridRef.current?.api?.setRowData(accounts?.connections || [])
+        } else {
+            gridRef.current?.api?.setColumnDefs(RT())
+            gridRef.current?.api?.setRowData(rowGenerator(metrics?.metrics))
+        }
+    }, [dimension, isAccountsLoading, metricsLoading])
+
     return (
         <Menu currentPage="assets">
             <Header breadCrumb={['Asset detail']} filter datePicker />
             <Card>
-                <Table
-                    title="Accounts"
-                    downloadable
-                    id="asset_detail_table"
-                    columns={
-                        dimension === 'connection'
-                            ? columns
-                            : resourceTableColumns
-                    }
-                    rowData={
-                        dimension === 'connection'
-                            ? accounts?.connections
-                            : rowGenerator(metrics?.metrics)
-                    }
-                    onGridReady={(e) => {
-                        if (isAccountsLoading) {
-                            e.api?.showLoadingOverlay()
-                        }
-                    }}
-                    onRowClicked={(event: RowClickedEvent) => {
-                        if (event.data && dimension === 'connection') {
-                            if (event.data.lifecycleState === 'ONBOARD') {
-                                navigate(`${event.data.id}`)
-                            } else {
-                                setNotification({
-                                    text: 'Account is not onboarded',
-                                    type: 'warning',
-                                })
-                            }
-                        }
-                    }}
-                    options={options}
-                />
+                <Flex>
+                    <Title className="font-semibold">Assets</Title>
+                    <Flex className="gap-4 w-fit">
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                gridRef.current?.api?.exportDataAsCsv()
+                            }}
+                            icon={ArrowDownOnSquareIcon}
+                        >
+                            Download
+                        </Button>
+                    </Flex>
+                </Flex>
+                <div className="ag-theme-alpine mt-4">
+                    <AgGridReact
+                        ref={gridRef}
+                        domLayout="autoHeight"
+                        gridOptions={options}
+                    />
+                </div>
             </Card>
         </Menu>
     )

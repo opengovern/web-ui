@@ -306,7 +306,7 @@ export default function Assets() {
                         oldChartData={pieData(composition).oldData}
                         activeTime={activeTimeRange}
                         loading={compositionLoading}
-                        seeMore="resource-metrics"
+                        seeMore="asset-details#category"
                     />
                 </Col>
                 <Col numColSpan={1} numColSpanLg={3} className="h-full">
