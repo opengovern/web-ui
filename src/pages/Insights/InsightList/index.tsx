@@ -235,14 +235,20 @@ export default function InsightList() {
                     <Table
                         id="insight_list"
                         columns={columns}
-                        rowData={rowGenerator(insightList).filter((i) => {
-                            if (selectedConnections.provider.length) {
-                                return (
-                                    i.connector === selectedConnections.provider
-                                )
-                            }
-                            return i
-                        })}
+                        rowData={rowGenerator(insightList)
+                            .filter((i) => {
+                                if (selectedConnections.provider.length) {
+                                    return (
+                                        i.connector ===
+                                        selectedConnections.provider
+                                    )
+                                }
+                                return i
+                            })
+                            .sort(
+                                (a, b) =>
+                                    b.totalResultValue - a.totalResultValue
+                            )}
                         options={options}
                         onRowClicked={(event: RowClickedEvent) => {
                             if (

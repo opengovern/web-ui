@@ -7,7 +7,6 @@ import {
     Flex,
     Grid,
     Icon,
-    Subtitle,
     Tab,
     TabGroup,
     TabList,
@@ -43,7 +42,6 @@ import {
     useInventoryApiV2AnalyticsCategoriesList,
 } from '../../api/inventory.gen'
 import Spinner from '../../components/Spinner'
-import { snakeCaseToLabel } from '../../utilities/labelMaker'
 import { getErrorMessage } from '../../types/apierror'
 import DrawerPanel from '../../components/DrawerPanel'
 import { RenderObject } from '../../components/RenderObject'
