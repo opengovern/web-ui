@@ -15,15 +15,16 @@ import {
     ChevronRightIcon,
 } from '@heroicons/react/24/outline'
 import { useEffect, useRef, useState } from 'react'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useParams } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react'
+import clipboardCopy from 'clipboard-copy'
 import Breakdown from '../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendTableList,
 } from '../../../api/inventory.gen'
-import { timeAtom } from '../../../store'
+import { notificationAtom, timeAtom } from '../../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
 import Spinner from '../../../components/Spinner'
@@ -50,6 +51,8 @@ export default function SpendSingleConnection() {
             ? 'monthly'
             : 'daily'
     )
+    const setNotification = useSetAtom(notificationAtom)
+
     const tableQuery = (): {
         startTime?: number | undefined
         endTime?: number | undefined
@@ -116,6 +119,13 @@ export default function SpendSingleConnection() {
                     labelDefault: 'Filters',
                     labelKey: 'filters',
                     iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                {
+                    id: 'chart',
+                    labelDefault: 'Options',
+                    labelKey: 'chart',
+                    iconKey: 'chart',
                     minWidth: 300,
                     maxWidth: 300,
                     width: 300,
@@ -176,6 +186,13 @@ export default function SpendSingleConnection() {
                     labelDefault: 'Filters',
                     labelKey: 'filters',
                     iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                {
+                    id: 'chart',
+                    labelDefault: 'Options',
+                    labelKey: 'chart',
+                    iconKey: 'chart',
                     minWidth: 300,
                     maxWidth: 300,
                     width: 300,
@@ -207,14 +224,6 @@ export default function SpendSingleConnection() {
                 {
                     field: 'dimension',
                     headerName: 'Service name',
-                    sortable: true,
-                    resizable: true,
-                    pivot: false,
-                    pinned: true,
-                },
-                {
-                    field: 'accountId',
-                    headerName: 'Provider ID',
                     sortable: true,
                     resizable: true,
                     pivot: false,
@@ -352,12 +361,6 @@ export default function SpendSingleConnection() {
         <Menu currentPage="assets">
             <Header breadCrumb={['Single account detail']} datePicker />
             <Grid numItems={2} className="w-full gap-4">
-                <Breakdown
-                    chartData={pieData(composition)}
-                    activeTime={activeTimeRange}
-                    loading={compositionLoading}
-                    seeMore="resource-metrics"
-                />
                 <Card className="w-full">
                     <Flex
                         flexDirection="col"
@@ -374,15 +377,53 @@ export default function SpendSingleConnection() {
                                 <List className="mt-2">
                                     <ListItem>
                                         <Text>Account ID</Text>
-                                        <Text>
-                                            {connection?.providerConnectionID}
-                                        </Text>
+                                        <Flex className="w-fit gap-3">
+                                            <Button
+                                                variant="light"
+                                                onClick={() =>
+                                                    clipboardCopy(
+                                                        `Account ID: ${connection?.providerConnectionID}`
+                                                    ).then(() =>
+                                                        setNotification({
+                                                            text: 'Account ID copied to clipboard',
+                                                            type: 'info',
+                                                        })
+                                                    )
+                                                }
+                                            >
+                                                Copy
+                                            </Button>
+                                            <Text>
+                                                {
+                                                    connection?.providerConnectionID
+                                                }
+                                            </Text>
+                                        </Flex>
                                     </ListItem>
                                     <ListItem>
                                         <Text>Account name</Text>
-                                        <Text>
-                                            {connection?.providerConnectionName}
-                                        </Text>
+                                        <Flex className="w-fit gap-3">
+                                            <Button
+                                                variant="light"
+                                                onClick={() =>
+                                                    clipboardCopy(
+                                                        `Account name: ${connection?.providerConnectionName}`
+                                                    ).then(() =>
+                                                        setNotification({
+                                                            text: 'Account name copied to clipboard',
+                                                            type: 'info',
+                                                        })
+                                                    )
+                                                }
+                                            >
+                                                Copy
+                                            </Button>
+                                            <Text>
+                                                {
+                                                    connection?.providerConnectionName
+                                                }
+                                            </Text>
+                                        </Flex>
                                     </ListItem>
                                     <ListItem>
                                         <Text>Health state</Text>
@@ -432,6 +473,10 @@ export default function SpendSingleConnection() {
                         </DrawerPanel>
                     </Flex>
                 </Card>
+                <Breakdown
+                    chartData={pieData(composition)}
+                    loading={compositionLoading}
+                />
             </Grid>
             <Card className="mt-4">
                 <Flex>

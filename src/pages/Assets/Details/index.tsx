@@ -282,6 +282,13 @@ export default function AssetDetail() {
                     toolPanel: 'agColumnsToolPanel',
                 },
                 {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                {
                     id: 'chart',
                     labelDefault: 'Options',
                     labelKey: 'chart',
@@ -317,6 +324,13 @@ export default function AssetDetail() {
                     labelKey: 'columns',
                     iconKey: 'columns',
                     toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
                 },
                 {
                     id: 'chart',

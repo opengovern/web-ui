@@ -1,20 +1,14 @@
-import {
-    ChevronRightIcon,
-    DocumentDuplicateIcon,
-} from '@heroicons/react/24/outline'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { maskPassword } from 'maskdata'
-import dayjs from 'dayjs'
-import clipboardCopy from 'clipboard-copy'
 import { SourceType } from '../../../api/api'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { getConnectorIcon } from '../ConnectorCard'
 import { notificationAtom, spendTimeAtom, timeAtom } from '../../../store'
 import { isDemo } from '../../../utilities/demo'
-import { dateDisplay } from '../../../utilities/dateDisplay'
 
 interface ITopListCard {
     title: string
@@ -52,9 +46,6 @@ export default function ListCard({
     type,
 }: ITopListCard) {
     const navigate = useNavigate()
-    const isSpend = window.location.pathname.split('/')[2] === 'spend'
-    const activeTimeRange = useAtomValue(isSpend ? spendTimeAtom : timeAtom)
-    const setNotification = useSetAtom(notificationAtom)
 
     const value = (item: Item) => {
         if (isPercentage) {
@@ -78,81 +69,25 @@ export default function ListCard({
                     ) : (
                         <List>
                             {items?.data.map((item: Item) => (
-                                <div
+                                <ListItem
                                     key={item.name}
-                                    className={`group relative ${
+                                    className={`py-1 ${
                                         type === 'account'
                                             ? 'cursor-pointer'
                                             : ''
                                     }`}
                                 >
-                                    {type === 'account' && (
-                                        <Flex className="absolute invisible bottom-0 left-0 group-hover:visible w-full h-full bg-white text-black">
-                                            <Flex
-                                                flexDirection="col"
-                                                alignItems="start"
-                                                onClick={() =>
-                                                    navigate(`${item.kaytuId}`)
-                                                }
-                                            >
-                                                <Text className="text-gray-800">
-                                                    {isDemo()
-                                                        ? maskPassword(
-                                                              item.name
-                                                          )
-                                                        : item.name}
-                                                </Text>
-                                                <Text className="truncate">
-                                                    id:{' '}
-                                                    {isDemo()
-                                                        ? maskPassword(item.id)
-                                                        : item.id}
-                                                </Text>
-                                            </Flex>
-                                            <DocumentDuplicateIcon
-                                                onClick={() =>
-                                                    clipboardCopy(
-                                                        `{connector: ${
-                                                            item.connector
-                                                        }\nname: ${
-                                                            item.name
-                                                        },\nid: ${item.id}\n${
-                                                            isSpend
-                                                                ? 'cost:'
-                                                                : 'resources:'
-                                                        } ${value(item)}\n${
-                                                            isSpend
-                                                                ? 'timePeriod:'
-                                                                : 'date:'
-                                                        } ${
-                                                            isSpend
-                                                                ? `${dateDisplay(
-                                                                      dayjs(
-                                                                          activeTimeRange.start
-                                                                      )
-                                                                  )} - ${dateDisplay(
-                                                                      dayjs(
-                                                                          activeTimeRange.end
-                                                                      )
-                                                                  )}`
-                                                                : dateDisplay(
-                                                                      dayjs(
-                                                                          activeTimeRange.end
-                                                                      )
-                                                                  )
-                                                        }}`
-                                                    ).then(() =>
-                                                        setNotification({
-                                                            text: 'Account copied to clipboard',
-                                                            type: 'info',
-                                                        })
-                                                    )
-                                                }
-                                                className="h-8 p-0.5 text-gray-500 border border-gray-400 rounded-md hover:text-kaytu-500 hover:border-kaytu-400"
-                                            />
-                                        </Flex>
-                                    )}
-                                    <ListItem>
+                                    <Flex
+                                        className={`py-1 rounded-md ${
+                                            type === 'account'
+                                                ? 'hover:bg-gray-50'
+                                                : ''
+                                        }`}
+                                        onClick={() =>
+                                            type === 'account' &&
+                                            navigate(`${item.kaytuId}`)
+                                        }
+                                    >
                                         <Flex justifyContent="start">
                                             {item.connector &&
                                                 (item.connector[0].length > 1
@@ -171,8 +106,8 @@ export default function ListCard({
                                         {item.value && (
                                             <Text>{value(item)}</Text>
                                         )}
-                                    </ListItem>
-                                </div>
+                                    </Flex>
+                                </ListItem>
                             ))}
                         </List>
                     )}

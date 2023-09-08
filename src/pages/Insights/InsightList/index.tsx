@@ -205,6 +205,13 @@ export default function InsightList() {
                     labelDefault: 'Filters',
                     labelKey: 'filters',
                     iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                {
+                    id: 'chart',
+                    labelDefault: 'Options',
+                    labelKey: 'chart',
+                    iconKey: 'chart',
                     minWidth: 300,
                     maxWidth: 300,
                     width: 300,

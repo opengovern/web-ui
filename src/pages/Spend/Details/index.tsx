@@ -188,6 +188,13 @@ export default function CostMetricsDetails() {
                     toolPanel: 'agColumnsToolPanel',
                 },
                 {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                {
                     id: 'chart',
                     labelDefault: 'Options',
                     labelKey: 'chart',
@@ -251,6 +258,13 @@ export default function CostMetricsDetails() {
                     labelKey: 'columns',
                     iconKey: 'columns',
                     toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
                 },
                 {
                     id: 'chart',
