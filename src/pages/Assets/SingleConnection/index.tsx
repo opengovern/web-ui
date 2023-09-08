@@ -11,14 +11,15 @@ import {
 import { GridOptions } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useParams } from 'react-router-dom'
+import clipboardCopy from 'clipboard-copy'
 import Breakdown from '../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
     useInventoryApiV2AnalyticsMetricList,
 } from '../../../api/inventory.gen'
-import { timeAtom } from '../../../store'
+import { notificationAtom, timeAtom } from '../../../store'
 import Table from '../../../components/Table'
 import { resourceTableColumns, rowGenerator } from '../Details'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
@@ -47,6 +48,7 @@ export default function SingleConnection() {
     const activeTimeRange = useAtomValue(timeAtom)
     const { id } = useParams()
     const [openDrawer, setOpenDrawer] = useState(false)
+    const setNotification = useSetAtom(notificationAtom)
 
     const query = {
         ...(id && {
@@ -79,13 +81,6 @@ export default function SingleConnection() {
         <Menu currentPage="assets">
             <Header breadCrumb={['Single account detail']} datePicker />
             <Grid numItems={2} className="w-full gap-4">
-                <Breakdown
-                    chartData={pieData(composition).newData}
-                    oldChartData={pieData(composition).oldData}
-                    activeTime={activeTimeRange}
-                    loading={compositionLoading}
-                    seeMore="resource-metrics"
-                />
                 <Card className="w-full">
                     <Flex
                         flexDirection="col"
@@ -102,15 +97,53 @@ export default function SingleConnection() {
                                 <List className="mt-2">
                                     <ListItem>
                                         <Text>Account ID</Text>
-                                        <Text>
-                                            {connection?.providerConnectionID}
-                                        </Text>
+                                        <Flex className="w-fit gap-3">
+                                            <Button
+                                                variant="light"
+                                                onClick={() =>
+                                                    clipboardCopy(
+                                                        `Account ID: ${connection?.providerConnectionID}`
+                                                    ).then(() =>
+                                                        setNotification({
+                                                            text: 'Account ID copied to clipboard',
+                                                            type: 'info',
+                                                        })
+                                                    )
+                                                }
+                                            >
+                                                Copy
+                                            </Button>
+                                            <Text>
+                                                {
+                                                    connection?.providerConnectionID
+                                                }
+                                            </Text>
+                                        </Flex>
                                     </ListItem>
                                     <ListItem>
                                         <Text>Account name</Text>
-                                        <Text>
-                                            {connection?.providerConnectionName}
-                                        </Text>
+                                        <Flex className="w-fit gap-3">
+                                            <Button
+                                                variant="light"
+                                                onClick={() =>
+                                                    clipboardCopy(
+                                                        `Account name: ${connection?.providerConnectionName}`
+                                                    ).then(() =>
+                                                        setNotification({
+                                                            text: 'Account name copied to clipboard',
+                                                            type: 'info',
+                                                        })
+                                                    )
+                                                }
+                                            >
+                                                Copy
+                                            </Button>
+                                            <Text>
+                                                {
+                                                    connection?.providerConnectionName
+                                                }
+                                            </Text>
+                                        </Flex>
                                     </ListItem>
                                     <ListItem>
                                         <Text>Health state</Text>
@@ -160,6 +193,12 @@ export default function SingleConnection() {
                         </DrawerPanel>
                     </Flex>
                 </Card>
+                <Breakdown
+                    chartData={pieData(composition).newData}
+                    oldChartData={pieData(composition).oldData}
+                    activeTime={activeTimeRange}
+                    loading={compositionLoading}
+                />
             </Grid>
             <Card className="mt-4">
                 <Table

@@ -5,6 +5,7 @@ import {
     Button,
     Card,
     Flex,
+    Grid,
     Icon,
     Subtitle,
     Tab,
@@ -50,6 +51,7 @@ import Table, { IColumn } from '../../components/Table'
 import Header from '../../components/Header'
 import { isDemo } from '../../utilities/demo'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../api/api'
+import QueryCard from '../../components/Cards/QueryCard'
 
 const getTable = (headers: any, details: any) => {
     const columns: IColumn<any, any>[] = []
@@ -129,7 +131,7 @@ export default function Finder() {
     const query = new URLSearchParams(queryParams).get('q')
     const [loaded, setLoaded] = useState(false)
     const [code, setCode] = useState(query || '')
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [selectedIndex, setSelectedIndex] = useState(1)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] = useState({})
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -312,7 +314,7 @@ export default function Finder() {
                                 }
                                 value={code}
                                 className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
-                                style={{ minHeight: '200px' }}
+                                style={{ minHeight: '150px' }}
                                 placeholder="-- write your SQL query here"
                             />
                             {isLoading && isExecuted && (
@@ -365,17 +367,14 @@ export default function Finder() {
                             </Flex>
                         </Flex>
                         <TabGroup
-                            className="mt-6"
+                            className="mt-4"
                             id="tabs"
                             index={selectedIndex}
                             onIndexChange={setSelectedIndex}
                         >
                             <TabList className="bg-gray-100 dark:bg-gray-900">
-                                <Tab>
-                                    <Subtitle className="text-gray-600 text-base">
-                                        Get Started
-                                    </Subtitle>
-                                </Tab>
+                                <Tab>Popular queries</Tab>
+                                <Tab>All queries</Tab>
                                 <Tab
                                     className={
                                         queryResponse?.query?.length &&
@@ -384,12 +383,37 @@ export default function Finder() {
                                             : 'hidden'
                                     }
                                 >
-                                    <Subtitle className="text-gray-600 text-base">
-                                        Result
-                                    </Subtitle>
+                                    Result
                                 </Tab>
                             </TabList>
-                            <TabPanels className="mt-6">
+                            <TabPanels className="mt-0">
+                                <TabPanel>
+                                    <Grid
+                                        numItems={2}
+                                        numItemsLg={4}
+                                        className="w-full gap-4 mt-6"
+                                    >
+                                        {queries?.map((q) => (
+                                            <QueryCard
+                                                title={q.title}
+                                                onClick={() => {
+                                                    setCode(
+                                                        `-- ${q.title}\n-- ${q.description}\n\n${q.query}` ||
+                                                            ''
+                                                    )
+                                                    document
+                                                        .getElementById(
+                                                            'kaytu-container'
+                                                        )
+                                                        ?.scrollTo({
+                                                            top: 0,
+                                                            behavior: 'smooth',
+                                                        })
+                                                }}
+                                            />
+                                        ))}
+                                    </Grid>
+                                </TabPanel>
                                 <TabPanel>
                                     <Table
                                         id="query_table"

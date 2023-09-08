@@ -1,4 +1,14 @@
-import { BadgeDelta, Button, Card, Flex, Text, Title } from '@tremor/react'
+import {
+    BadgeDelta,
+    Button,
+    Card,
+    Flex,
+    Tab,
+    TabGroup,
+    TabList,
+    Text,
+    Title,
+} from '@tremor/react'
 import {
     GridOptions,
     ICellRendererParams,
@@ -119,7 +129,6 @@ const columns: IColumn<any, any>[] = [
         type: 'string',
         sortable: true,
         filter: true,
-        rowGroup: true,
         enableRowGroup: true,
     },
     {
@@ -130,7 +139,7 @@ const columns: IColumn<any, any>[] = [
     },
     {
         field: 'lastInventory',
-        headerName: 'Last inventory date',
+        headerName: 'Last inventory',
         type: 'date',
         sortable: true,
     },
@@ -187,6 +196,7 @@ export default function AssetDetail() {
         }
     }
     const [dimension, setDimension] = useState<string>(page())
+    const [isOnboarded, setIsOnboarded] = useState(true)
 
     const filterPanel = () => {
         return (
@@ -196,6 +206,17 @@ export default function AssetDetail() {
                 alignItems="start"
                 className="w-full px-6"
             >
+                <Text className="my-3">Scope</Text>
+                <TabGroup className="w-fit rounded-lg">
+                    <TabList variant="solid">
+                        <Tab onClick={() => setIsOnboarded(true)}>
+                            Onboarded
+                        </Tab>
+                        <Tab onClick={() => setIsOnboarded(false)}>
+                            Show all
+                        </Tab>
+                    </TabList>
+                </TabGroup>
                 <Text className="my-3">Show by</Text>
                 {dimensionList.map((d) => (
                     // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions
@@ -282,6 +303,13 @@ export default function AssetDetail() {
                     toolPanel: 'agColumnsToolPanel',
                 },
                 {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                {
                     id: 'chart',
                     labelDefault: 'Options',
                     labelKey: 'chart',
@@ -319,6 +347,13 @@ export default function AssetDetail() {
                     toolPanel: 'agColumnsToolPanel',
                 },
                 {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+                {
                     id: 'chart',
                     labelDefault: 'Options',
                     labelKey: 'chart',
@@ -335,20 +370,31 @@ export default function AssetDetail() {
 
     useEffect(() => {
         if (dimension === 'connection') {
-            gridRef.current?.api?.setColumnDefs(columns)
-            gridRef.current?.api?.setRowData(accounts?.connections || [])
-        } else {
+            if (!isAccountsLoading) {
+                gridRef.current?.api?.setColumnDefs(columns)
+                gridRef.current?.api?.setRowData(
+                    accounts?.connections?.filter((acc) => {
+                        if (isOnboarded) {
+                            return acc.lifecycleState === 'ONBOARD'
+                        }
+                        return acc
+                    }) || []
+                )
+            } else gridRef.current?.api?.showLoadingOverlay()
+        } else if (!metricsLoading) {
             gridRef.current?.api?.setColumnDefs(RT())
             gridRef.current?.api?.setRowData(rowGenerator(metrics?.metrics))
-        }
-    }, [dimension, isAccountsLoading, metricsLoading])
+        } else gridRef.current?.api?.showLoadingOverlay()
+    }, [dimension, isAccountsLoading, metricsLoading, isOnboarded])
 
     return (
         <Menu currentPage="assets">
             <Header breadCrumb={['Asset detail']} filter datePicker />
             <Card>
                 <Flex>
-                    <Title className="font-semibold">Assets</Title>
+                    <Title className="font-semibold">
+                        {dimension === 'connection' ? 'Accounts' : 'Resources'}
+                    </Title>
                     <Flex className="gap-4 w-fit">
                         <Button
                             variant="secondary"

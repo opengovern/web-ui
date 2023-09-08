@@ -59,9 +59,9 @@ export default function CostMetricsDetails() {
                 return 'Service Name'
         }
     }
-    const [selectedIndex, setSelectedIndex] = useState(1)
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedGranularity, setSelectedGranularity] = useState<
-        'monthly' | 'daily' | 'yearly'
+        'monthly' | 'daily' | 'none'
     >(
         checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
             ? 'monthly'
@@ -70,13 +70,13 @@ export default function CostMetricsDetails() {
     useEffect(() => {
         switch (selectedIndex) {
             case 0:
-                setSelectedGranularity('daily')
+                setSelectedGranularity('none')
                 break
             case 1:
-                setSelectedGranularity('monthly')
+                setSelectedGranularity('daily')
                 break
             case 2:
-                setSelectedGranularity('yearly')
+                setSelectedGranularity('monthly')
                 break
             default:
                 setSelectedGranularity('monthly')
@@ -134,6 +134,7 @@ export default function CostMetricsDetails() {
                     className="w-fit rounded-lg"
                 >
                     <TabList variant="solid">
+                        <Tab>None</Tab>
                         <Tab>Daily</Tab>
                         <Tab
                             disabled={
@@ -144,16 +145,6 @@ export default function CostMetricsDetails() {
                             }
                         >
                             Monthly
-                        </Tab>
-                        <Tab
-                            disabled={
-                                !checkGranularity(
-                                    activeTimeRange.start,
-                                    activeTimeRange.end
-                                ).yearly
-                            }
-                        >
-                            Yearly
                         </Tab>
                     </TabList>
                 </TabGroup>
@@ -186,6 +177,13 @@ export default function CostMetricsDetails() {
                     labelKey: 'columns',
                     iconKey: 'columns',
                     toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
                 },
                 {
                     id: 'chart',
@@ -251,6 +249,13 @@ export default function CostMetricsDetails() {
                     labelKey: 'columns',
                     iconKey: 'columns',
                     toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
                 },
                 {
                     id: 'chart',
@@ -370,24 +375,30 @@ export default function CostMetricsDetails() {
                     })
                     .flat() || []
 
-            const dynamicCols: ColDef[] = columnNames
-                .filter((value, index, array) => array.indexOf(value) === index)
-                .map((colName) => {
-                    const v: ColDef = {
-                        field: colName,
-                        headerName: colName,
-                        sortable: true,
-                        suppressMenu: true,
-                        resizable: true,
-                        pivot: false,
-                        valueFormatter: (param) => {
-                            return param.value
-                                ? exactPriceDisplay(param.value)
-                                : ''
-                        },
-                    }
-                    return v
-                })
+            const dynamicCols: ColDef[] =
+                selectedGranularity !== 'none'
+                    ? columnNames
+                          .filter(
+                              (value, index, array) =>
+                                  array.indexOf(value) === index
+                          )
+                          .map((colName) => {
+                              const v: ColDef = {
+                                  field: colName,
+                                  headerName: colName,
+                                  sortable: true,
+                                  suppressMenu: true,
+                                  resizable: true,
+                                  pivot: false,
+                                  valueFormatter: (param) => {
+                                      return param.value
+                                          ? exactPriceDisplay(param.value)
+                                          : ''
+                                  },
+                              }
+                              return v
+                          })
+                    : []
 
             const cols = [...defaultCols, ...dynamicCols]
             const rows =
@@ -427,7 +438,7 @@ export default function CostMetricsDetails() {
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(newRow)
         } else gridRef.current?.api?.showLoadingOverlay()
-    }, [isLoading, dimension])
+    }, [isLoading, dimension, selectedGranularity])
 
     return (
         <Menu currentPage="spend">
