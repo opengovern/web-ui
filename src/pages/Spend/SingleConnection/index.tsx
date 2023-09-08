@@ -6,6 +6,9 @@ import {
     List,
     ListItem,
     Select,
+    Tab,
+    TabGroup,
+    TabList,
     Text,
     Title,
 } from '@tremor/react'
@@ -44,6 +47,7 @@ export default function SpendSingleConnection() {
     const activeTimeRange = useAtomValue(timeAtom)
     const { id } = useParams()
     const [openDrawer, setOpenDrawer] = useState(false)
+    const [selectedIndex, setSelectedIndex] = useState(1)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
@@ -52,6 +56,22 @@ export default function SpendSingleConnection() {
             : 'daily'
     )
     const setNotification = useSetAtom(notificationAtom)
+    useEffect(() => {
+        switch (selectedIndex) {
+            case 0:
+                setSelectedGranularity('daily')
+                break
+            case 1:
+                setSelectedGranularity('monthly')
+                break
+            case 2:
+                setSelectedGranularity('yearly')
+                break
+            default:
+                setSelectedGranularity('monthly')
+                break
+        }
+    }, [selectedIndex])
 
     const tableQuery = (): {
         startTime?: number | undefined
@@ -89,17 +109,35 @@ export default function SpendSingleConnection() {
                 className="w-full px-6"
             >
                 <Text className="m-3">Granularity</Text>
-                <Select
-                    value={selectedGranularity}
-                    onValueChange={(v) =>
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        setSelectedGranularity(v)
-                    }
-                    placeholder={capitalizeFirstLetter(selectedGranularity)}
+                <TabGroup
+                    index={selectedIndex}
+                    onIndexChange={setSelectedIndex}
+                    className="w-fit rounded-lg"
                 >
-                    {generateItems(activeTimeRange.start, activeTimeRange.end)}
-                </Select>
+                    <TabList variant="solid">
+                        <Tab>Daily</Tab>
+                        <Tab
+                            disabled={
+                                !checkGranularity(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                ).monthly
+                            }
+                        >
+                            Monthly
+                        </Tab>
+                        <Tab
+                            disabled={
+                                !checkGranularity(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                ).yearly
+                            }
+                        >
+                            Yearly
+                        </Tab>
+                    </TabList>
+                </TabGroup>
             </Flex>
         )
     }
@@ -358,7 +396,7 @@ export default function SpendSingleConnection() {
     const connection = accountInfo?.connections?.at(0)
 
     return (
-        <Menu currentPage="assets">
+        <Menu currentPage="spend">
             <Header breadCrumb={['Single account detail']} datePicker />
             <Grid numItems={2} className="w-full gap-4">
                 <Card className="w-full">
