@@ -5,7 +5,6 @@ import {
     Grid,
     List,
     ListItem,
-    Select,
     Tab,
     TabGroup,
     TabList,
@@ -36,11 +35,7 @@ import { RenderObject } from '../../../components/RenderObject'
 import { pieData } from '../index'
 import Menu from '../../../components/Menu'
 import Header from '../../../components/Header'
-import {
-    checkGranularity,
-    generateItems,
-} from '../../../utilities/dateComparator'
-import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
+import { checkGranularity } from '../../../utilities/dateComparator'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 
 export default function SpendSingleConnection() {

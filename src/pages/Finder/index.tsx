@@ -383,12 +383,12 @@ export default function Finder() {
                                     Result
                                 </Tab>
                             </TabList>
-                            <TabPanels className="mt-2">
+                            <TabPanels className="mt-0">
                                 <TabPanel>
                                     <Grid
                                         numItems={2}
                                         numItemsLg={4}
-                                        className="w-full gap-4"
+                                        className="w-full gap-4 mt-6"
                                     >
                                         {queries?.map((q) => (
                                             <QueryCard
