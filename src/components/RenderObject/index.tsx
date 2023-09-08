@@ -1,7 +1,17 @@
 import { List, ListItem, Text, Title } from '@tremor/react'
 import { snakeCaseToLabel } from '../../utilities/labelMaker'
 
-export function RenderObject({ obj }: any) {
+interface IRenderObjectProps {
+    obj: any
+    changeKeysToLabel?: boolean
+}
+
+export function RenderObject({
+    obj,
+    changeKeysToLabel = true,
+}: IRenderObjectProps) {
+    console.log(changeKeysToLabel)
+    console.log(obj)
     return (
         <List>
             {Object.keys(obj).length > 0 &&
@@ -14,7 +24,9 @@ export function RenderObject({ obj }: any) {
                             <div>
                                 {key !== '0' && (
                                     <Title className="mt-6">
-                                        {snakeCaseToLabel(key)}
+                                        {changeKeysToLabel
+                                            ? snakeCaseToLabel(key)
+                                            : key}
                                     </Title>
                                 )}
                                 <RenderObject obj={obj[key]} />
@@ -24,7 +36,11 @@ export function RenderObject({ obj }: any) {
 
                     return (
                         <ListItem key={key} className="py-6 flex items-start">
-                            <Text>{snakeCaseToLabel(key)}</Text>
+                            <Text>
+                                {changeKeysToLabel
+                                    ? snakeCaseToLabel(key)
+                                    : key}
+                            </Text>
                             <Text className="text-gray-900 w-3/5 whitespace-pre-wrap text-end">
                                 {String(obj[key])}
                             </Text>

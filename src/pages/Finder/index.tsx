@@ -60,7 +60,7 @@ const getTable = (headers: any, details: any) => {
         for (let i = 0; i < headers.length; i += 1) {
             columns.push({
                 field: headers[i],
-                headerName: snakeCaseToLabel(headers[i]),
+                headerName: headers[i],
                 type: 'string',
                 sortable: true,
                 resizable: true,
@@ -194,7 +194,10 @@ export default function Finder() {
                         open={openDrawer}
                         onClose={() => setOpenDrawer(false)}
                     >
-                        <RenderObject obj={selectedRow} />
+                        <RenderObject
+                            obj={selectedRow}
+                            changeKeysToLabel={false}
+                        />
                     </DrawerPanel>
                     {openSearch ? (
                         <Flex
