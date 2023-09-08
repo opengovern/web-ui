@@ -5,7 +5,6 @@ import {
     Button,
     Card,
     Flex,
-    Grid,
     Icon,
     Tab,
     TabGroup,
@@ -23,7 +22,7 @@ import {
     PlayCircleIcon,
     TableCellsIcon,
 } from '@heroicons/react/24/outline'
-import { useEffect, useState } from 'react' // eslint-disable-next-line import/no-extraneous-dependencies
+import { Fragment, useEffect, useState } from 'react' // eslint-disable-next-line import/no-extraneous-dependencies
 import { highlight, languages } from 'prismjs' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
@@ -35,6 +34,7 @@ import {
 } from '@heroicons/react/24/solid'
 import { useLocation } from 'react-router-dom'
 import { maskPassword } from 'maskdata'
+import { Transition } from '@headlessui/react'
 import Menu from '../../components/Menu'
 import {
     useInventoryApiV1QueryList,
@@ -49,7 +49,6 @@ import Table, { IColumn } from '../../components/Table'
 import Header from '../../components/Header'
 import { isDemo } from '../../utilities/demo'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../api/api'
-import QueryCard from '../../components/Cards/QueryCard'
 
 const getTable = (headers: any, details: any) => {
     const columns: IColumn<any, any>[] = []
@@ -129,11 +128,12 @@ export default function Finder() {
     const query = new URLSearchParams(queryParams).get('q')
     const [loaded, setLoaded] = useState(false)
     const [code, setCode] = useState(query || '')
-    const [selectedIndex, setSelectedIndex] = useState(1)
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] = useState({})
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
+    const [showEditor, setShowEditor] = useState(false)
 
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
@@ -157,7 +157,7 @@ export default function Finder() {
 
     useEffect(() => {
         if (queryResponse?.query?.length) {
-            setSelectedIndex(1)
+            setSelectedIndex(2)
         } else setSelectedIndex(0)
     }, [queryResponse])
 
@@ -167,6 +167,10 @@ export default function Finder() {
             setLoaded(true)
         }
     }, [])
+
+    useEffect(() => {
+        if (code.length) setShowEditor(true)
+    }, [code])
 
     const recordToArray = (record?: Record<string, string[]> | undefined) => {
         if (record === undefined) {
@@ -304,113 +308,165 @@ export default function Finder() {
                         flexDirection="col"
                         className="w-full border-l border-l-gray-300 pl-6"
                     >
-                        <Card className="relative overflow-hidden">
-                            <Editor
-                                onValueChange={(text) => setCode(text)}
-                                highlight={(text) =>
-                                    highlight(text, languages.sql, 'sql')
-                                }
-                                value={code}
-                                className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
-                                style={{ minHeight: '150px' }}
-                                placeholder="-- write your SQL query here"
-                            />
-                            {isLoading && isExecuted && (
-                                <Spinner className="bg-white/30 backdrop-blur-sm top-0 left-0 absolute flex justify-center items-center w-full h-full" />
-                            )}
-                        </Card>
-                        <Flex className="w-full mt-4">
-                            <Flex>
-                                {!isLoading && isExecuted && error && (
-                                    <Flex justifyContent="start">
-                                        <Icon
-                                            icon={ExclamationCircleIcon}
-                                            color="rose"
+                        <Transition.Root show={showEditor} as={Fragment}>
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-in-out duration-500"
+                                enterFrom="h-0 opacity-0"
+                                enterTo="h-fit opacity-100"
+                                leave="ease-in-out duration-500"
+                                leaveFrom="h-fit opacity-100"
+                                leaveTo="h-0 opacity-0"
+                            >
+                                <Flex flexDirection="col" className="mb-4">
+                                    <Card className="relative overflow-hidden">
+                                        <Editor
+                                            onValueChange={(text) =>
+                                                setCode(text)
+                                            }
+                                            highlight={(text) =>
+                                                highlight(
+                                                    text,
+                                                    languages.sql,
+                                                    'sql'
+                                                )
+                                            }
+                                            value={code}
+                                            className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
+                                            style={{
+                                                minHeight: '200px',
+                                                maxHeight: '500px',
+                                                overflow: 'scroll',
+                                            }}
+                                            placeholder="-- write your SQL query here"
                                         />
-                                        <Text color="rose">
-                                            {getErrorMessage(error)}
-                                        </Text>
+                                        {isLoading && isExecuted && (
+                                            <Spinner className="bg-white/30 backdrop-blur-sm top-0 left-0 absolute flex justify-center items-center w-full h-full" />
+                                        )}
+                                    </Card>
+                                    <Flex className="w-full mt-4">
+                                        <Flex>
+                                            {!isLoading &&
+                                                isExecuted &&
+                                                error && (
+                                                    <Flex justifyContent="start">
+                                                        <Icon
+                                                            icon={
+                                                                ExclamationCircleIcon
+                                                            }
+                                                            color="rose"
+                                                        />
+                                                        <Text color="rose">
+                                                            {getErrorMessage(
+                                                                error
+                                                            )}
+                                                        </Text>
+                                                    </Flex>
+                                                )}
+                                            {!isLoading &&
+                                                isExecuted &&
+                                                queryResponse && (
+                                                    <Flex justifyContent="start">
+                                                        <Icon
+                                                            icon={
+                                                                CheckCircleIcon
+                                                            }
+                                                            color="emerald"
+                                                        />
+                                                        <Text color="emerald">
+                                                            Success
+                                                        </Text>
+                                                    </Flex>
+                                                )}
+                                        </Flex>
+                                        <Flex className="w-fit gap-x-6">
+                                            {!!code.length && (
+                                                <Button
+                                                    variant="light"
+                                                    color="gray"
+                                                    icon={CommandLineIcon}
+                                                    onClick={() => setCode('')}
+                                                >
+                                                    Clear Console
+                                                </Button>
+                                            )}
+                                            <Button
+                                                icon={PlayCircleIcon}
+                                                onClick={() => sendNow()}
+                                                disabled={!code.length}
+                                                loading={
+                                                    isLoading && isExecuted
+                                                }
+                                                loadingText="Running"
+                                            >
+                                                Run Script
+                                            </Button>
+                                        </Flex>
                                     </Flex>
-                                )}
-                                {!isLoading && isExecuted && queryResponse && (
-                                    <Flex justifyContent="start">
-                                        <Icon
-                                            icon={CheckCircleIcon}
-                                            color="emerald"
-                                        />
-                                        <Text color="emerald">Success</Text>
-                                    </Flex>
-                                )}
-                            </Flex>
-                            <Flex className="w-fit gap-x-6">
-                                {!!code.length && (
-                                    <Button
-                                        variant="light"
-                                        color="gray"
-                                        icon={CommandLineIcon}
-                                        onClick={() => setCode('')}
-                                    >
-                                        Clear Console
-                                    </Button>
-                                )}
-                                <Button
-                                    icon={PlayCircleIcon}
-                                    onClick={() => sendNow()}
-                                    disabled={!code.length}
-                                    loading={isLoading && isExecuted}
-                                    loadingText="Running"
-                                >
-                                    Run Script
-                                </Button>
-                            </Flex>
-                        </Flex>
+                                </Flex>
+                            </Transition.Child>
+                        </Transition.Root>
                         <TabGroup
-                            className="mt-4"
                             id="tabs"
                             index={selectedIndex}
                             onIndexChange={setSelectedIndex}
                         >
                             <TabList className="bg-gray-100 dark:bg-gray-900">
-                                <Tab>Popular queries</Tab>
-                                <Tab>All queries</Tab>
-                                <Tab
-                                    className={
-                                        queryResponse?.query?.length &&
-                                        !isLoading
-                                            ? 'flex'
-                                            : 'hidden'
-                                    }
-                                >
-                                    Result
-                                </Tab>
+                                <Flex>
+                                    <Flex className="w-fit">
+                                        <Tab onClick={() => setCode('')}>
+                                            Popular queries
+                                        </Tab>
+                                        <Tab onClick={() => setCode('')}>
+                                            All queries
+                                        </Tab>
+                                        <Tab
+                                            className={
+                                                queryResponse?.query?.length &&
+                                                !isLoading
+                                                    ? 'flex'
+                                                    : 'hidden'
+                                            }
+                                        >
+                                            Result
+                                        </Tab>
+                                    </Flex>
+                                    <Button
+                                        variant="light"
+                                        onClick={() => {
+                                            if (showEditor) {
+                                                setShowEditor(false)
+                                                setCode('')
+                                            } else setShowEditor(true)
+                                        }}
+                                    >
+                                        {showEditor
+                                            ? 'Close editor'
+                                            : 'Open editor'}
+                                    </Button>
+                                </Flex>
                             </TabList>
                             <TabPanels className="mt-0">
                                 <TabPanel>
-                                    <Grid
-                                        numItems={2}
-                                        numItemsLg={4}
-                                        className="w-full gap-4 mt-6"
-                                    >
-                                        {queries?.map((q) => (
-                                            <QueryCard
-                                                title={q.title}
-                                                onClick={() => {
-                                                    setCode(
-                                                        `-- ${q.title}\n-- ${q.description}\n\n${q.query}` ||
-                                                            ''
-                                                    )
-                                                    document
-                                                        .getElementById(
-                                                            'kaytu-container'
-                                                        )
-                                                        ?.scrollTo({
-                                                            top: 0,
-                                                            behavior: 'smooth',
-                                                        })
-                                                }}
-                                            />
-                                        ))}
-                                    </Grid>
+                                    <Table
+                                        id="query_table"
+                                        columns={columns}
+                                        rowData={queries}
+                                        onRowClicked={(e) => {
+                                            setCode(
+                                                `-- ${e.data?.title}\n-- ${e.data?.description}\n\n${e.data?.query}` ||
+                                                    ''
+                                            )
+                                            document
+                                                .getElementById(
+                                                    'kaytu-container'
+                                                )
+                                                ?.scrollTo({
+                                                    top: 0,
+                                                    behavior: 'smooth',
+                                                })
+                                        }}
+                                    />
                                 </TabPanel>
                                 <TabPanel>
                                     <Table
