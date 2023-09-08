@@ -256,7 +256,7 @@ export default function Spend() {
                                 accountCostResponse?.totalCost
                             )}
                             loading={accountCostLoading}
-                            url="details#connections"
+                            url="spend-details#connections"
                             border={false}
                         />
                     </Col>

@@ -240,7 +240,7 @@ export default function Assets() {
                         <SummaryCard
                             title="Accounts"
                             metric={numericDisplay(accounts?.connectionCount)}
-                            url="accounts-detail"
+                            url="asset-details#connections"
                             loading={accountIsLoading}
                             border={false}
                         />
