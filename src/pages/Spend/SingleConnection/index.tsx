@@ -149,7 +149,7 @@ export default function SpendSingleConnection() {
                 },
                 {
                     id: 'filters',
-                    labelDefault: 'Filters',
+                    labelDefault: 'Table Filters',
                     labelKey: 'filters',
                     iconKey: 'filter',
                     toolPanel: 'agFiltersToolPanel',
@@ -216,7 +216,7 @@ export default function SpendSingleConnection() {
                 },
                 {
                     id: 'filters',
-                    labelDefault: 'Filters',
+                    labelDefault: 'Table Filters',
                     labelKey: 'filters',
                     iconKey: 'filter',
                     toolPanel: 'agFiltersToolPanel',

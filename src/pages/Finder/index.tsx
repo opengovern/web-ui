@@ -32,9 +32,9 @@ import {
     CheckCircleIcon,
     ExclamationCircleIcon,
 } from '@heroicons/react/24/solid'
-import { useLocation } from 'react-router-dom'
 import { maskPassword } from 'maskdata'
 import { Transition } from '@headlessui/react'
+import { useAtom } from 'jotai'
 import Menu from '../../components/Menu'
 import {
     useInventoryApiV1QueryList,
@@ -49,6 +49,7 @@ import Table, { IColumn } from '../../components/Table'
 import Header from '../../components/Header'
 import { isDemo } from '../../utilities/demo'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../api/api'
+import { queryAtom } from '../../store'
 
 const getTable = (headers: any, details: any) => {
     const columns: IColumn<any, any>[] = []
@@ -124,10 +125,11 @@ const columns: IColumn<
 ]
 
 export default function Finder() {
-    const queryParams = useLocation().search
-    const query = new URLSearchParams(queryParams).get('q')
+    // const queryParams = useLocation().search
+    // const query = new URLSearchParams(queryParams).get('q')
     const [loaded, setLoaded] = useState(false)
-    const [code, setCode] = useState(query || '')
+    const [savedQuery, setSavedQuery] = useAtom(queryAtom)
+    const [code, setCode] = useState(savedQuery || '')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedRow, setSelectedRow] = useState({})
@@ -321,9 +323,10 @@ export default function Finder() {
                                 <Flex flexDirection="col" className="mb-4">
                                     <Card className="relative overflow-hidden">
                                         <Editor
-                                            onValueChange={(text) =>
+                                            onValueChange={(text) => {
+                                                setSavedQuery('')
                                                 setCode(text)
-                                            }
+                                            }}
                                             highlight={(text) =>
                                                 highlight(
                                                     text,
@@ -336,7 +339,7 @@ export default function Finder() {
                                             style={{
                                                 minHeight: '200px',
                                                 maxHeight: '500px',
-                                                overflow: 'scroll',
+                                                overflowY: 'scroll',
                                             }}
                                             placeholder="-- write your SQL query here"
                                         />
@@ -387,7 +390,7 @@ export default function Finder() {
                                                     icon={CommandLineIcon}
                                                     onClick={() => setCode('')}
                                                 >
-                                                    Clear Console
+                                                    Clear editor
                                                 </Button>
                                             )}
                                             <Button
@@ -399,7 +402,7 @@ export default function Finder() {
                                                 }
                                                 loadingText="Running"
                                             >
-                                                Run Script
+                                                Run query
                                             </Button>
                                         </Flex>
                                     </Flex>
@@ -414,10 +417,20 @@ export default function Finder() {
                             <TabList className="bg-gray-100 dark:bg-gray-900">
                                 <Flex>
                                     <Flex className="w-fit">
-                                        <Tab onClick={() => setCode('')}>
+                                        <Tab
+                                            onClick={() => {
+                                                setCode('')
+                                                setSavedQuery('')
+                                            }}
+                                        >
                                             Popular queries
                                         </Tab>
-                                        <Tab onClick={() => setCode('')}>
+                                        <Tab
+                                            onClick={() => {
+                                                setCode('')
+                                                setSavedQuery('')
+                                            }}
+                                        >
                                             All queries
                                         </Tab>
                                         <Tab
@@ -436,6 +449,7 @@ export default function Finder() {
                                         onClick={() => {
                                             if (showEditor) {
                                                 setShowEditor(false)
+                                                setSavedQuery('')
                                                 setCode('')
                                             } else setShowEditor(true)
                                         }}

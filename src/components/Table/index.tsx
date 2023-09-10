@@ -200,7 +200,7 @@ export default function Table<TData = any, TValue = any>({
                 },
                 {
                     id: 'filters',
-                    labelDefault: 'Filters',
+                    labelDefault: 'Table Filters',
                     labelKey: 'filters',
                     iconKey: 'filter',
                     toolPanel: 'agFiltersToolPanel',
