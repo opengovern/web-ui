@@ -37,7 +37,7 @@ import { checkGranularity, generateItems } from '../../utilities/dateComparator'
 import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 import Header from '../../components/Header'
 
-const resourceTrendChart = (
+export const resourceTrendChart = (
     trend:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
         | undefined
@@ -150,6 +150,7 @@ const topServices = (
             name: string | undefined
             value: number | undefined
             connector: SourceType[] | undefined
+            kaytuId: string | undefined
         }[]
         total: number | undefined
     } = { data: [], total: 0 }
@@ -159,6 +160,7 @@ const topServices = (
                 name: input.metrics[i].name,
                 value: input.metrics[i].count,
                 connector: input.metrics[i]?.connectors,
+                kaytuId: input.metrics[i]?.id,
             })
         }
         top.total = input.total_metrics
@@ -234,7 +236,7 @@ export default function Assets() {
     return (
         <Menu currentPage="assets">
             <Header datePicker filter />
-            <Card className="mb-4 mt-6">
+            <Card className="mb-4">
                 <Grid numItems={6} className="gap-4">
                     <Col numColSpan={1}>
                         <SummaryCard

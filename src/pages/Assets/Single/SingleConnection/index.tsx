@@ -11,25 +11,25 @@ import {
 import { GridOptions } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { useLocation, useParams } from 'react-router-dom'
+import { useSetAtom } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
-import Breakdown from '../../../components/Breakdown'
+import { Dayjs } from 'dayjs'
+import Breakdown from '../../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
     useInventoryApiV2AnalyticsMetricList,
-} from '../../../api/inventory.gen'
-import { notificationAtom, timeAtom } from '../../../store'
-import Table from '../../../components/Table'
-import { resourceTableColumns, rowGenerator } from '../Details'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
-import { dateTimeDisplay } from '../../../utilities/dateDisplay'
-import Spinner from '../../../components/Spinner'
-import DrawerPanel from '../../../components/DrawerPanel'
-import { RenderObject } from '../../../components/RenderObject'
-import { pieData } from '../index'
-import Menu from '../../../components/Menu'
-import Header from '../../../components/Header'
+} from '../../../../api/inventory.gen'
+import { notificationAtom } from '../../../../store'
+import Table from '../../../../components/Table'
+import { resourceTableColumns, rowGenerator } from '../../Details'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import Spinner from '../../../../components/Spinner'
+import DrawerPanel from '../../../../components/DrawerPanel'
+import { RenderObject } from '../../../../components/RenderObject'
+import { pieData } from '../../index'
+import Menu from '../../../../components/Menu'
+import Header from '../../../../components/Header'
 
 const options: GridOptions = {
     enableGroupEdit: true,
@@ -44,11 +44,12 @@ const options: GridOptions = {
     groupAllowUnbalanced: true,
 }
 
-export default function SingleConnection() {
-    const activeTimeRange = useAtomValue(timeAtom)
-    const { id } = useParams()
-    const { hash } = useLocation()
-    console.log(hash)
+interface ISingle {
+    activeTimeRange: { start: Dayjs; end: Dayjs }
+    id: string | undefined
+}
+
+export default function SingleConnection({ activeTimeRange, id }: ISingle) {
     const [openDrawer, setOpenDrawer] = useState(false)
     const setNotification = useSetAtom(notificationAtom)
 
@@ -80,7 +81,7 @@ export default function SingleConnection() {
     const connection = accountInfo?.connections?.at(0)
 
     return (
-        <Menu currentPage="assets">
+        <>
             <Header breadCrumb={['Single account detail']} datePicker />
             <Grid numItems={2} className="w-full gap-4">
                 <Card className="w-full">
@@ -217,6 +218,6 @@ export default function SingleConnection() {
                     }}
                 />
             </Card>
-        </Menu>
+        </>
     )
 }
