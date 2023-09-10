@@ -13,20 +13,24 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useParams } from 'react-router-dom'
-import { useAtomValue } from 'jotai'
+import { Link, useParams } from 'react-router-dom'
+import { useAtomValue, useSetAtom } from 'jotai'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import { maskPassword } from 'maskdata'
+import { highlight, languages } from 'prismjs'
+import Editor from 'react-simple-code-editor'
+import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
+import clipboardCopy from 'clipboard-copy'
 import Menu from '../../../../components/Menu'
 import {
     useComplianceApiV1InsightDetail,
     useComplianceApiV1InsightTrendDetail,
 } from '../../../../api/compliance.gen'
-import { timeAtom } from '../../../../store'
+import { notificationAtom, queryAtom, timeAtom } from '../../../../store'
 import Spinner from '../../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
@@ -41,6 +45,7 @@ import Chart from '../../../../components/Chart'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { isDemo } from '../../../../utilities/demo'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
+import Modal from '../../../../components/Modal'
 
 export const chartData = (inputData: any) => {
     const label = []
@@ -135,7 +140,7 @@ const gridOptions: GridOptions = {
 }
 
 export default function InsightDetail() {
-    const { id } = useParams()
+    const { id, ws } = useParams()
     const activeTimeRange = useAtomValue(timeAtom)
     const [detailsDate, setDetailsDate] = useState<string>('')
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
@@ -146,6 +151,9 @@ export default function InsightDetail() {
         if (selectedIndex === 0) setSelectedChart('line')
         if (selectedIndex === 1) setSelectedChart('bar')
     }, [selectedIndex])
+    const [modalData, setModalData] = useState('')
+    const setNotification = useSetAtom(notificationAtom)
+    const setQuery = useSetAtom(queryAtom)
 
     const start = () => {
         if (detailsDate === '') {
@@ -220,17 +228,80 @@ export default function InsightDetail() {
             ) : (
                 <Flex flexDirection="col">
                     <Header breadCrumb={['Insight detail']} datePicker />
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        justifyContent="start"
-                        className="mb-6"
-                    >
-                        <Title className="font-semibold whitespace-nowrap">
-                            {insightDetail?.shortTitle}
-                        </Title>
-                        <Text>{insightDetail?.description}</Text>
+                    <Flex className="mb-6">
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            justifyContent="start"
+                        >
+                            <Title className="font-semibold whitespace-nowrap">
+                                {insightDetail?.shortTitle}
+                            </Title>
+                            <Text>{insightDetail?.description}</Text>
+                        </Flex>
+                        <Button
+                            variant="secondary"
+                            onClick={() =>
+                                setModalData(
+                                    insightDetail?.query?.queryToExecute || ''
+                                )
+                            }
+                        >
+                            See query
+                        </Button>
                     </Flex>
+                    <Modal
+                        open={!!modalData.length}
+                        onClose={() => setModalData('')}
+                    >
+                        <Title className="font-semibold">Insight query</Title>
+                        <Card className="my-4">
+                            <Editor
+                                onValueChange={() => console.log('')}
+                                highlight={(text) =>
+                                    highlight(text, languages.sql, 'sql')
+                                }
+                                value={modalData}
+                                className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
+                                style={{
+                                    minHeight: '200px',
+                                }}
+                                placeholder="-- write your SQL query here"
+                            />
+                        </Card>
+                        <Flex>
+                            <Button
+                                variant="light"
+                                icon={DocumentDuplicateIcon}
+                                iconPosition="left"
+                                onClick={() =>
+                                    clipboardCopy(modalData).then(() =>
+                                        setNotification({
+                                            text: 'Query copied to clipboard',
+                                            type: 'info',
+                                        })
+                                    )
+                                }
+                            >
+                                Copy
+                            </Button>
+                            <Flex className="w-fit gap-4">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setQuery(modalData)
+                                    }}
+                                >
+                                    <Link to={`/${ws}/finder`}>
+                                        Open in finder
+                                    </Link>
+                                </Button>
+                                <Button onClick={() => setModalData('')}>
+                                    Close
+                                </Button>
+                            </Flex>
+                        </Flex>
+                    </Modal>
                     <Card className="mb-4 gap-4">
                         <Grid numItems={4} className="w-full gap-4 mb-4">
                             <SummaryCard
