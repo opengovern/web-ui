@@ -18,10 +18,10 @@ import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
 import KeyInsights from '../pages/Insights/KeyInsights'
-import SingleConnection from '../pages/Assets/SingleConnection'
 import SpendSingleConnection from '../pages/Spend/SingleConnection'
 import AssetDetail from '../pages/Assets/Details'
 import InsightGroupDetail from '../pages/Insights/KeyInsights/InsightGroupDetail'
+import Single from '../pages/Assets/Single'
 
 const routes = [
     {
@@ -65,7 +65,7 @@ const authRoutes = [
     {
         key: 'assets single account',
         path: '/:ws/assets/:id',
-        component: SingleConnection,
+        component: Single,
     },
     {
         key: 'assets metrics',
@@ -75,7 +75,7 @@ const authRoutes = [
     {
         key: 'assets single account 2',
         path: '/:ws/assets/asset-details/:id',
-        component: SingleConnection,
+        component: Single,
     },
     {
         key: 'spend',

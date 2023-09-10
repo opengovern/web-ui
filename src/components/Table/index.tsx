@@ -212,7 +212,7 @@ export default function Table<TData = any, TValue = any>({
     }
 
     return (
-        <Flex flexDirection="col" className="w-full">
+        <Flex flexDirection="col" className="w-full gap-4">
             <Flex>
                 {!!title?.length && (
                     <Title className="font-semibold">{title}</Title>
@@ -232,7 +232,7 @@ export default function Table<TData = any, TValue = any>({
                     {children}
                 </Flex>
             </Flex>
-            <div className="w-full ag-theme-alpine mt-4">
+            <div className="w-full ag-theme-alpine">
                 <AgGridReact
                     ref={gridRef}
                     domLayout="autoHeight"
