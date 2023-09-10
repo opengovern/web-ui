@@ -3036,6 +3036,31 @@ export class Api<
             }),
 
         /**
+         * @description Returns list of metrics
+         *
+         * @tags analytics
+         * @name ApiV2AnalyticsMetricsDetail
+         * @summary List metrics
+         * @request GET:/inventory/api/v2/analytics/metrics/{metric_id}
+         * @secure
+         */
+        apiV2AnalyticsMetricsDetail: (
+            metricId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
+                any
+            >({
+                path: `/inventory/api/v2/analytics/metrics/${metricId}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving the cost composition with respect to specified filters. Retrieving information such as the total cost for the given time range, and the top services by cost.
          *
          * @tags analytics
@@ -3134,10 +3159,10 @@ export class Api<
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
-                /** Metrics IDs */
-                metricIds?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string[]
+                /** Metrics IDs */
+                metricIds?: string[]
                 /** timestamp for start in epoch seconds */
                 startTime?: number
                 /** timestamp for end in epoch seconds */
@@ -3181,6 +3206,8 @@ export class Api<
                 dimension?: 'connection' | 'metric'
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
+                /** Connection group to filter by - mutually exclusive with connectionId */
+                connectionGroup?: string[]
                 /** Metrics IDs */
                 metricIds?: string[]
             },
@@ -3214,10 +3241,10 @@ export class Api<
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
-                /** Metrics IDs */
-                metricIds?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string[]
+                /** Metrics IDs */
+                metricIds?: string[]
                 /** timestamp for start in epoch seconds */
                 startTime?: number
                 /** timestamp for end in epoch seconds */

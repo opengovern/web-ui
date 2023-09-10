@@ -243,7 +243,10 @@ export default function InsightDetail() {
                             variant="secondary"
                             onClick={() =>
                                 setModalData(
-                                    insightDetail?.query?.queryToExecute || ''
+                                    insightDetail?.query?.queryToExecute?.replace(
+                                        '$IS_ALL_CONNECTIONS_QUERY',
+                                        'true'
+                                    ) || ''
                                 )
                             }
                         >
