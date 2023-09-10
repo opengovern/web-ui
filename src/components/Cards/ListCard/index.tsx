@@ -1,13 +1,11 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
-import { useAtomValue, useSetAtom } from 'jotai'
 import { maskPassword } from 'maskdata'
 import { SourceType } from '../../../api/api'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { getConnectorIcon } from '../ConnectorCard'
-import { notificationAtom, spendTimeAtom, timeAtom } from '../../../store'
 import { isDemo } from '../../../utilities/demo'
 
 interface ITopListCard {
@@ -71,21 +69,18 @@ export default function ListCard({
                             {items?.data.map((item: Item) => (
                                 <ListItem
                                     key={item.name}
-                                    className={`py-1 ${
-                                        type === 'account'
-                                            ? 'cursor-pointer'
-                                            : ''
-                                    }`}
+                                    className="py-1 cursor-pointer"
                                 >
                                     <Flex
-                                        className={`py-1 rounded-md ${
-                                            type === 'account'
-                                                ? 'hover:bg-gray-50'
-                                                : ''
-                                        }`}
+                                        className="py-1 rounded-md hover:bg-gray-50"
                                         onClick={() =>
-                                            type === 'account' &&
-                                            navigate(`${item.kaytuId}`)
+                                            navigate(
+                                                `${item.kaytuId}${
+                                                    type === 'account'
+                                                        ? '#account'
+                                                        : '#metric'
+                                                }`
+                                            )
                                         }
                                     >
                                         <Flex justifyContent="start">
@@ -98,9 +93,7 @@ export default function ListCard({
                                                           String(item.connector)
                                                       ))}
                                             <Text className="w-4/5 truncate">
-                                                {type === 'account' && isDemo()
-                                                    ? maskPassword(item.name)
-                                                    : item.name}
+                                                {item.name}
                                             </Text>
                                         </Flex>
                                         {item.value && (

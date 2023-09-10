@@ -12,7 +12,7 @@ import { GridOptions } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import clipboardCopy from 'clipboard-copy'
 import Breakdown from '../../../components/Breakdown'
 import {
@@ -47,6 +47,8 @@ const options: GridOptions = {
 export default function SingleConnection() {
     const activeTimeRange = useAtomValue(timeAtom)
     const { id } = useParams()
+    const { hash } = useLocation()
+    console.log(hash)
     const [openDrawer, setOpenDrawer] = useState(false)
     const setNotification = useSetAtom(notificationAtom)
 
