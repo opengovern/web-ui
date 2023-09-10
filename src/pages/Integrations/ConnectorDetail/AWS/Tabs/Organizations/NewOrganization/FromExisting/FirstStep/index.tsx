@@ -106,7 +106,7 @@ export default function FirstStep({ onNext, onPrevious, accounts }: IStep) {
                 },
                 {
                     id: 'filters',
-                    labelDefault: 'Filters',
+                    labelDefault: 'Table Filters',
                     labelKey: 'filters',
                     iconKey: 'filter',
                     toolPanel: 'agFiltersToolPanel',

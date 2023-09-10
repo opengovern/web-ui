@@ -118,7 +118,7 @@ const gridOptions: GridOptions = {
             },
             {
                 id: 'filters',
-                labelDefault: 'Filters',
+                labelDefault: 'Table Filters',
                 labelKey: 'filters',
                 iconKey: 'filter',
                 toolPanel: 'agFiltersToolPanel',

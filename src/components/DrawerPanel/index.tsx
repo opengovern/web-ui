@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, ReactNode } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Button, Flex, Icon, Title } from '@tremor/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -7,7 +7,7 @@ interface Iprops {
     open: boolean
     onClose: any
     title?: string
-    children?: React.ReactNode
+    children?: ReactNode
 }
 
 export default function DrawerPanel({
