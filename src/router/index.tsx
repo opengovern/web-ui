@@ -18,10 +18,10 @@ import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
 import KeyInsights from '../pages/Insights/KeyInsights'
-import SpendSingleConnection from '../pages/Spend/SingleConnection'
 import AssetDetail from '../pages/Assets/Details'
 import InsightGroupDetail from '../pages/Insights/KeyInsights/InsightGroupDetail'
 import Single from '../pages/Assets/Single'
+import SingleSpend from '../pages/Spend/Single'
 
 const routes = [
     {
@@ -63,7 +63,7 @@ const authRoutes = [
         component: Assets,
     },
     {
-        key: 'assets single account',
+        key: 'assets single',
         path: '/:ws/assets/:id',
         component: Single,
     },
@@ -73,7 +73,7 @@ const authRoutes = [
         component: AssetDetail,
     },
     {
-        key: 'assets single account 2',
+        key: 'assets single 2',
         path: '/:ws/assets/asset-details/:id',
         component: Single,
     },
@@ -83,9 +83,9 @@ const authRoutes = [
         component: Spend,
     },
     {
-        key: 'spend single account',
+        key: 'spend single',
         path: '/:ws/spend/:id',
-        component: SpendSingleConnection,
+        component: SingleSpend,
     },
     {
         key: 'spend metrics',
@@ -93,9 +93,9 @@ const authRoutes = [
         component: CostMetricsDetails,
     },
     {
-        key: 'spend single account 2',
+        key: 'spend single 2',
         path: '/:ws/spend/spend-details/:id',
-        component: SpendSingleConnection,
+        component: SingleSpend,
     },
     {
         key: 'insight list',
