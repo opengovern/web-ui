@@ -283,7 +283,7 @@ export default function CostMetricsDetails() {
 
     // eslint-disable-next-line consistent-return
     const categoryOptions = () => {
-        if (dimension === 'category') {
+        if (dimension !== 'connection') {
             return [
                 {
                     field: 'percent',
@@ -295,11 +295,13 @@ export default function CostMetricsDetails() {
                     valueFormatter: (param: ValueFormatterParams) => {
                         return param.value ? `${param.value.toFixed(2)}%` : ''
                     },
+                    hide: dimension === 'metric',
                 },
                 {
                     field: 'category',
                     headerName: 'Category',
                     rowGroup: dimension === 'category',
+                    filter: true,
                     enableRowGroup: true,
                     sortable: true,
                     resizable: true,
@@ -316,6 +318,7 @@ export default function CostMetricsDetails() {
                 {
                     field: 'accountId',
                     headerName: 'Provider ID',
+                    filter: true,
                     sortable: true,
                     resizable: true,
                     pivot: false,
@@ -334,14 +337,15 @@ export default function CostMetricsDetails() {
                     headerName: 'Connector',
                     type: 'connector',
                     enableRowGroup: true,
+                    filter: true,
                     resizable: true,
                     sortable: true,
                     pinned: true,
-                    hide: true,
                 },
                 {
                     field: 'dimension',
                     headerName: dimensionName(),
+                    filter: true,
                     sortable: true,
                     resizable: true,
                     pivot: false,

@@ -5,7 +5,6 @@ import {
     Col,
     Flex,
     Grid,
-    Select,
     Tab,
     TabGroup,
     TabList,
@@ -19,11 +18,6 @@ import {
 } from '../../../../api/inventory.gen'
 import { filterAtom } from '../../../../store'
 import Header from '../../../../components/Header'
-import {
-    checkGranularity,
-    generateItems,
-} from '../../../../utilities/dateComparator'
-import { capitalizeFirstLetter } from '../../../../utilities/labelMaker'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
 import { resourceTrendChart } from '../../index'
