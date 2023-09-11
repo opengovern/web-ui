@@ -45,13 +45,13 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
         'line'
     )
     const [selectedIndex, setSelectedIndex] = useState(0)
-    const [selectedGranularity, setSelectedGranularity] = useState<
-        'monthly' | 'daily' | 'yearly'
-    >(
-        checkGranularity(activeTimeRange.start, activeTimeRange.end).daily
-            ? 'daily'
-            : 'monthly'
-    )
+    // const [selectedGranularity, setSelectedGranularity] = useState<
+    //     'monthly' | 'daily' | 'yearly'
+    // >(
+    //     checkGranularity(activeTimeRange.start, activeTimeRange.end).daily
+    //         ? 'daily'
+    //         : 'monthly'
+    // )
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
@@ -128,7 +128,7 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
                             className="h-full"
                         >
                             <Flex justifyContent="end" className="gap-4">
-                                <Select
+                                {/* <Select
                                     value={selectedGranularity}
                                     placeholder={capitalizeFirstLetter(
                                         selectedGranularity
@@ -144,7 +144,7 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
                                         activeTimeRange.start,
                                         activeTimeRange.end
                                     )}
-                                </Select>
+                                </Select> */}
                                 <TabGroup
                                     index={selectedIndex}
                                     onIndexChange={setSelectedIndex}
