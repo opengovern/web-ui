@@ -17,30 +17,36 @@ import {
     ChevronRightIcon,
 } from '@heroicons/react/24/outline'
 import { useEffect, useRef, useState } from 'react'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { useParams } from 'react-router-dom'
+import { useSetAtom } from 'jotai'
 import { AgGridReact } from 'ag-grid-react'
 import clipboardCopy from 'clipboard-copy'
-import Breakdown from '../../../components/Breakdown'
+import { Dayjs } from 'dayjs'
+import Breakdown from '../../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendTableList,
-} from '../../../api/inventory.gen'
-import { notificationAtom, timeAtom } from '../../../store'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
-import { dateTimeDisplay } from '../../../utilities/dateDisplay'
-import Spinner from '../../../components/Spinner'
-import DrawerPanel from '../../../components/DrawerPanel'
-import { RenderObject } from '../../../components/RenderObject'
-import { pieData } from '../index'
-import Menu from '../../../components/Menu'
-import Header from '../../../components/Header'
-import { checkGranularity } from '../../../utilities/dateComparator'
-import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+} from '../../../../api/inventory.gen'
+import { notificationAtom } from '../../../../store'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import Spinner from '../../../../components/Spinner'
+import DrawerPanel from '../../../../components/DrawerPanel'
+import { RenderObject } from '../../../../components/RenderObject'
+import { pieData } from '../../index'
+import Menu from '../../../../components/Menu'
+import Header from '../../../../components/Header'
+import { checkGranularity } from '../../../../utilities/dateComparator'
+import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
 
-export default function SpendSingleConnection() {
-    const activeTimeRange = useAtomValue(timeAtom)
-    const { id } = useParams()
+interface ISingle {
+    activeTimeRange: { start: Dayjs; end: Dayjs }
+    id: string | undefined
+}
+
+export default function SingleSpendConnection({
+    activeTimeRange,
+    id,
+}: ISingle) {
     const [openDrawer, setOpenDrawer] = useState(false)
     const [selectedIndex, setSelectedIndex] = useState(1)
     const [selectedGranularity, setSelectedGranularity] = useState<

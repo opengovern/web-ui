@@ -180,24 +180,17 @@ export default function Filter() {
                         <TabGroup
                             index={selectedIndex}
                             onIndexChange={setSelectedIndex}
-                            className="w-fit rounded-lg"
+                            className="rounded-lg"
                         >
                             <TabList variant="solid" className="mb-4">
-                                <Tab className="pt-0.5 pb-1">
-                                    <Text>Provider</Text>
-                                </Tab>
-                                <Tab className="pt-0.5 pb-1">
-                                    <Text>Group</Text>
-                                </Tab>
-                                <Tab className="pt-0.5 pb-1">
-                                    <Text>Connection</Text>
-                                </Tab>
-                                <Tab className="pt-0.5 pb-1" disabled>
-                                    <Text>Saved</Text>
+                                <Tab className="pt-0.5 pb-1 px-5">Provider</Tab>
+                                <Tab className="pt-0.5 pb-1 px-5">Group</Tab>
+                                <Tab className="pt-0.5 pb-1 px-5">
+                                    Connection
                                 </Tab>
                             </TabList>
                             <TabPanels className="px-2">
-                                <TabPanel>
+                                <TabPanel className="mb-[50px]">
                                     <Title className="mb-3">Provider</Title>
                                     <Flex
                                         justifyContent="start"
