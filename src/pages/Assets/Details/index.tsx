@@ -34,28 +34,33 @@ export const resourceTableColumns: IColumn<any, any>[] = [
         headerName: 'Connectors',
         field: 'connectors',
         type: 'string',
+        filter: true,
         width: 120,
         enableRowGroup: true,
     },
     {
         field: 'name',
         headerName: 'Resource name',
+        filter: true,
         type: 'string',
     },
     {
         field: 'category',
         enableRowGroup: true,
         headerName: 'Category',
+        filter: true,
         type: 'string',
     },
     {
         field: 'count',
         headerName: 'Count',
+        filter: true,
         type: 'number',
     },
     {
         headerName: 'Change (%)',
         type: 'string',
+        filter: true,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
@@ -323,14 +328,18 @@ export default function AssetDetail() {
             defaultToolPanel: '',
         },
         onRowClicked(event: RowClickedEvent) {
-            if (event.data && dimension === 'connection') {
-                if (event.data.lifecycleState === 'ONBOARD') {
-                    navigate(`${event.data.id}`)
+            if (event.data) {
+                if (dimension === 'connection') {
+                    if (event.data.lifecycleState === 'ONBOARD') {
+                        navigate(`${event.data.id}#account`)
+                    } else {
+                        setNotification({
+                            text: 'Account is not onboarded',
+                            type: 'warning',
+                        })
+                    }
                 } else {
-                    setNotification({
-                        text: 'Account is not onboarded',
-                        type: 'warning',
-                    })
+                    navigate(`${event.data.id}#metric`)
                 }
             }
         },

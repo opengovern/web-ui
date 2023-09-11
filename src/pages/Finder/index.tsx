@@ -51,7 +51,7 @@ import { isDemo } from '../../utilities/demo'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../api/api'
 import { queryAtom } from '../../store'
 
-const getTable = (headers: any, details: any) => {
+export const getTable = (headers: any, details: any) => {
     const columns: IColumn<any, any>[] = []
     const rows: any[] = []
     if (headers && headers.length) {
