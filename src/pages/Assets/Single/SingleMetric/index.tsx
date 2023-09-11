@@ -13,6 +13,7 @@ import {
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import {
+    useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsMetricsDetail,
     useInventoryApiV2AnalyticsTrendList,
 } from '../../../../api/inventory.gen'
@@ -28,6 +29,9 @@ import Chart from '../../../../components/Chart'
 import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
+import Spinner from '../../../../components/Spinner'
+import Table from '../../../../components/Table'
+import { getTable } from '../../../Finder'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -76,7 +80,26 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
         useInventoryApiV2AnalyticsTrendList(query)
     const { response: metricDetail, isLoading: metricDetailLoading } =
         useInventoryApiV2AnalyticsMetricsDetail(id || '')
-    console.log(metricDetail)
+
+    const {
+        response: queryResponse,
+        isLoading,
+        sendNow,
+    } = useInventoryApiV1QueryRunCreate(
+        {
+            page: { no: 1, size: 1000 },
+            query: metricDetail?.finderQuery,
+        },
+        {},
+        false
+    )
+
+    useEffect(() => {
+        if (metricDetail && metricDetail.finderQuery) {
+            sendNow()
+        }
+    }, [metricDetail])
+
     return (
         <>
             <Header breadCrumb={['Single resource detail']} datePicker filter />
@@ -151,6 +174,23 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
                     loading={resourceTrendLoading}
                 />
             </Card>
+            {isLoading ? (
+                <Spinner className="mt-56" />
+            ) : (
+                <Table
+                    title="Metrics"
+                    id="metric_table"
+                    columns={
+                        getTable(queryResponse?.headers, queryResponse?.result)
+                            .columns
+                    }
+                    rowData={
+                        getTable(queryResponse?.headers, queryResponse?.result)
+                            .rows
+                    }
+                    downloadable
+                />
+            )}
         </>
     )
 }

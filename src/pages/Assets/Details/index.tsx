@@ -323,14 +323,18 @@ export default function AssetDetail() {
             defaultToolPanel: '',
         },
         onRowClicked(event: RowClickedEvent) {
-            if (event.data && dimension === 'connection') {
-                if (event.data.lifecycleState === 'ONBOARD') {
-                    navigate(`${event.data.id}`)
+            if (event.data) {
+                if (dimension === 'connection') {
+                    if (event.data.lifecycleState === 'ONBOARD') {
+                        navigate(`${event.data.id}#account`)
+                    } else {
+                        setNotification({
+                            text: 'Account is not onboarded',
+                            type: 'warning',
+                        })
+                    }
                 } else {
-                    setNotification({
-                        text: 'Account is not onboarded',
-                        type: 'warning',
-                    })
+                    navigate(`${event.data.id}#metric`)
                 }
             }
         },
