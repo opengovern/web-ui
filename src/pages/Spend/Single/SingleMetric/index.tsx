@@ -5,4 +5,6 @@ interface ISingle {
     id: string | undefined
 }
 
-export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {}
+export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
+    return <div>hi</div>
+}

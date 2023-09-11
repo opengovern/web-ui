@@ -4,6 +4,7 @@ import { timeAtom } from '../../../store'
 import NotFound from '../../Errors'
 import Menu from '../../../components/Menu'
 import SingleSpendConnection from './SingleConnection'
+import SingleSpendMetric from './SingleMetric'
 
 export default function SingleSpend() {
     const activeTimeRange = useAtomValue(timeAtom)
@@ -20,7 +21,12 @@ export default function SingleSpend() {
                     />
                 )
             case '#metric':
-                return
+                return (
+                    <SingleSpendMetric
+                        activeTimeRange={activeTimeRange}
+                        id={id}
+                    />
+                )
             default:
                 return <NotFound />
         }
