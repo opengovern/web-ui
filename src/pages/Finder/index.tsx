@@ -280,7 +280,7 @@ export default function Finder() {
                         <Flex
                             flexDirection="col"
                             justifyContent="center"
-                            className="min-h-full w-fit pr-6"
+                            className="min-h-full w-fit"
                         >
                             <Button
                                 variant="light"
@@ -288,7 +288,7 @@ export default function Finder() {
                             >
                                 <Flex flexDirection="col" className="gap-4 w-4">
                                     <FunnelIcon />
-                                    <Text className="rotate-90">Filters</Text>
+                                    <Text className="rotate-90">Options</Text>
                                 </Flex>
                             </Button>
                         </Flex>
