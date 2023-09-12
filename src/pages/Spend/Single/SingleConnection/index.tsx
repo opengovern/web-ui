@@ -80,7 +80,6 @@ export default function SingleSpendConnection({
         granularity?: 'daily' | 'monthly' | 'yearly' | undefined
         dimension?: 'metric' | 'connection' | undefined
         connectionId?: string[]
-        metricIds?: string[]
     } => {
         let gra: 'monthly' | 'daily' | 'yearly' = 'daily'
         if (selectedGranularity === 'monthly') {
@@ -245,8 +244,6 @@ export default function SingleSpendConnection({
         groupIncludeTotalFooter: true,
     }
 
-    // eslint-disable-next-line consistent-return
-
     useEffect(() => {
         if (!isLoading) {
             const defaultCols: ColDef[] = [
@@ -400,7 +397,7 @@ export default function SingleSpendConnection({
     const connection = accountInfo?.connections?.at(0)
 
     return (
-        <Menu currentPage="spend">
+        <>
             <Header breadCrumb={['Single account detail']} datePicker />
             <Grid numItems={2} className="w-full gap-4">
                 <Card className="w-full">
@@ -543,6 +540,6 @@ export default function SingleSpendConnection({
                     />
                 </div>
             </Card>
-        </Menu>
+        </>
     )
 }

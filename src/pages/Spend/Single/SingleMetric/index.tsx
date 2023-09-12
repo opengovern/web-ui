@@ -1,7 +1,8 @@
 import { Dayjs } from 'dayjs'
 import { useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
+    Button,
     Card,
     Col,
     Flex,
@@ -11,7 +12,11 @@ import {
     TabGroup,
     TabList,
     Text,
+    Title,
 } from '@tremor/react'
+import { AgGridReact } from 'ag-grid-react'
+import { ColDef, GridOptions, ValueFormatterParams } from 'ag-grid-community'
+import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import { filterAtom } from '../../../../store'
 import {
     useInventoryApiV2AnalyticsSpendTableList,
@@ -41,6 +46,7 @@ interface ISingle {
 
 export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
     const selectedConnections = useAtomValue(filterAtom)
+    const gridRef = useRef<AgGridReact>(null)
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'area'
     )
@@ -87,7 +93,7 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
     const { response: accountCostResponse, isLoading: accountCostLoading } =
         useOnboardApiV1ConnectionsSummaryList(query)
 
-    const query1 = (): {
+    const tableQuery = (): {
         startTime?: number | undefined
         endTime?: number | undefined
         granularity?: 'daily' | 'monthly' | 'yearly' | undefined
@@ -108,12 +114,178 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
         }
     }
 
-    const { response: tableData, isLoading: tableLoading } =
-        useInventoryApiV2AnalyticsSpendTableList(query1())
+    const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
+        tableQuery()
+    )
+
+    const gridOptions: GridOptions = {
+        pagination: true,
+        paginationPageSize: 25,
+        suppressExcelExport: true,
+        animateRows: true,
+        enableGroupEdit: true,
+        columnTypes: {
+            dimension: {
+                enableRowGroup: true,
+                enablePivot: true,
+            },
+        },
+        rowGroupPanelShow: 'always',
+        groupAllowUnbalanced: true,
+        autoGroupColumnDef: {
+            pinned: true,
+            flex: 2,
+            sortable: true,
+            filter: true,
+            resizable: true,
+        },
+        getRowHeight: () => 50,
+        onGridReady: (e) => {
+            if (isLoading) {
+                e.api.showLoadingOverlay()
+            }
+        },
+        sideBar: {
+            toolPanels: [
+                {
+                    id: 'columns',
+                    labelDefault: 'Columns',
+                    labelKey: 'columns',
+                    iconKey: 'columns',
+                    toolPanel: 'agColumnsToolPanel',
+                },
+                {
+                    id: 'filters',
+                    labelDefault: 'Table Filters',
+                    labelKey: 'filters',
+                    iconKey: 'filter',
+                    toolPanel: 'agFiltersToolPanel',
+                },
+            ],
+            defaultToolPanel: '',
+        },
+        enableRangeSelection: true,
+        groupIncludeFooter: true,
+        groupIncludeTotalFooter: true,
+    }
+
+    useEffect(() => {
+        if (!isLoading) {
+            const defaultCols: ColDef[] = [
+                {
+                    field: 'connector',
+                    headerName: 'Connector',
+                    type: 'connector',
+                    enableRowGroup: true,
+                    resizable: true,
+                    filter: true,
+                    sortable: true,
+                    pinned: true,
+                },
+                {
+                    field: 'accountId',
+                    headerName: 'Provider ID',
+                    filter: true,
+                    sortable: true,
+                    resizable: true,
+                    pivot: false,
+                    pinned: true,
+                },
+                {
+                    field: 'category',
+                    headerName: 'Category',
+                    filter: true,
+                    enableRowGroup: true,
+                    sortable: true,
+                    resizable: true,
+                    pinned: true,
+                    hide: true,
+                },
+                {
+                    field: 'totalCost',
+                    headerName: 'Total cost',
+                    filter: true,
+                    sortable: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    pivot: false,
+                    pinned: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? exactPriceDisplay(param.value) : ''
+                    },
+                },
+            ]
+
+            const columnNames =
+                response
+                    ?.map((row) => {
+                        if (row.costValue) {
+                            return Object.entries(row.costValue).map(
+                                (value) => value[0]
+                            )
+                        }
+                        return []
+                    })
+                    .flat() || []
+
+            const dynamicCols: ColDef[] = columnNames
+                .filter((value, index, array) => array.indexOf(value) === index)
+                .map((colName) => {
+                    const v: ColDef = {
+                        field: colName,
+                        headerName: colName,
+                        sortable: true,
+                        suppressMenu: true,
+                        resizable: true,
+                        pivot: false,
+                        valueFormatter: (param) => {
+                            return param.value
+                                ? exactPriceDisplay(param.value)
+                                : ''
+                        },
+                    }
+                    return v
+                })
+
+            const cols = [...defaultCols, ...dynamicCols]
+            const rows =
+                response?.map((row) => {
+                    let temp = {}
+                    let totalCost = 0
+                    if (row.costValue) {
+                        temp = Object.fromEntries(Object.entries(row.costValue))
+                    }
+                    Object.values(temp).map(
+                        // eslint-disable-next-line no-return-assign
+                        (v: number | unknown) => (totalCost += Number(v))
+                    )
+                    return {
+                        category: row.category,
+                        accountId: row.accountID,
+                        connector: row.connector,
+                        totalCost,
+                        ...temp,
+                    }
+                }) || []
+            let sum = 0
+            const newRow = []
+            for (let i = 0; i < rows.length; i += 1) {
+                sum += rows[i].totalCost
+            }
+            for (let i = 0; i < rows.length; i += 1) {
+                newRow.push({
+                    ...rows[i],
+                    percent: (rows[i].totalCost / sum) * 100,
+                })
+            }
+            gridRef.current?.api?.setColumnDefs(cols)
+            gridRef.current?.api?.setRowData(newRow)
+        }
+    }, [isLoading])
 
     return (
         <>
-            <Header datePicker filter />
+            <Header breadCrumb={['Single metric detail']} datePicker filter />
             <Card className="mb-4">
                 <Grid numItems={6} className="gap-4">
                     <Col numColSpan={1}>
@@ -187,6 +359,29 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
                     isCost
                     loading={costTrendLoading}
                 />
+            </Card>
+            <Card className="mt-4">
+                <Flex>
+                    <Title className="font-semibold">Spend</Title>
+                    <Flex className="gap-4 w-fit">
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                gridRef.current?.api?.exportDataAsCsv()
+                            }}
+                            icon={ArrowDownOnSquareIcon}
+                        >
+                            Download
+                        </Button>
+                    </Flex>
+                </Flex>
+                <div className="ag-theme-alpine mt-4">
+                    <AgGridReact
+                        ref={gridRef}
+                        domLayout="autoHeight"
+                        gridOptions={gridOptions}
+                    />
+                </div>
             </Card>
         </>
     )
