@@ -81,7 +81,7 @@ export default function SettingsMembers() {
             </DrawerPanel>
             <Card key="summary">
                 <Flex>
-                    <Title className="flex-auto">All members</Title>
+                    <Title className="font-semibold">All members</Title>
                     <Button
                         className="float-right"
                         onClick={() => {

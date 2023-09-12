@@ -47,7 +47,7 @@ export default function SettingsWorkspaceAPIKeys() {
             </DrawerPanel>
             <Card key="summary">
                 <Flex className="mb-6">
-                    <Title className="flex-auto">API Keys</Title>
+                    <Title className="font-semibold">API Keys</Title>
                     <Button
                         className="float-right"
                         onClick={() => {
@@ -63,10 +63,10 @@ export default function SettingsWorkspaceAPIKeys() {
                     flexDirection="row"
                     className="mb-6"
                 >
-                    <Text className="text-xs w-1/4">Key Name</Text>
-                    <Text className="text-xs w-1/4">Role Name & Key</Text>
-                    <Text className="text-xs w-1/4">Created by</Text>
-                    <Text className="text-xs w-1/4">Create Date</Text>
+                    <Text className="w-1/4">Key Name</Text>
+                    <Text className="w-1/4">Role Name & Key</Text>
+                    <Text className="w-1/4">Created by</Text>
+                    <Text className="w-1/4">Create Date</Text>
                 </Flex>
                 {response?.map((item) => (
                     <APIKeyRecord
