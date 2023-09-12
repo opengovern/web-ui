@@ -227,7 +227,14 @@ export default function InsightDetail() {
                 </Flex>
             ) : (
                 <Flex flexDirection="col">
-                    <Header breadCrumb={['Insight detail']} datePicker />
+                    <Header
+                        breadCrumb={[
+                            insightDetail
+                                ? insightDetail?.shortTitle
+                                : 'Insight detail',
+                        ]}
+                        datePicker
+                    />
                     <Flex className="mb-6">
                         <Flex
                             flexDirection="col"

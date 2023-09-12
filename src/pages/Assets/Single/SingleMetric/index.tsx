@@ -96,12 +96,20 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
 
     return (
         <>
-            <Header breadCrumb={['Single resource detail']} datePicker filter />
+            <Header
+                breadCrumb={[
+                    metricDetail
+                        ? metricDetail?.name
+                        : 'Single resource detail',
+                ]}
+                datePicker
+                filter
+            />
             <Card className="mb-4">
                 <Grid numItems={6} className="gap-4">
                     <Col numColSpan={2}>
                         <SummaryCard
-                            title={`${metricDetail?.name} resource count`}
+                            title="Resource count"
                             metric={numericDisplay(
                                 resourceTrend
                                     ? resourceTrend[resourceTrend.length - 1]

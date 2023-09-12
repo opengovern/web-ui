@@ -285,7 +285,15 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
 
     return (
         <>
-            <Header breadCrumb={['Single metric detail']} datePicker filter />
+            <Header
+                breadCrumb={[
+                    response
+                        ? response[0]?.dimensionName
+                        : 'Single metric detail',
+                ]}
+                datePicker
+                filter
+            />
             <Card className="mb-4">
                 <Grid numItems={6} className="gap-4">
                     <Col numColSpan={1}>
