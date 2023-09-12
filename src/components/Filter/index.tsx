@@ -441,17 +441,16 @@ export default function Filter() {
                                 <Button
                                     variant="light"
                                     onClick={() => {
+                                        setSearch('')
                                         setProvider('')
                                         setConnections([])
                                         setConnectionGroup([])
                                         setSelectedFilters({
-                                            provider,
-                                            connections:
-                                                connectionID(connections),
-                                            connectionGroup,
+                                            provider: '',
+                                            connections: [],
+                                            connectionGroup: [],
                                         })
                                         setOpenDrawer(false)
-                                        setSearch('')
                                     }}
                                     className="whitespace-nowrap"
                                 >
