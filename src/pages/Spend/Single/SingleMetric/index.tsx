@@ -13,7 +13,10 @@ import {
     Text,
 } from '@tremor/react'
 import { filterAtom } from '../../../../store'
-import { useInventoryApiV2AnalyticsSpendTrendList } from '../../../../api/inventory.gen'
+import {
+    useInventoryApiV2AnalyticsSpendTableList,
+    useInventoryApiV2AnalyticsSpendTrendList,
+} from '../../../../api/inventory.gen'
 import {
     checkGranularity,
     generateItems,
@@ -29,6 +32,7 @@ import {
 } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
 import { costTrendChart, getConnections } from '../../index'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -72,9 +76,7 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
         ...(activeTimeRange.end && {
             endTime: activeTimeRange.end.unix(),
         }),
-        pageSize: 5,
         pageNumber: 1,
-        sortBy: 'cost',
     }
 
     const { response: costTrend, isLoading: costTrendLoading } =
@@ -82,6 +84,32 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
             ...query,
             granularity: selectedGranularity,
         })
+    const { response: accountCostResponse, isLoading: accountCostLoading } =
+        useOnboardApiV1ConnectionsSummaryList(query)
+
+    const query1 = (): {
+        startTime?: number | undefined
+        endTime?: number | undefined
+        granularity?: 'daily' | 'monthly' | 'yearly' | undefined
+        dimension?: 'metric' | 'connection' | undefined
+        metricIds?: string[]
+    } => {
+        let gra: 'monthly' | 'daily' = 'daily'
+        if (selectedGranularity === 'monthly') {
+            gra = 'monthly'
+        }
+
+        return {
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
+            dimension: 'metric',
+            granularity: gra,
+            metricIds: [String(id)],
+        }
+    }
+
+    const { response: tableData, isLoading: tableLoading } =
+        useInventoryApiV2AnalyticsSpendTableList(query1())
 
     return (
         <>
@@ -91,8 +119,10 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
                     <Col numColSpan={1}>
                         <SummaryCard
                             title={getConnections(selectedConnections)}
-                            metric={exactPriceDisplay(100)}
-                            // loading={accountCostLoading}
+                            metric={exactPriceDisplay(
+                                accountCostResponse?.totalCost
+                            )}
+                            loading={accountCostLoading}
                             border={false}
                         />
                     </Col>

@@ -208,7 +208,7 @@ export default function Finder() {
                         />
                     </DrawerPanel>
                     {openSearch ? (
-                        <Card className="w-fit">
+                        <Card className="sticky w-fit">
                             <TextInput
                                 className="w-full mb-6"
                                 icon={MagnifyingGlassIcon}

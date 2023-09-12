@@ -47,7 +47,7 @@ const topServices = (
             name: string | undefined
             value: number | undefined
             connector: SourceType[] | undefined
-            // kaytuId: string | undefined
+            kaytuId: string | undefined
         }[]
         total: number | undefined
     } = { data: [], total: 0 }
@@ -56,8 +56,8 @@ const topServices = (
             top.data.push({
                 name: input.metrics[i].cost_dimension_name,
                 value: input.metrics[i].total_cost,
-                connector: input.metrics[i]?.connector,
-                // kaytuId: input.metrics[i],
+                connector: input.metrics[i].connector,
+                kaytuId: input.metrics[i].cost_dimension_id,
             })
         }
         top.total = input.total_count
