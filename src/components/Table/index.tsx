@@ -212,8 +212,12 @@ export default function Table<TData = any, TValue = any>({
     }
 
     return (
-        <Flex flexDirection="col" className="w-full gap-4">
-            <Flex>
+        <Flex flexDirection="col" className="w-full">
+            <Flex
+                className={
+                    !!title?.length || downloadable || children ? 'mb-4' : ''
+                }
+            >
                 {!!title?.length && (
                     <Title className="font-semibold">{title}</Title>
                 )}
