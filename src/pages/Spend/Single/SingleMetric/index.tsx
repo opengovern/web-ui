@@ -62,6 +62,9 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
         }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(id && { metricIds: [id] }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),

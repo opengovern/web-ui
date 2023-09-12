@@ -90,6 +90,7 @@ export default function CostMetricsDetails() {
         dimension?: 'metric' | 'connection' | undefined
         connectionId?: string[]
         metricIds?: string[]
+        connectionGroup?: string[]
     } => {
         let dim: 'metric' | 'connection' = 'metric'
         if (dimension === 'connection') {
@@ -107,6 +108,7 @@ export default function CostMetricsDetails() {
             dimension: dim,
             granularity: gra,
             connectionId: selectedConnections.connections,
+            connectionGroup: selectedConnections.connectionGroup,
         }
     }
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
