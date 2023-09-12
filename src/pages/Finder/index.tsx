@@ -447,7 +447,7 @@ export default function Finder() {
                                     </Button>
                                 </Flex>
                             </TabList>
-                            <TabPanels className="mt-0">
+                            <TabPanels className="mt-0 pt-3">
                                 <TabPanel>
                                     <Table
                                         id="query_table"
@@ -490,7 +490,7 @@ export default function Finder() {
                                         }}
                                     />
                                 </TabPanel>
-                                <TabPanel className="mt-4">
+                                <TabPanel>
                                     {isLoading ? (
                                         <Spinner className="mt-56" />
                                     ) : (
