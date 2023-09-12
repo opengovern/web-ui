@@ -194,6 +194,7 @@ export default function Assets() {
             connector: [selectedConnections.provider],
         }),
         connectionId: selectedConnections.connections,
+        connectionGroup: selectedConnections.connectionGroup,
         startTime: activeTimeRange.start.unix(),
         endTime: activeTimeRange.end.unix(),
     }

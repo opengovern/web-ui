@@ -245,6 +245,9 @@ export default function AssetDetail() {
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
         }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),

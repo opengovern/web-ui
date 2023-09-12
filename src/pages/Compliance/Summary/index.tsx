@@ -23,6 +23,7 @@ export default function Summary({ benchmark, loading }: ISummary) {
                 connector: [selectedConnections.provider],
             }),
             connectionId: selectedConnections.connections,
+            connectionGroups: selectedConnections.connectionGroup,
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),
             pageSize: 10000,

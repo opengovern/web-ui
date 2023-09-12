@@ -94,6 +94,9 @@ export default function Summary({
         ...(connections.connections && {
             connectionId: connections.connections,
         }),
+        ...(connections.connectionGroup && {
+            connectionGroup: connections.connectionGroup,
+        }),
         ...(timeRange.start && {
             startTime: timeRange.start.unix().toString(),
         }),

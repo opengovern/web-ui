@@ -206,6 +206,9 @@ export default function Spend() {
         ...(selectedConnections.connections && {
             connectionId: selectedConnections.connections,
         }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
@@ -237,6 +240,9 @@ export default function Spend() {
             }),
             ...(selectedConnections.connections && {
                 connectionId: selectedConnections.connections,
+            }),
+            ...(selectedConnections.connectionGroup && {
+                connectionGroup: selectedConnections.connectionGroup,
             }),
             ...(activeTimeRange.start && {
                 endTime: activeTimeRange.end.unix(),

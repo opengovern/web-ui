@@ -60,9 +60,9 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
             connectionId: selectedConnections.connections,
         }),
         ...(id && { ids: [id] }),
-        // ...(selectedConnections.connectionGroup && {
-        //     connectionGroup: selectedConnections.connectionGroup,
-        // }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
