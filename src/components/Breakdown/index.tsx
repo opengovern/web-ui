@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import {
     Button,
     Card,
@@ -48,12 +48,24 @@ export default function Breakdown({
                         <TabList variant="solid">
                             <Tab className="pt-0.5 pb-1">
                                 <Text>
-                                    {dateDisplay(activeTime?.start.toString())}
+                                    {dateDisplay(
+                                        dayjs.utc(
+                                            activeTime?.start
+                                                .startOf('day')
+                                                .toString()
+                                        )
+                                    )}
                                 </Text>
                             </Tab>
                             <Tab className="pt-0.5 pb-1">
                                 <Text>
-                                    {dateDisplay(activeTime?.end.toString())}
+                                    {dateDisplay(
+                                        dayjs.utc(
+                                            activeTime?.end
+                                                .endOf('day')
+                                                .toString()
+                                        )
+                                    )}
                                 </Text>
                             </Tab>
                         </TabList>
