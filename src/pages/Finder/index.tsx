@@ -403,7 +403,6 @@ export default function Finder() {
                                     <Flex className="w-fit">
                                         <Tab
                                             onClick={() => {
-                                                setCode('')
                                                 setSavedQuery('')
                                             }}
                                         >
@@ -411,7 +410,6 @@ export default function Finder() {
                                         </Tab>
                                         <Tab
                                             onClick={() => {
-                                                setCode('')
                                                 setSavedQuery('')
                                             }}
                                         >
@@ -492,7 +490,7 @@ export default function Finder() {
                                         }}
                                     />
                                 </TabPanel>
-                                <TabPanel>
+                                <TabPanel className="mt-4">
                                     {isLoading ? (
                                         <Spinner className="mt-56" />
                                     ) : (

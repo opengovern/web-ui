@@ -212,7 +212,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
             <Card className="mt-4">
                 <Table
                     options={options}
-                    title="Resource Metrics"
+                    title="Resources"
                     downloadable
                     id="asset_resource_metrics"
                     rowData={rowGenerator(metrics?.metrics)}
