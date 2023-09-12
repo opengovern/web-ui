@@ -16,6 +16,8 @@ import {
 } from '@tremor/react'
 import {
     ChevronDoubleLeftIcon,
+    ChevronDownIcon,
+    ChevronUpIcon,
     CommandLineIcon,
     FunnelIcon,
     MagnifyingGlassIcon,
@@ -204,13 +206,9 @@ export default function Finder() {
                         />
                     </DrawerPanel>
                     {openSearch ? (
-                        <Flex
-                            flexDirection="col"
-                            alignItems="start"
-                            className="w-64 pr-6"
-                        >
+                        <Card className="w-fit">
                             <TextInput
-                                className="w-56 mb-2"
+                                className="w-full mb-6"
                                 icon={MagnifyingGlassIcon}
                                 placeholder="Search..."
                                 value={searchCategory}
@@ -229,19 +227,11 @@ export default function Finder() {
                                                 searchCategory.toLowerCase()
                                             )
                                     ).length && (
-                                        <Accordion className="w-56 border-0 rounded-none bg-transparent">
+                                        <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                                             <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                                                <Flex
-                                                    justifyContent="start"
-                                                    className="w-full"
-                                                >
-                                                    <Icon
-                                                        icon={TableCellsIcon}
-                                                    />
-                                                    <Text className="w-3/4 truncate text-start font-semibold">
-                                                        {cat.value}
-                                                    </Text>
-                                                </Flex>
+                                                <Text className="text-gray-800">
+                                                    {cat.value}
+                                                </Text>
                                             </AccordionHeader>
                                             <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
                                                 <Flex
@@ -258,19 +248,14 @@ export default function Finder() {
                                                         )
                                                         .map((subCat) => (
                                                             <Flex
+                                                                justifyContent="start"
                                                                 onClick={() =>
                                                                     setCode(
                                                                         `select * from kaytu_resources where resource_type = '${subCat}'`
                                                                     )
                                                                 }
                                                             >
-                                                                <Icon
-                                                                    icon={
-                                                                        TableCellsIcon
-                                                                    }
-                                                                    className="opacity-0"
-                                                                />
-                                                                <Text className="w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                                                <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
                                                                     {subCat}
                                                                 </Text>
                                                             </Flex>
@@ -288,7 +273,7 @@ export default function Finder() {
                                     <ChevronDoubleLeftIcon className="h-4" />
                                 </Button>
                             </Flex>
-                        </Flex>
+                        </Card>
                     ) : (
                         <Flex
                             flexDirection="col"
@@ -306,10 +291,7 @@ export default function Finder() {
                             </Button>
                         </Flex>
                     )}
-                    <Flex
-                        flexDirection="col"
-                        className="w-full border-l border-l-gray-300 pl-6"
-                    >
+                    <Flex flexDirection="col" className="w-full pl-6">
                         <Transition.Root show={showEditor} as={Fragment}>
                             <Transition.Child
                                 as={Fragment}
@@ -453,10 +435,15 @@ export default function Finder() {
                                                 setCode('')
                                             } else setShowEditor(true)
                                         }}
+                                        icon={
+                                            showEditor
+                                                ? ChevronUpIcon
+                                                : ChevronDownIcon
+                                        }
                                     >
                                         {showEditor
-                                            ? 'Close editor'
-                                            : 'Open editor'}
+                                            ? 'Close query editor'
+                                            : 'Open query editor'}
                                     </Button>
                                 </Flex>
                             </TabList>
