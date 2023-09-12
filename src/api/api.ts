@@ -858,6 +858,8 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow {
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
     /** @example ["Azure"] */
     connector?: SourceType[]
+    /** @example "microsoft_compute_disks" */
+    cost_dimension_id?: string
     /** @example "microsoft.compute/disks" */
     cost_dimension_name?: string
     /**
