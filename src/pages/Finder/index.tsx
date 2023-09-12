@@ -58,11 +58,13 @@ export const getTable = (headers: any, details: any) => {
     const rows: any[] = []
     if (headers && headers.length) {
         for (let i = 0; i < headers.length; i += 1) {
+            const isHide = headers[i][0] === '_'
             columns.push({
                 field: headers[i],
                 headerName: headers[i],
                 type: 'string',
                 sortable: true,
+                hide: isHide,
                 resizable: true,
                 filter: true,
                 width: 170,
