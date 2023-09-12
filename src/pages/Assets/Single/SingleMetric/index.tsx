@@ -179,19 +179,25 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (
-                <Table
-                    title="Metrics"
-                    id="metric_table"
-                    columns={
-                        getTable(queryResponse?.headers, queryResponse?.result)
-                            .columns
-                    }
-                    rowData={
-                        getTable(queryResponse?.headers, queryResponse?.result)
-                            .rows
-                    }
-                    downloadable
-                />
+                <Card>
+                    <Table
+                        title="Accounts"
+                        id="metric_table"
+                        columns={
+                            getTable(
+                                queryResponse?.headers,
+                                queryResponse?.result
+                            ).columns
+                        }
+                        rowData={
+                            getTable(
+                                queryResponse?.headers,
+                                queryResponse?.result
+                            ).rows
+                        }
+                        downloadable
+                    />
+                </Card>
             )}
         </>
     )
