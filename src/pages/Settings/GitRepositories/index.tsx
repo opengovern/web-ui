@@ -157,7 +157,7 @@ export default function SettingsGitRepositories() {
 
     return (
         <Card key="summary" className="top-6">
-            <Title>Git Repositories</Title>
+            <Title className="font-semibold">Git Repositories</Title>
             <Flex justifyContent="start" className="truncate space-x-4">
                 <div className="truncate">
                     <Text className="truncate text-sm">

@@ -1,11 +1,11 @@
-import { Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
+import { Card, List, ListItem, Text, Title } from '@tremor/react'
 import { useAuth0 } from '@auth0/auth0-react'
 
 export default function SettingsProfile() {
     const { user } = useAuth0()
     return (
         <Card>
-            <Title>Profile</Title>
+            <Title className="font-semibold">Profile</Title>
             {user?.picture && (
                 <img
                     className="my-3 rounded-lg"
@@ -14,59 +14,39 @@ export default function SettingsProfile() {
                 />
             )}
             <List className="mt-4">
-                <ListItem>
-                    <Flex>
-                        <Text className="w-1/2 text-md text-gray-900 font-bold my-5">
-                            First Name
-                        </Text>
-                        <Text className="w-1/2 text-md">{user?.name}</Text>
-                    </Flex>
+                <ListItem className="my-1">
+                    <Text className="w-1/2">First Name</Text>
+                    <Text className="w-1/2 text-gray-800">{user?.name}</Text>
                 </ListItem>
-                <ListItem>
-                    <Flex>
-                        <Text className="w-1/2 text-md text-gray-900 font-bold my-5">
-                            Last Name
-                        </Text>
-                        <Text className="w-1/2 text-md">
-                            {user?.family_name}
-                        </Text>
-                    </Flex>
+                <ListItem className="my-1">
+                    <Text className="w-1/2">Last Name</Text>
+                    <Text className="w-1/2 text-gray-800">
+                        {user?.family_name}
+                    </Text>
                 </ListItem>
-                <ListItem>
-                    <Flex>
-                        <Text className="w-1/2 text-md text-gray-900 font-bold my-5">
-                            Email
-                        </Text>
-                        <Text className="w-1/2 text-md">{user?.email}</Text>
-                    </Flex>
+                <ListItem className="my-1">
+                    <Text className="w-1/2">Email</Text>
+                    <Text className="w-1/2 text-gray-800">{user?.email}</Text>
                 </ListItem>
-                <ListItem>
-                    <Flex>
-                        <Text className="w-1/2 text-md text-gray-900 font-bold my-5">
-                            Member Since
-                        </Text>
-                        <Text className="w-1/2 text-md">
-                            {new Date(
-                                Date.parse(
-                                    user?.updated_at || Date.now().toString()
-                                )
-                            ).toLocaleDateString()}
-                        </Text>
-                    </Flex>
+                <ListItem className="my-1">
+                    <Text className="w-1/2">Member Since</Text>
+                    <Text className="w-1/2 text-gray-800">
+                        {new Date(
+                            Date.parse(
+                                user?.updated_at || Date.now().toString()
+                            )
+                        ).toLocaleDateString()}
+                    </Text>
                 </ListItem>
-                <ListItem>
-                    <Flex>
-                        <Text className="w-1/2 text-md text-gray-900 font-bold my-5">
-                            Last Login
-                        </Text>
-                        <Text className="w-1/2 text-md">
-                            {new Date(
-                                Date.parse(
-                                    user?.updated_at || Date.now().toString()
-                                )
-                            ).toLocaleDateString()}
-                        </Text>
-                    </Flex>
+                <ListItem className="my-1">
+                    <Text className="w-1/2">Last Login</Text>
+                    <Text className="w-1/2 text-gray-800">
+                        {new Date(
+                            Date.parse(
+                                user?.updated_at || Date.now().toString()
+                            )
+                        ).toLocaleDateString()}
+                    </Text>
                 </ListItem>
             </List>
         </Card>

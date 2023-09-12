@@ -10,7 +10,6 @@ import {
     Title,
 } from '@tremor/react'
 import { useParams } from 'react-router-dom'
-import dayjs from 'dayjs'
 import {
     useWorkspaceApiV1WorkspaceCurrentList,
     useWorkspaceApiV1WorkspacesLimitsDetail,
@@ -74,7 +73,7 @@ export default function SettingsEntitlement() {
         },
         {
             title: 'Workspace Owner',
-            value: ownerResp?.userName, // TODO get name from backend
+            value: ownerResp?.userName,
         },
         {
             title: 'Workspace Version',
@@ -139,15 +138,13 @@ export default function SettingsEntitlement() {
                     <ProgressBar value={hostsPercentage} className="mt-2" />
                 </Card>
             </Grid>
-            <Card key="summary" className="mt-3 w-full">
-                <Title>Summary</Title>
+            <Card key="summary" className="mt-4 w-full">
+                <Title className="font-semibold">Summary</Title>
                 <List className="mt-3">
                     {wsDetails.map((item) => (
                         <ListItem key={item.title} className="my-1">
-                            <Text className="truncate text-sm">
-                                {item.title}
-                            </Text>
-                            <Text className="text-sm">{item.value}</Text>
+                            <Text className="truncate">{item.title}</Text>
+                            <Text className="text-gray-800">{item.value}</Text>
                         </ListItem>
                     ))}
                 </List>

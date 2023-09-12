@@ -58,23 +58,15 @@ export default function SettingsOrganization() {
         </Flex>
     ) : (
         <Card>
-            <Title>Organization Info</Title>
+            <Title className="font-semibold">Organization Info</Title>
             <List className="mt-4">
                 {items.map((item) => {
                     return (
-                        <ListItem key={item.key}>
-                            <Flex
-                                alignItems="start"
-                                flexDirection="row"
-                                className="py-2"
-                            >
-                                <Text className="text-md w-1/2 text-gray-900">
-                                    {item.key}
-                                </Text>
-                                <Text className="text-md text-start w-1/2 text-gray-500">
-                                    {item.value}
-                                </Text>
-                            </Flex>
+                        <ListItem key={item.key} className="my-1">
+                            <Text className="w-1/2">{item.key}</Text>
+                            <Text className="w-1/2 text-gray-800">
+                                {item.value}
+                            </Text>
                         </ListItem>
                     )
                 })}
