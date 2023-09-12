@@ -31,7 +31,7 @@ export default function Menu({
     const workspace = useParams<{ ws: string }>().ws
 
     return (
-        <Flex flexDirection="row" className="h-screen overflow-hidden">
+        <Flex className="h-screen overflow-hidden">
             {showSidebar && (
                 <Sidebar workspace={workspace} currentPage={currentPage} />
             )}
