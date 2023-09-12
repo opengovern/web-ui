@@ -17,7 +17,6 @@ import SettingsOrganization from './Organization'
 import SettingsGitRepositories from './GitRepositories'
 import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
-import { isDemo } from '../../utilities/demo'
 import Header from '../../components/Header'
 
 const navigation = [
@@ -176,7 +175,7 @@ export default function Settings() {
                                                                 '#entitlement')
                                                             ? 'bg-kaytu-100 rounded-lg text-gray-800'
                                                             : 'text-gray-600'
-                                                    } group flex gap-x-3 py-2 px-10 font-medium`}
+                                                    } group flex gap-x-3 py-2 px-8 font-medium`}
                                                 >
                                                     {child.name}
                                                 </Link>
