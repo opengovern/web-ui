@@ -256,14 +256,15 @@ export default function SingleSpendConnection({
                     type: 'connector',
                     enableRowGroup: true,
                     resizable: true,
+                    filter: true,
                     sortable: true,
                     pinned: true,
-                    hide: true,
                 },
                 {
                     field: 'dimension',
                     headerName: 'Service name',
                     sortable: true,
+                    filter: true,
                     resizable: true,
                     pivot: false,
                     pinned: true,
@@ -271,6 +272,7 @@ export default function SingleSpendConnection({
                 {
                     field: 'totalCost',
                     headerName: 'Total cost',
+                    filter: true,
                     sortable: true,
                     aggFunc: 'sum',
                     resizable: true,
@@ -294,6 +296,7 @@ export default function SingleSpendConnection({
                 {
                     field: 'category',
                     headerName: 'Category',
+                    filter: true,
                     rowGroup: true,
                     enableRowGroup: true,
                     sortable: true,

@@ -275,8 +275,10 @@ export default function CostMetricsDetails() {
         groupIncludeFooter: true,
         groupIncludeTotalFooter: true,
         onRowClicked(event: RowClickedEvent) {
-            if (event.data && dimension === 'connection') {
-                navigate(`${event.data.id}#account`)
+            if (event.data) {
+                if (dimension === 'connection') {
+                    navigate(`${event.data.id}#account`)
+                } else navigate(`${event.data.id}#metric`)
             }
         },
     }
