@@ -23,13 +23,13 @@ export const spendTimeAtom = atom<{
 export interface IFilter {
     provider: '' | 'AWS' | 'Azure'
     connections: string[]
-    connectionGroup: string
+    connectionGroup: string[]
 }
 
 export const filterAtom = atom<IFilter>({
     provider: '',
     connections: [],
-    connectionGroup: '',
+    connectionGroup: [],
 })
 
 interface INotification {
