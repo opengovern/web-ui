@@ -28,7 +28,6 @@ import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../components/RenderObject'
 import { pieData } from '../../index'
-import Menu from '../../../../components/Menu'
 import Header from '../../../../components/Header'
 
 const options: GridOptions = {

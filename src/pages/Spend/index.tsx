@@ -47,6 +47,7 @@ const topServices = (
             name: string | undefined
             value: number | undefined
             connector: SourceType[] | undefined
+            // kaytuId: string | undefined
         }[]
         total: number | undefined
     } = { data: [], total: 0 }
@@ -56,6 +57,7 @@ const topServices = (
                 name: input.metrics[i].cost_dimension_name,
                 value: input.metrics[i].total_cost,
                 connector: input.metrics[i]?.connector,
+                // kaytuId: input.metrics[i],
             })
         }
         top.total = input.total_count
@@ -93,7 +95,7 @@ const topAccounts = (
     return top
 }
 
-const costTrendChart = (
+export const costTrendChart = (
     trend:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
         | undefined,
@@ -157,7 +159,7 @@ export const pieData = (
     return data
 }
 
-const getConnections = (con: IFilter) => {
+export const getConnections = (con: IFilter) => {
     if (con.provider.length) {
         return `Spend across ${con.provider}`
     }
