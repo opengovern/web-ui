@@ -1,5 +1,6 @@
 import { useAtomValue } from 'jotai'
 import { useLocation, useParams } from 'react-router-dom'
+import { useState } from 'react'
 import { timeAtom } from '../../../store'
 import NotFound from '../../Errors'
 import Menu from '../../../components/Menu'
@@ -10,9 +11,10 @@ export default function SingleSpend() {
     const activeTimeRange = useAtomValue(timeAtom)
     const { id, metric } = useParams()
     const { hash } = useLocation()
+    const [hashHolder, setHashHolder] = useState(hash)
 
     const renderPage = () => {
-        switch (hash) {
+        switch (hashHolder) {
             case '#account':
                 return (
                     <Menu currentPage="spend">
@@ -32,6 +34,13 @@ export default function SingleSpend() {
                     </Menu>
                 )
             default:
+                if (id?.includes('_')) {
+                    setHashHolder('#metric')
+                    break
+                } else if (id?.includes('-')) {
+                    setHashHolder('#account')
+                    break
+                }
                 return <NotFound />
         }
     }
