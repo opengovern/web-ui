@@ -8,7 +8,7 @@ import Menu from '../../../components/Menu'
 
 export default function Single() {
     const activeTimeRange = useAtomValue(timeAtom)
-    const { id } = useParams()
+    const { id, metric } = useParams()
     const { hash } = useLocation()
 
     const renderPage = () => {
@@ -17,12 +17,15 @@ export default function Single() {
                 return (
                     <SingleConnection
                         activeTimeRange={activeTimeRange}
-                        id={id}
+                        id={metric || id}
                     />
                 )
             case '#metric':
                 return (
-                    <SingleMetric activeTimeRange={activeTimeRange} id={id} />
+                    <SingleMetric
+                        activeTimeRange={activeTimeRange}
+                        id={metric || id}
+                    />
                 )
             default:
                 return <NotFound />

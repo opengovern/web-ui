@@ -130,23 +130,6 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
                             className="h-full"
                         >
                             <Flex justifyContent="end" className="gap-4">
-                                {/* <Select
-                                    value={selectedGranularity}
-                                    placeholder={capitalizeFirstLetter(
-                                        selectedGranularity
-                                    )}
-                                    onValueChange={(v) => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        setSelectedGranularity(v)
-                                    }}
-                                    className="w-10"
-                                >
-                                    {generateItems(
-                                        activeTimeRange.start,
-                                        activeTimeRange.end
-                                    )}
-                                </Select> */}
                                 <TabGroup
                                     index={selectedIndex}
                                     onIndexChange={setSelectedIndex}
@@ -176,29 +159,26 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
                     loading={resourceTrendLoading}
                 />
             </Card>
-            {isLoading ? (
-                <Spinner className="mt-56" />
-            ) : (
-                <Card>
-                    <Table
-                        title="Accounts"
-                        id="metric_table"
-                        columns={
-                            getTable(
-                                queryResponse?.headers,
-                                queryResponse?.result
-                            ).columns
+            <Card>
+                <Table
+                    title="Accounts"
+                    id="metric_table"
+                    onGridReady={(params) => {
+                        if (isLoading) {
+                            params.api.showLoadingOverlay()
                         }
-                        rowData={
-                            getTable(
-                                queryResponse?.headers,
-                                queryResponse?.result
-                            ).rows
-                        }
-                        downloadable
-                    />
-                </Card>
-            )}
+                    }}
+                    columns={
+                        getTable(queryResponse?.headers, queryResponse?.result)
+                            .columns
+                    }
+                    rowData={
+                        getTable(queryResponse?.headers, queryResponse?.result)
+                            .rows
+                    }
+                    downloadable
+                />
+            </Card>
         </>
     )
 }
