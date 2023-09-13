@@ -23,29 +23,23 @@ import Chart from '../../../../components/Chart'
 import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
-import Spinner from '../../../../components/Spinner'
 import Table from '../../../../components/Table'
 import { getTable } from '../../../Finder'
+import { useParams } from 'react-router-dom'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
-    id: string | undefined
+    metricId: string | undefined
 }
 
-export default function SingleMetric({ activeTimeRange, id }: ISingle) {
+export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
     const selectedConnections = useAtomValue(filterAtom)
+    const { id, metric } = useParams()
 
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
     const [selectedIndex, setSelectedIndex] = useState(0)
-    // const [selectedGranularity, setSelectedGranularity] = useState<
-    //     'monthly' | 'daily' | 'yearly'
-    // >(
-    //     checkGranularity(activeTimeRange.start, activeTimeRange.end).daily
-    //         ? 'daily'
-    //         : 'monthly'
-    // )
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
@@ -56,10 +50,8 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
         ...(selectedConnections.provider && {
             connector: [selectedConnections.provider],
         }),
-        ...(selectedConnections.connections && {
-            connectionId: selectedConnections.connections,
-        }),
-        ...(id && { ids: [id] }),
+        connectionId: metric ? [String(id)] : selectedConnections.connections,
+        ...(metricId && { ids: [metricId] }),
         ...(selectedConnections.connectionGroup && {
             connectionGroup: selectedConnections.connectionGroup,
         }),
@@ -73,7 +65,7 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
     const { response: resourceTrend, isLoading: resourceTrendLoading } =
         useInventoryApiV2AnalyticsTrendList(query)
     const { response: metricDetail, isLoading: metricDetailLoading } =
-        useInventoryApiV2AnalyticsMetricsDetail(id || '')
+        useInventoryApiV2AnalyticsMetricsDetail(metricId || '')
 
     const {
         response: queryResponse,

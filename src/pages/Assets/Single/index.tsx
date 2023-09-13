@@ -24,7 +24,7 @@ export default function Single() {
                 return (
                     <SingleMetric
                         activeTimeRange={activeTimeRange}
-                        id={metric || id}
+                        metricId={metric || id}
                     />
                 )
             default:

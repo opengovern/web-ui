@@ -8,7 +8,7 @@ import SingleSpendMetric from './SingleMetric'
 
 export default function SingleSpend() {
     const activeTimeRange = useAtomValue(timeAtom)
-    const { id } = useParams()
+    const { id, metric } = useParams()
     const { hash } = useLocation()
 
     const renderPage = () => {
@@ -17,14 +17,14 @@ export default function SingleSpend() {
                 return (
                     <SingleSpendConnection
                         activeTimeRange={activeTimeRange}
-                        id={id}
+                        id={metric || id}
                     />
                 )
             case '#metric':
                 return (
                     <SingleSpendMetric
                         activeTimeRange={activeTimeRange}
-                        id={id}
+                        metricId={metric || id}
                     />
                 )
             default:

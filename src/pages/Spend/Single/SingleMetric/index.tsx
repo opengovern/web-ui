@@ -38,15 +38,20 @@ import {
 import Chart from '../../../../components/Chart'
 import { costTrendChart, getConnections } from '../../index'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { useParams } from 'react-router-dom'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
-    id: string | undefined
+    metricId: string | undefined
 }
 
-export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
+export default function SingleSpendMetric({
+    activeTimeRange,
+    metricId,
+}: ISingle) {
     const selectedConnections = useAtomValue(filterAtom)
     const gridRef = useRef<AgGridReact>(null)
+    const { id, metric } = useParams()
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'area'
     )
@@ -69,13 +74,11 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
         ...(selectedConnections.provider !== '' && {
             connector: [selectedConnections.provider],
         }),
-        ...(selectedConnections.connections && {
-            connectionId: selectedConnections.connections,
-        }),
+        connectionId: metric ? [String(id)] : selectedConnections.connections,
         ...(selectedConnections.connectionGroup && {
             connectionGroup: selectedConnections.connectionGroup,
         }),
-        ...(id && { metricIds: [id] }),
+        ...(metricId && { metricIds: [metricId] }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
@@ -110,7 +113,7 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
             endTime: activeTimeRange.end.unix(),
             dimension: 'metric',
             granularity: gra,
-            metricIds: [String(id)],
+            metricIds: [String(metricId)],
         }
     }
 
