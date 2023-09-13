@@ -9,7 +9,10 @@ import {
     Title,
 } from '@tremor/react'
 import { GridOptions } from 'ag-grid-community'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import {
+    ChevronRightIcon,
+    DocumentDuplicateIcon,
+} from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
@@ -78,6 +81,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
             needCost: false,
         })
     const connection = accountInfo?.connections?.at(0)
+    console.log(metrics)
 
     return (
         <>
@@ -106,7 +110,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                 <List className="mt-2">
                                     <ListItem>
                                         <Text>Account ID</Text>
-                                        <Flex className="w-fit gap-3">
+                                        <Flex className="w-fit">
                                             <Button
                                                 variant="light"
                                                 onClick={() =>
@@ -119,9 +123,8 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                                         })
                                                     )
                                                 }
-                                            >
-                                                Copy
-                                            </Button>
+                                                icon={DocumentDuplicateIcon}
+                                            />
                                             <Text>
                                                 {
                                                     connection?.providerConnectionID
@@ -131,7 +134,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                     </ListItem>
                                     <ListItem>
                                         <Text>Account name</Text>
-                                        <Flex className="w-fit gap-3">
+                                        <Flex className="w-fit">
                                             <Button
                                                 variant="light"
                                                 onClick={() =>
@@ -144,9 +147,8 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                                         })
                                                     )
                                                 }
-                                            >
-                                                Copy
-                                            </Button>
+                                                icon={DocumentDuplicateIcon}
+                                            />
                                             <Text>
                                                 {
                                                     connection?.providerConnectionName
