@@ -11,16 +11,23 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { ColDef, GridOptions, ValueFormatterParams } from 'ag-grid-community'
+import {
+    ColDef,
+    GridOptions,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import {
     ArrowDownOnSquareIcon,
     ChevronRightIcon,
+    DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline'
 import { useEffect, useRef, useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { AgGridReact } from 'ag-grid-react'
 import clipboardCopy from 'clipboard-copy'
 import { Dayjs } from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 import Breakdown from '../../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
@@ -33,7 +40,6 @@ import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../components/RenderObject'
 import { pieData } from '../../index'
-import Menu from '../../../../components/Menu'
 import Header from '../../../../components/Header'
 import { checkGranularity } from '../../../../utilities/dateComparator'
 import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
@@ -56,7 +62,9 @@ export default function SingleSpendConnection({
             ? 'monthly'
             : 'daily'
     )
+    const navigate = useNavigate()
     const setNotification = useSetAtom(notificationAtom)
+
     useEffect(() => {
         switch (selectedIndex) {
             case 0:
@@ -242,6 +250,11 @@ export default function SingleSpendConnection({
         enableRangeSelection: true,
         groupIncludeFooter: true,
         groupIncludeTotalFooter: true,
+        onRowClicked(event: RowClickedEvent) {
+            if (event.data) {
+                navigate(`${event.data.id}#metric`)
+            }
+        },
     }
 
     useEffect(() => {
@@ -352,6 +365,7 @@ export default function SingleSpendConnection({
                         category: row.category,
                         accountId: row.accountID,
                         connector: row.connector,
+                        id: row.dimensionId,
                         totalCost,
                         ...temp,
                     }
@@ -371,6 +385,7 @@ export default function SingleSpendConnection({
             gridRef.current?.api?.setRowData(newRow)
         }
     }, [isLoading])
+
     const query = {
         ...(id && {
             connectionId: [id],
@@ -423,7 +438,7 @@ export default function SingleSpendConnection({
                                 <List className="mt-2">
                                     <ListItem>
                                         <Text>Account ID</Text>
-                                        <Flex className="w-fit gap-3">
+                                        <Flex className="w-fit">
                                             <Button
                                                 variant="light"
                                                 onClick={() =>
@@ -436,9 +451,8 @@ export default function SingleSpendConnection({
                                                         })
                                                     )
                                                 }
-                                            >
-                                                Copy
-                                            </Button>
+                                                icon={DocumentDuplicateIcon}
+                                            />
                                             <Text>
                                                 {
                                                     connection?.providerConnectionID
@@ -448,7 +462,7 @@ export default function SingleSpendConnection({
                                     </ListItem>
                                     <ListItem>
                                         <Text>Account name</Text>
-                                        <Flex className="w-fit gap-3">
+                                        <Flex className="w-fit">
                                             <Button
                                                 variant="light"
                                                 onClick={() =>
@@ -461,9 +475,8 @@ export default function SingleSpendConnection({
                                                         })
                                                     )
                                                 }
-                                            >
-                                                Copy
-                                            </Button>
+                                                icon={DocumentDuplicateIcon}
+                                            />
                                             <Text>
                                                 {
                                                     connection?.providerConnectionName

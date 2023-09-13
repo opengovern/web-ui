@@ -9,11 +9,15 @@ import {
     Title,
 } from '@tremor/react'
 import { GridOptions } from 'ag-grid-community'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import {
+    ChevronRightIcon,
+    DocumentDuplicateIcon,
+} from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
 import { Dayjs } from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 import Breakdown from '../../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
@@ -51,6 +55,7 @@ interface ISingle {
 export default function SingleConnection({ activeTimeRange, id }: ISingle) {
     const [openDrawer, setOpenDrawer] = useState(false)
     const setNotification = useSetAtom(notificationAtom)
+    const navigate = useNavigate()
 
     const query = {
         ...(id && {
@@ -106,7 +111,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                 <List className="mt-2">
                                     <ListItem>
                                         <Text>Account ID</Text>
-                                        <Flex className="w-fit gap-3">
+                                        <Flex className="w-fit">
                                             <Button
                                                 variant="light"
                                                 onClick={() =>
@@ -119,9 +124,8 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                                         })
                                                     )
                                                 }
-                                            >
-                                                Copy
-                                            </Button>
+                                                icon={DocumentDuplicateIcon}
+                                            />
                                             <Text>
                                                 {
                                                     connection?.providerConnectionID
@@ -131,7 +135,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                     </ListItem>
                                     <ListItem>
                                         <Text>Account name</Text>
-                                        <Flex className="w-fit gap-3">
+                                        <Flex className="w-fit">
                                             <Button
                                                 variant="light"
                                                 onClick={() =>
@@ -144,9 +148,8 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                                         })
                                                     )
                                                 }
-                                            >
-                                                Copy
-                                            </Button>
+                                                icon={DocumentDuplicateIcon}
+                                            />
                                             <Text>
                                                 {
                                                     connection?.providerConnectionName
@@ -220,6 +223,11 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                     onGridReady={(params) => {
                         if (metricsLoading) {
                             params.api.showLoadingOverlay()
+                        }
+                    }}
+                    onRowClicked={(e) => {
+                        if (e.data) {
+                            navigate(`${e.data.id}#metric`)
                         }
                     }}
                 />

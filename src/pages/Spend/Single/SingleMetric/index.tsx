@@ -17,6 +17,7 @@ import {
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
+import { useParams } from 'react-router-dom'
 import { filterAtom } from '../../../../store'
 import {
     useInventoryApiV2AnalyticsSpendTableList,
@@ -41,12 +42,16 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.g
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
-    id: string | undefined
+    metricId: string | undefined
 }
 
-export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
+export default function SingleSpendMetric({
+    activeTimeRange,
+    metricId,
+}: ISingle) {
     const selectedConnections = useAtomValue(filterAtom)
     const gridRef = useRef<AgGridReact>(null)
+    const { id, metric } = useParams()
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'area'
     )
@@ -69,13 +74,11 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
         ...(selectedConnections.provider !== '' && {
             connector: [selectedConnections.provider],
         }),
-        ...(selectedConnections.connections && {
-            connectionId: selectedConnections.connections,
-        }),
+        connectionId: metric ? [String(id)] : selectedConnections.connections,
         ...(selectedConnections.connectionGroup && {
             connectionGroup: selectedConnections.connectionGroup,
         }),
-        ...(id && { metricIds: [id] }),
+        ...(metricId && { metricIds: [metricId] }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
@@ -99,6 +102,7 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
         granularity?: 'daily' | 'monthly' | 'yearly' | undefined
         dimension?: 'metric' | 'connection' | undefined
         metricIds?: string[]
+        connectionId: string[]
     } => {
         let gra: 'monthly' | 'daily' = 'daily'
         if (selectedGranularity === 'monthly') {
@@ -108,9 +112,12 @@ export default function SingleSpendMetric({ activeTimeRange, id }: ISingle) {
         return {
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),
+            connectionId: metric
+                ? [String(id)]
+                : selectedConnections.connections,
             dimension: 'metric',
             granularity: gra,
-            metricIds: [String(id)],
+            metricIds: [String(metricId)],
         }
     }
 

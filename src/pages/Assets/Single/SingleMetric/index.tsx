@@ -11,6 +11,7 @@ import {
     Text,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsMetricsDetail,
@@ -23,29 +24,22 @@ import Chart from '../../../../components/Chart'
 import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
-import Spinner from '../../../../components/Spinner'
 import Table from '../../../../components/Table'
 import { getTable } from '../../../Finder'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
-    id: string | undefined
+    metricId: string | undefined
 }
 
-export default function SingleMetric({ activeTimeRange, id }: ISingle) {
+export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
     const selectedConnections = useAtomValue(filterAtom)
+    const { id, metric } = useParams()
 
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
     const [selectedIndex, setSelectedIndex] = useState(0)
-    // const [selectedGranularity, setSelectedGranularity] = useState<
-    //     'monthly' | 'daily' | 'yearly'
-    // >(
-    //     checkGranularity(activeTimeRange.start, activeTimeRange.end).daily
-    //         ? 'daily'
-    //         : 'monthly'
-    // )
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
@@ -56,10 +50,8 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
         ...(selectedConnections.provider && {
             connector: [selectedConnections.provider],
         }),
-        ...(selectedConnections.connections && {
-            connectionId: selectedConnections.connections,
-        }),
-        ...(id && { ids: [id] }),
+        connectionId: metric ? [String(id)] : selectedConnections.connections,
+        ...(metricId && { ids: [metricId] }),
         ...(selectedConnections.connectionGroup && {
             connectionGroup: selectedConnections.connectionGroup,
         }),
@@ -73,7 +65,7 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
     const { response: resourceTrend, isLoading: resourceTrendLoading } =
         useInventoryApiV2AnalyticsTrendList(query)
     const { response: metricDetail, isLoading: metricDetailLoading } =
-        useInventoryApiV2AnalyticsMetricsDetail(id || '')
+        useInventoryApiV2AnalyticsMetricsDetail(metricId || '')
 
     const {
         response: queryResponse,
@@ -130,23 +122,6 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
                             className="h-full"
                         >
                             <Flex justifyContent="end" className="gap-4">
-                                {/* <Select
-                                    value={selectedGranularity}
-                                    placeholder={capitalizeFirstLetter(
-                                        selectedGranularity
-                                    )}
-                                    onValueChange={(v) => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        setSelectedGranularity(v)
-                                    }}
-                                    className="w-10"
-                                >
-                                    {generateItems(
-                                        activeTimeRange.start,
-                                        activeTimeRange.end
-                                    )}
-                                </Select> */}
                                 <TabGroup
                                     index={selectedIndex}
                                     onIndexChange={setSelectedIndex}
@@ -176,29 +151,26 @@ export default function SingleMetric({ activeTimeRange, id }: ISingle) {
                     loading={resourceTrendLoading}
                 />
             </Card>
-            {isLoading ? (
-                <Spinner className="mt-56" />
-            ) : (
-                <Card>
-                    <Table
-                        title="Accounts"
-                        id="metric_table"
-                        columns={
-                            getTable(
-                                queryResponse?.headers,
-                                queryResponse?.result
-                            ).columns
+            <Card>
+                <Table
+                    title="Accounts"
+                    id="metric_table"
+                    onGridReady={(params) => {
+                        if (isLoading) {
+                            params.api.showLoadingOverlay()
                         }
-                        rowData={
-                            getTable(
-                                queryResponse?.headers,
-                                queryResponse?.result
-                            ).rows
-                        }
-                        downloadable
-                    />
-                </Card>
-            )}
+                    }}
+                    columns={
+                        getTable(queryResponse?.headers, queryResponse?.result)
+                            .columns
+                    }
+                    rowData={
+                        getTable(queryResponse?.headers, queryResponse?.result)
+                            .rows
+                    }
+                    downloadable
+                />
+            </Card>
         </>
     )
 }

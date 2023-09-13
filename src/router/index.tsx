@@ -68,6 +68,11 @@ const authRoutes = [
         component: Single,
     },
     {
+        key: 'assets single metric',
+        path: '/:ws/assets/:id/:metric',
+        component: Single,
+    },
+    {
         key: 'assets metrics',
         path: '/:ws/assets/asset-details',
         component: AssetDetail,
@@ -75,6 +80,11 @@ const authRoutes = [
     {
         key: 'assets single 2',
         path: '/:ws/assets/asset-details/:id',
+        component: Single,
+    },
+    {
+        key: 'assets single metric 2',
+        path: '/:ws/assets/asset-details/:id/:metric',
         component: Single,
     },
     {
@@ -88,6 +98,11 @@ const authRoutes = [
         component: SingleSpend,
     },
     {
+        key: 'spend single metric',
+        path: '/:ws/spend/:id/:metric',
+        component: SingleSpend,
+    },
+    {
         key: 'spend metrics',
         path: '/:ws/spend/spend-details',
         component: CostMetricsDetails,
@@ -95,6 +110,11 @@ const authRoutes = [
     {
         key: 'spend single 2',
         path: '/:ws/spend/spend-details/:id',
+        component: SingleSpend,
+    },
+    {
+        key: 'spend single metric 2',
+        path: '/:ws/spend/spend-details/:id/:metric',
         component: SingleSpend,
     },
     {
