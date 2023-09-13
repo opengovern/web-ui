@@ -11,6 +11,7 @@ import {
     Text,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsMetricsDetail,
@@ -25,7 +26,6 @@ import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import Table from '../../../../components/Table'
 import { getTable } from '../../../Finder'
-import { useParams } from 'react-router-dom'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }

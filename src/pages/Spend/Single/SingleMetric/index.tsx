@@ -17,6 +17,7 @@ import {
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
+import { useParams } from 'react-router-dom'
 import { filterAtom } from '../../../../store'
 import {
     useInventoryApiV2AnalyticsSpendTableList,
@@ -38,7 +39,6 @@ import {
 import Chart from '../../../../components/Chart'
 import { costTrendChart, getConnections } from '../../index'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import { useParams } from 'react-router-dom'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }

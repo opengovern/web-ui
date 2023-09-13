@@ -15,22 +15,26 @@ export default function SingleSpend() {
         switch (hash) {
             case '#account':
                 return (
-                    <SingleSpendConnection
-                        activeTimeRange={activeTimeRange}
-                        id={metric || id}
-                    />
+                    <Menu currentPage="spend">
+                        <SingleSpendConnection
+                            activeTimeRange={activeTimeRange}
+                            id={metric || id}
+                        />
+                    </Menu>
                 )
             case '#metric':
                 return (
-                    <SingleSpendMetric
-                        activeTimeRange={activeTimeRange}
-                        metricId={metric || id}
-                    />
+                    <Menu currentPage="spend">
+                        <SingleSpendMetric
+                            activeTimeRange={activeTimeRange}
+                            metricId={metric || id}
+                        />
+                    </Menu>
                 )
             default:
                 return <NotFound />
         }
     }
 
-    return <Menu currentPage="spend">{renderPage()}</Menu>
+    return renderPage()
 }
