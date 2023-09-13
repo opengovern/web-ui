@@ -34,13 +34,13 @@ export default function SingleSpend() {
                     </Menu>
                 )
             default:
-                if (id?.includes('_')) {
-                    setHashHolder('#metric')
-                    break
-                } else if (id?.includes('-')) {
-                    setHashHolder('#account')
-                    break
-                }
+                // if (id?.includes('_')) {
+                //     setHashHolder('#metric')
+                //     break
+                // } else if (id?.includes('-')) {
+                //     setHashHolder('#account')
+                //     break
+                // }
                 return <NotFound />
         }
     }

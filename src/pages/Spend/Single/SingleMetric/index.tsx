@@ -102,6 +102,7 @@ export default function SingleSpendMetric({
         granularity?: 'daily' | 'monthly' | 'yearly' | undefined
         dimension?: 'metric' | 'connection' | undefined
         metricIds?: string[]
+        connectionId: string[]
     } => {
         let gra: 'monthly' | 'daily' = 'daily'
         if (selectedGranularity === 'monthly') {
@@ -111,6 +112,9 @@ export default function SingleSpendMetric({
         return {
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),
+            connectionId: metric
+                ? [String(id)]
+                : selectedConnections.connections,
             dimension: 'metric',
             granularity: gra,
             metricIds: [String(metricId)],
