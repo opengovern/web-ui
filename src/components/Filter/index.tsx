@@ -301,7 +301,7 @@ export default function Filter() {
                                                     setSearch(e.target.value)
                                                 }
                                             />
-                                            {response && !!search.length && (
+                                            {!!search.length && (
                                                 <Card className="absolute z-10 top-full mt-1.5 shadow-lg py-2 px-3 max-h-[228px] overflow-y-scroll">
                                                     <List>
                                                         {response?.connections
