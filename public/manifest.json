@@ -451,7 +451,7 @@
       "sizes": "1024x1024"
     }
   ],
-  "start_url": "https://app.kaytu.dev",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#0D2239",
   "background_color": "#F3F4F6",
