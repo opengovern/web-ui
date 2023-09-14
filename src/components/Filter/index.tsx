@@ -33,6 +33,16 @@ import { getConnectorIcon } from '../Cards/ConnectorCard'
 import Tag from '../Tag'
 import Spinner from '../Spinner'
 
+const connectionID = (list: any) => {
+    const idList = []
+    if (list) {
+        for (let i = 0; i < list.length; i += 1) {
+            idList.push(list[i].id)
+        }
+    }
+    return idList
+}
+
 export default function Filter() {
     const [openDrawer, setOpenDrawer] = useState(false)
     const [selectedIndex, setSelectedIndex] = useState(0)
@@ -65,40 +75,14 @@ export default function Filter() {
     )
 
     useEffect(() => {
-        if (connections.length) {
-            setProvider('')
-            setConnectionGroup([])
-        }
-        if (provider.length) {
-            setConnections([])
-            setConnectionGroup([])
-        }
-        if (connectionGroup.length) {
-            setConnections([])
-            setProvider('')
-        }
-    }, [connections, provider, connectionGroup])
-
-    useEffect(() => {
         if (connectionGroup.length > 3) {
             connectionGroup.shift()
         }
     }, [connectionGroup])
 
     const [search, setSearch] = useState('')
-    const { response: groupList } = useOnboardApiV1ConnectionGroupsList()
-
-    const connectionID = (list: any) => {
-        const idList = []
-        if (list) {
-            for (let i = 0; i < list.length; i += 1) {
-                idList.push(list[i].id)
-            }
-        }
-        return idList
-    }
-
-    const connectionList = response?.connections
+    const { response: groupList, isLoading: groupListLoading } =
+        useOnboardApiV1ConnectionGroupsList()
 
     const restFilters = () => {
         setProvider(selectedFilters.provider)
@@ -214,6 +198,7 @@ export default function Filter() {
                                                 id="all"
                                                 type="radio"
                                                 checked={provider === ''}
+                                                readOnly
                                             />
                                             <Text>All</Text>
                                         </label>
@@ -227,6 +212,7 @@ export default function Filter() {
                                                 id="aws"
                                                 type="radio"
                                                 checked={provider === 'AWS'}
+                                                readOnly
                                             />
                                             <Text>AWS</Text>
                                         </label>
@@ -240,6 +226,7 @@ export default function Filter() {
                                                 id="azure"
                                                 type="radio"
                                                 checked={provider === 'Azure'}
+                                                readOnly
                                             />
                                             <Text>Azure</Text>
                                         </label>
@@ -256,35 +243,29 @@ export default function Filter() {
                                             (up to 3 groups)
                                         </Text>
                                     </Flex>
-                                    <MultiSelect
-                                        value={connectionGroup}
-                                        onChange={(v) => {
-                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                            // @ts-ignore
-                                            setConnectionGroup(v)
-                                        }}
-                                        placeholder={
-                                            connectionGroup.length
-                                                ? `${
-                                                      connectionGroup.length
-                                                  } group${
-                                                      connectionGroup.length > 1
-                                                          ? 's'
-                                                          : ''
-                                                  } selected`
-                                                : 'Select connection group...'
-                                        }
-                                    >
-                                        <div>
-                                            {groupList?.map((cg) => (
-                                                <MultiSelectItem
-                                                    value={String(cg.name)}
-                                                >
-                                                    {cg.name}
-                                                </MultiSelectItem>
-                                            ))}
-                                        </div>
-                                    </MultiSelect>
+                                    {groupListLoading ? (
+                                        <Spinner />
+                                    ) : (
+                                        <MultiSelect
+                                            value={connectionGroup}
+                                            onChange={(v) => {
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                setConnectionGroup(v)
+                                            }}
+                                            placeholder="Select connection group..."
+                                        >
+                                            <div>
+                                                {groupList?.map((cg) => (
+                                                    <MultiSelectItem
+                                                        value={String(cg.name)}
+                                                    >
+                                                        {cg.name}
+                                                    </MultiSelectItem>
+                                                ))}
+                                            </div>
+                                        </MultiSelect>
+                                    )}
                                     {!!connectionGroup.length && (
                                         <div className="mt-6" />
                                     )}
@@ -320,82 +301,81 @@ export default function Filter() {
                                                     setSearch(e.target.value)
                                                 }
                                             />
-                                            {!!connectionList?.length &&
-                                                !!search.length && (
-                                                    <Card className="absolute z-10 top-full mt-1.5 shadow-lg py-2 px-3 max-h-[228px] overflow-y-scroll">
-                                                        <List>
-                                                            {connectionList
-                                                                ?.filter(
-                                                                    (c) =>
-                                                                        c?.providerConnectionName
-                                                                            ?.toLowerCase()
-                                                                            .includes(
-                                                                                search.toLowerCase()
-                                                                            ) ||
-                                                                        c?.providerConnectionID
-                                                                            ?.toLowerCase()
-                                                                            .includes(
-                                                                                search.toLowerCase()
-                                                                            )
-                                                                )
-                                                                .map(
-                                                                    (
-                                                                        connection
-                                                                    ) => (
-                                                                        <ListItem
-                                                                            className="py-1"
-                                                                            key={
-                                                                                connection.id
-                                                                            }
+                                            {!!search.length && (
+                                                <Card className="absolute z-10 top-full mt-1.5 shadow-lg py-2 px-3 max-h-[228px] overflow-y-scroll">
+                                                    <List>
+                                                        {response?.connections
+                                                            ?.filter(
+                                                                (c) =>
+                                                                    c?.providerConnectionName
+                                                                        ?.toLowerCase()
+                                                                        .includes(
+                                                                            search.toLowerCase()
+                                                                        ) ||
+                                                                    c?.providerConnectionID
+                                                                        ?.toLowerCase()
+                                                                        .includes(
+                                                                            search.toLowerCase()
+                                                                        )
+                                                            )
+                                                            .map(
+                                                                (
+                                                                    connection
+                                                                ) => (
+                                                                    <ListItem
+                                                                        className="py-1"
+                                                                        key={
+                                                                            connection.id
+                                                                        }
+                                                                    >
+                                                                        <Flex
+                                                                            justifyContent="start"
+                                                                            className="py-1 cursor-pointer hover:bg-kaytu-50/50 rounded-lg"
+                                                                            onClick={() => {
+                                                                                if (
+                                                                                    !connections.includes(
+                                                                                        connection
+                                                                                    )
+                                                                                ) {
+                                                                                    setConnections(
+                                                                                        (
+                                                                                            prevState
+                                                                                        ) => [
+                                                                                            ...prevState,
+                                                                                            connection,
+                                                                                        ]
+                                                                                    )
+                                                                                    setSearch(
+                                                                                        ''
+                                                                                    )
+                                                                                }
+                                                                            }}
                                                                         >
+                                                                            {getConnectorIcon(
+                                                                                connection.connector
+                                                                            )}
                                                                             <Flex
-                                                                                justifyContent="start"
-                                                                                className="py-1 cursor-pointer hover:bg-kaytu-50/50 rounded-lg"
-                                                                                onClick={() => {
-                                                                                    if (
-                                                                                        !connections.includes(
-                                                                                            connection
-                                                                                        )
-                                                                                    ) {
-                                                                                        setConnections(
-                                                                                            (
-                                                                                                prevState
-                                                                                            ) => [
-                                                                                                ...prevState,
-                                                                                                connection,
-                                                                                            ]
-                                                                                        )
-                                                                                        setSearch(
-                                                                                            ''
-                                                                                        )
-                                                                                    }
-                                                                                }}
+                                                                                flexDirection="col"
+                                                                                alignItems="start"
                                                                             >
-                                                                                {getConnectorIcon(
-                                                                                    connection.connector
-                                                                                )}
-                                                                                <Flex
-                                                                                    flexDirection="col"
-                                                                                    alignItems="start"
-                                                                                >
-                                                                                    <Text className="text-gray-800">
-                                                                                        {
-                                                                                            connection.providerConnectionName
-                                                                                        }
-                                                                                    </Text>
-                                                                                    <Text className="text-xs">
-                                                                                        {
-                                                                                            connection.providerConnectionID
-                                                                                        }
-                                                                                    </Text>
-                                                                                </Flex>
+                                                                                <Text className="text-gray-800">
+                                                                                    {
+                                                                                        connection.providerConnectionName
+                                                                                    }
+                                                                                </Text>
+                                                                                <Text className="text-xs">
+                                                                                    {
+                                                                                        connection.providerConnectionID
+                                                                                    }
+                                                                                </Text>
                                                                             </Flex>
-                                                                        </ListItem>
-                                                                    )
-                                                                )}
-                                                        </List>
-                                                    </Card>
-                                                )}
+                                                                        </Flex>
+                                                                    </ListItem>
+                                                                )
+                                                            )}
+                                                    </List>
+                                                </Card>
+                                            )}
                                         </Flex>
                                     )}
                                     {!!connections.length && (
@@ -463,7 +443,6 @@ export default function Filter() {
                                     onClick={() => {
                                         restFilters()
                                         setOpenDrawer(false)
-                                        setSearch('')
                                     }}
                                 >
                                     Cancel
@@ -477,7 +456,6 @@ export default function Filter() {
                                             connectionGroup,
                                         })
                                         setOpenDrawer(false)
-                                        setSearch('')
                                     }}
                                     disabled={btnDisable()}
                                 >
