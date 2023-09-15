@@ -138,13 +138,7 @@ export default function InsightGroupDetail() {
                                     insightDetail?.totalResultValue
                                 )}%`}
                             />
-                            <Flex className="pl-4 border-l border-l-gray-200">
-                                <SummaryCard
-                                    border={false}
-                                    title="Evaluated"
-                                    metric={10}
-                                />
-                            </Flex>
+                            <Col />
                             <Col numColSpan={2}>
                                 <Flex justifyContent="end" alignItems="start">
                                     <TabGroup
