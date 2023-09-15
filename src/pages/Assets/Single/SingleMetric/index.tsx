@@ -79,6 +79,7 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
         {},
         false
     )
+    console.log(getTable(queryResponse?.headers, queryResponse?.result).columns)
 
     useEffect(() => {
         if (metricDetail && metricDetail.finderQuery) {
@@ -154,7 +155,7 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
             <Card>
                 <Table
                     title="Accounts"
-                    id="metric_table"
+                    id="hi"
                     onGridReady={(params) => {
                         if (isLoading) {
                             params.api.showLoadingOverlay()

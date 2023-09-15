@@ -15,22 +15,26 @@ export default function Single() {
         switch (hash) {
             case '#account':
                 return (
-                    <SingleConnection
-                        activeTimeRange={activeTimeRange}
-                        id={metric || id}
-                    />
+                    <Menu currentPage="assets">
+                        <SingleConnection
+                            activeTimeRange={activeTimeRange}
+                            id={metric || id}
+                        />
+                    </Menu>
                 )
             case '#metric':
                 return (
-                    <SingleMetric
-                        activeTimeRange={activeTimeRange}
-                        metricId={metric || id}
-                    />
+                    <Menu currentPage="assets">
+                        <SingleMetric
+                            activeTimeRange={activeTimeRange}
+                            metricId={metric || id}
+                        />
+                    </Menu>
                 )
             default:
                 return <NotFound />
         }
     }
 
-    return <Menu currentPage="assets">{renderPage()}</Menu>
+    return renderPage()
 }
