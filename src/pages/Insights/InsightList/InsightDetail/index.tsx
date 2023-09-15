@@ -333,6 +333,7 @@ export default function InsightDetail() {
                                 <SummaryCard
                                     border={false}
                                     title="Evaluated"
+                                    loading={detailLoading}
                                     metric={
                                         insightDetail?.result
                                             ? insightDetail?.result[0]
