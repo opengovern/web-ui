@@ -1,6 +1,5 @@
 import { useAtomValue } from 'jotai'
-import { useLocation, useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { timeAtom } from '../../../store'
 import NotFound from '../../Errors'
 import Menu from '../../../components/Menu'
@@ -10,39 +9,52 @@ import SingleSpendMetric from './SingleMetric'
 export default function SingleSpend() {
     const activeTimeRange = useAtomValue(timeAtom)
     const { id, metric } = useParams()
-    const { hash } = useLocation()
-    const [hashHolder, setHashHolder] = useState(hash)
+    const urlParams = window.location.pathname.split('/')
+
+    const idGenerator = () => {
+        if (metric) {
+            if (urlParams[urlParams.length - 1].startsWith('account_')) {
+                return metric.replace('account_', '')
+            }
+            if (urlParams[urlParams.length - 1].startsWith('metric_')) {
+                return metric.replace('metric_', '')
+            }
+            return undefined
+        }
+        if (id) {
+            if (urlParams[urlParams.length - 1].startsWith('account_')) {
+                return id.replace('account_', '')
+            }
+            if (urlParams[urlParams.length - 1].startsWith('metric_')) {
+                return id.replace('metric_', '')
+            }
+            return undefined
+        }
+        return undefined
+    }
 
     const renderPage = () => {
-        switch (hashHolder) {
-            case '#account':
-                return (
-                    <Menu currentPage="spend">
-                        <SingleSpendConnection
-                            activeTimeRange={activeTimeRange}
-                            id={metric || id}
-                        />
-                    </Menu>
-                )
-            case '#metric':
-                return (
-                    <Menu currentPage="spend">
-                        <SingleSpendMetric
-                            activeTimeRange={activeTimeRange}
-                            metricId={metric || id}
-                        />
-                    </Menu>
-                )
-            default:
-                // if (id?.includes('_')) {
-                //     setHashHolder('#metric')
-                //     break
-                // } else if (id?.includes('-')) {
-                //     setHashHolder('#account')
-                //     break
-                // }
-                return <NotFound />
+        if (urlParams[urlParams.length - 1].startsWith('account_')) {
+            return (
+                <Menu currentPage="assets">
+                    <SingleSpendConnection
+                        activeTimeRange={activeTimeRange}
+                        id={idGenerator()}
+                    />
+                </Menu>
+            )
         }
+        if (urlParams[urlParams.length - 1].startsWith('metric_')) {
+            return (
+                <Menu currentPage="assets">
+                    <SingleSpendMetric
+                        activeTimeRange={activeTimeRange}
+                        metricId={idGenerator()}
+                    />
+                </Menu>
+            )
+        }
+        return <NotFound />
     }
 
     return renderPage()

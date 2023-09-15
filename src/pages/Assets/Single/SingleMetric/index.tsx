@@ -50,7 +50,9 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
         ...(selectedConnections.provider && {
             connector: [selectedConnections.provider],
         }),
-        connectionId: metric ? [String(id)] : selectedConnections.connections,
+        connectionId: metric
+            ? [String(id).replace('account_', '')]
+            : selectedConnections.connections,
         ...(metricId && { ids: [metricId] }),
         ...(selectedConnections.connectionGroup && {
             connectionGroup: selectedConnections.connectionGroup,
@@ -153,7 +155,7 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
             </Card>
             <Card>
                 <Table
-                    title="Accounts"
+                    title="Results"
                     id="metric_table"
                     onGridReady={(params) => {
                         if (isLoading) {

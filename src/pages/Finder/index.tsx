@@ -22,7 +22,6 @@ import {
     FunnelIcon,
     MagnifyingGlassIcon,
     PlayCircleIcon,
-    TableCellsIcon,
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useState } from 'react' // eslint-disable-next-line import/no-extraneous-dependencies
 import { highlight, languages } from 'prismjs' // eslint-disable-next-line import/no-extraneous-dependencies
@@ -450,9 +449,11 @@ export default function Finder() {
                             <TabPanels className="mt-0 pt-3">
                                 <TabPanel>
                                     <Table
-                                        id="query_table"
+                                        id="popular_query_table"
                                         columns={columns}
-                                        rowData={queries}
+                                        rowData={queries?.filter(
+                                            (q) => q.tags?.popular
+                                        )}
                                         onRowClicked={(e) => {
                                             setCode(
                                                 `-- ${e.data?.title}\n-- ${e.data?.description}\n\n${e.data?.query}` ||

@@ -14,7 +14,7 @@ import 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import 'ag-grid-community/styles/agGridMaterialFont.css'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Button, Flex, Title } from '@tremor/react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import dayjs from 'dayjs'
@@ -91,6 +91,10 @@ export default function Table<TData = any, TValue = any>({
             }
         }
     }
+
+    useEffect(() => {
+        gridRef.current?.api?.setColumnDefs(columns)
+    }, [columns])
 
     const saveVisibility = () => {
         if (visibility.current) {
