@@ -333,7 +333,13 @@ export default function InsightDetail() {
                                 <SummaryCard
                                     border={false}
                                     title="Evaluated"
-                                    metric={10}
+                                    loading={detailLoading}
+                                    metric={
+                                        insightDetail?.result
+                                            ? insightDetail?.result[0]
+                                                  ?.connections?.length
+                                            : 0
+                                    }
                                 />
                             </Flex>
                             <Col numColSpan={2}>
