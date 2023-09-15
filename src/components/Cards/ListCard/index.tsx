@@ -75,11 +75,11 @@ export default function ListCard({
                                         className="py-1 rounded-md hover:bg-gray-50"
                                         onClick={() =>
                                             navigate(
-                                                `${item.kaytuId}${
+                                                `${
                                                     type === 'account'
-                                                        ? '#account'
-                                                        : '#metric'
-                                                }`
+                                                        ? 'account_'
+                                                        : 'metric_'
+                                                }${item.kaytuId}`
                                             )
                                         }
                                     >

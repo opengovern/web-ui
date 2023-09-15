@@ -50,7 +50,9 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
         ...(selectedConnections.provider && {
             connector: [selectedConnections.provider],
         }),
-        connectionId: metric ? [String(id)] : selectedConnections.connections,
+        connectionId: metric
+            ? [String(id).replace('account_', '')]
+            : selectedConnections.connections,
         ...(metricId && { ids: [metricId] }),
         ...(selectedConnections.connectionGroup && {
             connectionGroup: selectedConnections.connectionGroup,
@@ -79,7 +81,6 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
         {},
         false
     )
-    console.log(getTable(queryResponse?.headers, queryResponse?.result).columns)
 
     useEffect(() => {
         if (metricDetail && metricDetail.finderQuery) {
@@ -154,8 +155,8 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
             </Card>
             <Card>
                 <Table
-                    title="Accounts"
-                    id="hi"
+                    title="Results"
+                    id="metric_table"
                     onGridReady={(params) => {
                         if (isLoading) {
                             params.api.showLoadingOverlay()

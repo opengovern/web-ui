@@ -334,7 +334,7 @@ export default function AssetDetail() {
             if (event.data) {
                 if (dimension === 'connection') {
                     if (event.data.lifecycleState === 'ONBOARD') {
-                        navigate(`${event.data.id}#account`)
+                        navigate(`account_${event.data.id}`)
                     } else {
                         setNotification({
                             text: 'Account is not onboarded',
@@ -342,7 +342,7 @@ export default function AssetDetail() {
                         })
                     }
                 } else {
-                    navigate(`${event.data.id}#metric`)
+                    navigate(`metric_${event.data.id}`)
                 }
             }
         },

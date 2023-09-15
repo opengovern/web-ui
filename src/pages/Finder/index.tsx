@@ -22,7 +22,6 @@ import {
     FunnelIcon,
     MagnifyingGlassIcon,
     PlayCircleIcon,
-    TableCellsIcon,
 } from '@heroicons/react/24/outline'
 import { Fragment, useEffect, useState } from 'react' // eslint-disable-next-line import/no-extraneous-dependencies
 import { highlight, languages } from 'prismjs' // eslint-disable-next-line import/no-extraneous-dependencies
@@ -145,6 +144,7 @@ export default function Finder() {
         useInventoryApiV2AnalyticsCategoriesList()
     const { response: queries, isLoading: queryLoading } =
         useInventoryApiV1QueryList({})
+    console.log(queries)
 
     const {
         response: queryResponse,

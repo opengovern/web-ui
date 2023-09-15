@@ -227,7 +227,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                     }}
                     onRowClicked={(e) => {
                         if (e.data) {
-                            navigate(`${e.data.id}#metric`)
+                            navigate(`metric_${e.data.id}`)
                         }
                     }}
                 />
