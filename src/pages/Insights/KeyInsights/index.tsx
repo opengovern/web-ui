@@ -25,7 +25,6 @@ export default function KeyInsights() {
         sendNow: insightSendNow,
         error: insightError,
     } = useComplianceApiV1InsightGroupList(query)
-    console.log(insightList)
 
     return (
         <Menu currentPage="key-insights">

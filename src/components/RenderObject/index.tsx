@@ -10,8 +10,6 @@ export function RenderObject({
     obj,
     changeKeysToLabel = true,
 }: IRenderObjectProps) {
-    console.log(changeKeysToLabel)
-    console.log(obj)
     return (
         <List>
             {Object.keys(obj).length > 0 &&
