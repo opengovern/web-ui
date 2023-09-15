@@ -141,38 +141,6 @@ export default function InsightList() {
                     <SelectItem value="connection">Connection</SelectItem>
                     <SelectItem value="category">Category</SelectItem>
                 </Select>
-                <Text className="m-3">Persona</Text>
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    className="gap-1.5"
-                >
-                    {personaList.map((p) => (
-                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions
-                        <label
-                            onClick={() =>
-                                setSelectedPersona((prevState) => {
-                                    if (selectedPersona.includes(p)) {
-                                        const arr = selectedPersona
-                                        arr.splice(arr.indexOf(p), 1)
-                                        return arr
-                                    }
-                                    return [...prevState, p]
-                                })
-                            }
-                            htmlFor={p}
-                            className="flex items-center gap-2"
-                        >
-                            <input
-                                id={p}
-                                type="checkbox"
-                                checked={selectedPersona.includes(p)}
-                                className="w-4 h-4 mr-2 text-blue-600 bg-gray-100 border-gray-300 rounded dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            <Text>{p}</Text>
-                        </label>
-                    ))}
-                </Flex>
             </Flex>
         )
     }

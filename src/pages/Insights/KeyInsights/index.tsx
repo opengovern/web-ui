@@ -49,6 +49,7 @@ export default function KeyInsights() {
                                 description={insight.longTitle}
                                 count={insight.totalResultValue}
                                 prevCount={insight.oldTotalResultValue}
+                                personas={['Developer', 'DevOps']}
                             />
                         ))}
                 </Grid>
