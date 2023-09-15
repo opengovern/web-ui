@@ -9,7 +9,6 @@ import {
     Title,
 } from '@tremor/react'
 import {
-    ArrowsRightLeftIcon,
     ChevronRightIcon,
     CloudIcon,
     ExclamationTriangleIcon,
@@ -23,7 +22,6 @@ import {
     percentageByChange,
 } from '../../../utilities/deltaType'
 import { numericDisplay } from '../../../utilities/numericDisplay'
-import { getConnectorIcon } from '../ConnectorCard'
 
 interface IConnectorCard {
     title: string | undefined
