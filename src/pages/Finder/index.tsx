@@ -144,7 +144,6 @@ export default function Finder() {
         useInventoryApiV2AnalyticsCategoriesList()
     const { response: queries, isLoading: queryLoading } =
         useInventoryApiV1QueryList({})
-    console.log(queries)
 
     const {
         response: queryResponse,
@@ -450,9 +449,11 @@ export default function Finder() {
                             <TabPanels className="mt-0 pt-3">
                                 <TabPanel>
                                     <Table
-                                        id="query_table"
+                                        id="popular_query_table"
                                         columns={columns}
-                                        rowData={queries}
+                                        rowData={queries?.filter(
+                                            (q) => q.tags?.popular
+                                        )}
                                         onRowClicked={(e) => {
                                             setCode(
                                                 `-- ${e.data?.title}\n-- ${e.data?.description}\n\n${e.data?.query}` ||
