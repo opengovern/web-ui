@@ -279,8 +279,8 @@ export default function CostMetricsDetails() {
         onRowClicked(event: RowClickedEvent) {
             if (event.data) {
                 if (event.data.category.length) {
-                    navigate(`${event.data.id}#metric`)
-                } else navigate(`${event.data.id}#account`)
+                    navigate(`metric_${event.data.id}`)
+                } else navigate(`account_${event.data.id}`)
             }
         },
     }

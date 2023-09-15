@@ -74,7 +74,9 @@ export default function SingleSpendMetric({
         ...(selectedConnections.provider !== '' && {
             connector: [selectedConnections.provider],
         }),
-        connectionId: metric ? [String(id)] : selectedConnections.connections,
+        connectionId: metric
+            ? [String(id).replace('account_', '')]
+            : selectedConnections.connections,
         ...(selectedConnections.connectionGroup && {
             connectionGroup: selectedConnections.connectionGroup,
         }),

@@ -252,7 +252,7 @@ export default function SingleSpendConnection({
         groupIncludeTotalFooter: true,
         onRowClicked(event: RowClickedEvent) {
             if (event.data) {
-                navigate(`${event.data.id}#metric`)
+                navigate(`metric_${event.data.id}`)
             }
         },
     }
