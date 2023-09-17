@@ -5,7 +5,6 @@ import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import CreateWorkspace from './CreateWorkspace'
 import Spinner from '../../components/Spinner'
-import { isDemo } from '../../utilities/demo'
 import Header from '../../components/Header'
 
 export default function Workspaces() {

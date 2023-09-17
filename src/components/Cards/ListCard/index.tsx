@@ -1,12 +1,10 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
-import { maskPassword } from 'maskdata'
 import { SourceType } from '../../../api/api'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { getConnectorIcon } from '../ConnectorCard'
-import { isDemo } from '../../../utilities/demo'
 
 interface ITopListCard {
     title: string
