@@ -97,7 +97,7 @@ export default function SummaryCard({
                         <ChevronRightIcon className="ml-1 h-4 text-kaytu-500" />
                     )}
                 </Flex>
-                {delta && (
+                {delta && !delta.includes('Infinity') && (
                     <BadgeDelta deltaType={deltaType}>{delta}</BadgeDelta>
                 )}
             </Flex>
@@ -106,10 +106,8 @@ export default function SummaryCard({
                     <Spinner />
                 </div>
             ) : (
-                <Flex justifyContent="between" alignItems="baseline">
-                    <div className="flex flex-row items-baseline space-x-3 w-full">
-                        {value()}
-                    </div>
+                <Flex alignItems="baseline">
+                    <Flex>{value()}</Flex>
                     {border && (
                         <div className="justify-self-end">
                             {url && (
