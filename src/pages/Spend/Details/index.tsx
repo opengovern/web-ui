@@ -89,6 +89,7 @@ export default function CostMetricsDetails() {
         granularity?: 'daily' | 'monthly' | 'yearly' | undefined
         dimension?: 'metric' | 'connection' | undefined
         connectionId?: string[]
+        connector?: 'AWS' | 'Azure' | ''
         metricIds?: string[]
         connectionGroup?: string[]
     } => {
@@ -107,6 +108,7 @@ export default function CostMetricsDetails() {
             endTime: activeTimeRange.end.unix(),
             dimension: dim,
             granularity: gra,
+            connector: selectedConnections.provider,
             connectionId: selectedConnections.connections,
             connectionGroup: selectedConnections.connectionGroup,
         }
@@ -398,6 +400,7 @@ export default function CostMetricsDetails() {
                                   suppressMenu: true,
                                   resizable: true,
                                   pivot: false,
+                                  aggFunc: 'sum',
                                   valueFormatter: (param) => {
                                       return param.value
                                           ? exactPriceDisplay(param.value)
@@ -446,7 +449,7 @@ export default function CostMetricsDetails() {
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(newRow)
         } else gridRef.current?.api?.showLoadingOverlay()
-    }, [isLoading, dimension, selectedGranularity])
+    }, [selectedConnections, isLoading, dimension, selectedGranularity])
 
     return (
         <Menu currentPage="spend">
