@@ -12,8 +12,8 @@ import {
     ChevronDoubleLeftIcon,
     ChevronDoubleRightIcon,
     Cog6ToothIcon,
+    CpuChipIcon,
     DocumentChartBarIcon,
-    DocumentDuplicateIcon,
     HomeIcon,
     MagnifyingGlassIcon,
     ServerStackIcon,
@@ -44,7 +44,7 @@ const navigation = [
         ],
     },
     {
-        name: 'Assets',
+        name: 'Infrastructure',
         page: 'assets',
         icon: ServerStackIcon,
         children: [
@@ -70,7 +70,7 @@ const navigation = [
     {
         name: 'Integrations',
         page: 'integrations',
-        icon: DocumentDuplicateIcon,
+        icon: CpuChipIcon,
     },
     {
         name: 'Settings',
@@ -92,7 +92,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [insightHover, setInsightHover] = useState(false)
 
     const isOpen = (item: any) => {
-        if (item.name === 'Assets') {
+        if (item.name === 'Infrastructure') {
             return assetOpen
         }
         if (item.name === 'Insights') {

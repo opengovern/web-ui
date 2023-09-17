@@ -36,7 +36,7 @@ export default function SingleSpend() {
     const renderPage = () => {
         if (urlParams[urlParams.length - 1].startsWith('account_')) {
             return (
-                <Menu currentPage="assets">
+                <Menu currentPage="spend">
                     <SingleSpendConnection
                         activeTimeRange={activeTimeRange}
                         id={idGenerator()}
@@ -46,7 +46,7 @@ export default function SingleSpend() {
         }
         if (urlParams[urlParams.length - 1].startsWith('metric_')) {
             return (
-                <Menu currentPage="assets">
+                <Menu currentPage="spend">
                     <SingleSpendMetric
                         activeTimeRange={activeTimeRange}
                         metricId={idGenerator()}

@@ -95,13 +95,13 @@ export default function InsightGroupCard({
                     <Subtitle className="mb-2 line-clamp-2 h-12">
                         {description}
                     </Subtitle>
-                    <Flex justifyContent="start" className="gap-3 flex-wrap">
+                    {/* <Flex justifyContent="start" className="gap-3 flex-wrap">
                         {personas.map((p) => (
                             <Badge size="sm" color="sky">
                                 {p}
                             </Badge>
                         ))}
-                    </Flex>
+                    </Flex> */}
                 </Flex>
                 <Flex justifyContent="end">
                     <Icon color="blue" icon={ChevronRightIcon} />
