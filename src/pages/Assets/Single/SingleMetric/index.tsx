@@ -143,34 +143,28 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
                     </Flex>
                     <Col />
                     <Col>
-                        <Flex
-                            flexDirection="col"
-                            alignItems="end"
-                            className="h-full"
-                        >
-                            <Flex justifyContent="end" className="gap-4">
-                                <TabGroup
-                                    index={selectedIndex}
-                                    onIndexChange={setSelectedIndex}
-                                    className="w-fit rounded-lg"
-                                >
-                                    <TabList variant="solid">
-                                        <Tab value="line">
-                                            <LineChartIcon className="h-5" />
-                                        </Tab>
-                                        <Tab value="bar">
-                                            <BarChartIcon className="h-5" />
-                                        </Tab>
-                                    </TabList>
-                                </TabGroup>
-                            </Flex>
-                            <Flex justifyContent="end" className="mt-6 gap-2.5">
-                                <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                                <Text>Resources</Text>
-                            </Flex>
+                        <Flex justifyContent="end" className="gap-4">
+                            <TabGroup
+                                index={selectedIndex}
+                                onIndexChange={setSelectedIndex}
+                                className="w-fit rounded-lg"
+                            >
+                                <TabList variant="solid">
+                                    <Tab value="line">
+                                        <LineChartIcon className="h-5" />
+                                    </Tab>
+                                    <Tab value="bar">
+                                        <BarChartIcon className="h-5" />
+                                    </Tab>
+                                </TabList>
+                            </TabGroup>
                         </Flex>
                     </Col>
                 </Grid>
+                <Flex justifyContent="end" className="mt-6 gap-2.5">
+                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
+                    <Text>Resources</Text>
+                </Flex>
                 <Chart
                     labels={resourceTrendChart(resourceTrend).label}
                     chartData={resourceTrendChart(resourceTrend).data}

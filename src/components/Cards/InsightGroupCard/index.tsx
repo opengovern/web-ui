@@ -33,19 +33,19 @@ interface IConnectorCard {
 }
 
 const iconGenerator = (t: string) => {
-    let color: Color = 'slate'
+    const color: Color = 'slate'
     let icon = TagIcon
     if (t.includes('Issues') || t.includes('Risky')) {
-        color = 'rose'
+        // color = 'rose'
         icon = ExclamationTriangleIcon
     } else if (t.includes('Cloud')) {
-        color = 'sky'
+        // color = 'sky'
         icon = CloudIcon
     } else if (t.includes('Disks')) {
-        color = 'indigo'
+        // color = 'indigo'
         icon = ServerStackIcon
     } else if (t.includes('Logging')) {
-        color = 'amber'
+        // color = 'amber'
         icon = ListBulletIcon
     }
     return { color, icon }
@@ -76,11 +76,13 @@ export default function InsightGroupCard({
                             variant="light"
                             size="lg"
                         />
-                        <BadgeDelta
-                            deltaType={badgeTypeByDelta(prevCount, count)}
-                        >
-                            {`${percentageByChange(prevCount, count)} %`}
-                        </BadgeDelta>
+                        {!!prevCount && (
+                            <BadgeDelta
+                                deltaType={badgeTypeByDelta(prevCount, count)}
+                            >
+                                {`${percentageByChange(prevCount, count)} %`}
+                            </BadgeDelta>
+                        )}
                     </Flex>
                     <Flex alignItems="start" className="mb-1">
                         <Title className="font-semibold truncate">
@@ -93,13 +95,13 @@ export default function InsightGroupCard({
                     <Subtitle className="mb-2 line-clamp-2 h-12">
                         {description}
                     </Subtitle>
-                    <Flex justifyContent="start" className="gap-3 flex-wrap">
+                    {/* <Flex justifyContent="start" className="gap-3 flex-wrap">
                         {personas.map((p) => (
                             <Badge size="sm" color="sky">
                                 {p}
                             </Badge>
                         ))}
-                    </Flex>
+                    </Flex> */}
                 </Flex>
                 <Flex justifyContent="end">
                     <Icon color="blue" icon={ChevronRightIcon} />

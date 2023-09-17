@@ -117,18 +117,18 @@ export default function SingleSpendMetric({
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),
             connectionId: metric
-                ? [String(id)]
+                ? [String(id).replace('account_', '')]
                 : selectedConnections.connections,
             dimension: 'connection',
             granularity: gra,
             metricIds: [String(metricId)],
         }
     }
-    // console.log(metricDetail)
 
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
         tableQuery()
     )
+    console.log(response)
 
     const gridOptions: GridOptions = {
         pagination: true,
@@ -340,58 +340,52 @@ export default function SingleSpendMetric({
                         />
                     </Flex>
                     <Col numColSpan={2}>
-                        <Flex
-                            flexDirection="col"
-                            alignItems="end"
-                            className="h-full"
-                        >
-                            <Flex justifyContent="end" className="gap-4">
-                                <Select
-                                    value={selectedGranularity}
-                                    placeholder={capitalizeFirstLetter(
-                                        selectedGranularity
-                                    )}
-                                    onValueChange={(v) => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        setSelectedGranularity(v)
-                                    }}
-                                    className="w-10"
-                                >
-                                    {generateItems(
-                                        activeTimeRange.start,
-                                        activeTimeRange.end
-                                    )}
-                                </Select>
-                                <TabGroup
-                                    index={selectedIndex}
-                                    onIndexChange={setSelectedIndex}
-                                    className="w-fit rounded-lg"
-                                >
-                                    <TabList variant="solid">
-                                        <Tab value="area">
-                                            <AreaChartIcon className="h-5" />
-                                        </Tab>
-                                        <Tab value="line">
-                                            <LineChartIcon className="h-5" />
-                                        </Tab>
-                                        <Tab value="bar">
-                                            <BarChartIcon className="h-5" />
-                                        </Tab>
-                                    </TabList>
-                                </TabGroup>
-                            </Flex>
-                            <Flex justifyContent="end" className="mt-6 gap-2.5">
-                                <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                                {selectedChart === 'area' ? (
-                                    <Text>Accumulated cost</Text>
-                                ) : (
-                                    <Text>Spend</Text>
+                        <Flex justifyContent="end" className="gap-4">
+                            <Select
+                                value={selectedGranularity}
+                                placeholder={capitalizeFirstLetter(
+                                    selectedGranularity
                                 )}
-                            </Flex>
+                                onValueChange={(v) => {
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    setSelectedGranularity(v)
+                                }}
+                                className="w-10"
+                            >
+                                {generateItems(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                )}
+                            </Select>
+                            <TabGroup
+                                index={selectedIndex}
+                                onIndexChange={setSelectedIndex}
+                                className="w-fit rounded-lg"
+                            >
+                                <TabList variant="solid">
+                                    <Tab value="area">
+                                        <AreaChartIcon className="h-5" />
+                                    </Tab>
+                                    <Tab value="line">
+                                        <LineChartIcon className="h-5" />
+                                    </Tab>
+                                    <Tab value="bar">
+                                        <BarChartIcon className="h-5" />
+                                    </Tab>
+                                </TabList>
+                            </TabGroup>
                         </Flex>
                     </Col>
                 </Grid>
+                <Flex justifyContent="end" className="mt-6 gap-2.5">
+                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
+                    {selectedChart === 'area' ? (
+                        <Text>Accumulated cost</Text>
+                    ) : (
+                        <Text>Spend</Text>
+                    )}
+                </Flex>
                 <Chart
                     labels={costTrendChart(costTrend, selectedChart).label}
                     chartData={costTrendChart(costTrend, selectedChart).data}
