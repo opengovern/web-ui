@@ -31,6 +31,7 @@ import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
 import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
+import { SourceType } from '../../../api/api'
 
 const dimensionList = ['connection', 'metric', 'category']
 
@@ -89,6 +90,7 @@ export default function CostMetricsDetails() {
         granularity?: 'daily' | 'monthly' | 'yearly' | undefined
         dimension?: 'metric' | 'connection' | undefined
         connectionId?: string[]
+        connector?: 'AWS' | 'Azure' | ''
         metricIds?: string[]
         connectionGroup?: string[]
     } => {
@@ -107,6 +109,7 @@ export default function CostMetricsDetails() {
             endTime: activeTimeRange.end.unix(),
             dimension: dim,
             granularity: gra,
+            connector: selectedConnections.provider,
             connectionId: selectedConnections.connections,
             connectionGroup: selectedConnections.connectionGroup,
         }
@@ -446,7 +449,7 @@ export default function CostMetricsDetails() {
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(newRow)
         } else gridRef.current?.api?.showLoadingOverlay()
-    }, [isLoading, dimension, selectedGranularity])
+    }, [selectedConnections, isLoading, dimension, selectedGranularity])
 
     return (
         <Menu currentPage="spend">
