@@ -329,19 +329,23 @@ export default function InsightDetail() {
                                     insightDetail?.totalResultValue
                                 )}%`}
                             />
-                            <Flex className="pl-4 border-l border-l-gray-200">
-                                <SummaryCard
-                                    border={false}
-                                    title="Evaluated"
-                                    loading={detailLoading}
-                                    metric={
-                                        insightDetail?.result
-                                            ? insightDetail?.result[0]
-                                                  ?.connections?.length
-                                            : 0
-                                    }
-                                />
-                            </Flex>
+                            {insightDetail?.result &&
+                                !!insightDetail?.result[0]?.connections
+                                    ?.length && (
+                                    <Flex className="pl-4 border-l border-l-gray-200">
+                                        <SummaryCard
+                                            border={false}
+                                            title="Evaluated"
+                                            loading={detailLoading}
+                                            metric={
+                                                insightDetail?.result
+                                                    ? insightDetail?.result[0]
+                                                          ?.connections?.length
+                                                    : 0
+                                            }
+                                        />
+                                    </Flex>
+                                )}
                             <Col numColSpan={2}>
                                 <Flex justifyContent="end" alignItems="start">
                                     <TabGroup

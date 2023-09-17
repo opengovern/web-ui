@@ -1,6 +1,7 @@
 import { Dayjs } from 'dayjs'
 import { useAtomValue } from 'jotai'
 import {
+    Button,
     Card,
     Col,
     Flex,
@@ -9,6 +10,7 @@ import {
     TabGroup,
     TabList,
     Text,
+    Title,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -26,6 +28,7 @@ import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import Table from '../../../../components/Table'
 import { getTable } from '../../../Finder'
+import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -99,25 +102,47 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
                 datePicker
                 filter
             />
+            <Flex className="mb-6">
+                <Flex alignItems="start" className="gap-2">
+                    {getConnectorIcon(
+                        metricDetail?.connectors
+                            ? metricDetail?.connectors[0]
+                            : undefined
+                    )}
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        justifyContent="start"
+                    >
+                        <Title className="font-semibold whitespace-nowrap">
+                            {metricDetail?.name}
+                        </Title>
+                        <Text>{metricDetail?.id}</Text>
+                    </Flex>
+                </Flex>
+            </Flex>
             <Card className="mb-4">
-                <Grid numItems={6} className="gap-4">
-                    <Col numColSpan={2}>
+                <Grid numItems={4} className="gap-4 mb-4">
+                    <SummaryCard
+                        title="Resource count"
+                        metric={numericDisplay(
+                            resourceTrend
+                                ? resourceTrend[resourceTrend.length - 1]?.count
+                                : 0
+                        )}
+                        loading={resourceTrendLoading || metricDetailLoading}
+                        border={false}
+                    />
+                    <Flex className="pl-4 border-l border-l-gray-200">
                         <SummaryCard
-                            title="Resource count"
-                            metric={numericDisplay(
-                                resourceTrend
-                                    ? resourceTrend[resourceTrend.length - 1]
-                                          ?.count
-                                    : 0
-                            )}
-                            loading={
-                                resourceTrendLoading || metricDetailLoading
-                            }
                             border={false}
+                            title="Evaluated"
+                            // loading={detailLoading}
+                            metric={10}
                         />
-                    </Col>
-                    <Col numColSpan={2} />
-                    <Col numColSpan={2}>
+                    </Flex>
+                    <Col />
+                    <Col>
                         <Flex
                             flexDirection="col"
                             alignItems="end"
@@ -158,7 +183,7 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
                     title="Results"
                     id="metric_table"
                     onGridReady={(params) => {
-                        if (isLoading) {
+                        if (metricDetailLoading || isLoading) {
                             params.api.showLoadingOverlay()
                         }
                     }}

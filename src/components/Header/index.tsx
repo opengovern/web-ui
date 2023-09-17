@@ -70,7 +70,7 @@ export default function Header({
                             <ChevronRightIcon className="h-5 w-5 text-gray-600" />
                             <Button
                                 onClick={() =>
-                                    navigate(goBack(subPages().length - i + 1))
+                                    navigate(goBack(subPages().length - i - 1))
                                 }
                                 variant="light"
                                 className={`${
