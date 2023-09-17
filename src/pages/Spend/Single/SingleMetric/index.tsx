@@ -20,6 +20,7 @@ import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import { useParams } from 'react-router-dom'
 import { filterAtom } from '../../../../store'
 import {
+    useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTableList,
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../../api/inventory.gen'
@@ -39,6 +40,7 @@ import {
 import Chart from '../../../../components/Chart'
 import { costTrendChart, getConnections } from '../../index'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -77,9 +79,9 @@ export default function SingleSpendMetric({
         connectionId: metric
             ? [String(id).replace('account_', '')]
             : selectedConnections.connections,
-        ...(selectedConnections.connectionGroup && {
-            connectionGroup: selectedConnections.connectionGroup,
-        }),
+        // ...(selectedConnections.connectionGroup && {
+        //     connectionGroup: selectedConnections.connectionGroup,
+        // }),
         ...(metricId && { metricIds: [metricId] }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
@@ -95,8 +97,8 @@ export default function SingleSpendMetric({
             ...query,
             granularity: selectedGranularity,
         })
-    const { response: accountCostResponse, isLoading: accountCostLoading } =
-        useOnboardApiV1ConnectionsSummaryList(query)
+    const { response: metricDetail, isLoading: metricDetailLoading } =
+        useInventoryApiV2AnalyticsSpendMetricList(query)
 
     const tableQuery = (): {
         startTime?: number | undefined
@@ -117,11 +119,12 @@ export default function SingleSpendMetric({
             connectionId: metric
                 ? [String(id)]
                 : selectedConnections.connections,
-            dimension: 'metric',
+            dimension: 'connection',
             granularity: gra,
             metricIds: [String(metricId)],
         }
     }
+    // console.log(metricDetail)
 
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
         tableQuery()
@@ -303,19 +306,39 @@ export default function SingleSpendMetric({
                 datePicker
                 filter
             />
+            <Flex className="mb-6">
+                <Flex alignItems="start" className="gap-2">
+                    {getConnectorIcon(
+                        response ? response[0]?.connector : undefined
+                    )}
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        justifyContent="start"
+                    >
+                        <Title className="font-semibold whitespace-nowrap">
+                            {response ? response[0]?.dimensionName : ''}
+                        </Title>
+                        <Text>{response ? response[0]?.dimensionId : ''}</Text>
+                    </Flex>
+                </Flex>
+            </Flex>
             <Card className="mb-4">
-                <Grid numItems={6} className="gap-4">
-                    <Col numColSpan={1}>
+                <Grid numItems={4} className="gap-4">
+                    <SummaryCard
+                        title={getConnections(selectedConnections)}
+                        metric={exactPriceDisplay(metricDetail?.total_cost)}
+                        loading={metricDetailLoading}
+                        border={false}
+                    />
+                    <Flex className="pl-4 border-l border-l-gray-200">
                         <SummaryCard
-                            title={getConnections(selectedConnections)}
-                            metric={exactPriceDisplay(
-                                accountCostResponse?.totalCost
-                            )}
-                            loading={accountCostLoading}
                             border={false}
+                            title="Evaluated"
+                            // loading={detailLoading}
+                            metric={10}
                         />
-                    </Col>
-                    <Col numColSpan={3} />
+                    </Flex>
                     <Col numColSpan={2}>
                         <Flex
                             flexDirection="col"

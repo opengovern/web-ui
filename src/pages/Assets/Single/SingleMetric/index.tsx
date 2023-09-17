@@ -122,7 +122,7 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
                 </Flex>
             </Flex>
             <Card className="mb-4">
-                <Grid numItems={4} className="gap-4">
+                <Grid numItems={4} className="gap-4 mb-4">
                     <SummaryCard
                         title="Resource count"
                         metric={numericDisplay(
