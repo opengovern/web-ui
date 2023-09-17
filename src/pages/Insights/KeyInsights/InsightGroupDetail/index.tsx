@@ -11,7 +11,6 @@ import {
 } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
-import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import 'ag-grid-enterprise'
 import { ICellRendererParams } from 'ag-grid-community'
@@ -23,6 +22,7 @@ import {
 import { timeAtom } from '../../../../store'
 import Spinner from '../../../../components/Spinner'
 import {
+    badgeDelta,
     badgeTypeByDelta,
     percentageByChange,
 } from '../../../../utilities/deltaType'
@@ -58,6 +58,36 @@ const columns: IColumn<any, any>[] = [
                 </Flex>
             ),
     },
+    {
+        field: 'totalResultValue',
+        headerName: 'Count',
+        type: 'number',
+        width: 100,
+    },
+    {
+        field: 'oldTotalResultValue',
+        headerName: 'Previous Count',
+        type: 'number',
+        width: 140,
+    },
+    {
+        headerName: 'Growth',
+        type: 'string',
+        width: 100,
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight>
+        ) =>
+            params.data?.connector && (
+                <Flex justifyContent="center" className="h-full">
+                    {params.data?.oldTotalResultValue
+                        ? badgeDelta(
+                              params.data?.oldTotalResultValue,
+                              params.data?.totalResultValue
+                          )
+                        : badgeDelta(1, 2)}
+                </Flex>
+            ),
+    },
 ]
 
 export default function InsightGroupDetail() {
@@ -80,19 +110,16 @@ export default function InsightGroupDetail() {
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
-        ...(activeTimeRange.end
-            ? {
-                  endTime: activeTimeRange.end.unix(),
-              }
-            : {
-                  endTime: activeTimeRange.start.unix(),
-              }),
+        ...(activeTimeRange.end && {
+            endTime: activeTimeRange.end.unix(),
+        }),
     }
 
     const { response: insightTrend, isLoading: trendLoading } =
         useComplianceApiV1InsightGroupTrendDetail(String(id), query)
     const { response: insightDetail, isLoading: detailLoading } =
         useComplianceApiV1InsightGroupDetail(String(id), query)
+    console.log(insightDetail?.insights)
 
     return (
         <Menu currentPage="key-insights">
