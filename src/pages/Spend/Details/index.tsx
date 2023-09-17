@@ -31,7 +31,6 @@ import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
 import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
-import { SourceType } from '../../../api/api'
 
 const dimensionList = ['connection', 'metric', 'category']
 
@@ -401,6 +400,7 @@ export default function CostMetricsDetails() {
                                   suppressMenu: true,
                                   resizable: true,
                                   pivot: false,
+                                  aggFunc: 'sum',
                                   valueFormatter: (param) => {
                                       return param.value
                                           ? exactPriceDisplay(param.value)
