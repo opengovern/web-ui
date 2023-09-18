@@ -17,7 +17,7 @@ export default function Workspaces() {
     } = useWorkspaceApiV1WorkspacesList()
 
     return (
-        <Menu currentPage="assets" showSidebar={false}>
+        <Menu currentPage="infrastructure" showSidebar={false}>
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />

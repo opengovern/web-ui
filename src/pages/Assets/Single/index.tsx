@@ -36,7 +36,7 @@ export default function Single() {
     const renderPage = () => {
         if (urlParams[urlParams.length - 1].startsWith('account_')) {
             return (
-                <Menu currentPage="assets">
+                <Menu currentPage="infrastructure">
                     <SingleConnection
                         activeTimeRange={activeTimeRange}
                         id={idGenerator()}
@@ -46,7 +46,7 @@ export default function Single() {
         }
         if (urlParams[urlParams.length - 1].startsWith('metric_')) {
             return (
-                <Menu currentPage="assets">
+                <Menu currentPage="infrastructure">
                     <SingleMetric
                         activeTimeRange={activeTimeRange}
                         metricId={idGenerator()}

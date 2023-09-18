@@ -45,12 +45,12 @@ const navigation = [
     },
     {
         name: 'Infrastructure',
-        page: 'assets',
+        page: 'infrastructure',
         icon: ServerStackIcon,
-        children: [
-            { name: 'Summary', page: 'assets' },
-            { name: 'Deployment', page: 'deployment' },
-        ],
+        // children: [
+        //     { name: 'Summary', page: 'assets' },
+        //     { name: 'Deployment', page: 'deployment' },
+        // ],
     },
     {
         name: 'Spend',
@@ -86,20 +86,20 @@ interface ISidebar {
 
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
-    const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom)
+    // const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom)
     const [insightOpen, setInsightOpen] = useAtom(administrationOpenAtom)
-    const [assetHover, setAssetHover] = useState(false)
+    // const [assetHover, setAssetHover] = useState(false)
     const [insightHover, setInsightHover] = useState(false)
-
     const isOpen = (item: any) => {
-        if (item.name === 'Infrastructure') {
-            return assetOpen
-        }
+        // if (item.name === 'Infrastructure') {
+        //     return assetOpen
+        // }
         if (item.name === 'Insights') {
             return insightOpen
         }
         return false
     }
+
     return (
         <Flex
             flexDirection="col"
@@ -126,9 +126,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         className="bg-transparent border-0"
                                         defaultOpen={isOpen(item)}
                                         onClick={() => {
-                                            if (item.name === 'Assets') {
-                                                setAssetOpen(!assetOpen)
-                                            }
+                                            // if (item.name === 'Assets') {
+                                            //     setAssetOpen(!assetOpen)
+                                            // }
                                             if (item.name === 'Insights') {
                                                 setInsightOpen(!insightOpen)
                                             }
@@ -139,7 +139,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 justifyContent="start"
                                                 className="h-full"
                                             >
-                                                <item.icon className="h-4 w-4 shrink-0" />
+                                                <item.icon className="h-5 w-5 shrink-0" />
                                                 <Text className="ml-3 text-inherit">
                                                     {item.name}
                                                 </Text>
@@ -156,7 +156,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }`}
                                                 >
-                                                    <Text className="pl-7 text-inherit my-0.5">
+                                                    <Text className="pl-8 text-inherit my-0.5">
                                                         {i.name}
                                                     </Text>
                                                 </Link>
@@ -179,17 +179,17 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             : 'gap-x-3'
                                                     }`}
                                         onMouseEnter={() => {
-                                            if (item.name === 'Assets') {
-                                                setAssetHover(true)
-                                            }
+                                            // if (item.name === 'Assets') {
+                                            //     setAssetHover(true)
+                                            // }
                                             if (item.name === 'Insights') {
                                                 setInsightHover(true)
                                             }
                                         }}
                                         onMouseLeave={() => {
-                                            if (item.name === 'Assets') {
-                                                setAssetHover(false)
-                                            }
+                                            // if (item.name === 'Assets') {
+                                            //     setAssetHover(false)
+                                            // }
                                             if (item.name === 'Insights') {
                                                 setInsightHover(false)
                                             }
@@ -199,7 +199,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             <item.icon
                                                 className={`${
                                                     !collapsed
-                                                        ? 'h-4 w-4'
+                                                        ? 'h-5 w-5'
                                                         : '-ml-1 h-6 w-6'
                                                 } shrink-0`}
                                             />
@@ -209,7 +209,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 </Text>
                                             )}
                                         </Flex>
-                                        {collapsed &&
+                                        {/* {collapsed &&
                                             assetHover &&
                                             item.name === 'Assets' && (
                                                 <div
@@ -277,19 +277,19 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         )}
                                                     </Flex>
                                                 </div>
-                                            )}
+                                            )} */}
                                         {collapsed &&
                                             insightHover &&
                                             item.name === 'Insights' && (
                                                 <div
                                                     className="pl-6 absolute -top-2 left-full"
                                                     onMouseEnter={() => {
-                                                        if (
-                                                            item.name ===
-                                                            'Assets'
-                                                        ) {
-                                                            setAssetHover(true)
-                                                        }
+                                                        // if (
+                                                        //     item.name ===
+                                                        //     'Assets'
+                                                        // ) {
+                                                        //     setAssetHover(true)
+                                                        // }
                                                         if (
                                                             item.name ===
                                                             'Insights'
@@ -300,12 +300,12 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         }
                                                     }}
                                                     onMouseLeave={() => {
-                                                        if (
-                                                            item.name ===
-                                                            'Assets'
-                                                        ) {
-                                                            setAssetHover(false)
-                                                        }
+                                                        // if (
+                                                        //     item.name ===
+                                                        //     'Assets'
+                                                        // ) {
+                                                        //     setAssetHover(false)
+                                                        // }
                                                         if (
                                                             item.name ===
                                                             'Insights'

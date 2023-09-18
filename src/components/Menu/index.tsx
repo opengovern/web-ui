@@ -12,7 +12,7 @@ type IProps = {
         | 'home'
         | 'all-insights'
         | 'key-insights'
-        | 'assets'
+        | 'infrastructure'
         | 'spend'
         | 'integrations'
         | 'compliance'
