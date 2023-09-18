@@ -321,7 +321,7 @@ export default function Finder() {
                                             className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
                                             style={{
                                                 minHeight: '200px',
-                                                maxHeight: '500px',
+                                                // maxHeight: '500px',
                                                 overflowY: 'scroll',
                                             }}
                                             placeholder="-- write your SQL query here"
