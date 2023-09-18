@@ -39,7 +39,6 @@ import {
 } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
 import { costTrendChart, getConnections } from '../../index'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 interface ISingle {
@@ -79,9 +78,9 @@ export default function SingleSpendMetric({
         connectionId: metric
             ? [String(id).replace('account_', '')]
             : selectedConnections.connections,
-        // ...(selectedConnections.connectionGroup && {
-        //     connectionGroup: selectedConnections.connectionGroup,
-        // }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(metricId && { metricIds: [metricId] }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
@@ -128,7 +127,6 @@ export default function SingleSpendMetric({
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
         tableQuery()
     )
-    console.log(response)
 
     const gridOptions: GridOptions = {
         pagination: true,
