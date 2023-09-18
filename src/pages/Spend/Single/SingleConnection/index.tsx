@@ -20,7 +20,7 @@ import {
 import {
     ArrowDownOnSquareIcon,
     ChevronRightIcon,
-    DocumentDuplicateIcon,
+    Square2StackIcon,
 } from '@heroicons/react/24/outline'
 import { useEffect, useRef, useState } from 'react'
 import { useSetAtom } from 'jotai'
@@ -451,9 +451,9 @@ export default function SingleSpendConnection({
                                                         })
                                                     )
                                                 }
-                                                icon={DocumentDuplicateIcon}
+                                                icon={Square2StackIcon}
                                             />
-                                            <Text>
+                                            <Text className="text-gray-800">
                                                 {
                                                     connection?.providerConnectionID
                                                 }
@@ -475,9 +475,9 @@ export default function SingleSpendConnection({
                                                         })
                                                     )
                                                 }
-                                                icon={DocumentDuplicateIcon}
+                                                icon={Square2StackIcon}
                                             />
-                                            <Text>
+                                            <Text className="text-gray-800">
                                                 {
                                                     connection?.providerConnectionName
                                                 }
@@ -486,17 +486,19 @@ export default function SingleSpendConnection({
                                     </ListItem>
                                     <ListItem>
                                         <Text>Health state</Text>
-                                        <Text>{connection?.healthState}</Text>
+                                        <Text className="text-gray-800">
+                                            {connection?.healthState}
+                                        </Text>
                                     </ListItem>
                                     <ListItem>
-                                        <Text>Lifecycle state</Text>
-                                        <Text>
-                                            {connection?.lifecycleState}
+                                        <Text>Connector</Text>
+                                        <Text className="text-gray-800">
+                                            {connection?.connector}
                                         </Text>
                                     </ListItem>
                                     <ListItem>
                                         <Text>Onboard date</Text>
-                                        <Text>
+                                        <Text className="text-gray-800">
                                             {dateTimeDisplay(
                                                 connection?.onboardDate
                                             )}
@@ -504,7 +506,7 @@ export default function SingleSpendConnection({
                                     </ListItem>
                                     <ListItem>
                                         <Text>Last inventory</Text>
-                                        <Text>
+                                        <Text className="text-gray-800">
                                             {dateTimeDisplay(
                                                 connection?.lastInventory
                                             )}

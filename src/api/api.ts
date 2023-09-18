@@ -939,8 +939,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest {
-    /** Specifies the Connectors */
-    connectorsFilter?: SourceType[]
     /** Specifies the Title */
     titleFilter?: string
 }
@@ -1066,6 +1064,8 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendData
     count?: number
     /** @format date-time */
     date?: string
+    totalConnectionCount?: number
+    totalSuccessfulDescribedConnectionCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest {
@@ -1093,12 +1093,10 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory {
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem {
     /** Category (Tags[category]) */
     category?: string
-    /** Description */
-    description?: string
-    /** Query Id */
-    id?: number
     /** Provider */
-    provider?: string
+    connectors?: SourceType[]
+    /** Query Id */
+    id?: string
     /** Query */
     query?: string
     /** Tags */
@@ -3119,7 +3117,7 @@ export class Api<
                 /** Connection IDs to filter by - mutually exclusive with connectionGroup */
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string
+                connectionGroup?: string[]
                 /** timestamp for start in epoch seconds */
                 startTime?: number
                 /** timestamp for end in epoch seconds */
@@ -3130,6 +3128,8 @@ export class Api<
                 pageSize?: number
                 /** page number - default is 1 */
                 pageNumber?: number
+                /** Metric IDs */
+                metricIDs?: string[]
             },
             params: RequestParams = {}
         ) =>
@@ -3210,6 +3210,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string[]
+                /** Connector */
+                connector?: string
                 /** Metrics IDs */
                 metricIds?: string[]
             },
@@ -4026,11 +4028,13 @@ export class Api<
                  * ُTerraform StateFile full path
                  * @format binary
                  */
-                terraformFile: File
+                stateFile?: File
                 /** Tags Map[string][]string */
                 tag?: string
                 /** Config json structure */
                 config: string
+                /** Config json structure for terraform remote state backend */
+                remoteStateConfig?: string
             },
             params: RequestParams = {}
         ) =>

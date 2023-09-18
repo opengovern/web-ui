@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Button, Flex, Grid } from '@tremor/react'
 import Menu from '../../components/Menu'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
@@ -16,7 +16,7 @@ export default function Workspaces() {
     } = useWorkspaceApiV1WorkspacesList()
 
     return (
-        <Menu currentPage="assets" showSidebar={false}>
+        <Menu currentPage="infrastructure" showSidebar={false}>
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />

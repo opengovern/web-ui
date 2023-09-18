@@ -9,10 +9,7 @@ import {
     Title,
 } from '@tremor/react'
 import { GridOptions } from 'ag-grid-community'
-import {
-    ChevronRightIcon,
-    DocumentDuplicateIcon,
-} from '@heroicons/react/24/outline'
+import { ChevronRightIcon, Square2StackIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
@@ -124,9 +121,9 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                                         })
                                                     )
                                                 }
-                                                icon={DocumentDuplicateIcon}
+                                                icon={Square2StackIcon}
                                             />
-                                            <Text>
+                                            <Text className="text-gray-800">
                                                 {
                                                     connection?.providerConnectionID
                                                 }
@@ -148,9 +145,9 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                                         })
                                                     )
                                                 }
-                                                icon={DocumentDuplicateIcon}
+                                                icon={Square2StackIcon}
                                             />
-                                            <Text>
+                                            <Text className="text-gray-800">
                                                 {
                                                     connection?.providerConnectionName
                                                 }
@@ -159,17 +156,19 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                     </ListItem>
                                     <ListItem>
                                         <Text>Health state</Text>
-                                        <Text>{connection?.healthState}</Text>
+                                        <Text className="text-gray-800">
+                                            {connection?.healthState}
+                                        </Text>
                                     </ListItem>
                                     <ListItem>
-                                        <Text>Lifecycle state</Text>
-                                        <Text>
-                                            {connection?.lifecycleState}
+                                        <Text>Connector</Text>
+                                        <Text className="text-gray-800">
+                                            {connection?.connector}
                                         </Text>
                                     </ListItem>
                                     <ListItem>
                                         <Text>Onboard date</Text>
-                                        <Text>
+                                        <Text className="text-gray-800">
                                             {dateTimeDisplay(
                                                 connection?.onboardDate
                                             )}
@@ -177,7 +176,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                     </ListItem>
                                     <ListItem>
                                         <Text>Last inventory</Text>
-                                        <Text>
+                                        <Text className="text-gray-800">
                                             {dateTimeDisplay(
                                                 connection?.lastInventory
                                             )}

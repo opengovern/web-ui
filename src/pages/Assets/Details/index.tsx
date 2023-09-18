@@ -398,8 +398,8 @@ export default function AssetDetail() {
     }, [dimension, isAccountsLoading, metricsLoading, isOnboarded])
 
     return (
-        <Menu currentPage="assets">
-            <Header breadCrumb={['Asset detail']} filter datePicker />
+        <Menu currentPage="infrastructure">
+            <Header breadCrumb={['Infrastructure detail']} filter datePicker />
             <Card>
                 <Flex>
                     <Title className="font-semibold">

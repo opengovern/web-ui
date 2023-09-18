@@ -235,7 +235,7 @@ export default function Assets() {
         })
 
     return (
-        <Menu currentPage="assets">
+        <Menu currentPage="infrastructure">
             <Header datePicker filter />
             <Card className="mb-4">
                 <Grid numItems={6} className="gap-4">
