@@ -211,11 +211,13 @@ interface IuseScheduleApiV1StacksCreateCreateState {
 
 export const useScheduleApiV1StacksCreateCreate = (
     data: {
-        terraformFile: File
+        stateFile?: File
 
         tag?: string
 
         config: string
+
+        remoteStateConfig?: string
     },
     params: RequestParams = {},
     autoExecute = true

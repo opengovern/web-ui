@@ -104,7 +104,7 @@ const columns: IColumn<
 >[] = [
     {
         field: 'title',
-        headerName: 'Smart Queries',
+        headerName: 'Smart queries',
         type: 'string',
         sortable: true,
         resizable: false,
@@ -456,7 +456,7 @@ export default function Finder() {
                                         )}
                                         onRowClicked={(e) => {
                                             setCode(
-                                                `-- ${e.data?.title}\n-- ${e.data?.description}\n\n${e.data?.query}` ||
+                                                `-- ${e.data?.title}\n\n${e.data?.query}` ||
                                                     ''
                                             )
                                             document
@@ -477,7 +477,7 @@ export default function Finder() {
                                         rowData={queries}
                                         onRowClicked={(e) => {
                                             setCode(
-                                                `-- ${e.data?.title}\n-- ${e.data?.description}\n\n${e.data?.query}` ||
+                                                `-- ${e.data?.title}\n\n${e.data?.query}` ||
                                                     ''
                                             )
                                             document

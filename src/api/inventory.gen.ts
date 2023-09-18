@@ -913,7 +913,7 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
 
         connectionId?: string[]
 
-        connectionGroup?: string
+        connectionGroup?: string[]
 
         startTime?: number
 
@@ -924,6 +924,8 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
         pageSize?: number
 
         pageNumber?: number
+
+        metricIDs?: string[]
     },
     params: RequestParams = {},
     autoExecute = true
@@ -1132,6 +1134,8 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
         connectionId?: string[]
 
         connectionGroup?: string[]
+
+        connector?: string
 
         metricIds?: string[]
     },
