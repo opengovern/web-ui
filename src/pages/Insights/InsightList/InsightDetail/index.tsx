@@ -397,60 +397,62 @@ export default function InsightDetail() {
                             chartType={selectedChart}
                         />
                     </Card>
-                    {detailsDate !== '' && (
-                        <Flex
-                            flexDirection="row"
-                            className="bg-kaytu-50 my-2 rounded-md pr-6"
-                        >
-                            <Callout
-                                title={`The available data for the result is exclusively limited to ${end().format(
-                                    'MMM DD, YYYY'
-                                )}.`}
-                                color="blue"
-                                icon={ExclamationCircleIcon}
-                                className="w-full text-xs leading-5 truncate max-w-full"
+                    <Card>
+                        {detailsDate !== '' && (
+                            <Flex
+                                flexDirection="row"
+                                className="bg-kaytu-50 my-2 rounded-md pr-6"
                             >
-                                <Flex flexDirection="row">
-                                    <Text className="text-kaytu-800">
-                                        The following results present you with a
-                                        partial result based on the filter you
-                                        have selected.
-                                    </Text>
-                                </Flex>
-                            </Callout>
-                            <Button
-                                variant="secondary"
-                                onClick={() => setDetailsDate('')}
-                            >
-                                Show All
-                            </Button>
-                        </Flex>
-                    )}
-                    <Table
-                        title="Results"
-                        id="insight_detail"
-                        columns={getTable(columns, rows).columns}
-                        rowData={getTable(columns, rows).row}
-                        downloadable
-                        options={gridOptions}
-                        onGridReady={(e) => {
-                            if (detailLoading) {
-                                e.api.showLoadingOverlay()
-                            }
-                        }}
-                    >
-                        <Select
-                            className="h-full"
-                            onValueChange={setDetailsDate}
-                            placeholder={
-                                detailsDate === ''
-                                    ? 'Latest'
-                                    : end().format('MMM DD, YYYY')
-                            }
+                                <Callout
+                                    title={`The available data for the result is exclusively limited to ${end().format(
+                                        'MMM DD, YYYY'
+                                    )}.`}
+                                    color="blue"
+                                    icon={ExclamationCircleIcon}
+                                    className="w-full text-xs leading-5 truncate max-w-full"
+                                >
+                                    <Flex flexDirection="row">
+                                        <Text className="text-kaytu-800">
+                                            The following results present you
+                                            with a partial result based on the
+                                            filter you have selected.
+                                        </Text>
+                                    </Flex>
+                                </Callout>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setDetailsDate('')}
+                                >
+                                    Show All
+                                </Button>
+                            </Flex>
+                        )}
+                        <Table
+                            title="Results"
+                            id="insight_detail"
+                            columns={getTable(columns, rows).columns}
+                            rowData={getTable(columns, rows).row}
+                            downloadable
+                            options={gridOptions}
+                            onGridReady={(e) => {
+                                if (detailLoading) {
+                                    e.api.showLoadingOverlay()
+                                }
+                            }}
                         >
-                            {trendDates()}
-                        </Select>
-                    </Table>
+                            <Select
+                                className="h-full"
+                                onValueChange={setDetailsDate}
+                                placeholder={
+                                    detailsDate === ''
+                                        ? 'Latest'
+                                        : end().format('MMM DD, YYYY')
+                                }
+                            >
+                                {trendDates()}
+                            </Select>
+                        </Table>
+                    </Card>
                 </>
             )}
         </Menu>
