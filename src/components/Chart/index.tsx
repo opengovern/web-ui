@@ -89,6 +89,7 @@ export default function Chart({
                         },
                     },
                 },
+                visualMap,
                 series: [
                     chartType === 'area' && {
                         data: chartData,
@@ -126,7 +127,6 @@ export default function Chart({
                         return numberDisplay(Number(value), 0)
                     },
                 },
-                visualMap,
                 color: [
                     '#1D4F85',
                     '#2970BC',
