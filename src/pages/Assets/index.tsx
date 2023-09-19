@@ -1,4 +1,5 @@
 import {
+    Callout,
     Card,
     Col,
     Flex,
@@ -9,7 +10,7 @@ import {
     TabList,
     Text,
 } from '@tremor/react'
-import { useAtomValue } from 'jotai/index'
+import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import Menu from '../../components/Menu'
 import { filterAtom, timeAtom } from '../../store'
@@ -44,15 +45,72 @@ export const resourceTrendChart = (
 ) => {
     const label = []
     const data: any = []
+    const flag = []
     if (trend) {
         for (let i = 0; i < trend?.length; i += 1) {
             label.push(dateDisplay(trend[i]?.date))
             data.push(trend[i]?.count)
+            if (
+                trend[i].totalConnectionCount !==
+                trend[i].totalSuccessfulDescribedConnectionCount
+            ) {
+                flag.push(true)
+            } else flag.push(false)
         }
     }
     return {
         label,
         data,
+        flag,
+    }
+}
+
+const generateVisualMap = (flag: boolean[], label: string[]) => {
+    const pieces = []
+    const data = []
+    if (flag) {
+        let start = 0
+        let end = 0
+        let temp = flag[0]
+        let addToArray = false
+        for (let i = 0; i < flag.length; i += 1) {
+            if (flag[i] === temp) {
+                end = i
+            } else {
+                addToArray = true
+            }
+            if (addToArray || i === flag.length - 1) {
+                pieces.push({
+                    gt: start || undefined,
+                    lte: i === flag.length - 1 ? end : end + 1,
+                    color: flag[i + 1] ? '#1D4F85' : '#E01D48',
+                })
+                addToArray = false
+                temp = flag[i]
+                start = i
+            }
+        }
+        for (let i = 0; i < pieces.length; i += 1) {
+            if (pieces[i].color === '#E01D48') {
+                data.push([
+                    { xAxis: label[pieces[i].gt || 0] },
+                    { xAxis: label[pieces[i].lte] },
+                ])
+            }
+        }
+    }
+    return {
+        visualMap: pieces.length
+            ? { show: false, dimension: 0, pieces }
+            : undefined,
+        markArea: data.length
+            ? {
+                  itemStyle: {
+                      color: 'rgba(255, 173, 177, 0.1)',
+                  },
+                  data,
+              }
+            : undefined,
     }
 }
 
@@ -213,7 +271,6 @@ export default function Assets() {
             // @ts-ignore
             granularity: selectedGranularity,
         })
-
     const { response: composition, isLoading: compositionLoading } =
         useInventoryApiV2AnalyticsCompositionDetail('category', {
             ...query,
@@ -251,56 +308,72 @@ export default function Assets() {
                     </Col>
                     <Col numColSpan={3} />
                     <Col numColSpan={2}>
-                        <Flex
-                            flexDirection="col"
-                            alignItems="end"
-                            className="h-full"
-                        >
-                            <Flex justifyContent="end" className="gap-4">
-                                <Select
-                                    value={selectedGranularity}
-                                    placeholder={capitalizeFirstLetter(
-                                        selectedGranularity
-                                    )}
-                                    onValueChange={(v) => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        setSelectedGranularity(v)
-                                    }}
-                                    className="w-10"
-                                >
-                                    {generateItems(
-                                        activeTimeRange.start,
-                                        activeTimeRange.end
-                                    )}
-                                </Select>
-                                <TabGroup
-                                    index={selectedIndex}
-                                    onIndexChange={setSelectedIndex}
-                                    className="w-fit rounded-lg"
-                                >
-                                    <TabList variant="solid">
-                                        <Tab value="line">
-                                            <LineChartIcon className="h-5" />
-                                        </Tab>
-                                        <Tab value="bar">
-                                            <BarChartIcon className="h-5" />
-                                        </Tab>
-                                    </TabList>
-                                </TabGroup>
-                            </Flex>
-                            <Flex justifyContent="end" className="mt-6 gap-2.5">
-                                <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                                <Text>Resources</Text>
-                            </Flex>
+                        <Flex justifyContent="end" className="gap-4">
+                            <Select
+                                value={selectedGranularity}
+                                placeholder={capitalizeFirstLetter(
+                                    selectedGranularity
+                                )}
+                                onValueChange={(v) => {
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    setSelectedGranularity(v)
+                                }}
+                                className="w-10"
+                            >
+                                {generateItems(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                )}
+                            </Select>
+                            <TabGroup
+                                index={selectedIndex}
+                                onIndexChange={setSelectedIndex}
+                                className="w-fit rounded-lg"
+                            >
+                                <TabList variant="solid">
+                                    <Tab value="line">
+                                        <LineChartIcon className="h-5" />
+                                    </Tab>
+                                    <Tab value="bar">
+                                        <BarChartIcon className="h-5" />
+                                    </Tab>
+                                </TabList>
+                            </TabGroup>
                         </Flex>
                     </Col>
                 </Grid>
+                {!!generateVisualMap(
+                    resourceTrendChart(resourceTrend).flag,
+                    resourceTrendChart(resourceTrend).label
+                ).visualMap && (
+                    <Callout
+                        color="rose"
+                        title="Data for red spots is incomplete or missing"
+                        className="w-fit mt-4"
+                    />
+                )}
+                <Flex justifyContent="end" className="mt-2 gap-2.5">
+                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-800" />
+                    <Text>Resources</Text>
+                </Flex>
                 <Chart
                     labels={resourceTrendChart(resourceTrend).label}
                     chartData={resourceTrendChart(resourceTrend).data}
                     chartType={selectedChart}
                     loading={resourceTrendLoading}
+                    visualMap={
+                        generateVisualMap(
+                            resourceTrendChart(resourceTrend).flag,
+                            resourceTrendChart(resourceTrend).label
+                        ).visualMap
+                    }
+                    markArea={
+                        generateVisualMap(
+                            resourceTrendChart(resourceTrend).flag,
+                            resourceTrendChart(resourceTrend).label
+                        ).markArea
+                    }
                 />
             </Card>
             <Grid numItems={1} numItemsLg={5} className="w-full gap-4">
