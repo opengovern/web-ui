@@ -65,7 +65,7 @@ export const resourceTrendChart = (
     }
 }
 
-const generateVisualMap = (flag: boolean[], label: string[]) => {
+export const generateVisualMap = (flag: boolean[], label: string[]) => {
     const pieces = []
     const data = []
     if (flag) {

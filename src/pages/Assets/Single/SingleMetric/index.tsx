@@ -1,6 +1,7 @@
 import { Dayjs } from 'dayjs'
 import { useAtomValue } from 'jotai'
 import {
+    Callout,
     Card,
     Col,
     Flex,
@@ -22,7 +23,7 @@ import { filterAtom } from '../../../../store'
 import Header from '../../../../components/Header'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
-import { resourceTrendChart } from '../../index'
+import { generateVisualMap, resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numericDisplay } from '../../../../utilities/numericDisplay'
 import Table from '../../../../components/Table'
@@ -160,13 +161,35 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
                         </Flex>
                     </Col>
                 </Grid>
-                <Flex justifyContent="end" className="mt-6 gap-2.5">
-                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
+                {!!generateVisualMap(
+                    resourceTrendChart(resourceTrend).flag,
+                    resourceTrendChart(resourceTrend).label
+                ).visualMap && (
+                    <Callout
+                        color="rose"
+                        title="Data for red spots is incomplete or missing"
+                        className="w-fit mt-4"
+                    />
+                )}
+                <Flex justifyContent="end" className="mt-2 gap-2.5">
+                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-800" />
                     <Text>Resources</Text>
                 </Flex>
                 <Chart
                     labels={resourceTrendChart(resourceTrend).label}
                     chartData={resourceTrendChart(resourceTrend).data}
+                    visualMap={
+                        generateVisualMap(
+                            resourceTrendChart(resourceTrend).flag,
+                            resourceTrendChart(resourceTrend).label
+                        ).visualMap
+                    }
+                    markArea={
+                        generateVisualMap(
+                            resourceTrendChart(resourceTrend).flag,
+                            resourceTrendChart(resourceTrend).label
+                        ).markArea
+                    }
                     chartType={selectedChart}
                     loading={resourceTrendLoading}
                 />
