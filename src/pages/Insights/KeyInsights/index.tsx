@@ -3,14 +3,24 @@ import { Button, Flex, Grid } from '@tremor/react'
 import Menu from '../../../components/Menu'
 import Header from '../../../components/Header'
 import { useComplianceApiV1InsightGroupList } from '../../../api/compliance.gen'
-import { timeAtom } from '../../../store'
+import { filterAtom, timeAtom } from '../../../store'
 import Spinner from '../../../components/Spinner'
 import InsightGroupCard from '../../../components/Cards/InsightGroupCard'
 
 export default function KeyInsights() {
     const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
 
     const query = {
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
@@ -25,11 +35,10 @@ export default function KeyInsights() {
         sendNow: insightSendNow,
         error: insightError,
     } = useComplianceApiV1InsightGroupList(query)
-    // console.log(insightList)
 
     return (
         <Menu currentPage="key-insights">
-            <Header datePicker />
+            <Header datePicker filter />
             {/* eslint-disable-next-line no-nested-ternary */}
             {listLoading ? (
                 <Flex justifyContent="center" className="mt-56">

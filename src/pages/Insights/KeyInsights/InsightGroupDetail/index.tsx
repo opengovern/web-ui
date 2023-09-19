@@ -19,7 +19,7 @@ import {
     useComplianceApiV1InsightGroupDetail,
     useComplianceApiV1InsightGroupTrendDetail,
 } from '../../../../api/compliance.gen'
-import { timeAtom } from '../../../../store'
+import { filterAtom, timeAtom } from '../../../../store'
 import Spinner from '../../../../components/Spinner'
 import {
     badgeDelta,
@@ -93,6 +93,7 @@ const columns: IColumn<any, any>[] = [
 export default function InsightGroupDetail() {
     const navigate = useNavigate()
     const { id } = useParams()
+    const selectedConnections = useAtomValue(filterAtom)
     const activeTimeRange = useAtomValue(timeAtom)
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
@@ -107,6 +108,15 @@ export default function InsightGroupDetail() {
     }
 
     const query = {
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
@@ -123,20 +133,21 @@ export default function InsightGroupDetail() {
 
     return (
         <Menu currentPage="key-insights">
+            <Header
+                breadCrumb={[
+                    insightDetail
+                        ? insightDetail?.shortTitle
+                        : 'Key insight detail',
+                ]}
+                datePicker
+                filter
+            />
             {trendLoading || detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
                 </Flex>
             ) : (
-                <Flex flexDirection="col">
-                    <Header
-                        breadCrumb={[
-                            insightDetail
-                                ? insightDetail?.shortTitle
-                                : 'Key insight detail',
-                        ]}
-                        datePicker
-                    />
+                <>
                     <Flex
                         flexDirection="col"
                         alignItems="start"
@@ -203,7 +214,7 @@ export default function InsightGroupDetail() {
                             navigateToInsightsDetails(e.data?.id)
                         }}
                     />
-                </Flex>
+                </>
             )}
         </Menu>
     )
