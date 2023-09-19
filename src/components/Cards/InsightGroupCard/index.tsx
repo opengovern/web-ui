@@ -29,11 +29,11 @@ interface IConnectorCard {
     prevCount: number | undefined
     count: number | undefined
     id: string | number | undefined
-    personas: string[]
+    // personas: string[]
 }
 
 const iconGenerator = (t: string) => {
-    const color: Color = 'slate'
+    const color: Color = 'blue'
     let icon = TagIcon
     if (t.includes('Issues') || t.includes('Risky')) {
         // color = 'rose'
@@ -56,7 +56,7 @@ export default function InsightGroupCard({
     prevCount,
     count,
     description,
-    personas,
+    // personas,
     id,
 }: IConnectorCard) {
     const navigate = useNavigate()
@@ -69,12 +69,13 @@ export default function InsightGroupCard({
         >
             <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Flex flexDirection="col" alignItems="start" className="h-fit">
-                    <Flex className="mb-3">
+                    <Flex alignItems="start" className="mb-3">
                         <Icon
                             icon={iconGenerator(String(title)).icon}
                             color={iconGenerator(String(title)).color}
                             variant="light"
                             size="lg"
+                            className="!rounded-full"
                         />
                         {!!prevCount && (
                             <BadgeDelta

@@ -42,6 +42,8 @@ interface IChart {
           )[]
         | undefined
     chartType: 'bar' | 'line' | 'area' | 'doughnut' | 'half-doughnut'
+    visualMap?: any
+    markArea?: any
     isCost?: boolean
     isPercent?: boolean
     loading?: boolean
@@ -56,6 +58,8 @@ export default function Chart({
     chartType,
     isCost = false,
     isPercent = false,
+    markArea,
+    visualMap,
     loading,
     error,
     onRefresh,
@@ -91,8 +95,14 @@ export default function Chart({
                         type: 'line',
                         areaStyle: { opacity: 0.7 },
                     },
-                    (chartType === 'bar' || chartType === 'line') && {
+                    chartType === 'bar' && {
                         data: chartData,
+                        type: chartType,
+                        areaStyle: { opacity: 0 },
+                    },
+                    chartType === 'line' && {
+                        data: chartData,
+                        markArea,
                         type: chartType,
                         areaStyle: { opacity: 0 },
                     },
@@ -116,6 +126,7 @@ export default function Chart({
                         return numberDisplay(Number(value), 0)
                     },
                 },
+                visualMap,
                 color: [
                     '#1D4F85',
                     '#2970BC',

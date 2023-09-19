@@ -1,5 +1,4 @@
 import {
-    AreaChart,
     BadgeDelta,
     Button,
     Card,
@@ -25,6 +24,21 @@ type IProps = {
     blueBorder?: boolean
     error?: string
     onRefresh?: () => void
+}
+
+const changeColor = (delta: DeltaType | undefined) => {
+    switch (delta) {
+        case 'decrease':
+        case 'moderateDecrease':
+            return 'rose'
+        case 'increase':
+        case 'moderateIncrease':
+            return 'emerald'
+        case 'unchanged':
+            return 'amber'
+        default:
+            return 'slate'
+    }
 }
 
 export default function SummaryCard({
@@ -66,19 +80,19 @@ export default function SummaryCard({
             )
         }
         return (
-            <>
+            <Flex justifyContent="start" alignItems="end" className="gap-1">
                 <Metric>
                     {Number(metric) ? numberDisplay(metric, 0) : metric}
                 </Metric>
                 {!!metricPrev && (
-                    <Text>
+                    <Text className="mb-0.5">
                         from{' '}
                         {Number(metricPrev)
                             ? numberDisplay(metricPrev, 0)
                             : metricPrev}
                     </Text>
                 )}
-            </>
+            </Flex>
         )
     }
 
@@ -90,15 +104,10 @@ export default function SummaryCard({
                 url ? 'cursor-pointer' : ''
             } ${blueBorder ? 'border-l-kaytu-500 border-l-2' : ''}`}
         >
-            <Flex alignItems="start">
-                <Flex justifyContent="start">
-                    <Text className="font-semibold mb-1.5">{title}</Text>
-                    {!border && url && (
-                        <ChevronRightIcon className="ml-1 h-4 text-kaytu-500" />
-                    )}
-                </Flex>
-                {delta && !delta.includes('Infinity') && (
-                    <BadgeDelta deltaType={deltaType}>{delta}</BadgeDelta>
+            <Flex justifyContent="start" className="mb-1.5">
+                <Text className="font-semibold">{title}</Text>
+                {!border && url && (
+                    <ChevronRightIcon className="ml-1 h-4 text-kaytu-500" />
                 )}
             </Flex>
             {loading ? (
@@ -106,23 +115,31 @@ export default function SummaryCard({
                     <Spinner />
                 </div>
             ) : (
-                <Flex alignItems="baseline">
-                    <Flex>{value()}</Flex>
-                    {border && (
-                        <div className="justify-self-end">
-                            {url && (
-                                <Button
-                                    size="xs"
-                                    variant="light"
-                                    icon={ChevronRightIcon}
-                                    iconPosition="right"
-                                >
-                                    See more
-                                </Button>
-                            )}
-                        </div>
+                <>
+                    <Flex alignItems="baseline">
+                        <Flex>{value()}</Flex>
+                        {border && (
+                            <div className="justify-self-end">
+                                {url && (
+                                    <Button
+                                        size="xs"
+                                        variant="light"
+                                        icon={ChevronRightIcon}
+                                        iconPosition="right"
+                                    >
+                                        See more
+                                    </Button>
+                                )}
+                            </div>
+                        )}
+                    </Flex>
+                    {delta && !delta.includes('Infinity') && (
+                        <Flex className="mt-2.5 gap-1" justifyContent="start">
+                            <BadgeDelta size="sm" deltaType={deltaType} />
+                            <Text color={changeColor(deltaType)}>{delta}</Text>
+                        </Flex>
                     )}
-                </Flex>
+                </>
             )}
         </Card>
     )

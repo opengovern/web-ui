@@ -30,7 +30,12 @@ import {
     useComplianceApiV1InsightDetail,
     useComplianceApiV1InsightTrendDetail,
 } from '../../../../api/compliance.gen'
-import { notificationAtom, queryAtom, timeAtom } from '../../../../store'
+import {
+    filterAtom,
+    notificationAtom,
+    queryAtom,
+    timeAtom,
+} from '../../../../store'
 import Spinner from '../../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
@@ -132,6 +137,7 @@ const gridOptions: GridOptions = {
 export default function InsightDetail() {
     const { id, ws } = useParams()
     const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
     const [detailsDate, setDetailsDate] = useState<string>('')
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
@@ -163,18 +169,33 @@ export default function InsightDetail() {
     }
 
     const query = {
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
-        ...(activeTimeRange.end
-            ? {
-                  endTime: activeTimeRange.end.unix(),
-              }
-            : {
-                  endTime: activeTimeRange.start.unix(),
-              }),
+        ...(activeTimeRange.end && {
+            endTime: activeTimeRange.end.unix(),
+        }),
     }
+
     const detailsQuery = {
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(activeTimeRange.start && {
             startTime: start().unix(),
             endTime: end().unix(),
@@ -211,20 +232,21 @@ export default function InsightDetail() {
 
     return (
         <Menu currentPage="all-insights">
+            <Header
+                breadCrumb={[
+                    insightDetail
+                        ? insightDetail?.shortTitle
+                        : 'Insight detail',
+                ]}
+                datePicker
+                filter
+            />
             {trendLoading || detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
                 </Flex>
             ) : (
-                <Flex flexDirection="col">
-                    <Header
-                        breadCrumb={[
-                            insightDetail
-                                ? insightDetail?.shortTitle
-                                : 'Insight detail',
-                        ]}
-                        datePicker
-                    />
+                <>
                     <Flex className="mb-6">
                         <Flex
                             flexDirection="col"
@@ -322,7 +344,7 @@ export default function InsightDetail() {
                             {insightDetail?.result &&
                                 !!insightDetail?.result[0]?.connections
                                     ?.length && (
-                                    <Flex className="pl-4 border-l border-l-gray-200">
+                                    <div className="pl-4 border-l border-l-gray-200">
                                         <SummaryCard
                                             border={false}
                                             title="Evaluated"
@@ -334,7 +356,7 @@ export default function InsightDetail() {
                                                     : 0
                                             }
                                         />
-                                    </Flex>
+                                    </div>
                                 )}
                             <Col numColSpan={2}>
                                 <Flex justifyContent="end" alignItems="start">
@@ -365,61 +387,63 @@ export default function InsightDetail() {
                             chartType={selectedChart}
                         />
                     </Card>
-                    {detailsDate !== '' && (
-                        <Flex
-                            flexDirection="row"
-                            className="bg-kaytu-50 my-2 rounded-md pr-6"
-                        >
-                            <Callout
-                                title={`The available data for the result is exclusively limited to ${end().format(
-                                    'MMM DD, YYYY'
-                                )}.`}
-                                color="blue"
-                                icon={ExclamationCircleIcon}
-                                className="w-full text-xs leading-5 truncate max-w-full"
+                    <Card>
+                        {detailsDate !== '' && (
+                            <Flex
+                                flexDirection="row"
+                                className="bg-kaytu-50 my-2 rounded-md pr-6"
                             >
-                                <Flex flexDirection="row">
-                                    <Text className="text-kaytu-800">
-                                        The following results present you with a
-                                        partial result based on the filter you
-                                        have selected.
-                                    </Text>
-                                </Flex>
-                            </Callout>
-                            <Button
-                                variant="secondary"
-                                onClick={() => setDetailsDate('')}
-                            >
-                                Show All
-                            </Button>
-                        </Flex>
-                    )}
-                    <Table
-                        title="Results"
-                        id="insight_detail"
-                        columns={getTable(columns, rows).columns}
-                        rowData={getTable(columns, rows).row}
-                        downloadable
-                        options={gridOptions}
-                        onGridReady={(e) => {
-                            if (detailLoading) {
-                                e.api.showLoadingOverlay()
-                            }
-                        }}
-                    >
-                        <Select
-                            className="h-full"
-                            onValueChange={setDetailsDate}
-                            placeholder={
-                                detailsDate === ''
-                                    ? 'Latest'
-                                    : end().format('MMM DD, YYYY')
-                            }
+                                <Callout
+                                    title={`The available data for the result is exclusively limited to ${end().format(
+                                        'MMM DD, YYYY'
+                                    )}.`}
+                                    color="blue"
+                                    icon={ExclamationCircleIcon}
+                                    className="w-full text-xs leading-5 truncate max-w-full"
+                                >
+                                    <Flex flexDirection="row">
+                                        <Text className="text-kaytu-800">
+                                            The following results present you
+                                            with a partial result based on the
+                                            filter you have selected.
+                                        </Text>
+                                    </Flex>
+                                </Callout>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setDetailsDate('')}
+                                >
+                                    Show All
+                                </Button>
+                            </Flex>
+                        )}
+                        <Table
+                            title="Results"
+                            id="insight_detail"
+                            columns={getTable(columns, rows).columns}
+                            rowData={getTable(columns, rows).row}
+                            downloadable
+                            options={gridOptions}
+                            onGridReady={(e) => {
+                                if (detailLoading) {
+                                    e.api.showLoadingOverlay()
+                                }
+                            }}
                         >
-                            {trendDates()}
-                        </Select>
-                    </Table>
-                </Flex>
+                            <Select
+                                className="h-full"
+                                onValueChange={setDetailsDate}
+                                placeholder={
+                                    detailsDate === ''
+                                        ? 'Latest'
+                                        : end().format('MMM DD, YYYY')
+                                }
+                            >
+                                {trendDates()}
+                            </Select>
+                        </Table>
+                    </Card>
+                </>
             )}
         </Menu>
     )

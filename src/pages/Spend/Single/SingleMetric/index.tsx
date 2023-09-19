@@ -329,14 +329,14 @@ export default function SingleSpendMetric({
                         loading={metricDetailLoading}
                         border={false}
                     />
-                    <Flex className="pl-4 border-l border-l-gray-200">
+                    <div className="pl-4 border-l border-l-gray-200">
                         <SummaryCard
                             border={false}
                             title="Evaluated"
                             // loading={detailLoading}
                             metric={10}
                         />
-                    </Flex>
+                    </div>
                     <Col numColSpan={2}>
                         <Flex justifyContent="end" className="gap-4">
                             <Select

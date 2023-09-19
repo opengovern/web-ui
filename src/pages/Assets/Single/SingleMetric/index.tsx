@@ -132,14 +132,14 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
                         loading={resourceTrendLoading || metricDetailLoading}
                         border={false}
                     />
-                    <Flex className="pl-4 border-l border-l-gray-200">
+                    <div className="pl-4 border-l border-l-gray-200">
                         <SummaryCard
                             border={false}
                             title="Evaluated"
                             // loading={detailLoading}
                             metric={10}
                         />
-                    </Flex>
+                    </div>
                     <Col />
                     <Col>
                         <Flex justifyContent="end" className="gap-4">
