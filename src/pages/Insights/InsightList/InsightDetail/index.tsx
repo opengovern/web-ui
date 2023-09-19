@@ -332,7 +332,7 @@ export default function InsightDetail() {
                             {insightDetail?.result &&
                                 !!insightDetail?.result[0]?.connections
                                     ?.length && (
-                                    <Flex className="pl-4 border-l border-l-gray-200">
+                                    <div className="pl-4 border-l border-l-gray-200">
                                         <SummaryCard
                                             border={false}
                                             title="Evaluated"
@@ -344,7 +344,7 @@ export default function InsightDetail() {
                                                     : 0
                                             }
                                         />
-                                    </Flex>
+                                    </div>
                                 )}
                             <Col numColSpan={2}>
                                 <Flex justifyContent="end" alignItems="start">

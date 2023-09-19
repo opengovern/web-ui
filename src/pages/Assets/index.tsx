@@ -213,6 +213,7 @@ export default function Assets() {
             // @ts-ignore
             granularity: selectedGranularity,
         })
+    console.log(resourceTrend)
     const { response: composition, isLoading: compositionLoading } =
         useInventoryApiV2AnalyticsCompositionDetail('category', {
             ...query,
