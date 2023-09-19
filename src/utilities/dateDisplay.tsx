@@ -11,13 +11,12 @@ export const dateDisplay = (
     if ((typeof date).toString() === 'Dayjs') {
         return (date as Dayjs).subtract(s, 'day').format('ll')
     }
-
     if (date !== undefined) {
-        return dayjs(date).subtract(s, 'day').format('ll')
+        return dayjs.utc(date).subtract(s, 'day').format('ll')
     }
     return ''
 }
 
 export const dateTimeDisplay = (date: Date | string | undefined) => {
-    return dayjs(date).format('lll')
+    return dayjs.utc(date).format('lll')
 }

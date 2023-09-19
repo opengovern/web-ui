@@ -226,6 +226,13 @@ export default function Chart({
         }
         return undefined
     }
+    const onChartClick = (params: any) => {
+        console.log('Chart clicked', params)
+    }
+
+    const onEvents = {
+        click: onChartClick,
+    }
 
     if (error !== undefined && error.length > 0) {
         return (
@@ -256,6 +263,7 @@ export default function Chart({
             option={options()}
             showLoading={loading}
             className="w-full"
+            onEvents={onEvents}
         />
     )
 }

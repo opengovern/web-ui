@@ -167,7 +167,7 @@ export default function InsightDetail() {
         }
         const d = new Date(0)
         d.setUTCSeconds(parseInt(detailsDate, 10) - 1)
-        return dayjs(d)
+        return dayjs.utc(d)
     }
     const end = () => {
         if (detailsDate === '') {
@@ -175,7 +175,7 @@ export default function InsightDetail() {
         }
         const d = new Date(0)
         d.setUTCSeconds(parseInt(detailsDate, 10) + 1)
-        return dayjs(d)
+        return dayjs.utc(d)
     }
 
     const query = {

@@ -17,13 +17,13 @@ import 'ag-grid-community/styles/agGridMaterialFont.css'
 import { useEffect, useRef } from 'react'
 import { Button, Flex, Title } from '@tremor/react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
-import dayjs from 'dayjs'
 import {
     exactPriceDisplay,
     numberGroupedDisplay,
 } from '../../utilities/numericDisplay'
 import { agGridDateComparator } from '../../utilities/dateComparator'
 import { getConnectorIcon } from '../Cards/ConnectorCard'
+import { dateDisplay } from '../../utilities/dateDisplay'
 
 export interface IColumn<TData, TValue> {
     type: 'string' | 'number' | 'price' | 'date' | 'connector'
@@ -155,11 +155,11 @@ export default function Table<TData = any, TValue = any>({
                 }
                 v.valueFormatter = (param) => {
                     if (param.value) {
-                        return dayjs(
+                        return dateDisplay(
                             Number(param.value)
                                 ? param.value * 1000
                                 : param.value
-                        ).format('MMM DD, YYYY')
+                        )
                     }
                     return ''
                 }
