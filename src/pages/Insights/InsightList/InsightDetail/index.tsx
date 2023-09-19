@@ -30,7 +30,12 @@ import {
     useComplianceApiV1InsightDetail,
     useComplianceApiV1InsightTrendDetail,
 } from '../../../../api/compliance.gen'
-import { notificationAtom, queryAtom, timeAtom } from '../../../../store'
+import {
+    filterAtom,
+    notificationAtom,
+    queryAtom,
+    timeAtom,
+} from '../../../../store'
 import Spinner from '../../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
@@ -142,6 +147,7 @@ const gridOptions: GridOptions = {
 export default function InsightDetail() {
     const { id, ws } = useParams()
     const activeTimeRange = useAtomValue(timeAtom)
+    const selectedConnections = useAtomValue(filterAtom)
     const [detailsDate, setDetailsDate] = useState<string>('')
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
@@ -173,18 +179,33 @@ export default function InsightDetail() {
     }
 
     const query = {
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
-        ...(activeTimeRange.end
-            ? {
-                  endTime: activeTimeRange.end.unix(),
-              }
-            : {
-                  endTime: activeTimeRange.start.unix(),
-              }),
+        ...(activeTimeRange.end && {
+            endTime: activeTimeRange.end.unix(),
+        }),
     }
+
     const detailsQuery = {
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
         ...(activeTimeRange.start && {
             startTime: start().unix(),
             endTime: end().unix(),
@@ -221,20 +242,21 @@ export default function InsightDetail() {
 
     return (
         <Menu currentPage="all-insights">
+            <Header
+                breadCrumb={[
+                    insightDetail
+                        ? insightDetail?.shortTitle
+                        : 'Insight detail',
+                ]}
+                datePicker
+                filter
+            />
             {trendLoading || detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
                 </Flex>
             ) : (
-                <Flex flexDirection="col">
-                    <Header
-                        breadCrumb={[
-                            insightDetail
-                                ? insightDetail?.shortTitle
-                                : 'Insight detail',
-                        ]}
-                        datePicker
-                    />
+                <>
                     <Flex className="mb-6">
                         <Flex
                             flexDirection="col"
@@ -429,7 +451,7 @@ export default function InsightDetail() {
                             {trendDates()}
                         </Select>
                     </Table>
-                </Flex>
+                </>
             )}
         </Menu>
     )
