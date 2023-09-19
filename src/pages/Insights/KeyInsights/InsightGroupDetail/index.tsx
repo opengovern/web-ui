@@ -129,7 +129,6 @@ export default function InsightGroupDetail() {
         useComplianceApiV1InsightGroupTrendDetail(String(id), query)
     const { response: insightDetail, isLoading: detailLoading } =
         useComplianceApiV1InsightGroupDetail(String(id), query)
-    console.log(insightDetail?.insights)
 
     return (
         <Menu currentPage="key-insights">
