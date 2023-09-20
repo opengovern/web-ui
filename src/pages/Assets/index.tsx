@@ -81,7 +81,7 @@ export const generateVisualMap = (flag: boolean[], label: string[]) => {
             }
             if (addToArray || i === flag.length - 1) {
                 pieces.push({
-                    gt: start || undefined,
+                    gt: start || -1,
                     lte: i === flag.length - 1 ? end : end + 1,
                     color: flag[i + 1] ? '#1D4F85' : '#E01D48',
                 })
@@ -93,7 +93,7 @@ export const generateVisualMap = (flag: boolean[], label: string[]) => {
         for (let i = 0; i < pieces.length; i += 1) {
             if (pieces[i].color === '#E01D48') {
                 data.push([
-                    { xAxis: label[pieces[i].gt || 0] },
+                    { xAxis: label[pieces[i].gt < 0 ? 0 : pieces[i].gt] },
                     { xAxis: label[pieces[i].lte] },
                 ])
             }

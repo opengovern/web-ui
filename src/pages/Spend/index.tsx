@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
+    Callout,
     Card,
     Col,
     Flex,
@@ -22,7 +23,10 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
 import { dateDisplay } from '../../utilities/dateDisplay'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import { exactPriceDisplay } from '../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numberDisplay,
+} from '../../utilities/numericDisplay'
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
@@ -36,6 +40,7 @@ import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity, generateItems } from '../../utilities/dateComparator'
 import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 import Header from '../../components/Header'
+import { generateVisualMap } from '../Assets'
 
 const topServices = (
     input:
@@ -103,11 +108,18 @@ export const costTrendChart = (
 ) => {
     const label = []
     const data: any = []
+    const flag = []
     if (trend) {
         if (chart === 'bar' || chart === 'line') {
             for (let i = 0; i < trend?.length; i += 1) {
                 label.push(dateDisplay(trend[i]?.date))
                 data.push(trend[i]?.count)
+                if (
+                    trend[i].totalConnectionCount !==
+                    trend[i].totalSuccessfulDescribedConnectionCount
+                ) {
+                    flag.push(true)
+                } else flag.push(false)
             }
         }
         if (chart === 'area') {
@@ -124,6 +136,7 @@ export const costTrendChart = (
     return {
         label,
         data,
+        flag,
     }
 }
 
@@ -184,6 +197,7 @@ export default function Spend() {
             ? 'daily'
             : 'monthly'
     )
+    const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('area')
@@ -225,7 +239,7 @@ export default function Spend() {
             ...query,
             granularity: selectedGranularity,
         })
-
+    console.log(costTrend)
     const { response: serviceCostResponse, isLoading: serviceCostLoading } =
         useInventoryApiV2AnalyticsSpendMetricList(query)
 
@@ -270,64 +284,101 @@ export default function Spend() {
                     </Col>
                     <Col numColSpan={3} />
                     <Col numColSpan={2}>
-                        <Flex
-                            flexDirection="col"
-                            alignItems="end"
-                            className="h-full"
-                        >
-                            <Flex justifyContent="end" className="gap-4">
-                                <Select
-                                    value={selectedGranularity}
-                                    placeholder={capitalizeFirstLetter(
-                                        selectedGranularity
-                                    )}
-                                    onValueChange={(v) => {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        setSelectedGranularity(v)
-                                    }}
-                                    className="w-10"
-                                >
-                                    {generateItems(
-                                        activeTimeRange.start,
-                                        activeTimeRange.end
-                                    )}
-                                </Select>
-                                <TabGroup
-                                    index={selectedIndex}
-                                    onIndexChange={setSelectedIndex}
-                                    className="w-fit rounded-lg"
-                                >
-                                    <TabList variant="solid">
-                                        <Tab value="area">
-                                            <AreaChartIcon className="h-5" />
-                                        </Tab>
-                                        <Tab value="line">
-                                            <LineChartIcon className="h-5" />
-                                        </Tab>
-                                        <Tab value="bar">
-                                            <BarChartIcon className="h-5" />
-                                        </Tab>
-                                    </TabList>
-                                </TabGroup>
-                            </Flex>
-                            <Flex justifyContent="end" className="mt-6 gap-2.5">
-                                <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                                {selectedChart === 'area' ? (
-                                    <Text>Accumulated cost</Text>
-                                ) : (
-                                    <Text>Spend</Text>
+                        <Flex justifyContent="end" className="gap-4">
+                            <Select
+                                value={selectedGranularity}
+                                placeholder={capitalizeFirstLetter(
+                                    selectedGranularity
                                 )}
-                            </Flex>
+                                onValueChange={(v) => {
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    setSelectedGranularity(v)
+                                }}
+                                className="w-10"
+                            >
+                                {generateItems(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                )}
+                            </Select>
+                            <TabGroup
+                                index={selectedIndex}
+                                onIndexChange={setSelectedIndex}
+                                className="w-fit rounded-lg"
+                            >
+                                <TabList variant="solid">
+                                    <Tab value="area">
+                                        <AreaChartIcon className="h-5" />
+                                    </Tab>
+                                    <Tab value="line">
+                                        <LineChartIcon className="h-5" />
+                                    </Tab>
+                                    <Tab value="bar">
+                                        <BarChartIcon className="h-5" />
+                                    </Tab>
+                                </TabList>
+                            </TabGroup>
                         </Flex>
                     </Col>
                 </Grid>
+                {costTrend
+                    ?.filter(
+                        (t) =>
+                            selectedDatapoint?.color === '#E01D48' &&
+                            dateDisplay(t.date) === selectedDatapoint?.name
+                    )
+                    .map((t) => (
+                        <Callout
+                            color="rose"
+                            title="Incomplete data"
+                            className="w-fit mt-4"
+                        >
+                            Checked{' '}
+                            {numberDisplay(
+                                t.totalSuccessfulDescribedConnectionCount,
+                                0
+                            )}{' '}
+                            accounts out of{' '}
+                            {numberDisplay(t.totalConnectionCount, 0)} on{' '}
+                            {dateDisplay(t.date)}
+                        </Callout>
+                    ))}
+                <Flex justifyContent="end" className="mt-2 gap-2.5">
+                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
+                    {selectedChart === 'area' ? (
+                        <Text>Accumulated cost</Text>
+                    ) : (
+                        <Text>Spend</Text>
+                    )}
+                </Flex>
                 <Chart
                     labels={costTrendChart(costTrend, selectedChart).label}
                     chartData={costTrendChart(costTrend, selectedChart).data}
                     chartType={selectedChart}
                     isCost
                     loading={costTrendLoading}
+                    visualMap={
+                        selectedChart === 'area'
+                            ? undefined
+                            : generateVisualMap(
+                                  costTrendChart(costTrend, selectedChart).flag,
+                                  costTrendChart(costTrend, selectedChart).label
+                              ).visualMap
+                    }
+                    markArea={
+                        selectedChart === 'area'
+                            ? undefined
+                            : generateVisualMap(
+                                  costTrendChart(costTrend, selectedChart).flag,
+                                  costTrendChart(costTrend, selectedChart).label
+                              ).markArea
+                    }
+                    onClick={
+                        selectedChart === 'area'
+                            ? undefined
+                            : (p) => setSelectedDatapoint(p)
+                    }
                 />
             </Card>
             <Grid numItems={5} className="w-full gap-4">
