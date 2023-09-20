@@ -22,8 +22,8 @@ import {
 import { useAtom } from 'jotai'
 import { useState } from 'react'
 import {
-    administrationOpenAtom,
-    assetOpenAtom,
+    insightOpenAtom,
+    complianceOpenAtom,
     sideBarCollapsedAtom,
 } from '../../../store'
 import { KaytuIcon } from '../../../icons/icons'
@@ -61,6 +61,10 @@ const navigation = [
         name: 'Compliance',
         page: 'compliance',
         icon: ShieldCheckIcon,
+        children: [
+            { name: 'Summary', page: 'compliance' },
+            { name: 'Service Advisor', page: 'service-advisor' },
+        ],
     },
     {
         name: 'Finder',
@@ -86,14 +90,14 @@ interface ISidebar {
 
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
-    // const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom)
-    const [insightOpen, setInsightOpen] = useAtom(administrationOpenAtom)
-    // const [assetHover, setAssetHover] = useState(false)
+    const [complianceOpen, setComplianceOpen] = useAtom(complianceOpenAtom)
+    const [insightOpen, setInsightOpen] = useAtom(insightOpenAtom)
+    const [complianceHover, setComplianceHover] = useState(false)
     const [insightHover, setInsightHover] = useState(false)
     const isOpen = (item: any) => {
-        // if (item.name === 'Infrastructure') {
-        //     return assetOpen
-        // }
+        if (item.name === 'Compliance') {
+            return complianceOpen
+        }
         if (item.name === 'Insights') {
             return insightOpen
         }
@@ -126,9 +130,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         className="bg-transparent border-0"
                                         defaultOpen={isOpen(item)}
                                         onClick={() => {
-                                            // if (item.name === 'Assets') {
-                                            //     setAssetOpen(!assetOpen)
-                                            // }
+                                            if (item.name === 'Compliance') {
+                                                setComplianceOpen(
+                                                    !complianceOpen
+                                                )
+                                            }
                                             if (item.name === 'Insights') {
                                                 setInsightOpen(!insightOpen)
                                             }
@@ -179,17 +185,17 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             : 'gap-x-3'
                                                     }`}
                                         onMouseEnter={() => {
-                                            // if (item.name === 'Assets') {
-                                            //     setAssetHover(true)
-                                            // }
+                                            if (item.name === 'Compliance') {
+                                                setComplianceHover(true)
+                                            }
                                             if (item.name === 'Insights') {
                                                 setInsightHover(true)
                                             }
                                         }}
                                         onMouseLeave={() => {
-                                            // if (item.name === 'Assets') {
-                                            //     setAssetHover(false)
-                                            // }
+                                            if (item.name === 'Compliance') {
+                                                setComplianceHover(false)
+                                            }
                                             if (item.name === 'Insights') {
                                                 setInsightHover(false)
                                             }
@@ -209,17 +215,19 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 </Text>
                                             )}
                                         </Flex>
-                                        {/* {collapsed &&
-                                            assetHover &&
-                                            item.name === 'Assets' && (
+                                        {collapsed &&
+                                            complianceHover &&
+                                            item.name === 'Compliance' && (
                                                 <div
                                                     className="pl-6 absolute -top-2 left-full"
                                                     onMouseEnter={() => {
                                                         if (
                                                             item.name ===
-                                                            'Assets'
+                                                            'Compliance'
                                                         ) {
-                                                            setAssetHover(true)
+                                                            setComplianceHover(
+                                                                true
+                                                            )
                                                         }
                                                         if (
                                                             item.name ===
@@ -233,9 +241,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     onMouseLeave={() => {
                                                         if (
                                                             item.name ===
-                                                            'Assets'
+                                                            'Compliance'
                                                         ) {
-                                                            setAssetHover(false)
+                                                            setComplianceHover(
+                                                                false
+                                                            )
                                                         }
                                                         if (
                                                             item.name ===
@@ -277,19 +287,21 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         )}
                                                     </Flex>
                                                 </div>
-                                            )} */}
+                                            )}
                                         {collapsed &&
                                             insightHover &&
                                             item.name === 'Insights' && (
                                                 <div
                                                     className="pl-6 absolute -top-2 left-full"
                                                     onMouseEnter={() => {
-                                                        // if (
-                                                        //     item.name ===
-                                                        //     'Assets'
-                                                        // ) {
-                                                        //     setAssetHover(true)
-                                                        // }
+                                                        if (
+                                                            item.name ===
+                                                            'Compliance'
+                                                        ) {
+                                                            setComplianceHover(
+                                                                true
+                                                            )
+                                                        }
                                                         if (
                                                             item.name ===
                                                             'Insights'
@@ -300,12 +312,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                         }
                                                     }}
                                                     onMouseLeave={() => {
-                                                        // if (
-                                                        //     item.name ===
-                                                        //     'Assets'
-                                                        // ) {
-                                                        //     setAssetHover(false)
-                                                        // }
+                                                        if (
+                                                            item.name ===
+                                                            'Compliance'
+                                                        ) {
+                                                            setComplianceHover(
+                                                                false
+                                                            )
+                                                        }
                                                         if (
                                                             item.name ===
                                                             'Insights'
