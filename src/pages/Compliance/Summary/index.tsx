@@ -1,5 +1,4 @@
 import { Grid } from '@tremor/react'
-import dayjs from 'dayjs'
 import { useAtomValue } from 'jotai'
 import SummaryCard from '../../../components/Cards/SummaryCard'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse } from '../../../api/api'

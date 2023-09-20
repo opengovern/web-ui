@@ -22,6 +22,7 @@ import AssetDetail from '../pages/Assets/Details'
 import InsightGroupDetail from '../pages/Insights/KeyInsights/InsightGroupDetail'
 import Single from '../pages/Assets/Single'
 import SingleSpend from '../pages/Spend/Single'
+import ServiceAdvisor from '../pages/Compliance/ServiceAdvisor'
 
 const routes = [
     {
@@ -165,6 +166,16 @@ const authRoutes = [
     {
         key: 'benchmark detail',
         path: '/:ws/compliance/:id',
+        component: BenchmarkDetail,
+    },
+    {
+        key: 'service advisor',
+        path: '/:ws/service-advisor',
+        component: ServiceAdvisor,
+    },
+    {
+        key: 'service advisor detail',
+        path: '/:ws/service-advisor/:id',
         component: BenchmarkDetail,
     },
     {
