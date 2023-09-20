@@ -242,7 +242,7 @@ export default function Assets() {
             : 'monthly'
     )
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
-    console.log(selectedDatapoint)
+
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
         if (selectedIndex === 1) setSelectedChart('bar')
