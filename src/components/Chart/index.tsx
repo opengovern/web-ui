@@ -49,6 +49,7 @@ interface IChart {
     loading?: boolean
     error?: string
     onRefresh?: () => void
+    onClick?: (param?: any) => void
 }
 
 export default function Chart({
@@ -63,6 +64,7 @@ export default function Chart({
     loading,
     error,
     onRefresh,
+    onClick,
 }: IChart) {
     const options = () => {
         if (
@@ -226,8 +228,10 @@ export default function Chart({
         }
         return undefined
     }
+
     const onChartClick = (params: any) => {
-        console.log('Chart clicked', params)
+        // eslint-disable-next-line no-unused-expressions
+        onClick ? onClick(params) : undefined
     }
 
     const onEvents = {

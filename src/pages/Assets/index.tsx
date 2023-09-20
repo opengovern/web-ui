@@ -16,7 +16,7 @@ import Menu from '../../components/Menu'
 import { filterAtom, timeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import { numericDisplay } from '../../utilities/numericDisplay'
+import { numberDisplay, numericDisplay } from '../../utilities/numericDisplay'
 import { BarChartIcon, LineChartIcon } from '../../icons/icons'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
@@ -241,7 +241,8 @@ export default function Assets() {
             ? 'daily'
             : 'monthly'
     )
-
+    const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
+    console.log(selectedDatapoint)
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
         if (selectedIndex === 1) setSelectedChart('bar')
@@ -343,16 +344,28 @@ export default function Assets() {
                         </Flex>
                     </Col>
                 </Grid>
-                {!!generateVisualMap(
-                    resourceTrendChart(resourceTrend).flag,
-                    resourceTrendChart(resourceTrend).label
-                ).visualMap && (
-                    <Callout
-                        color="rose"
-                        title="Data for red spots is incomplete or missing"
-                        className="w-fit mt-4"
-                    />
-                )}
+                {resourceTrend
+                    ?.filter(
+                        (t) =>
+                            selectedDatapoint?.color === '#E01D48' &&
+                            dateDisplay(t.date) === selectedDatapoint?.name
+                    )
+                    .map((t) => (
+                        <Callout
+                            color="rose"
+                            title="Incomplete data"
+                            className="w-fit mt-4"
+                        >
+                            Checked{' '}
+                            {numberDisplay(
+                                t.totalSuccessfulDescribedConnectionCount,
+                                0
+                            )}{' '}
+                            accounts out of{' '}
+                            {numberDisplay(t.totalConnectionCount, 0)} on{' '}
+                            {dateDisplay(t.date)}
+                        </Callout>
+                    ))}
                 <Flex justifyContent="end" className="mt-2 gap-2.5">
                     <div className="h-2.5 w-2.5 rounded-full bg-kaytu-800" />
                     <Text>Resources</Text>
@@ -374,6 +387,7 @@ export default function Assets() {
                             resourceTrendChart(resourceTrend).label
                         ).markArea
                     }
+                    onClick={(p) => setSelectedDatapoint(p)}
                 />
             </Card>
             <Grid numItems={1} numItemsLg={5} className="w-full gap-4">
