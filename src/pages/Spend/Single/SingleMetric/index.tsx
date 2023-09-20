@@ -299,12 +299,6 @@ export default function SingleSpendMetric({
             gridRef.current?.api?.setRowData(newRow)
         }
     }, [isLoading])
-    console.log(
-        generateVisualMap(
-            costTrendChart(costTrend, selectedChart).flag,
-            costTrendChart(costTrend, selectedChart).label
-        ).visualMap
-    )
 
     return (
         <>

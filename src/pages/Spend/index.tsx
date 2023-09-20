@@ -239,7 +239,7 @@ export default function Spend() {
             ...query,
             granularity: selectedGranularity,
         })
-    console.log(costTrend)
+
     const { response: serviceCostResponse, isLoading: serviceCostLoading } =
         useInventoryApiV2AnalyticsSpendMetricList(query)
 
