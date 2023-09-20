@@ -3,6 +3,7 @@ import { useAtomValue } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import {
     Button,
+    Callout,
     Card,
     Col,
     Flex,
@@ -30,7 +31,10 @@ import {
 } from '../../../../utilities/dateComparator'
 import Header from '../../../../components/Header'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
-import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
+import {
+    exactPriceDisplay,
+    numberDisplay,
+} from '../../../../utilities/numericDisplay'
 import { capitalizeFirstLetter } from '../../../../utilities/labelMaker'
 import {
     AreaChartIcon,
@@ -40,6 +44,8 @@ import {
 import Chart from '../../../../components/Chart'
 import { costTrendChart, getConnections } from '../../index'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
+import { generateVisualMap } from '../../../Assets'
+import { dateDisplay } from '../../../../utilities/dateDisplay'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -64,6 +70,7 @@ export default function SingleSpendMetric({
             ? 'daily'
             : 'monthly'
     )
+    const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('area')
@@ -376,7 +383,29 @@ export default function SingleSpendMetric({
                         </Flex>
                     </Col>
                 </Grid>
-                <Flex justifyContent="end" className="mt-6 gap-2.5">
+                {costTrend
+                    ?.filter(
+                        (t) =>
+                            selectedDatapoint?.color === '#E01D48' &&
+                            dateDisplay(t.date) === selectedDatapoint?.name
+                    )
+                    .map((t) => (
+                        <Callout
+                            color="rose"
+                            title="Incomplete data"
+                            className="w-fit mt-4"
+                        >
+                            Checked{' '}
+                            {numberDisplay(
+                                t.totalSuccessfulDescribedConnectionCount,
+                                0
+                            )}{' '}
+                            accounts out of{' '}
+                            {numberDisplay(t.totalConnectionCount, 0)} on{' '}
+                            {dateDisplay(t.date)}
+                        </Callout>
+                    ))}
+                <Flex justifyContent="end" className="mt-2 gap-2.5">
                     <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
                     {selectedChart === 'area' ? (
                         <Text>Accumulated cost</Text>
@@ -390,6 +419,27 @@ export default function SingleSpendMetric({
                     chartType={selectedChart}
                     isCost
                     loading={costTrendLoading}
+                    visualMap={
+                        selectedChart === 'area'
+                            ? undefined
+                            : generateVisualMap(
+                                  costTrendChart(costTrend, selectedChart).flag,
+                                  costTrendChart(costTrend, selectedChart).label
+                              ).visualMap
+                    }
+                    markArea={
+                        selectedChart === 'area'
+                            ? undefined
+                            : generateVisualMap(
+                                  costTrendChart(costTrend, selectedChart).flag,
+                                  costTrendChart(costTrend, selectedChart).label
+                              ).markArea
+                    }
+                    onClick={
+                        selectedChart === 'area'
+                            ? undefined
+                            : (p) => setSelectedDatapoint(p)
+                    }
                 />
             </Card>
             <Card className="mt-4">

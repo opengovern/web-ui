@@ -10,6 +10,7 @@ import {
 import { GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding } from '../../../../api/api'
 import ConfirmModal from '../../../../components/Modal/ConfirmModal'
 import { notificationAtom } from '../../../../store'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 
 interface IMemberDetails {
     user?: GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding
@@ -72,7 +73,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
     }
 
     const lastActivity = () => {
-        const d = dayjs(user.lastActivity || Date.now().toString())
+        const d = dayjs.utc(user.lastActivity || Date.now().toString())
         const unix = d.unix()
         if (unix < 0) {
             return 'Never'
@@ -88,9 +89,7 @@ export default function MemberDetails({ user, close }: IMemberDetails) {
         },
         {
             title: 'Member Since',
-            value: dayjs(user.createdAt || Date.now().toString()).format(
-                'MMM DD, YYYY HH:mm'
-            ),
+            value: dateTimeDisplay(user.createdAt || Date.now().toString()),
         },
         {
             title: 'Last Activity',

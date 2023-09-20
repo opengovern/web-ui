@@ -621,6 +621,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightResult {
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint {
     /**
+     * Connection Count
+     * @example 10
+     */
+    connectionCount?: number
+    /**
      * Time
      * @example 1686346668
      */
@@ -884,6 +889,8 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint {
     count?: number
     /** @format date-time */
     date?: string
+    totalConnectionCount?: number
+    totalSuccessfulDescribedConnectionCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair {
