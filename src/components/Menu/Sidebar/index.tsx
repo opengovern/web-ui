@@ -58,11 +58,11 @@ const navigation = [
         icon: BanknotesIcon,
     },
     {
-        name: 'Compliance',
+        name: 'Governance',
         page: 'compliance',
         icon: ShieldCheckIcon,
         children: [
-            { name: 'Summary', page: 'compliance' },
+            { name: 'Compliance', page: 'compliance' },
             { name: 'Service Advisor', page: 'service-advisor' },
         ],
     },
@@ -95,7 +95,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [complianceHover, setComplianceHover] = useState(false)
     const [insightHover, setInsightHover] = useState(false)
     const isOpen = (item: any) => {
-        if (item.name === 'Compliance') {
+        if (item.name === 'Governance') {
             return complianceOpen
         }
         if (item.name === 'Insights') {
@@ -130,7 +130,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         className="bg-transparent border-0"
                                         defaultOpen={isOpen(item)}
                                         onClick={() => {
-                                            if (item.name === 'Compliance') {
+                                            if (item.name === 'Governance') {
                                                 setComplianceOpen(
                                                     !complianceOpen
                                                 )
@@ -185,7 +185,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             : 'gap-x-3'
                                                     }`}
                                         onMouseEnter={() => {
-                                            if (item.name === 'Compliance') {
+                                            if (item.name === 'Governance') {
                                                 setComplianceHover(true)
                                             }
                                             if (item.name === 'Insights') {
@@ -193,7 +193,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             }
                                         }}
                                         onMouseLeave={() => {
-                                            if (item.name === 'Compliance') {
+                                            if (item.name === 'Governance') {
                                                 setComplianceHover(false)
                                             }
                                             if (item.name === 'Insights') {
@@ -217,13 +217,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         </Flex>
                                         {collapsed &&
                                             complianceHover &&
-                                            item.name === 'Compliance' && (
+                                            item.name === 'Governance' && (
                                                 <div
                                                     className="pl-6 absolute -top-2 left-full"
                                                     onMouseEnter={() => {
                                                         if (
                                                             item.name ===
-                                                            'Compliance'
+                                                            'Governance'
                                                         ) {
                                                             setComplianceHover(
                                                                 true
@@ -241,7 +241,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     onMouseLeave={() => {
                                                         if (
                                                             item.name ===
-                                                            'Compliance'
+                                                            'Governance'
                                                         ) {
                                                             setComplianceHover(
                                                                 false
@@ -296,7 +296,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     onMouseEnter={() => {
                                                         if (
                                                             item.name ===
-                                                            'Compliance'
+                                                            'Governance'
                                                         ) {
                                                             setComplianceHover(
                                                                 true
@@ -314,7 +314,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                     onMouseLeave={() => {
                                                         if (
                                                             item.name ===
-                                                            'Compliance'
+                                                            'Governance'
                                                         ) {
                                                             setComplianceHover(
                                                                 false

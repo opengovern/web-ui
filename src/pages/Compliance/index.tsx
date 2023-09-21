@@ -40,7 +40,7 @@ export default function Compliance() {
         error,
         sendNow,
     } = useComplianceApiV1BenchmarksSummaryList()
-    console.log(benchmarks)
+    // console.log(benchmarks)
 
     return (
         <Menu currentPage="compliance">
