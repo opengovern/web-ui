@@ -35,14 +35,7 @@ type IProps = {
 }
 
 type Item = {
-    name:
-        | boolean
-        | Key
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        | ReactElement<any, string | JSXElementConstructor<any>>
-        | Iterable<ReactNode>
-        | null
-        | undefined
+    name: any
     value: string | number | undefined
 }
 

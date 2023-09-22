@@ -92,7 +92,7 @@ export default function Chart({
                     },
                 },
                 visualMap,
-                animation: !onClick,
+                animation: false,
                 series: [
                     chartType === 'area' && {
                         data: chartData,
