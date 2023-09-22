@@ -50,7 +50,6 @@ export default function Compliance() {
         error,
         sendNow,
     } = useComplianceApiV1BenchmarksSummaryList()
-    console.log(benchmarks)
 
     return (
         <Menu currentPage="compliance">
@@ -63,7 +62,7 @@ export default function Compliance() {
                         index={selectedIndex}
                         onIndexChange={setSelectedIndex}
                     >
-                        <TabList variant="solid" className="px-0 mb-4">
+                        <TabList variant="solid" className="px-0">
                             <Tab className="px-4 py-2">All</Tab>
                             <Tab className="px-4 py-2">Certifications</Tab>
                             <Tab className="px-4 py-2">Legal regulations</Tab>
