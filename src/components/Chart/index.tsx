@@ -92,6 +92,7 @@ export default function Chart({
                     },
                 },
                 visualMap,
+                animation: !onClick,
                 series: [
                     chartType === 'area' && {
                         data: chartData,
@@ -229,13 +230,8 @@ export default function Chart({
         return undefined
     }
 
-    const onChartClick = (params: any) => {
-        // eslint-disable-next-line no-unused-expressions
-        onClick ? onClick(params) : undefined
-    }
-
     const onEvents = {
-        click: onChartClick,
+        click: (params: any) => (onClick ? onClick(params) : undefined),
     }
 
     if (error !== undefined && error.length > 0) {
@@ -267,7 +263,11 @@ export default function Chart({
             option={options()}
             showLoading={loading}
             className="w-full"
-            onEvents={onEvents}
+            onEvents={
+                chartType === 'bar' || chartType === 'line'
+                    ? onEvents
+                    : undefined
+            }
         />
     )
 }
