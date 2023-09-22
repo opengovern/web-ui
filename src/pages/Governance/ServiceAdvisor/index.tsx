@@ -14,7 +14,7 @@ import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import ComplianceCard from '../../../components/Cards/ComplianceCard'
-import { benchmarkList } from '../index'
+import { benchmarkList } from '../Compliance'
 
 export default function ServiceAdvisor() {
     const [selectedProvider, setSelectedProvider] = useState('')

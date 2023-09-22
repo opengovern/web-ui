@@ -10,13 +10,13 @@ import {
     Title,
 } from '@tremor/react'
 import { useState } from 'react'
-import Menu from '../../components/Menu'
+import Menu from '../../../components/Menu'
 import Summary from './Summary'
-import { useComplianceApiV1BenchmarksSummaryList } from '../../api/compliance.gen'
-import Spinner from '../../components/Spinner'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../api/api'
-import ComplianceCard from '../../components/Cards/ComplianceCard'
-import Header from '../../components/Header'
+import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
+import Spinner from '../../../components/Spinner'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
+import ComplianceCard from '../../../components/Cards/ComplianceCard'
+import Header from '../../../components/Header'
 
 export const benchmarkList = (ben: any) => {
     const connected = []

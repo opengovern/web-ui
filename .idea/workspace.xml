@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Compliance/ServiceAdvisor/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Compliance/ServiceAdvisor/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Compliance/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Compliance/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Compliance/BenchmarkDetail/Tabs/Assignments/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkDetail/Tabs/Assignments/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Compliance/BenchmarkDetail/Tabs/Findings/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkDetail/Tabs/Findings/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Compliance/BenchmarkDetail/Tabs/Policies/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkDetail/Tabs/Policies/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Compliance/BenchmarkDetail/Tabs/Summary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkDetail/Tabs/Summary/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Compliance/BenchmarkDetail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkDetail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Compliance/ServiceAdvisor/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/ServiceAdvisor/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Compliance/Summary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/Summary/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Compliance/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,11 +76,11 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/Governance" />
       <recent name="$PROJECT_DIR$/src/pages/Spend/Single" />
       <recent name="$PROJECT_DIR$/src/pages/Assets/Single" />
       <recent name="$PROJECT_DIR$/src/pages/Insights/InsightList" />
       <recent name="$PROJECT_DIR$/src/pages/Assets/Details/AccountsDetails" />
-      <recent name="$PROJECT_DIR$/src/components/Cards" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -178,7 +184,7 @@
       <workItem from="1695035652215" duration="3290000" />
       <workItem from="1695121539081" duration="28002000" />
       <workItem from="1695295410442" duration="2970000" />
-      <workItem from="1695380804458" duration="2003000" />
+      <workItem from="1695380804458" duration="2100000" />
     </task>
     <servers />
   </component>

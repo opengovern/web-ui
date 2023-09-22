@@ -11,16 +11,16 @@ import {
 } from '@tremor/react'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import SummaryCard from '../../../../../components/Cards/SummaryCard'
-import CardWithList from '../../../../../components/Cards/CardWithList'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../../../api/api'
+import SummaryCard from '../../../../../../components/Cards/SummaryCard'
+import CardWithList from '../../../../../../components/Cards/CardWithList'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../../../../api/api'
 import {
     useComplianceApiV1BenchmarksTrendDetail,
     useComplianceApiV1FindingsTopDetail,
-} from '../../../../../api/compliance.gen'
-import { dateDisplay } from '../../../../../utilities/dateDisplay'
-import Chart from '../../../../../components/Chart'
-import { BarChartIcon, LineChartIcon } from '../../../../../icons/icons'
+} from '../../../../../../api/compliance.gen'
+import { dateDisplay } from '../../../../../../utilities/dateDisplay'
+import Chart from '../../../../../../components/Chart'
+import { BarChartIcon, LineChartIcon } from '../../../../../../icons/icons'
 
 interface ISummary {
     detail:

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { Badge, Flex, Title } from '@tremor/react'
-import { useComplianceApiV1FindingsCreate } from '../../../../../api/compliance.gen'
-import DrawerPanel from '../../../../../components/DrawerPanel'
-import { RenderObject } from '../../../../../components/RenderObject'
-import Table, { IColumn } from '../../../../../components/Table'
-import { getConnectorIcon } from '../../../../../components/Cards/ConnectorCard'
+import { useComplianceApiV1FindingsCreate } from '../../../../../../api/compliance.gen'
+import DrawerPanel from '../../../../../../components/DrawerPanel'
+import { RenderObject } from '../../../../../../components/RenderObject'
+import Table, { IColumn } from '../../../../../../components/Table'
+import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
 
 interface IFinder {
     id: string | undefined

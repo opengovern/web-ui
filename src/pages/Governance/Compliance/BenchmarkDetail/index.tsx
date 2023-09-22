@@ -11,16 +11,16 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import Menu from '../../../components/Menu'
-import { filterAtom, timeAtom } from '../../../store'
+import Menu from '../../../../components/Menu'
+import { filterAtom, timeAtom } from '../../../../store'
 import Summary from './Tabs/Summary'
-import { useComplianceApiV1BenchmarksSummaryDetail } from '../../../api/compliance.gen'
+import { useComplianceApiV1BenchmarksSummaryDetail } from '../../../../api/compliance.gen'
 import Assignments from './Tabs/Assignments'
 import Policies from './Tabs/Policies'
 import Findings from './Tabs/Findings'
-import Spinner from '../../../components/Spinner'
-import { dateDisplay } from '../../../utilities/dateDisplay'
-import Header from '../../../components/Header'
+import Spinner from '../../../../components/Spinner'
+import { dateDisplay } from '../../../../utilities/dateDisplay'
+import Header from '../../../../components/Header'
 
 export default function BenchmarkDetail() {
     const [selectedTab, setSelectedTab] = useState(0)
