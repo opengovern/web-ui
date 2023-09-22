@@ -108,7 +108,7 @@ export default function Table<TData = any, TValue = any>({
 
     const buildColumnDef = () =>
         columns?.map((item) => {
-            const v: ColDef<TData> | ColGroupDef<TData> = {
+            const v: ColDef<TData> | ColGroupDef<TData> | any = {
                 field: item.field,
                 headerName: item.headerName,
                 filter: true,
@@ -137,13 +137,13 @@ export default function Table<TData = any, TValue = any>({
             if (item.type === 'price') {
                 v.filter = 'agNumberColumnFilter'
                 v.cellDataType = 'text'
-                v.valueFormatter = (param) => {
+                v.valueFormatter = (param: any) => {
                     return exactPriceDisplay(String(param.value)) || ''
                 }
             } else if (item.type === 'number') {
                 v.filter = 'agNumberColumnFilter'
                 v.cellDataType = 'number'
-                v.valueFormatter = (param) => {
+                v.valueFormatter = (param: any) => {
                     return param.value || param.value === 0
                         ? numberGroupedDisplay(String(param.value))
                         : ''
@@ -153,7 +153,7 @@ export default function Table<TData = any, TValue = any>({
                 v.filterParams = {
                     comparator: agGridDateComparator,
                 }
-                v.valueFormatter = (param) => {
+                v.valueFormatter = (param: any) => {
                     if (param.value) {
                         return dateDisplay(
                             Number(param.value)
