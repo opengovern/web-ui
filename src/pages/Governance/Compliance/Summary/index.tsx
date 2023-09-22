@@ -1,10 +1,10 @@
 import { Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import SummaryCard from '../../../components/Cards/SummaryCard'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse } from '../../../api/api'
-import { filterAtom, timeAtom } from '../../../store'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
-import { numericDisplay } from '../../../utilities/numericDisplay'
+import SummaryCard from '../../../../components/Cards/SummaryCard'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse } from '../../../../api/api'
+import { filterAtom, timeAtom } from '../../../../store'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { numericDisplay } from '../../../../utilities/numericDisplay'
 
 interface ISummary {
     benchmark:

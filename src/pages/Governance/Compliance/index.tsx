@@ -1,13 +1,22 @@
-import { Button, Col, Grid, TextInput, Title } from '@tremor/react'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import {
+    Button,
+    Col,
+    Grid,
+    Select,
+    SelectItem,
+    Tab,
+    TabGroup,
+    TabList,
+    Title,
+} from '@tremor/react'
 import { useState } from 'react'
-import Menu from '../../components/Menu'
+import Menu from '../../../components/Menu'
 import Summary from './Summary'
-import { useComplianceApiV1BenchmarksSummaryList } from '../../api/compliance.gen'
-import Spinner from '../../components/Spinner'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../api/api'
-import ComplianceCard from '../../components/Cards/ComplianceCard'
-import Header from '../../components/Header'
+import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
+import Spinner from '../../../components/Spinner'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
+import ComplianceCard from '../../../components/Cards/ComplianceCard'
+import Header from '../../../components/Header'
 
 export const benchmarkList = (ben: any) => {
     const connected = []
@@ -32,7 +41,8 @@ export const benchmarkList = (ben: any) => {
 }
 
 export default function Compliance() {
-    const [search, setSearch] = useState('')
+    const [selectedProvider, setSelectedProvider] = useState('')
+    const [selectedIndex, setSelectedIndex] = useState(0)
 
     const {
         response: benchmarks,
@@ -40,7 +50,6 @@ export default function Compliance() {
         error,
         sendNow,
     } = useComplianceApiV1BenchmarksSummaryList()
-    // console.log(benchmarks)
 
     return (
         <Menu currentPage="compliance">
@@ -48,13 +57,30 @@ export default function Compliance() {
             <Summary benchmark={benchmarks} loading={isLoading} />
             <Title className="font-semibold">Benchmarks</Title>
             <Grid numItems={3} className="w-full gap-4 my-4">
-                <Col numColSpan={2} />
+                <Col numColSpan={2}>
+                    <TabGroup
+                        index={selectedIndex}
+                        onIndexChange={setSelectedIndex}
+                    >
+                        <TabList variant="solid" className="px-0">
+                            <Tab className="px-4 py-2">All</Tab>
+                            <Tab className="px-4 py-2">Certifications</Tab>
+                            <Tab className="px-4 py-2">Legal regulations</Tab>
+                            <Tab className="px-4 py-2">Frameworks</Tab>
+                            <Tab className="px-4 py-2">Privacy</Tab>
+                        </TabList>
+                    </TabGroup>
+                </Col>
                 <Col numColSpan={1}>
-                    <TextInput
-                        placeholder="Search Benchmark"
-                        icon={MagnifyingGlassIcon}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
+                    <Select
+                        value={selectedProvider}
+                        onValueChange={setSelectedProvider}
+                        placeholder="Select provider..."
+                    >
+                        <SelectItem value="">All</SelectItem>
+                        <SelectItem value="AWS">AWS</SelectItem>
+                        <SelectItem value="Azure">Azure</SelectItem>
+                    </Select>
                 </Col>
             </Grid>
             {/* eslint-disable-next-line no-nested-ternary */}
@@ -69,9 +95,9 @@ export default function Compliance() {
                                 (a?.checks?.passedCount || 0)
                         )
                         .filter((bm) =>
-                            bm?.title
-                                ?.toLowerCase()
-                                .includes(search.toLowerCase())
+                            selectedProvider.length
+                                ? bm?.tags?.service?.includes(selectedProvider)
+                                : bm
                         )
                         .map(
                             (
