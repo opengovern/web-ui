@@ -265,13 +265,6 @@ export default function Spend() {
                 startTime: activeTimeRange.start.unix(),
             }),
         })
-    console.log(
-        generateVisualMap(
-            costTrendChart(costTrend, selectedChart).flag,
-            costTrendChart(costTrend, selectedChart).label
-        ).visualMap
-    )
-    console.log(costTrendChart(costTrend, selectedChart).flag)
 
     return (
         <Menu currentPage="spend">
