@@ -69,26 +69,33 @@ export const generateVisualMap = (flag: boolean[], label: string[]) => {
     const pieces = []
     const data = []
     if (flag) {
-        let start = 0
-        let end = 0
-        let temp = flag[0]
-        let addToArray = false
+        // let start = 0
+        // let end = 0
+        // let temp = flag[0]
+        // let addToArray = false
+        // for (let i = 0; i < flag.length; i += 1) {
+        //     if (flag[i] === temp) {
+        //         end = i
+        //     } else {
+        //         addToArray = true
+        //     }
+        //     if (addToArray || i === flag.length - 1) {
+        //         pieces.push({
+        //             gt: start || -1,
+        //             lte: start > end ? end + 2 : end + 1,
+        //             color: flag[i] ? '#1D4F85' : '#E01D48',
+        //         })
+        //         addToArray = false
+        //         temp = flag[i]
+        //         start = i
+        //     }
+        // }
         for (let i = 0; i < flag.length; i += 1) {
-            if (flag[i] === temp) {
-                end = i
-            } else {
-                addToArray = true
-            }
-            if (addToArray || i === flag.length - 1) {
-                pieces.push({
-                    gt: start || -1,
-                    lte: i === flag.length - 1 ? end : end + 1,
-                    color: flag[i + 1] ? '#1D4F85' : '#E01D48',
-                })
-                addToArray = false
-                temp = flag[i]
-                start = i
-            }
+            pieces.push({
+                gt: i,
+                lte: i + 1,
+                color: flag[i] ? '#E01D48' : '#1D4F85',
+            })
         }
         for (let i = 0; i < pieces.length; i += 1) {
             if (pieces[i].color === '#E01D48') {
