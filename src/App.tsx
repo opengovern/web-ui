@@ -41,7 +41,7 @@ Sentry.init({
     replaysOnErrorSampleRate: 1.0,
 })
 
-function App() {
+export default function App() {
     const { isLoading, isAuthenticated, getAccessTokenSilently } = useAuth0()
     const [token, setToken] = useState<string>('')
     const [accessTokenLoading, setAccessTokenLoading] = useState<boolean>(false)
@@ -74,5 +74,3 @@ function App() {
 
     return <Router />
 }
-
-export default App
