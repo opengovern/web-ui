@@ -37,6 +37,7 @@ import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity, generateItems } from '../../utilities/dateComparator'
 import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 import Header from '../../components/Header'
+import SingleConnection from './Single/SingleConnection'
 
 export const resourceTrendChart = (
     trend:
@@ -282,129 +283,141 @@ export default function Assets() {
     return (
         <Menu currentPage="infrastructure">
             <Header datePicker filter />
-            <Card className="mb-4">
-                <Grid numItems={6} className="gap-4">
-                    <Col numColSpan={1}>
-                        <SummaryCard
-                            title="Accounts"
-                            metric={numericDisplay(accounts?.connectionCount)}
-                            url="asset-details#connections"
-                            loading={accountIsLoading}
-                            border={false}
-                        />
-                    </Col>
-                    <Col numColSpan={3} />
-                    <Col numColSpan={2}>
-                        <Flex justifyContent="end" className="gap-4">
-                            <Select
-                                value={selectedGranularity}
-                                placeholder={capitalizeFirstLetter(
-                                    selectedGranularity
-                                )}
-                                onValueChange={(v) => {
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    setSelectedGranularity(v)
-                                }}
-                                className="w-10"
-                            >
-                                {generateItems(
-                                    activeTimeRange.start,
-                                    activeTimeRange.end
-                                )}
-                            </Select>
-                            <TabGroup
-                                index={selectedIndex}
-                                onIndexChange={setSelectedIndex}
-                                className="w-fit rounded-lg"
-                            >
-                                <TabList variant="solid">
-                                    <Tab value="line">
-                                        <LineChartIcon className="h-5" />
-                                    </Tab>
-                                    <Tab value="bar">
-                                        <BarChartIcon className="h-5" />
-                                    </Tab>
-                                </TabList>
-                            </TabGroup>
-                        </Flex>
-                    </Col>
-                </Grid>
-                {resourceTrend
-                    ?.filter(
-                        (t) =>
-                            selectedDatapoint?.color === '#E01D48' &&
-                            dateDisplay(t.date) === selectedDatapoint?.name
-                    )
-                    .map((t) => (
-                        <Callout
-                            color="rose"
-                            title="Incomplete data"
-                            className="w-fit mt-4"
-                        >
-                            Checked{' '}
-                            {numberDisplay(
-                                t.totalSuccessfulDescribedConnectionCount,
-                                0
-                            )}{' '}
-                            accounts out of{' '}
-                            {numberDisplay(t.totalConnectionCount, 0)} on{' '}
-                            {dateDisplay(t.date)}
-                        </Callout>
-                    ))}
-                <Flex justifyContent="end" className="mt-2 gap-2.5">
-                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-800" />
-                    <Text>Resources</Text>
-                </Flex>
-                <Chart
-                    labels={resourceTrendChart(resourceTrend).label}
-                    chartData={resourceTrendChart(resourceTrend).data}
-                    chartType={selectedChart}
-                    loading={resourceTrendLoading}
-                    visualMap={
-                        generateVisualMap(
-                            resourceTrendChart(resourceTrend).flag,
-                            resourceTrendChart(resourceTrend).label
-                        ).visualMap
-                    }
-                    markArea={
-                        generateVisualMap(
-                            resourceTrendChart(resourceTrend).flag,
-                            resourceTrendChart(resourceTrend).label
-                        ).markArea
-                    }
-                    onClick={(p) => setSelectedDatapoint(p)}
+            {selectedConnections.connections.length === 1 ? (
+                <SingleConnection
+                    activeTimeRange={activeTimeRange}
+                    id={selectedConnections.connections[0]}
                 />
-            </Card>
-            <Grid numItems={1} numItemsLg={5} className="w-full gap-4">
-                <Col numColSpan={1} numColSpanLg={2}>
-                    <Breakdown
-                        chartData={pieData(composition).newData}
-                        oldChartData={pieData(composition).oldData}
-                        activeTime={activeTimeRange}
-                        loading={compositionLoading}
-                        seeMore="asset-details#category"
-                    />
-                </Col>
-                <Col numColSpan={1} numColSpanLg={3} className="h-full">
-                    <Grid numItems={2} className="w-full h-full gap-4">
-                        <ListCard
-                            title="Top Accounts"
-                            loading={accountsResponseLoading}
-                            items={topAccounts(accountsResponse)}
-                            url="asset-details#connections"
-                            type="account"
+            ) : (
+                <>
+                    <Card className="mb-4">
+                        <Grid numItems={6} className="gap-4">
+                            <Col numColSpan={1}>
+                                <SummaryCard
+                                    title="Accounts"
+                                    metric={numericDisplay(
+                                        accounts?.connectionCount
+                                    )}
+                                    url="asset-details#connections"
+                                    loading={accountIsLoading}
+                                    border={false}
+                                />
+                            </Col>
+                            <Col numColSpan={3} />
+                            <Col numColSpan={2}>
+                                <Flex justifyContent="end" className="gap-4">
+                                    <Select
+                                        value={selectedGranularity}
+                                        placeholder={capitalizeFirstLetter(
+                                            selectedGranularity
+                                        )}
+                                        onValueChange={(v) => {
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            setSelectedGranularity(v)
+                                        }}
+                                        className="w-10"
+                                    >
+                                        {generateItems(
+                                            activeTimeRange.start,
+                                            activeTimeRange.end
+                                        )}
+                                    </Select>
+                                    <TabGroup
+                                        index={selectedIndex}
+                                        onIndexChange={setSelectedIndex}
+                                        className="w-fit rounded-lg"
+                                    >
+                                        <TabList variant="solid">
+                                            <Tab value="line">
+                                                <LineChartIcon className="h-5" />
+                                            </Tab>
+                                            <Tab value="bar">
+                                                <BarChartIcon className="h-5" />
+                                            </Tab>
+                                        </TabList>
+                                    </TabGroup>
+                                </Flex>
+                            </Col>
+                        </Grid>
+                        {resourceTrend
+                            ?.filter(
+                                (t) =>
+                                    selectedDatapoint?.color === '#E01D48' &&
+                                    dateDisplay(t.date) ===
+                                        selectedDatapoint?.name
+                            )
+                            .map((t) => (
+                                <Callout
+                                    color="rose"
+                                    title="Incomplete data"
+                                    className="w-fit mt-4"
+                                >
+                                    Checked{' '}
+                                    {numberDisplay(
+                                        t.totalSuccessfulDescribedConnectionCount,
+                                        0
+                                    )}{' '}
+                                    accounts out of{' '}
+                                    {numberDisplay(t.totalConnectionCount, 0)}{' '}
+                                    on {dateDisplay(t.date)}
+                                </Callout>
+                            ))}
+                        <Flex justifyContent="end" className="mt-2 gap-2.5">
+                            <div className="h-2.5 w-2.5 rounded-full bg-kaytu-800" />
+                            <Text>Resources</Text>
+                        </Flex>
+                        <Chart
+                            labels={resourceTrendChart(resourceTrend).label}
+                            chartData={resourceTrendChart(resourceTrend).data}
+                            chartType={selectedChart}
+                            loading={resourceTrendLoading}
+                            visualMap={
+                                generateVisualMap(
+                                    resourceTrendChart(resourceTrend).flag,
+                                    resourceTrendChart(resourceTrend).label
+                                ).visualMap
+                            }
+                            markArea={
+                                generateVisualMap(
+                                    resourceTrendChart(resourceTrend).flag,
+                                    resourceTrendChart(resourceTrend).label
+                                ).markArea
+                            }
+                            onClick={(p) => setSelectedDatapoint(p)}
                         />
-                        <ListCard
-                            title="Top Resources"
-                            loading={servicesResponseLoading}
-                            items={topServices(servicesResponse)}
-                            url="asset-details#resources"
-                            type="service"
-                        />
+                    </Card>
+                    <Grid numItems={1} numItemsLg={5} className="w-full gap-4">
+                        <Col numColSpan={1} numColSpanLg={2}>
+                            <Breakdown
+                                chartData={pieData(composition).newData}
+                                oldChartData={pieData(composition).oldData}
+                                activeTime={activeTimeRange}
+                                loading={compositionLoading}
+                                seeMore="asset-details#category"
+                            />
+                        </Col>
+                        <Col numColSpan={1} numColSpanLg={3} className="h-full">
+                            <Grid numItems={2} className="w-full h-full gap-4">
+                                <ListCard
+                                    title="Top Accounts"
+                                    loading={accountsResponseLoading}
+                                    items={topAccounts(accountsResponse)}
+                                    url="asset-details#connections"
+                                    type="account"
+                                />
+                                <ListCard
+                                    title="Top Resources"
+                                    loading={servicesResponseLoading}
+                                    items={topServices(servicesResponse)}
+                                    url="asset-details#resources"
+                                    type="service"
+                                />
+                            </Grid>
+                        </Col>
                     </Grid>
-                </Col>
-            </Grid>
+                </>
+            )}
         </Menu>
     )
 }

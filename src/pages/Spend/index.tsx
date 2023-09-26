@@ -41,6 +41,7 @@ import { checkGranularity, generateItems } from '../../utilities/dateComparator'
 import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 import Header from '../../components/Header'
 import { generateVisualMap } from '../Assets'
+import SingleSpendConnection from './Single/SingleConnection'
 
 const topServices = (
     input:
@@ -269,148 +270,174 @@ export default function Spend() {
     return (
         <Menu currentPage="spend">
             <Header datePicker filter />
-            <Card className="mb-4">
-                <Grid numItems={6} className="gap-4">
-                    <Col numColSpan={1}>
-                        <SummaryCard
-                            title={getConnections(selectedConnections)}
-                            metric={exactPriceDisplay(
-                                accountCostResponse?.totalCost
-                            )}
-                            loading={accountCostLoading}
-                            url="spend-details#connections"
-                            border={false}
-                        />
-                    </Col>
-                    <Col numColSpan={3} />
-                    <Col numColSpan={2}>
-                        <Flex justifyContent="end" className="gap-4">
-                            <Select
-                                value={selectedGranularity}
-                                placeholder={capitalizeFirstLetter(
-                                    selectedGranularity
-                                )}
-                                onValueChange={(v) => {
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    setSelectedGranularity(v)
-                                }}
-                                className="w-10"
-                            >
-                                {generateItems(
-                                    activeTimeRange.start,
-                                    activeTimeRange.end
-                                )}
-                            </Select>
-                            <TabGroup
-                                index={selectedIndex}
-                                onIndexChange={setSelectedIndex}
-                                className="w-fit rounded-lg"
-                            >
-                                <TabList variant="solid">
-                                    <Tab value="area">
-                                        <AreaChartIcon className="h-5" />
-                                    </Tab>
-                                    <Tab value="line">
-                                        <LineChartIcon className="h-5" />
-                                    </Tab>
-                                    <Tab value="bar">
-                                        <BarChartIcon className="h-5" />
-                                    </Tab>
-                                </TabList>
-                            </TabGroup>
-                        </Flex>
-                    </Col>
-                </Grid>
-                {costTrend
-                    ?.filter(
-                        (t) =>
-                            selectedDatapoint?.color === '#E01D48' &&
-                            dateDisplay(t.date) === selectedDatapoint?.name
-                    )
-                    .map((t) => (
-                        <Callout
-                            color="rose"
-                            title="Incomplete data"
-                            className="w-fit mt-4"
-                        >
-                            Checked{' '}
-                            {numberDisplay(
-                                t.totalSuccessfulDescribedConnectionCount,
-                                0
-                            )}{' '}
-                            accounts out of{' '}
-                            {numberDisplay(t.totalConnectionCount, 0)} on{' '}
-                            {dateDisplay(t.date)}
-                        </Callout>
-                    ))}
-                <Flex justifyContent="end" className="mt-2 gap-2.5">
-                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                    {selectedChart === 'area' ? (
-                        <Text>Accumulated cost</Text>
-                    ) : (
-                        <Text>Spend</Text>
-                    )}
-                </Flex>
-                <Chart
-                    labels={costTrendChart(costTrend, selectedChart).label}
-                    chartData={costTrendChart(costTrend, selectedChart).data}
-                    chartType={selectedChart}
-                    isCost
-                    loading={costTrendLoading}
-                    visualMap={
-                        selectedChart === 'area'
-                            ? undefined
-                            : generateVisualMap(
-                                  costTrendChart(costTrend, selectedChart).flag,
-                                  costTrendChart(costTrend, selectedChart).label
-                              ).visualMap
-                    }
-                    markArea={
-                        selectedChart === 'area'
-                            ? undefined
-                            : generateVisualMap(
-                                  costTrendChart(costTrend, selectedChart).flag,
-                                  costTrendChart(costTrend, selectedChart).label
-                              ).markArea
-                    }
-                    onClick={
-                        selectedChart === 'area'
-                            ? undefined
-                            : (p) => setSelectedDatapoint(p)
-                    }
+            {selectedConnections.connections.length === 1 ? (
+                <SingleSpendConnection
+                    activeTimeRange={activeTimeRange}
+                    id={selectedConnections.connections[0]}
                 />
-            </Card>
-            <Grid numItems={5} className="w-full gap-4">
-                <Col numColSpan={2}>
-                    <Breakdown
-                        chartData={pieData(composition)}
-                        loading={compositionLoading}
-                        seeMore="spend-details#category"
-                        isCost
-                    />
-                </Col>
-                <Col numColSpan={3} className="h-full">
-                    <Grid numItems={2} className="w-full h-full gap-4">
-                        <ListCard
-                            title="Top Accounts"
-                            loading={accountCostLoading}
-                            items={topAccounts(accountCostResponse)}
-                            url="spend-details#connections"
-                            type="account"
-                            isPrice
+            ) : (
+                <>
+                    <Card className="mb-4">
+                        <Grid numItems={6} className="gap-4">
+                            <Col numColSpan={1}>
+                                <SummaryCard
+                                    title={getConnections(selectedConnections)}
+                                    metric={exactPriceDisplay(
+                                        accountCostResponse?.totalCost
+                                    )}
+                                    loading={accountCostLoading}
+                                    url="spend-details#connections"
+                                    border={false}
+                                />
+                            </Col>
+                            <Col numColSpan={3} />
+                            <Col numColSpan={2}>
+                                <Flex justifyContent="end" className="gap-4">
+                                    <Select
+                                        value={selectedGranularity}
+                                        placeholder={capitalizeFirstLetter(
+                                            selectedGranularity
+                                        )}
+                                        onValueChange={(v) => {
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            setSelectedGranularity(v)
+                                        }}
+                                        className="w-10"
+                                    >
+                                        {generateItems(
+                                            activeTimeRange.start,
+                                            activeTimeRange.end
+                                        )}
+                                    </Select>
+                                    <TabGroup
+                                        index={selectedIndex}
+                                        onIndexChange={setSelectedIndex}
+                                        className="w-fit rounded-lg"
+                                    >
+                                        <TabList variant="solid">
+                                            <Tab value="area">
+                                                <AreaChartIcon className="h-5" />
+                                            </Tab>
+                                            <Tab value="line">
+                                                <LineChartIcon className="h-5" />
+                                            </Tab>
+                                            <Tab value="bar">
+                                                <BarChartIcon className="h-5" />
+                                            </Tab>
+                                        </TabList>
+                                    </TabGroup>
+                                </Flex>
+                            </Col>
+                        </Grid>
+                        {costTrend
+                            ?.filter(
+                                (t) =>
+                                    selectedDatapoint?.color === '#E01D48' &&
+                                    dateDisplay(t.date) ===
+                                        selectedDatapoint?.name
+                            )
+                            .map((t) => (
+                                <Callout
+                                    color="rose"
+                                    title="Incomplete data"
+                                    className="w-fit mt-4"
+                                >
+                                    Checked{' '}
+                                    {numberDisplay(
+                                        t.totalSuccessfulDescribedConnectionCount,
+                                        0
+                                    )}{' '}
+                                    accounts out of{' '}
+                                    {numberDisplay(t.totalConnectionCount, 0)}{' '}
+                                    on {dateDisplay(t.date)}
+                                </Callout>
+                            ))}
+                        <Flex justifyContent="end" className="mt-2 gap-2.5">
+                            <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
+                            {selectedChart === 'area' ? (
+                                <Text>Accumulated cost</Text>
+                            ) : (
+                                <Text>Spend</Text>
+                            )}
+                        </Flex>
+                        <Chart
+                            labels={
+                                costTrendChart(costTrend, selectedChart).label
+                            }
+                            chartData={
+                                costTrendChart(costTrend, selectedChart).data
+                            }
+                            chartType={selectedChart}
+                            isCost
+                            loading={costTrendLoading}
+                            visualMap={
+                                selectedChart === 'area'
+                                    ? undefined
+                                    : generateVisualMap(
+                                          costTrendChart(
+                                              costTrend,
+                                              selectedChart
+                                          ).flag,
+                                          costTrendChart(
+                                              costTrend,
+                                              selectedChart
+                                          ).label
+                                      ).visualMap
+                            }
+                            markArea={
+                                selectedChart === 'area'
+                                    ? undefined
+                                    : generateVisualMap(
+                                          costTrendChart(
+                                              costTrend,
+                                              selectedChart
+                                          ).flag,
+                                          costTrendChart(
+                                              costTrend,
+                                              selectedChart
+                                          ).label
+                                      ).markArea
+                            }
+                            onClick={
+                                selectedChart === 'area'
+                                    ? undefined
+                                    : (p) => setSelectedDatapoint(p)
+                            }
                         />
-                        <ListCard
-                            title="Top Services"
-                            loading={serviceCostLoading}
-                            items={topServices(serviceCostResponse)}
-                            url="spend-details#services"
-                            type="service"
-                            isPrice
-                        />
+                    </Card>
+                    <Grid numItems={5} className="w-full gap-4">
+                        <Col numColSpan={2}>
+                            <Breakdown
+                                chartData={pieData(composition)}
+                                loading={compositionLoading}
+                                seeMore="spend-details#category"
+                                isCost
+                            />
+                        </Col>
+                        <Col numColSpan={3} className="h-full">
+                            <Grid numItems={2} className="w-full h-full gap-4">
+                                <ListCard
+                                    title="Top Accounts"
+                                    loading={accountCostLoading}
+                                    items={topAccounts(accountCostResponse)}
+                                    url="spend-details#connections"
+                                    type="account"
+                                    isPrice
+                                />
+                                <ListCard
+                                    title="Top Services"
+                                    loading={serviceCostLoading}
+                                    items={topServices(serviceCostResponse)}
+                                    url="spend-details#services"
+                                    type="service"
+                                    isPrice
+                                />
+                            </Grid>
+                        </Col>
                     </Grid>
-                </Col>
-            </Grid>
+                </>
+            )}
         </Menu>
     )
 }
