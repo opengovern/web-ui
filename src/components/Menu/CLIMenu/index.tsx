@@ -1,20 +1,10 @@
 import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
-    ChevronDownIcon,
-    PhoneIcon,
-    PlayCircleIcon,
-} from '@heroicons/react/20/solid'
-import {
-    ArrowPathIcon,
-    ChartPieIcon,
     CommandLineIcon,
-    CursorArrowRaysIcon,
     DocumentDuplicateIcon,
-    FingerPrintIcon,
-    SquaresPlusIcon,
 } from '@heroicons/react/24/outline'
-import { Button, Card, Flex, Icon, Text } from '@tremor/react'
+import { Button, Card, Flex, Text } from '@tremor/react'
 import clipboardCopy from 'clipboard-copy'
 import { ReactComponent as AppleIcon } from '../../../icons/Apple.svg'
 import { ReactComponent as LinuxIcon } from '../../../icons/Vector.svg'

@@ -98,8 +98,8 @@ export default function Filter() {
                 return connectionGroup === selectedFilters.connectionGroup
             case 2:
                 return (
-                    connections === selectedFilters.connections ||
-                    connections.length < 2
+                    connections === findConnections()
+                    // || connections.length < 2
                 )
             default:
                 return true

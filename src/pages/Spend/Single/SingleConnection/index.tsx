@@ -413,14 +413,16 @@ export default function SingleSpendConnection({
 
     return (
         <>
-            <Header
-                breadCrumb={[
-                    connection
-                        ? connection?.providerConnectionName
-                        : 'Single account detail',
-                ]}
-                datePicker
-            />
+            {!!window.location.pathname.split('/')[3] && (
+                <Header
+                    breadCrumb={[
+                        connection
+                            ? connection?.providerConnectionName
+                            : 'Single account detail',
+                    ]}
+                    datePicker
+                />
+            )}
             <Grid numItems={2} className="w-full gap-4">
                 <Card className="w-full">
                     <Flex
