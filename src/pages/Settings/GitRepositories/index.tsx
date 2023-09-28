@@ -84,7 +84,7 @@ export default function SettingsGitRepositories() {
                     <Flex justifyContent="start" className="truncate space-x-4">
                         <div className="truncate">
                             <Text className="truncate text-sm">
-                                Metrics Git URL:
+                                Configuration Git URL:
                             </Text>
                         </div>
                     </Flex>
