@@ -55,9 +55,7 @@ export default function SettingsGitRepositories() {
     }
 
     const save = async () => {
-        const setUrls = [
-            setMetricsGitURL(),
-        ]
+        const setUrls = [setMetricsGitURL()]
         await Promise.all(setUrls).then(() => {
             syncQueries()
         })
