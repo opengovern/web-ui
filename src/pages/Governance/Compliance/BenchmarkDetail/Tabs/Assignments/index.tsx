@@ -83,14 +83,18 @@ export default function Assignments({ id }: IAssignments) {
     const { response: enable, sendNow: sendEnable } =
         useComplianceApiV1AssignmentsConnectionCreate(
             String(id),
-            connection,
+            {
+                connectionId: [connection],
+            },
             {},
             false
         )
     const { response: disable, sendNow: sendDisable } =
         useComplianceApiV1AssignmentsConnectionDelete(
             String(id),
-            connection,
+            {
+                connectionId: [connection],
+            },
             {},
             false
         )
@@ -102,6 +106,7 @@ export default function Assignments({ id }: IAssignments) {
         if (connection && status === 'disable') {
             sendEnable()
         }
+        console.log(connection, status)
         if (connection && status) getData()
         setConnection(null)
         setStatus(null)
