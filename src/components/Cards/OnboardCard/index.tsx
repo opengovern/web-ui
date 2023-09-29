@@ -43,7 +43,7 @@ export default function OnboardCard({
                     (((inProgress || 0) + (healthy || 0)) / (total || 1)) * 100
                 }
                 showLabels={false}
-                colors={['slate', 'amber', 'emerald']}
+                colors={['slate', 'emerald', 'amber']}
             />
             <Flex justifyContent="start" className="gap-3">
                 <Flex alignItems="start" className="gap-2 w-fit">
