@@ -1,6 +1,10 @@
 import { useState } from 'react'
-import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { Badge, Flex, Title } from '@tremor/react'
+import {
+    GridOptions,
+    ICellRendererParams,
+    RowClickedEvent,
+} from 'ag-grid-community'
 import { useComplianceApiV1FindingsCreate } from '../../../../../../api/compliance.gen'
 import DrawerPanel from '../../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../../components/RenderObject'
@@ -23,7 +27,13 @@ const renderBadge = (severity: any) => {
         if (severity === 'high') {
             return <Badge color="orange">High</Badge>
         }
-        return <Badge color="rose">Critical</Badge>
+        if (severity === 'none') {
+            return <Badge color="gray">None</Badge>
+        }
+        if (severity === 'critical') {
+            return <Badge color="rose">Critical</Badge>
+        }
+        return <Badge>{severity}</Badge>
     }
     return ''
 }
@@ -33,12 +43,14 @@ const columns: IColumn<any, any>[] = [
         width: 50,
         sortable: true,
         filter: true,
+        enableRowGroup: true,
         type: 'connector',
     },
     {
         field: 'policyID',
         headerName: 'Policy ID',
         type: 'string',
+        enableRowGroup: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -58,6 +70,7 @@ const columns: IColumn<any, any>[] = [
         field: 'resourceID',
         headerName: 'Resource ID',
         type: 'string',
+        enableRowGroup: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -120,6 +133,29 @@ export default function Findings({ id, connections }: IFinder) {
             size: 10000,
         },
     })
+
+    const options: GridOptions = {
+        enableGroupEdit: true,
+        columnTypes: {
+            dimension: {
+                enableRowGroup: true,
+                enablePivot: true,
+            },
+        },
+        groupDefaultExpanded: -1,
+        rowGroupPanelShow: 'always',
+        groupAllowUnbalanced: true,
+        autoGroupColumnDef: {
+            headerName: 'Policy ID',
+            flex: 2,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            // cellRendererParams: {
+            //     suppressCount: true,
+            // },
+        },
+    }
 
     return (
         <>
