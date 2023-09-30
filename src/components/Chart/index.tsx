@@ -145,7 +145,7 @@ export default function Chart({
                 series: [
                     {
                         type: 'pie',
-                        radius: ['50%', '70%'],
+                        radius: ['47%', '70%'],
                         // center: ['50%', '50%'],
                         avoidLabelOverlap: false,
                         label: {
@@ -172,7 +172,7 @@ export default function Chart({
                             },
                         },
                         itemStyle: {
-                            borderRadius: 8,
+                            borderRadius: 10,
                             borderColor: '#fff',
                             borderWidth: 2,
                         },
