@@ -77,6 +77,7 @@ const columns: IColumn<any, any>[] = [
 export default function Assignments({ id }: IAssignments) {
     const [connection, setConnection] = useState<any>(null)
     const [status, setStatus] = useState<any>(null)
+    const [flag, setFlag] = useState(false)
 
     const {
         response: assignments,
@@ -106,25 +107,35 @@ export default function Assignments({ id }: IAssignments) {
         false
     )
 
-    useEffect(() => {
-        if (connection && status === 'enable') {
+    const callApi = (s: string | null, callback: any) => {
+        if (s === 'enable') {
             sendDisable()
         }
-        if (connection && status === 'disable') {
+        if (s === 'disable') {
             sendEnable()
+        }
+        callback()
+    }
+
+    useEffect(() => {
+        if (connection && status === 'enable') {
+            callApi('enable', getData)
+        }
+        if (connection && status === 'disable') {
+            callApi('disable', getData)
         }
     }, [connection, status])
 
     useEffect(() => {
-        if (enableExecuted) {
+        if (enableExecuted && enableLoading) {
             setConnection(null)
             setStatus(null)
-            getData()
+            // getData()
         }
-        if (disableExecuted) {
+        if (disableExecuted && disableLoading) {
             setConnection(null)
             setStatus(null)
-            getData()
+            // getData()
         }
     }, [enableExecuted, disableExecuted, enableLoading, disableLoading])
 
