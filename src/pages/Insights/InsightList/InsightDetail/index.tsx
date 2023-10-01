@@ -48,7 +48,6 @@ import Header from '../../../../components/Header'
 import Table, { IColumn } from '../../../../components/Table'
 import Chart from '../../../../components/Chart'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
-import { isDemo } from '../../../../utilities/demo'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Modal from '../../../../components/Modal'
 
@@ -88,21 +87,12 @@ const getTable = (header: any, details: any) => {
         if (rows && rows.length) {
             for (let i = 0; i < rows.length; i += 1) {
                 const object = Object.fromEntries(
-                    isDemo()
-                        ? headers.map((key: any, index: any) => [
-                              key,
-                              typeof rows[i][index] === 'string'
-                                  ? maskPassword(rows[i][index])
-                                  : maskPassword(
-                                        JSON.stringify(rows[i][index])
-                                    ),
-                          ])
-                        : headers.map((key: any, index: any) => [
-                              key,
-                              typeof rows[i][index] === 'string'
-                                  ? rows[i][index]
-                                  : JSON.stringify(rows[i][index]),
-                          ])
+                    headers.map((key: any, index: any) => [
+                        key,
+                        typeof rows[i][index] === 'string'
+                            ? rows[i][index]
+                            : JSON.stringify(rows[i][index]),
+                    ])
                 )
                 row.push({ id: i, ...object })
             }

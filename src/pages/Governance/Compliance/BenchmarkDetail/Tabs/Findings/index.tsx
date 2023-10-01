@@ -41,6 +41,7 @@ const columns: IColumn<any, any>[] = [
         field: 'policyID',
         headerName: 'Policy ID',
         type: 'string',
+        enableRowGroup: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -60,6 +61,7 @@ const columns: IColumn<any, any>[] = [
         field: 'resourceID',
         headerName: 'Resource ID',
         type: 'string',
+        enableRowGroup: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -122,6 +124,29 @@ export default function Findings({ id, connections }: IFinder) {
             size: 10000,
         },
     })
+
+    const options: GridOptions = {
+        enableGroupEdit: true,
+        columnTypes: {
+            dimension: {
+                enableRowGroup: true,
+                enablePivot: true,
+            },
+        },
+        groupDefaultExpanded: -1,
+        rowGroupPanelShow: 'always',
+        groupAllowUnbalanced: true,
+        autoGroupColumnDef: {
+            headerName: 'Policy ID',
+            flex: 2,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            // cellRendererParams: {
+            //     suppressCount: true,
+            // },
+        },
+    }
 
     return (
         <>
