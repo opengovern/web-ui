@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { RowClickedEvent } from 'ag-grid-community'
-import { Badge, Title } from '@tremor/react'
+import { GridOptions, RowClickedEvent } from 'ag-grid-community'
+import { Title } from '@tremor/react'
 import { useComplianceApiV1FindingsCreate } from '../../../../../../api/compliance.gen'
 import DrawerPanel from '../../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../../components/RenderObject'
@@ -137,7 +137,7 @@ export default function Findings({ id, connections }: IFinder) {
         rowGroupPanelShow: 'always',
         groupAllowUnbalanced: true,
         autoGroupColumnDef: {
-            headerName: 'Policy ID',
+            headerName: 'Severity',
             flex: 2,
             sortable: true,
             filter: true,
@@ -156,10 +156,11 @@ export default function Findings({ id, connections }: IFinder) {
                 id="compliance_findings"
                 columns={columns}
                 rowData={findings?.findings || []}
-                onCellClicked={(event: RowClickedEvent<any>) => {
+                onCellClicked={(event: RowClickedEvent) => {
                     setFinding(event.data)
                     setOpen(true)
                 }}
+                options={options}
             />
             <DrawerPanel
                 open={open}
