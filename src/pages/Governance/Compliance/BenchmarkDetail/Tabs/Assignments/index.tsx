@@ -8,7 +8,6 @@ import {
 } from '../../../../../../api/compliance.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource } from '../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../components/Table'
-import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
 
 interface IAssignments {
     id: string | undefined
@@ -16,11 +15,12 @@ interface IAssignments {
 
 const columns: IColumn<any, any>[] = [
     {
-        width: 50,
+        width: 120,
         sortable: true,
         filter: true,
-        type: 'connector',
-        field: 'connectors',
+        enableRowGroup: true,
+        type: 'string',
+        field: 'connector',
     },
     {
         field: 'providerConnectionName',
@@ -78,22 +78,33 @@ export default function Assignments({ id }: IAssignments) {
     const [connection, setConnection] = useState<any>(null)
     const [status, setStatus] = useState<any>(null)
 
-    const { response: assignments, sendNow: getData } =
-        useComplianceApiV1AssignmentsBenchmarkDetail(String(id))
-    const { response: enable, sendNow: sendEnable } =
-        useComplianceApiV1AssignmentsConnectionCreate(
-            String(id),
-            connection,
-            {},
-            false
-        )
-    const { response: disable, sendNow: sendDisable } =
-        useComplianceApiV1AssignmentsConnectionDelete(
-            String(id),
-            connection,
-            {},
-            false
-        )
+    const {
+        response: assignments,
+        isLoading,
+        sendNow: getData,
+    } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id))
+    const {
+        response: enable,
+        sendNow: sendEnable,
+        isLoading: enableLoading,
+        isExecuted: enableExecuted,
+    } = useComplianceApiV1AssignmentsConnectionCreate(
+        String(id),
+        connection,
+        {},
+        false
+    )
+    const {
+        response: disable,
+        sendNow: sendDisable,
+        isLoading: disableLoading,
+        isExecuted: disableExecuted,
+    } = useComplianceApiV1AssignmentsConnectionDelete(
+        String(id),
+        connection,
+        {},
+        false
+    )
 
     useEffect(() => {
         if (connection && status === 'enable') {
@@ -102,10 +113,20 @@ export default function Assignments({ id }: IAssignments) {
         if (connection && status === 'disable') {
             sendEnable()
         }
-        if (connection && status) getData()
-        setConnection(null)
-        setStatus(null)
     }, [connection, status])
+
+    useEffect(() => {
+        if (enableExecuted) {
+            setConnection(null)
+            setStatus(null)
+            getData()
+        }
+        if (disableExecuted) {
+            setConnection(null)
+            setStatus(null)
+            getData()
+        }
+    }, [enableExecuted, disableExecuted, enableLoading, disableLoading])
 
     return (
         <Table
@@ -122,6 +143,11 @@ export default function Assignments({ id }: IAssignments) {
                     } else {
                         setStatus('disable')
                     }
+                }
+            }}
+            onGridReady={(params) => {
+                if (isLoading) {
+                    params.api.showLoadingOverlay()
                 }
             }}
             rowData={

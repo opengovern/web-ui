@@ -34,6 +34,7 @@ const columns: IColumn<any, any>[] = [
         headerName: 'Connector',
         sortable: true,
         filter: true,
+        enableRowGroup: true,
         type: 'string',
     },
     {
