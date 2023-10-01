@@ -1,50 +1,41 @@
 import { useState } from 'react'
-import { Badge, Flex, Title } from '@tremor/react'
-import {
-    GridOptions,
-    ICellRendererParams,
-    RowClickedEvent,
-} from 'ag-grid-community'
+import { RowClickedEvent } from 'ag-grid-community'
+import { Badge, Title } from '@tremor/react'
 import { useComplianceApiV1FindingsCreate } from '../../../../../../api/compliance.gen'
 import DrawerPanel from '../../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../../components/RenderObject'
 import Table, { IColumn } from '../../../../../../components/Table'
-import { getConnectorIcon } from '../../../../../../components/Cards/ConnectorCard'
 
 interface IFinder {
     id: string | undefined
     connections: any
 }
 
-const renderBadge = (severity: any) => {
-    if (severity) {
-        if (severity === 'low') {
-            return <Badge color="blue">Low</Badge>
-        }
-        if (severity === 'medium') {
-            return <Badge color="yellow">Medium</Badge>
-        }
-        if (severity === 'high') {
-            return <Badge color="orange">High</Badge>
-        }
-        if (severity === 'none') {
-            return <Badge color="gray">None</Badge>
-        }
-        if (severity === 'critical') {
-            return <Badge color="rose">Critical</Badge>
-        }
-        return <Badge>{severity}</Badge>
-    }
-    return ''
-}
+// const renderBadge = (severity: any) => {
+//     if (severity) {
+//         if (severity === 'low') {
+//             return <Badge color="blue">Low</Badge>
+//         }
+//         if (severity === 'medium') {
+//             return <Badge color="yellow">Medium</Badge>
+//         }
+//         if (severity === 'high') {
+//             return <Badge color="orange">High</Badge>
+//         }
+//         return <Badge color="rose">Critical</Badge>
+//     }
+//     return ''
+// }
 
 const columns: IColumn<any, any>[] = [
     {
-        width: 50,
+        width: 120,
+        field: 'connector',
+        headerName: 'Connector',
         sortable: true,
         filter: true,
         enableRowGroup: true,
-        type: 'connector',
+        type: 'string',
     },
     {
         field: 'policyID',
@@ -86,15 +77,15 @@ const columns: IColumn<any, any>[] = [
         filter: true,
         resizable: true,
         flex: 0.5,
-        cellRenderer: (params: ICellRendererParams) => (
-            <Flex
-                className="h-full w-full"
-                justifyContent="center"
-                alignItems="center"
-            >
-                {renderBadge(params.data?.severity)}
-            </Flex>
-        ),
+        // cellRenderer: (params: ICellRendererParams) => (
+        //     <Flex
+        //         className="h-full w-full"
+        //         justifyContent="center"
+        //         alignItems="center"
+        //     >
+        //         {renderBadge(params.data?.value)}
+        //     </Flex>
+        // ),
     },
     {
         field: 'reason',
