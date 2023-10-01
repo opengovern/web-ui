@@ -33,7 +33,6 @@ import {
     CheckCircleIcon,
     ExclamationCircleIcon,
 } from '@heroicons/react/24/solid'
-import { maskPassword } from 'maskdata'
 import { Transition } from '@headlessui/react'
 import { useAtom } from 'jotai'
 import Menu from '../../components/Menu'
