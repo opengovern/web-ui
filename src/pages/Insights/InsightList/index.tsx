@@ -1,4 +1,12 @@
-import { Button, Flex, Select, SelectItem, Text } from '@tremor/react'
+import {
+    Button,
+    Card,
+    Flex,
+    Select,
+    SelectItem,
+    Text,
+    TextInput,
+} from '@tremor/react'
 import { useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
@@ -7,6 +15,7 @@ import {
     RowClickedEvent,
 } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
+import { FunnelIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Menu from '../../../components/Menu'
 import { useComplianceApiV1InsightList } from '../../../api/compliance.gen'
 import { filterAtom, notificationAtom, timeAtom } from '../../../store'
@@ -82,12 +91,11 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
-const personaList = ['Developer', 'Security', 'Executive', 'DevOps', 'Product']
-
 export default function InsightList() {
-    const [selectedPersona, setSelectedPersona] = useState<string[]>([])
     const [selectedResourceType, setSelectedResourceType] = useState<string>('')
     const [selectedObjective, setSelectedObjective] = useState<string>('')
+    const [searchCategory, setSearchCategory] = useState('')
+    const [showFilter, setShowFilter] = useState(false)
 
     const setNotification = useSetAtom(notificationAtom)
 
@@ -193,49 +201,85 @@ export default function InsightList() {
     return (
         <Menu currentPage="all-insights">
             <Header datePicker filter />
-            <Flex className="gap-6" alignItems="start">
+            <>
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {listLoading ? (
                     <Flex justifyContent="center" className="mt-56">
                         <Spinner />
                     </Flex>
                 ) : insightError === undefined ? (
-                    <Table
-                        id="insight_list"
-                        columns={columns}
-                        rowData={rowGenerator(insightList)
-                            .filter((i) => {
-                                if (selectedConnections.provider.length) {
-                                    return (
-                                        i.connector ===
-                                        selectedConnections.provider
-                                    )
-                                }
-                                return i
-                            })
-                            .sort(
-                                (a, b) =>
-                                    b.totalResultValue - a.totalResultValue
-                            )}
-                        options={options}
-                        onRowClicked={(event: RowClickedEvent) => {
-                            if (
-                                event.data?.totalResultValue ||
-                                event.data?.oldTotalResultValue
-                            ) {
-                                navigateToInsightsDetails(event.data?.id)
-                            } else {
-                                setNotification({
-                                    text: 'Time period is not covered by insight',
-                                    type: 'warning',
+                    <Flex alignItems="start" className="gap-4">
+                        {showFilter ? (
+                            <Card className="sticky w-fit">
+                                <TextInput
+                                    className="w-56 mb-6"
+                                    icon={MagnifyingGlassIcon}
+                                    placeholder="Search..."
+                                    value={searchCategory}
+                                    onChange={(e) =>
+                                        setSearchCategory(e.target.value)
+                                    }
+                                />
+                            </Card>
+                        ) : (
+                            <Flex
+                                flexDirection="col"
+                                justifyContent="center"
+                                className="min-h-full w-fit"
+                            >
+                                <Button
+                                    variant="light"
+                                    onClick={() => setShowFilter(true)}
+                                >
+                                    <Flex
+                                        flexDirection="col"
+                                        className="gap-4 w-4"
+                                    >
+                                        <FunnelIcon />
+                                        <Text className="rotate-90">
+                                            Options
+                                        </Text>
+                                    </Flex>
+                                </Button>
+                            </Flex>
+                        )}
+                        <Table
+                            id="insight_list"
+                            columns={columns}
+                            rowData={rowGenerator(insightList)
+                                .filter((i) => {
+                                    if (selectedConnections.provider.length) {
+                                        return (
+                                            i.connector ===
+                                            selectedConnections.provider
+                                        )
+                                    }
+                                    return i
                                 })
-                            }
-                        }}
-                    />
+                                .sort(
+                                    (a, b) =>
+                                        b.totalResultValue - a.totalResultValue
+                                )}
+                            options={options}
+                            onRowClicked={(event: RowClickedEvent) => {
+                                if (
+                                    event.data?.totalResultValue ||
+                                    event.data?.oldTotalResultValue
+                                ) {
+                                    navigateToInsightsDetails(event.data?.id)
+                                } else {
+                                    setNotification({
+                                        text: 'Time period is not covered by insight',
+                                        type: 'warning',
+                                    })
+                                }
+                            }}
+                        />
+                    </Flex>
                 ) : (
                     <Button onClick={() => insightSendNow()}>Retry</Button>
                 )}
-            </Flex>
+            </>
         </Menu>
     )
 }
