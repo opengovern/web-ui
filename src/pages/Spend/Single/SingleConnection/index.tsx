@@ -45,7 +45,7 @@ import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../components/RenderObject'
-import { costTrendChart, getConnections, pieData } from '../../index'
+import { costTrendChart, pieData } from '../../index'
 import Header from '../../../../components/Header'
 import {
     checkGranularity,
