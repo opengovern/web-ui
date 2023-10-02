@@ -13,29 +13,22 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { Link, useParams } from 'react-router-dom'
-import { useAtomValue, useSetAtom } from 'jotai'
-import dayjs from 'dayjs'
+import { Link } from 'react-router-dom'
+import { useSetAtom } from 'jotai'
+import dayjs, { Dayjs } from 'dayjs'
 import { useEffect, useState } from 'react'
 import { GridOptions } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
-import { maskPassword } from 'maskdata'
 import { highlight, languages } from 'prismjs'
 import Editor from 'react-simple-code-editor'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 import clipboardCopy from 'clipboard-copy'
-import Menu from '../../../../components/Menu'
 import {
     useComplianceApiV1InsightDetail,
     useComplianceApiV1InsightTrendDetail,
 } from '../../../../api/compliance.gen'
-import {
-    filterAtom,
-    notificationAtom,
-    queryAtom,
-    timeAtom,
-} from '../../../../store'
+import { IFilter, notificationAtom, queryAtom } from '../../../../store'
 import Spinner from '../../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
@@ -134,19 +127,30 @@ const gridOptions: GridOptions = {
     },
 }
 
-export default function InsightDetail() {
-    const { id, ws } = useParams()
-    const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+interface IInsightDetail {
+    id: string | undefined
+    ws: string | undefined
+    activeTimeRange: { start: Dayjs; end: Dayjs }
+    selectedConnections: IFilter
+}
+
+export default function InsightDetail({
+    id,
+    ws,
+    activeTimeRange,
+    selectedConnections,
+}: IInsightDetail) {
     const [detailsDate, setDetailsDate] = useState<string>('')
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
     const [selectedIndex, setSelectedIndex] = useState(0)
+
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
         if (selectedIndex === 1) setSelectedChart('bar')
     }, [selectedIndex])
+
     const [modalData, setModalData] = useState('')
     const setNotification = useSetAtom(notificationAtom)
     const setQuery = useSetAtom(queryAtom)
@@ -231,7 +235,7 @@ export default function InsightDetail() {
     }
 
     return (
-        <Menu currentPage="all-insights">
+        <>
             <Header
                 breadCrumb={[
                     insightDetail
@@ -445,6 +449,6 @@ export default function InsightDetail() {
                     </Card>
                 </>
             )}
-        </Menu>
+        </>
     )
 }

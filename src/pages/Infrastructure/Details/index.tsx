@@ -1,5 +1,4 @@
 import {
-    BadgeDelta,
     Button,
     Card,
     Flex,
@@ -25,7 +24,7 @@ import Menu from '../../../components/Menu'
 import { filterAtom, notificationAtom, timeAtom } from '../../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../api/api'
-import { badgeDelta, badgeTypeByDelta } from '../../../utilities/deltaType'
+import { badgeDelta } from '../../../utilities/deltaType'
 import { useInventoryApiV2AnalyticsMetricList } from '../../../api/inventory.gen'
 import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
 
@@ -82,25 +81,8 @@ export const resourceTableColumns: IColumn<any, any>[] = [
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
-            params.data?.name && (
-                <Flex
-                    justifyContent="center"
-                    alignItems="center"
-                    className="mt-1"
-                >
-                    <BadgeDelta
-                        deltaType={badgeTypeByDelta(
-                            params.data?.old_count,
-                            params.data?.count
-                        )}
-                    >
-                        {Math.abs(
-                            (params.data?.old_count || 0) -
-                                (params.data?.count || 0)
-                        )}
-                    </BadgeDelta>
-                </Flex>
-            ),
+            params.data?.name &&
+            badgeDelta(params.data?.old_count, params.data?.count),
     },
 ]
 

@@ -9,17 +9,16 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useAtomValue } from 'jotai'
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import 'ag-grid-enterprise'
 import { ICellRendererParams } from 'ag-grid-community'
-import Menu from '../../../../components/Menu'
+import { Dayjs } from 'dayjs'
 import {
     useComplianceApiV1InsightGroupDetail,
     useComplianceApiV1InsightGroupTrendDetail,
 } from '../../../../api/compliance.gen'
-import { filterAtom, timeAtom } from '../../../../store'
+import { IFilter } from '../../../../store'
 import Spinner from '../../../../components/Spinner'
 import {
     badgeDelta,
@@ -32,7 +31,7 @@ import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Table, { IColumn } from '../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../../api/api'
-import { chartData } from '../../InsightList/InsightDetail'
+import { chartData } from '../InsightDetail'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -90,11 +89,19 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
-export default function InsightGroupDetail() {
+interface IKeyInsightDetail {
+    id: string | undefined
+    activeTimeRange: { start: Dayjs; end: Dayjs }
+    selectedConnections: IFilter
+}
+
+export default function KeyInsightDetail({
+    id,
+    selectedConnections,
+    activeTimeRange,
+}: IKeyInsightDetail) {
     const navigate = useNavigate()
-    const { id } = useParams()
-    const selectedConnections = useAtomValue(filterAtom)
-    const activeTimeRange = useAtomValue(timeAtom)
+
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
@@ -131,7 +138,7 @@ export default function InsightGroupDetail() {
         useComplianceApiV1InsightGroupDetail(String(id), query)
 
     return (
-        <Menu currentPage="key-insights">
+        <>
             <Header
                 breadCrumb={[
                     insightDetail
@@ -215,6 +222,6 @@ export default function InsightGroupDetail() {
                     />
                 </>
             )}
-        </Menu>
+        </>
     )
 }

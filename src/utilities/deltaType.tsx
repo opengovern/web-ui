@@ -1,4 +1,5 @@
-import { DeltaType, BadgeDelta } from '@tremor/react'
+import { DeltaType } from '@tremor/react'
+import ChangeDelta from '../components/ChangeDelta'
 
 export const badgeTypeByDelta = (
     oldValue?: number,
@@ -25,8 +26,9 @@ export const percentageByChange = (oldValue?: number, newValue?: number) => {
 
 export const badgeDelta = (oldValue?: number, newValue?: number) => {
     return (
-        <BadgeDelta deltaType={badgeTypeByDelta(oldValue, newValue)}>
-            {percentageByChange(oldValue, newValue)}%
-        </BadgeDelta>
+        <ChangeDelta
+            deltaType={badgeTypeByDelta(oldValue, newValue)}
+            change={percentageByChange(oldValue, newValue)}
+        />
     )
 }
