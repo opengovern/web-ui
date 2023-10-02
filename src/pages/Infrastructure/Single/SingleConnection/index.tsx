@@ -1,16 +1,24 @@
 import {
     Button,
+    Callout,
     Card,
+    Col,
     Flex,
     Grid,
     List,
     ListItem,
+    Select,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
     Text,
     Title,
 } from '@tremor/react'
 import { GridOptions } from 'ag-grid-community'
 import { ChevronRightIcon, Square2StackIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSetAtom } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
 import { Dayjs } from 'dayjs'
@@ -19,17 +27,30 @@ import Breakdown from '../../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
     useInventoryApiV2AnalyticsMetricList,
+    useInventoryApiV2AnalyticsTrendList,
 } from '../../../../api/inventory.gen'
 import { notificationAtom } from '../../../../store'
 import Table from '../../../../components/Table'
 import { resourceTableColumns, rowGenerator } from '../../Details'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../components/RenderObject'
-import { pieData } from '../../index'
+import { generateVisualMap, pieData, resourceTrendChart } from '../../index'
 import Header from '../../../../components/Header'
+import {
+    checkGranularity,
+    generateItems,
+} from '../../../../utilities/dateComparator'
+import SummaryCard from '../../../../components/Cards/SummaryCard'
+import {
+    numberDisplay,
+    numericDisplay,
+} from '../../../../utilities/numericDisplay'
+import { capitalizeFirstLetter } from '../../../../utilities/labelMaker'
+import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
+import Chart from '../../../../components/Chart'
 
 const options: GridOptions = {
     enableGroupEdit: true,
@@ -53,6 +74,24 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
     const [openDrawer, setOpenDrawer] = useState(false)
     const setNotification = useSetAtom(notificationAtom)
     const navigate = useNavigate()
+
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
+        'line'
+    )
+    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [selectedGranularity, setSelectedGranularity] = useState<
+        'monthly' | 'daily' | 'yearly'
+    >(
+        checkGranularity(activeTimeRange.start, activeTimeRange.end).daily
+            ? 'daily'
+            : 'monthly'
+    )
+    const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
+
+    useEffect(() => {
+        if (selectedIndex === 0) setSelectedChart('line')
+        if (selectedIndex === 1) setSelectedChart('bar')
+    }, [selectedIndex])
 
     const query = {
         ...(id && {
@@ -78,6 +117,13 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
             ...query,
             pageSize: 1,
             needCost: false,
+        })
+    const { response: resourceTrend, isLoading: resourceTrendLoading } =
+        useInventoryApiV2AnalyticsTrendList({
+            ...query,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            granularity: selectedGranularity,
         })
     const connection = accountInfo?.connections?.at(0)
 
@@ -213,26 +259,146 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                     loading={compositionLoading}
                 />
             </Grid>
-            <Card className="mt-4">
-                <Table
-                    options={options}
-                    title="Resources"
-                    downloadable
-                    id="asset_resource_metrics"
-                    rowData={rowGenerator(metrics?.metrics)}
-                    columns={resourceTableColumns}
-                    onGridReady={(params) => {
-                        if (metricsLoading) {
-                            params.api.showLoadingOverlay()
-                        }
-                    }}
-                    onRowClicked={(e) => {
-                        if (e.data) {
-                            navigate(`metric_${e.data.id}`)
-                        }
-                    }}
-                />
-            </Card>
+            <TabGroup className="mt-4">
+                <TabList>
+                    <Tab>Trend</Tab>
+                    <Tab>Table</Tab>
+                </TabList>
+                <TabPanels>
+                    <TabPanel>
+                        <Card className="mb-4">
+                            <Grid numItems={6} className="gap-4">
+                                <SummaryCard
+                                    title={
+                                        connection?.providerConnectionName || ''
+                                    }
+                                    metric={numericDisplay(
+                                        connection?.resourceCount
+                                    )}
+                                    metricPrev={numericDisplay(
+                                        connection?.oldResourceCount
+                                    )}
+                                    loading={resourceTrendLoading}
+                                    border={false}
+                                />
+                                <Col numColSpan={3} />
+                                <Col numColSpan={2}>
+                                    <Flex
+                                        justifyContent="end"
+                                        className="gap-4"
+                                    >
+                                        <Select
+                                            value={selectedGranularity}
+                                            placeholder={capitalizeFirstLetter(
+                                                selectedGranularity
+                                            )}
+                                            onValueChange={(v) => {
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                setSelectedGranularity(v)
+                                            }}
+                                            className="w-10"
+                                        >
+                                            {generateItems(
+                                                activeTimeRange.start,
+                                                activeTimeRange.end
+                                            )}
+                                        </Select>
+                                        <TabGroup
+                                            index={selectedIndex}
+                                            onIndexChange={setSelectedIndex}
+                                            className="w-fit rounded-lg"
+                                        >
+                                            <TabList variant="solid">
+                                                <Tab value="line">
+                                                    <LineChartIcon className="h-5" />
+                                                </Tab>
+                                                <Tab value="bar">
+                                                    <BarChartIcon className="h-5" />
+                                                </Tab>
+                                            </TabList>
+                                        </TabGroup>
+                                    </Flex>
+                                </Col>
+                            </Grid>
+                            {resourceTrend
+                                ?.filter(
+                                    (t) =>
+                                        selectedDatapoint?.color ===
+                                            '#E01D48' &&
+                                        dateDisplay(t.date) ===
+                                            selectedDatapoint?.name
+                                )
+                                .map((t) => (
+                                    <Callout
+                                        color="rose"
+                                        title="Incomplete data"
+                                        className="w-fit mt-4"
+                                    >
+                                        Checked{' '}
+                                        {numberDisplay(
+                                            t.totalSuccessfulDescribedConnectionCount,
+                                            0
+                                        )}{' '}
+                                        accounts out of{' '}
+                                        {numberDisplay(
+                                            t.totalConnectionCount,
+                                            0
+                                        )}{' '}
+                                        on {dateDisplay(t.date)}
+                                    </Callout>
+                                ))}
+                            <Flex justifyContent="end" className="mt-2 gap-2.5">
+                                <div className="h-2.5 w-2.5 rounded-full bg-kaytu-800" />
+                                <Text>Resources</Text>
+                            </Flex>
+                            <Chart
+                                labels={resourceTrendChart(resourceTrend).label}
+                                chartData={
+                                    resourceTrendChart(resourceTrend).data
+                                }
+                                chartType={selectedChart}
+                                loading={resourceTrendLoading}
+                                visualMap={
+                                    generateVisualMap(
+                                        resourceTrendChart(resourceTrend).flag,
+                                        resourceTrendChart(resourceTrend).label
+                                    ).visualMap
+                                }
+                                markArea={
+                                    generateVisualMap(
+                                        resourceTrendChart(resourceTrend).flag,
+                                        resourceTrendChart(resourceTrend).label
+                                    ).markArea
+                                }
+                                onClick={(p) => setSelectedDatapoint(p)}
+                            />
+                        </Card>
+                    </TabPanel>
+                    <TabPanel>
+                        <Card>
+                            <Table
+                                options={options}
+                                title="Resources"
+                                downloadable
+                                id="asset_resource_metrics"
+                                rowData={rowGenerator(metrics?.metrics)}
+                                columns={resourceTableColumns}
+                                onGridReady={(params) => {
+                                    if (metricsLoading) {
+                                        params.api.showLoadingOverlay()
+                                    }
+                                }}
+                                onRowClicked={(e) => {
+                                    if (e.data) {
+                                        navigate(`metric_${e.data.id}`)
+                                    }
+                                }}
+                            />
+                        </Card>
+                    </TabPanel>
+                </TabPanels>
+            </TabGroup>
         </>
     )
 }

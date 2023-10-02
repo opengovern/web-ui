@@ -40,7 +40,7 @@ import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity, generateItems } from '../../utilities/dateComparator'
 import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 import Header from '../../components/Header'
-import { generateVisualMap } from '../Assets'
+import { generateVisualMap } from '../Infrastructure'
 import SingleSpendConnection from './Single/SingleConnection'
 
 const topServices = (

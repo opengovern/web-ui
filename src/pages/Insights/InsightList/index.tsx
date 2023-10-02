@@ -24,7 +24,7 @@ import Header from '../../../components/Header'
 import Table, { IColumn } from '../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { badgeDelta } from '../../../utilities/deltaType'
-import { rowGenerator } from '../../Assets/Details'
+import { rowGenerator } from '../../Infrastructure/Details'
 
 const columns: IColumn<any, any>[] = [
     {

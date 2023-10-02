@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import Assets from '../pages/Assets'
+import Infrastructure from '../pages/Infrastructure'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
 import { CallbackPage } from '../pages/Callback'
@@ -18,9 +18,9 @@ import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
 import KeyInsights from '../pages/Insights/KeyInsights'
-import AssetDetail from '../pages/Assets/Details'
+import AssetDetail from '../pages/Infrastructure/Details'
 import InsightGroupDetail from '../pages/Insights/KeyInsights/InsightGroupDetail'
-import Single from '../pages/Assets/Single'
+import Single from '../pages/Infrastructure/Single'
 import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 
@@ -61,7 +61,7 @@ const authRoutes = [
     {
         key: 'infrastructure',
         path: '/:ws/infrastructure',
-        component: Assets,
+        component: Infrastructure,
     },
     {
         key: 'infrastructure single',
