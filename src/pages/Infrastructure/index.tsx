@@ -113,19 +113,11 @@ export const pieData = (
         // eslint-disable-next-line array-callback-return
         Object.entries(response?.top_values).map(([key, value]) => {
             newData.push({
-                name: `${key} - ${Math.abs(
-                    (Math.round(value.count || 0) /
-                        Math.round(response.total_count || 1)) *
-                        100
-                ).toFixed(1)}%`,
+                name: key,
                 value: Number(value.count).toFixed(0),
             })
             oldData.push({
-                name: `${key} - ${Math.abs(
-                    (Math.round(value.old_count || 0) /
-                        Math.round(response.total_count || 1)) *
-                        100
-                ).toFixed(1)} %`,
+                name: key,
                 value: Number(value.old_count).toFixed(0),
             })
         })
@@ -136,19 +128,11 @@ export const pieData = (
             return b.value - a.value
         })
         newData.push({
-            name: `Others - ${Math.abs(
-                (Math.round(response?.others?.count || 0) /
-                    Math.round(response.total_count || 1)) *
-                    100
-            ).toFixed(1)} %`,
+            name: 'Others',
             value: Number(response.others?.count).toFixed(0),
         })
         oldData.push({
-            name: `Others - ${Math.abs(
-                (Math.round(response?.others?.old_count || 0) /
-                    Math.round(response.total_count || 1)) *
-                    100
-            ).toFixed(1)}%`,
+            name: 'Others',
             value: Number(response.others?.old_count).toFixed(0),
         })
     }

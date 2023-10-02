@@ -150,11 +150,7 @@ export const pieData = (
     if (response && response.top_values) {
         Object.entries(response?.top_values).map(([key, value]) =>
             data.push({
-                name: `${key} - ${Math.abs(
-                    (Math.round(value) /
-                        Math.round(response.total_cost_value || 1)) *
-                        100
-                ).toFixed(1)}%`,
+                name: key,
                 value: Number(value).toFixed(0),
             })
         )
@@ -162,11 +158,7 @@ export const pieData = (
             return b.value - a.value
         })
         data.push({
-            name: `Others - ${Math.abs(
-                (Math.round(response.others || 0) /
-                    Math.round(response.total_cost_value || 1)) *
-                    100
-            ).toFixed(1)}%`,
+            name: 'Others',
             value: Number(response.others).toFixed(0),
         })
     }

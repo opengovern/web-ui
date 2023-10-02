@@ -158,7 +158,9 @@ export default function Chart({
                                 fontSize: 16,
                                 fontWeight: 'bold',
                                 formatter: (params: any) => {
-                                    return `${params.data.name}\n\n${
+                                    return `${params.data.name} - ${
+                                        params.percent
+                                    }%\n\n${
                                         isCost
                                             ? exactPriceDisplay(
                                                   params.data.value
