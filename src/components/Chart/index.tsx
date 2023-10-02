@@ -184,7 +184,7 @@ export default function Chart({
                     },
                 ],
                 legend: {
-                    right: 0,
+                    right: 12,
                     top: 'middle',
                     icon: 'circle',
                     orient: 'vertical',
