@@ -6,7 +6,7 @@ import Header from '../../../components/Header'
 import { useComplianceApiV1InsightGroupList } from '../../../api/compliance.gen'
 import { filterAtom, timeAtom } from '../../../store'
 import Spinner from '../../../components/Spinner'
-import InsightGroupCard from '../../../components/Cards/InsightGroupCard'
+import KeyInsightCard from '../../../components/Cards/KeyInsightCard'
 
 export default function KeyInsights() {
     const activeTimeRange = useAtomValue(timeAtom)
@@ -103,10 +103,9 @@ export default function KeyInsights() {
                                     : insight
                             )
                             .map((insight) => (
-                                <InsightGroupCard
+                                <KeyInsightCard
                                     id={insight.id}
                                     title={insight.shortTitle}
-                                    description={insight.longTitle}
                                     count={insight.totalResultValue}
                                     prevCount={insight.oldTotalResultValue}
                                 />

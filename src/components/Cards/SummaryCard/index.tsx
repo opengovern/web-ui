@@ -11,6 +11,7 @@ import { ArrowPathIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../Spinner'
 import { numberDisplay } from '../../../utilities/numericDisplay'
+import ChangeDelta from '../../ChangeDelta'
 
 type IProps = {
     title: string
@@ -24,21 +25,6 @@ type IProps = {
     blueBorder?: boolean
     error?: string
     onRefresh?: () => void
-}
-
-const changeColor = (delta: DeltaType | undefined) => {
-    switch (delta) {
-        case 'decrease':
-        case 'moderateDecrease':
-            return 'rose'
-        case 'increase':
-        case 'moderateIncrease':
-            return 'emerald'
-        case 'unchanged':
-            return 'amber'
-        default:
-            return 'slate'
-    }
 }
 
 export default function SummaryCard({
@@ -134,10 +120,7 @@ export default function SummaryCard({
                         )}
                     </Flex>
                     {delta && !delta.includes('Infinity') && (
-                        <Flex className="mt-2.5 gap-1" justifyContent="start">
-                            <BadgeDelta size="sm" deltaType={deltaType} />
-                            <Text color={changeColor(deltaType)}>{delta}</Text>
-                        </Flex>
+                        <ChangeDelta deltaType={deltaType} change={delta} />
                     )}
                 </>
             )}

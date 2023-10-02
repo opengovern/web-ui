@@ -1,4 +1,4 @@
-import { BadgeDelta, Card, Flex, Subtitle, Text, Title } from '@tremor/react'
+import { Card, Flex, Subtitle, Text, Title } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
@@ -8,6 +8,7 @@ import {
 } from '../../../utilities/deltaType'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../ConnectorCard'
+import ChangeDelta from '../../ChangeDelta'
 
 interface IInsightsCard {
     metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
@@ -68,18 +69,16 @@ const generateBadge = (
         )
     }
     return (
-        <BadgeDelta
+        <ChangeDelta
             deltaType={badgeTypeByDelta(
                 met.oldTotalResultValue,
                 met.totalResultValue
             )}
-            className="cursor-pointer"
-        >
-            {`${percentageByChange(
+            change={percentageByChange(
                 met.oldTotalResultValue,
                 met.totalResultValue
-            )}%`}
-        </BadgeDelta>
+            )}
+        />
     )
 }
 
