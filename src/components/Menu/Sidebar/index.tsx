@@ -36,12 +36,12 @@ const navigation = [
     },
     {
         name: 'Insights',
-        page: 'all-insights',
+        page: 'insights',
         icon: DocumentChartBarIcon,
-        children: [
-            { name: 'Key Insights', page: 'key-insights' },
-            { name: 'All Insights', page: 'all-insights' },
-        ],
+        // children: [
+        //     { name: 'Key Insights', page: 'key-insights' },
+        //     { name: 'All Insights', page: 'all-insights' },
+        // ],
     },
     {
         name: 'Infrastructure',
@@ -91,15 +91,10 @@ interface ISidebar {
 export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const [complianceOpen, setComplianceOpen] = useAtom(complianceOpenAtom)
-    const [insightOpen, setInsightOpen] = useAtom(insightOpenAtom)
     const [complianceHover, setComplianceHover] = useState(false)
-    const [insightHover, setInsightHover] = useState(false)
     const isOpen = (item: any) => {
         if (item.name === 'Governance') {
             return complianceOpen
-        }
-        if (item.name === 'Insights') {
-            return insightOpen
         }
         return false
     }
@@ -134,9 +129,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 setComplianceOpen(
                                                     !complianceOpen
                                                 )
-                                            }
-                                            if (item.name === 'Insights') {
-                                                setInsightOpen(!insightOpen)
                                             }
                                         }}
                                     >
@@ -188,16 +180,10 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             if (item.name === 'Governance') {
                                                 setComplianceHover(true)
                                             }
-                                            if (item.name === 'Insights') {
-                                                setInsightHover(true)
-                                            }
                                         }}
                                         onMouseLeave={() => {
                                             if (item.name === 'Governance') {
                                                 setComplianceHover(false)
-                                            }
-                                            if (item.name === 'Insights') {
-                                                setInsightHover(false)
                                             }
                                         }}
                                     >
@@ -229,14 +215,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                                 true
                                                             )
                                                         }
-                                                        if (
-                                                            item.name ===
-                                                            'Insights'
-                                                        ) {
-                                                            setInsightHover(
-                                                                true
-                                                            )
-                                                        }
                                                     }}
                                                     onMouseLeave={() => {
                                                         if (
@@ -244,14 +222,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             'Governance'
                                                         ) {
                                                             setComplianceHover(
-                                                                false
-                                                            )
-                                                        }
-                                                        if (
-                                                            item.name ===
-                                                            'Insights'
-                                                        ) {
-                                                            setInsightHover(
                                                                 false
                                                             )
                                                         }
@@ -264,75 +234,6 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             backgroundColor:
                                                                 '#0B2447',
                                                         }}
-                                                    >
-                                                        {item.children?.map(
-                                                            (child) => (
-                                                                <Link
-                                                                    to={`/${workspace}/${child.page}`}
-                                                                    className={`
-                                                                    relative p-2 group flex rounded-md text-sm my-0.5 ${
-                                                                        child.page ===
-                                                                        currentPage
-                                                                            ? 'bg-kaytu-500 text-gray-200 font-semibold'
-                                                                            : 'text-gray-300 hover:bg-kaytu-800'
-                                                                    }`}
-                                                                >
-                                                                    <Text className="ml-3 text-inherit w-48">
-                                                                        {
-                                                                            child.name
-                                                                        }
-                                                                    </Text>
-                                                                </Link>
-                                                            )
-                                                        )}
-                                                    </Flex>
-                                                </div>
-                                            )}
-                                        {collapsed &&
-                                            insightHover &&
-                                            item.name === 'Insights' && (
-                                                <div
-                                                    className="pl-6 absolute -top-2 left-full"
-                                                    onMouseEnter={() => {
-                                                        if (
-                                                            item.name ===
-                                                            'Governance'
-                                                        ) {
-                                                            setComplianceHover(
-                                                                true
-                                                            )
-                                                        }
-                                                        if (
-                                                            item.name ===
-                                                            'Insights'
-                                                        ) {
-                                                            setInsightHover(
-                                                                true
-                                                            )
-                                                        }
-                                                    }}
-                                                    onMouseLeave={() => {
-                                                        if (
-                                                            item.name ===
-                                                            'Governance'
-                                                        ) {
-                                                            setComplianceHover(
-                                                                false
-                                                            )
-                                                        }
-                                                        if (
-                                                            item.name ===
-                                                            'Insights'
-                                                        ) {
-                                                            setInsightHover(
-                                                                false
-                                                            )
-                                                        }
-                                                    }}
-                                                >
-                                                    <Flex
-                                                        flexDirection="col"
-                                                        className="rounded-md py-2 px-1 bg-kaytu-950"
                                                     >
                                                         {item.children?.map(
                                                             (child) => (

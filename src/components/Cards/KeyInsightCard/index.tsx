@@ -47,7 +47,7 @@ export default function KeyInsightCard({
         <Card
             key={title}
             className="cursor-pointer"
-            onClick={() => navigate(`${id}`)}
+            onClick={() => navigate(`key_insight_${id}`)}
         >
             <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Flex flexDirection="col" alignItems="start" className="h-fit">
