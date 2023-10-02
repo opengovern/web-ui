@@ -266,7 +266,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <Card className="mb-4">
+                        <Card>
                             <Grid numItems={6} className="gap-4">
                                 <SummaryCard
                                     title={
