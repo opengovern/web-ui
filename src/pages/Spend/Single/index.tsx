@@ -1,13 +1,13 @@
 import { useAtomValue } from 'jotai'
 import { useParams } from 'react-router-dom'
-import { timeAtom } from '../../../store'
+import { spendTimeAtom, timeAtom } from '../../../store'
 import NotFound from '../../Errors'
 import Menu from '../../../components/Menu'
 import SingleSpendConnection from './SingleConnection'
 import SingleSpendMetric from './SingleMetric'
 
 export default function SingleSpend() {
-    const activeTimeRange = useAtomValue(timeAtom)
+    const activeTimeRange = useAtomValue(spendTimeAtom)
     const { id, metric } = useParams()
     const urlParams = window.location.pathname.split('/')
 
