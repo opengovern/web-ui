@@ -74,16 +74,18 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
-export default function Assignments({ id }: IAssignments) {
-    const [connection, setConnection] = useState<any>(null)
-    const [status, setStatus] = useState<any>(null)
-    const [flag, setFlag] = useState(false)
+interface ITransferState {
+    connectionID: string
+    status: boolean
+}
 
-    const {
-        response: assignments,
-        isLoading,
-        sendNow: getData,
-    } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id))
+export default function Assignments({ id }: IAssignments) {
+    const [firstLoading, setFirstLoading] = useState<boolean>(true)
+    const [transfer, setTransfer] = useState<ITransferState>({
+        connectionID: '',
+        status: false,
+    })
+
     const {
         response: enable,
         sendNow: sendEnable,
@@ -91,7 +93,7 @@ export default function Assignments({ id }: IAssignments) {
         isExecuted: enableExecuted,
     } = useComplianceApiV1AssignmentsConnectionCreate(
         String(id),
-        connection,
+        { connectionId: [transfer.connectionID] },
         {},
         false
     )
@@ -102,40 +104,42 @@ export default function Assignments({ id }: IAssignments) {
         isExecuted: disableExecuted,
     } = useComplianceApiV1AssignmentsConnectionDelete(
         String(id),
-        connection,
+        { connectionId: [transfer.connectionID] },
         {},
         false
     )
 
-    const callApi = (s: string | null, callback: any) => {
-        if (s === 'enable') {
-            sendDisable()
-        }
-        if (s === 'disable') {
-            sendEnable()
-        }
-        callback()
-    }
+    const {
+        response: assignments,
+        isLoading,
+        sendNow: refreshList,
+    } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {}, false)
 
     useEffect(() => {
-        if (connection && status === 'enable') {
-            callApi('enable', getData)
+        if (transfer.connectionID !== '') {
+            if (transfer.status) {
+                sendEnable()
+            } else {
+                sendDisable()
+            }
         }
-        if (connection && status === 'disable') {
-            callApi('disable', getData)
-        }
-    }, [connection, status])
+    }, [transfer])
 
     useEffect(() => {
-        if (enableExecuted && enableLoading) {
-            setConnection(null)
-            setStatus(null)
-            // getData()
+        if (firstLoading) {
+            refreshList()
         }
-        if (disableExecuted && disableLoading) {
-            setConnection(null)
-            setStatus(null)
-            // getData()
+        setFirstLoading(false)
+    }, [])
+
+    useEffect(() => {
+        if (enableExecuted && !enableLoading) {
+            setTransfer({ connectionID: '', status: false })
+            refreshList()
+        }
+        if (disableExecuted && !disableLoading) {
+            setTransfer({ connectionID: '', status: false })
+            refreshList()
         }
     }, [enableExecuted, disableExecuted, enableLoading, disableLoading])
 
@@ -148,12 +152,10 @@ export default function Assignments({ id }: IAssignments) {
                 event: CellClickedEvent<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource>
             ) => {
                 if (event.colDef.headerName === 'Enable') {
-                    setConnection(event.data?.connectionID)
-                    if (event.data?.status) {
-                        setStatus('enable')
-                    } else {
-                        setStatus('disable')
-                    }
+                    setTransfer({
+                        connectionID: event.data?.connectionID || '',
+                        status: !(event.data?.status || false),
+                    })
                 }
             }}
             onGridReady={(params) => {
@@ -173,8 +175,7 @@ export default function Assignments({ id }: IAssignments) {
                 <Button
                     variant="secondary"
                     onClick={() => {
-                        setConnection('all')
-                        setStatus('enable')
+                        setTransfer({ connectionID: 'all', status: false })
                     }}
                 >
                     Disable All
@@ -182,8 +183,7 @@ export default function Assignments({ id }: IAssignments) {
                 <Button
                     variant="secondary"
                     onClick={() => {
-                        setConnection('all')
-                        setStatus('disable')
+                        setTransfer({ connectionID: 'all', status: true })
                     }}
                 >
                     Enable All
