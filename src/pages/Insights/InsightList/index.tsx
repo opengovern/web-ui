@@ -2,6 +2,7 @@ import {
     Button,
     Card,
     Flex,
+    Grid,
     Select,
     SelectItem,
     Text,
@@ -25,6 +26,7 @@ import Table, { IColumn } from '../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { badgeDelta } from '../../../utilities/deltaType'
 import { rowGenerator } from '../../Infrastructure/Details'
+import InsightCard from '../../../components/Cards/InsightCard'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -243,38 +245,11 @@ export default function InsightList() {
                                 </Button>
                             </Flex>
                         )}
-                        <Table
-                            id="insight_list"
-                            columns={columns}
-                            rowData={rowGenerator(insightList)
-                                .filter((i) => {
-                                    if (selectedConnections.provider.length) {
-                                        return (
-                                            i.connector ===
-                                            selectedConnections.provider
-                                        )
-                                    }
-                                    return i
-                                })
-                                .sort(
-                                    (a, b) =>
-                                        b.totalResultValue - a.totalResultValue
-                                )}
-                            options={options}
-                            onRowClicked={(event: RowClickedEvent) => {
-                                if (
-                                    event.data?.totalResultValue ||
-                                    event.data?.oldTotalResultValue
-                                ) {
-                                    navigateToInsightsDetails(event.data?.id)
-                                } else {
-                                    setNotification({
-                                        text: 'Time period is not covered by insight',
-                                        type: 'warning',
-                                    })
-                                }
-                            }}
-                        />
+                        <Grid numItems={3} className="w-full gap-4">
+                            {insightList?.map((insight) => (
+                                <InsightCard metric={insight} />
+                            ))}
+                        </Grid>
                     </Flex>
                 ) : (
                     <Button onClick={() => insightSendNow()}>Retry</Button>
