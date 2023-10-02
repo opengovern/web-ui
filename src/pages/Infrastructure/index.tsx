@@ -213,7 +213,7 @@ const topServices = (
     return top
 }
 
-export default function Assets() {
+export default function Infrastructure() {
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 

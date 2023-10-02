@@ -44,7 +44,7 @@ import {
 import Chart from '../../../../components/Chart'
 import { costTrendChart, getConnections } from '../../index'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
-import { generateVisualMap } from '../../../Assets'
+import { generateVisualMap } from '../../../Infrastructure'
 import { dateDisplay } from '../../../../utilities/dateDisplay'
 
 interface ISingle {

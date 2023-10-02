@@ -1,13 +1,18 @@
 import {
     Button,
+    Callout,
     Card,
+    Col,
     Flex,
     Grid,
     List,
     ListItem,
+    Select,
     Tab,
     TabGroup,
     TabList,
+    TabPanel,
+    TabPanels,
     Text,
     Title,
 } from '@tremor/react'
@@ -32,17 +37,33 @@ import Breakdown from '../../../../components/Breakdown'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendTableList,
+    useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../../api/inventory.gen'
 import { notificationAtom } from '../../../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../components/RenderObject'
-import { pieData } from '../../index'
+import { costTrendChart, getConnections, pieData } from '../../index'
 import Header from '../../../../components/Header'
-import { checkGranularity } from '../../../../utilities/dateComparator'
-import { exactPriceDisplay } from '../../../../utilities/numericDisplay'
+import {
+    checkGranularity,
+    generateItems,
+} from '../../../../utilities/dateComparator'
+import {
+    exactPriceDisplay,
+    numberDisplay,
+} from '../../../../utilities/numericDisplay'
+import SummaryCard from '../../../../components/Cards/SummaryCard'
+import { capitalizeFirstLetter } from '../../../../utilities/labelMaker'
+import {
+    AreaChartIcon,
+    BarChartIcon,
+    LineChartIcon,
+} from '../../../../icons/icons'
+import Chart from '../../../../components/Chart'
+import { generateVisualMap } from '../../../Infrastructure'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -55,6 +76,11 @@ export default function SingleSpendConnection({
 }: ISingle) {
     const [openDrawer, setOpenDrawer] = useState(false)
     const [selectedIndex, setSelectedIndex] = useState(1)
+    const [selectedChartIndex, setSelectedChartIndex] = useState(1)
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
+        'area'
+    )
+    const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
@@ -64,6 +90,12 @@ export default function SingleSpendConnection({
     )
     const navigate = useNavigate()
     const setNotification = useSetAtom(notificationAtom)
+
+    useEffect(() => {
+        if (selectedChartIndex === 0) setSelectedChart('area')
+        if (selectedChartIndex === 1) setSelectedChart('line')
+        if (selectedChartIndex === 2) setSelectedChart('bar')
+    }, [selectedChartIndex])
 
     useEffect(() => {
         switch (selectedIndex) {
@@ -81,6 +113,14 @@ export default function SingleSpendConnection({
                 break
         }
     }, [selectedIndex])
+
+    const { response: costTrend, isLoading: costTrendLoading } =
+        useInventoryApiV2AnalyticsSpendTrendList({
+            startTime: activeTimeRange.start.unix(),
+            endTime: activeTimeRange.end.unix(),
+            granularity: selectedGranularity,
+            connectionId: [String(id)],
+        })
 
     const tableQuery = (): {
         startTime?: number | undefined
@@ -407,7 +447,6 @@ export default function SingleSpendConnection({
         useOnboardApiV1ConnectionsSummaryList({
             ...query,
             pageSize: 1,
-            needCost: false,
         })
     const connection = accountInfo?.connections?.at(0)
 
@@ -541,29 +580,180 @@ export default function SingleSpendConnection({
                     loading={compositionLoading}
                 />
             </Grid>
-            <Card className="mt-4">
-                <Flex>
-                    <Title className="font-semibold">Spend</Title>
-                    <Flex className="gap-4 w-fit">
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                gridRef.current?.api?.exportDataAsCsv()
-                            }}
-                            icon={ArrowDownOnSquareIcon}
-                        >
-                            Download
-                        </Button>
-                    </Flex>
-                </Flex>
-                <div className="ag-theme-alpine mt-4">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                    />
-                </div>
-            </Card>
+            <TabGroup className="mt-4">
+                <TabList>
+                    <Tab>Trend</Tab>
+                    <Tab>Table</Tab>
+                </TabList>
+                <TabPanels>
+                    <TabPanel>
+                        <Card>
+                            <Grid numItems={6} className="gap-4">
+                                <SummaryCard
+                                    title={
+                                        connection?.providerConnectionName || ''
+                                    }
+                                    metric={exactPriceDisplay(
+                                        accountInfo?.totalCost
+                                    )}
+                                    loading={accountInfoLoading}
+                                    border={false}
+                                />
+                                <Col numColSpan={3} />
+                                <Col numColSpan={2}>
+                                    <Flex
+                                        justifyContent="end"
+                                        className="gap-4"
+                                    >
+                                        <Select
+                                            value={selectedGranularity}
+                                            placeholder={capitalizeFirstLetter(
+                                                selectedGranularity
+                                            )}
+                                            onValueChange={(v) => {
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                setSelectedGranularity(v)
+                                            }}
+                                            className="w-10"
+                                        >
+                                            {generateItems(
+                                                activeTimeRange.start,
+                                                activeTimeRange.end
+                                            )}
+                                        </Select>
+                                        <TabGroup
+                                            index={selectedChartIndex}
+                                            onIndexChange={
+                                                setSelectedChartIndex
+                                            }
+                                            className="w-fit rounded-lg"
+                                        >
+                                            <TabList variant="solid">
+                                                <Tab value="area">
+                                                    <AreaChartIcon className="h-5" />
+                                                </Tab>
+                                                <Tab value="line">
+                                                    <LineChartIcon className="h-5" />
+                                                </Tab>
+                                                <Tab value="bar">
+                                                    <BarChartIcon className="h-5" />
+                                                </Tab>
+                                            </TabList>
+                                        </TabGroup>
+                                    </Flex>
+                                </Col>
+                            </Grid>
+                            {costTrend
+                                ?.filter(
+                                    (t) =>
+                                        selectedDatapoint?.color ===
+                                            '#E01D48' &&
+                                        dateDisplay(t.date) ===
+                                            selectedDatapoint?.name
+                                )
+                                .map((t) => (
+                                    <Callout
+                                        color="rose"
+                                        title="Incomplete data"
+                                        className="w-fit mt-4"
+                                    >
+                                        Checked{' '}
+                                        {numberDisplay(
+                                            t.totalSuccessfulDescribedConnectionCount,
+                                            0
+                                        )}{' '}
+                                        accounts out of{' '}
+                                        {numberDisplay(
+                                            t.totalConnectionCount,
+                                            0
+                                        )}{' '}
+                                        on {dateDisplay(t.date)}
+                                    </Callout>
+                                ))}
+                            <Flex justifyContent="end" className="mt-2 gap-2.5">
+                                <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
+                                {selectedChart === 'area' ? (
+                                    <Text>Accumulated cost</Text>
+                                ) : (
+                                    <Text>Spend</Text>
+                                )}
+                            </Flex>
+                            <Chart
+                                labels={
+                                    costTrendChart(costTrend, selectedChart)
+                                        .label
+                                }
+                                chartData={
+                                    costTrendChart(costTrend, selectedChart)
+                                        .data
+                                }
+                                chartType={selectedChart}
+                                isCost
+                                loading={costTrendLoading}
+                                visualMap={
+                                    selectedChart === 'area'
+                                        ? undefined
+                                        : generateVisualMap(
+                                              costTrendChart(
+                                                  costTrend,
+                                                  selectedChart
+                                              ).flag,
+                                              costTrendChart(
+                                                  costTrend,
+                                                  selectedChart
+                                              ).label
+                                          ).visualMap
+                                }
+                                markArea={
+                                    selectedChart === 'area'
+                                        ? undefined
+                                        : generateVisualMap(
+                                              costTrendChart(
+                                                  costTrend,
+                                                  selectedChart
+                                              ).flag,
+                                              costTrendChart(
+                                                  costTrend,
+                                                  selectedChart
+                                              ).label
+                                          ).markArea
+                                }
+                                onClick={
+                                    selectedChart === 'area'
+                                        ? undefined
+                                        : (p) => setSelectedDatapoint(p)
+                                }
+                            />
+                        </Card>
+                    </TabPanel>
+                    <TabPanel>
+                        <Card>
+                            <Flex>
+                                <Title className="font-semibold">Spend</Title>
+                                <Flex className="gap-4 w-fit">
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => {
+                                            gridRef.current?.api?.exportDataAsCsv()
+                                        }}
+                                        icon={ArrowDownOnSquareIcon}
+                                    >
+                                        Download
+                                    </Button>
+                                </Flex>
+                            </Flex>
+                            <div className="ag-theme-alpine mt-4">
+                                <AgGridReact
+                                    ref={gridRef}
+                                    domLayout="autoHeight"
+                                    gridOptions={gridOptions}
+                                />
+                            </div>
+                        </Card>
+                    </TabPanel>
+                </TabPanels>
+            </TabGroup>
         </>
     )
 }
