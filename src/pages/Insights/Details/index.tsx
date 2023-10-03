@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { filterAtom, timeAtom } from '../../../store'
 import InsightDetail from './InsightDetail'
-import KeyInsightDetail from './keyInsightDetail'
+import KeyInsightDetail from './KeyInsightDetail'
 import Menu from '../../../components/Menu'
 
 export default function InsightDetails() {

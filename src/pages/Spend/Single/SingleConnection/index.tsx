@@ -88,6 +88,14 @@ export default function SingleSpendConnection({
             ? 'monthly'
             : 'daily'
     )
+    useEffect(() => {
+        setSelectedGranularity(
+            checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
+                ? 'monthly'
+                : 'daily'
+        )
+    }, [activeTimeRange])
+
     const navigate = useNavigate()
     const setNotification = useSetAtom(notificationAtom)
 
@@ -478,40 +486,22 @@ export default function SingleSpendConnection({
                             ) : (
                                 <List className="mt-2">
                                     <ListItem>
-                                        <Text>Account ID</Text>
-                                        <Flex className="w-fit">
-                                            <Button
-                                                variant="light"
-                                                onClick={() =>
-                                                    clipboardCopy(
-                                                        `Account ID: ${connection?.providerConnectionID}`
-                                                    ).then(() =>
-                                                        setNotification({
-                                                            text: 'Account ID copied to clipboard',
-                                                            type: 'info',
-                                                        })
-                                                    )
-                                                }
-                                                icon={Square2StackIcon}
-                                            />
-                                            <Text className="text-gray-800">
-                                                {
-                                                    connection?.providerConnectionID
-                                                }
-                                            </Text>
-                                        </Flex>
+                                        <Text>Connector</Text>
+                                        <Text className="text-gray-800">
+                                            {connection?.connector}
+                                        </Text>
                                     </ListItem>
                                     <ListItem>
-                                        <Text>Account name</Text>
-                                        <Flex className="w-fit">
+                                        <Text>Discovered name</Text>
+                                        <Flex className="gap-1 w-fit">
                                             <Button
                                                 variant="light"
                                                 onClick={() =>
                                                     clipboardCopy(
-                                                        `Account name: ${connection?.providerConnectionName}`
+                                                        `Discovered name: ${connection?.providerConnectionName}`
                                                     ).then(() =>
                                                         setNotification({
-                                                            text: 'Account name copied to clipboard',
+                                                            text: 'Discovered name copied to clipboard',
                                                             type: 'info',
                                                         })
                                                     )
@@ -526,15 +516,33 @@ export default function SingleSpendConnection({
                                         </Flex>
                                     </ListItem>
                                     <ListItem>
-                                        <Text>Health state</Text>
-                                        <Text className="text-gray-800">
-                                            {connection?.healthState}
-                                        </Text>
+                                        <Text>Discovered ID</Text>
+                                        <Flex className="gap-1 w-fit">
+                                            <Button
+                                                variant="light"
+                                                onClick={() =>
+                                                    clipboardCopy(
+                                                        `Discovered ID: ${connection?.providerConnectionID}`
+                                                    ).then(() =>
+                                                        setNotification({
+                                                            text: 'Discovered ID copied to clipboard',
+                                                            type: 'info',
+                                                        })
+                                                    )
+                                                }
+                                                icon={Square2StackIcon}
+                                            />
+                                            <Text className="text-gray-800">
+                                                {
+                                                    connection?.providerConnectionID
+                                                }
+                                            </Text>
+                                        </Flex>
                                     </ListItem>
                                     <ListItem>
-                                        <Text>Connector</Text>
+                                        <Text>Lifecycle state</Text>
                                         <Text className="text-gray-800">
-                                            {connection?.connector}
+                                            {connection?.lifecycleState}
                                         </Text>
                                     </ListItem>
                                     <ListItem>
@@ -583,16 +591,14 @@ export default function SingleSpendConnection({
             <TabGroup className="mt-4">
                 <TabList>
                     <Tab>Trend</Tab>
-                    <Tab>Table</Tab>
+                    <Tab>Details</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
                         <Card>
                             <Grid numItems={6} className="gap-4">
                                 <SummaryCard
-                                    title={
-                                        connection?.providerConnectionName || ''
-                                    }
+                                    title=""
                                     metric={exactPriceDisplay(
                                         accountInfo?.totalCost
                                     )}

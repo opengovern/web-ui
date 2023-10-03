@@ -70,6 +70,14 @@ export default function SingleSpendMetric({
             ? 'daily'
             : 'monthly'
     )
+    useEffect(() => {
+        setSelectedGranularity(
+            checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
+                ? 'monthly'
+                : 'daily'
+        )
+    }, [activeTimeRange])
+
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
 
     useEffect(() => {
@@ -125,7 +133,7 @@ export default function SingleSpendMetric({
             connectionId: metric
                 ? [String(id).replace('account_', '')]
                 : selectedConnections.connections,
-            dimension: 'connection',
+            dimension: 'metric',
             granularity: gra,
             metricIds: [String(metricId)],
         }
