@@ -68,6 +68,14 @@ export default function CostMetricsDetails() {
             : 'daily'
     )
     useEffect(() => {
+        setSelectedGranularity(
+            checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
+                ? 'monthly'
+                : 'daily'
+        )
+    }, [activeTimeRange])
+
+    useEffect(() => {
         switch (selectedIndex) {
             case 0:
                 setSelectedGranularity('none')

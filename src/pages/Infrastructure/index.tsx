@@ -212,6 +212,14 @@ export default function Infrastructure() {
             ? 'daily'
             : 'monthly'
     )
+    useEffect(() => {
+        setSelectedGranularity(
+            checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
+                ? 'monthly'
+                : 'daily'
+        )
+    }, [activeTimeRange])
+
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
 
     useEffect(() => {

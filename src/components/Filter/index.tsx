@@ -93,14 +93,14 @@ export default function Filter() {
     const btnDisable = () => {
         switch (selectedIndex) {
             case 0:
-                return provider === selectedFilters.provider
+                return selectedFilters.connections.length ||
+                    selectedFilters.connectionGroup.length
+                    ? false
+                    : provider === selectedFilters.provider
             case 1:
                 return connectionGroup === selectedFilters.connectionGroup
             case 2:
-                return (
-                    connections === findConnections()
-                    // || connections.length < 2
-                )
+                return connections === findConnections()
             default:
                 return true
         }

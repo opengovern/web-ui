@@ -31,16 +31,17 @@ export const checkGranularity = (start: Dayjs, end: Dayjs) => {
     let monthly = true
     let yearly = true
 
-    if (dayjs(start).diff(dayjs(end), 'month', true) > 2) {
+    if (dayjs(end).diff(dayjs(start), 'month', true) > 2) {
         daily = false
     }
     if (
-        dayjs(start).month() === dayjs(end).month() &&
-        dayjs(start).diff(dayjs(end), 'month', true) > 11
+        (dayjs(end).month() === dayjs(start).month() &&
+            dayjs(end).year() === dayjs(start).year()) ||
+        dayjs(end).diff(dayjs(start), 'month', true) > 11
     ) {
         monthly = false
     }
-    if (dayjs(start).year() === dayjs(end).year()) {
+    if (dayjs(end).year() === dayjs(start).year()) {
         yearly = false
     }
 

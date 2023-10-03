@@ -7,7 +7,7 @@ import InsightList from '../pages/Insights'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
-import InsightDetail from '../pages/Insights/details/InsightDetail'
+import InsightDetail from '../pages/Insights/Details/InsightDetail'
 import Spend from '../pages/Spend'
 import Integrations from '../pages/Integrations'
 import CostMetricsDetails from '../pages/Spend/Details'
@@ -21,7 +21,7 @@ import AssetDetail from '../pages/Infrastructure/Details'
 import Single from '../pages/Infrastructure/Single'
 import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
-import InsightDetails from '../pages/Insights/details'
+import InsightDetails from '../pages/Insights/Details'
 
 const routes = [
     {
