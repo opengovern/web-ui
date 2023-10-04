@@ -1,5 +1,6 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import {
+    Button,
     Flex,
     Tab,
     TabGroup,
@@ -11,6 +12,7 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
+import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
 import Menu from '../../../../components/Menu'
 import { filterAtom, timeAtom } from '../../../../store'
 import Summary from './Tabs/Summary'
@@ -19,8 +21,9 @@ import Assignments from './Tabs/Assignments'
 import Policies from './Tabs/Policies'
 import Findings from './Tabs/Findings'
 import Spinner from '../../../../components/Spinner'
-import { dateDisplay } from '../../../../utilities/dateDisplay'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Header from '../../../../components/Header'
+import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
 
 export default function BenchmarkDetail() {
     const [selectedTab, setSelectedTab] = useState(0)
@@ -33,6 +36,12 @@ export default function BenchmarkDetail() {
 
     const { response: benchmarkDetail, isLoading } =
         useComplianceApiV1BenchmarksSummaryDetail(String(id))
+    const {
+        response,
+        isLoading: evaluateLoading,
+        sendNow: triggerEvaluate,
+        isExecuted,
+    } = useScheduleApiV1ComplianceTriggerUpdate(String(id), {}, false)
 
     useEffect(() => {
         switch (tabs) {
@@ -62,21 +71,37 @@ export default function BenchmarkDetail() {
                         filter
                         datePicker
                     />
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        justifyContent="start"
-                        className="mb-6"
-                    >
-                        <Flex className="mb-1">
-                            <Title>{benchmarkDetail?.title}</Title>
-                            <Text className="whitespace-nowrap">{`Last evaluation: ${dateDisplay(
+                    <Flex className="mb-6">
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            justifyContent="start"
+                        >
+                            <Title className="mb-1">
+                                {benchmarkDetail?.title}
+                            </Title>
+                            <Text className="w-2/3">
+                                {benchmarkDetail?.description}
+                            </Text>
+                        </Flex>
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            className="w-fit"
+                        >
+                            <Button
+                                variant="light"
+                                icon={ArrowPathRoundedSquareIcon}
+                                className="mb-1"
+                                onClick={() => triggerEvaluate()}
+                                loading={evaluateLoading && isExecuted}
+                            >
+                                Evaluate now
+                            </Button>
+                            <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
                                 benchmarkDetail?.evaluatedAt
                             )}`}</Text>
                         </Flex>
-                        <Text className="w-2/3">
-                            {benchmarkDetail?.description}
-                        </Text>
                     </Flex>
                     <TabGroup
                         index={selectedTab}
