@@ -14,6 +14,73 @@ export interface EchoHTTPError {
     message?: any
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiApiAction {
+    body?: string
+    headers?: Record<string, string>
+    id?: number
+    method?: string
+    url?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiApiRule {
+    action_id?: number
+    event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
+    id?: number
+    operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
+    scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiConditionStruct {
+    conditionType?: string
+    operatorStr?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiEventType {
+    benchmarkId?: string
+    insightId?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorInformation {
+    operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType
+    value?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct {
+    conditionStr?: GithubComKaytuIoKaytuEnginePkgAlertingApiConditionStruct
+    operatorInfo?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorInformation
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType {
+    OperatorGreaterThan = '>',
+    OperatorLessThan = '<',
+    OperatorLessThanOrEqual = '<=',
+    OperatorGreaterThanOrEqual = '>=',
+    OperatorEqual = '=',
+    OperatorDoesNotEqual = '!=',
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiScope {
+    connectionGroup?: string
+    connectionId?: string
+    connectorName?: SourceType
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest {
+    body?: string
+    headers?: Record<string, string>
+    id?: number
+    method?: string
+    url?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest {
+    action_id?: number
+    event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
+    id?: number
+    operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
+    scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
+}
+
 export enum GithubComKaytuIoKaytuEnginePkgAnalyticsDbMetricType {
     MetricTypeAssets = 'assets',
     MetricTypeSpend = 'spend',
@@ -372,6 +439,10 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
     title?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation {
+    remediation?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree {
     children?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree[]
     /**
@@ -403,6 +474,7 @@ export enum GithubComKaytuIoKaytuEnginePkgComplianceApiDirectionType {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
+    activeOnly?: boolean
     /**
      * Benchmark ID
      * @example ["azure_cis_v140"]
@@ -1182,10 +1254,6 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyInsightJobInterval = 'insight_job_interval',
     MetadataKeyMetricsJobInterval = 'metrics_job_interval',
     MetadataKeyDataRetention = 'data_retention_duration',
-    MetadataKeyAWSComplianceGitURL = 'aws_compliance_git_url',
-    MetadataKeyAzureComplianceGitURL = 'azure_compliance_git_url',
-    MetadataKeyInsightsGitURL = 'insights_git_url',
-    MetadataKeyQueriesGitURL = 'queries_git_url',
     MetadataKeyAnalyticsGitURL = 'analytics_git_url',
 }
 
@@ -1265,6 +1333,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
      * @example 1000
      */
     dailyCostAtStartTime?: number
+    describeJobRunning?: boolean
     /** @example "This is an example connection" */
     description?: string
     /** @example "johndoe@example.com" */
@@ -1547,6 +1616,7 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRe
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest {
     description?: string
     name?: string
+    organization_id?: number
     tier?: string
 }
 
@@ -1585,6 +1655,8 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
     organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
     /** @example "google-oauth2|204590896945502695694" */
     ownerId?: string
+    /** @example "sm" */
+    size?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize
     /** @example "PROVISIONED" */
     status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus
     /** @example "ENTERPRISE" */
@@ -1630,6 +1702,8 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
     /** @example "google-oauth2|204590896945502695694" */
     ownerId?: string
+    /** @example "sm" */
+    size?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize
     /** @example "PROVISIONED" */
     status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus
     /** @example "ENTERPRISE" */
@@ -1638,6 +1712,13 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     uri?: string
     /** @example "v0.45.4" */
     version?: string
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
+    SizeXS = 'xs',
+    SizeSM = 'sm',
+    SizeMD = 'md',
+    SizeLG = 'lg',
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus {
@@ -1886,7 +1967,7 @@ export class HttpClient<SecurityDataType = unknown> {
     }: ApiConfig<SecurityDataType> = {}) {
         this.instance = axios.create({
             ...axiosConfig,
-            baseURL: axiosConfig.baseURL || 'https://dev-cluster.kaytu.io',
+            baseURL: axiosConfig.baseURL || 'https://api.kaytu.io',
         })
         this.secure = secure
         this.format = format
@@ -2000,7 +2081,7 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title Kaytu Service API
  * @version 1.0
- * @baseUrl https://dev-cluster.kaytu.io
+ * @baseUrl https://api.kaytu.io
  * @contact
  */
 export class Api<
@@ -2024,6 +2105,171 @@ export class Api<
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
+                ...params,
+            }),
+    }
+    alerting = {
+        /**
+         * @description create an action by the specified input
+         *
+         * @tags alerting
+         * @name ApiActionCreateCreate
+         * @summary Create action
+         * @request POST:/alerting/api/action/create
+         * @secure
+         */
+        apiActionCreateCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgAlertingApiApiAction,
+            params: RequestParams = {}
+        ) =>
+            this.request<string, any>({
+                path: `/alerting/api/action/create`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description Deleting a single action for the given action id
+         *
+         * @tags alerting
+         * @name ApiActionDeleteDelete
+         * @summary Delete action
+         * @request DELETE:/alerting/api/action/delete/{actionId}
+         * @secure
+         */
+        apiActionDeleteDelete: (actionId: string, params: RequestParams = {}) =>
+            this.request<string, any>({
+                path: `/alerting/api/action/delete/${actionId}`,
+                method: 'DELETE',
+                secure: true,
+                ...params,
+            }),
+
+        /**
+         * @description returns list of all actions
+         *
+         * @tags alerting
+         * @name ApiActionListList
+         * @summary List actions
+         * @request GET:/alerting/api/action/list
+         * @secure
+         */
+        apiActionListList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgAlertingApiApiAction[],
+                any
+            >({
+                path: `/alerting/api/action/list`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving an action by the specified input
+         *
+         * @tags alerting
+         * @name ApiActionUpdateList
+         * @summary Update action
+         * @request GET:/alerting/api/action/update
+         * @secure
+         */
+        apiActionUpdateList: (
+            request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<string, any>({
+                path: `/alerting/api/action/update`,
+                method: 'GET',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description Deleting a single rule for the given rule id
+         *
+         * @tags alerting
+         * @name ApiRuleDeleteDelete
+         * @summary Delete rule
+         * @request DELETE:/alerting/api/rule/Delete/{ruleId}
+         * @secure
+         */
+        apiRuleDeleteDelete: (ruleId: string, params: RequestParams = {}) =>
+            this.request<string, any>({
+                path: `/alerting/api/rule/Delete/${ruleId}`,
+                method: 'DELETE',
+                secure: true,
+                ...params,
+            }),
+
+        /**
+         * @description create a rule by the specified input
+         *
+         * @tags alerting
+         * @name ApiRuleCreateCreate
+         * @summary Create rule
+         * @request POST:/alerting/api/rule/create
+         * @secure
+         */
+        apiRuleCreateCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgAlertingApiApiRule,
+            params: RequestParams = {}
+        ) =>
+            this.request<string, any>({
+                path: `/alerting/api/rule/create`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description returns list of all rules
+         *
+         * @tags alerting
+         * @name ApiRuleListList
+         * @summary List rules
+         * @request GET:/alerting/api/rule/list
+         * @secure
+         */
+        apiRuleListList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgAlertingApiApiRule[],
+                any
+            >({
+                path: `/alerting/api/rule/list`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving a rule by the specified input
+         *
+         * @tags alerting
+         * @name ApiRuleUpdateList
+         * @summary Update rule
+         * @request GET:/alerting/api/rule/update
+         * @secure
+         */
+        apiRuleUpdateList: (
+            request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<string, any>({
+                path: `/alerting/api/rule/update`,
+                method: 'GET',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
                 ...params,
             }),
     }
@@ -2250,6 +2496,31 @@ export class Api<
             }),
     }
     compliance = {
+        /**
+         * No description
+         *
+         * @tags compliance
+         * @name ApiV1AiPolicyRemediationCreate
+         * @summary Get policy remediation using AI
+         * @request POST:/compliance/api/v1/ai/policy/{policyID}/remediation
+         * @secure
+         */
+        apiV1AiPolicyRemediationCreate: (
+            policyId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
+                any
+            >({
+                path: `/compliance/api/v1/ai/policy/${policyId}/remediation`,
+                method: 'POST',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
         /**
          * @description Retrieving all benchmark assigned sources with benchmark id
          *
@@ -3966,6 +4237,50 @@ export class Api<
     }
     schedule = {
         /**
+         * @description Triggers a compliance job to run immediately for the given benchmark
+         *
+         * @tags describe
+         * @name ApiV1ComplianceTriggerUpdate
+         * @summary Triggers compliance job
+         * @request PUT:/schedule/api/v1/compliance/trigger/{benchmark_id}
+         * @secure
+         */
+        apiV1ComplianceTriggerUpdate: (
+            benchmarkId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/schedule/api/v1/compliance/trigger/${benchmarkId}`,
+                method: 'PUT',
+                secure: true,
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags describe
+         * @name ApiV1DescribeConnectionStatusUpdate
+         * @summary Get connection describe status
+         * @request PUT:/schedule/api/v1/describe/connection/status
+         * @secure
+         */
+        apiV1DescribeConnectionStatusUpdate: (
+            query: {
+                /** Connection ID */
+                connection_id: string
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/schedule/api/v1/describe/connection/status`,
+                method: 'PUT',
+                query: query,
+                secure: true,
+                ...params,
+            }),
+
+        /**
          * @description Triggers a describe job to run immediately for the given connection
          *
          * @tags describe
@@ -3986,6 +4301,26 @@ export class Api<
                 path: `/schedule/api/v1/describe/trigger/${connectionId}`,
                 method: 'PUT',
                 query: query,
+                secure: true,
+                ...params,
+            }),
+
+        /**
+         * @description Triggers a insight job to run immediately for the given insight
+         *
+         * @tags describe
+         * @name ApiV1InsightTriggerUpdate
+         * @summary Triggers insight job
+         * @request PUT:/schedule/api/v1/insight/trigger/{insight_id}
+         * @secure
+         */
+        apiV1InsightTriggerUpdate: (
+            insightId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/schedule/api/v1/insight/trigger/${insightId}`,
+                method: 'PUT',
                 secure: true,
                 ...params,
             }),
