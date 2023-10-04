@@ -1,5 +1,6 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import {
+    Button,
     Flex,
     Tab,
     TabGroup,
@@ -11,6 +12,7 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
+import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
 import Menu from '../../../../components/Menu'
 import { filterAtom, timeAtom } from '../../../../store'
 import Summary from './Tabs/Summary'
@@ -62,21 +64,35 @@ export default function BenchmarkDetail() {
                         filter
                         datePicker
                     />
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        justifyContent="start"
-                        className="mb-6"
-                    >
-                        <Flex className="mb-1">
-                            <Title>{benchmarkDetail?.title}</Title>
+                    <Flex className="mb-6">
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            justifyContent="start"
+                        >
+                            <Title className="mb-1">
+                                {benchmarkDetail?.title}
+                            </Title>
+                            <Text className="w-2/3">
+                                {benchmarkDetail?.description}
+                            </Text>
+                        </Flex>
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            className="w-fit"
+                        >
+                            <Button
+                                variant="light"
+                                icon={ArrowPathRoundedSquareIcon}
+                                className="mb-1"
+                            >
+                                Evaluate now
+                            </Button>
                             <Text className="whitespace-nowrap">{`Last evaluation: ${dateDisplay(
                                 benchmarkDetail?.evaluatedAt
                             )}`}</Text>
                         </Flex>
-                        <Text className="w-2/3">
-                            {benchmarkDetail?.description}
-                        </Text>
                     </Flex>
                     <TabGroup
                         index={selectedTab}

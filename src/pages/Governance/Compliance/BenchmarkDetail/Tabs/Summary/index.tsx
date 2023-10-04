@@ -172,7 +172,7 @@ export default function Summary({
     const skip = detail?.result?.skipCount || 0
 
     return (
-        <Flex flexDirection="col">
+        <>
             <Grid numItems={2} numItemsMd={4} className="w-full gap-4 mb-4">
                 <SummaryCard title="Number of active alarms" metric={alarm} />
                 <SummaryCard
@@ -195,7 +195,7 @@ export default function Summary({
                     ).toFixed(2)} %`}
                 />
             </Grid>
-            <Grid numItems={1} numItemsMd={2} className="w-full gap-4 mb-4">
+            {/* <Grid numItems={1} numItemsMd={2} className="w-full gap-4 mb-4">
                 <CardWithList
                     title="Top Findings"
                     tabs={[
@@ -232,7 +232,7 @@ export default function Summary({
                         showAnimation={false}
                     />
                 </Card>
-            </Grid>
+            </Grid> */}
             <Card>
                 <Flex>
                     <Title className="font-semibold">
@@ -266,6 +266,6 @@ export default function Summary({
                     isPercent
                 />
             </Card>
-        </Flex>
+        </>
     )
 }

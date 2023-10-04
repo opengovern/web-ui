@@ -73,6 +73,12 @@ const renderStatus = (status: any) => {
 
 const columns: IColumn<any, any>[] = [
     {
+        headerName: 'Policy ID',
+        field: 'lastChecked',
+        type: 'string',
+    },
+    {
+        headerName: 'Severity',
         field: 'severity',
         width: 120,
         type: 'string',
@@ -90,6 +96,7 @@ const columns: IColumn<any, any>[] = [
         ),
     },
     {
+        headerName: 'Status',
         field: 'status',
         width: 100,
         type: 'string',
@@ -107,6 +114,17 @@ const columns: IColumn<any, any>[] = [
         ),
     },
     {
+        headerName: '# of failures',
+        field: 'lastChecked',
+        type: 'string',
+    },
+    {
+        headerName: '# of failed accounts',
+        field: 'lastChecked',
+        type: 'string',
+    },
+    {
+        headerName: 'Last checked',
         field: 'lastChecked',
         type: 'date',
         width: 120,
