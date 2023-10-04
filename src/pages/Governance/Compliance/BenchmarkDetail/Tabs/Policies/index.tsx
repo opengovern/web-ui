@@ -74,7 +74,7 @@ const renderStatus = (status: any) => {
 const columns: IColumn<any, any>[] = [
     {
         headerName: 'Policy ID',
-        field: 'lastChecked',
+        field: 'id',
         type: 'string',
     },
     {
@@ -113,16 +113,16 @@ const columns: IColumn<any, any>[] = [
             </Flex>
         ),
     },
-    {
-        headerName: '# of failures',
-        field: 'lastChecked',
-        type: 'string',
-    },
-    {
-        headerName: '# of failed accounts',
-        field: 'lastChecked',
-        type: 'string',
-    },
+    // {
+    //     headerName: '# of failures',
+    //     field: 'lastChecked',
+    //     type: 'string',
+    // },
+    // {
+    //     headerName: '# of failed accounts',
+    //     field: 'lastChecked',
+    //     type: 'string',
+    // },
     {
         headerName: 'Last checked',
         field: 'lastChecked',
@@ -135,6 +135,7 @@ export default function Policies({ id }: IPolicies) {
     const { response: policies } = useComplianceApiV1BenchmarksTreeDetail(
         String(id)
     )
+    console.log(policies)
 
     const gridOptions: GridOptions = {
         autoGroupColumnDef: {

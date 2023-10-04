@@ -157,17 +157,14 @@ export default function Table<TData = any, TValue = any>({
                     if (param.value) {
                         let value = ''
                         if (!Number.isNaN(Number(param.value))) {
-                            console.log('number', param.value)
                             value = dateDisplay(
                                 Number(param.value) > 16000000000
                                     ? Number(param.value)
                                     : Number(param.value) * 1000
                             )
                         } else {
-                            console.log('nan', param.value)
                             value = dateDisplay(param.value)
                         }
-                        console.log(value)
                         return value
                     }
                     return ''
