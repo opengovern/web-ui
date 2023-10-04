@@ -141,7 +141,7 @@ export default function Finder() {
         error,
     } = useInventoryApiV1QueryRunCreate(
         {
-            page: { no: 1, size: 1000 },
+            page: { no: 1, size: 5000 },
             query: code,
         },
         {},
