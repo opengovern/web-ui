@@ -21,8 +21,9 @@ import Assignments from './Tabs/Assignments'
 import Policies from './Tabs/Policies'
 import Findings from './Tabs/Findings'
 import Spinner from '../../../../components/Spinner'
-import { dateDisplay } from '../../../../utilities/dateDisplay'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Header from '../../../../components/Header'
+import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
 
 export default function BenchmarkDetail() {
     const [selectedTab, setSelectedTab] = useState(0)
@@ -35,6 +36,12 @@ export default function BenchmarkDetail() {
 
     const { response: benchmarkDetail, isLoading } =
         useComplianceApiV1BenchmarksSummaryDetail(String(id))
+    const {
+        response,
+        isLoading: evaluateLoading,
+        sendNow: triggerEvaluate,
+        isExecuted,
+    } = useScheduleApiV1ComplianceTriggerUpdate(String(id), {}, false)
 
     useEffect(() => {
         switch (tabs) {
@@ -86,10 +93,12 @@ export default function BenchmarkDetail() {
                                 variant="light"
                                 icon={ArrowPathRoundedSquareIcon}
                                 className="mb-1"
+                                onClick={() => triggerEvaluate()}
+                                loading={evaluateLoading && isExecuted}
                             >
                                 Evaluate now
                             </Button>
-                            <Text className="whitespace-nowrap">{`Last evaluation: ${dateDisplay(
+                            <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
                                 benchmarkDetail?.evaluatedAt
                             )}`}</Text>
                         </Flex>

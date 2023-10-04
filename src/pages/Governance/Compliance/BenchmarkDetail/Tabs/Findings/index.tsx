@@ -111,7 +111,7 @@ export default function Findings({ id, connections }: IFinder) {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
 
-    const { response: findings } = useComplianceApiV1FindingsCreate({
+    const { response: findings, isLoading } = useComplianceApiV1FindingsCreate({
         filters: {
             benchmarkID: [String(id)],
             connector: connections.provider.length
@@ -133,7 +133,6 @@ export default function Findings({ id, connections }: IFinder) {
                 enablePivot: true,
             },
         },
-        groupDefaultExpanded: -1,
         rowGroupPanelShow: 'always',
         groupAllowUnbalanced: true,
         autoGroupColumnDef: {
@@ -161,6 +160,11 @@ export default function Findings({ id, connections }: IFinder) {
                     setOpen(true)
                 }}
                 options={options}
+                onGridReady={(params) => {
+                    if (isLoading) {
+                        params.api.showLoadingOverlay()
+                    }
+                }}
             />
             <DrawerPanel
                 open={open}
