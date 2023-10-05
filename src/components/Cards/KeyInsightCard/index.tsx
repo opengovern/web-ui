@@ -7,12 +7,8 @@ import {
     ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
-import {
-    badgeTypeByDelta,
-    percentageByChange,
-} from '../../../utilities/deltaType'
+import { badgeDelta } from '../../../utilities/deltaType'
 import { numericDisplay } from '../../../utilities/numericDisplay'
-import ChangeDelta from '../../ChangeDelta'
 
 interface IKeyInsightCard {
     title: string | undefined
@@ -63,12 +59,7 @@ export default function KeyInsightCard({
                             ({numericDisplay(count)})
                         </span>
                     </Title>
-                    {!!prevCount && (
-                        <ChangeDelta
-                            deltaType={badgeTypeByDelta(prevCount, count)}
-                            change={percentageByChange(prevCount, count)}
-                        />
-                    )}
+                    {badgeDelta(prevCount, count)}
                 </Flex>
             </Flex>
         </Card>
