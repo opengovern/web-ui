@@ -1,4 +1,4 @@
-import { Card, Text, Title } from '@tremor/react'
+import { Card, Flex, Text, Title } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import {
@@ -8,6 +8,7 @@ import {
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../ConnectorCard'
 import ChangeDelta from '../../ChangeDelta'
+import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IInsightsCard {
     metric: GithubComKaytuIoKaytuEnginePkgComplianceApiInsight
@@ -80,11 +81,21 @@ export default function InsightCard({ metric }: IInsightsCard) {
                 navigateToAssetsInsightsDetails(metric.id)
             }
         >
-            {getConnectorIcon(metric?.connector)}
-            <Title className="font-semibold mt-2 mb-3 truncate max-w-full">
-                {metric?.shortTitle}
-            </Title>
-            {generateBadge(metric)}
+            <Flex justifyContent="start">
+                {getConnectorIcon(metric?.connector)}
+                <Title className="font-semibold mt-2 mb-3 truncate max-w-full">
+                    {metric?.shortTitle}
+                </Title>
+            </Flex>
+            <Flex>
+                <Flex justifyContent="start" alignItems="end" className="gap-1">
+                    <Title>{numericDisplay(metric.totalResultValue)}</Title>
+                    <Text className="mb-0.5">
+                        from {numericDisplay(metric.oldTotalResultValue)}
+                    </Text>
+                </Flex>
+                {generateBadge(metric)}
+            </Flex>
         </Card>
     )
 }

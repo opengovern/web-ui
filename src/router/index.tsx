@@ -3,11 +3,10 @@ import Infrastructure from '../pages/Infrastructure'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
 import { CallbackPage } from '../pages/Callback'
-import InsightList from '../pages/Insights'
+import Insights from '../pages/Insights'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
-import InsightDetail from '../pages/Insights/Details/InsightDetail'
 import Spend from '../pages/Spend'
 import Integrations from '../pages/Integrations'
 import CostMetricsDetails from '../pages/Spend/Details'
@@ -22,6 +21,7 @@ import Single from '../pages/Infrastructure/Single'
 import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import InsightDetails from '../pages/Insights/Details'
+import InsightList from '../pages/Insights/InsightList'
 
 const routes = [
     {
@@ -120,6 +120,11 @@ const authRoutes = [
     {
         key: 'insights',
         path: '/:ws/insights',
+        component: Insights,
+    },
+    {
+        key: 'insights',
+        path: '/:ws/insights/insight-list',
         component: InsightList,
     },
     {
@@ -127,11 +132,11 @@ const authRoutes = [
         path: '/:ws/insights/:id',
         component: InsightDetails,
     },
-    {
-        key: 'insight details',
-        path: '/:ws/insights/:idd/:id',
-        component: InsightDetails,
-    },
+    // {
+    //     key: 'insight details',
+    //     path: '/:ws/insights/:idd/:id',
+    //     component: InsightDetails,
+    // },
     {
         key: 'integrations',
         path: '/:ws/integrations',

@@ -22,7 +22,7 @@ const changeColor = (delta: DeltaType | undefined) => {
 
 export default function ChangeDelta({ deltaType, change }: IChangeDelta) {
     return (
-        <Flex className="w-fit gap-1">
+        <Flex className="w-fit min-w-fit gap-1">
             <BadgeDelta size="sm" deltaType={deltaType} />
             <Text color={changeColor(deltaType)}>{`${change} %`}</Text>
         </Flex>

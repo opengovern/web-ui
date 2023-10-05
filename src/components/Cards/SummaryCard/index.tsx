@@ -66,7 +66,11 @@ export default function SummaryCard({
             )
         }
         return (
-            <Flex justifyContent="start" alignItems="end" className="gap-1">
+            <Flex
+                justifyContent="start"
+                alignItems="end"
+                className="gap-1 mb-1"
+            >
                 <Metric>
                     {Number(metric) ? numberDisplay(metric, 0) : metric}
                 </Metric>
