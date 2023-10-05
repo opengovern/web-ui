@@ -7,12 +7,14 @@ interface IGoalCard {
 
 export default function GoalCard({ title }: IGoalCard) {
     return (
-        <Card className="w-fit">
-            <Flex flexDirection="col" className="gap-3">
-                <Icon icon={DocumentDuplicateIcon} size="lg" className="p-0" />
-                <Text className="!text-lg whitespace-nowrap text-center">
-                    {title}
-                </Text>
+        <Card>
+            <Flex flexDirection="col">
+                <Icon
+                    icon={DocumentDuplicateIcon}
+                    size="lg"
+                    className="p-0 mb-4"
+                />
+                <Text className="text-center">{title}</Text>
             </Flex>
         </Card>
     )
