@@ -1,13 +1,9 @@
 import { Card, Flex, Text, Title } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
-import {
-    badgeTypeByDelta,
-    percentageByChange,
-} from '../../../utilities/deltaType'
+import { badgeDelta } from '../../../utilities/deltaType'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 import { getConnectorIcon } from '../ConnectorCard'
-import ChangeDelta from '../../ChangeDelta'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 
 interface IInsightsCard {
@@ -49,18 +45,7 @@ const generateBadge = (
             </Text>
         )
     }
-    return (
-        <ChangeDelta
-            deltaType={badgeTypeByDelta(
-                met.oldTotalResultValue,
-                met.totalResultValue
-            )}
-            change={percentageByChange(
-                met.oldTotalResultValue,
-                met.totalResultValue
-            )}
-        />
-    )
+    return badgeDelta(met.oldTotalResultValue, met.totalResultValue)
 }
 
 export default function InsightCard({ metric }: IInsightsCard) {
