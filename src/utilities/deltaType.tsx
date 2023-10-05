@@ -25,10 +25,12 @@ export const percentageByChange = (oldValue?: number, newValue?: number) => {
 }
 
 export const badgeDelta = (oldValue?: number, newValue?: number) => {
-    return (
+    return oldValue !== 0 ? (
         <ChangeDelta
             deltaType={badgeTypeByDelta(oldValue, newValue)}
             change={percentageByChange(oldValue, newValue)}
         />
+    ) : (
+        ''
     )
 }

@@ -2,24 +2,26 @@ import {
     Button,
     Card,
     Flex,
-    Grid,
     Tab,
     TabGroup,
     TabList,
-    Text,
     TextInput,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import { ICellRendererParams } from 'ag-grid-community'
+import {
+    GridOptions,
+    ICellRendererParams,
+    RowClickedEvent,
+} from 'ag-grid-community'
+import { useNavigate } from 'react-router-dom'
 import Menu from '../../../components/Menu'
 import { useComplianceApiV1InsightList } from '../../../api/compliance.gen'
-import { filterAtom, timeAtom } from '../../../store'
+import { filterAtom, notificationAtom, timeAtom } from '../../../store'
 import Spinner from '../../../components/Spinner'
 import Header from '../../../components/Header'
-import InsightCard from '../../../components/Cards/InsightCard'
-import { IColumn } from '../../../components/Table'
+import Table, { IColumn } from '../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { badgeDelta } from '../../../utilities/deltaType'
 
@@ -28,6 +30,7 @@ const columns: IColumn<any, any>[] = [
         headerName: 'Connector',
         field: 'connector',
         type: 'string',
+        sortable: true,
         width: 120,
         enableRowGroup: true,
     },
@@ -35,26 +38,18 @@ const columns: IColumn<any, any>[] = [
         headerName: 'Insight',
         type: 'string',
         sortable: false,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight>
-        ) =>
-            params.data?.connector && (
-                <Flex flexDirection="col" alignItems="start">
-                    <Text className="text-gray-800 mb-0.5">
-                        {params.data?.shortTitle}
-                    </Text>
-                    <Text>{params.data?.longTitle}</Text>
-                </Flex>
-            ),
-    },
-    {
-        field: 'category',
-        rowGroup: true,
-        enableRowGroup: true,
-        headerName: 'Category',
-        type: 'string',
-        hide: true,
-        width: 190,
+        field: 'shortTitle',
+        // cellRenderer: (
+        //     params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight>
+        // ) =>
+        //     params.data?.connector && (
+        //         <Flex flexDirection="col" alignItems="start">
+        //             <Text className="text-gray-800 mb-0.5">
+        //                 {params.data?.shortTitle}
+        //             </Text>
+        //             <Text>{params.data?.longTitle}</Text>
+        //         </Flex>
+        //     ),
     },
     {
         field: 'totalResultValue',
@@ -71,7 +66,7 @@ const columns: IColumn<any, any>[] = [
     {
         headerName: 'Growth',
         type: 'string',
-        width: 100,
+        width: 120,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight>
         ) =>
@@ -84,6 +79,7 @@ const columns: IColumn<any, any>[] = [
 ]
 
 export default function InsightList() {
+    const navigate = useNavigate()
     const [searchCategory, setSearchCategory] = useState('')
     const [selectedCategory, setSelectedCategory] = useState('')
     const [selectedIndex, setSelectedIndex] = useState(0)
@@ -116,6 +112,7 @@ export default function InsightList() {
 
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
+    const setNotification = useSetAtom(notificationAtom)
 
     const query = {
         ...(selectedConnections.provider && {
@@ -141,6 +138,16 @@ export default function InsightList() {
         sendNow: insightSendNow,
         error: insightError,
     } = useComplianceApiV1InsightList(query)
+
+    const navigateToInsightsDetails = (id: number | undefined) => {
+        navigate(`${id}`)
+    }
+
+    const options: GridOptions = {
+        // eslint-disable-next-line consistent-return
+        isRowSelectable: (param) =>
+            param.data?.totalResultValue || param.data?.oldTotalResultValue,
+    }
 
     return (
         <Menu currentPage="insights">
@@ -175,11 +182,33 @@ export default function InsightList() {
                             <Spinner />
                         </Flex>
                     ) : insightError === undefined ? (
-                        <Grid numItems={3} className="w-full gap-4">
-                            {insightList?.map((insight) => (
-                                <InsightCard metric={insight} />
-                            ))}
-                        </Grid>
+                        <Table
+                            id="insight_list"
+                            columns={columns}
+                            rowData={insightList?.filter((i) => {
+                                if (selectedConnections.provider.length) {
+                                    return (
+                                        i.connector ===
+                                        selectedConnections.provider
+                                    )
+                                }
+                                return i
+                            })}
+                            options={options}
+                            onRowClicked={(event: RowClickedEvent) => {
+                                if (
+                                    event.data?.totalResultValue ||
+                                    event.data?.oldTotalResultValue
+                                ) {
+                                    navigateToInsightsDetails(event.data?.id)
+                                } else {
+                                    setNotification({
+                                        text: 'Time period is not covered by insight',
+                                        type: 'warning',
+                                    })
+                                }
+                            }}
+                        />
                     ) : (
                         <Button onClick={() => insightSendNow()}>Retry</Button>
                     )}
