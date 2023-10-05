@@ -1,4 +1,4 @@
-import { Button, Flex, Title } from '@tremor/react'
+import { Button, Flex, Metric, Title } from '@tremor/react'
 import { ReactNode } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
@@ -89,7 +89,7 @@ export default function Header({
                     ))}
                 </Flex>
             ) : (
-                <Title className="font-semibold whitespace-nowrap">
+                <Title className="font-semibold text-2xl whitespace-nowrap">
                     {mainPage()}
                 </Title>
             )}
