@@ -21,6 +21,7 @@ import Single from '../pages/Infrastructure/Single'
 import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import InsightDetails from '../pages/Insights/Details'
+import InsightList from '../pages/Insights/InsightList'
 
 const routes = [
     {
@@ -122,15 +123,20 @@ const authRoutes = [
         component: Insights,
     },
     {
+        key: 'insights',
+        path: '/:ws/insights/insight-list',
+        component: InsightList,
+    },
+    {
         key: 'insight detail',
         path: '/:ws/insights/:id',
         component: InsightDetails,
     },
-    {
-        key: 'insight details',
-        path: '/:ws/insights/:idd/:id',
-        component: InsightDetails,
-    },
+    // {
+    //     key: 'insight details',
+    //     path: '/:ws/insights/:idd/:id',
+    //     component: InsightDetails,
+    // },
     {
         key: 'integrations',
         path: '/:ws/integrations',

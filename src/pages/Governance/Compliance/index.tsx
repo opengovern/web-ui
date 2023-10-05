@@ -54,9 +54,7 @@ export default function Compliance() {
     return (
         <Menu currentPage="compliance">
             <Header />
-            <Summary benchmark={benchmarks} loading={isLoading} />
-            <Title className="font-semibold">Benchmarks</Title>
-            <Grid numItems={3} className="w-full gap-4 my-4">
+            <Grid numItems={3} className="w-full gap-4 mb-4">
                 <Col numColSpan={2}>
                     <TabGroup
                         index={selectedIndex}

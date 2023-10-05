@@ -1,5 +1,6 @@
 import { Button, Flex, Grid, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
+import { useNavigate } from 'react-router-dom'
 import Menu from '../../components/Menu'
 import Header from '../../components/Header'
 import PersonaCard from '../../components/Cards/PersonaCard'
@@ -10,6 +11,7 @@ import InsightCard from '../../components/Cards/InsightCard'
 import GoalCard from '../../components/Cards/GoalCard'
 
 export default function Insights() {
+    const navigate = useNavigate()
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
@@ -37,7 +39,6 @@ export default function Insights() {
         sendNow: insightSendNow,
         error: insightError,
     } = useComplianceApiV1InsightList(query)
-    console.log(insightList)
 
     return (
         <Menu currentPage="insights">
@@ -73,7 +74,12 @@ export default function Insights() {
             </div>
             <Flex className="mb-4">
                 <Title className="font-semibold">Popular insights</Title>
-                <Button variant="light">View all insights</Button>
+                <Button
+                    variant="light"
+                    onClick={() => navigate('insight-list')}
+                >
+                    View all insights
+                </Button>
             </Flex>
             {/* eslint-disable-next-line no-nested-ternary */}
             {listLoading ? (
