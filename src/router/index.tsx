@@ -129,6 +129,11 @@ const authRoutes = [
     },
     {
         key: 'insight detail',
+        path: '/:ws/insights/insight-list/:id',
+        component: InsightDetails,
+    },
+    {
+        key: 'insight detail',
         path: '/:ws/insights/:id',
         component: InsightDetails,
     },
