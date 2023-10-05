@@ -1,33 +1,15 @@
-import {
-    Button,
-    Card,
-    Flex,
-    Grid,
-    Tab,
-    TabGroup,
-    TabList,
-    Text,
-    TextInput,
-    Title,
-} from '@tremor/react'
-import { useState } from 'react'
+import { Button, Flex, Grid, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { FunnelIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Menu from '../../components/Menu'
-import {
-    useComplianceApiV1InsightGroupList,
-    useComplianceApiV1InsightList,
-} from '../../api/compliance.gen'
-import { filterAtom, timeAtom } from '../../store'
-import Spinner from '../../components/Spinner'
 import Header from '../../components/Header'
+import PersonaCard from '../../components/Cards/PersonaCard'
+import { filterAtom, timeAtom } from '../../store'
+import { useComplianceApiV1InsightList } from '../../api/compliance.gen'
+import Spinner from '../../components/Spinner'
 import InsightCard from '../../components/Cards/InsightCard'
-import KeyInsightCard from '../../components/Cards/KeyInsightCard'
+import GoalCard from '../../components/Cards/GoalCard'
 
-export default function InsightList() {
-    const [searchCategory, setSearchCategory] = useState('')
-    const [showFilter, setShowFilter] = useState(false)
-
+export default function Insights() {
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
@@ -55,86 +37,59 @@ export default function InsightList() {
         sendNow: insightSendNow,
         error: insightError,
     } = useComplianceApiV1InsightList(query)
-    const {
-        response: keyInsightList,
-        isLoading: keyListLoading,
-        sendNow: keyInsightSendNow,
-        error: keyInsightError,
-    } = useComplianceApiV1InsightGroupList(query)
+    console.log(insightList)
 
     return (
         <Menu currentPage="insights">
             <Header datePicker filter />
-            <Flex alignItems="start" className="gap-4">
-                {showFilter ? (
-                    <Card className="sticky w-fit">
-                        <TextInput
-                            className="w-56 mb-6"
-                            icon={MagnifyingGlassIcon}
-                            placeholder="Search..."
-                            value={searchCategory}
-                            onChange={(e) => setSearchCategory(e.target.value)}
-                        />
-                    </Card>
-                ) : (
-                    <Flex
-                        flexDirection="col"
-                        justifyContent="center"
-                        className="min-h-full w-fit"
-                    >
-                        <Button
-                            variant="light"
-                            onClick={() => setShowFilter(true)}
-                        >
-                            <Flex flexDirection="col" className="gap-4 w-4">
-                                <FunnelIcon />
-                                <Text className="rotate-90">Options</Text>
-                            </Flex>
-                        </Button>
-                    </Flex>
-                )}
-                <Flex flexDirection="col" alignItems="start">
-                    <Title className="font-semibold mb-4">Key insights</Title>
-                    {/* eslint-disable-next-line no-nested-ternary */}
-                    {keyListLoading ? (
-                        <Flex justifyContent="center" className="my-40">
-                            <Spinner />
-                        </Flex>
-                    ) : keyInsightError === undefined ? (
-                        <Grid numItems={3} className="w-full gap-4">
-                            {keyInsightList?.map((insight) => (
-                                <KeyInsightCard
-                                    id={insight.id}
-                                    title={insight.shortTitle}
-                                    count={insight.totalResultValue}
-                                    prevCount={insight.oldTotalResultValue}
-                                />
-                            ))}
-                        </Grid>
-                    ) : (
-                        <Button onClick={() => keyInsightSendNow()}>
-                            Retry
-                        </Button>
-                    )}
-                    <Title className="font-semibold mt-6 mb-4">
-                        All insights
-                    </Title>
-                    {/* eslint-disable-next-line no-nested-ternary */}
-                    {listLoading ? (
-                        <Flex justifyContent="center" className="mt-56">
-                            <Spinner />
-                        </Flex>
-                    ) : insightError === undefined ? (
-                        <Grid numItems={4} className="w-full gap-4">
-                            {insightList?.map((insight) => (
-                                <InsightCard metric={insight} />
-                            ))}
-                        </Grid>
-                    ) : (
-                        <Button onClick={() => insightSendNow()}>Retry</Button>
-                    )}
-                </Flex>
+            <Title className="font-semibold mb-4">Personas</Title>
+            <Flex justifyContent="start" className="gap-4 mb-8">
+                <PersonaCard type="Engineer" />
+                <PersonaCard type="DevOps" />
+                <PersonaCard type="Product" />
+                <PersonaCard type="Security" />
+                <PersonaCard type="Executive" />
             </Flex>
+            <Title className="font-semibold mb-4">Goals</Title>
+            <div className="relative mb-8">
+                <div className="opacity-0">
+                    <GoalCard title="Find IAM issues" />
+                </div>
+                <Flex
+                    justifyContent="start"
+                    className="absolute left-0 top-0 gap-4 pb-4 overflow-scroll"
+                    style={{
+                        width: 'calc(100% + 500px)',
+                        paddingRight: '500px',
+                    }}
+                >
+                    <GoalCard title="Find IAM issues" />
+                    <GoalCard title="Internet exposed storage" />
+                    <GoalCard title="Workload without HA" />
+                    <GoalCard title="Over Provisioned" />
+                    <GoalCard title="Cloud Technical Debt" />
+                    <GoalCard title="Cloud Native Databases" />
+                </Flex>
+            </div>
+            <Flex className="mb-4">
+                <Title className="font-semibold">Popular insights</Title>
+                <Button variant="light">View all insights</Button>
+            </Flex>
+            {/* eslint-disable-next-line no-nested-ternary */}
+            {listLoading ? (
+                <Flex justifyContent="center" className="mt-56">
+                    <Spinner />
+                </Flex>
+            ) : insightError === undefined ? (
+                <Grid numItems={3} className="w-full gap-4">
+                    {insightList?.map(
+                        (insight, i) =>
+                            i < 5 && <InsightCard metric={insight} />
+                    )}
+                </Grid>
+            ) : (
+                <Button onClick={() => insightSendNow()}>Retry</Button>
+            )}
         </Menu>
     )
 }

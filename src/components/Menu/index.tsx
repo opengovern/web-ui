@@ -37,13 +37,13 @@ export default function Menu({
             )}
             <div className="z-10 w-full h-full relative bg-kaytu-950">
                 <Header workspace={workspace} />
+                <Notification />
                 <Flex
                     flexDirection="col"
                     alignItems="center"
-                    className="mt-16 bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll"
+                    className="mt-16 bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll overflow-x-hidden"
                     id="kaytu-container"
                 >
-                    <Notification />
                     <Flex justifyContent="center" className="px-12">
                         <div className="max-w-7xl w-full py-8">{children}</div>
                     </Flex>

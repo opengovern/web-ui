@@ -57,7 +57,7 @@ export default function Header({
                             )
                         }
                         variant="light"
-                        className="text-lg mr-2 hover:text-kaytu-600"
+                        className="!text-lg mr-2 hover:text-kaytu-600"
                     >
                         {mainPage()}
                     </Button>
@@ -77,7 +77,7 @@ export default function Header({
                                     i === subPages().length - 1
                                         ? 'text-black'
                                         : ''
-                                } opacity-100 ml-2 text-lg`}
+                                } opacity-100 ml-2 !text-lg`}
                                 disabled={i === subPages().length - 1}
                             >
                                 {i === subPages().length - 1 &&
@@ -89,7 +89,7 @@ export default function Header({
                     ))}
                 </Flex>
             ) : (
-                <Title className="font-semibold text-2xl whitespace-nowrap">
+                <Title className="font-semibold !text-xl whitespace-nowrap">
                     {mainPage()}
                 </Title>
             )}
