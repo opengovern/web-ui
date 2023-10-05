@@ -28,7 +28,7 @@ const personaImg = (type: string) => {
 
 export default function PersonaCard({ type }: IPersonaCard) {
     return (
-        <Card className="w-fit cursor-pointer">
+        <Card className="cursor-pointer">
             <Flex flexDirection="col" className="gap-3">
                 <img src={personaImg(type)} alt={`${type} persona`} />
                 <Text className="!text-lg">{type}</Text>

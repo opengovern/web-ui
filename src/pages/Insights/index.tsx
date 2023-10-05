@@ -44,15 +44,15 @@ export default function Insights() {
         <Menu currentPage="insights">
             <Header datePicker filter />
             <Title className="font-semibold mb-4">Personas</Title>
-            <Flex justifyContent="start" className="gap-4 mb-8">
+            <Grid numItems={9} className="w-full gap-4 mb-12">
                 <PersonaCard type="Engineer" />
                 <PersonaCard type="DevOps" />
                 <PersonaCard type="Product" />
                 <PersonaCard type="Security" />
                 <PersonaCard type="Executive" />
-            </Flex>
+            </Grid>
             <Title className="font-semibold mb-4">Goals</Title>
-            <div className="relative mb-8">
+            {/* <div className="relative mb-8">
                 <div className="opacity-0">
                     <GoalCard title="Find IAM issues" />
                 </div>
@@ -71,7 +71,15 @@ export default function Insights() {
                     <GoalCard title="Cloud Technical Debt" />
                     <GoalCard title="Cloud Native Databases" />
                 </Flex>
-            </div>
+            </div> */}
+            <Grid numItems={6} className="w-full gap-4 mb-12">
+                <GoalCard title="Find IAM issues" />
+                <GoalCard title="Exposed storage" />
+                <GoalCard title="Workload without HA" />
+                <GoalCard title="Over Provisioned" />
+                <GoalCard title="Cloud Technical Debt" />
+                <GoalCard title="Cloud Native Databases" />
+            </Grid>
             <Flex className="mb-4">
                 <Title className="font-semibold">Popular insights</Title>
                 <Button
@@ -90,7 +98,7 @@ export default function Insights() {
                 <Grid numItems={3} className="w-full gap-4">
                     {insightList?.map(
                         (insight, i) =>
-                            i < 5 && <InsightCard metric={insight} />
+                            i < 6 && <InsightCard metric={insight} />
                     )}
                 </Grid>
             ) : (
