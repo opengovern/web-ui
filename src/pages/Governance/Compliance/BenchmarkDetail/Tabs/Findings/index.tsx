@@ -160,11 +160,7 @@ export default function Findings({ id, connections }: IFinder) {
                     setOpen(true)
                 }}
                 options={options}
-                onGridReady={(params) => {
-                    if (isLoading) {
-                        params.api.showLoadingOverlay()
-                    }
-                }}
+                loading={isLoading}
             />
             <DrawerPanel
                 open={open}

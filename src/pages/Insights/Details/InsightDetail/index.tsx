@@ -428,11 +428,7 @@ export default function InsightDetail({
                             rowData={getTable(columns, rows).row}
                             downloadable
                             options={gridOptions}
-                            onGridReady={(e) => {
-                                if (detailLoading) {
-                                    e.api.showLoadingOverlay()
-                                }
-                            }}
+                            loading={detailLoading}
                         >
                             <Select
                                 className="h-full"

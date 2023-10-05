@@ -176,12 +176,7 @@ export default function InsightList() {
                             <Tab className="px-4 py-2">Security</Tab>
                         </TabList>
                     </TabGroup>
-                    {/* eslint-disable-next-line no-nested-ternary */}
-                    {listLoading ? (
-                        <Flex justifyContent="center" className="mt-56">
-                            <Spinner />
-                        </Flex>
-                    ) : insightError === undefined ? (
+                    {insightError === undefined ? (
                         <Table
                             id="insight_list"
                             columns={columns}
@@ -208,6 +203,7 @@ export default function InsightList() {
                                     })
                                 }
                             }}
+                            loading={listLoading}
                         />
                     ) : (
                         <Button onClick={() => insightSendNow()}>Retry</Button>

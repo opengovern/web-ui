@@ -390,11 +390,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                                 id="asset_resource_metrics"
                                 rowData={rowGenerator(metrics?.metrics)}
                                 columns={resourceTableColumns}
-                                onGridReady={(params) => {
-                                    if (metricsLoading) {
-                                        params.api.showLoadingOverlay()
-                                    }
-                                }}
+                                loading={metricsLoading}
                                 onRowClicked={(e) => {
                                     if (e.data) {
                                         navigate(`metric_${e.data.id}`)

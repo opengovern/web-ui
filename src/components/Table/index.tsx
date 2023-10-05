@@ -60,6 +60,7 @@ interface IProps<TData, TValue> {
     title?: string
     children?: any
     options?: GridOptions
+    loading?: boolean
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -73,6 +74,7 @@ export default function Table<TData = any, TValue = any>({
     title,
     children,
     options,
+    loading,
 }: IProps<TData, TValue>) {
     const gridRef = useRef<AgGridReact>(null)
     const visibility = useRef<Map<string, boolean> | undefined>(undefined)
@@ -91,6 +93,12 @@ export default function Table<TData = any, TValue = any>({
             }
         }
     }
+
+    useEffect(() => {
+        if (loading) {
+            gridRef.current?.api?.showLoadingOverlay()
+        }
+    }, [loading])
 
     useEffect(() => {
         gridRef.current?.api?.setColumnDefs(columns)
