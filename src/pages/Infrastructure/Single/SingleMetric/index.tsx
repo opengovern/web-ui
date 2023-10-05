@@ -198,11 +198,7 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
                 <Table
                     title="Results"
                     id="metric_table"
-                    onGridReady={(params) => {
-                        if (metricDetailLoading || isLoading) {
-                            params.api.showLoadingOverlay()
-                        }
-                    }}
+                    loading={metricDetailLoading || isLoading}
                     columns={
                         getTable(queryResponse?.headers, queryResponse?.result)
                             .columns

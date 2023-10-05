@@ -223,11 +223,7 @@ export default function Subscriptions({
                     rowData={generateRows(subscriptions)}
                     columns={columns}
                     options={options}
-                    onGridReady={(params) => {
-                        if (loading) {
-                            params.api.showLoadingOverlay()
-                        }
-                    }}
+                    loading={loading}
                     onRowClicked={(
                         event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
                     ) => {

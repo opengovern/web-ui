@@ -226,11 +226,7 @@ export default function AccountList({
                     options={options}
                     rowData={generateRows(accounts)}
                     columns={columns}
-                    onGridReady={(params) => {
-                        if (loading) {
-                            params.api.showLoadingOverlay()
-                        }
-                    }}
+                    loading={loading}
                     onRowClicked={(
                         event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
                     ) => {

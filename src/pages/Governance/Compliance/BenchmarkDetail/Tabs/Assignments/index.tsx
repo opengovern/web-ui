@@ -158,11 +158,7 @@ export default function Assignments({ id }: IAssignments) {
                     })
                 }
             }}
-            onGridReady={(params) => {
-                if (isLoading) {
-                    params.api.showLoadingOverlay()
-                }
-            }}
+            loading={isLoading}
             rowData={
                 assignments?.sort(
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
