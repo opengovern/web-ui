@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import {
     Button,
     Card,
@@ -20,6 +20,7 @@ import { filterAtom, timeAtom } from '../../../../store'
 import {
     useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1BenchmarksTrendDetail,
+    useComplianceApiV1FindingsTopDetail,
 } from '../../../../api/compliance.gen'
 import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Header from '../../../../components/Header'
@@ -29,7 +30,11 @@ import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
 import Breakdown from '../../../../components/Breakdown'
 import ListCard from '../../../../components/Cards/ListCard'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint } from '../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+} from '../../../../api/api'
+import Spinner from '../../../../components/Spinner'
 
 const generateLineData = (
     input:
@@ -56,6 +61,23 @@ const generateLineData = (
         }
     }
     return { data, label }
+}
+
+const topList = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
+        | undefined
+) => {
+    const data = []
+    if (input) {
+        for (let i = 0; i < (input.records?.length || 0); i += 1) {
+            data.push({
+                name: input.records ? input.records[i].value : '',
+                value: input.records ? input.records[i].count : 0,
+            })
+        }
+    }
+    return { data, total: input?.totalCount || 0 }
 }
 
 export default function BenchmarkSummary() {
@@ -90,6 +112,18 @@ export default function BenchmarkSummary() {
         }),
     }
 
+    const topQuery = {
+        ...(selectedConnections.provider && {
+            connector: [selectedConnections.provider],
+        }),
+        ...(selectedConnections.connections && {
+            connectionId: selectedConnections.connections,
+        }),
+        ...(selectedConnections.connectionGroup && {
+            connectionGroup: selectedConnections.connectionGroup,
+        }),
+    }
+
     const { response: benchmarkTrend } =
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -105,6 +139,18 @@ export default function BenchmarkSummary() {
         sendNow: triggerEvaluate,
         isExecuted,
     } = useScheduleApiV1ComplianceTriggerUpdate(String(id), {}, false)
+    const { response: connections } = useComplianceApiV1FindingsTopDetail(
+        String(id),
+        'connectionID',
+        5,
+        topQuery
+    )
+    const { response: services } = useComplianceApiV1FindingsTopDetail(
+        String(id),
+        'service',
+        5,
+        topQuery
+    )
 
     useEffect(() => {
         if (isExecuted && !evaluateLoading) {
@@ -133,32 +179,40 @@ export default function BenchmarkSummary() {
                 filter
                 datePicker
             />
-            <Flex alignItems="end" className="mb-6">
-                <Flex
-                    flexDirection="col"
-                    alignItems="start"
-                    justifyContent="start"
-                >
-                    <Title className="mb-1">{benchmarkDetail?.title}</Title>
-                    <Text className="w-2/3">
-                        {benchmarkDetail?.description}
-                    </Text>
-                </Flex>
-                <Flex flexDirection="col" alignItems="start" className="w-fit">
-                    <Button
-                        variant="light"
-                        icon={ArrowPathRoundedSquareIcon}
-                        className="mb-1"
-                        onClick={() => triggerEvaluate()}
-                        loading={evaluateLoading && isExecuted}
+            {isLoading ? (
+                <Spinner className="mb-12" />
+            ) : (
+                <Flex alignItems="end" className="mb-6">
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        justifyContent="start"
                     >
-                        Evaluate now
-                    </Button>
-                    <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
-                        benchmarkDetail?.evaluatedAt
-                    )}`}</Text>
+                        <Title className="mb-1">{benchmarkDetail?.title}</Title>
+                        <Text className="w-2/3">
+                            {benchmarkDetail?.description}
+                        </Text>
+                    </Flex>
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        className="w-fit"
+                    >
+                        <Button
+                            variant="light"
+                            icon={ArrowPathRoundedSquareIcon}
+                            className="mb-1"
+                            onClick={() => triggerEvaluate()}
+                            loading={evaluateLoading && isExecuted}
+                        >
+                            Evaluate now
+                        </Button>
+                        <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
+                            benchmarkDetail?.evaluatedAt
+                        )}`}</Text>
+                    </Flex>
                 </Flex>
-            </Flex>
+            )}
             <Card className="mb-4">
                 <Grid numItems={7} className="w-full">
                     <SummaryCard
@@ -261,14 +315,14 @@ export default function BenchmarkSummary() {
                         <ListCard
                             title="Top Accounts"
                             loading={isLoading}
-                            items={{ data: [], total: 0 }}
+                            items={topList(connections)}
                             url="asset-details#connections"
                             type="account"
                         />
                         <ListCard
-                            title="Top Resources"
+                            title="Top Services"
                             loading={isLoading}
-                            items={{ data: [], total: 0 }}
+                            items={topList(services)}
                             url="asset-details#resources"
                             type="service"
                         />

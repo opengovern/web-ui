@@ -65,7 +65,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                     {((passed / total || 0) * 100).toFixed(2)}%
                 </Badge>
             </Flex>
-            <Subtitle className="line-clamp-2 mb-6 mt-2 text-gray-600">
+            <Subtitle className="line-clamp-2 h-12 mb-6 mt-2 text-gray-600">
                 {benchmark?.description}
             </Subtitle>
             <CategoryBar

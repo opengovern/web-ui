@@ -15,7 +15,7 @@ interface ITopListCard {
         data: {
             name: string | undefined
             value: number | undefined
-            connector: SourceType[] | SourceType | undefined
+            connector?: SourceType[] | SourceType | undefined
             id?: string | undefined
         }[]
         total: number | undefined
@@ -90,9 +90,11 @@ export default function ListCard({
                                                     : getConnectorIcon(
                                                           String(item.connector)
                                                       ))}
-                                            <Text className="w-4/5 truncate">
-                                                {item.name}
-                                            </Text>
+                                            <Flex className="h-9">
+                                                <Text className="w-4/5 truncate">
+                                                    {item.name}
+                                                </Text>
+                                            </Flex>
                                         </Flex>
                                         {item.value && (
                                             <Text>{value(item)}</Text>
@@ -108,13 +110,15 @@ export default function ListCard({
                     className="cursor-pointer"
                     onClick={() => (url ? navigate(url) : null)}
                 >
-                    {!!items.total && (
+                    {(items.total || 0) - items.data.length > 0 && (
                         <Button
                             variant="light"
                             icon={ChevronRightIcon}
                             iconPosition="right"
                         >
-                            {`+ ${numericDisplay((items.total || 0) - 5)} more`}
+                            {`+ ${numericDisplay(
+                                (items.total || 0) - items.data.length
+                            )} more`}
                         </Button>
                     )}
                 </Flex>
