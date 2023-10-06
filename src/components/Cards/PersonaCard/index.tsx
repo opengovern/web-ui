@@ -31,7 +31,7 @@ export default function PersonaCard({ type }: IPersonaCard) {
         <Card className="cursor-pointer">
             <Flex flexDirection="col" className="gap-3">
                 <img src={personaImg(type)} alt={`${type} persona`} />
-                <Text className="!text-lg">{type}</Text>
+                <Text>{type}</Text>
             </Flex>
         </Card>
     )

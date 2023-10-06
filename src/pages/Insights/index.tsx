@@ -52,26 +52,6 @@ export default function Insights() {
                 <PersonaCard type="Executive" />
             </Grid>
             <Title className="font-semibold mb-4">Goals</Title>
-            {/* <div className="relative mb-8">
-                <div className="opacity-0">
-                    <GoalCard title="Find IAM issues" />
-                </div>
-                <Flex
-                    justifyContent="start"
-                    className="absolute left-0 top-0 gap-4 pb-4 overflow-scroll"
-                    style={{
-                        width: 'calc(100% + 500px)',
-                        paddingRight: '500px',
-                    }}
-                >
-                    <GoalCard title="Find IAM issues" />
-                    <GoalCard title="Internet exposed storage" />
-                    <GoalCard title="Workload without HA" />
-                    <GoalCard title="Over Provisioned" />
-                    <GoalCard title="Cloud Technical Debt" />
-                    <GoalCard title="Cloud Native Databases" />
-                </Flex>
-            </div> */}
             <Grid numItems={6} className="w-full gap-4 mb-12">
                 <GoalCard title="Find IAM issues" />
                 <GoalCard title="Exposed storage" />
