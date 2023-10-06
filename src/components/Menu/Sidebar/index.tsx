@@ -111,9 +111,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     justifyContent="start"
                     className="mt-2 h-16 shrink-0 border-b border-gray-700"
                 >
-                    <KaytuIcon className="ml-5 w-7 h-7" />
+                    <KaytuIcon
+                        className={`ml-5 ${collapsed ? 'w-8 h-8' : 'w-7 h-7'}`}
+                    />
                     {!collapsed && (
-                        <Title className="text-slate-50 ml-1.5">KAYTU</Title>
+                        <Title className="text-slate-50 ml-1.5">kaytu</Title>
                     )}
                 </Flex>
                 <nav className="w-full flex flex-1 flex-col px-4 justify-between items-center">
@@ -192,7 +194,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                 className={`${
                                                     !collapsed
                                                         ? 'h-5 w-5'
-                                                        : '-ml-1 h-6 w-6'
+                                                        : 'h-6 w-6'
                                                 } shrink-0`}
                                             />
                                             {!collapsed && (
