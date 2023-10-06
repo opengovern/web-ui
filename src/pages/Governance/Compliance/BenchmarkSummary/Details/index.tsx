@@ -21,11 +21,17 @@ export default function BenchmarkDetails() {
             case '#policies':
                 setSelectedTab(0)
                 break
-            case '#assignments':
+            case '#connections':
                 setSelectedTab(1)
                 break
-            case '#findings':
+            case '#services':
                 setSelectedTab(2)
+                break
+            case '#assignments':
+                setSelectedTab(3)
+                break
+            case '#findings':
+                setSelectedTab(4)
                 break
             default:
                 setSelectedTab(0)
@@ -35,18 +41,36 @@ export default function BenchmarkDetails() {
 
     return (
         <Menu currentPage="compliance">
-            <Header filter={tabs === '#findings'} />
+            <Header
+                filter={
+                    tabs === '#findings' ||
+                    tabs === '#connections' ||
+                    tabs === '#services'
+                }
+            />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList>
                     <Tab onClick={() => navigate('#policies')}>Policies</Tab>
+                    <Tab onClick={() => navigate('#connections')}>
+                        Connections
+                    </Tab>
+                    <Tab onClick={() => navigate('#services')}>Services</Tab>
                     <Tab onClick={() => navigate('#assignments')}>
                         Assignments
                     </Tab>
-                    <Tab onClick={() => navigate('#findings')}>Findings</Tab>
+                    <Tab onClick={() => navigate('#findings')}>
+                        All findings
+                    </Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
                         <Policies id={id} />
+                    </TabPanel>
+                    <TabPanel>
+                        <Findings id={id} connections={selectedConnections} />
+                    </TabPanel>
+                    <TabPanel>
+                        <Findings id={id} connections={selectedConnections} />
                     </TabPanel>
                     <TabPanel>
                         <Assignments id={id} />

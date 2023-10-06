@@ -316,14 +316,14 @@ export default function BenchmarkSummary() {
                             title="Top Accounts"
                             loading={isLoading}
                             items={topList(connections)}
-                            url="asset-details#connections"
+                            url="details#connections"
                             type="account"
                         />
                         <ListCard
                             title="Top Services"
                             loading={isLoading}
                             items={topList(services)}
-                            url="asset-details#resources"
+                            url="details#services"
                             type="service"
                         />
                     </Grid>
