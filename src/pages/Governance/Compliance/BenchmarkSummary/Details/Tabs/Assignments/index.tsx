@@ -5,9 +5,9 @@ import {
     useComplianceApiV1AssignmentsBenchmarkDetail,
     useComplianceApiV1AssignmentsConnectionCreate,
     useComplianceApiV1AssignmentsConnectionDelete,
-} from '../../../../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource } from '../../../../../../api/api'
-import Table, { IColumn } from '../../../../../../components/Table'
+} from '../../../../../../../api/compliance.gen'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource } from '../../../../../../../api/api'
+import Table, { IColumn } from '../../../../../../../components/Table'
 
 interface IAssignments {
     id: string | undefined

@@ -17,10 +17,11 @@ import { dateDisplay } from '../../utilities/dateDisplay'
 
 interface IBreakdown {
     activeTime?: { start: Dayjs; end: Dayjs }
-    chartData: (string | number | undefined)[]
+    chartData: (string | number | undefined | any)[]
     oldChartData?: (string | number | undefined)[]
     seeMore?: string
     isCost?: boolean
+    title?: string
     loading: boolean
 }
 
@@ -31,6 +32,7 @@ export default function Breakdown({
     activeTime,
     seeMore,
     isCost = false,
+    title,
 }: IBreakdown) {
     const navigate = useNavigate()
     const [selectedIndex, setSelectedIndex] = useState(1)
@@ -38,7 +40,7 @@ export default function Breakdown({
     return (
         <Card className="pb-0 relative h-full">
             <Flex>
-                <Title className="font-semibold">Breakdown</Title>
+                <Title className="font-semibold">{title || 'Breakdown'}</Title>
                 {!!activeTime && (
                     <TabGroup
                         index={selectedIndex}

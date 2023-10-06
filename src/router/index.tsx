@@ -12,7 +12,7 @@ import Integrations from '../pages/Integrations'
 import CostMetricsDetails from '../pages/Spend/Details'
 import ConnectorDetail from '../pages/Integrations/ConnectorDetail'
 import Compliance from '../pages/Governance/Compliance'
-import BenchmarkDetail from '../pages/Governance/Compliance/BenchmarkDetail'
+import BenchmarkSummary from '../pages/Governance/Compliance/BenchmarkSummary'
 import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
@@ -22,6 +22,7 @@ import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import InsightDetails from '../pages/Insights/Details'
 import InsightList from '../pages/Insights/InsightList'
+import BenchmarkDetails from '../pages/Governance/Compliance/BenchmarkSummary/Details'
 
 const routes = [
     {
@@ -163,9 +164,14 @@ const authRoutes = [
         component: Compliance,
     },
     {
-        key: 'benchmark detail',
+        key: 'benchmark summary',
         path: '/:ws/compliance/:id',
-        component: BenchmarkDetail,
+        component: BenchmarkSummary,
+    },
+    {
+        key: 'benchmark detail',
+        path: '/:ws/compliance/:id/details',
+        component: BenchmarkDetails,
     },
     {
         key: 'service advisor',
@@ -175,7 +181,7 @@ const authRoutes = [
     {
         key: 'service advisor detail',
         path: '/:ws/service-advisor/:id',
-        component: BenchmarkDetail,
+        component: BenchmarkSummary,
     },
     {
         key: 'home',
