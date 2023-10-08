@@ -126,7 +126,7 @@ const columns: IColumn<any, any>[] = [
     {
         headerName: 'Last checked',
         field: 'lastChecked',
-        type: 'date',
+        type: 'datetime',
         width: 120,
     },
 ]
