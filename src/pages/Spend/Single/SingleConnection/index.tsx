@@ -299,7 +299,7 @@ export default function SingleSpendConnection({
         groupIncludeFooter: true,
         groupIncludeTotalFooter: true,
         onRowClicked(event: RowClickedEvent) {
-            if (event.data) {
+            if (event.data && event.data.dimension !== 'All') {
                 navigate(`metric_${event.data.id}`)
             }
         },
@@ -311,7 +311,7 @@ export default function SingleSpendConnection({
                 {
                     field: 'connector',
                     headerName: 'Connector',
-                    type: 'connector',
+                    width: 120,
                     enableRowGroup: true,
                     resizable: true,
                     filter: true,
@@ -333,6 +333,7 @@ export default function SingleSpendConnection({
                     filter: true,
                     sortable: true,
                     aggFunc: 'sum',
+                    width: 150,
                     resizable: true,
                     pivot: false,
                     pinned: true,
@@ -343,6 +344,7 @@ export default function SingleSpendConnection({
                 {
                     field: 'percent',
                     headerName: '%',
+                    width: 120,
                     pinned: true,
                     sortable: true,
                     aggFunc: 'sum',
@@ -355,6 +357,7 @@ export default function SingleSpendConnection({
                     field: 'category',
                     headerName: 'Category',
                     filter: true,
+                    hide: true,
                     rowGroup: true,
                     enableRowGroup: true,
                     sortable: true,
@@ -385,6 +388,7 @@ export default function SingleSpendConnection({
                         suppressMenu: true,
                         resizable: true,
                         pivot: false,
+                        aggFunc: 'sum',
                         valueFormatter: (param) => {
                             return param.value
                                 ? exactPriceDisplay(param.value)
@@ -423,12 +427,14 @@ export default function SingleSpendConnection({
             for (let i = 0; i < rows.length; i += 1) {
                 sum += rows[i].totalCost
             }
+            const pinnedRow = [{ totalCost: sum, dimension: 'All' }]
             for (let i = 0; i < rows.length; i += 1) {
                 newRow.push({
                     ...rows[i],
                     percent: (rows[i].totalCost / sum) * 100,
                 })
             }
+            gridRef.current?.api?.setPinnedTopRowData(pinnedRow)
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(newRow)
         }
