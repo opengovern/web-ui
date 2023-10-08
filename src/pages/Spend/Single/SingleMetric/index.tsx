@@ -163,6 +163,15 @@ export default function SingleSpendMetric({
             sortable: true,
             filter: true,
             resizable: true,
+            cellRendererParams: {
+                footerValueGetter: (params: any) => {
+                    const isRootLevel = params.node.level === -1
+                    if (isRootLevel) {
+                        return 'Grand Total'
+                    }
+                    return `Sub Total (${params.value})`
+                },
+            },
         },
         getRowHeight: () => 50,
         onGridReady: (e) => {
