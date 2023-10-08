@@ -23,10 +23,10 @@ import {
 } from '../../utilities/numericDisplay'
 import { agGridDateComparator } from '../../utilities/dateComparator'
 import { getConnectorIcon } from '../Cards/ConnectorCard'
-import { dateDisplay } from '../../utilities/dateDisplay'
+import { dateDisplay, dateTimeDisplay } from '../../utilities/dateDisplay'
 
 export interface IColumn<TData, TValue> {
-    type: 'string' | 'number' | 'price' | 'date' | 'connector'
+    type: 'string' | 'number' | 'price' | 'date' | 'datetime' | 'connector'
     field?: NestedFieldPaths<TData, any>
     width?: number
     cellStyle?: any
@@ -172,6 +172,27 @@ export default function Table<TData = any, TValue = any>({
                             )
                         } else {
                             value = dateDisplay(param.value)
+                        }
+                        return value
+                    }
+                    return ''
+                }
+            } else if (item.type === 'datetime') {
+                v.filter = 'agDateColumnFilter'
+                v.filterParams = {
+                    comparator: agGridDateComparator,
+                }
+                v.valueFormatter = (param: any) => {
+                    if (param.value) {
+                        let value = ''
+                        if (!Number.isNaN(Number(param.value))) {
+                            value = dateTimeDisplay(
+                                Number(param.value) > 16000000000
+                                    ? Number(param.value)
+                                    : Number(param.value) * 1000
+                            )
+                        } else {
+                            value = dateTimeDisplay(param.value)
                         }
                         return value
                     }

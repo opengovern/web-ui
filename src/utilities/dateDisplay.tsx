@@ -17,6 +17,11 @@ export const dateDisplay = (
     return ''
 }
 
-export const dateTimeDisplay = (date: Date | string | undefined) => {
+export const dateTimeDisplay = (
+    date: Dayjs | Date | number | string | undefined
+) => {
+    if ((typeof date).toString() === 'Dayjs') {
+        return (date as Dayjs).format('lll')
+    }
     return dayjs.utc(date).format('lll')
 }

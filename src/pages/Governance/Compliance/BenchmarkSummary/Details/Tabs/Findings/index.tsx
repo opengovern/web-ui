@@ -98,8 +98,8 @@ const columns: IColumn<any, any>[] = [
     },
     {
         field: 'evaluatedAt',
-        headerName: 'Evaluation Date',
-        type: 'date',
+        headerName: 'Last checked',
+        type: 'datetime',
         sortable: true,
         filter: true,
         resizable: true,
