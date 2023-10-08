@@ -188,7 +188,9 @@ export default function BenchmarkSummary() {
                         alignItems="start"
                         justifyContent="start"
                     >
-                        <Title className="mb-1">{benchmarkDetail?.title}</Title>
+                        <Title className="font-semibold mb-1">
+                            {benchmarkDetail?.title}
+                        </Title>
                         <Text className="w-2/3">
                             {benchmarkDetail?.description}
                         </Text>
