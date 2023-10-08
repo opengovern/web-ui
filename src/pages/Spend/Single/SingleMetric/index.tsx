@@ -163,6 +163,15 @@ export default function SingleSpendMetric({
             sortable: true,
             filter: true,
             resizable: true,
+            cellRendererParams: {
+                footerValueGetter: (params: any) => {
+                    const isRootLevel = params.node.level === -1
+                    if (isRootLevel) {
+                        return 'Grand Total'
+                    }
+                    return `Sub Total (${params.value})`
+                },
+            },
         },
         getRowHeight: () => 50,
         onGridReady: (e) => {
@@ -200,7 +209,7 @@ export default function SingleSpendMetric({
                 {
                     field: 'connector',
                     headerName: 'Connector',
-                    type: 'connector',
+                    width: 120,
                     enableRowGroup: true,
                     resizable: true,
                     filter: true,
@@ -232,6 +241,7 @@ export default function SingleSpendMetric({
                     filter: true,
                     sortable: true,
                     aggFunc: 'sum',
+                    width: 150,
                     resizable: true,
                     pivot: false,
                     pinned: true,
@@ -263,6 +273,7 @@ export default function SingleSpendMetric({
                         suppressMenu: true,
                         resizable: true,
                         pivot: false,
+                        aggFunc: 'sum',
                         valueFormatter: (param) => {
                             return param.value
                                 ? exactPriceDisplay(param.value)
@@ -297,12 +308,14 @@ export default function SingleSpendMetric({
             for (let i = 0; i < rows.length; i += 1) {
                 sum += rows[i].totalCost
             }
+            const pinnedRow = [{ totalCost: sum, accountId: 'All' }]
             for (let i = 0; i < rows.length; i += 1) {
                 newRow.push({
                     ...rows[i],
                     percent: (rows[i].totalCost / sum) * 100,
                 })
             }
+            gridRef.current?.api?.setPinnedTopRowData(pinnedRow)
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(newRow)
         }

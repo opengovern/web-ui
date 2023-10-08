@@ -448,12 +448,14 @@ export default function CostMetricsDetails() {
             for (let i = 0; i < rows.length; i += 1) {
                 sum += rows[i].totalCost
             }
+            const pinnedRow = [{ totalCost: sum, dimension: 'All' }]
             for (let i = 0; i < rows.length; i += 1) {
                 newRow.push({
                     ...rows[i],
                     percent: (rows[i].totalCost / sum) * 100,
                 })
             }
+            gridRef.current?.api?.setPinnedTopRowData(pinnedRow)
             gridRef.current?.api?.setColumnDefs(cols)
             gridRef.current?.api?.setRowData(newRow)
         } else gridRef.current?.api?.showLoadingOverlay()
