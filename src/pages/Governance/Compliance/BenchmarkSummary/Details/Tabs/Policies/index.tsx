@@ -132,10 +132,8 @@ const columns: IColumn<any, any>[] = [
 ]
 
 export default function Policies({ id }: IPolicies) {
-    const { response: policies } = useComplianceApiV1BenchmarksTreeDetail(
-        String(id)
-    )
-    console.log(policies)
+    const { response: policies, isLoading } =
+        useComplianceApiV1BenchmarksTreeDetail(String(id))
 
     const gridOptions: GridOptions = {
         autoGroupColumnDef: {
@@ -159,6 +157,7 @@ export default function Policies({ id }: IPolicies) {
             title="Policies"
             downloadable
             id="compliance_policies"
+            loading={isLoading}
             columns={columns}
             rowData={rows(policies)}
             options={gridOptions}
