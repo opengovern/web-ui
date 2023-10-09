@@ -424,10 +424,23 @@ export default function SingleSpendConnection({
                 }) || []
             let sum = 0
             const newRow = []
+            const granularity: any = {}
             for (let i = 0; i < rows.length; i += 1) {
                 sum += rows[i].totalCost
+                // eslint-disable-next-line array-callback-return
+                Object.entries(rows[i]).map(([key, value]) => {
+                    if (Number(key[0])) {
+                        if (granularity[key]) {
+                            granularity[key] += value
+                        } else {
+                            granularity[key] = value
+                        }
+                    }
+                })
             }
-            const pinnedRow = [{ totalCost: sum, dimension: 'All' }]
+            const pinnedRow = [
+                { totalCost: sum, dimension: 'Total cost', ...granularity },
+            ]
             for (let i = 0; i < rows.length; i += 1) {
                 newRow.push({
                     ...rows[i],
@@ -595,7 +608,7 @@ export default function SingleSpendConnection({
                 />
             </Grid>
             <TabGroup className="mt-4">
-                <TabList>
+                <TabList className="mb-3">
                     <Tab>Trend</Tab>
                     <Tab>Details</Tab>
                 </TabList>
@@ -740,29 +753,27 @@ export default function SingleSpendConnection({
                         </Card>
                     </TabPanel>
                     <TabPanel>
-                        <Card>
-                            <Flex>
-                                <Title className="font-semibold">Spend</Title>
-                                <Flex className="gap-4 w-fit">
-                                    <Button
-                                        variant="secondary"
-                                        onClick={() => {
-                                            gridRef.current?.api?.exportDataAsCsv()
-                                        }}
-                                        icon={ArrowDownOnSquareIcon}
-                                    >
-                                        Download
-                                    </Button>
-                                </Flex>
+                        <Flex>
+                            <Title className="font-semibold">Spend</Title>
+                            <Flex className="gap-4 w-fit">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        gridRef.current?.api?.exportDataAsCsv()
+                                    }}
+                                    icon={ArrowDownOnSquareIcon}
+                                >
+                                    Download
+                                </Button>
                             </Flex>
-                            <div className="ag-theme-alpine mt-4">
-                                <AgGridReact
-                                    ref={gridRef}
-                                    domLayout="autoHeight"
-                                    gridOptions={gridOptions}
-                                />
-                            </div>
-                        </Card>
+                        </Flex>
+                        <div className="ag-theme-alpine mt-4">
+                            <AgGridReact
+                                ref={gridRef}
+                                domLayout="autoHeight"
+                                gridOptions={gridOptions}
+                            />
+                        </div>
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

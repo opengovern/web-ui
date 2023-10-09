@@ -174,9 +174,9 @@ export default function Chart({
                             },
                         },
                         itemStyle: {
-                            borderRadius: 10,
+                            borderRadius: 4,
                             borderColor: '#fff',
-                            borderWidth: 2,
+                            borderWidth: 1,
                         },
                         data: chartData,
                         left: '-5%',

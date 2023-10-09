@@ -268,7 +268,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                 />
             </Grid>
             <TabGroup className="mt-4">
-                <TabList>
+                <TabList className="mb-3">
                     <Tab>Trend</Tab>
                     <Tab>Details</Tab>
                 </TabList>
@@ -382,22 +382,20 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                         </Card>
                     </TabPanel>
                     <TabPanel>
-                        <Card>
-                            <Table
-                                options={options}
-                                title="Resources"
-                                downloadable
-                                id="asset_resource_metrics"
-                                rowData={rowGenerator(metrics?.metrics)}
-                                columns={resourceTableColumns}
-                                loading={metricsLoading}
-                                onRowClicked={(e) => {
-                                    if (e.data) {
-                                        navigate(`metric_${e.data.id}`)
-                                    }
-                                }}
-                            />
-                        </Card>
+                        <Table
+                            options={options}
+                            title="Resources"
+                            downloadable
+                            id="asset_resource_metrics"
+                            rowData={rowGenerator(metrics?.metrics)}
+                            columns={resourceTableColumns}
+                            loading={metricsLoading}
+                            onRowClicked={(e) => {
+                                if (e.data) {
+                                    navigate(`metric_${e.data.id}`)
+                                }
+                            }}
+                        />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

@@ -49,7 +49,7 @@ export default function BenchmarkDetails() {
                 }
             />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
-                <TabList>
+                <TabList className="mb-3">
                     <Tab onClick={() => navigate('#policies')}>Policies</Tab>
                     <Tab onClick={() => navigate('#connections')}>
                         Connections

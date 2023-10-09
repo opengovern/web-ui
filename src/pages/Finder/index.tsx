@@ -385,7 +385,7 @@ export default function Finder() {
                             index={selectedIndex}
                             onIndexChange={setSelectedIndex}
                         >
-                            <TabList className="bg-gray-100 dark:bg-gray-900">
+                            <TabList className="mb-3">
                                 <Flex>
                                     <Flex className="w-fit">
                                         <Tab
@@ -434,7 +434,7 @@ export default function Finder() {
                                     </Button>
                                 </Flex>
                             </TabList>
-                            <TabPanels className="mt-0 pt-3">
+                            <TabPanels>
                                 <TabPanel>
                                     <Table
                                         id="popular_query_table"

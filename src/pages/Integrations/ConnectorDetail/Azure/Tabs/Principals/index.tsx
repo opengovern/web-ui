@@ -1,4 +1,4 @@
-import { Badge, Button, Card } from '@tremor/react'
+import { Badge, Button } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
@@ -137,25 +137,23 @@ export default function Principals({ principals }: IPrincipals) {
 
     return (
         <>
-            <Card>
-                <Table
-                    downloadable
-                    title="Principals"
-                    id="azure_pri_list"
-                    columns={columns}
-                    rowData={principals}
-                    onRowClicked={(
-                        event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
-                    ) => {
-                        setPriData(event.data)
-                        setOpenInfo(true)
-                    }}
-                >
-                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                        Create New Principal
-                    </Button>
-                </Table>
-            </Card>
+            <Table
+                downloadable
+                title="Principals"
+                id="azure_pri_list"
+                columns={columns}
+                rowData={principals}
+                onRowClicked={(
+                    event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
+                ) => {
+                    setPriData(event.data)
+                    setOpenInfo(true)
+                }}
+            >
+                <Button icon={PlusIcon} onClick={() => setOpen(true)}>
+                    Create New Principal
+                </Button>
+            </Table>
             <PrincipalInfo
                 data={priData}
                 open={openInfo}
