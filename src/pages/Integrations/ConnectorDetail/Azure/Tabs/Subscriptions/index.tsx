@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
     GridOptions,
     ICellRendererParams,
     RowClickedEvent,
 } from 'ag-grid-community'
-import { Badge, Button, Card } from '@tremor/react'
+import { Badge, Button } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import NewAzureSubscription from './NewSubscription'
 import {
@@ -215,27 +215,25 @@ export default function Subscriptions({
 
     return (
         <>
-            <Card>
-                <Table
-                    downloadable
-                    title="Subscriptions"
-                    id="azure_subscription_list"
-                    rowData={generateRows(subscriptions)}
-                    columns={columns}
-                    options={options}
-                    loading={loading}
-                    onRowClicked={(
-                        event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
-                    ) => {
-                        setPriData(event.data)
-                        setOpenInfo(true)
-                    }}
-                >
-                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                        Onboard New Azure Principal
-                    </Button>
-                </Table>
-            </Card>
+            <Table
+                downloadable
+                title="Subscriptions"
+                id="azure_subscription_list"
+                rowData={generateRows(subscriptions)}
+                columns={columns}
+                options={options}
+                loading={loading}
+                onRowClicked={(
+                    event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+                ) => {
+                    setPriData(event.data)
+                    setOpenInfo(true)
+                }}
+            >
+                <Button icon={PlusIcon} onClick={() => setOpen(true)}>
+                    Onboard New Azure Principal
+                </Button>
+            </Table>
             <SubscriptionInfo
                 data={priData}
                 open={openInfo}

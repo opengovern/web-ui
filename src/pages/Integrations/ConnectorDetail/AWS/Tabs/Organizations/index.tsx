@@ -1,4 +1,4 @@
-import { Badge, Button, Card } from '@tremor/react'
+import { Badge, Button } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useState } from 'react'
@@ -144,25 +144,23 @@ export default function Organizations({
 
     return (
         <>
-            <Card>
-                <Table
-                    downloadable
-                    title="Organizations"
-                    id="aws_org_list"
-                    columns={columns}
-                    rowData={organizations}
-                    onRowClicked={(
-                        event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
-                    ) => {
-                        setOrgData(event.data)
-                        setOpenInfo(true)
-                    }}
-                >
-                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                        Create New Organization
-                    </Button>
-                </Table>
-            </Card>
+            <Table
+                downloadable
+                title="Organizations"
+                id="aws_org_list"
+                columns={columns}
+                rowData={organizations}
+                onRowClicked={(
+                    event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
+                ) => {
+                    setOrgData(event.data)
+                    setOpenInfo(true)
+                }}
+            >
+                <Button icon={PlusIcon} onClick={() => setOpen(true)}>
+                    Create New Organization
+                </Button>
+            </Table>
             <OrganizationInfo
                 open={openInfo}
                 onClose={() => {

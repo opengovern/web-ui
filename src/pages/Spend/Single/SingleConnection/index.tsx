@@ -595,7 +595,7 @@ export default function SingleSpendConnection({
                 />
             </Grid>
             <TabGroup className="mt-4">
-                <TabList>
+                <TabList className="mb-3">
                     <Tab>Trend</Tab>
                     <Tab>Details</Tab>
                 </TabList>
@@ -740,29 +740,27 @@ export default function SingleSpendConnection({
                         </Card>
                     </TabPanel>
                     <TabPanel>
-                        <Card>
-                            <Flex>
-                                <Title className="font-semibold">Spend</Title>
-                                <Flex className="gap-4 w-fit">
-                                    <Button
-                                        variant="secondary"
-                                        onClick={() => {
-                                            gridRef.current?.api?.exportDataAsCsv()
-                                        }}
-                                        icon={ArrowDownOnSquareIcon}
-                                    >
-                                        Download
-                                    </Button>
-                                </Flex>
+                        <Flex>
+                            <Title className="font-semibold">Spend</Title>
+                            <Flex className="gap-4 w-fit">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        gridRef.current?.api?.exportDataAsCsv()
+                                    }}
+                                    icon={ArrowDownOnSquareIcon}
+                                >
+                                    Download
+                                </Button>
                             </Flex>
-                            <div className="ag-theme-alpine mt-4">
-                                <AgGridReact
-                                    ref={gridRef}
-                                    domLayout="autoHeight"
-                                    gridOptions={gridOptions}
-                                />
-                            </div>
-                        </Card>
+                        </Flex>
+                        <div className="ag-theme-alpine mt-4">
+                            <AgGridReact
+                                ref={gridRef}
+                                domLayout="autoHeight"
+                                gridOptions={gridOptions}
+                            />
+                        </div>
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

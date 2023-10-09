@@ -1,4 +1,4 @@
-import { Badge, Button, Card } from '@tremor/react'
+import { Badge, Button } from '@tremor/react'
 import { useState } from 'react'
 import {
     GridOptions,
@@ -12,7 +12,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
-import Notification from '../../../../../../components/Notification'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
 
@@ -218,27 +217,25 @@ export default function AccountList({
 
     return (
         <>
-            <Card>
-                <Table
-                    downloadable
-                    title="Accounts"
-                    id="aws_account_list"
-                    options={options}
-                    rowData={generateRows(accounts)}
-                    columns={columns}
-                    loading={loading}
-                    onRowClicked={(
-                        event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
-                    ) => {
-                        setAccData(event.data)
-                        setOpenInfo(true)
-                    }}
-                >
-                    <Button icon={PlusIcon} onClick={() => setOpen(true)}>
-                        Onboard New AWS Account
-                    </Button>
-                </Table>
-            </Card>
+            <Table
+                downloadable
+                title="Accounts"
+                id="aws_account_list"
+                options={options}
+                rowData={generateRows(accounts)}
+                columns={columns}
+                loading={loading}
+                onRowClicked={(
+                    event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+                ) => {
+                    setAccData(event.data)
+                    setOpenInfo(true)
+                }}
+            >
+                <Button icon={PlusIcon} onClick={() => setOpen(true)}>
+                    Onboard New AWS Account
+                </Button>
+            </Table>
             <AccountInfo
                 data={accData}
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
