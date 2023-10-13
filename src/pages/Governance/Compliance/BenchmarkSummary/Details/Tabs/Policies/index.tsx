@@ -151,7 +151,6 @@ export default function Policies({ id }: IPolicies) {
             return data.path.split('/')
         },
     }
-    console.log(policies)
 
     return (
         <Table

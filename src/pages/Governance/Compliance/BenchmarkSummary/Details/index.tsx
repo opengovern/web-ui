@@ -8,6 +8,8 @@ import Assignments from './Tabs/Assignments'
 import Findings from './Tabs/Findings'
 import { filterAtom } from '../../../../../store'
 import Header from '../../../../../components/Header'
+import Connections from './Tabs/Connections'
+import Services from './Tabs/Sevices'
 
 export default function BenchmarkDetails() {
     const navigate = useNavigate()
@@ -67,10 +69,13 @@ export default function BenchmarkDetails() {
                         <Policies id={id} />
                     </TabPanel>
                     <TabPanel>
-                        <Findings id={id} connections={selectedConnections} />
+                        <Connections
+                            id={id}
+                            connections={selectedConnections}
+                        />
                     </TabPanel>
                     <TabPanel>
-                        <Findings id={id} connections={selectedConnections} />
+                        <Services id={id} connections={selectedConnections} />
                     </TabPanel>
                     <TabPanel>
                         <Assignments id={id} />
