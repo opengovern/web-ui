@@ -1,4 +1,4 @@
-import { GridOptions, ICellRendererParams } from 'ag-grid-community'
+import { ICellRendererParams } from 'ag-grid-community'
 import { Badge, Flex } from '@tremor/react'
 import { useComplianceApiV1BenchmarksTreeDetail } from '../../../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
@@ -73,9 +73,21 @@ const renderStatus = (status: any) => {
 
 const columns: IColumn<any, any>[] = [
     {
+        headerName: 'Title',
+        field: 'title',
+        type: 'string',
+        sortable: true,
+        filter: true,
+        resizable: true,
+    },
+    {
         headerName: 'Policy ID',
         field: 'id',
+        width: 170,
         type: 'string',
+        sortable: true,
+        filter: true,
+        resizable: true,
     },
     {
         headerName: 'Severity',
@@ -131,26 +143,26 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
+// const gridOptions: GridOptions = {
+// autoGroupColumnDef: {
+//     headerName: 'Title',
+//     flex: 2,
+//     sortable: true,
+//     filter: true,
+//     resizable: true,
+//     cellRendererParams: {
+//         suppressCount: true,
+//     },
+// },
+// treeData: true,
+// getDataPath: (data: any) => {
+//     return data.path.split('/')
+// },
+// }
+
 export default function Policies({ id }: IPolicies) {
     const { response: policies, isLoading } =
         useComplianceApiV1BenchmarksTreeDetail(String(id))
-
-    const gridOptions: GridOptions = {
-        autoGroupColumnDef: {
-            headerName: 'Title',
-            flex: 2,
-            sortable: true,
-            filter: true,
-            resizable: true,
-            cellRendererParams: {
-                suppressCount: true,
-            },
-        },
-        treeData: true,
-        getDataPath: (data: any) => {
-            return data.path.split('/')
-        },
-    }
 
     return (
         <Table
@@ -160,7 +172,6 @@ export default function Policies({ id }: IPolicies) {
             loading={isLoading}
             columns={columns}
             rowData={rows(policies)}
-            options={gridOptions}
         />
     )
 }
