@@ -171,13 +171,38 @@ export default function SingleSpendConnection({
                     className="w-fit rounded-lg"
                 >
                     <TabList variant="solid">
-                        <Tab>Daily</Tab>
+                        <Tab
+                            disabled={
+                                !checkGranularity(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                ).daily
+                            }
+                            className={
+                                checkGranularity(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                ).daily
+                                    ? ''
+                                    : 'cursor-not-allowed'
+                            }
+                        >
+                            Daily
+                        </Tab>
                         <Tab
                             disabled={
                                 !checkGranularity(
                                     activeTimeRange.start,
                                     activeTimeRange.end
                                 ).monthly
+                            }
+                            className={
+                                checkGranularity(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                ).monthly
+                                    ? ''
+                                    : 'cursor-not-allowed'
                             }
                         >
                             Monthly
@@ -188,6 +213,14 @@ export default function SingleSpendConnection({
                                     activeTimeRange.start,
                                     activeTimeRange.end
                                 ).yearly
+                            }
+                            className={
+                                checkGranularity(
+                                    activeTimeRange.start,
+                                    activeTimeRange.end
+                                ).yearly
+                                    ? ''
+                                    : 'cursor-not-allowed'
                             }
                         >
                             Yearly
@@ -228,7 +261,7 @@ export default function SingleSpendConnection({
             ],
             defaultToolPanel: '',
         })
-    }, [selectedGranularity])
+    }, [selectedIndex])
 
     const gridOptions: GridOptions = {
         pagination: true,

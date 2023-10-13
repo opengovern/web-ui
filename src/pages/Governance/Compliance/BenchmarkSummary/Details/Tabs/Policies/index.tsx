@@ -126,7 +126,7 @@ const columns: IColumn<any, any>[] = [
     {
         headerName: 'Last checked',
         field: 'lastChecked',
-        type: 'datetime',
+        type: 'date',
         width: 120,
     },
 ]
@@ -151,6 +151,7 @@ export default function Policies({ id }: IPolicies) {
             return data.path.split('/')
         },
     }
+    console.log(policies)
 
     return (
         <Table

@@ -14,7 +14,7 @@ export interface EchoHTTPError {
     message?: any
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiApiAction {
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiAction {
     body?: string
     headers?: Record<string, string>
     id?: number
@@ -22,7 +22,55 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiApiAction {
     url?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiApiRule {
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiConditionStruct {
+    condition_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiConditionType
+    operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct[]
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgAlertingApiConditionType {
+    ConditionAnd = 'AND',
+    ConditionOr = 'OR',
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq {
+    body?: string
+    headers?: Record<string, string>
+    method?: string
+    url?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest {
+    action_id?: number
+    event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
+    operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
+    scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiEventType {
+    benchmark_id?: string
+    insight_id?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorInformation {
+    operator_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType
+    value?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct {
+    condition?: GithubComKaytuIoKaytuEnginePkgAlertingApiConditionStruct
+    operator_info?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorInformation
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType {
+    OperatorGreaterThan = 'GreaterThan',
+    OperatorLessThan = 'LessThan',
+    OperatorLessThanOrEqual = 'LessThanOrEqual',
+    OperatorGreaterThanOrEqual = 'GreaterThanOrEqual',
+    OperatorEqual = 'Equal',
+    OperatorDoesNotEqual = 'DoesNotEqual',
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiRule {
     action_id?: number
     event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
     id?: number
@@ -30,39 +78,10 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiApiRule {
     scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiConditionStruct {
-    conditionType?: string
-    operatorStr?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct[]
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiEventType {
-    benchmarkId?: string
-    insightId?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorInformation {
-    operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType
-    value?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct {
-    conditionStr?: GithubComKaytuIoKaytuEnginePkgAlertingApiConditionStruct
-    operatorInfo?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorInformation
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType {
-    OperatorGreaterThan = '>',
-    OperatorLessThan = '<',
-    OperatorLessThanOrEqual = '<=',
-    OperatorGreaterThanOrEqual = '>=',
-    OperatorEqual = '=',
-    OperatorDoesNotEqual = '!=',
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiScope {
-    connectionGroup?: string
-    connectionId?: string
-    connectorName?: SourceType
+    connection_group?: string
+    connection_id?: string
+    connector?: SourceType
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest {
@@ -1831,6 +1850,8 @@ export interface TypesFinding {
      * @example "The VM is not using managed disks"
      */
     reason?: string
+    /** Resource collection */
+    resourceCollection?: string
     /**
      * Resource ID
      * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"
@@ -2113,17 +2134,17 @@ export class Api<
          * @description create an action by the specified input
          *
          * @tags alerting
-         * @name ApiActionCreateCreate
+         * @name ApiV1ActionCreateCreate
          * @summary Create action
-         * @request POST:/alerting/api/action/create
+         * @request POST:/alerting/api/v1/action/create
          * @secure
          */
-        apiActionCreateCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgAlertingApiApiAction,
+        apiV1ActionCreateCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
             params: RequestParams = {}
         ) =>
             this.request<string, any>({
-                path: `/alerting/api/action/create`,
+                path: `/alerting/api/v1/action/create`,
                 method: 'POST',
                 body: request,
                 secure: true,
@@ -2135,14 +2156,17 @@ export class Api<
          * @description Deleting a single action for the given action id
          *
          * @tags alerting
-         * @name ApiActionDeleteDelete
+         * @name ApiV1ActionDeleteDelete
          * @summary Delete action
-         * @request DELETE:/alerting/api/action/delete/{actionId}
+         * @request DELETE:/alerting/api/v1/action/delete/{actionId}
          * @secure
          */
-        apiActionDeleteDelete: (actionId: string, params: RequestParams = {}) =>
+        apiV1ActionDeleteDelete: (
+            actionId: string,
+            params: RequestParams = {}
+        ) =>
             this.request<string, any>({
-                path: `/alerting/api/action/delete/${actionId}`,
+                path: `/alerting/api/v1/action/delete/${actionId}`,
                 method: 'DELETE',
                 secure: true,
                 ...params,
@@ -2152,17 +2176,17 @@ export class Api<
          * @description returns list of all actions
          *
          * @tags alerting
-         * @name ApiActionListList
+         * @name ApiV1ActionListList
          * @summary List actions
-         * @request GET:/alerting/api/action/list
+         * @request GET:/alerting/api/v1/action/list
          * @secure
          */
-        apiActionListList: (params: RequestParams = {}) =>
+        apiV1ActionListList: (params: RequestParams = {}) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgAlertingApiApiAction[],
+                GithubComKaytuIoKaytuEnginePkgAlertingApiAction[],
                 any
             >({
-                path: `/alerting/api/action/list`,
+                path: `/alerting/api/v1/action/list`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -2173,18 +2197,40 @@ export class Api<
          * @description Retrieving an action by the specified input
          *
          * @tags alerting
-         * @name ApiActionUpdateList
+         * @name ApiV1ActionUpdateList
          * @summary Update action
-         * @request GET:/alerting/api/action/update
+         * @request GET:/alerting/api/v1/action/update
          * @secure
          */
-        apiActionUpdateList: (
+        apiV1ActionUpdateList: (
             request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
             params: RequestParams = {}
         ) =>
             this.request<string, any>({
-                path: `/alerting/api/action/update`,
+                path: `/alerting/api/v1/action/update`,
                 method: 'GET',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description create a rule by the specified input
+         *
+         * @tags alerting
+         * @name ApiV1RuleCreateCreate
+         * @summary Create rule
+         * @request POST:/alerting/api/v1/rule/create
+         * @secure
+         */
+        apiV1RuleCreateCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<string, any>({
+                path: `/alerting/api/v1/rule/create`,
+                method: 'POST',
                 body: request,
                 secure: true,
                 type: ContentType.Json,
@@ -2195,38 +2241,16 @@ export class Api<
          * @description Deleting a single rule for the given rule id
          *
          * @tags alerting
-         * @name ApiRuleDeleteDelete
+         * @name ApiV1RuleDeleteDelete
          * @summary Delete rule
-         * @request DELETE:/alerting/api/rule/Delete/{ruleId}
+         * @request DELETE:/alerting/api/v1/rule/delete/{ruleId}
          * @secure
          */
-        apiRuleDeleteDelete: (ruleId: string, params: RequestParams = {}) =>
+        apiV1RuleDeleteDelete: (ruleId: string, params: RequestParams = {}) =>
             this.request<string, any>({
-                path: `/alerting/api/rule/Delete/${ruleId}`,
+                path: `/alerting/api/v1/rule/delete/${ruleId}`,
                 method: 'DELETE',
                 secure: true,
-                ...params,
-            }),
-
-        /**
-         * @description create a rule by the specified input
-         *
-         * @tags alerting
-         * @name ApiRuleCreateCreate
-         * @summary Create rule
-         * @request POST:/alerting/api/rule/create
-         * @secure
-         */
-        apiRuleCreateCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgAlertingApiApiRule,
-            params: RequestParams = {}
-        ) =>
-            this.request<string, any>({
-                path: `/alerting/api/rule/create`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
                 ...params,
             }),
 
@@ -2234,17 +2258,14 @@ export class Api<
          * @description returns list of all rules
          *
          * @tags alerting
-         * @name ApiRuleListList
+         * @name ApiV1RuleListList
          * @summary List rules
-         * @request GET:/alerting/api/rule/list
+         * @request GET:/alerting/api/v1/rule/list
          * @secure
          */
-        apiRuleListList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAlertingApiApiRule[],
-                any
-            >({
-                path: `/alerting/api/rule/list`,
+        apiV1RuleListList: (params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgAlertingApiRule[], any>({
+                path: `/alerting/api/v1/rule/list`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -2255,21 +2276,39 @@ export class Api<
          * @description Retrieving a rule by the specified input
          *
          * @tags alerting
-         * @name ApiRuleUpdateList
+         * @name ApiV1RuleUpdateList
          * @summary Update rule
-         * @request GET:/alerting/api/rule/update
+         * @request GET:/alerting/api/v1/rule/update
          * @secure
          */
-        apiRuleUpdateList: (
+        apiV1RuleUpdateList: (
             request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
             params: RequestParams = {}
         ) =>
             this.request<string, any>({
-                path: `/alerting/api/rule/update`,
+                path: `/alerting/api/v1/rule/update`,
                 method: 'GET',
                 body: request,
                 secure: true,
                 type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description Trigger one rule manually
+         *
+         * @tags alerting
+         * @name ApiV1RuleTriggerDetail
+         * @summary Trigger one rule
+         * @request GET:/alerting/api/v1/rule/{ruleId}/trigger
+         * @secure
+         */
+        apiV1RuleTriggerDetail: (ruleId: string, params: RequestParams = {}) =>
+            this.request<string, any>({
+                path: `/alerting/api/v1/rule/${ruleId}/trigger`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
                 ...params,
             }),
     }
@@ -2760,6 +2799,43 @@ export class Api<
                 path: `/compliance/api/v1/findings`,
                 method: 'POST',
                 body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving the number of findings field count by policies.
+         *
+         * @tags compliance
+         * @name ApiV1FindingsCountDetail
+         * @summary Get findings field count by policies
+         * @request GET:/compliance/api/v1/findings/{benchmarkId}/{field}/count
+         * @secure
+         */
+        apiV1FindingsCountDetail: (
+            benchmarkId: string,
+            field: 'resourceType' | 'connectionID' | 'resourceID' | 'service',
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Severities to filter by */
+                severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+                any
+            >({
+                path: `/compliance/api/v1/findings/${benchmarkId}/${field}/count`,
+                method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
