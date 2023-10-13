@@ -69,6 +69,7 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
     } = useOnboardApiV1SourceDelete(data?.id || '', {}, false)
 
     const {
+        response: healthResponse,
         isExecuted: isHealthCheckExecuted,
         isLoading: isHealthCheckLoading,
         sendNow: runHealthCheckNow,
@@ -146,15 +147,28 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
                             >
                                 Trigger Health Check
                             </Button>
-                            <Badge
-                                color={
-                                    data?.healthState === 'healthy'
-                                        ? 'emerald'
-                                        : 'rose'
-                                }
-                            >
-                                {data?.healthState}
-                            </Badge>
+                            {healthResponse ? (
+                                <Badge
+                                    color={
+                                        healthResponse?.healthState ===
+                                        'healthy'
+                                            ? 'emerald'
+                                            : 'rose'
+                                    }
+                                >
+                                    {healthResponse?.healthState}
+                                </Badge>
+                            ) : (
+                                <Badge
+                                    color={
+                                        data?.healthState === 'healthy'
+                                            ? 'emerald'
+                                            : 'rose'
+                                    }
+                                >
+                                    {data?.healthState}
+                                </Badge>
+                            )}
                         </Flex>
                     </Flex>
                     <Divider />

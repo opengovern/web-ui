@@ -153,7 +153,7 @@ export default function InsightList() {
         <Menu currentPage="insights">
             <Header datePicker filter />
             <Flex alignItems="start" className="gap-4">
-                <Card className="sticky w-fit">
+                {/* <Card className="sticky w-fit">
                     <TextInput
                         className="w-56 mb-6"
                         icon={MagnifyingGlassIcon}
@@ -161,7 +161,7 @@ export default function InsightList() {
                         value={searchCategory}
                         onChange={(e) => setSearchCategory(e.target.value)}
                     />
-                </Card>
+                </Card> */}
                 <Flex flexDirection="col" alignItems="start">
                     <TabGroup
                         index={selectedIndex}

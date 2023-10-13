@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiApiAction,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiApiRule,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
     GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
     GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
     RequestParams,
@@ -11,7 +13,7 @@ import {
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
 
-interface IuseAlertingApiActionCreateCreateState {
+interface IuseAlertingApiV1ActionCreateCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: string
@@ -19,8 +21,8 @@ interface IuseAlertingApiActionCreateCreateState {
     error?: any
 }
 
-export const useAlertingApiActionCreateCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgAlertingApiApiAction,
+export const useAlertingApiV1ActionCreateCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -35,10 +37,11 @@ export const useAlertingApiActionCreateCreate = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] = useState<IuseAlertingApiActionCreateCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+    const [state, setState] =
+        useState<IuseAlertingApiV1ActionCreateCreateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([request, params, autoExecute])
     )
@@ -52,7 +55,7 @@ export const useAlertingApiActionCreateCreate = (
         })
         try {
             api.alerting
-                .apiActionCreateCreate(request, params)
+                .apiV1ActionCreateCreate(request, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -101,7 +104,7 @@ export const useAlertingApiActionCreateCreate = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAlertingApiActionDeleteDeleteState {
+interface IuseAlertingApiV1ActionDeleteDeleteState {
     isLoading: boolean
     isExecuted: boolean
     response?: string
@@ -109,7 +112,7 @@ interface IuseAlertingApiActionDeleteDeleteState {
     error?: any
 }
 
-export const useAlertingApiActionDeleteDelete = (
+export const useAlertingApiV1ActionDeleteDelete = (
     actionId: string,
     params: RequestParams = {},
     autoExecute = true
@@ -125,10 +128,11 @@ export const useAlertingApiActionDeleteDelete = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] = useState<IuseAlertingApiActionDeleteDeleteState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+    const [state, setState] =
+        useState<IuseAlertingApiV1ActionDeleteDeleteState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([actionId, params, autoExecute])
     )
@@ -142,7 +146,7 @@ export const useAlertingApiActionDeleteDelete = (
         })
         try {
             api.alerting
-                .apiActionDeleteDelete(actionId, params)
+                .apiV1ActionDeleteDelete(actionId, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -191,15 +195,15 @@ export const useAlertingApiActionDeleteDelete = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAlertingApiActionListListState {
+interface IuseAlertingApiV1ActionListListState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAlertingApiApiAction[]
+    response?: GithubComKaytuIoKaytuEnginePkgAlertingApiAction[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
-export const useAlertingApiActionListList = (
+export const useAlertingApiV1ActionListList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -214,7 +218,7 @@ export const useAlertingApiActionListList = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] = useState<IuseAlertingApiActionListListState>({
+    const [state, setState] = useState<IuseAlertingApiV1ActionListListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -231,7 +235,7 @@ export const useAlertingApiActionListList = (
         })
         try {
             api.alerting
-                .apiActionListList(params)
+                .apiV1ActionListList(params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -280,7 +284,7 @@ export const useAlertingApiActionListList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAlertingApiActionUpdateListState {
+interface IuseAlertingApiV1ActionUpdateListState {
     isLoading: boolean
     isExecuted: boolean
     response?: string
@@ -288,7 +292,7 @@ interface IuseAlertingApiActionUpdateListState {
     error?: any
 }
 
-export const useAlertingApiActionUpdateList = (
+export const useAlertingApiV1ActionUpdateList = (
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
     params: RequestParams = {},
     autoExecute = true
@@ -304,7 +308,7 @@ export const useAlertingApiActionUpdateList = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] = useState<IuseAlertingApiActionUpdateListState>({
+    const [state, setState] = useState<IuseAlertingApiV1ActionUpdateListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -321,7 +325,7 @@ export const useAlertingApiActionUpdateList = (
         })
         try {
             api.alerting
-                .apiActionUpdateList(request, params)
+                .apiV1ActionUpdateList(request, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -370,7 +374,7 @@ export const useAlertingApiActionUpdateList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAlertingApiRuleDeleteDeleteState {
+interface IuseAlertingApiV1RuleCreateCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: string
@@ -378,7 +382,97 @@ interface IuseAlertingApiRuleDeleteDeleteState {
     error?: any
 }
 
-export const useAlertingApiRuleDeleteDelete = (
+export const useAlertingApiV1RuleCreateCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('kaytu')
+    }
+
+    const [state, setState] = useState<IuseAlertingApiV1RuleCreateCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([request, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.alerting
+                .apiV1RuleCreateCreate(request, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseAlertingApiV1RuleDeleteDeleteState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useAlertingApiV1RuleDeleteDelete = (
     ruleId: string,
     params: RequestParams = {},
     autoExecute = true
@@ -394,7 +488,7 @@ export const useAlertingApiRuleDeleteDelete = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] = useState<IuseAlertingApiRuleDeleteDeleteState>({
+    const [state, setState] = useState<IuseAlertingApiV1RuleDeleteDeleteState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -411,7 +505,7 @@ export const useAlertingApiRuleDeleteDelete = (
         })
         try {
             api.alerting
-                .apiRuleDeleteDelete(ruleId, params)
+                .apiV1RuleDeleteDelete(ruleId, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -460,16 +554,15 @@ export const useAlertingApiRuleDeleteDelete = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAlertingApiRuleCreateCreateState {
+interface IuseAlertingApiV1RuleListListState {
     isLoading: boolean
     isExecuted: boolean
-    response?: string
+    response?: GithubComKaytuIoKaytuEnginePkgAlertingApiRule[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
-export const useAlertingApiRuleCreateCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgAlertingApiApiRule,
+export const useAlertingApiV1RuleListList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -484,96 +577,7 @@ export const useAlertingApiRuleCreateCreate = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] = useState<IuseAlertingApiRuleCreateCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.alerting
-                .apiRuleCreateCreate(request, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseAlertingApiRuleListListState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgAlertingApiApiRule[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    error?: any
-}
-
-export const useAlertingApiRuleListList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
-    const [state, setState] = useState<IuseAlertingApiRuleListListState>({
+    const [state, setState] = useState<IuseAlertingApiV1RuleListListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -590,7 +594,7 @@ export const useAlertingApiRuleListList = (
         })
         try {
             api.alerting
-                .apiRuleListList(params)
+                .apiV1RuleListList(params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -639,7 +643,7 @@ export const useAlertingApiRuleListList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAlertingApiRuleUpdateListState {
+interface IuseAlertingApiV1RuleUpdateListState {
     isLoading: boolean
     isExecuted: boolean
     response?: string
@@ -647,7 +651,7 @@ interface IuseAlertingApiRuleUpdateListState {
     error?: any
 }
 
-export const useAlertingApiRuleUpdateList = (
+export const useAlertingApiV1RuleUpdateList = (
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
     params: RequestParams = {},
     autoExecute = true
@@ -663,7 +667,7 @@ export const useAlertingApiRuleUpdateList = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] = useState<IuseAlertingApiRuleUpdateListState>({
+    const [state, setState] = useState<IuseAlertingApiV1RuleUpdateListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -680,7 +684,7 @@ export const useAlertingApiRuleUpdateList = (
         })
         try {
             api.alerting
-                .apiRuleUpdateList(request, params)
+                .apiV1RuleUpdateList(request, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -711,6 +715,98 @@ export const useAlertingApiRuleUpdateList = (
 
     if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([request, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseAlertingApiV1RuleTriggerDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useAlertingApiV1RuleTriggerDetail = (
+    ruleId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('kaytu')
+    }
+
+    const [state, setState] = useState<IuseAlertingApiV1RuleTriggerDetailState>(
+        {
+            isLoading: true,
+            isExecuted: false,
+        }
+    )
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([ruleId, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.alerting
+                .apiV1RuleTriggerDetail(ruleId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([ruleId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([ruleId, params, autoExecute]))
     }
 
     useEffect(() => {

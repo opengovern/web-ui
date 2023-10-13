@@ -39,19 +39,8 @@ const columns: IColumn<any, any>[] = [
     },
     {
         field: 'policyID',
-        headerName: 'Policy ID',
+        headerName: 'Service name',
         type: 'string',
-        enableRowGroup: true,
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'connectionID',
-        headerName: 'Connection ID',
-        type: 'string',
-        enableRowGroup: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -59,9 +48,8 @@ const columns: IColumn<any, any>[] = [
     },
     {
         field: 'resourceID',
-        headerName: 'Resource ID',
+        headerName: 'Service label',
         type: 'string',
-        enableRowGroup: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -72,7 +60,7 @@ const columns: IColumn<any, any>[] = [
         headerName: 'Severity',
         type: 'string',
         sortable: true,
-        rowGroup: true,
+        enableRowGroup: true,
         filter: true,
         resizable: true,
         flex: 0.5,
@@ -103,10 +91,11 @@ const columns: IColumn<any, any>[] = [
         filter: true,
         resizable: true,
         flex: 1,
+        hide: true,
     },
 ]
 
-export default function Findings({ id, connections }: IFinder) {
+export default function Services({ id, connections }: IFinder) {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
 
@@ -135,24 +124,14 @@ export default function Findings({ id, connections }: IFinder) {
         },
         rowGroupPanelShow: 'always',
         groupAllowUnbalanced: true,
-        autoGroupColumnDef: {
-            headerName: 'Severity',
-            flex: 2,
-            sortable: true,
-            filter: true,
-            resizable: true,
-            // cellRendererParams: {
-            //     suppressCount: true,
-            // },
-        },
     }
 
     return (
         <>
             <Table
-                title="Findings"
+                title="Services"
                 downloadable
-                id="compliance_findings"
+                id="compliance_servicess"
                 columns={columns}
                 rowData={findings?.findings || []}
                 onCellClicked={(event: RowClickedEvent) => {

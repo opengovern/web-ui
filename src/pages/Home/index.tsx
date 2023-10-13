@@ -29,7 +29,7 @@ import Header from '../../components/Header'
 
 export default function Home() {
     const start = dayjs.utc().subtract(2, 'week').startOf('day')
-    const end = dayjs.utc().endOf('day')
+    const end = dayjs.utc().subtract(2, 'day').endOf('day')
 
     const [selectedType, setSelectedType] = useState('resource')
     const {
