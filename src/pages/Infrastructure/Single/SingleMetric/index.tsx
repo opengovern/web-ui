@@ -25,10 +25,14 @@ import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
 import { generateVisualMap, resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
-import { numericDisplay } from '../../../../utilities/numericDisplay'
+import {
+    numberDisplay,
+    numericDisplay,
+} from '../../../../utilities/numericDisplay'
 import Table from '../../../../components/Table'
 import { getTable } from '../../../Finder'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
+import { dateDisplay } from '../../../../utilities/dateDisplay'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -48,6 +52,8 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
         if (selectedIndex === 0) setSelectedChart('line')
         if (selectedIndex === 1) setSelectedChart('bar')
     }, [selectedIndex])
+
+    const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
 
     const query = {
         ...(selectedConnections.provider && {
@@ -161,16 +167,28 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
                         </Flex>
                     </Col>
                 </Grid>
-                {!!generateVisualMap(
-                    resourceTrendChart(resourceTrend).flag,
-                    resourceTrendChart(resourceTrend).label
-                ).visualMap && (
-                    <Callout
-                        color="rose"
-                        title="Data for red spots is incomplete or missing"
-                        className="w-fit mt-4"
-                    />
-                )}
+                {resourceTrend
+                    ?.filter(
+                        (t) =>
+                            selectedDatapoint?.color === '#E01D48' &&
+                            dateDisplay(t.date) === selectedDatapoint?.name
+                    )
+                    .map((t) => (
+                        <Callout
+                            color="rose"
+                            title="Incomplete data"
+                            className="w-fit mt-4"
+                        >
+                            Checked{' '}
+                            {numberDisplay(
+                                t.totalSuccessfulDescribedConnectionCount,
+                                0
+                            )}{' '}
+                            accounts out of{' '}
+                            {numberDisplay(t.totalConnectionCount, 0)} on{' '}
+                            {dateDisplay(t.date)}
+                        </Callout>
+                    ))}
                 <Flex justifyContent="end" className="mt-2 gap-2.5">
                     <div className="h-2.5 w-2.5 rounded-full bg-kaytu-800" />
                     <Text>Resources</Text>
@@ -192,6 +210,7 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
                     }
                     chartType={selectedChart}
                     loading={resourceTrendLoading}
+                    onClick={(p) => setSelectedDatapoint(p)}
                 />
             </Card>
             <Card>

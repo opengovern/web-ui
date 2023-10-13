@@ -75,7 +75,7 @@ export default function SingleSpendConnection({
     id,
 }: ISingle) {
     const [openDrawer, setOpenDrawer] = useState(false)
-    const [selectedIndex, setSelectedIndex] = useState(1)
+    const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedChartIndex, setSelectedChartIndex] = useState(0)
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'area'
