@@ -13,6 +13,7 @@
         "@react-aria/datepicker": "^3.7.0",
         "@react-aria/overlays": "^3.17.0",
         "@react-spectrum/view": "^3.6.2",
+        "@sentry/cli": "^2.21.2",
         "@sentry/react": "^7.70.0",
         "@tailwindcss/forms": "^0.5.6",
         "@testing-library/jest-dom": "^5.17.0",

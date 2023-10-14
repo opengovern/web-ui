@@ -15,7 +15,7 @@ jobs:
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       SENTRY_URL: https://sen.kaytu.dev/
       SENTRY_ORG: sentry
-      SENTRY_PROJECT: kaytu
+      SENTRY_PROJECT: kaytu-app
 
     steps:
     - uses: actions/checkout@v3
