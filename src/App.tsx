@@ -12,7 +12,7 @@ import Spinner from './components/Spinner'
 import { setAuthHeader } from './api/ApiConfig'
 
 Sentry.init({
-    dsn: 'https://52b7fbc9a36540bc8bfeca77cff5bd4e@sen.kaytu.dev/2',
+    dsn: 'https://fa326593d9cf444dae882971c709c29c@sen.kaytu.dev/2',
     integrations: [
         new Sentry.BrowserTracing({
             // See docs for support of different versions of variation of react router
