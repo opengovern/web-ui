@@ -108,7 +108,6 @@ export default function Assignments({ id }: IAssignments) {
         isLoading,
         sendNow: refreshList,
     } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {}, false)
-    console.log(assignments)
 
     useEffect(() => {
         if (transfer.connectionID !== '') {
