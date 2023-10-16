@@ -87,7 +87,6 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiScope {
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest {
     body?: string
     headers?: Record<string, string>
-    id?: number
     method?: string
     url?: string
 }
@@ -95,7 +94,6 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest {
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest {
     action_id?: number
     event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
-    id?: number
     operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
     scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
 }
@@ -379,7 +377,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
     userName?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource {
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedConnection {
     /**
      * Connection ID
      * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
@@ -404,6 +402,23 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSou
     status?: boolean
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities {
+    connections?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedConnection[]
+    resourceCollections?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedResourceCollection[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedResourceCollection {
+    /** Resource Collection ID */
+    resourceCollectionID?: string
+    /** Resource Collection Name */
+    resourceCollectionName?: string
+    /**
+     * Status
+     * @example true
+     */
+    status?: boolean
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment {
     /** Unix timestamp */
     assignedAt?: string
@@ -416,7 +431,12 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment 
      * Connection ID
      * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
      */
-    sourceId?: string
+    connectionId?: string
+    /**
+     * Resource Collection ID
+     * @example "example-rc"
+     */
+    resourceCollectionId?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary {
@@ -514,6 +534,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      * @example ["azure_cis_v140_7_5"]
      */
     policyID?: string[]
+    /**
+     * Resource Collection ID
+     * @example ["example-rc"]
+     */
+    resourceCollection?: string[]
     /**
      * Resource unique identifier
      * @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"]
@@ -742,6 +767,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPage {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree {
+    accounts?: TypesComplianceResultShortSummary
     /**
      * Policy ID
      * @example "azure_cis_v140_7_5"
@@ -752,6 +778,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree {
      * @example 0
      */
     lastChecked?: number
+    resources?: TypesComplianceResultShortSummary
     /**
      * Severity
      * @example "low"
@@ -1786,6 +1813,11 @@ export enum TypesComplianceResult {
     ComplianceResultERROR = 'error',
 }
 
+export interface TypesComplianceResultShortSummary {
+    failed?: number
+    passed?: number
+}
+
 export interface TypesComplianceResultSummary {
     /** @example 1 */
     alarmCount?: number
@@ -2197,18 +2229,19 @@ export class Api<
          * @description Retrieving an action by the specified input
          *
          * @tags alerting
-         * @name ApiV1ActionUpdateList
+         * @name ApiV1ActionUpdateUpdate
          * @summary Update action
-         * @request GET:/alerting/api/v1/action/update
+         * @request PUT:/alerting/api/v1/action/update/{actionId}
          * @secure
          */
-        apiV1ActionUpdateList: (
+        apiV1ActionUpdateUpdate: (
+            actionId: string,
             request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
             params: RequestParams = {}
         ) =>
             this.request<string, any>({
-                path: `/alerting/api/v1/action/update`,
-                method: 'GET',
+                path: `/alerting/api/v1/action/update/${actionId}`,
+                method: 'PUT',
                 body: request,
                 secure: true,
                 type: ContentType.Json,
@@ -2276,18 +2309,19 @@ export class Api<
          * @description Retrieving a rule by the specified input
          *
          * @tags alerting
-         * @name ApiV1RuleUpdateList
+         * @name ApiV1RuleUpdateUpdate
          * @summary Update rule
-         * @request GET:/alerting/api/v1/rule/update
+         * @request PUT:/alerting/api/v1/rule/update/{ruleId}
          * @secure
          */
-        apiV1RuleUpdateList: (
+        apiV1RuleUpdateUpdate: (
+            ruleId: string,
             request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
             params: RequestParams = {}
         ) =>
             this.request<string, any>({
-                path: `/alerting/api/v1/rule/update`,
-                method: 'GET',
+                path: `/alerting/api/v1/rule/update/${ruleId}`,
+                method: 'PUT',
                 body: request,
                 secure: true,
                 type: ContentType.Json,
@@ -2574,7 +2608,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
                 any
             >({
                 path: `/compliance/api/v1/assignments/benchmark/${benchmarkId}`,
@@ -2599,8 +2633,10 @@ export class Api<
             query?: {
                 /** Connection ID or 'all' for everything */
                 connectionId?: string[]
-                /** Connection group  */
+                /** Connection group */
                 connectionGroup?: string[]
+                /** Resource collection */
+                resourceCollection?: string[]
             },
             params: RequestParams = {}
         ) =>
@@ -2633,6 +2669,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection Group  */
                 connectionGroup?: string[]
+                /** Resource Collection */
+                resourceCollection?: string[]
             },
             params: RequestParams = {}
         ) =>
@@ -2660,6 +2698,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** timestamp for values in epoch seconds */
@@ -2696,6 +2736,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** timestamp for values in epoch seconds */
@@ -2757,6 +2799,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** timestamp for start of the chart in epoch seconds */
@@ -2809,6 +2853,82 @@ export class Api<
          * @description Retrieving the number of findings field count by policies.
          *
          * @tags compliance
+         * @name ApiV1FindingsAccountsDetail
+         * @summary Get findings field count by policies
+         * @request GET:/compliance/api/v1/findings/{benchmarkId}/accounts
+         * @secure
+         */
+        apiV1FindingsAccountsDetail: (
+            benchmarkId: string,
+            query?: {
+                /** Number of outputs */
+                count?: number
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+                any
+            >({
+                path: `/compliance/api/v1/findings/${benchmarkId}/accounts`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving the number of findings field count by policies.
+         *
+         * @tags compliance
+         * @name ApiV1FindingsServicesDetail
+         * @summary Get findings field count by policies
+         * @request GET:/compliance/api/v1/findings/{benchmarkId}/services
+         * @secure
+         */
+        apiV1FindingsServicesDetail: (
+            benchmarkId: string,
+            query?: {
+                /** Number of outputs */
+                count?: number
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+                any
+            >({
+                path: `/compliance/api/v1/findings/${benchmarkId}/services`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving the number of findings field count by policies.
+         *
+         * @tags compliance
          * @name ApiV1FindingsCountDetail
          * @summary Get findings field count by policies
          * @request GET:/compliance/api/v1/findings/{benchmarkId}/{field}/count
@@ -2822,6 +2942,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Severities to filter by */
@@ -2860,6 +2982,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Severities to filter by */
@@ -2899,6 +3023,8 @@ export class Api<
                 connectionId?: string[]
                 /** filter the result by connection group  */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -2937,6 +3063,8 @@ export class Api<
                 connectionId?: string[]
                 /** filter the result by connection group */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -2973,6 +3101,8 @@ export class Api<
                 connectionId?: string[]
                 /** filter the result by connection group */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -3008,6 +3138,8 @@ export class Api<
                 connectionId?: string[]
                 /** filter the result by connection group */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -3045,6 +3177,8 @@ export class Api<
                 connectionId?: string[]
                 /** filter the result by connection group */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -3080,6 +3214,8 @@ export class Api<
                 connectionId?: string[]
                 /** filter the result by connection group */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** unix seconds for the start time of the trend */
                 startTime?: number
                 /** unix seconds for the end time of the trend */
@@ -3287,6 +3423,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** timestamp for resource count in epoch seconds */
                 endTime?: number
                 /** timestamp for resource count change comparison in epoch seconds */
@@ -3328,6 +3466,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** Metric IDs */
                 metricIDs?: string[]
                 /** timestamp for resource count in epoch seconds */
@@ -3677,6 +3817,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** Minimum number of resources/spend with this tag value, default 1 */
                 minCount?: number
                 /** Start time in unix timestamp format, default now - 1 month */
@@ -3721,6 +3863,8 @@ export class Api<
                 connectionId?: string[]
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** timestamp for start in epoch seconds */
                 startTime?: number
                 /** timestamp for end in epoch seconds */
