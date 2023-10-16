@@ -1,8 +1,9 @@
-import { ICellRendererParams } from 'ag-grid-community'
+import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { Badge, Flex } from '@tremor/react'
 import { useComplianceApiV1BenchmarksTreeDetail } from '../../../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
 import Table, { IColumn } from '../../../../../../../components/Table'
+import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
 
 interface IPolicies {
     id: string | undefined
@@ -121,25 +122,40 @@ const columns: IColumn<any, any>[] = [
                 justifyContent="center"
                 alignItems="center"
             >
-                {renderStatus(params.data?.status)}
+                {renderStatus(params.value)}
             </Flex>
         ),
     },
-    // {
-    //     headerName: '# of failures',
-    //     field: 'lastChecked',
-    //     type: 'string',
-    // },
-    // {
-    //     headerName: '# of failed accounts',
-    //     field: 'lastChecked',
-    //     type: 'string',
-    // },
+    {
+        headerName: '# of failed resources',
+        field: 'resources',
+        type: 'string',
+        cellRenderer: (params: ICellRendererParams) =>
+            `${params.value.passed} out of ${
+                params.value.passed + params.value.failed
+            }`,
+        resizable: true,
+    },
+    {
+        headerName: '# of failed accounts',
+        field: 'accounts',
+        type: 'string',
+        cellRenderer: (params: ICellRendererParams) =>
+            `${params.value.passed} out of ${
+                params.value.passed + params.value.failed
+            }`,
+        resizable: true,
+    },
     {
         headerName: 'Last checked',
         field: 'lastChecked',
         type: 'date',
-        width: 120,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        valueFormatter: (param: ValueFormatterParams) => {
+            return param.value ? dateTimeDisplay(param.value) : ''
+        },
     },
 ]
 
@@ -163,6 +179,7 @@ const columns: IColumn<any, any>[] = [
 export default function Policies({ id }: IPolicies) {
     const { response: policies, isLoading } =
         useComplianceApiV1BenchmarksTreeDetail(String(id))
+    console.log(rows(policies))
 
     return (
         <Table
