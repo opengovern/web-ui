@@ -284,7 +284,7 @@ export const useAlertingApiV1ActionListList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAlertingApiV1ActionUpdateListState {
+interface IuseAlertingApiV1ActionUpdateUpdateState {
     isLoading: boolean
     isExecuted: boolean
     response?: string
@@ -292,7 +292,8 @@ interface IuseAlertingApiV1ActionUpdateListState {
     error?: any
 }
 
-export const useAlertingApiV1ActionUpdateList = (
+export const useAlertingApiV1ActionUpdateUpdate = (
+    actionId: string,
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
     params: RequestParams = {},
     autoExecute = true
@@ -308,12 +309,13 @@ export const useAlertingApiV1ActionUpdateList = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] = useState<IuseAlertingApiV1ActionUpdateListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+    const [state, setState] =
+        useState<IuseAlertingApiV1ActionUpdateUpdateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([actionId, request, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -325,7 +327,7 @@ export const useAlertingApiV1ActionUpdateList = (
         })
         try {
             api.alerting
-                .apiV1ActionUpdateList(request, params)
+                .apiV1ActionUpdateUpdate(actionId, request, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -354,8 +356,10 @@ export const useAlertingApiV1ActionUpdateList = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (
+        JSON.stringify([actionId, request, params, autoExecute]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([actionId, request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -643,7 +647,7 @@ export const useAlertingApiV1RuleListList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseAlertingApiV1RuleUpdateListState {
+interface IuseAlertingApiV1RuleUpdateUpdateState {
     isLoading: boolean
     isExecuted: boolean
     response?: string
@@ -651,7 +655,8 @@ interface IuseAlertingApiV1RuleUpdateListState {
     error?: any
 }
 
-export const useAlertingApiV1RuleUpdateList = (
+export const useAlertingApiV1RuleUpdateUpdate = (
+    ruleId: string,
     request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
     params: RequestParams = {},
     autoExecute = true
@@ -667,12 +672,12 @@ export const useAlertingApiV1RuleUpdateList = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] = useState<IuseAlertingApiV1RuleUpdateListState>({
+    const [state, setState] = useState<IuseAlertingApiV1RuleUpdateUpdateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([ruleId, request, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -684,7 +689,7 @@ export const useAlertingApiV1RuleUpdateList = (
         })
         try {
             api.alerting
-                .apiV1RuleUpdateList(request, params)
+                .apiV1RuleUpdateUpdate(ruleId, request, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -713,8 +718,8 @@ export const useAlertingApiV1RuleUpdateList = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([ruleId, request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([ruleId, request, params, autoExecute]))
     }
 
     useEffect(() => {

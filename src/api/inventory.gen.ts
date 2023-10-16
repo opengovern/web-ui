@@ -408,6 +408,8 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
 
         connectionGroup?: string[]
 
+        resourceCollection?: string[]
+
         endTime?: number
 
         startTime?: number
@@ -512,6 +514,8 @@ export const useInventoryApiV2AnalyticsMetricList = (
         connectionId?: string[]
 
         connectionGroup?: string[]
+
+        resourceCollection?: string[]
 
         metricIDs?: string[]
 
@@ -1440,6 +1444,8 @@ export const useInventoryApiV2AnalyticsTagList = (
 
         connectionGroup?: string[]
 
+        resourceCollection?: string[]
+
         minCount?: number
 
         startTime?: number
@@ -1551,6 +1557,8 @@ export const useInventoryApiV2AnalyticsTrendList = (
         connectionId?: string[]
 
         connectionGroup?: string[]
+
+        resourceCollection?: string[]
 
         startTime?: number
 

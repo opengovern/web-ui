@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react'
-import { CellClickedEvent, ICellRendererParams } from 'ag-grid-community'
 import { Button, Flex } from '@tremor/react'
 import {
     useComplianceApiV1AssignmentsBenchmarkDetail,
     useComplianceApiV1AssignmentsConnectionCreate,
     useComplianceApiV1AssignmentsConnectionDelete,
 } from '../../../../../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource } from '../../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../../components/Table'
 
 interface IAssignments {
@@ -47,9 +45,7 @@ const columns: IColumn<any, any>[] = [
         filter: true,
         resizable: true,
         flex: 0.5,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource>
-        ) => {
+        cellRenderer: (params: any) => {
             return (
                 <Flex
                     alignItems="center"
@@ -87,7 +83,6 @@ export default function Assignments({ id }: IAssignments) {
     })
 
     const {
-        response: enable,
         sendNow: sendEnable,
         isLoading: enableLoading,
         isExecuted: enableExecuted,
@@ -98,7 +93,6 @@ export default function Assignments({ id }: IAssignments) {
         false
     )
     const {
-        response: disable,
         sendNow: sendDisable,
         isLoading: disableLoading,
         isExecuted: disableExecuted,
@@ -148,9 +142,7 @@ export default function Assignments({ id }: IAssignments) {
             title="Assignmnets"
             id="compliance_assignments"
             columns={columns}
-            onCellClicked={(
-                event: CellClickedEvent<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedSource>
-            ) => {
+            onCellClicked={(event) => {
                 if (event.colDef.headerName === 'Enable') {
                     setTransfer({
                         connectionID: event.data?.connectionID || '',
@@ -160,7 +152,7 @@ export default function Assignments({ id }: IAssignments) {
             }}
             loading={isLoading}
             rowData={
-                assignments?.sort(
+                assignments?.connections?.sort(
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     (a, b) => b.status - a.status

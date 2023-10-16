@@ -1,44 +1,36 @@
 import { useState } from 'react'
-import { GridOptions, RowClickedEvent } from 'ag-grid-community'
+import {
+    GridOptions,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import { Title } from '@tremor/react'
-import { useComplianceApiV1FindingsCreate } from '../../../../../../../api/compliance.gen'
+import { useComplianceApiV1FindingsServicesDetail } from '../../../../../../../api/compliance.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../../../components/RenderObject'
 import Table, { IColumn } from '../../../../../../../components/Table'
+import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
+import { IFilter } from '../../../../../../../store'
 
 interface IFinder {
     id: string | undefined
-    connections: any
+    connections: IFilter
 }
 
-// const renderBadge = (severity: any) => {
-//     if (severity) {
-//         if (severity === 'low') {
-//             return <Badge color="blue">Low</Badge>
-//         }
-//         if (severity === 'medium') {
-//             return <Badge color="yellow">Medium</Badge>
-//         }
-//         if (severity === 'high') {
-//             return <Badge color="orange">High</Badge>
-//         }
-//         return <Badge color="rose">Critical</Badge>
-//     }
-//     return ''
-// }
+const rowGenerator = (data: any) => {
+    const temp: any = []
+    if (data && data?.services) {
+        const holder = data?.services
+        for (let i = 0; i < holder.length; i += 1) {
+            temp.push({ ...holder[i], ...holder[i].SeveritiesCount })
+        }
+    }
+    return temp
+}
 
 const columns: IColumn<any, any>[] = [
     {
-        width: 120,
-        field: 'connector',
-        headerName: 'Connector',
-        sortable: true,
-        filter: true,
-        enableRowGroup: true,
-        type: 'string',
-    },
-    {
-        field: 'policyID',
+        field: 'serviceName',
         headerName: 'Service name',
         type: 'string',
         sortable: true,
@@ -47,7 +39,7 @@ const columns: IColumn<any, any>[] = [
         flex: 1,
     },
     {
-        field: 'resourceID',
+        field: 'serviceLabel',
         headerName: 'Service label',
         type: 'string',
         sortable: true,
@@ -56,35 +48,55 @@ const columns: IColumn<any, any>[] = [
         flex: 1,
     },
     {
-        field: 'severity',
-        headerName: 'Severity',
-        type: 'string',
+        field: 'critical',
+        headerName: 'Critical',
+        type: 'number',
         sortable: true,
-        enableRowGroup: true,
         filter: true,
         resizable: true,
         flex: 0.5,
-        // cellRenderer: (params: ICellRendererParams) => (
-        //     <Flex
-        //         className="h-full w-full"
-        //         justifyContent="center"
-        //         alignItems="center"
-        //     >
-        //         {renderBadge(params.data?.value)}
-        //     </Flex>
-        // ),
     },
     {
-        field: 'reason',
-        headerName: 'Reason',
-        type: 'string',
+        field: 'high',
+        headerName: 'High',
+        type: 'number',
         sortable: true,
         filter: true,
         resizable: true,
-        flex: 1,
+        flex: 0.5,
     },
     {
-        field: 'evaluatedAt',
+        field: 'medium',
+        headerName: 'Medium',
+        type: 'number',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 0.5,
+    },
+    {
+        field: 'low',
+        headerName: 'Low',
+        type: 'number',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 0.5,
+    },
+    {
+        field: 'securityScore',
+        headerName: 'Security score',
+        type: 'number',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 0.5,
+        valueFormatter: (param: ValueFormatterParams) => {
+            return param.value ? Number(param.value).toFixed(2) : ''
+        },
+    },
+    {
+        field: 'lastCheckTime',
         headerName: 'Last checked',
         type: 'datetime',
         sortable: true,
@@ -92,6 +104,9 @@ const columns: IColumn<any, any>[] = [
         resizable: true,
         flex: 1,
         hide: true,
+        valueFormatter: (param: ValueFormatterParams) => {
+            return param.value ? dateTimeDisplay(param.value) : ''
+        },
     },
 ]
 
@@ -99,20 +114,14 @@ export default function Services({ id, connections }: IFinder) {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
 
-    const { response: findings, isLoading } = useComplianceApiV1FindingsCreate({
-        filters: {
-            benchmarkID: [String(id)],
+    const { response: findings, isLoading } =
+        useComplianceApiV1FindingsServicesDetail(id || '', {
             connector: connections.provider.length
                 ? [connections.provider]
                 : [],
-            connectionID: connections.connections,
-            activeOnly: false,
-        },
-        page: {
-            no: 1,
-            size: 10000,
-        },
-    })
+            connectionId: connections.connections,
+            connectionGroup: connections.connectionGroup,
+        })
 
     const options: GridOptions = {
         enableGroupEdit: true,
@@ -131,9 +140,9 @@ export default function Services({ id, connections }: IFinder) {
             <Table
                 title="Services"
                 downloadable
-                id="compliance_servicess"
+                id="compliance_services"
                 columns={columns}
-                rowData={findings?.findings || []}
+                rowData={rowGenerator(findings) || []}
                 onCellClicked={(event: RowClickedEvent) => {
                     setFinding(event.data)
                     setOpen(true)

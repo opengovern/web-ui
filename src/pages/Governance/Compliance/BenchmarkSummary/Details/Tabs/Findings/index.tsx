@@ -1,31 +1,21 @@
 import { useState } from 'react'
-import { GridOptions, RowClickedEvent } from 'ag-grid-community'
+import {
+    GridOptions,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import { Title } from '@tremor/react'
 import { useComplianceApiV1FindingsCreate } from '../../../../../../../api/compliance.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../../../components/RenderObject'
 import Table, { IColumn } from '../../../../../../../components/Table'
+import { IFilter } from '../../../../../../../store'
+import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
 
 interface IFinder {
     id: string | undefined
-    connections: any
+    connections: IFilter
 }
-
-// const renderBadge = (severity: any) => {
-//     if (severity) {
-//         if (severity === 'low') {
-//             return <Badge color="blue">Low</Badge>
-//         }
-//         if (severity === 'medium') {
-//             return <Badge color="yellow">Medium</Badge>
-//         }
-//         if (severity === 'high') {
-//             return <Badge color="orange">High</Badge>
-//         }
-//         return <Badge color="rose">Critical</Badge>
-//     }
-//     return ''
-// }
 
 const columns: IColumn<any, any>[] = [
     {
@@ -74,17 +64,9 @@ const columns: IColumn<any, any>[] = [
         sortable: true,
         rowGroup: true,
         filter: true,
+        hide: true,
         resizable: true,
         flex: 0.5,
-        // cellRenderer: (params: ICellRendererParams) => (
-        //     <Flex
-        //         className="h-full w-full"
-        //         justifyContent="center"
-        //         alignItems="center"
-        //     >
-        //         {renderBadge(params.data?.value)}
-        //     </Flex>
-        // ),
     },
     {
         field: 'reason',
@@ -98,11 +80,14 @@ const columns: IColumn<any, any>[] = [
     {
         field: 'evaluatedAt',
         headerName: 'Last checked',
-        type: 'datetime',
+        type: 'date',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 1,
+        valueFormatter: (param: ValueFormatterParams) => {
+            return param.value ? dateTimeDisplay(param.value) : ''
+        },
     },
 ]
 
@@ -113,6 +98,8 @@ export default function Findings({ id, connections }: IFinder) {
     const { response: findings, isLoading } = useComplianceApiV1FindingsCreate({
         filters: {
             benchmarkID: [String(id)],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             connector: connections.provider.length
                 ? [connections.provider]
                 : [],
