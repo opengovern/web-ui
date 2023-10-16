@@ -5,27 +5,12 @@ import { useComplianceApiV1FindingsCreate } from '../../../../../../../api/compl
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../../../components/RenderObject'
 import Table, { IColumn } from '../../../../../../../components/Table'
+import { IFilter } from '../../../../../../../store'
 
 interface IFinder {
     id: string | undefined
-    connections: any
+    connections: IFilter
 }
-
-// const renderBadge = (severity: any) => {
-//     if (severity) {
-//         if (severity === 'low') {
-//             return <Badge color="blue">Low</Badge>
-//         }
-//         if (severity === 'medium') {
-//             return <Badge color="yellow">Medium</Badge>
-//         }
-//         if (severity === 'high') {
-//             return <Badge color="orange">High</Badge>
-//         }
-//         return <Badge color="rose">Critical</Badge>
-//     }
-//     return ''
-// }
 
 const columns: IColumn<any, any>[] = [
     {
@@ -113,6 +98,8 @@ export default function Findings({ id, connections }: IFinder) {
     const { response: findings, isLoading } = useComplianceApiV1FindingsCreate({
         filters: {
             benchmarkID: [String(id)],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             connector: connections.provider.length
                 ? [connections.provider]
                 : [],

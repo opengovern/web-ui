@@ -10,10 +10,11 @@ import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../../../components/RenderObject'
 import Table, { IColumn } from '../../../../../../../components/Table'
 import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
+import { IFilter } from '../../../../../../../store'
 
 interface IFinder {
     id: string | undefined
-    connections: any
+    connections: IFilter
 }
 
 const rowGenerator = (data: any) => {
