@@ -12,7 +12,7 @@ import Spinner from './components/Spinner'
 import { setAuthHeader } from './api/ApiConfig'
 
 Sentry.init({
-    dsn: 'https://fa326593d9cf444dae882971c709c29c@sen.kaytu.dev/2',
+    dsn: 'https://fa326593d9cf444dae882971c709c29c@sen.kaytu.io/2',
     integrations: [
         new Sentry.BrowserTracing({
             // See docs for support of different versions of variation of react router
@@ -33,7 +33,7 @@ Sentry.init({
     tracesSampleRate: 1.0,
 
     // Set `tracePropagationTargets` to control for which URLs distributed tracing should be enabled
-    tracePropagationTargets: ['localhost', /^https:\/\/app\.kaytu\.dev/],
+    tracePropagationTargets: ['localhost', /^https:\/\/app\.kaytu\.io/],
 
     // Capture Replay for 10% of all sessions,
     // plus for 100% of sessions with an error

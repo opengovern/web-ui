@@ -63,8 +63,8 @@
         "lint:fix": "eslint --fix .",
         "format": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|md)\"",
         "chromatic": "npx chromatic --project-token=2ae656df246a --allow-console-errors",
-        "codegen": "npx swagger-typescript-api --axios -p https://swagger.kaytu.dev/swagger/doc.json -o ./src/api -n api.ts && go run codegen/generate.go",
-        "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sentry --project kaytu ./build && sentry-cli --url https://sen.kaytu.dev/ sourcemaps upload --org sentry --release v1.0.0 --project kaytu ./build"
+        "codegen": "npx swagger-typescript-api --axios -p https://swagger.kaytu.io/swagger/doc.json -o ./src/api -n api.ts && go run codegen/generate.go",
+        "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sentry --project kaytu ./build && sentry-cli --url https://sen.kaytu.io/ sourcemaps upload --org sentry --release v1.0.0 --project kaytu ./build"
     },
     "browserslist": {
         "production": [
