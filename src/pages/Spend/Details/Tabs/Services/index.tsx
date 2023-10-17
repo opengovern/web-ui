@@ -278,10 +278,8 @@ export default function Services({
             pinnedRow={rowGenerator(response).pinnedRow}
             options={gridOptions}
             onRowClicked={(event) => {
-                if (event.data) {
-                    if (event.data.category.length) {
-                        navigate(`metric_${event.data.id}`)
-                    } else navigate(`account_${event.data.id}`)
+                if (event.data.category.length) {
+                    navigate(`metric_${event.data.id}`)
                 }
             }}
             onGridReady={(event) => {
