@@ -179,7 +179,6 @@ const columns: IColumn<any, any>[] = [
 export default function Policies({ id }: IPolicies) {
     const { response: policies, isLoading } =
         useComplianceApiV1BenchmarksTreeDetail(String(id))
-    console.log(rows(policies))
 
     return (
         <Table
