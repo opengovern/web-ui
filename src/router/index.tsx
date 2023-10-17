@@ -9,7 +9,6 @@ import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
 import Spend from '../pages/Spend'
 import Integrations from '../pages/Integrations'
-import CostMetricsDetails from '../pages/Spend/Details'
 import ConnectorDetail from '../pages/Integrations/ConnectorDetail'
 import Compliance from '../pages/Governance/Compliance'
 import BenchmarkSummary from '../pages/Governance/Compliance/BenchmarkSummary'
@@ -23,6 +22,7 @@ import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import InsightDetails from '../pages/Insights/Details'
 import InsightList from '../pages/Insights/InsightList'
 import BenchmarkDetails from '../pages/Governance/Compliance/BenchmarkSummary/Details'
+import SpendDetails from '../pages/Spend/Details'
 
 const routes = [
     {
@@ -106,7 +106,7 @@ const authRoutes = [
     {
         key: 'spend metrics',
         path: '/:ws/spend/spend-details',
-        component: CostMetricsDetails,
+        component: SpendDetails,
     },
     {
         key: 'spend single 2',

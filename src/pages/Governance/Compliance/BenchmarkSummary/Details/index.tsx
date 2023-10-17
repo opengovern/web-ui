@@ -9,7 +9,7 @@ import Findings from './Tabs/Findings'
 import { filterAtom } from '../../../../../store'
 import Header from '../../../../../components/Header'
 import Connections from './Tabs/Connections'
-import Services from './Tabs/Sevices'
+import Services from './Tabs/Services'
 
 export default function BenchmarkDetails() {
     const navigate = useNavigate()
