@@ -178,7 +178,11 @@ export default function Connections({
         >
             <Select
                 value={selectedGranularity}
-                placeholder={capitalizeFirstLetter(selectedGranularity)}
+                placeholder={
+                    selectedGranularity
+                        ? capitalizeFirstLetter(selectedGranularity)
+                        : ''
+                }
                 onValueChange={(v) => {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
