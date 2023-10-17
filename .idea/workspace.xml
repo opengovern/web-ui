@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/Spend/Details/Tabs/Connections/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Spend/Details/Tabs/Services/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Table/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Table/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Sevices/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Services/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Details/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Details/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Spend/Details/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Spend/Details/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,11 +75,11 @@
       <recent name="$PROJECT_DIR$/src/icons" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/Spend/Details/Tabs/Connections" />
       <recent name="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Details" />
       <recent name="$PROJECT_DIR$/src/pages/Insights/InsightList" />
       <recent name="$PROJECT_DIR$/src/pages/Insights/details" />
       <recent name="$PROJECT_DIR$/src/pages/Insights" />
-      <recent name="$PROJECT_DIR$/src/pages/Governance" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -198,6 +205,7 @@
       <workItem from="1697367510625" duration="346000" />
       <workItem from="1697455225007" duration="328000" />
       <workItem from="1697455557660" duration="6707000" />
+      <workItem from="1697545023260" duration="7426000" />
     </task>
     <servers />
   </component>

@@ -41,7 +41,6 @@ export interface IColumn<TData, TValue> {
     suppressMenu?: boolean
     floatingFilter?: boolean
     pivot?: boolean
-
     hide?: boolean
     filter?: boolean
     sortable?: boolean
@@ -53,6 +52,7 @@ interface IProps<TData, TValue> {
     id: string
     columns: IColumn<TData, TValue>[]
     rowData: TData[] | undefined
+    pinnedRow?: any | undefined
     onGridReady?: (event: GridReadyEvent<TData>) => void
     onCellClicked?: (event: CellClickedEvent<TData>) => void
     onRowClicked?: (event: RowClickedEvent<TData>) => void
@@ -67,6 +67,7 @@ export default function Table<TData = any, TValue = any>({
     id,
     columns,
     rowData,
+    pinnedRow,
     onGridReady,
     onCellClicked,
     onRowClicked,
@@ -103,6 +104,10 @@ export default function Table<TData = any, TValue = any>({
     useEffect(() => {
         gridRef.current?.api?.setColumnDefs(columns)
     }, [columns])
+
+    useEffect(() => {
+        gridRef.current?.api?.setPinnedTopRowData(pinnedRow)
+    }, [pinnedRow])
 
     const saveVisibility = () => {
         if (visibility.current) {
@@ -254,7 +259,7 @@ export default function Table<TData = any, TValue = any>({
         <Flex flexDirection="col" className="w-full">
             <Flex
                 className={
-                    !!title?.length || downloadable || children ? 'mb-4' : ''
+                    !!title?.length || downloadable || children ? 'mb-3' : ''
                 }
             >
                 {!!title?.length && (
