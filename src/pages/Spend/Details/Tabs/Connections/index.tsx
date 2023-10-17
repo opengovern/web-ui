@@ -1,96 +1,131 @@
-import {
-    Button,
-    Card,
-    Flex,
-    Tab,
-    TabGroup,
-    TabList,
-    Text,
-    Title,
-} from '@tremor/react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { AgGridReact } from 'ag-grid-react'
-import 'ag-grid-community/styles/ag-grid.css'
-import 'ag-grid-community/styles/ag-theme-alpine.css'
-import 'ag-grid-enterprise'
-import { useAtomValue } from 'jotai'
-import { useEffect, useRef, useState } from 'react'
-import {
-    ColDef,
-    FilterChangedEvent,
-    GridOptions,
-    MenuItemDef,
-    RowClickedEvent,
-    ValueFormatterParams,
-} from 'ag-grid-community'
-import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
-import Menu from '../../../../../components/Menu'
-import { useInventoryApiV2AnalyticsSpendTableList } from '../../../../../api/inventory.gen'
-import { filterAtom, spendTimeAtom } from '../../../../../store'
+import { Dayjs } from 'dayjs'
+import { ValueFormatterParams } from 'ag-grid-community'
+import { Select, SelectItem, Text } from '@tremor/react'
+import { Dispatch, SetStateAction } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { IFilter } from '../../../../../store'
+import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../../api/api'
+import Table, { IColumn } from '../../../../../components/Table'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
-import { checkGranularity } from '../../../../../utilities/dateComparator'
-import Header from '../../../../../components/Header'
+import { useInventoryApiV2AnalyticsSpendTableList } from '../../../../../api/inventory.gen'
 import { capitalizeFirstLetter } from '../../../../../utilities/labelMaker'
+import { gridOptions, rowGenerator } from '../Services'
 
-const dimensionList = ['connection', 'metric', 'category']
+interface IConnections {
+    activeTimeRange: { start: Dayjs; end: Dayjs }
+    connections: IFilter
+    selectedGranularity: 'none' | 'monthly' | 'daily'
+    onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily' | 'none'>>
+}
 
-export default function CostMetricsDetails() {
+const defaultColumns: IColumn<any, any>[] = [
+    {
+        field: 'connector',
+        headerName: 'Connector',
+        type: 'string',
+        width: 115,
+        enableRowGroup: true,
+        filter: true,
+        resizable: true,
+        sortable: true,
+        pinned: true,
+    },
+    {
+        field: 'dimension',
+        headerName: 'Connection name',
+        type: 'string',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        pivot: false,
+        pinned: true,
+    },
+    {
+        field: 'accountId',
+        headerName: 'Provider ID',
+        type: 'string',
+        filter: true,
+        sortable: true,
+        resizable: true,
+        pivot: false,
+        pinned: true,
+    },
+    {
+        field: 'totalCost',
+        headerName: 'Total cost',
+        type: 'price',
+        width: 110,
+        sortable: true,
+        aggFunc: 'sum',
+        resizable: true,
+        pivot: false,
+        pinned: true,
+        valueFormatter: (param: ValueFormatterParams) => {
+            return param.value ? exactPriceDisplay(param.value) : ''
+        },
+    },
+]
+
+export default function Connections({
+    activeTimeRange,
+    connections,
+    selectedGranularity,
+    onGranularityChange,
+}: IConnections) {
     const navigate = useNavigate()
-    const { hash } = useLocation()
-    const page = () => {
-        switch (hash) {
-            case '#connections':
-                return 'connection'
-            case '#services':
-                return 'metric'
-            default:
-                return 'category'
+
+    const columnGenerator = (
+        input:
+            | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+            | undefined
+    ) => {
+        let columns: IColumn<any, any>[] = []
+        if (input) {
+            const columnNames =
+                input
+                    ?.map((row) => {
+                        if (row.costValue) {
+                            return Object.entries(row.costValue).map(
+                                (value) => value[0]
+                            )
+                        }
+                        return []
+                    })
+                    .flat() || []
+            const dynamicCols: IColumn<any, any>[] =
+                selectedGranularity !== 'none'
+                    ? columnNames
+                          .filter(
+                              (value, index, array) =>
+                                  array.indexOf(value) === index
+                          )
+                          .map((colName) => {
+                              const v: IColumn<any, any> = {
+                                  field: colName,
+                                  headerName: colName,
+                                  type: 'price',
+                                  width: 130,
+                                  sortable: true,
+                                  suppressMenu: true,
+                                  resizable: true,
+                                  pivot: false,
+                                  aggFunc: 'sum',
+                                  valueFormatter: (
+                                      param: ValueFormatterParams
+                                  ) => {
+                                      return param.value
+                                          ? exactPriceDisplay(param.value)
+                                          : ''
+                                  },
+                              }
+                              return v
+                          })
+                    : []
+            columns = [...dynamicCols]
         }
+        return columns
     }
 
-    const activeTimeRange = useAtomValue(spendTimeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
-    const [dimension, setDimension] = useState<string>(page())
-    const dimensionName = () => {
-        switch (dimension) {
-            case 'connection':
-                return 'Connection Name'
-            default:
-                return 'Service Name'
-        }
-    }
-    const [selectedIndex, setSelectedIndex] = useState(0)
-    const [selectedGranularity, setSelectedGranularity] = useState<
-        'monthly' | 'daily' | 'none'
-    >(
-        checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
-            ? 'monthly'
-            : 'daily'
-    )
-    useEffect(() => {
-        setSelectedGranularity(
-            checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
-                ? 'monthly'
-                : 'daily'
-        )
-    }, [activeTimeRange])
-
-    useEffect(() => {
-        switch (selectedIndex) {
-            case 0:
-                setSelectedGranularity('none')
-                break
-            case 1:
-                setSelectedGranularity('daily')
-                break
-            case 2:
-                setSelectedGranularity('monthly')
-                break
-            default:
-                setSelectedGranularity('monthly')
-                break
-        }
-    }, [selectedIndex])
     const query = (): {
         startTime?: number | undefined
         endTime?: number | undefined
@@ -101,11 +136,6 @@ export default function CostMetricsDetails() {
         metricIds?: string[]
         connectionGroup?: string[]
     } => {
-        let dim: 'metric' | 'connection' = 'metric'
-        if (dimension === 'connection') {
-            dim = 'connection'
-        }
-
         let gra: 'monthly' | 'daily' = 'daily'
         if (selectedGranularity === 'monthly') {
             gra = 'monthly'
@@ -114,391 +144,60 @@ export default function CostMetricsDetails() {
         return {
             startTime: activeTimeRange.start.unix(),
             endTime: activeTimeRange.end.unix(),
-            dimension: dim,
+            dimension: 'connection',
             granularity: gra,
-            connector: selectedConnections.provider,
-            connectionId: selectedConnections.connections,
-            connectionGroup: selectedConnections.connectionGroup,
+            connector: connections.provider,
+            connectionId: connections.connections,
+            connectionGroup: connections.connectionGroup,
         }
     }
     const { response, isLoading } = useInventoryApiV2AnalyticsSpendTableList(
         query()
     )
 
-    const gridRef = useRef<AgGridReact>(null)
-
-    function getContextMenuItems(): (string | MenuItemDef)[] {
-        return ['copy', 'separator', 'chartRange']
-    }
-
-    const filterPanel = () => {
-        return (
-            <Flex
-                flexDirection="col"
-                justifyContent="start"
-                alignItems="start"
-                className="w-full px-6"
-            >
-                <Text className="my-3">Granularity</Text>
-                <TabGroup
-                    index={selectedIndex}
-                    onIndexChange={setSelectedIndex}
-                    className="w-fit rounded-lg"
-                >
-                    <TabList variant="solid">
-                        <Tab>None</Tab>
-                        <Tab>Daily</Tab>
-                        <Tab
-                            disabled={
-                                !checkGranularity(
-                                    activeTimeRange.start,
-                                    activeTimeRange.end
-                                ).monthly
-                            }
-                        >
-                            Monthly
-                        </Tab>
-                    </TabList>
-                </TabGroup>
-                <Text className="my-3">Show by</Text>
-                {dimensionList.map((d) => (
-                    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions
-                    <label
-                        onClick={() => setDimension(d)}
-                        htmlFor={d}
-                        className="flex items-center gap-2 mb-1.5"
-                    >
-                        <input id={d} type="radio" checked={dimension === d} />
-                        <Text>
-                            {d === 'metric'
-                                ? 'Services'
-                                : capitalizeFirstLetter(d)}
-                        </Text>
-                    </label>
-                ))}
-            </Flex>
-        )
-    }
-
-    useEffect(() => {
-        gridRef.current?.api?.setSideBar({
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Table Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    toolPanel: 'agFiltersToolPanel',
-                },
-                {
-                    id: 'chart',
-                    labelDefault: 'Options',
-                    labelKey: 'chart',
-                    iconKey: 'chart',
-                    minWidth: 300,
-                    maxWidth: 300,
-                    width: 300,
-                    toolPanel: filterPanel,
-                },
-            ],
-            defaultToolPanel: '',
-        })
-    }, [selectedGranularity, dimension])
-
-    const gridOptions: GridOptions = {
-        pagination: true,
-        paginationPageSize: 25,
-        suppressExcelExport: true,
-        animateRows: true,
-        enableGroupEdit: true,
-        columnTypes: {
-            dimension: {
-                enableRowGroup: true,
-                enablePivot: true,
-            },
-        },
-        rowGroupPanelShow: 'always',
-        groupAllowUnbalanced: true,
-        autoGroupColumnDef: {
-            pinned: true,
-            flex: 2,
-            sortable: true,
-            filter: true,
-            resizable: true,
-            cellRendererParams: {
-                footerValueGetter: (params: any) => {
-                    const isRootLevel = params.node.level === -1
-                    if (isRootLevel) {
-                        return 'Grand Total'
-                    }
-                    return `Sub Total (${params.value})`
-                },
-            },
-        },
-        getRowHeight: () => 50,
-        onGridReady: (e) => {
-            if (isLoading) {
-                e.api.showLoadingOverlay()
-            }
-        },
-        onFilterChanged(e: FilterChangedEvent<any>) {
-            if (isLoading) {
-                e.api.showLoadingOverlay()
-            }
-        },
-        sideBar: {
-            toolPanels: [
-                {
-                    id: 'columns',
-                    labelDefault: 'Columns',
-                    labelKey: 'columns',
-                    iconKey: 'columns',
-                    toolPanel: 'agColumnsToolPanel',
-                },
-                {
-                    id: 'filters',
-                    labelDefault: 'Table Filters',
-                    labelKey: 'filters',
-                    iconKey: 'filter',
-                    toolPanel: 'agFiltersToolPanel',
-                },
-                {
-                    id: 'chart',
-                    labelDefault: 'Options',
-                    labelKey: 'chart',
-                    iconKey: 'chart',
-                    minWidth: 300,
-                    maxWidth: 300,
-                    width: 300,
-                    toolPanel: filterPanel,
-                },
-            ],
-            defaultToolPanel: '',
-        },
-        enableRangeSelection: true,
-        getContextMenuItems,
-        groupIncludeFooter: true,
-        groupIncludeTotalFooter: true,
-        onRowClicked(event: RowClickedEvent) {
-            if (event.data) {
-                if (event.data.category.length) {
-                    navigate(`metric_${event.data.id}`)
-                } else navigate(`account_${event.data.id}`)
-            }
-        },
-    }
-
-    // eslint-disable-next-line consistent-return
-    const categoryOptions = () => {
-        if (dimension !== 'connection') {
-            return [
-                {
-                    field: 'percent',
-                    headerName: '%',
-                    pinned: true,
-                    sortable: true,
-                    aggFunc: 'sum',
-                    resizable: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? `${param.value.toFixed(2)}%` : ''
-                    },
-                    hide: dimension === 'metric',
-                },
-                {
-                    field: 'category',
-                    headerName: 'Category',
-                    rowGroup: dimension === 'category',
-                    filter: true,
-                    enableRowGroup: true,
-                    sortable: true,
-                    resizable: true,
-                    pinned: true,
-                },
-            ]
-        }
-        return []
-    }
-
-    const accountOptions = () => {
-        if (dimension === 'connection') {
-            return [
-                {
-                    field: 'accountId',
-                    headerName: 'Provider ID',
-                    filter: true,
-                    sortable: true,
-                    resizable: true,
-                    pivot: false,
-                    pinned: true,
-                },
-            ]
-        }
-        return []
-    }
-
-    useEffect(() => {
-        if (!isLoading) {
-            const defaultCols: ColDef[] = [
-                {
-                    field: 'connector',
-                    headerName: 'Connector',
-                    type: 'connector',
-                    enableRowGroup: true,
-                    filter: true,
-                    resizable: true,
-                    sortable: true,
-                    pinned: true,
-                },
-                {
-                    field: 'dimension',
-                    headerName: dimensionName(),
-                    filter: true,
-                    sortable: true,
-                    resizable: true,
-                    pivot: false,
-                    pinned: true,
-                },
-                ...accountOptions(),
-                {
-                    field: 'totalCost',
-                    headerName: 'Total Cost',
-                    sortable: true,
-                    aggFunc: 'sum',
-                    resizable: true,
-                    pivot: false,
-                    pinned: true,
-                    valueFormatter: (param: ValueFormatterParams) => {
-                        return param.value ? exactPriceDisplay(param.value) : ''
-                    },
-                },
-                ...categoryOptions(),
-            ]
-
-            const columnNames =
-                response
-                    ?.map((row) => {
-                        if (row.costValue) {
-                            return Object.entries(row.costValue).map(
-                                (value) => value[0]
-                            )
-                        }
-                        return []
-                    })
-                    .flat() || []
-
-            const dynamicCols: ColDef[] =
-                selectedGranularity !== 'none'
-                    ? columnNames
-                          .filter(
-                              (value, index, array) =>
-                                  array.indexOf(value) === index
-                          )
-                          .map((colName) => {
-                              const v: ColDef = {
-                                  field: colName,
-                                  headerName: colName,
-                                  sortable: true,
-                                  suppressMenu: true,
-                                  resizable: true,
-                                  pivot: false,
-                                  aggFunc: 'sum',
-                                  valueFormatter: (param) => {
-                                      return param.value
-                                          ? exactPriceDisplay(param.value)
-                                          : ''
-                                  },
-                              }
-                              return v
-                          })
-                    : []
-
-            const cols = [...defaultCols, ...dynamicCols]
-            const rows =
-                response?.map((row) => {
-                    let temp = {}
-                    let totalCost = 0
-                    if (row.costValue) {
-                        temp = Object.fromEntries(Object.entries(row.costValue))
-                    }
-                    Object.values(temp).map(
-                        // eslint-disable-next-line no-return-assign
-                        (v: number | unknown) => (totalCost += Number(v))
-                    )
-                    return {
-                        dimension: row.dimensionName
-                            ? row.dimensionName
-                            : row.dimensionId,
-                        category: row.category,
-                        accountId: row.accountID,
-                        connector: row.connector,
-                        id: row.dimensionId,
-                        totalCost,
-                        ...temp,
-                    }
-                }) || []
-            let sum = 0
-            const newRow = []
-            const granularity: any = {}
-            for (let i = 0; i < rows.length; i += 1) {
-                sum += rows[i].totalCost
-                // eslint-disable-next-line array-callback-return
-                Object.entries(rows[i]).map(([key, value]) => {
-                    if (Number(key[0])) {
-                        if (granularity[key]) {
-                            granularity[key] += value
-                        } else {
-                            granularity[key] = value
-                        }
-                    }
-                })
-            }
-            const pinnedRow = [
-                { totalCost: sum, dimension: 'Total cost', ...granularity },
-            ]
-            for (let i = 0; i < rows.length; i += 1) {
-                newRow.push({
-                    ...rows[i],
-                    percent: (rows[i].totalCost / sum) * 100,
-                })
-            }
-            gridRef.current?.api?.setPinnedTopRowData(pinnedRow)
-            gridRef.current?.api?.setColumnDefs(cols)
-            gridRef.current?.api?.setRowData(newRow)
-        } else gridRef.current?.api?.showLoadingOverlay()
-    }, [selectedConnections, isLoading, dimension, selectedGranularity])
-
     return (
-        <Menu currentPage="spend">
-            <Card>
-                <Flex>
-                    <Title className="font-semibold">Spend</Title>
-                    <Flex className="gap-4 w-fit">
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                gridRef.current?.api?.exportDataAsCsv()
-                            }}
-                            icon={ArrowDownOnSquareIcon}
-                        >
-                            Download
-                        </Button>
-                    </Flex>
-                </Flex>
-                <div className="ag-theme-alpine mt-4">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                    />
-                </div>
-            </Card>
-        </Menu>
+        <Table
+            title="Connections"
+            downloadable
+            id="spend_connection_table"
+            loading={isLoading}
+            columns={[...defaultColumns, ...columnGenerator(response)]}
+            rowData={rowGenerator(response).finalRow}
+            pinnedRow={rowGenerator(response).pinnedRow}
+            options={gridOptions}
+            onRowClicked={(event) => {
+                if (event.data) {
+                    if (event.data.category.length) {
+                        navigate(`metric_${event.data.id}`)
+                    } else navigate(`account_${event.data.id}`)
+                }
+            }}
+            onGridReady={(event) => {
+                if (isLoading) {
+                    event.api.showLoadingOverlay()
+                }
+            }}
+        >
+            <Select
+                value={selectedGranularity}
+                placeholder={capitalizeFirstLetter(selectedGranularity)}
+                onValueChange={(v) => {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    onGranularityChange(v)
+                }}
+                className="w-10"
+            >
+                <SelectItem value="none">
+                    <Text>None</Text>
+                </SelectItem>
+                <SelectItem value="daily">
+                    <Text>Daily</Text>
+                </SelectItem>
+                <SelectItem value="monthly">
+                    <Text>Monthly</Text>
+                </SelectItem>
+            </Select>
+        </Table>
     )
 }

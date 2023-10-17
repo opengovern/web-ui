@@ -7,6 +7,7 @@ import Header from '../../../components/Header'
 import Services from './Tabs/Services'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import { filterAtom, spendTimeAtom } from '../../../store'
+import Connections from './Tabs/Connections'
 
 export default function SpendDetails() {
     const navigate = useNavigate()
@@ -67,7 +68,14 @@ export default function SpendDetails() {
                             isSummary
                         />
                     </TabPanel>
-                    <TabPanel>hi</TabPanel>
+                    <TabPanel>
+                        <Connections
+                            activeTimeRange={activeTimeRange}
+                            connections={selectedConnections}
+                            selectedGranularity={selectedGranularity}
+                            onGranularityChange={setSelectedGranularity}
+                        />
+                    </TabPanel>
                     <TabPanel>
                         <Services
                             activeTimeRange={activeTimeRange}

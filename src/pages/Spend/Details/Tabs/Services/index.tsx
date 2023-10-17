@@ -18,7 +18,7 @@ interface IServices {
     onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily' | 'none'>>
 }
 
-const rowGenerator = (
+export const rowGenerator = (
     input: GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[] | undefined
 ) => {
     let sum = 0
@@ -115,7 +115,7 @@ const defaultColumns: IColumn<any, any>[] = [
     },
 ]
 
-const gridOptions: GridOptions = {
+export const gridOptions: GridOptions = {
     columnTypes: {
         dimension: {
             enableRowGroup: true,
