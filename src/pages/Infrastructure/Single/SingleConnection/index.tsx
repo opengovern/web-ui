@@ -31,7 +31,10 @@ import {
 } from '../../../../api/inventory.gen'
 import { notificationAtom } from '../../../../store'
 import Table from '../../../../components/Table'
-import { resourceTableColumns, rowGenerator } from '../../Details'
+import {
+    resourceTableColumns,
+    rowGenerator,
+} from '../../Details/Tabs/CloudAccounts'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'

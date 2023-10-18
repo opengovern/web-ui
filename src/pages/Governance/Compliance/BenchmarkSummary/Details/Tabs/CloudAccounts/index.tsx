@@ -110,7 +110,7 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
-export default function Connections({ id, connections }: IFinder) {
+export default function CloudAccounts({ id, connections }: IFinder) {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
 
@@ -138,7 +138,7 @@ export default function Connections({ id, connections }: IFinder) {
     return (
         <>
             <Table
-                title="Connections"
+                title="Cloud accounts"
                 downloadable
                 id="compliance_connections"
                 columns={columns}

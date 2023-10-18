@@ -3,7 +3,6 @@ import Infrastructure from '../pages/Infrastructure'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
 import { CallbackPage } from '../pages/Callback'
-import Insights from '../pages/Insights'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
@@ -15,7 +14,6 @@ import BenchmarkSummary from '../pages/Governance/Compliance/BenchmarkSummary'
 import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
-import AssetDetail from '../pages/Infrastructure/Details'
 import Single from '../pages/Infrastructure/Single'
 import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
@@ -23,6 +21,7 @@ import InsightDetails from '../pages/Insights/Details'
 import InsightList from '../pages/Insights/InsightList'
 import BenchmarkDetails from '../pages/Governance/Compliance/BenchmarkSummary/Details'
 import SpendDetails from '../pages/Spend/Details'
+import InfrastructureDetails from '../pages/Infrastructure/Details'
 
 const routes = [
     {
@@ -75,17 +74,17 @@ const authRoutes = [
     },
     {
         key: 'infrastructure metrics',
-        path: '/:ws/infrastructure/asset-details',
-        component: AssetDetail,
+        path: '/:ws/infrastructure/infrastructure-details',
+        component: InfrastructureDetails,
     },
     {
         key: 'infrastructure single 2',
-        path: '/:ws/infrastructure/asset-details/:id',
+        path: '/:ws/infrastructure/infrastructure-details/:id',
         component: Single,
     },
     {
         key: 'infrastructure single metric 2',
-        path: '/:ws/infrastructure/asset-details/:id/:metric',
+        path: '/:ws/infrastructure/infrastructure-details/:id/:metric',
         component: Single,
     },
     {
@@ -121,28 +120,13 @@ const authRoutes = [
     {
         key: 'insights',
         path: '/:ws/insights',
-        component: Insights,
-    },
-    {
-        key: 'insights',
-        path: '/:ws/insights/insight-list',
         component: InsightList,
-    },
-    {
-        key: 'insight detail',
-        path: '/:ws/insights/insight-list/:id',
-        component: InsightDetails,
     },
     {
         key: 'insight detail',
         path: '/:ws/insights/:id',
         component: InsightDetails,
     },
-    // {
-    //     key: 'insight details',
-    //     path: '/:ws/insights/:idd/:id',
-    //     component: InsightDetails,
-    // },
     {
         key: 'integrations',
         path: '/:ws/integrations',

@@ -8,7 +8,7 @@ import Assignments from './Tabs/Assignments'
 import Findings from './Tabs/Findings'
 import { filterAtom } from '../../../../../store'
 import Header from '../../../../../components/Header'
-import Connections from './Tabs/Connections'
+import CloudAccounts from './Tabs/CloudAccounts'
 import Services from './Tabs/Services'
 
 export default function BenchmarkDetails() {
@@ -23,7 +23,7 @@ export default function BenchmarkDetails() {
             case '#policies':
                 setSelectedTab(0)
                 break
-            case '#connections':
+            case '#cloud-accounts':
                 setSelectedTab(1)
                 break
             case '#services':
@@ -53,8 +53,8 @@ export default function BenchmarkDetails() {
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#policies')}>Policies</Tab>
-                    <Tab onClick={() => navigate('#connections')}>
-                        Connections
+                    <Tab onClick={() => navigate('#cloud-accounts')}>
+                        Cloud accounts
                     </Tab>
                     <Tab onClick={() => navigate('#services')}>Services</Tab>
                     <Tab onClick={() => navigate('#assignments')}>
@@ -69,7 +69,7 @@ export default function BenchmarkDetails() {
                         <Policies id={id} />
                     </TabPanel>
                     <TabPanel>
-                        <Connections
+                        <CloudAccounts
                             id={id}
                             connections={selectedConnections}
                         />

@@ -418,7 +418,7 @@ export default function Spend() {
                         <Col numColSpan={3} className="h-full">
                             <Grid numItems={2} className="w-full h-full gap-4">
                                 <ListCard
-                                    title="Top Accounts"
+                                    title="Top accounts"
                                     loading={accountCostLoading}
                                     items={topAccounts(accountCostResponse)}
                                     url="spend-details#connections"
@@ -426,7 +426,7 @@ export default function Spend() {
                                     isPrice
                                 />
                                 <ListCard
-                                    title="Top Services"
+                                    title="Top services"
                                     loading={serviceCostLoading}
                                     items={topServices(serviceCostResponse)}
                                     url="spend-details#services"
