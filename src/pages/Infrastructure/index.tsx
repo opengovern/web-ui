@@ -290,7 +290,7 @@ export default function Infrastructure() {
                                     metric={numericDisplay(
                                         accounts?.connectionCount
                                     )}
-                                    url="asset-details#connections"
+                                    url="infrastructure-details#cloud-accounts"
                                     loading={accountIsLoading}
                                     border={false}
                                 />
@@ -386,7 +386,7 @@ export default function Infrastructure() {
                                 oldChartData={pieData(composition).oldData}
                                 activeTime={activeTimeRange}
                                 loading={compositionLoading}
-                                seeMore="asset-details#category"
+                                seeMore="infrastructure-details#category"
                             />
                         </Col>
                         <Col numColSpan={1} numColSpanLg={3} className="h-full">
@@ -395,14 +395,14 @@ export default function Infrastructure() {
                                     title="Top accounts"
                                     loading={accountsResponseLoading}
                                     items={topAccounts(accountsResponse)}
-                                    url="asset-details#connections"
+                                    url="infrastructure-details#cloud-accounts"
                                     type="account"
                                 />
                                 <ListCard
                                     title="Top resources"
                                     loading={servicesResponseLoading}
                                     items={topServices(servicesResponse)}
-                                    url="asset-details#resources"
+                                    url="infrastructure-details#resources"
                                     type="service"
                                 />
                             </Grid>

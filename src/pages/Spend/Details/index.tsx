@@ -21,7 +21,7 @@ export default function SpendDetails() {
             case '#summary':
                 setSelectedTab(0)
                 break
-            case '#connections':
+            case '#cloud-accounts':
                 setSelectedTab(1)
                 break
             case '#services':
@@ -49,11 +49,11 @@ export default function SpendDetails() {
 
     return (
         <Menu currentPage="spend">
-            <Header breadCrumb={['Spend detail']} filter datePicker />
+            <Header breadCrumb={['Details']} filter datePicker />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#summary')}>Summary</Tab>
-                    <Tab onClick={() => navigate('#connections')}>
+                    <Tab onClick={() => navigate('#cloud-accounts')}>
                         Cloud accounts
                     </Tab>
                     <Tab onClick={() => navigate('#services')}>Services</Tab>

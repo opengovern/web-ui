@@ -14,7 +14,7 @@ import BenchmarkSummary from '../pages/Governance/Compliance/BenchmarkSummary'
 import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
-import AssetDetail from '../pages/Infrastructure/Details'
+import AssetDetail from '../pages/Infrastructure/Details/Tabs/CloudAccounts'
 import Single from '../pages/Infrastructure/Single'
 import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
@@ -22,6 +22,7 @@ import InsightDetails from '../pages/Insights/Details'
 import InsightList from '../pages/Insights/InsightList'
 import BenchmarkDetails from '../pages/Governance/Compliance/BenchmarkSummary/Details'
 import SpendDetails from '../pages/Spend/Details'
+import InfrastructureDetails from '../pages/Infrastructure/Details'
 
 const routes = [
     {
@@ -74,17 +75,17 @@ const authRoutes = [
     },
     {
         key: 'infrastructure metrics',
-        path: '/:ws/infrastructure/asset-details',
-        component: AssetDetail,
+        path: '/:ws/infrastructure/infrastructure-details',
+        component: InfrastructureDetails,
     },
     {
         key: 'infrastructure single 2',
-        path: '/:ws/infrastructure/asset-details/:id',
+        path: '/:ws/infrastructure/infrastructure-details/:id',
         component: Single,
     },
     {
         key: 'infrastructure single metric 2',
-        path: '/:ws/infrastructure/asset-details/:id/:metric',
+        path: '/:ws/infrastructure/infrastructure-details/:id/:metric',
         component: Single,
     },
     {
