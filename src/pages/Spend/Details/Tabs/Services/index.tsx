@@ -77,7 +77,7 @@ export const rowGenerator = (
     }
 }
 
-const defaultColumns: IColumn<any, any>[] = [
+export const defaultColumns: IColumn<any, any>[] = [
     {
         field: 'connector',
         headerName: 'Connector',
