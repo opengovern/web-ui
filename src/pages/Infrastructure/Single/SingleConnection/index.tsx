@@ -388,7 +388,18 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                             downloadable
                             id="asset_resource_metrics"
                             rowData={rowGenerator(metrics?.metrics)}
-                            columns={defaultColumns}
+                            columns={[
+                                ...defaultColumns,
+                                {
+                                    field: 'category',
+                                    enableRowGroup: true,
+                                    headerName: 'Category',
+                                    resizable: true,
+                                    sortable: true,
+                                    filter: true,
+                                    type: 'string',
+                                },
+                            ]}
                             loading={metricsLoading}
                             onRowClicked={(e) => {
                                 if (e.data) {
