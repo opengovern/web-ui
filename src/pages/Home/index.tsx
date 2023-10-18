@@ -136,7 +136,7 @@ export default function Home() {
                 className="gap-4 w-full mt-6 mb-4"
             >
                 <SummaryCard
-                    title="Cloud Accounts"
+                    title="Cloud accounts"
                     metric={numberDisplay(summary?.connectionCount, 0)}
                     loading={limitsLoading}
                     error={getErrorMessage(summaryError)}
@@ -152,7 +152,7 @@ export default function Home() {
                     blueBorder
                 />
                 <SummaryCard
-                    title="Resource Count"
+                    title="Resource count"
                     metric={numberDisplay(summary?.totalResourceCount, 0)}
                     loading={limitsLoading}
                     error={getErrorMessage(summaryError)}
@@ -160,7 +160,7 @@ export default function Home() {
                     blueBorder
                 />
                 <SummaryCard
-                    title="Total Spend"
+                    title="Total spend"
                     metric={exactPriceDisplay(summary?.totalCost, 0)}
                     loading={limitsLoading}
                     error={getErrorMessage(summaryError)}
