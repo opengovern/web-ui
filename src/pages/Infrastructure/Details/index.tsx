@@ -1,11 +1,12 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai/index'
-import { Tab, TabGroup, TabList } from '@tremor/react'
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { filterAtom, timeAtom } from '../../../store'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
 import Menu from '../../../components/Menu'
+import Resources from './Tabs/Resources'
 
 export default function InfrastructureDetails() {
     const navigate = useNavigate()
@@ -30,20 +31,8 @@ export default function InfrastructureDetails() {
                 break
         }
     }, [tabs])
-    const [selectedGranularity, setSelectedGranularity] = useState<
-        'monthly' | 'daily' | 'none'
-    >(
-        checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
-            ? 'monthly'
-            : 'daily'
-    )
-    useEffect(() => {
-        setSelectedGranularity(
-            checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
-                ? 'monthly'
-                : 'daily'
-        )
-    }, [activeTimeRange])
+
+    const [isOnboarded, setIsOnboarded] = useState(true)
 
     return (
         <Menu currentPage="infrastructure">
@@ -56,6 +45,26 @@ export default function InfrastructureDetails() {
                     </Tab>
                     <Tab onClick={() => navigate('#services')}>Services</Tab>
                 </TabList>
+                <TabPanels>
+                    <TabPanel>
+                        <Resources
+                            activeTimeRange={activeTimeRange}
+                            connections={selectedConnections}
+                            onboardState={isOnboarded}
+                            onChange={setIsOnboarded}
+                            isSummary
+                        />
+                    </TabPanel>
+                    <TabPanel>hi</TabPanel>
+                    <TabPanel>
+                        <Resources
+                            activeTimeRange={activeTimeRange}
+                            connections={selectedConnections}
+                            onboardState={isOnboarded}
+                            onChange={setIsOnboarded}
+                        />
+                    </TabPanel>
+                </TabPanels>
             </TabGroup>
         </Menu>
     )
