@@ -3,7 +3,6 @@ import Infrastructure from '../pages/Infrastructure'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
 import { CallbackPage } from '../pages/Callback'
-import Insights from '../pages/Insights'
 import Settings from '../pages/Settings'
 import Workspaces from '../pages/Workspaces'
 import Logout from '../pages/Logout'
@@ -121,28 +120,13 @@ const authRoutes = [
     {
         key: 'insights',
         path: '/:ws/insights',
-        component: Insights,
-    },
-    {
-        key: 'insights',
-        path: '/:ws/insights/insight-list',
         component: InsightList,
-    },
-    {
-        key: 'insight detail',
-        path: '/:ws/insights/insight-list/:id',
-        component: InsightDetails,
     },
     {
         key: 'insight detail',
         path: '/:ws/insights/:id',
         component: InsightDetails,
     },
-    // {
-    //     key: 'insight details',
-    //     path: '/:ws/insights/:idd/:id',
-    //     component: InsightDetails,
-    // },
     {
         key: 'integrations',
         path: '/:ws/integrations',

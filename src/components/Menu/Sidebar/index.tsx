@@ -21,11 +21,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { useAtom } from 'jotai'
 import { useState } from 'react'
-import {
-    insightOpenAtom,
-    complianceOpenAtom,
-    sideBarCollapsedAtom,
-} from '../../../store'
+import { complianceOpenAtom, sideBarCollapsedAtom } from '../../../store'
 import { KaytuIcon } from '../../../icons/icons'
 
 const navigation = [
@@ -33,15 +29,6 @@ const navigation = [
         name: 'Home',
         page: 'home',
         icon: HomeIcon,
-    },
-    {
-        name: 'Insights',
-        page: 'insights',
-        icon: DocumentChartBarIcon,
-        // children: [
-        //     { name: 'Key Insights', page: 'key-insights' },
-        //     { name: 'All Insights', page: 'all-insights' },
-        // ],
     },
     {
         name: 'Infrastructure',
@@ -65,6 +52,15 @@ const navigation = [
             { name: 'Compliance', page: 'compliance' },
             { name: 'Service Advisor', page: 'service-advisor' },
         ],
+    },
+    {
+        name: 'Insights',
+        page: 'insights',
+        icon: DocumentChartBarIcon,
+        // children: [
+        //     { name: 'Key Insights', page: 'key-insights' },
+        //     { name: 'All Insights', page: 'all-insights' },
+        // ],
     },
     {
         name: 'Finder',
