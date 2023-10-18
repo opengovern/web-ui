@@ -24,7 +24,7 @@ export const rowGenerator = (
     let sum = 0
     const finalRow = []
     const granularity: any = {}
-    const pinnedRow = [
+    let pinnedRow = [
         { totalCost: sum, dimension: 'Total cost', ...granularity },
     ]
     if (input) {
@@ -64,6 +64,9 @@ export const rowGenerator = (
                 }
             })
         }
+        pinnedRow = [
+            { totalCost: sum, dimension: 'Total cost', ...granularity },
+        ]
         for (let i = 0; i < rows.length; i += 1) {
             finalRow.push({
                 ...rows[i],
