@@ -32,7 +32,7 @@ const defaultColumns: IColumn<any, any>[] = [
     },
     {
         field: 'dimension',
-        headerName: 'Connection name',
+        headerName: 'Account name',
         type: 'string',
         filter: true,
         sortable: true,
