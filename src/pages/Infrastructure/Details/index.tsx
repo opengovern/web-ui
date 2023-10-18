@@ -7,6 +7,7 @@ import { checkGranularity } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
 import Menu from '../../../components/Menu'
 import Resources from './Tabs/Resources'
+import CloudAccounts from './Tabs/CloudAccounts'
 
 export default function InfrastructureDetails() {
     const navigate = useNavigate()
@@ -32,8 +33,6 @@ export default function InfrastructureDetails() {
         }
     }, [tabs])
 
-    const [isOnboarded, setIsOnboarded] = useState(true)
-
     return (
         <Menu currentPage="infrastructure">
             <Header breadCrumb={['Details']} filter datePicker />
@@ -50,18 +49,19 @@ export default function InfrastructureDetails() {
                         <Resources
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
-                            onboardState={isOnboarded}
-                            onChange={setIsOnboarded}
                             isSummary
                         />
                     </TabPanel>
-                    <TabPanel>hi</TabPanel>
+                    <TabPanel>
+                        <CloudAccounts
+                            activeTimeRange={activeTimeRange}
+                            connections={selectedConnections}
+                        />
+                    </TabPanel>
                     <TabPanel>
                         <Resources
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
-                            onboardState={isOnboarded}
-                            onChange={setIsOnboarded}
                         />
                     </TabPanel>
                 </TabPanels>

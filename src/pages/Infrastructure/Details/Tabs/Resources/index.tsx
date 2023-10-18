@@ -1,7 +1,5 @@
-import { Flex, Tab, TabGroup, TabList } from '@tremor/react'
-import { ICellRendererParams } from 'ag-grid-community'
+import { GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Dayjs } from 'dayjs'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
 import Table, { IColumn } from '../../../../../components/Table'
@@ -13,9 +11,7 @@ import { useInventoryApiV2AnalyticsMetricList } from '../../../../../api/invento
 interface IResources {
     activeTimeRange: { start: Dayjs; end: Dayjs }
     connections: IFilter
-    onboardState: boolean
     isSummary?: boolean
-    onChange: Dispatch<SetStateAction<boolean>>
 }
 
 export const rowGenerator = (data: any) => {
@@ -58,15 +54,6 @@ export const defaultColumns: IColumn<any, any>[] = [
         type: 'string',
     },
     {
-        field: 'category',
-        enableRowGroup: true,
-        headerName: 'Category',
-        resizable: true,
-        sortable: true,
-        filter: true,
-        type: 'string',
-    },
-    {
         field: 'count',
         resizable: true,
         sortable: true,
@@ -81,17 +68,9 @@ export const defaultColumns: IColumn<any, any>[] = [
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
-            params.data?.name && (
-                <Flex
-                    justifyContent="center"
-                    alignItems="center"
-                    className="mt-1"
-                >
-                    {params.data?.old_count
-                        ? badgeDelta(params.data?.old_count, params.data?.count)
-                        : badgeDelta(1, 2)}
-                </Flex>
-            ),
+            params.data?.name && params.data?.old_count
+                ? badgeDelta(params.data?.old_count, params.data?.count)
+                : badgeDelta(1, 2),
     },
     {
         headerName: 'Change (Δ)',
@@ -104,23 +83,25 @@ export const defaultColumns: IColumn<any, any>[] = [
     },
 ]
 
+export const options: GridOptions = {
+    enableGroupEdit: true,
+    rowGroupPanelShow: 'always',
+    groupAllowUnbalanced: true,
+    autoGroupColumnDef: {
+        width: 200,
+        sortable: true,
+        filter: true,
+        resizable: true,
+    },
+}
+
 export default function Resources({
     activeTimeRange,
     connections,
-    onboardState,
     isSummary = false,
-    onChange,
 }: IResources) {
     const navigate = useNavigate()
     const setNotification = useSetAtom(notificationAtom)
-
-    const [index, setIndex] = useState(0)
-
-    useEffect(() => {
-        if (onboardState) {
-            setIndex(0)
-        } else setIndex(1)
-    }, [onboardState])
 
     const query = {
         ...(connections.provider && {
@@ -144,13 +125,20 @@ export default function Resources({
     const { response: resources, isLoading: resourcesLoading } =
         useInventoryApiV2AnalyticsMetricList(query)
 
-    const columns = () => {
-        const temp = defaultColumns
-        if (isSummary) {
-            temp[2].rowGroup = true
-        }
-        return temp
-    }
+    const columns: IColumn<any, any>[] = [
+        ...defaultColumns,
+        {
+            field: 'category',
+            enableRowGroup: true,
+            headerName: 'Category',
+            resizable: true,
+            sortable: true,
+            filter: true,
+            type: 'string',
+            hide: isSummary,
+            rowGroup: isSummary,
+        },
+    ]
 
     return (
         <Table
@@ -160,7 +148,7 @@ export default function Resources({
                     ? 'infrastructure_summary_table'
                     : 'infrastructure_service_table'
             }
-            columns={columns()}
+            columns={columns}
             downloadable
             rowData={rowGenerator(resources?.metrics)}
             loading={resourcesLoading}
@@ -181,13 +169,7 @@ export default function Resources({
                     event.api.showLoadingOverlay()
                 }
             }}
-        >
-            <TabGroup className="w-fit rounded-lg border" index={index}>
-                <TabList variant="solid">
-                    <Tab onClick={() => onChange(true)}>Onboarded</Tab>
-                    <Tab onClick={() => onChange(false)}>Show all</Tab>
-                </TabList>
-            </TabGroup>
-        </Table>
+            options={options}
+        />
     )
 }

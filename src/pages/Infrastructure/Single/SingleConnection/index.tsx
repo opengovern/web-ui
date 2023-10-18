@@ -31,10 +31,7 @@ import {
 } from '../../../../api/inventory.gen'
 import { notificationAtom } from '../../../../store'
 import Table from '../../../../components/Table'
-import {
-    resourceTableColumns,
-    rowGenerator,
-} from '../../Details/Tabs/CloudAccounts'
+import { defaultColumns, rowGenerator } from '../../Details/Tabs/Resources'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'
@@ -391,7 +388,7 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                             downloadable
                             id="asset_resource_metrics"
                             rowData={rowGenerator(metrics?.metrics)}
-                            columns={resourceTableColumns}
+                            columns={defaultColumns}
                             loading={metricsLoading}
                             onRowClicked={(e) => {
                                 if (e.data) {
