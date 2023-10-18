@@ -315,14 +315,14 @@ export default function BenchmarkSummary() {
                 <Col numColSpanLg={3} className="h-full">
                     <Grid numItems={2} className="w-full h-full gap-4">
                         <ListCard
-                            title="Top Accounts"
+                            title="Top accounts"
                             loading={isLoading}
                             items={topList(connections)}
                             url="details#cloud-accounts"
                             type="account"
                         />
                         <ListCard
-                            title="Top Services"
+                            title="Top services"
                             loading={isLoading}
                             items={topList(services)}
                             url="details#services"

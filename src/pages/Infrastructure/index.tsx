@@ -392,14 +392,14 @@ export default function Infrastructure() {
                         <Col numColSpan={1} numColSpanLg={3} className="h-full">
                             <Grid numItems={2} className="w-full h-full gap-4">
                                 <ListCard
-                                    title="Top Accounts"
+                                    title="Top accounts"
                                     loading={accountsResponseLoading}
                                     items={topAccounts(accountsResponse)}
                                     url="asset-details#connections"
                                     type="account"
                                 />
                                 <ListCard
-                                    title="Top Resources"
+                                    title="Top resources"
                                     loading={servicesResponseLoading}
                                     items={topServices(servicesResponse)}
                                     url="asset-details#resources"
