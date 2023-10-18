@@ -66,7 +66,7 @@ const defaultColumns: IColumn<any, any>[] = [
     },
 ]
 
-export default function Connections({
+export default function CloudAccounts({
     activeTimeRange,
     connections,
     selectedGranularity,
@@ -157,7 +157,7 @@ export default function Connections({
 
     return (
         <Table
-            title="Connections"
+            title="Cloud accounts"
             downloadable
             id="spend_connection_table"
             loading={isLoading}

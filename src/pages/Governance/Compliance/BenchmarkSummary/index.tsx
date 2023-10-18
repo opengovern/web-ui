@@ -318,7 +318,7 @@ export default function BenchmarkSummary() {
                             title="Top Accounts"
                             loading={isLoading}
                             items={topList(connections)}
-                            url="details#connections"
+                            url="details#cloud-accounts"
                             type="account"
                         />
                         <ListCard
