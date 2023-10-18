@@ -73,7 +73,6 @@ export default function SingleSpendConnection({
     id,
 }: ISingle) {
     const [openDrawer, setOpenDrawer] = useState(false)
-    const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedChartIndex, setSelectedChartIndex] = useState(0)
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'area'
@@ -102,23 +101,6 @@ export default function SingleSpendConnection({
         if (selectedChartIndex === 1) setSelectedChart('line')
         if (selectedChartIndex === 2) setSelectedChart('bar')
     }, [selectedChartIndex])
-
-    useEffect(() => {
-        switch (selectedIndex) {
-            case 0:
-                setSelectedGranularity('daily')
-                break
-            case 1:
-                setSelectedGranularity('monthly')
-                break
-            case 2:
-                setSelectedGranularity('yearly')
-                break
-            default:
-                setSelectedGranularity('monthly')
-                break
-        }
-    }, [selectedIndex])
 
     const { response: costTrend, isLoading: costTrendLoading } =
         useInventoryApiV2AnalyticsSpendTrendList({
@@ -528,7 +510,7 @@ export default function SingleSpendConnection({
                         <Table
                             title="Services"
                             downloadable
-                            id="spend_service_table"
+                            id="single_spend_service_table"
                             loading={isLoading}
                             columns={columns}
                             rowData={rowGenerator(response).finalRow}
