@@ -320,6 +320,7 @@ export default function BenchmarkSummary() {
                             items={topList(connections)}
                             url="details#cloud-accounts"
                             type="account"
+                            isClickable={false}
                         />
                         <ListCard
                             title="Top services"
@@ -327,6 +328,7 @@ export default function BenchmarkSummary() {
                             items={topList(services)}
                             url="details#services"
                             type="service"
+                            isClickable={false}
                         />
                     </Grid>
                 </Col>
