@@ -21,6 +21,7 @@ import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import { useParams } from 'react-router-dom'
 import { filterAtom } from '../../../../store'
 import {
+    useInventoryApiV2AnalyticsMetricsDetail,
     useInventoryApiV2AnalyticsSpendMetricList,
     useInventoryApiV2AnalyticsSpendTableList,
     useInventoryApiV2AnalyticsSpendTrendList,
@@ -96,7 +97,6 @@ export default function SingleSpendMetric({
         ...(selectedConnections.connectionGroup && {
             connectionGroup: selectedConnections.connectionGroup,
         }),
-        ...(metricId && { metricIds: [metricId] }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
         }),
@@ -110,9 +110,17 @@ export default function SingleSpendMetric({
         useInventoryApiV2AnalyticsSpendTrendList({
             ...query,
             granularity: selectedGranularity,
+            metricIds: [String(metricId)],
         })
     const { response: metricDetail, isLoading: metricDetailLoading } =
-        useInventoryApiV2AnalyticsSpendMetricList(query)
+        useInventoryApiV2AnalyticsSpendMetricList({
+            ...query,
+            metricIDs: [String(metricId)],
+        })
+    const { response: metricName, isLoading: metricLoading } =
+        useInventoryApiV2AnalyticsMetricsDetail(
+            String(id).replace('metric_', '')
+        )
 
     const tableQuery = (): {
         startTime?: number | undefined
@@ -133,7 +141,7 @@ export default function SingleSpendMetric({
             connectionId: metric
                 ? [String(id).replace('account_', '')]
                 : selectedConnections.connections,
-            dimension: 'metric',
+            dimension: 'connection',
             granularity: gra,
             metricIds: [String(metricId)],
         }
@@ -338,9 +346,7 @@ export default function SingleSpendMetric({
         <>
             <Header
                 breadCrumb={[
-                    response
-                        ? response[0]?.dimensionName
-                        : 'Single metric detail',
+                    metricName ? metricName.name : 'Single metric detail',
                 ]}
                 datePicker
                 filter
@@ -348,7 +354,9 @@ export default function SingleSpendMetric({
             <Flex className="mb-6">
                 <Flex alignItems="start" className="gap-2">
                     {getConnectorIcon(
-                        response ? response[0]?.connector : undefined
+                        metricName && metricName?.connectors
+                            ? metricName?.connectors[0]
+                            : undefined
                     )}
                     <Flex
                         flexDirection="col"
@@ -356,9 +364,9 @@ export default function SingleSpendMetric({
                         justifyContent="start"
                     >
                         <Title className="font-semibold whitespace-nowrap">
-                            {response ? response[0]?.dimensionName : ''}
+                            {metricName ? metricName.name : ''}
                         </Title>
-                        <Text>{response ? response[0]?.dimensionId : ''}</Text>
+                        <Text>{metricName ? metricName.id : ''}</Text>
                     </Flex>
                 </Flex>
             </Flex>
@@ -374,8 +382,8 @@ export default function SingleSpendMetric({
                         <SummaryCard
                             border={false}
                             title="Evaluated"
-                            // loading={detailLoading}
-                            metric={10}
+                            loading={isLoading}
+                            metric={response?.length}
                         />
                     </div>
                     <Col numColSpan={2}>
