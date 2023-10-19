@@ -286,7 +286,7 @@ export default function Spend() {
                                         accountCostResponse?.totalCost
                                     )}
                                     loading={accountCostLoading}
-                                    url="spend-details#connections"
+                                    url="spend-details#cloud-accounts"
                                     border={false}
                                 />
                             </Col>
@@ -421,7 +421,7 @@ export default function Spend() {
                                     title="Top accounts"
                                     loading={accountCostLoading}
                                     items={topAccounts(accountCostResponse)}
-                                    url="spend-details#connections"
+                                    url="spend-details#cloud-accounts"
                                     type="account"
                                     isPrice
                                 />
