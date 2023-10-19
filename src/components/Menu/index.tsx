@@ -18,6 +18,8 @@ type IProps = {
         | 'service-advisor'
         | 'settings'
         | 'stack'
+        | 'automation'
+        | 'alerts'
         | 'finder'
         | '404'
     showSidebar?: boolean
