@@ -46,7 +46,7 @@ export default function BenchmarkDetails() {
             <Header
                 filter={
                     tabs === '#findings' ||
-                    tabs === '#connections' ||
+                    tabs === '#cloud-accounts' ||
                     tabs === '#services'
                 }
             />
