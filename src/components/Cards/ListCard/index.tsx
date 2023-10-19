@@ -22,6 +22,7 @@ interface ITopListCard {
     }
     url?: string
     type: 'service' | 'account'
+    isClickable?: boolean
 }
 
 interface Item {
@@ -40,6 +41,7 @@ export default function ListCard({
     items,
     url,
     type,
+    isClickable = true,
 }: ITopListCard) {
     const navigate = useNavigate()
 
@@ -67,18 +69,26 @@ export default function ListCard({
                             {items?.data.map((item: Item) => (
                                 <ListItem
                                     key={item.name}
-                                    className="py-1 cursor-pointer"
+                                    className={`py-1 ${
+                                        isClickable ? 'cursor-pointer' : ''
+                                    }`}
                                 >
                                     <Flex
-                                        className="py-1 rounded-md hover:bg-gray-50"
+                                        className={`py-1 rounded-md ${
+                                            isClickable
+                                                ? 'hover:bg-gray-50'
+                                                : ''
+                                        }`}
                                         onClick={() =>
-                                            navigate(
-                                                `${
-                                                    type === 'account'
-                                                        ? 'account_'
-                                                        : 'metric_'
-                                                }${item.kaytuId}`
-                                            )
+                                            isClickable
+                                                ? navigate(
+                                                      `${
+                                                          type === 'account'
+                                                              ? 'account_'
+                                                              : 'metric_'
+                                                      }${item.kaytuId}`
+                                                  )
+                                                : undefined
                                         }
                                     >
                                         <Flex justifyContent="start">
