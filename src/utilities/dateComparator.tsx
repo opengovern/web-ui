@@ -27,13 +27,13 @@ export const agGridDateComparator = (
 }
 
 export const checkGranularity = (start: Dayjs, end: Dayjs) => {
-    let daily = true
+    const daily = true
     let monthly = true
     let yearly = true
 
-    if (dayjs(end).diff(dayjs(start), 'month', true) > 2) {
-        daily = false
-    }
+    // if (dayjs(end).diff(dayjs(start), 'month', true) > 2) {
+    //     daily = false
+    // }
     if (dayjs(end).diff(dayjs(start), 'month', true) < 1) {
         monthly = false
     }
