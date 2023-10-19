@@ -1,10 +1,14 @@
 import {
+    Accordion,
+    AccordionBody,
+    AccordionHeader,
     Button,
     Card,
     Flex,
     Tab,
     TabGroup,
     TabList,
+    Text,
     TextInput,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
@@ -153,7 +157,7 @@ export default function InsightList() {
         <Menu currentPage="insights">
             <Header datePicker filter />
             <Flex alignItems="start" className="gap-4">
-                {/* <Card className="sticky w-fit">
+                <Card className="sticky w-fit">
                     <TextInput
                         className="w-56 mb-6"
                         icon={MagnifyingGlassIcon}
@@ -161,7 +165,59 @@ export default function InsightList() {
                         value={searchCategory}
                         onChange={(e) => setSearchCategory(e.target.value)}
                     />
-                </Card> */}
+                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="text-gray-800">Objectives</Text>
+                        </AccordionHeader>
+                        <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                sample
+                            </Text>
+                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                sample
+                            </Text>
+                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                sample
+                            </Text>
+                        </AccordionBody>
+                    </Accordion>
+                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="text-gray-800">
+                                Cloud services
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                sample
+                            </Text>
+                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                sample
+                            </Text>
+                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                sample
+                            </Text>
+                        </AccordionBody>
+                    </Accordion>
+                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="text-gray-800">
+                                Resource types
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                sample
+                            </Text>
+                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                sample
+                            </Text>
+                            <Text className="ml-4 w-full truncate text-start py-2 cursor-pointer hover:text-kaytu-600">
+                                sample
+                            </Text>
+                        </AccordionBody>
+                    </Accordion>
+                </Card>
                 <Flex flexDirection="col" alignItems="start">
                     <TabGroup
                         index={selectedIndex}
