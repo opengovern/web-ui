@@ -44,6 +44,6 @@ export const notificationAtom = atom<INotification>({
 
 export const sideBarCollapsedAtom = atom(false)
 export const complianceOpenAtom = atom(false)
-export const insightOpenAtom = atom(false)
+export const automationOpenAtom = atom(false)
 
 export const queryAtom = atom('')

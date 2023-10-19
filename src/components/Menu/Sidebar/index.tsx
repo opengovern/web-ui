@@ -15,13 +15,18 @@ import {
     CpuChipIcon,
     DocumentChartBarIcon,
     HomeIcon,
+    LightBulbIcon,
     MagnifyingGlassIcon,
     ServerStackIcon,
     ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import { useAtom } from 'jotai'
 import { useState } from 'react'
-import { complianceOpenAtom, sideBarCollapsedAtom } from '../../../store'
+import {
+    automationOpenAtom,
+    complianceOpenAtom,
+    sideBarCollapsedAtom,
+} from '../../../store'
 import { KaytuIcon } from '../../../icons/icons'
 
 const navigation = [
@@ -73,6 +78,15 @@ const navigation = [
         icon: CpuChipIcon,
     },
     {
+        name: 'Automation',
+        page: 'rules',
+        icon: LightBulbIcon,
+        children: [
+            { name: 'Rules', page: 'rules' },
+            { name: 'Alerts', page: 'alerts' },
+        ],
+    },
+    {
         name: 'Settings',
         page: 'settings',
         icon: Cog6ToothIcon,
@@ -88,9 +102,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [collapsed, setCollapsed] = useAtom(sideBarCollapsedAtom)
     const [complianceOpen, setComplianceOpen] = useAtom(complianceOpenAtom)
     const [complianceHover, setComplianceHover] = useState(false)
+    const [automationOpen, setAutomationOpen] = useAtom(automationOpenAtom)
+    const [automationHover, setAutomationHover] = useState(false)
     const isOpen = (item: any) => {
         if (item.name === 'Governance') {
             return complianceOpen
+        }
+        if (item.name === 'Automation') {
+            return automationOpen
         }
         return false
     }
@@ -126,6 +145,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             if (item.name === 'Governance') {
                                                 setComplianceOpen(
                                                     !complianceOpen
+                                                )
+                                            }
+                                            if (item.name === 'Automation') {
+                                                setAutomationOpen(
+                                                    !automationOpen
                                                 )
                                             }
                                         }}
@@ -178,10 +202,16 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                             if (item.name === 'Governance') {
                                                 setComplianceHover(true)
                                             }
+                                            if (item.name === 'Automation') {
+                                                setAutomationHover(true)
+                                            }
                                         }}
                                         onMouseLeave={() => {
                                             if (item.name === 'Governance') {
                                                 setComplianceHover(false)
+                                            }
+                                            if (item.name === 'Automation') {
+                                                setAutomationHover(false)
                                             }
                                         }}
                                     >
@@ -220,6 +250,63 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                                             'Governance'
                                                         ) {
                                                             setComplianceHover(
+                                                                false
+                                                            )
+                                                        }
+                                                    }}
+                                                >
+                                                    <Flex
+                                                        flexDirection="col"
+                                                        className="rounded-md py-2 px-1"
+                                                        style={{
+                                                            backgroundColor:
+                                                                '#0B2447',
+                                                        }}
+                                                    >
+                                                        {item.children?.map(
+                                                            (child) => (
+                                                                <Link
+                                                                    to={`/${workspace}/${child.page}`}
+                                                                    className={`
+                                                                    relative p-2 group flex rounded-md text-sm my-0.5 ${
+                                                                        child.page ===
+                                                                        currentPage
+                                                                            ? 'bg-kaytu-500 text-gray-200 font-semibold'
+                                                                            : 'text-gray-300 hover:bg-kaytu-800'
+                                                                    }`}
+                                                                >
+                                                                    <Text className="ml-3 text-inherit w-48">
+                                                                        {
+                                                                            child.name
+                                                                        }
+                                                                    </Text>
+                                                                </Link>
+                                                            )
+                                                        )}
+                                                    </Flex>
+                                                </div>
+                                            )}
+                                        {collapsed &&
+                                            automationHover &&
+                                            item.name === 'Automation' && (
+                                                <div
+                                                    className="pl-6 absolute -top-2 left-full"
+                                                    onMouseEnter={() => {
+                                                        if (
+                                                            item.name ===
+                                                            'Automation'
+                                                        ) {
+                                                            setAutomationHover(
+                                                                true
+                                                            )
+                                                        }
+                                                    }}
+                                                    onMouseLeave={() => {
+                                                        if (
+                                                            item.name ===
+                                                            'Automation'
+                                                        ) {
+                                                            setAutomationHover(
                                                                 false
                                                             )
                                                         }
