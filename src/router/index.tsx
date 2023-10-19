@@ -1,4 +1,5 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import Infrastructure from '../pages/Infrastructure'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
@@ -185,6 +186,15 @@ const authRoutes = [
 ]
 
 export default function Router() {
+    const navigate = useNavigate()
+
+    const url = window.location.pathname.split('/')
+    useEffect(() => {
+        if (url[1] === 'undefined') {
+            navigate('/workspaces')
+        }
+    }, [url])
+
     return (
         <Routes>
             {routes.map((route) => (
