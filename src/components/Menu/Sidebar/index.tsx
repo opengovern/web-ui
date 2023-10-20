@@ -39,10 +39,6 @@ const navigation = [
         name: 'Infrastructure',
         page: 'infrastructure',
         icon: ServerStackIcon,
-        // children: [
-        //     { name: 'Summary', page: 'assets' },
-        //     { name: 'Deployment', page: 'deployment' },
-        // ],
     },
     {
         name: 'Spend',
