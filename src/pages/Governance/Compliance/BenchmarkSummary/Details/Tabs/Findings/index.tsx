@@ -104,7 +104,7 @@ export default function Findings({ id, connections }: IFinder) {
                 ? [connections.provider]
                 : [],
             connectionID: connections.connections,
-            activeOnly: false,
+            activeOnly: true,
         },
         page: {
             no: 1,
