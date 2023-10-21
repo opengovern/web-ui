@@ -18,7 +18,7 @@ type IProps = {
         | 'service-advisor'
         | 'settings'
         | 'stack'
-        | 'automation'
+        | 'rules'
         | 'alerts'
         | 'finder'
         | '404'
