@@ -24,6 +24,7 @@ import BenchmarkDetails from '../pages/Governance/Compliance/BenchmarkSummary/De
 import SpendDetails from '../pages/Spend/Details'
 import InfrastructureDetails from '../pages/Infrastructure/Details'
 import Rules from '../pages/Automation/Rules'
+import Alerts from '../pages/Automation/Alerts'
 
 const routes = [
     {
@@ -188,6 +189,11 @@ const authRoutes = [
         key: 'rules',
         path: '/:ws/rules',
         component: Rules,
+    },
+    {
+        key: 'rules',
+        path: '/:ws/alerts',
+        component: Alerts,
     },
 ]
 
