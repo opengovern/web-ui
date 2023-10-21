@@ -42,7 +42,7 @@ export default function Alerts() {
             <Flex justifyContent="end" className="mb-4">
                 <TextInput
                     icon={MagnifyingGlassIcon}
-                    placeholder="Search rules..."
+                    placeholder="Search alerts..."
                     className="w-56"
                 />
             </Flex>
