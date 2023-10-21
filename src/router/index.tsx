@@ -23,6 +23,7 @@ import InsightList from '../pages/Insights/InsightList'
 import BenchmarkDetails from '../pages/Governance/Compliance/BenchmarkSummary/Details'
 import SpendDetails from '../pages/Spend/Details'
 import InfrastructureDetails from '../pages/Infrastructure/Details'
+import Rules from '../pages/Automation/Rules'
 
 const routes = [
     {
@@ -182,6 +183,11 @@ const authRoutes = [
         key: 'finder',
         path: '/:ws/finder',
         component: Finder,
+    },
+    {
+        key: 'rules',
+        path: '/:ws/rules',
+        component: Rules,
     },
 ]
 
