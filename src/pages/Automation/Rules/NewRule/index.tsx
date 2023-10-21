@@ -2,6 +2,7 @@ import { useState } from 'react'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import Steps from '../../../../components/Steps'
 import StepOne from './StepOne'
+import StepTwo from './StepTwo'
 
 interface INewRule {
     open: boolean
@@ -24,6 +25,13 @@ export default function NewRule({ open, onClose }: INewRule) {
                             setCurrentStep(2)
                         }}
                         onBack={onClose}
+                    />
+                )
+            case 2:
+                return (
+                    <StepTwo
+                        onNext={() => setCurrentStep(3)}
+                        onBack={() => setCurrentStep(1)}
                     />
                 )
             default:

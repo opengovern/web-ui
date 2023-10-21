@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/Automation/Rules/NewRule/StepTwo/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DrawerPanel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DrawerPanel/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Automation/Rules/NewRule/StepOne/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Automation/Rules/NewRule/StepOne/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Automation/Rules/NewRule/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Automation/Rules/NewRule/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -205,7 +204,7 @@
       <workItem from="1697632920463" duration="10961000" />
       <workItem from="1697655874211" duration="2002000" />
       <workItem from="1697710222500" duration="11185000" />
-      <workItem from="1697833729010" duration="7875000" />
+      <workItem from="1697833729010" duration="8119000" />
     </task>
     <servers />
   </component>
