@@ -2,7 +2,7 @@ import { Button, Divider, Flex, Select, SelectItem, Text } from '@tremor/react'
 import { useState } from 'react'
 
 interface IStep {
-    onNext: () => void
+    onNext: (event: string, compliance: string) => void
     onBack: () => void
 }
 
@@ -99,7 +99,10 @@ export default function StepOne({ onNext, onBack }: IStep) {
                 <Button variant="secondary" onClick={onBack}>
                     Close
                 </Button>
-                <Button disabled={event.length < 1 || compliance.length < 1}>
+                <Button
+                    disabled={event.length < 1 || compliance.length < 1}
+                    onClick={() => onNext(event, compliance)}
+                >
                     Next
                 </Button>
             </Flex>

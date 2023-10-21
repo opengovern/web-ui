@@ -70,12 +70,7 @@ export default function DrawerPanel({
                                                 </Button>
                                             </Flex>
                                         </Dialog.Title>
-                                        <div
-                                            className="w-full h-full pt-16 px-6"
-                                            // style={{
-                                            //     height: 'calc(100% - 56px)',
-                                            // }}
-                                        >
+                                        <div className="w-full h-full pt-16 px-6">
                                             {children}
                                         </div>
                                     </Flex>
