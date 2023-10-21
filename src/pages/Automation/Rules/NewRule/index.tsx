@@ -4,6 +4,7 @@ import Steps from '../../../../components/Steps'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import StepThree from './StepThree'
+import StepFour from './StepFour'
 
 interface INewRule {
     open: boolean
@@ -40,6 +41,13 @@ export default function NewRule({ open, onClose }: INewRule) {
                     <StepThree
                         onNext={() => setCurrentStep(4)}
                         onBack={() => setCurrentStep(2)}
+                    />
+                )
+            case 4:
+                return (
+                    <StepFour
+                        onNext={onClose}
+                        onBack={() => setCurrentStep(3)}
                     />
                 )
             default:

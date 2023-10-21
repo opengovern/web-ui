@@ -106,7 +106,7 @@ export default function StepThree({ onNext, onBack }: IStep) {
                 <Button variant="secondary" onClick={onBack}>
                     Back
                 </Button>
-                <Button onClick={() => onNext()}>Next</Button>
+                <Button onClick={onNext}>Next</Button>
             </Flex>
         </Flex>
     )
