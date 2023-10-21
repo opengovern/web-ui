@@ -6,6 +6,7 @@ import Menu from '../../../components/Menu'
 import Header from '../../../components/Header'
 import { useAlertingApiV1RuleListList } from '../../../api/alerting.gen'
 import Table, { IColumn } from '../../../components/Table'
+import NewRule from './NewRule'
 
 const columns: IColumn<any, any>[] = [
     {
@@ -40,6 +41,8 @@ const columns: IColumn<any, any>[] = [
 
 export default function Rules() {
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const [openDrawer, setOpenDrawer] = useState(false)
+
     const { response: rules, isLoading } = useAlertingApiV1RuleListList()
 
     return (
@@ -62,9 +65,12 @@ export default function Rules() {
                         placeholder="Search rules..."
                         className="w-56"
                     />
-                    <Button icon={PlusIcon}>Create rule</Button>
+                    <Button icon={PlusIcon} onClick={() => setOpenDrawer(true)}>
+                        Create rule
+                    </Button>
                 </Flex>
             </Flex>
+            <NewRule open={openDrawer} onClose={() => setOpenDrawer(false)} />
             <Table
                 id="rules"
                 columns={columns}
