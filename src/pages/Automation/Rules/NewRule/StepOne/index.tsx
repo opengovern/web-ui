@@ -16,7 +16,7 @@ export default function StepOne({ onNext, onBack }: IStep) {
                 return (
                     <>
                         <Divider />
-                        <Text className="mb-4">
+                        <Text className="mb-6">
                             Choose your compliance and press next
                         </Text>
                         <Flex>
@@ -24,7 +24,7 @@ export default function StepOne({ onNext, onBack }: IStep) {
                             <Select
                                 value={compliance}
                                 onValueChange={setCompliance}
-                                className="w-1/2"
+                                className="w-2/3"
                             >
                                 <SelectItem value="1">1</SelectItem>
                                 <SelectItem value="2">2</SelectItem>
@@ -48,7 +48,7 @@ export default function StepOne({ onNext, onBack }: IStep) {
                 <Flex>
                     <Text className="text-gray-800">Event on</Text>
                     <Select
-                        className="w-1/2"
+                        className="w-2/3"
                         value={event}
                         onValueChange={setEvent}
                     >

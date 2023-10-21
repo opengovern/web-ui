@@ -3,6 +3,7 @@ import DrawerPanel from '../../../../components/DrawerPanel'
 import Steps from '../../../../components/Steps'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
+import StepThree from './StepThree'
 
 interface INewRule {
     open: boolean
@@ -32,6 +33,13 @@ export default function NewRule({ open, onClose }: INewRule) {
                     <StepTwo
                         onNext={() => setCurrentStep(3)}
                         onBack={() => setCurrentStep(1)}
+                    />
+                )
+            case 3:
+                return (
+                    <StepThree
+                        onNext={() => setCurrentStep(4)}
+                        onBack={() => setCurrentStep(2)}
                     />
                 )
             default:
