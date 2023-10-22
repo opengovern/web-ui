@@ -86,13 +86,14 @@ const columns: IColumn<any, any>[] = [
     {
         field: 'securityScore',
         headerName: 'Security score',
-        type: 'number',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
         flex: 0.5,
         valueFormatter: (param: ValueFormatterParams) => {
-            return param.value ? Number(param.value).toFixed(2) : ''
+            console.log(`${param.value ? Number(param.value).toFixed(2) : ''}%`)
+            return `${param.value ? Number(param.value).toFixed(2) : ''}%`
         },
     },
     {

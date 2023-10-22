@@ -102,10 +102,6 @@ export default function Table<TData = any, TValue = any>({
     }, [loading])
 
     useEffect(() => {
-        gridRef.current?.api?.setColumnDefs(columns)
-    }, [columns])
-
-    useEffect(() => {
         gridRef.current?.api?.setPinnedTopRowData(pinnedRow)
     }, [pinnedRow])
 
@@ -119,8 +115,9 @@ export default function Table<TData = any, TValue = any>({
         }
     }
 
-    const buildColumnDef = () =>
-        columns?.map((item) => {
+    const buildColumnDef = () => {
+        console.log('building col def')
+        return columns?.map((item) => {
             const v: ColDef<TData> | ColGroupDef<TData> | any = {
                 field: item.field,
                 headerName: item.headerName,
@@ -211,6 +208,12 @@ export default function Table<TData = any, TValue = any>({
             }
             return v
         })
+    }
+
+    useEffect(() => {
+        console.log('changing columns')
+        gridRef.current?.api?.setColumnDefs(buildColumnDef())
+    }, [columns])
 
     const gridOptions: GridOptions = {
         columnDefs: buildColumnDef(),

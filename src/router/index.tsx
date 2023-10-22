@@ -166,9 +166,14 @@ const authRoutes = [
         component: ServiceAdvisor,
     },
     {
-        key: 'service advisor detail',
+        key: 'service advisor summary',
         path: '/:ws/service-advisor/:id',
         component: BenchmarkSummary,
+    },
+    {
+        key: 'service advisor detail',
+        path: '/:ws/service-advisor/:id/details',
+        component: BenchmarkDetails,
     },
     {
         key: 'home',
