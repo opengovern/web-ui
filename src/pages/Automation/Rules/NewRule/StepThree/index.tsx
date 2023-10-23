@@ -8,6 +8,7 @@ import {
     TextInput,
 } from '@tremor/react'
 import { useState } from 'react'
+import { useAlertingApiV1ActionCreateCreate } from '../../../../../api/alerting.gen'
 
 interface IStep {
     onNext: () => void
@@ -16,6 +17,18 @@ interface IStep {
 
 export default function StepThree({ onNext, onBack }: IStep) {
     const [alert, setAlert] = useState('')
+    const [method, setMethod] = useState('')
+    const [url, setUrl] = useState('')
+    const [header, setHeader] = useState('')
+    const [body, setBody] = useState('')
+
+    const { response, isLoading, isExecuted, sendNow } =
+        useAlertingApiV1ActionCreateCreate(
+            { body, headers: { header }, method, url },
+            {},
+            false
+        )
+    console.log(response)
 
     const renderOption = () => {
         switch (alert) {
@@ -28,20 +41,36 @@ export default function StepThree({ onNext, onBack }: IStep) {
                             your Webhook account
                         </Text>
                         <Flex className="mb-6">
-                            <Text className="text-gray-800">Methode</Text>
-                            <TextInput className="w-2/3" />
+                            <Text className="text-gray-800">Method</Text>
+                            <TextInput
+                                value={method}
+                                onChange={(e) => setMethod(e.target.value)}
+                                className="w-2/3"
+                            />
                         </Flex>
                         <Flex className="mb-6">
                             <Text className="text-gray-800">URL</Text>
-                            <TextInput className="w-2/3" />
+                            <TextInput
+                                value={url}
+                                onChange={(e) => setUrl(e.target.value)}
+                                className="w-2/3"
+                            />
                         </Flex>
                         <Flex className="mb-6">
                             <Text className="text-gray-800">Headers</Text>
-                            <TextInput className="w-2/3" />
+                            <TextInput
+                                value={header}
+                                onChange={(e) => setHeader(e.target.value)}
+                                className="w-2/3"
+                            />
                         </Flex>
                         <Flex className="mb-6">
                             <Text className="text-gray-800">Body</Text>
-                            <TextInput className="w-2/3" />
+                            <TextInput
+                                value={body}
+                                onChange={(e) => setBody(e.target.value)}
+                                className="w-2/3"
+                            />
                         </Flex>
                     </>
                 )
@@ -106,7 +135,9 @@ export default function StepThree({ onNext, onBack }: IStep) {
                 <Button variant="secondary" onClick={onBack}>
                     Back
                 </Button>
-                <Button onClick={onNext}>Next</Button>
+                <Button loading={isExecuted && isLoading} onClick={sendNow}>
+                    Next
+                </Button>
             </Flex>
         </Flex>
     )

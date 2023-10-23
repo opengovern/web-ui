@@ -42,3 +42,32 @@ code {
 .ag-header-cell-text {
     color: #374151 !important;
 }
+
+.queryBuilder {
+    width: 100%;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.queryBuilder select {
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 2px 28px 2px 12px;
+}
+
+.queryBuilder input {
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 2px 12px;
+}
+
+.ruleGroup-addRule, .ruleGroup-addGroup {
+    border: 1px solid #6b7280;
+    padding: 3px 12px;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.rule-operators {
+    width: 60px;
+}

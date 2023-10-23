@@ -1,5 +1,8 @@
 import { Button, Divider, Flex, Select, SelectItem, Text } from '@tremor/react'
 import { useState } from 'react'
+import { useComplianceApiV1BenchmarksSummaryList } from '../../../../../api/compliance.gen'
+import { benchmarkList } from '../../../../Governance/Compliance'
+import Spinner from '../../../../../components/Spinner'
 
 interface IStep {
     onNext: (event: string, compliance: string) => void
@@ -10,25 +13,37 @@ export default function StepOne({ onNext, onBack }: IStep) {
     const [event, setEvent] = useState('')
     const [compliance, setCompliance] = useState('')
 
+    const { response: benchmarks, isLoading } =
+        useComplianceApiV1BenchmarksSummaryList()
+
     const renderOption = () => {
         switch (event) {
             case 'compliance':
-                return (
+                return isLoading ? (
+                    <>
+                        <Divider />
+                        <Spinner />
+                    </>
+                ) : (
                     <>
                         <Divider />
                         <Text className="mb-6">
-                            Choose your compliance and press next
+                            Choose your benchmark and press next
                         </Text>
                         <Flex>
-                            <Text className="text-gray-800">Compliance</Text>
+                            <Text className="text-gray-800">Benchmark</Text>
                             <Select
                                 value={compliance}
                                 onValueChange={setCompliance}
                                 className="w-2/3"
                             >
-                                <SelectItem value="1">1</SelectItem>
-                                <SelectItem value="2">2</SelectItem>
-                                <SelectItem value="3">3</SelectItem>
+                                {benchmarkList(
+                                    benchmarks?.benchmarkSummary
+                                ).connected.map((b) => (
+                                    <SelectItem key={b.id} value={b.id}>
+                                        <Text>{b.title}</Text>
+                                    </SelectItem>
+                                ))}
                             </Select>
                         </Flex>
                     </>

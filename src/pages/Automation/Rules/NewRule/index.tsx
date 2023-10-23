@@ -15,6 +15,7 @@ export default function NewRule({ open, onClose }: INewRule) {
     const [currentStep, setCurrentStep] = useState(1)
     const [event, setEvent] = useState('')
     const [compliance, setCompliance] = useState('')
+    const [condition, setCondition] = useState('')
 
     const renderStep = () => {
         switch (currentStep) {
@@ -32,7 +33,10 @@ export default function NewRule({ open, onClose }: INewRule) {
             case 2:
                 return (
                     <StepTwo
-                        onNext={() => setCurrentStep(3)}
+                        onNext={(query) => {
+                            setCondition(query)
+                            setCurrentStep(3)
+                        }}
                         onBack={() => setCurrentStep(1)}
                     />
                 )
