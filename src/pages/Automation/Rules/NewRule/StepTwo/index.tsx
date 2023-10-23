@@ -4,7 +4,7 @@ import { QueryBuilder, RuleGroupType } from 'react-querybuilder'
 import { useState } from 'react'
 
 interface IStep {
-    onNext: () => void
+    onNext: (query: string) => void
     onBack: () => void
 }
 
@@ -51,7 +51,7 @@ export default function StepTwo({ onNext, onBack }: IStep) {
                 <Button variant="secondary" onClick={onBack}>
                     Back
                 </Button>
-                <Button onClick={onNext}>Next</Button>
+                <Button onClick={() => onNext(queryCreator())}>Next</Button>
             </Flex>
         </Flex>
     )
