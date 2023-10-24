@@ -463,9 +463,7 @@
   "orientation": "landscape",
   "display_override": [
     "standalone",
-    "fullscreen",
-    "browser",
-    "window-controls-overlay"
+    "fullscreen"
   ],
   "categories": [
     "business",
