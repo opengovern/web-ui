@@ -452,7 +452,7 @@
     }
   ],
   "start_url": "/",
-  "scope": "/",
+  "scope": "https://app.kaytu.io/",
   "display": "standalone",
   "theme_color": "#0D2239",
   "background_color": "#F3F4F6",
