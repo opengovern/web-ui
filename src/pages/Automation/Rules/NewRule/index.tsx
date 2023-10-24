@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import Steps from '../../../../components/Steps'
 import StepOne from './StepOne'
 import StepTwo from './StepTwo'
 import StepThree from './StepThree'
 import StepFour from './StepFour'
+import { useAlertingApiV1RuleCreateCreate } from '../../../../api/alerting.gen'
 
 interface INewRule {
     open: boolean
@@ -16,6 +17,31 @@ export default function NewRule({ open, onClose }: INewRule) {
     const [event, setEvent] = useState('')
     const [compliance, setCompliance] = useState('')
     const [condition, setCondition] = useState('')
+    const [actionId, setActionId] = useState<string | number>('')
+    const [metadata, setMetadata] = useState<any>({})
+
+    const { response, sendNow } = useAlertingApiV1RuleCreateCreate({
+        action_id: Number(actionId),
+        event_type: {
+            benchmark_id: compliance,
+        },
+        metadata,
+        operator: {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            condition,
+        },
+    })
+
+    useEffect(() => {
+        if (response) onClose()
+    }, [response])
+
+    useEffect(() => {
+        if (metadata.name) {
+            sendNow()
+        }
+    }, [metadata])
 
     const renderStep = () => {
         switch (currentStep) {
@@ -43,14 +69,23 @@ export default function NewRule({ open, onClose }: INewRule) {
             case 3:
                 return (
                     <StepThree
-                        onNext={() => setCurrentStep(4)}
+                        onNext={(id) => {
+                            setActionId(id)
+                            setCurrentStep(4)
+                        }}
                         onBack={() => setCurrentStep(2)}
                     />
                 )
             case 4:
                 return (
                     <StepFour
-                        onNext={onClose}
+                        onNext={(name, description, label) => {
+                            setMetadata({
+                                name,
+                                description,
+                                label: [label],
+                            })
+                        }}
                         onBack={() => setCurrentStep(3)}
                     />
                 )

@@ -7,11 +7,11 @@ import {
     Text,
     TextInput,
 } from '@tremor/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAlertingApiV1ActionCreateCreate } from '../../../../../api/alerting.gen'
 
 interface IStep {
-    onNext: () => void
+    onNext: (id: number | string) => void
     onBack: () => void
 }
 
@@ -28,7 +28,12 @@ export default function StepThree({ onNext, onBack }: IStep) {
             {},
             false
         )
-    console.log(response)
+
+    useEffect(() => {
+        if (response) {
+            onNext(response)
+        }
+    }, [response])
 
     const renderOption = () => {
         switch (alert) {
