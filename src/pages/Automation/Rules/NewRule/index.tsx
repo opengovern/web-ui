@@ -37,12 +37,6 @@ export default function NewRule({ open, onClose }: INewRule) {
         if (response) onClose()
     }, [response])
 
-    useEffect(() => {
-        if (metadata.name) {
-            sendNow()
-        }
-    }, [metadata])
-
     const renderStep = () => {
         switch (currentStep) {
             case 1:
@@ -85,6 +79,7 @@ export default function NewRule({ open, onClose }: INewRule) {
                                 description,
                                 label: [label],
                             })
+                            sendNow()
                         }}
                         onBack={() => setCurrentStep(3)}
                     />
