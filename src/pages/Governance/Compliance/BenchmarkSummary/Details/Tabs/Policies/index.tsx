@@ -1,49 +1,13 @@
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { Badge, Flex } from '@tremor/react'
-import { useComplianceApiV1BenchmarksTreeDetail } from '../../../../../../../api/compliance.gen'
+import { useComplianceApiV1BenchmarksPoliciesDetail } from '../../../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
 import Table, { IColumn } from '../../../../../../../components/Table'
 import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary } from '../../../../../../../api/api'
 
 interface IPolicies {
     id: string | undefined
-}
-
-const rows = (json: any) => {
-    let arr: any = []
-    let path = ''
-    if (json) {
-        path += `${json.title}/`
-        if (json.policies !== null && json.policies !== undefined) {
-            for (let i = 0; i < json.policies.length; i += 1) {
-                let obj = {}
-                obj = {
-                    path: path + json.policies[i].title,
-                    ...json.policies[i],
-                }
-                arr.push(obj)
-            }
-        }
-        if (json.children !== null && json.children !== undefined) {
-            for (let i = 0; i < json.children.length; i += 1) {
-                const res = rows(json.children[i])
-                arr = arr.concat(res)
-            }
-        }
-    }
-    if (arr.length) {
-        return arr.sort((a: any, b: any) => {
-            if (a.path < b.path) {
-                return -1
-            }
-            if (a.path > b.path) {
-                return 1
-            }
-            return 0
-        })
-    }
-
-    return arr
 }
 
 const renderBadge = (severity: any) => {
@@ -62,20 +26,17 @@ const renderBadge = (severity: any) => {
     return ''
 }
 
-const renderStatus = (status: any) => {
+const renderStatus = (status: boolean) => {
     if (status) {
-        if (status === 'passed') {
-            return <Badge color="emerald">Passed</Badge>
-        }
-        return <Badge color="rose">Failed</Badge>
+        return <Badge color="emerald">Passed</Badge>
     }
-    return ''
+    return <Badge color="rose">Failed</Badge>
 }
 
 const columns: IColumn<any, any>[] = [
     {
         headerName: 'Title',
-        field: 'title',
+        field: 'policy.title',
         type: 'string',
         sortable: true,
         filter: true,
@@ -83,7 +44,7 @@ const columns: IColumn<any, any>[] = [
     },
     {
         headerName: 'Policy ID',
-        field: 'id',
+        field: 'policy.id',
         width: 170,
         type: 'string',
         sortable: true,
@@ -98,13 +59,15 @@ const columns: IColumn<any, any>[] = [
         sortable: true,
         filter: true,
         resizable: true,
-        cellRenderer: (params: ICellRendererParams) => (
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
+        ) => (
             <Flex
                 className="h-full w-full"
                 justifyContent="center"
                 alignItems="center"
             >
-                {renderBadge(params.data?.severity)}
+                {renderBadge(params.data?.policy?.severity)}
             </Flex>
         ),
     },
@@ -116,39 +79,44 @@ const columns: IColumn<any, any>[] = [
         sortable: true,
         filter: true,
         resizable: true,
-        cellRenderer: (params: ICellRendererParams) => (
-            <Flex
-                className="h-full w-full"
-                justifyContent="center"
-                alignItems="center"
-            >
-                {renderStatus(params.value)}
-            </Flex>
-        ),
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
+        ) => {
+            console.log('++++', params.data, params.data?.failedConnectionCount)
+            return (
+                <Flex
+                    className="h-full w-full"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    {renderStatus(params.data?.passed || false)}
+                </Flex>
+            )
+        },
     },
     {
         headerName: '# of failed resources',
         field: 'resources',
         type: 'string',
-        cellRenderer: (params: ICellRendererParams) =>
-            `${params.value.passed} out of ${
-                params.value.passed + params.value.failed
-            }`,
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
+        ) =>
+            `${params.data?.failedConnectionCount} out of ${params.data?.totalResourcesCount}`,
         resizable: true,
     },
     {
         headerName: '# of failed accounts',
         field: 'accounts',
         type: 'string',
-        cellRenderer: (params: ICellRendererParams) =>
-            `${params.value.passed} out of ${
-                params.value.passed + params.value.failed
-            }`,
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
+        ) =>
+            `${params.data?.failedConnectionCount} out of ${params.data?.totalConnectionCount}`,
         resizable: true,
     },
     {
         headerName: 'Last checked',
-        field: 'lastChecked',
+        field: 'evaluatedAt',
         type: 'date',
         sortable: true,
         filter: true,
@@ -178,7 +146,7 @@ const columns: IColumn<any, any>[] = [
 
 export default function Policies({ id }: IPolicies) {
     const { response: policies, isLoading } =
-        useComplianceApiV1BenchmarksTreeDetail(String(id))
+        useComplianceApiV1BenchmarksPoliciesDetail(String(id))
 
     return (
         <Table
@@ -187,7 +155,7 @@ export default function Policies({ id }: IPolicies) {
             id="compliance_policies"
             loading={isLoading}
             columns={columns}
-            rowData={rows(policies)}
+            rowData={policies}
         />
     )
 }

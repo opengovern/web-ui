@@ -6,7 +6,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
@@ -17,6 +16,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary,
     RequestParams,
 } from './api'
 
@@ -505,6 +505,97 @@ export const useComplianceApiV1BenchmarksSummaryList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
+interface IuseComplianceApiV1BenchmarksPoliciesDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useComplianceApiV1BenchmarksPoliciesDetail = (
+    benchmarkId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('kaytu')
+    }
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1BenchmarksPoliciesDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([benchmarkId, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.compliance
+                .apiV1BenchmarksPoliciesDetail(benchmarkId, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([benchmarkId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
 interface IuseComplianceApiV1BenchmarksSummaryDetailState {
     isLoading: boolean
     isExecuted: boolean
@@ -591,97 +682,6 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
         JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
     ) {
         setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            sendRequest()
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        sendRequest()
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1BenchmarksTreeDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    error?: any
-}
-
-export const useComplianceApiV1BenchmarksTreeDetail = (
-    benchmarkId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksTreeDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, params, autoExecute])
-    )
-
-    const sendRequest = () => {
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            api.compliance
-                .apiV1BenchmarksTreeDetail(benchmarkId, params)
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (JSON.stringify([benchmarkId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -907,13 +907,9 @@ interface IuseComplianceApiV1FindingsAccountsDetailState {
 export const useComplianceApiV1FindingsAccountsDetail = (
     benchmarkId: string,
     query?: {
-        count?: number
-
         connectionId?: string[]
 
         connectionGroup?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
     },
     params: RequestParams = {},
     autoExecute = true
@@ -1009,13 +1005,9 @@ interface IuseComplianceApiV1FindingsServicesDetailState {
 export const useComplianceApiV1FindingsServicesDetail = (
     benchmarkId: string,
     query?: {
-        count?: number
-
         connectionId?: string[]
 
         connectionGroup?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
     },
     params: RequestParams = {},
     autoExecute = true
@@ -1120,7 +1112,14 @@ export const useComplianceApiV1FindingsCountDetail = (
 
         connector?: ('' | 'AWS' | 'Azure')[]
 
-        severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+        severities?: (
+            | 'none'
+            | 'passed'
+            | 'low'
+            | 'medium'
+            | 'high'
+            | 'critical'
+        )[]
     },
     params: RequestParams = {},
     autoExecute = true
@@ -1229,7 +1228,14 @@ export const useComplianceApiV1FindingsTopDetail = (
 
         connector?: ('' | 'AWS' | 'Azure')[]
 
-        severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+        severities?: (
+            | 'none'
+            | 'passed'
+            | 'low'
+            | 'medium'
+            | 'high'
+            | 'critical'
+        )[]
     },
     params: RequestParams = {},
     autoExecute = true

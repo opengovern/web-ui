@@ -66,22 +66,34 @@ export default function BenchmarkDetails() {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <Policies id={id} />
+                        {selectedTab === 0 && <Policies id={id} />}
                     </TabPanel>
                     <TabPanel>
-                        <CloudAccounts
-                            id={id}
-                            connections={selectedConnections}
-                        />
+                        {selectedTab === 1 && (
+                            <CloudAccounts
+                                id={id}
+                                connections={selectedConnections}
+                            />
+                        )}
                     </TabPanel>
                     <TabPanel>
-                        <Services id={id} connections={selectedConnections} />
+                        {selectedTab === 2 && (
+                            <Services
+                                id={id}
+                                connections={selectedConnections}
+                            />
+                        )}
                     </TabPanel>
                     <TabPanel>
-                        <Assignments id={id} />
+                        {selectedTab === 3 && <Assignments id={id} />}
                     </TabPanel>
                     <TabPanel>
-                        <Findings id={id} connections={selectedConnections} />
+                        {selectedTab === 4 && (
+                            <Findings
+                                id={id}
+                                connections={selectedConnections}
+                            />
+                        )}
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

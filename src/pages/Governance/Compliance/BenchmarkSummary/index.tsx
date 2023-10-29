@@ -46,7 +46,7 @@ const generateLineData = (
     if (input) {
         for (let i = 0; i < input.length; i += 1) {
             label.push(dateDisplay((input[i].timestamp || 0) * 1000))
-            data.push(((input[i].securityScore || 0) * 100).toFixed(2))
+            data.push((input[i].securityScore || 0).toFixed(2))
         }
     }
     return { data, label }

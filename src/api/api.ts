@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -525,26 +524,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation
     remediation?: string
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree {
-    children?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree[]
-    /**
-     * Benchmark ID
-     * @example "azure_cis_v140"
-     */
-    id?: string
-    policies?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree[]
-    /**
-     * Benchmark title
-     * @example "CIS v1.4.0"
-     */
-    title?: string
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint {
-    /**
-     * Result    types.ComplianceResultSummary `json:"result"`
-     * Checks    types.SeverityResult          `json:"checks"`
-     */
     securityScore?: number
     /**
      * Time
@@ -868,34 +848,41 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoin
     value?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree {
-    accounts?: TypesComplianceResultShortSummary
-    /**
-     * Policy ID
-     * @example "azure_cis_v140_7_5"
-     */
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy {
+    /** @example "Azure" */
+    connector?: SourceType
+    /** @example "2020-01-01T00:00:00Z" */
+    createdAt?: string
+    /** @example "Enable multi-factor authentication for all user credentials who have write access to Azure resources. These include roles like 'Service Co-Administrators', 'Subscription Owners', 'Contributors'." */
+    description?: string
+    /** @example "benchmarks/azure_cis_v140_1_1.md" */
+    documentURI?: string
+    /** @example true */
+    enabled?: boolean
+    /** @example "azure_cis_v140_1_1" */
     id?: string
-    /**
-     * Last checked
-     * @example 0
-     */
-    lastChecked?: number
-    resources?: TypesComplianceResultShortSummary
-    /**
-     * Severity
-     * @example "low"
-     */
+    /** @example true */
+    managed?: boolean
+    /** @example true */
+    manualVerification?: boolean
+    /** @example "azure_ad_manual_control" */
+    queryID?: string
+    /** @example "low" */
     severity?: TypesFindingSeverity
-    /**
-     * Status
-     * @example "passed"
-     */
-    status?: TypesPolicyStatus
-    /**
-     * Policy title
-     * @example "7.5 Ensure that the latest OS Patches for all Virtual Machines are applied"
-     */
+    tags?: Record<string, string[]>
+    /** @example "1.1 Ensure that multi-factor authentication status is enabled for all privileged users" */
     title?: string
+    /** @example "2020-01-01T00:00:00Z" */
+    updatedAt?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary {
+    failedConnectionCount?: number
+    failedResourcesCount?: number
+    passed?: boolean
+    policy?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy
+    totalConnectionCount?: number
+    totalResourcesCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
@@ -1898,11 +1885,6 @@ export enum TypesComplianceResult {
     ComplianceResultERROR = 'error',
 }
 
-export interface TypesComplianceResultShortSummary {
-    failed?: number
-    passed?: number
-}
-
 export interface TypesComplianceResultSummary {
     /** @example 1 */
     alarmCount?: number
@@ -1918,16 +1900,11 @@ export interface TypesComplianceResultSummary {
 
 export enum TypesFindingSeverity {
     FindingSeverityNone = 'none',
+    FindingSeverityPassed = 'passed',
     FindingSeverityLow = 'low',
     FindingSeverityMedium = 'medium',
     FindingSeverityHigh = 'high',
     FindingSeverityCritical = 'critical',
-}
-
-export enum TypesPolicyStatus {
-    PolicyStatusPASSED = 'passed',
-    PolicyStatusFAILED = 'failed',
-    PolicyStatusUNKNOWN = 'unknown',
 }
 
 export interface TypesSeverityResult {
@@ -2782,6 +2759,31 @@ export class Api<
             }),
 
         /**
+         * No description
+         *
+         * @tags compliance
+         * @name ApiV1BenchmarksPoliciesDetail
+         * @summary Get benchmark policies
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/policies
+         * @secure
+         */
+        apiV1BenchmarksPoliciesDetail: (
+            benchmarkId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary[],
+                any
+            >({
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving a summary of a benchmark and its associated checks and results.
          *
          * @tags compliance
@@ -2813,31 +2815,6 @@ export class Api<
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/summary`,
                 method: 'GET',
                 query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving the benchmark tree, including all of its child benchmarks.
-         *
-         * @tags compliance
-         * @name ApiV1BenchmarksTreeDetail
-         * @summary Get benchmark tree
-         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/tree
-         * @secure
-         */
-        apiV1BenchmarksTreeDetail: (
-            benchmarkId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
-                any
-            >({
-                path: `/compliance/api/v1/benchmarks/${benchmarkId}/tree`,
-                method: 'GET',
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -2922,14 +2899,10 @@ export class Api<
         apiV1FindingsAccountsDetail: (
             benchmarkId: string,
             query?: {
-                /** Number of outputs */
-                count?: number
                 /** Connection IDs to filter by */
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
-                /** Connector type to filter by */
-                connector?: ('' | 'AWS' | 'Azure')[]
             },
             params: RequestParams = {}
         ) =>
@@ -2958,14 +2931,10 @@ export class Api<
         apiV1FindingsServicesDetail: (
             benchmarkId: string,
             query?: {
-                /** Number of outputs */
-                count?: number
                 /** Connection IDs to filter by */
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
-                /** Connector type to filter by */
-                connector?: ('' | 'AWS' | 'Azure')[]
             },
             params: RequestParams = {}
         ) =>
@@ -3004,7 +2973,14 @@ export class Api<
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Severities to filter by */
-                severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+                severities?: (
+                    | 'none'
+                    | 'passed'
+                    | 'low'
+                    | 'medium'
+                    | 'high'
+                    | 'critical'
+                )[]
             },
             params: RequestParams = {}
         ) =>
@@ -3044,7 +3020,14 @@ export class Api<
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Severities to filter by */
-                severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+                severities?: (
+                    | 'none'
+                    | 'passed'
+                    | 'low'
+                    | 'medium'
+                    | 'high'
+                    | 'critical'
+                )[]
             },
             params: RequestParams = {}
         ) =>

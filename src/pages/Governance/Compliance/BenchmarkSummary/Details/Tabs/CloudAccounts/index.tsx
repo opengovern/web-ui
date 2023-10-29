@@ -25,6 +25,7 @@ const rowGenerator = (data: any) => {
             temp.push({ ...holder[i], ...holder[i].SeveritiesCount })
         }
     }
+    console.log(temp)
     return temp
 }
 
@@ -48,7 +49,7 @@ const columns: IColumn<any, any>[] = [
         flex: 1,
     },
     {
-        field: 'critical',
+        field: 'severitiesCount.critical',
         headerName: 'Critical',
         type: 'number',
         sortable: true,
@@ -57,7 +58,7 @@ const columns: IColumn<any, any>[] = [
         flex: 0.5,
     },
     {
-        field: 'high',
+        field: 'severitiesCount.high',
         headerName: 'High',
         type: 'number',
         sortable: true,
@@ -66,7 +67,7 @@ const columns: IColumn<any, any>[] = [
         flex: 0.5,
     },
     {
-        field: 'medium',
+        field: 'severitiesCount.medium',
         headerName: 'Medium',
         type: 'number',
         sortable: true,
@@ -75,7 +76,7 @@ const columns: IColumn<any, any>[] = [
         flex: 0.5,
     },
     {
-        field: 'low',
+        field: 'severitiesCount.low',
         headerName: 'Low',
         type: 'number',
         sortable: true,
@@ -92,7 +93,6 @@ const columns: IColumn<any, any>[] = [
         resizable: true,
         flex: 0.5,
         valueFormatter: (param: ValueFormatterParams) => {
-            console.log(`${param.value ? Number(param.value).toFixed(2) : ''}%`)
             return `${param.value ? Number(param.value).toFixed(2) : ''}%`
         },
     },
@@ -117,9 +117,6 @@ export default function CloudAccounts({ id, connections }: IFinder) {
 
     const { response: findings, isLoading } =
         useComplianceApiV1FindingsAccountsDetail(id || '', {
-            connector: connections.provider.length
-                ? [connections.provider]
-                : [],
             connectionId: connections.connections,
             connectionGroup: connections.connectionGroup,
         })
