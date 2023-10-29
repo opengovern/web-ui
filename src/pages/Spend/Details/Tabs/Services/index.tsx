@@ -210,14 +210,13 @@ export default function Services({
     }
 
     const query = (): {
-        startTime?: number | undefined
-        endTime?: number | undefined
-        granularity?: 'daily' | 'monthly' | 'yearly' | undefined
-        dimension?: 'metric' | 'connection' | undefined
-        connectionId?: string[]
-        connector?: 'AWS' | 'Azure' | ''
-        metricIds?: string[]
-        connectionGroup?: string[]
+        connector: ('' | 'AWS' | 'Azure')[]
+        granularity: 'daily' | 'monthly'
+        connectionId: string[]
+        startTime: number
+        endTime: number
+        dimension: 'metric'
+        connectionGroup: string[]
     } => {
         let gra: 'monthly' | 'daily' = 'daily'
         if (selectedGranularity === 'monthly') {
@@ -229,7 +228,7 @@ export default function Services({
             endTime: activeTimeRange.end.unix(),
             dimension: 'metric',
             granularity: gra,
-            connector: connections.provider,
+            connector: [connections.provider],
             connectionId: connections.connections,
             connectionGroup: connections.connectionGroup,
         }

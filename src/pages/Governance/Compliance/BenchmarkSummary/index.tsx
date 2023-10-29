@@ -46,18 +46,7 @@ const generateLineData = (
     if (input) {
         for (let i = 0; i < input.length; i += 1) {
             label.push(dateDisplay((input[i].timestamp || 0) * 1000))
-            data.push(
-                (
-                    ((input[i].checks?.passedCount || 0) /
-                        ((input[i].checks?.criticalCount || 0) +
-                            (input[i].checks?.highCount || 0) +
-                            (input[i].checks?.mediumCount || 0) +
-                            (input[i].checks?.lowCount || 0) +
-                            (input[i].checks?.passedCount || 0) +
-                            (input[i].checks?.unknownCount || 0))) *
-                        100 || 0
-                ).toFixed(2)
-            )
+            data.push(((input[i].securityScore || 0) * 100).toFixed(2))
         }
     }
     return { data, label }
@@ -89,6 +78,7 @@ export default function BenchmarkSummary() {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
+
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
         if (selectedIndex === 1) setSelectedChart('bar')

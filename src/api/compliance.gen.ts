@@ -8,9 +8,11 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
@@ -897,7 +899,7 @@ export const useComplianceApiV1FindingsCreate = (
 interface IuseComplianceApiV1FindingsAccountsDetailState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
@@ -910,8 +912,6 @@ export const useComplianceApiV1FindingsAccountsDetail = (
         connectionId?: string[]
 
         connectionGroup?: string[]
-
-        resourceCollection?: string[]
 
         connector?: ('' | 'AWS' | 'Azure')[]
     },
@@ -1001,7 +1001,7 @@ export const useComplianceApiV1FindingsAccountsDetail = (
 interface IuseComplianceApiV1FindingsServicesDetailState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
@@ -1014,8 +1014,6 @@ export const useComplianceApiV1FindingsServicesDetail = (
         connectionId?: string[]
 
         connectionGroup?: string[]
-
-        resourceCollection?: string[]
 
         connector?: ('' | 'AWS' | 'Azure')[]
     },

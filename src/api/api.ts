@@ -42,6 +42,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq {
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest {
     action_id?: number
     event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
+    metadata?: GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata
     operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
     scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
 }
@@ -51,14 +52,28 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiEventType {
     insight_id?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorInformation {
-    operator_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType
-    value?: number
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse {
+    action_id?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs {
+    atlassian_api_token?: string
+    atlassian_domain?: string
+    email?: string
+    issue_type_id?: string
+    project_id?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata {
+    description?: string
+    label?: string[]
+    name?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct {
     condition?: GithubComKaytuIoKaytuEnginePkgAlertingApiConditionStruct
-    operator_info?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorInformation
+    operator_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType
+    value?: number
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorType {
@@ -74,6 +89,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiRule {
     action_id?: number
     event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
     id?: number
+    metadata?: GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata
     operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
     scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
 }
@@ -82,6 +98,19 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiScope {
     connection_group?: string
     connection_id?: string
     connector?: SourceType
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs {
+    channel_name?: string
+    slack_url?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers {
+    event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
+    response_status?: number
+    scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
+    triggered_at?: string
+    value?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest {
@@ -94,6 +123,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest {
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest {
     action_id?: number
     event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
+    metadata?: GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata
     operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
     scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
 }
@@ -377,6 +407,19 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
     userName?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary {
+    accountId?: string
+    accountName?: string
+    lastCheckTime?: string
+    securityScore?: number
+    severitiesCount?: {
+        critical?: number
+        high?: number
+        low?: number
+        medium?: number
+    }
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedConnection {
     /**
      * Connection ID
@@ -498,8 +541,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTree {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint {
-    checks?: TypesSeverityResult
-    result?: TypesComplianceResultSummary
+    /**
+     * Result    types.ComplianceResultSummary `json:"result"`
+     * Checks    types.SeverityResult          `json:"checks"`
+     */
+    securityScore?: number
     /**
      * Time
      * @example 1686346668
@@ -507,9 +553,101 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapo
     timestamp?: number
 }
 
-export enum GithubComKaytuIoKaytuEnginePkgComplianceApiDirectionType {
-    DirectionAscending = 'asc',
-    DirectionDescending = 'desc',
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
+    /**
+     * Finding ID
+     * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1-azure_cis_v140_7_5"
+     */
+    ID?: string
+    /**
+     * Benchmark ID
+     * @example "azure_cis_v140"
+     */
+    benchmarkID?: string
+    /**
+     * Compliance job ID
+     * @example 1
+     */
+    complianceJobID?: number
+    /**
+     * Connection ID
+     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
+     */
+    connectionID?: string
+    /**
+     * Cloud provider
+     * @example "Azure"
+     */
+    connector?: SourceType
+    /**
+     * Timestamp of the policy evaluation
+     * @example 1589395200
+     */
+    evaluatedAt?: number
+    /**
+     * Evaluator name
+     * @example "steampipe-v0.5"
+     */
+    evaluator?: string
+    parentBenchmarks?: string[]
+    /**
+     * Policy ID
+     * @example "azure_cis_v140_7_5"
+     */
+    policyID?: string
+    policyTitle?: string
+    /**
+     * Connection ID
+     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
+     */
+    providerConnectionID?: string
+    /**
+     * Connection ID
+     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
+     */
+    providerConnectionName?: string
+    /**
+     * Reason for the policy evaluation result
+     * @example "The VM is not using managed disks"
+     */
+    reason?: string
+    /** Resource collection */
+    resourceCollection?: string
+    /**
+     * Resource ID
+     * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"
+     */
+    resourceID?: string
+    /**
+     * Resource location
+     * @example "eastus"
+     */
+    resourceLocation?: string
+    /**
+     * Resource name
+     * @example "vm-1"
+     */
+    resourceName?: string
+    /**
+     * Resource type
+     * @example "Microsoft.Compute/virtualMachines"
+     */
+    resourceType?: string
+    /**
+     * Compliance result
+     * @example "alarm"
+     */
+    result?: TypesComplianceResult
+    /**
+     * Compliance severity
+     * @example "low"
+     */
+    severity?: TypesFindingSeverity
+    /**
+     * Whether the policy is active or not
+     * @example true
+     */
+    stateActive?: boolean
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
@@ -561,33 +699,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
     status?: TypesComplianceResult[]
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingSortItem {
-    /**
-     * Sort direction
-     * @example "asc"
-     */
-    direction?: 'asc' | 'desc'
-    /**
-     * Field to sort by
-     * @example "status"
-     */
-    field?:
-        | 'resourceID'
-        | 'resourceName'
-        | 'resourceType'
-        | 'serviceName'
-        | 'category'
-        | 'resourceLocation'
-        | 'status'
-        | 'describedAt'
-        | 'evaluatedAt'
-        | 'sourceID'
-        | 'connectionProviderID'
-        | 'connectionProviderName'
-        | 'sourceType'
-        | 'benchmarkID'
-        | 'policyID'
-        | 'policySeverity'
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse {
+    accounts?: GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse {
@@ -598,14 +711,16 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummary
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
     filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
-    page: GithubComKaytuIoKaytuEnginePkgComplianceApiPage
-    sorts?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingSortItem[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse {
-    findings?: TypesFinding[]
+    findings?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
     /** @example 100 */
     totalCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse {
+    services?: GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSummary[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse {
@@ -753,19 +868,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoin
     value?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPage {
-    /**
-     * Number of pages
-     * @example 5
-     */
-    no?: number
-    /**
-     * Number of items per page
-     * @example 100
-     */
-    size?: number
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicyTree {
     accounts?: TypesComplianceResultShortSummary
     /**
@@ -820,23 +922,16 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     updatedAt?: string
 }
 
-export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortFieldType {
-    FieldResourceID = 'resourceID',
-    FieldResourceName = 'resourceName',
-    FieldResourceType = 'resourceType',
-    FieldServiceName = 'serviceName',
-    FieldCategory = 'category',
-    FieldResourceLocation = 'resourceLocation',
-    FieldStatus = 'status',
-    FieldDescribedAt = 'describedAt',
-    FieldEvaluatedAt = 'evaluatedAt',
-    FieldSourceID = 'sourceID',
-    FieldConnectionProviderID = 'connectionProviderID',
-    FieldConnectionProviderName = 'connectionProviderName',
-    FieldSourceType = 'sourceType',
-    FieldBenchmarkID = 'benchmarkID',
-    FieldPolicyID = 'policyID',
-    FieldPolicySeverity = 'policySeverity',
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSummary {
+    securityScore?: number
+    serviceLabel?: string
+    serviceName?: string
+    severitiesCount?: {
+        critical?: number
+        high?: number
+        low?: number
+        medium?: number
+    }
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
@@ -855,10 +950,6 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings {
      * @example ["azure_cis_v140"]
      */
     benchmarkIds?: string[]
-    /** Pages count to retrieve */
-    page: GithubComKaytuIoKaytuEnginePkgComplianceApiPage
-    /** Sorts to apply */
-    sorts?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingSortItem[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
@@ -1078,12 +1169,6 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompo
     total_count?: number
     /** @min 0 */
     total_value_count?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint {
-    costTrend?: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
-    /** @example "EC2-Service-Example" */
-    serviceName?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiMetric {
@@ -1831,101 +1916,6 @@ export interface TypesComplianceResultSummary {
     skipCount?: number
 }
 
-export interface TypesFinding {
-    /**
-     * Finding ID
-     * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1-azure_cis_v140_7_5"
-     */
-    ID?: string
-    /**
-     * Benchmark ID
-     * @example "azure_cis_v140"
-     */
-    benchmarkID?: string
-    /**
-     * Compliance job ID
-     * @example 1
-     */
-    complianceJobID?: number
-    /**
-     * Connection ID
-     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
-     */
-    connectionID?: string
-    /**
-     * Cloud provider
-     * @example "Azure"
-     */
-    connector?: SourceType
-    /**
-     * Timestamp of the policy description
-     * @example 1589395200
-     */
-    describedAt?: number
-    /**
-     * Timestamp of the policy evaluation
-     * @example 1589395200
-     */
-    evaluatedAt?: number
-    /**
-     * Evaluator name
-     * @example "steampipe-v0.5"
-     */
-    evaluator?: string
-    /**
-     * Policy ID
-     * @example "azure_cis_v140_7_5"
-     */
-    policyID?: string
-    /**
-     * Reason for the policy evaluation result
-     * @example "The VM is not using managed disks"
-     */
-    reason?: string
-    /** Resource collection */
-    resourceCollection?: string
-    /**
-     * Resource ID
-     * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"
-     */
-    resourceID?: string
-    /**
-     * Resource location
-     * @example "eastus"
-     */
-    resourceLocation?: string
-    /**
-     * Resource name
-     * @example "vm-1"
-     */
-    resourceName?: string
-    /**
-     * Resource type
-     * @example "Microsoft.Compute/virtualMachines"
-     */
-    resourceType?: string
-    /**
-     * Compliance result
-     * @example "alarm"
-     */
-    result?: TypesComplianceResult
-    /**
-     * Schedule job ID
-     * @example 1
-     */
-    scheduleJobID?: number
-    /**
-     * Compliance severity
-     * @example "low"
-     */
-    severity?: TypesFindingSeverity
-    /**
-     * Whether the policy is active or not
-     * @example true
-     */
-    stateActive?: boolean
-}
-
 export enum TypesFindingSeverity {
     FindingSeverityNone = 'none',
     FindingSeverityLow = 'low',
@@ -2175,7 +2165,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
             params: RequestParams = {}
         ) =>
-            this.request<string, any>({
+            this.request<number, any>({
                 path: `/alerting/api/v1/action/create`,
                 method: 'POST',
                 body: request,
@@ -2205,6 +2195,31 @@ export class Api<
             }),
 
         /**
+         * @description Create action with jira url and header and body
+         *
+         * @tags alerting
+         * @name ApiV1ActionJiraCreate
+         * @summary Create Jira Action
+         * @request POST:/alerting/api/v1/action/jira
+         * @secure
+         */
+        apiV1ActionJiraCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
+                any
+            >({
+                path: `/alerting/api/v1/action/jira`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
          * @description returns list of all actions
          *
          * @tags alerting
@@ -2222,6 +2237,31 @@ export class Api<
                 method: 'GET',
                 secure: true,
                 format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Create action with slack url and body
+         *
+         * @tags alerting
+         * @name ApiV1ActionSlackCreate
+         * @summary Create Slack Action
+         * @request POST:/alerting/api/v1/action/slack
+         * @secure
+         */
+        apiV1ActionSlackCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
+                any
+            >({
+                path: `/alerting/api/v1/action/slack`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
                 ...params,
             }),
 
@@ -2261,7 +2301,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
             params: RequestParams = {}
         ) =>
-            this.request<string, any>({
+            this.request<number, any>({
                 path: `/alerting/api/v1/rule/create`,
                 method: 'POST',
                 body: request,
@@ -2340,6 +2380,27 @@ export class Api<
         apiV1RuleTriggerDetail: (ruleId: string, params: RequestParams = {}) =>
             this.request<string, any>({
                 path: `/alerting/api/v1/rule/${ruleId}/trigger`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description returns list of all the triggers
+         *
+         * @tags alerting
+         * @name ApiV1TriggerListList
+         * @summary List triggers
+         * @request GET:/alerting/api/v1/trigger/list
+         * @secure
+         */
+        apiV1TriggerListList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers[],
+                any
+            >({
+                path: `/alerting/api/v1/trigger/list`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -2850,11 +2911,11 @@ export class Api<
             }),
 
         /**
-         * @description Retrieving the number of findings field count by policies.
+         * @description Retrieving list of accounts with their security score and severities findings count
          *
          * @tags compliance
          * @name ApiV1FindingsAccountsDetail
-         * @summary Get findings field count by policies
+         * @summary Get accounts findings summaries
          * @request GET:/compliance/api/v1/findings/{benchmarkId}/accounts
          * @secure
          */
@@ -2867,15 +2928,13 @@ export class Api<
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
             },
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
                 any
             >({
                 path: `/compliance/api/v1/findings/${benchmarkId}/accounts`,
@@ -2888,11 +2947,11 @@ export class Api<
             }),
 
         /**
-         * @description Retrieving the number of findings field count by policies.
+         * @description Retrieving list of services with their security score and severities findings count
          *
          * @tags compliance
          * @name ApiV1FindingsServicesDetail
-         * @summary Get findings field count by policies
+         * @summary Get services findings summary
          * @request GET:/compliance/api/v1/findings/{benchmarkId}/services
          * @secure
          */
@@ -2905,15 +2964,13 @@ export class Api<
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
             },
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
                 any
             >({
                 path: `/compliance/api/v1/findings/${benchmarkId}/services`,
@@ -3298,6 +3355,51 @@ export class Api<
                 ...params,
             }),
     }
+    costEstimator = {
+        /**
+         * @description Get AWS cost for each resource
+         *
+         * @tags cost-estimator
+         * @name ApiV1CostAwsList
+         * @summary Get AWS cost
+         * @request GET:/cost_estimator/api/v1/cost/aws
+         * @secure
+         */
+        apiV1CostAwsList: (
+            resourceId: string,
+            resourceType: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<number, any>({
+                path: `/cost_estimator/api/v1/cost/aws`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Get Azure cost for each resource
+         *
+         * @tags cost-estimator
+         * @name ApiV1CostAzureList
+         * @summary Get Azure cost
+         * @request GET:/cost_estimator/api/v1/cost/azure
+         * @secure
+         */
+        apiV1CostAzureList: (
+            resourceId: string,
+            resourceType: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<number, any>({
+                path: `/cost_estimator/api/v1/cost/azure`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+    }
     inventory = {
         /**
          * @description Retrieving list of smart queries by specified filters
@@ -3641,47 +3743,6 @@ export class Api<
             }),
 
         /**
-         * @description Retrieving a list of costs over the course of the specified time frame based on the given input filters. If startTime and endTime are empty, the API returns the last month trend.
-         *
-         * @tags analytics
-         * @name ApiV2AnalyticsSpendMetricsTrendList
-         * @summary Get Cost Trend
-         * @request GET:/inventory/api/v2/analytics/spend/metrics/trend
-         * @secure
-         */
-        apiV2AnalyticsSpendMetricsTrendList: (
-            query?: {
-                /** Connector type to filter by */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
-                connectionId?: string[]
-                /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string[]
-                /** Metrics IDs */
-                metricIds?: string[]
-                /** timestamp for start in epoch seconds */
-                startTime?: number
-                /** timestamp for end in epoch seconds */
-                endTime?: number
-                /** Granularity of the table, default is daily */
-                granularity?: 'monthly' | 'daily' | 'yearly'
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiListServicesCostTrendDatapoint[],
-                any
-            >({
-                path: `/inventory/api/v2/analytics/spend/metrics/trend`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
          * @description Returns spend table with respect to the dimension and granularity
          *
          * @tags analytics
@@ -3705,7 +3766,7 @@ export class Api<
                 /** Connection group to filter by - mutually exclusive with connectionId */
                 connectionGroup?: string[]
                 /** Connector */
-                connector?: string
+                connector?: string[]
                 /** Metrics IDs */
                 metricIds?: string[]
             },

@@ -19,23 +19,36 @@ export default function NewRule({ open, onClose }: INewRule) {
     const [condition, setCondition] = useState('')
     const [actionId, setActionId] = useState<string | number>('')
     const [metadata, setMetadata] = useState<any>({})
+    const [scope, setScope] = useState<any>({})
 
-    const { response, sendNow } = useAlertingApiV1RuleCreateCreate({
-        action_id: Number(actionId),
-        event_type: {
-            benchmark_id: compliance,
+    const { response, sendNow } = useAlertingApiV1RuleCreateCreate(
+        {
+            action_id: Number(actionId),
+            event_type: {
+                benchmark_id: compliance,
+            },
+            metadata,
+            operator: {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                condition,
+            },
+            scope,
         },
-        metadata,
-        operator: {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            condition,
-        },
-    })
+        {},
+        false
+    )
 
+    console.log(response)
     useEffect(() => {
         if (response) onClose()
     }, [response])
+
+    useEffect(() => {
+        if (metadata.name) {
+            sendNow()
+        }
+    }, [metadata])
 
     const renderStep = () => {
         switch (currentStep) {
@@ -53,8 +66,9 @@ export default function NewRule({ open, onClose }: INewRule) {
             case 2:
                 return (
                     <StepTwo
-                        onNext={(query) => {
+                        onNext={(query, s) => {
                             setCondition(query)
+                            setScope(s)
                             setCurrentStep(3)
                         }}
                         onBack={() => setCurrentStep(1)}
@@ -79,7 +93,6 @@ export default function NewRule({ open, onClose }: INewRule) {
                                 description,
                                 label: [label],
                             })
-                            sendNow()
                         }}
                         onBack={() => setCurrentStep(3)}
                     />
