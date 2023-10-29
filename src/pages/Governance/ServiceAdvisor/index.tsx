@@ -70,8 +70,8 @@ export default function ServiceAdvisor() {
                         {benchmarkList(benchmarks?.benchmarkSummary)
                             .notConnected?.sort(
                                 (a, b) =>
-                                    (b?.checks?.passedCount || 0) -
-                                    (a?.checks?.passedCount || 0)
+                                    (b?.securityScore || 0) -
+                                    (a?.securityScore || 0)
                             )
                             .filter((bm) =>
                                 selectedProvider.length

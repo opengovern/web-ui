@@ -132,7 +132,7 @@ export default function CloudAccounts({
         granularity?: 'daily' | 'monthly' | 'yearly' | undefined
         dimension?: 'metric' | 'connection' | undefined
         connectionId?: string[]
-        connector?: 'AWS' | 'Azure' | ''
+        connector: ('' | 'AWS' | 'Azure')[]
         metricIds?: string[]
         connectionGroup?: string[]
     } => {
@@ -146,7 +146,7 @@ export default function CloudAccounts({
             endTime: activeTimeRange.end.unix(),
             dimension: 'connection',
             granularity: gra,
-            connector: connections.provider,
+            connector: [connections.provider],
             connectionId: connections.connections,
             connectionGroup: connections.connectionGroup,
         }
