@@ -73,6 +73,12 @@ export default function StepTwo({ onNext, onBack }: IStep) {
         temp = temp.replaceAll('combinator', 'condition_type')
         temp = temp.replaceAll('operator', 'operator_type')
         temp = temp.replaceAll('rules', 'operator')
+
+        console.log('+++', temp)
+        const re = /value":\s*"([-\d.]+)"/i
+        temp = temp.replace(re, 'value": $1')
+        console.log('+++', temp)
+
         return JSON.parse(temp)
     }
 
