@@ -39,7 +39,6 @@ export default function NewRule({ open, onClose }: INewRule) {
         false
     )
 
-    console.log(response)
     useEffect(() => {
         if (response) onClose()
     }, [response])

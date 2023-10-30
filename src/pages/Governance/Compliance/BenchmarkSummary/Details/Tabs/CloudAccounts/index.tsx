@@ -25,7 +25,6 @@ const rowGenerator = (data: any) => {
             temp.push({ ...holder[i], ...holder[i].SeveritiesCount })
         }
     }
-    console.log(temp)
     return temp
 }
 

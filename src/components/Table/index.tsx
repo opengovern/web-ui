@@ -116,7 +116,6 @@ export default function Table<TData = any, TValue = any>({
     }
 
     const buildColumnDef = () => {
-        console.log('building col def')
         return columns?.map((item) => {
             const v: ColDef<TData> | ColGroupDef<TData> | any = {
                 field: item.field,
@@ -135,6 +134,7 @@ export default function Table<TData = any, TValue = any>({
                 suppressMenu: item.suppressMenu || false,
                 floatingFilter: item.floatingFilter || false,
                 pivot: item.pivot || false,
+                valueFormatter: item.valueFormatter,
             }
 
             if (
@@ -211,7 +211,6 @@ export default function Table<TData = any, TValue = any>({
     }
 
     useEffect(() => {
-        console.log('changing columns')
         gridRef.current?.api?.setColumnDefs(buildColumnDef())
     }, [columns])
 

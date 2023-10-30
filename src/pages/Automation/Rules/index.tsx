@@ -2,14 +2,17 @@ import { Button, Flex, Tab, TabGroup, TabList, TextInput } from '@tremor/react'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { ValueFormatterParams } from 'ag-grid-community'
 import Menu from '../../../components/Menu'
 import Header from '../../../components/Header'
 import { useAlertingApiV1RuleListList } from '../../../api/alerting.gen'
 import Table, { IColumn } from '../../../components/Table'
 import NewRule from './NewRule'
+import { GithubComKaytuIoKaytuEnginePkgAlertingApiRule } from '../../../api/api'
 
 const columns: IColumn<any, any>[] = [
     {
+        field: 'metadata.name',
         headerName: 'Rule name',
         sortable: true,
         filter: true,
@@ -17,6 +20,7 @@ const columns: IColumn<any, any>[] = [
         type: 'string',
     },
     {
+        field: 'metadata.description',
         headerName: 'Description',
         sortable: true,
         filter: true,
@@ -24,18 +28,21 @@ const columns: IColumn<any, any>[] = [
         type: 'string',
     },
     {
-        headerName: 'Condition',
+        headerName: 'Trigger',
         sortable: true,
         filter: true,
-        enableRowGroup: true,
         type: 'string',
-    },
-    {
-        headerName: 'Status',
-        sortable: true,
-        filter: true,
-        enableRowGroup: true,
-        type: 'string',
+        valueFormatter: (
+            param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgAlertingApiRule>
+        ) => {
+            if (param.data?.event_type?.benchmark_id !== undefined) {
+                return `Benchmark: ${param.data?.event_type?.benchmark_id}`
+            }
+            if (param.data?.event_type?.insight_id !== undefined) {
+                return `Insight: ${param.data?.event_type?.insight_id}`
+            }
+            return ''
+        },
     },
 ]
 
@@ -74,7 +81,7 @@ export default function Rules() {
             <Table
                 id="rules"
                 columns={columns}
-                rowData={[]}
+                rowData={rules}
                 loading={isLoading}
             />
         </Menu>

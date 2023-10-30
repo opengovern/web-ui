@@ -82,7 +82,6 @@ const columns: IColumn<any, any>[] = [
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
         ) => {
-            console.log('++++', params.data, params.data?.failedConnectionCount)
             return (
                 <Flex
                     className="h-full w-full"
