@@ -1,4 +1,12 @@
-import { Button, Flex, Tab, TabGroup, TabList, TextInput } from '@tremor/react'
+import {
+    Badge,
+    Button,
+    Flex,
+    Tab,
+    TabGroup,
+    TabList,
+    TextInput,
+} from '@tremor/react'
 import { useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
@@ -26,6 +34,21 @@ const columns: IColumn<any, any>[] = [
         filter: true,
         enableRowGroup: true,
         type: 'string',
+    },
+    {
+        headerName: 'Status',
+        sortable: true,
+        filter: true,
+        enableRowGroup: true,
+        type: 'string',
+        cellRenderer: (
+            param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgAlertingApiRule>
+        ) => {
+            if (param.data?.trigger_status === 'Not Active') {
+                return <Badge color="rose">Not Active</Badge>
+            }
+            return <Badge color="emerald">Active</Badge>
+        },
     },
     {
         headerName: 'Trigger',

@@ -48,7 +48,9 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
             key={benchmark?.id}
             className="cursor-pointer"
             onClick={() =>
-                navigate(`${benchmark?.id}${total ? '' : '#assignments'}`)
+                navigate(
+                    `${benchmark?.id}${total ? '' : '/details#assignments'}`
+                )
             }
         >
             <Title className="w-full truncate mb-1 font-semibold">
