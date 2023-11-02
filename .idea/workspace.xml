@@ -6,14 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/alerting.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/alerting.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/compliance.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/compliance.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/inventory.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/inventory.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Spend/Details/Tabs/CloudAccounts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Spend/Details/Tabs/CloudAccounts/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Spend/Details/Tabs/Services/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Spend/Details/Tabs/Services/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Automation/Alerts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Automation/Alerts/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +209,10 @@
       <workItem from="1698145585536" duration="4545000" />
       <workItem from="1698415477802" duration="611000" />
       <workItem from="1698583046341" duration="2960000" />
-      <workItem from="1698586018045" duration="444000" />
+      <workItem from="1698586018045" duration="1520000" />
+      <workItem from="1698666252741" duration="133000" />
+      <workItem from="1698748020575" duration="945000" />
+      <workItem from="1698932012756" duration="1503000" />
     </task>
     <servers />
   </component>
@@ -243,7 +239,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/api/api.ts</url>
-          <line>732</line>
+          <line>715</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
