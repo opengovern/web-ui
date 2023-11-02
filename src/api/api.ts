@@ -28,7 +28,9 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiConditionStruct {
 
 export enum GithubComKaytuIoKaytuEnginePkgAlertingApiConditionType {
     ConditionAnd = 'AND',
+    ConditionAndLowerCase = 'and',
     ConditionOr = 'OR',
+    ConditionOrLowerCase = 'or',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq {
@@ -91,6 +93,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiRule {
     metadata?: GithubComKaytuIoKaytuEnginePkgAlertingApiMetadata
     operator?: GithubComKaytuIoKaytuEnginePkgAlertingApiOperatorStruct
     scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
+    trigger_status?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiScope {
@@ -877,6 +880,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary {
+    evaluatedAt?: number
     failedConnectionCount?: number
     failedResourcesCount?: number
     passed?: boolean
