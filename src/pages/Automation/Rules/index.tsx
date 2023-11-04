@@ -44,7 +44,7 @@ const columns: IColumn<any, any>[] = [
         type: 'string',
     },
     {
-        headerName: 'Status',
+        headerName: 'Condition state',
         sortable: true,
         filter: true,
         enableRowGroup: true,
@@ -53,9 +53,9 @@ const columns: IColumn<any, any>[] = [
             param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgAlertingApiRule>
         ) => {
             if (param.data?.trigger_status === 'Not Active') {
-                return <Badge color="rose">Not Active</Badge>
+                return <Badge color="rose">Not satisfied</Badge>
             }
-            return <Badge color="emerald">Active</Badge>
+            return <Badge color="emerald">Satisfied</Badge>
         },
     },
     {
@@ -116,8 +116,8 @@ export default function Rules() {
                 >
                     <TabList variant="solid" className="px-0">
                         <Tab className="px-4 py-2">All</Tab>
-                        <Tab className="px-4 py-2">Active</Tab>
-                        <Tab className="px-4 py-2">Not active</Tab>
+                        <Tab className="px-4 py-2">Satisfied</Tab>
+                        <Tab className="px-4 py-2">Not satisfied</Tab>
                     </TabList>
                 </TabGroup>
                 <Flex className="w-fit gap-4">
@@ -162,12 +162,12 @@ export default function Rules() {
                             </Text>
                         </ListItem>
                         <ListItem className="py-5">
-                            <Text>State</Text>
+                            <Text>Condition state</Text>
                             <Text className="text-gray-900 w-3/5 whitespace-pre-wrap text-end">
                                 {selectedRow?.trigger_status === 'Active' ? (
-                                    <Badge color="emerald">Active</Badge>
+                                    <Badge color="emerald">Satisfied</Badge>
                                 ) : (
-                                    <Badge color="rose">Not Active</Badge>
+                                    <Badge color="rose">Not satisfied</Badge>
                                 )}
                             </Text>
                         </ListItem>
