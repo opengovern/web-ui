@@ -103,9 +103,7 @@ export default function NewRule({ open, onClose }: INewRule) {
 
     return (
         <DrawerPanel title="New rule" open={open} onClose={onClose}>
-            <div className="mb-6">
-                <Steps steps={4} currentStep={currentStep} />
-            </div>
+            <Steps steps={4} currentStep={currentStep} />
             {renderStep()}
         </DrawerPanel>
     )
