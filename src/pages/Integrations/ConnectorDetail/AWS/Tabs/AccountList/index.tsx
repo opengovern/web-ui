@@ -181,6 +181,29 @@ const generateRows = (data: any) => {
     return rows
 }
 
+const options: GridOptions = {
+    enableGroupEdit: true,
+    columnTypes: {
+        dimension: {
+            enableRowGroup: true,
+            enablePivot: true,
+        },
+    },
+    // groupDefaultExpanded: -1,
+    rowGroupPanelShow: 'always',
+    groupAllowUnbalanced: true,
+    autoGroupColumnDef: {
+        headerName: 'Account Type',
+        flex: 2,
+        sortable: true,
+        filter: true,
+        resizable: true,
+        // cellRendererParams: {
+        //     suppressCount: true,
+        // },
+    },
+}
+
 export default function AccountList({
     accounts,
     organizations,
@@ -191,29 +214,6 @@ export default function AccountList({
     >(undefined)
     const [openInfo, setOpenInfo] = useState(false)
     const [open, setOpen] = useState(false)
-
-    const options: GridOptions = {
-        enableGroupEdit: true,
-        columnTypes: {
-            dimension: {
-                enableRowGroup: true,
-                enablePivot: true,
-            },
-        },
-        groupDefaultExpanded: -1,
-        rowGroupPanelShow: 'always',
-        groupAllowUnbalanced: true,
-        autoGroupColumnDef: {
-            headerName: 'Account Type',
-            flex: 2,
-            sortable: true,
-            filter: true,
-            resizable: true,
-            // cellRendererParams: {
-            //     suppressCount: true,
-            // },
-        },
-    }
 
     return (
         <>
