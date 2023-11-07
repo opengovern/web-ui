@@ -101,7 +101,7 @@ export default function ListCard({
                                                           String(item.connector)
                                                       ))}
                                             <Flex className="h-9">
-                                                <Text className="w-4/5 truncate">
+                                                <Text className="w-4/5 truncate blur-md">
                                                     {item.name}
                                                 </Text>
                                             </Flex>
