@@ -13,7 +13,7 @@ export default function StepFour({ onNext, onBack }: IStep) {
     const [isClicked, setIsClicked] = useState(false)
 
     return (
-        <Flex flexDirection="col" className="h-full max-h-screen">
+        <Flex flexDirection="col" style={{ height: 'calc(100% - 46px)' }}>
             <Flex flexDirection="col" alignItems="start">
                 <Flex justifyContent="start" className="gap-1 mb-6">
                     <Text>4/4.</Text>

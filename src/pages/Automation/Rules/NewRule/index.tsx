@@ -6,13 +6,15 @@ import StepTwo from './StepTwo'
 import StepThree from './StepThree'
 import StepFour from './StepFour'
 import { useAlertingApiV1RuleCreateCreate } from '../../../../api/alerting.gen'
+import { GithubComKaytuIoKaytuEnginePkgAlertingApiRule } from '../../../../api/api'
 
 interface INewRule {
     open: boolean
     onClose: () => void
+    selectedRule?: GithubComKaytuIoKaytuEnginePkgAlertingApiRule | undefined
 }
 
-export default function NewRule({ open, onClose }: INewRule) {
+export default function NewRule({ open, onClose, selectedRule }: INewRule) {
     const [currentStep, setCurrentStep] = useState(1)
     const [event, setEvent] = useState('')
     const [compliance, setCompliance] = useState('')
@@ -103,9 +105,7 @@ export default function NewRule({ open, onClose }: INewRule) {
 
     return (
         <DrawerPanel title="New rule" open={open} onClose={onClose}>
-            <div className="mb-6">
-                <Steps steps={4} currentStep={currentStep} />
-            </div>
+            <Steps steps={4} currentStep={currentStep} />
             {renderStep()}
         </DrawerPanel>
     )

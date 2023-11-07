@@ -87,7 +87,7 @@ const stepFix = (step: number) => {
 
 export default function Steps({ steps, currentStep }: ISteps) {
     return (
-        <nav className="w-full">
+        <nav className="w-full mb-6">
             <ol className="flex items-center justify-between">
                 {stepFix(steps).map((step: any, stepIdx: number) => (
                     <li

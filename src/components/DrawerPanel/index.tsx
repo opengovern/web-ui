@@ -47,7 +47,7 @@ export default function DrawerPanel({
                                     <Flex
                                         flexDirection="col"
                                         justifyContent="start"
-                                        className="h-full w-full bg-white dark:bg-gray-900 pt-12 pb-20 shadow-xl"
+                                        className="h-full w-full bg-white dark:bg-gray-900 py-8 shadow-xl"
                                     >
                                         <Dialog.Title className="absolute top-0 z-10 w-[560px] bg-white dark:bg-gray-900 px-4 text-gray-900 border-b pt-5 pb-4">
                                             <Flex>
