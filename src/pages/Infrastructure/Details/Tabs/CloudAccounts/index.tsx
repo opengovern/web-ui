@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { Dayjs } from 'dayjs'
+import { ValueFormatterParams } from 'ag-grid-community'
 import Table, { IColumn } from '../../../../../components/Table'
 import { IFilter, notificationAtom } from '../../../../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
@@ -30,6 +31,9 @@ const columns: IColumn<any, any>[] = [
         type: 'string',
         sortable: true,
         filter: true,
+        cellRenderer: (param: ValueFormatterParams) => (
+            <span className="blur-md">hahaha, you looser</span>
+        ),
     },
     {
         field: 'providerConnectionID',
@@ -38,6 +42,9 @@ const columns: IColumn<any, any>[] = [
         resizable: true,
         sortable: true,
         filter: true,
+        cellRenderer: (param: ValueFormatterParams) => (
+            <span className="blur-md">hahaha, you looser</span>
+        ),
     },
     {
         field: 'lifecycleState',

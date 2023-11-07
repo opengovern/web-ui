@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
 import dayjs, { Dayjs } from 'dayjs'
 import { useEffect, useState } from 'react'
-import { GridOptions } from 'ag-grid-community'
+import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import 'ag-grid-enterprise'
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid'
 import { highlight, languages } from 'prismjs'
@@ -72,6 +72,9 @@ const getTable = (header: any, details: any) => {
                 resizable: true,
                 filter: true,
                 flex: 1,
+                cellRenderer: (param: ValueFormatterParams) => (
+                    <span className="blur-md">hahaha, you looser</span>
+                ),
             })
         }
     }
