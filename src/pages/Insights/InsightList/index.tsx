@@ -11,7 +11,7 @@ import {
     Text,
     TextInput,
 } from '@tremor/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import {
@@ -21,9 +21,11 @@ import {
 } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../../../components/Layout'
-import { useComplianceApiV1InsightList } from '../../../api/compliance.gen'
+import {
+    useComplianceApiV1InsightList,
+    useComplianceApiV1MetadataTagInsightList,
+} from '../../../api/compliance.gen'
 import { filterAtom, notificationAtom, timeAtom } from '../../../store'
-import Spinner from '../../../components/Spinner'
 import Header from '../../../components/Header'
 import Table, { IColumn } from '../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
@@ -82,37 +84,17 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
+const options: GridOptions = {
+    // eslint-disable-next-line consistent-return
+    isRowSelectable: (param) =>
+        param.data?.totalResultValue || param.data?.oldTotalResultValue,
+}
+
 export default function InsightList() {
     const navigate = useNavigate()
     const [searchCategory, setSearchCategory] = useState('')
+    const [selectedPersona, setSelectedPersona] = useState('')
     const [selectedCategory, setSelectedCategory] = useState('')
-    const [selectedIndex, setSelectedIndex] = useState(0)
-
-    useEffect(() => {
-        switch (selectedIndex) {
-            case 0:
-                setSelectedCategory('')
-                break
-            case 1:
-                setSelectedCategory('DevOps')
-                break
-            case 2:
-                setSelectedCategory('Executive')
-                break
-            case 3:
-                setSelectedCategory('FinOps')
-                break
-            case 4:
-                setSelectedCategory('Product')
-                break
-            case 5:
-                setSelectedCategory('Security')
-                break
-            default:
-                setSelectedCategory('')
-                break
-        }
-    }, [selectedIndex])
 
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
@@ -142,15 +124,11 @@ export default function InsightList() {
         sendNow: insightSendNow,
         error: insightError,
     } = useComplianceApiV1InsightList(query)
+    console.log(insightList)
+    const { response: categories } = useComplianceApiV1MetadataTagInsightList()
 
     const navigateToInsightsDetails = (id: number | undefined) => {
         navigate(`${id}`)
-    }
-
-    const options: GridOptions = {
-        // eslint-disable-next-line consistent-return
-        isRowSelectable: (param) =>
-            param.data?.totalResultValue || param.data?.oldTotalResultValue,
     }
 
     return (
@@ -165,6 +143,45 @@ export default function InsightList() {
                         value={searchCategory}
                         onChange={(e) => setSearchCategory(e.target.value)}
                     />
+                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                        <AccordionHeader className="pl-0 pr-0.5 py-2 w-full bg-transparent">
+                            <Text className="text-gray-800">Categories</Text>
+                        </AccordionHeader>
+                        <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
+                            <Button
+                                variant="light"
+                                onClick={() => {
+                                    setSelectedCategory('')
+                                }}
+                                className={`flex justify-start min-w-full truncate p-2 rounded-md ${
+                                    selectedCategory === ''
+                                        ? 'bg-kaytu-100'
+                                        : ''
+                                }`}
+                            >
+                                <Text className="w-full truncate hover:text-kaytu-600">
+                                    All
+                                </Text>
+                            </Button>
+                            {categories?.category?.map((cat) => (
+                                <Button
+                                    variant="light"
+                                    onClick={() => {
+                                        setSelectedCategory(cat)
+                                    }}
+                                    className={`flex justify-start min-w-full truncate p-2 rounded-md ${
+                                        selectedCategory === cat
+                                            ? 'bg-kaytu-100'
+                                            : ''
+                                    }`}
+                                >
+                                    <Text className="truncate hover:text-kaytu-600">
+                                        {cat}
+                                    </Text>
+                                </Button>
+                            ))}
+                        </AccordionBody>
+                    </Accordion>
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="text-gray-800">Objectives</Text>
@@ -219,32 +236,57 @@ export default function InsightList() {
                     </Accordion>
                 </Card>
                 <Flex flexDirection="col" alignItems="start">
-                    <TabGroup
-                        index={selectedIndex}
-                        onIndexChange={setSelectedIndex}
-                    >
-                        <TabList variant="solid" className="px-0 mb-4">
-                            <Tab className="px-4 py-2">All</Tab>
-                            <Tab className="px-4 py-2">DevOps</Tab>
-                            <Tab className="px-4 py-2">Executive</Tab>
-                            <Tab className="px-4 py-2">FinOps</Tab>
-                            <Tab className="px-4 py-2">Product</Tab>
-                            <Tab className="px-4 py-2">Security</Tab>
+                    <TabGroup className="mb-4">
+                        <TabList variant="solid" className="px-0">
+                            <Tab
+                                className="px-4 py-2"
+                                onClick={() => setSelectedPersona('')}
+                            >
+                                All
+                            </Tab>
+                            {/* eslint-disable-next-line react/jsx-no-useless-fragment */}
+                            <>
+                                {categories?.persona?.map((cat) => (
+                                    <Tab
+                                        className="px-4 py-2"
+                                        onClick={() => setSelectedPersona(cat)}
+                                    >
+                                        {cat}
+                                    </Tab>
+                                ))}
+                            </>
                         </TabList>
                     </TabGroup>
                     {insightError === undefined ? (
                         <Table
                             id="insight_list"
                             columns={columns}
-                            rowData={insightList?.filter((i) => {
-                                if (selectedConnections.provider.length) {
-                                    return (
-                                        i.connector ===
-                                        selectedConnections.provider
-                                    )
-                                }
-                                return i
-                            })}
+                            rowData={insightList
+                                ?.filter((i) => {
+                                    if (selectedConnections.provider.length) {
+                                        return (
+                                            i.connector ===
+                                            selectedConnections.provider
+                                        )
+                                    }
+                                    return i
+                                })
+                                ?.filter((i) => {
+                                    if (selectedCategory.length) {
+                                        return i.tags?.category?.includes(
+                                            selectedCategory
+                                        )
+                                    }
+                                    return i
+                                })
+                                ?.filter((i) => {
+                                    if (selectedPersona.length) {
+                                        return i.tags?.persona?.includes(
+                                            selectedPersona
+                                        )
+                                    }
+                                    return i
+                                })}
                             options={options}
                             onRowClicked={(event: RowClickedEvent) => {
                                 if (
