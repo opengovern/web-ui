@@ -5,6 +5,7 @@ import 'ag-grid-enterprise'
 import Table, { IColumn } from '../../../../../../../components/Table'
 import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary } from '../../../../../../../api/api'
+import { numberDisplay } from '../../../../../../../utilities/numericDisplay'
 
 interface IPolicies {
     id: string | undefined
@@ -100,7 +101,10 @@ const columns: IColumn<any, any>[] = [
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
         ) =>
-            `${params.data?.failedConnectionCount} out of ${params.data?.totalResourcesCount}`,
+            `${numberDisplay(
+                params.data?.failedResourcesCount,
+                0
+            )} out of ${numberDisplay(params.data?.totalResourcesCount, 0)}`,
         resizable: true,
     },
     {
@@ -110,7 +114,10 @@ const columns: IColumn<any, any>[] = [
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
         ) =>
-            `${params.data?.failedConnectionCount} out of ${params.data?.totalConnectionCount}`,
+            `${numberDisplay(
+                params.data?.failedConnectionCount,
+                0
+            )} out of ${numberDisplay(params.data?.totalConnectionCount, 0)}`,
         resizable: true,
     },
     {
