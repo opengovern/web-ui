@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import { CisIcon, HipaaIcon } from '../../../icons/icons'
 import { getConnectorIcon } from '../ConnectorCard'
+import { numberDisplay } from '../../../utilities/numericDisplay'
 
 interface IComplianceCard {
     benchmark:
@@ -96,7 +97,10 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                 ]}
             />
             <Flex className={`mb-6 ${total ? '' : 'hidden'}`}>
-                <Text className="text-xs">{`${failed} of ${total} checks failed`}</Text>
+                <Text className="text-xs">{`${numberDisplay(
+                    failed,
+                    0
+                )} of ${numberDisplay(total, 0)} checks failed`}</Text>
                 {!!(failed / total) && (
                     <Text className="text-xs font-semibold">{`${Math.round(
                         (failed / total) * 100
