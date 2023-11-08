@@ -3,9 +3,11 @@ import {
     GridOptions,
     ICellRendererParams,
     RowClickedEvent,
+    ValueFormatterParams,
 } from 'ag-grid-community'
 import { Badge, Button } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/outline'
+import { useAtomValue } from 'jotai'
 import NewAzureSubscription from './NewSubscription'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
@@ -14,6 +16,7 @@ import {
 import SubscriptionInfo from './SubscriptionInfo'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
+import { isDemoAtom } from '../../../../../../store'
 
 interface ISubscriptions {
     subscriptions: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -53,115 +56,128 @@ function getBadgeText(status: string) {
     }
 }
 
-const columns: IColumn<any, any>[] = [
-    {
-        field: 'providerConnectionName',
-        headerName: 'Name',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'providerConnectionID',
-        headerName: 'ID',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'credentialName',
-        headerName: 'Parent SPN Name',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'credentialType',
-        headerName: 'Subscription Type',
-        type: 'string',
-        hide: true,
-        sortable: true,
-        filter: true,
-        resizable: true,
-        valueFormatter: (param) => snakeCaseToLabel(param.value),
-        flex: 1,
-    },
-    {
-        field: 'credentialID',
-        headerName: 'Parent SPN ID',
-        type: 'string',
-        hide: true,
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'lifecycleState',
-        headerName: 'State',
-        type: 'string',
-        rowGroup: true,
-        enableRowGroup: true,
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Badge color={getBadgeColor(params.value)}>
-                    {getBadgeText(params.value)}
-                </Badge>
-            )
+const columns = (isDemo: boolean) => {
+    const temp: IColumn<any, any>[] = [
+        {
+            field: 'providerConnectionName',
+            headerName: 'Name',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
         },
-        hide: true,
-    },
-    {
-        field: 'healthState',
-        type: 'string',
-        headerName: 'Health state',
-        enableRowGroup: true,
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'id',
-        headerName: 'Kaytu Connection ID',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'lastInventory',
-        headerName: 'Last Inventory',
-        type: 'date',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'onboardDate',
-        headerName: 'Onboard Date',
-        type: 'date',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-]
+        {
+            field: 'providerConnectionID',
+            headerName: 'ID',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: 'credentialName',
+            headerName: 'Parent SPN Name',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: 'credentialType',
+            headerName: 'Subscription Type',
+            type: 'string',
+            hide: true,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            valueFormatter: (param: ValueFormatterParams) =>
+                snakeCaseToLabel(param.value),
+            flex: 1,
+        },
+        {
+            field: 'credentialID',
+            headerName: 'Parent SPN ID',
+            type: 'string',
+            hide: true,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'lifecycleState',
+            headerName: 'State',
+            type: 'string',
+            rowGroup: true,
+            enableRowGroup: true,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (params: ICellRendererParams) => {
+                return (
+                    <Badge color={getBadgeColor(params.value)}>
+                        {getBadgeText(params.value)}
+                    </Badge>
+                )
+            },
+            hide: true,
+        },
+        {
+            field: 'healthState',
+            type: 'string',
+            headerName: 'Health state',
+            enableRowGroup: true,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'id',
+            headerName: 'Kaytu Connection ID',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+        },
+        {
+            field: 'lastInventory',
+            headerName: 'Last Inventory',
+            type: 'date',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+        },
+        {
+            field: 'onboardDate',
+            headerName: 'Onboard Date',
+            type: 'date',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+        },
+    ]
+    return temp
+}
 
 const generateRows = (data: any) => {
     const rows = []
@@ -179,6 +195,25 @@ const generateRows = (data: any) => {
     return rows
 }
 
+const options: GridOptions = {
+    enableGroupEdit: true,
+    columnTypes: {
+        dimension: {
+            enableRowGroup: true,
+            enablePivot: true,
+        },
+    },
+    rowGroupPanelShow: 'always',
+    groupAllowUnbalanced: true,
+    autoGroupColumnDef: {
+        headerName: 'State',
+        flex: 2,
+        sortable: true,
+        filter: true,
+        resizable: true,
+    },
+}
+
 export default function Subscriptions({
     subscriptions,
     spns,
@@ -189,29 +224,7 @@ export default function Subscriptions({
     const [priData, setPriData] = useState<
         GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
     >(undefined)
-
-    const options: GridOptions = {
-        enableGroupEdit: true,
-        columnTypes: {
-            dimension: {
-                enableRowGroup: true,
-                enablePivot: true,
-            },
-        },
-        groupDefaultExpanded: -1,
-        rowGroupPanelShow: 'always',
-        groupAllowUnbalanced: true,
-        autoGroupColumnDef: {
-            headerName: 'State',
-            flex: 2,
-            sortable: true,
-            filter: true,
-            resizable: true,
-            // cellRendererParams: {
-            //     suppressCount: true,
-            // },
-        },
-    }
+    const isDemo = useAtomValue(isDemoAtom)
 
     return (
         <>
@@ -220,12 +233,10 @@ export default function Subscriptions({
                 title="Subscriptions"
                 id="azure_subscription_list"
                 rowData={generateRows(subscriptions)}
-                columns={columns}
+                columns={columns(isDemo)}
                 options={options}
                 loading={loading}
-                onRowClicked={(
-                    event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
-                ) => {
+                onRowClicked={(event: RowClickedEvent) => {
                     setPriData(event.data)
                     setOpenInfo(true)
                 }}
@@ -238,6 +249,7 @@ export default function Subscriptions({
                 data={priData}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
+                isDemo={isDemo}
             />
             <NewAzureSubscription
                 spns={spns}

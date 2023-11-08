@@ -19,7 +19,7 @@ import {
     useInventoryApiV2AnalyticsMetricsDetail,
     useInventoryApiV2AnalyticsTrendList,
 } from '../../../../api/inventory.gen'
-import { filterAtom } from '../../../../store'
+import { filterAtom, isDemoAtom } from '../../../../store'
 import Header from '../../../../components/Header'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
@@ -42,6 +42,7 @@ interface ISingle {
 export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
     const selectedConnections = useAtomValue(filterAtom)
     const { id, metric } = useParams()
+    const isDemo = useAtomValue(isDemoAtom)
 
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
@@ -219,12 +220,18 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
                     id="metric_table"
                     loading={metricDetailLoading || isLoading}
                     columns={
-                        getTable(queryResponse?.headers, queryResponse?.result)
-                            .columns
+                        getTable(
+                            queryResponse?.headers,
+                            queryResponse?.result,
+                            isDemo
+                        ).columns
                     }
                     rowData={
-                        getTable(queryResponse?.headers, queryResponse?.result)
-                            .rows
+                        getTable(
+                            queryResponse?.headers,
+                            queryResponse?.result,
+                            isDemo
+                        ).rows
                     }
                     downloadable
                 />

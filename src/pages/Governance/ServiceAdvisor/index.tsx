@@ -9,7 +9,7 @@ import {
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
@@ -45,7 +45,7 @@ export default function ServiceAdvisor() {
     } = useComplianceApiV1BenchmarksSummaryList()
 
     return (
-        <Menu currentPage="service-advisor">
+        <Layout currentPage="service-advisor">
             <Header />
             {/* eslint-disable-next-line no-nested-ternary */}
             {isLoading ? (
@@ -92,6 +92,6 @@ export default function ServiceAdvisor() {
             ) : (
                 <Button onClick={() => sendNow()}>Retry</Button>
             )}
-        </Menu>
+        </Layout>
     )
 }

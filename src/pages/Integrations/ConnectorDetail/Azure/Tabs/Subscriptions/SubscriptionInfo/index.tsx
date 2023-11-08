@@ -26,6 +26,7 @@ interface ISubscriptionInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
     open: boolean
     onClose: () => void
+    isDemo: boolean
 }
 
 function getBadgeText(status: string) {
@@ -49,6 +50,7 @@ export default function SubscriptionInfo({
     data,
     open,
     onClose,
+    isDemo,
 }: ISubscriptionInfo) {
     const {
         isExecuted: isDeleteExecuted,
@@ -111,14 +113,22 @@ export default function SubscriptionInfo({
                     <Divider />
                     <Flex>
                         <Text>Name</Text>
-                        <Text className="text-black">
+                        <Text
+                            className={
+                                isDemo ? 'blur-md text-black' : 'text-black'
+                            }
+                        >
                             {data?.providerConnectionName}
                         </Text>
                     </Flex>
                     <Divider />
                     <Flex>
                         <Text>ID</Text>
-                        <Text className="text-black">
+                        <Text
+                            className={
+                                isDemo ? 'blur-md text-black' : 'text-black'
+                            }
+                        >
                             {data?.providerConnectionID}
                         </Text>
                     </Flex>
@@ -187,7 +197,13 @@ export default function SubscriptionInfo({
                             >
                                 <Flex>
                                     <Text>Subscription Type</Text>
-                                    <Text className="text-black">
+                                    <Text
+                                        className={
+                                            isDemo
+                                                ? 'blur-md text-black'
+                                                : 'text-black'
+                                        }
+                                    >
                                         {snakeCaseToLabel(
                                             data?.credentialType || ''
                                         )}
@@ -196,14 +212,26 @@ export default function SubscriptionInfo({
                                 <Divider />
                                 <Flex>
                                     <Text>Last inventory</Text>
-                                    <Text className="text-black">
+                                    <Text
+                                        className={
+                                            isDemo
+                                                ? 'blur-md text-black'
+                                                : 'text-black'
+                                        }
+                                    >
                                         {dateTimeDisplay(data?.lastInventory)}
                                     </Text>
                                 </Flex>
                                 <Divider />
                                 <Flex>
                                     <Text>Last health check</Text>
-                                    <Text className="text-black">
+                                    <Text
+                                        className={
+                                            isDemo
+                                                ? 'blur-md text-black'
+                                                : 'text-black'
+                                        }
+                                    >
                                         {dateTimeDisplay(
                                             data?.lastHealthCheckTime
                                         )}
@@ -212,7 +240,13 @@ export default function SubscriptionInfo({
                                 <Divider />
                                 <Flex>
                                     <Text>Onboard date</Text>
-                                    <Text className="text-black">
+                                    <Text
+                                        className={
+                                            isDemo
+                                                ? 'blur-md text-black'
+                                                : 'text-black'
+                                        }
+                                    >
                                         {dateTimeDisplay(data?.onboardDate)}
                                     </Text>
                                 </Flex>
@@ -231,6 +265,7 @@ export default function SubscriptionInfo({
                                                 ).map(([name, value]) => (
                                                     <Tag
                                                         text={`${name}: ${value}`}
+                                                        isDemo={isDemo}
                                                     />
                                                 ))}
                                             </Flex>

@@ -19,7 +19,7 @@ import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import { useParams } from 'react-router-dom'
-import { filterAtom } from '../../../../store'
+import { filterAtom, isDemoAtom } from '../../../../store'
 import {
     useInventoryApiV2AnalyticsMetricsDetail,
     useInventoryApiV2AnalyticsSpendMetricList,
@@ -78,6 +78,7 @@ export default function SingleSpendMetric({
                 : 'daily'
         )
     }, [activeTimeRange])
+    const isDemo = useAtomValue(isDemoAtom)
 
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
 
@@ -232,6 +233,12 @@ export default function SingleSpendMetric({
                     resizable: true,
                     pivot: false,
                     pinned: true,
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    cellRenderer: (param: ValueFormatterParams) => (
+                        <span className={isDemo ? 'blur-md' : ''}>
+                            {param.value}
+                        </span>
+                    ),
                 },
                 {
                     field: 'category',

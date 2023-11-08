@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button, Flex, Grid } from '@tremor/react'
-import Menu from '../../components/Menu'
+import Layout from '../../components/Layout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import CreateWorkspace from './CreateWorkspace'
@@ -16,7 +16,7 @@ export default function Workspaces() {
     } = useWorkspaceApiV1WorkspacesList()
 
     return (
-        <Menu currentPage="infrastructure" showSidebar={false}>
+        <Layout currentPage="infrastructure" showSidebar={false}>
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
@@ -52,6 +52,6 @@ export default function Workspaces() {
                     </div>
                 </Flex>
             )}
-        </Menu>
+        </Layout>
     )
 }

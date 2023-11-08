@@ -21,9 +21,15 @@ interface IOrgInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
     open: boolean
     onClose: () => void
+    isDemo: boolean
 }
 
-export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
+export default function OrganizationInfo({
+    data,
+    open,
+    onClose,
+    isDemo,
+}: IOrgInfo) {
     const { response: credential } = useOnboardApiV1CredentialDetail(
         data?.id || '',
         {},
@@ -70,19 +76,27 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                 <Divider />
                 <Flex>
                     <Text>Name</Text>
-                    <Text className="text-black">{data?.name}</Text>
+                    <Text
+                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                    >
+                        {data?.name}
+                    </Text>
                 </Flex>
                 <Divider />
                 <Flex>
                     <Text>Email</Text>
-                    <Text className="text-black">
+                    <Text
+                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                    >
                         {data?.metadata?.organization_master_account_email}
                     </Text>
                 </Flex>
                 <Divider />
                 <Flex>
                     <Text>Onboard date</Text>
-                    <Text className="text-black">
+                    <Text
+                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                    >
                         {dateDisplay(data?.onboardDate)}
                     </Text>
                 </Flex>
@@ -102,14 +116,18 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                 <Divider />
                 <Flex>
                     <Text>Last health check</Text>
-                    <Text className="text-black">
+                    <Text
+                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                    >
                         {dateDisplay(credential?.lastHealthCheckTime)}
                     </Text>
                 </Flex>
                 <Divider />
                 <Flex>
                     <Text>Number of accounts</Text>
-                    <Text className="text-black">
+                    <Text
+                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                    >
                         {data?.total_connections}
                     </Text>
                 </Flex>
@@ -117,14 +135,18 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                 <Divider />
                 <Flex>
                     <Text>AWS account name</Text>
-                    <Text className="text-black">
+                    <Text
+                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                    >
                         {data?.metadata?.iam_user_name}
                     </Text>
                 </Flex>
                 <Divider />
                 <Flex>
                     <Text>AWS account ID</Text>
-                    <Text className="text-black">
+                    <Text
+                        className={isDemo ? 'blur-md text-black' : 'text-black'}
+                    >
                         {data?.metadata?.account_id}
                     </Text>
                 </Flex>
@@ -166,7 +188,11 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                         </>
                     ) : (
                         <Flex justifyContent="end">
-                            <Text className="text-black">
+                            <Text
+                                className={
+                                    isDemo ? 'blur-md text-black' : 'text-black'
+                                }
+                            >
                                 {credential?.config.accessKey}
                             </Text>
                             <Button
@@ -209,7 +235,11 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                         </>
                     ) : (
                         <Flex justifyContent="end">
-                            <Text className="text-black">
+                            <Text
+                                className={
+                                    isDemo ? 'blur-md text-black' : 'text-black'
+                                }
+                            >
                                 *****************
                             </Text>
                             <Button
@@ -250,7 +280,13 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                         </>
                     ) : (
                         <Flex justifyContent="end">
-                            <Text className="text-black text-end">
+                            <Text
+                                className={
+                                    isDemo
+                                        ? 'blur-md text-black text-end'
+                                        : 'text-black text-end'
+                                }
+                            >
                                 {credential?.config.assumeRoleName}
                             </Text>
                             <Button
@@ -292,7 +328,11 @@ export default function OrganizationInfo({ data, open, onClose }: IOrgInfo) {
                         </>
                     ) : (
                         <Flex justifyContent="end">
-                            <Text className="text-black">
+                            <Text
+                                className={
+                                    isDemo ? 'blur-md text-black' : 'text-black'
+                                }
+                            >
                                 {credential?.config.externalId}
                             </Text>
                             <Button

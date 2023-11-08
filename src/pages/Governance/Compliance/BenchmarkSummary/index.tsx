@@ -15,7 +15,7 @@ import {
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
-import Menu from '../../../../components/Menu'
+import Layout from '../../../../components/Layout'
 import { filterAtom, timeAtom } from '../../../../store'
 import {
     useComplianceApiV1BenchmarksSummaryDetail,
@@ -159,7 +159,7 @@ export default function BenchmarkSummary() {
     const failed = critical + high + medium + low
 
     return (
-        <Menu currentPage="compliance">
+        <Layout currentPage="compliance">
             <Header
                 breadCrumb={[
                     benchmarkDetail?.title
@@ -323,6 +323,6 @@ export default function BenchmarkSummary() {
                     </Grid>
                 </Col>
             </Grid>
-        </Menu>
+        </Layout>
     )
 }

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { filterAtom, timeAtom } from '../../../store'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 import Resources from './Tabs/Resources'
 import CloudAccounts from './Tabs/CloudAccounts'
 
@@ -34,7 +34,7 @@ export default function InfrastructureDetails() {
     }, [tabs])
 
     return (
-        <Menu currentPage="infrastructure">
+        <Layout currentPage="infrastructure">
             <Header breadCrumb={['Details']} filter datePicker />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
@@ -66,6 +66,6 @@ export default function InfrastructureDetails() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-        </Menu>
+        </Layout>
     )
 }

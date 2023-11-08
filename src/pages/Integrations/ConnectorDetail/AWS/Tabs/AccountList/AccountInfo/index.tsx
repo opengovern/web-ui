@@ -30,6 +30,7 @@ interface IAccInfo {
     open: boolean
     type: string
     onClose: () => void
+    isDemo: boolean
 }
 
 function getBadgeText(status: string) {
@@ -49,7 +50,13 @@ function getBadgeText(status: string) {
     }
 }
 
-export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
+export default function AccountInfo({
+    data,
+    open,
+    type,
+    onClose,
+    isDemo,
+}: IAccInfo) {
     const { response: credential } = useOnboardApiV1CredentialDetail(
         data?.credentialID || '',
         {},
@@ -120,14 +127,22 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
                     <Divider />
                     <Flex>
                         <Text>Account name</Text>
-                        <Text className="text-black">
+                        <Text
+                            className={
+                                isDemo ? 'blur-md text-black' : 'text-black'
+                            }
+                        >
                             {data?.providerConnectionName}
                         </Text>
                     </Flex>
                     <Divider />
                     <Flex>
                         <Text>Account ID</Text>
-                        <Text className="text-black">
+                        <Text
+                            className={
+                                isDemo ? 'blur-md text-black' : 'text-black'
+                            }
+                        >
                             {data?.metadata?.account_id}
                         </Text>
                     </Flex>
@@ -201,7 +216,13 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
                                 <Divider />
                                 <Flex>
                                     <Text>ARN</Text>
-                                    <Text className="text-black">
+                                    <Text
+                                        className={
+                                            isDemo
+                                                ? 'blur-md text-black'
+                                                : 'text-black'
+                                        }
+                                    >
                                         {
                                             data?.metadata?.account_organization
                                                 .Arn
@@ -211,21 +232,39 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
                                 <Divider />
                                 <Flex>
                                     <Text>Onboard date</Text>
-                                    <Text className="text-black">
+                                    <Text
+                                        className={
+                                            isDemo
+                                                ? 'blur-md text-black'
+                                                : 'text-black'
+                                        }
+                                    >
                                         {dateTimeDisplay(data?.onboardDate)}
                                     </Text>
                                 </Flex>
                                 <Divider />
                                 <Flex>
                                     <Text>Last inventory</Text>
-                                    <Text className="text-black">
+                                    <Text
+                                        className={
+                                            isDemo
+                                                ? 'blur-md text-black'
+                                                : 'text-black'
+                                        }
+                                    >
                                         {dateTimeDisplay(data?.lastInventory)}
                                     </Text>
                                 </Flex>
                                 <Divider />
                                 <Flex>
                                     <Text>Last health check</Text>
-                                    <Text className="text-black">
+                                    <Text
+                                        className={
+                                            isDemo
+                                                ? 'blur-md text-black'
+                                                : 'text-black'
+                                        }
+                                    >
                                         {dateTimeDisplay(
                                             data?.lastHealthCheckTime
                                         )}
@@ -249,6 +288,7 @@ export default function AccountInfo({ data, open, type, onClose }: IAccInfo) {
                                                             ?.organization_tags
                                                     ).map(([name, value]) => (
                                                         <Tag
+                                                            isDemo={isDemo}
                                                             text={`${name}: ${value}`}
                                                         />
                                                     ))}

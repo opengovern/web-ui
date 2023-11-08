@@ -28,14 +28,14 @@ import { highlight, languages } from 'prismjs' // eslint-disable-next-line impor
 import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
 import Editor from 'react-simple-code-editor'
-import { RowClickedEvent } from 'ag-grid-community'
+import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import {
     CheckCircleIcon,
     ExclamationCircleIcon,
 } from '@heroicons/react/24/solid'
 import { Transition } from '@headlessui/react'
-import { useAtom } from 'jotai'
-import Menu from '../../components/Menu'
+import { useAtom, useAtomValue } from 'jotai'
+import Layout from '../../components/Layout'
 import {
     useInventoryApiV1QueryList,
     useInventoryApiV1QueryRunCreate,
@@ -48,9 +48,9 @@ import { RenderObject } from '../../components/RenderObject'
 import Table, { IColumn } from '../../components/Table'
 import Header from '../../components/Header'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../api/api'
-import { queryAtom } from '../../store'
+import { isDemoAtom, queryAtom } from '../../store'
 
-export const getTable = (headers: any, details: any) => {
+export const getTable = (headers: any, details: any, isDemo: boolean) => {
     const columns: IColumn<any, any>[] = []
     const rows: any[] = []
     if (headers && headers.length) {
@@ -65,6 +65,11 @@ export const getTable = (headers: any, details: any) => {
                 resizable: true,
                 filter: true,
                 width: 170,
+                cellRenderer: (param: ValueFormatterParams) => (
+                    <span className={isDemo ? 'blur-md' : ''}>
+                        {param.value}
+                    </span>
+                ),
             })
         }
     }
@@ -116,8 +121,6 @@ const columns: IColumn<
 ]
 
 export default function Finder() {
-    // const queryParams = useLocation().search
-    // const query = new URLSearchParams(queryParams).get('q')
     const [loaded, setLoaded] = useState(false)
     const [savedQuery, setSavedQuery] = useAtom(queryAtom)
     const [code, setCode] = useState(savedQuery || '')
@@ -127,6 +130,7 @@ export default function Finder() {
     const [openDrawer, setOpenDrawer] = useState(false)
     const [openSearch, setOpenSearch] = useState(true)
     const [showEditor, setShowEditor] = useState(false)
+    const isDemo = useAtomValue(isDemoAtom)
 
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
@@ -179,7 +183,7 @@ export default function Finder() {
     }
 
     return (
-        <Menu currentPage="finder">
+        <Layout currentPage="finder">
             <Header />
             {categoryLoading || queryLoading ? (
                 <Spinner className="mt-56" />
@@ -489,13 +493,15 @@ export default function Finder() {
                                             columns={
                                                 getTable(
                                                     queryResponse?.headers,
-                                                    queryResponse?.result
+                                                    queryResponse?.result,
+                                                    isDemo
                                                 ).columns
                                             }
                                             rowData={
                                                 getTable(
                                                     queryResponse?.headers,
-                                                    queryResponse?.result
+                                                    queryResponse?.result,
+                                                    isDemo
                                                 ).rows
                                             }
                                             downloadable
@@ -513,6 +519,6 @@ export default function Finder() {
                     </Flex>
                 </Flex>
             )}
-        </Menu>
+        </Layout>
     )
 }

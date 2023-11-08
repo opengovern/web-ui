@@ -12,7 +12,7 @@ import {
     Text,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import Menu from '../../components/Menu'
+import Layout from '../../components/Layout'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
     useInventoryApiV2AnalyticsSpendMetricList,
@@ -268,7 +268,7 @@ export default function Spend() {
         })
 
     return (
-        <Menu currentPage="spend">
+        <Layout currentPage="spend">
             <Header datePicker filter />
             {selectedConnections.connections.length === 1 ? (
                 <SingleSpendConnection
@@ -438,6 +438,6 @@ export default function Spend() {
                     </Grid>
                 </>
             )}
-        </Menu>
+        </Layout>
     )
 }

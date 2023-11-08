@@ -8,7 +8,6 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import dayjs from 'dayjs'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
 import {
@@ -21,9 +20,15 @@ interface IPriInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
     open: boolean
     onClose: () => void
+    isDemo: boolean
 }
 
-export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
+export default function PrincipalInfo({
+    data,
+    open,
+    onClose,
+    isDemo,
+}: IPriInfo) {
     const [id, setId] = useState('')
     const [eid, seteId] = useState(false)
     const [value, setValue] = useState('')
@@ -65,26 +70,44 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                     <Divider />
                     <Flex>
                         <Text>Name</Text>
-                        <Text className="text-black">{data?.name}</Text>
+                        <Text
+                            className={
+                                isDemo ? 'blur-md text-black' : 'text-black'
+                            }
+                        >
+                            {data?.name}
+                        </Text>
                     </Flex>
                     <Divider />
                     <Flex>
                         <Text>Application ID</Text>
-                        <Text className="text-black">
+                        <Text
+                            className={
+                                isDemo ? 'blur-md text-black' : 'text-black'
+                            }
+                        >
                             {data?.metadata?.organization_master_account_email}
                         </Text>
                     </Flex>
                     <Divider />
                     <Flex>
                         <Text>Object ID</Text>
-                        <Text className="text-black">
+                        <Text
+                            className={
+                                isDemo ? 'blur-md text-black' : 'text-black'
+                            }
+                        >
                             {data?.metadata?.object_id}
                         </Text>
                     </Flex>
                     <Divider />
                     <Flex>
                         <Text>Directory ID</Text>
-                        <Text className="text-black">
+                        <Text
+                            className={
+                                isDemo ? 'blur-md text-black' : 'text-black'
+                            }
+                        >
                             {data?.metadata?.organization_master_account_email}
                         </Text>
                     </Flex>
@@ -104,7 +127,11 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                     <Divider />
                     <Flex>
                         <Text>Last health check</Text>
-                        <Text className="text-black">
+                        <Text
+                            className={
+                                isDemo ? 'blur-md text-black' : 'text-black'
+                            }
+                        >
                             {dateDisplay(data?.lastHealthCheckTime)}
                         </Text>
                     </Flex>
@@ -133,7 +160,13 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                             </>
                         ) : (
                             <Flex justifyContent="end">
-                                <Text className="text-black">
+                                <Text
+                                    className={
+                                        isDemo
+                                            ? 'blur-md text-black'
+                                            : 'text-black'
+                                    }
+                                >
                                     {data?.metadata?.secret_id}
                                 </Text>
                                 <Button
@@ -174,7 +207,13 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                             </>
                         ) : (
                             <Flex justifyContent="end">
-                                <Text className="text-black">
+                                <Text
+                                    className={
+                                        isDemo
+                                            ? 'blur-md text-black'
+                                            : 'text-black'
+                                    }
+                                >
                                     *****************
                                 </Text>
                                 <Button
@@ -190,7 +229,11 @@ export default function PrincipalInfo({ data, open, onClose }: IPriInfo) {
                     <Divider />
                     <Flex>
                         <Text>Number of subscriptions</Text>
-                        <Text className="text-black">
+                        <Text
+                            className={
+                                isDemo ? 'blur-md text-black' : 'text-black'
+                            }
+                        >
                             {data?.total_connections}
                         </Text>
                     </Flex>

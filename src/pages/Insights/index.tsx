@@ -1,7 +1,7 @@
 import { Button, Flex, Grid, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
-import Menu from '../../components/Menu'
+import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import PersonaCard from '../../components/Cards/PersonaCard'
 import { filterAtom, timeAtom } from '../../store'
@@ -41,7 +41,7 @@ export default function Insights() {
     } = useComplianceApiV1InsightList(query)
 
     return (
-        <Menu currentPage="insights">
+        <Layout currentPage="insights">
             <Header datePicker filter />
             <Title className="font-semibold mb-4">Personas</Title>
             <Grid numItems={9} className="w-full gap-4 mb-12">
@@ -84,6 +84,6 @@ export default function Insights() {
             ) : (
                 <Button onClick={() => insightSendNow()}>Retry</Button>
             )}
-        </Menu>
+        </Layout>
     )
 }

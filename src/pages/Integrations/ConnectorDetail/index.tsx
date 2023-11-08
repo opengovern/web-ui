@@ -1,7 +1,7 @@
 import { Flex, Title } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 import {
     useOnboardApiV1CatalogMetricsList,
     useOnboardApiV1ConnectionsSummaryList,
@@ -40,7 +40,7 @@ export default function ConnectorDetail() {
         })
 
     return (
-        <Menu currentPage="integrations">
+        <Layout currentPage="integrations">
             <Flex flexDirection="col" alignItems="start">
                 <Header breadCrumb={[connector]} />
                 <Title className="font-semibold">{connector}</Title>
@@ -76,6 +76,6 @@ export default function ConnectorDetail() {
                     </>
                 )}
             </Flex>
-        </Menu>
+        </Layout>
     )
 }

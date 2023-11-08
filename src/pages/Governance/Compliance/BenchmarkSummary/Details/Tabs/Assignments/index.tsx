@@ -1,74 +1,86 @@
 import { useEffect, useState } from 'react'
 import { Button, Flex } from '@tremor/react'
+import { useAtomValue } from 'jotai'
+import { ValueFormatterParams } from 'ag-grid-community'
 import {
     useComplianceApiV1AssignmentsBenchmarkDetail,
     useComplianceApiV1AssignmentsConnectionCreate,
     useComplianceApiV1AssignmentsConnectionDelete,
 } from '../../../../../../../api/compliance.gen'
 import Table, { IColumn } from '../../../../../../../components/Table'
+import { isDemoAtom } from '../../../../../../../store'
 
 interface IAssignments {
     id: string | undefined
 }
 
-const columns: IColumn<any, any>[] = [
-    {
-        width: 120,
-        sortable: true,
-        filter: true,
-        enableRowGroup: true,
-        type: 'string',
-        field: 'connector',
-    },
-    {
-        field: 'providerConnectionName',
-        headerName: 'Connection Name',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'connectionID',
-        headerName: 'Connection ID',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        headerName: 'Enable',
-        sortable: true,
-        type: 'string',
-        filter: true,
-        resizable: true,
-        flex: 0.5,
-        cellRenderer: (params: any) => {
-            return (
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    className="h-full w-full"
-                >
-                    <label
-                        htmlFor="status"
-                        className="relative inline-flex items-center cursor-pointer"
-                    >
-                        <input
-                            type="checkbox"
-                            value=""
-                            className="sr-only peer"
-                            checked={params.data?.status}
-                        />
-                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-kaytu-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600" />
-                    </label>
-                </Flex>
-            )
+const columns = (isDemo: boolean) => {
+    const temp: IColumn<any, any>[] = [
+        {
+            width: 120,
+            sortable: true,
+            filter: true,
+            enableRowGroup: true,
+            type: 'string',
+            field: 'connector',
         },
-    },
-]
+        {
+            field: 'providerConnectionName',
+            headerName: 'Connection Name',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: 'connectionID',
+            headerName: 'Connection ID',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            headerName: 'Enable',
+            sortable: true,
+            type: 'string',
+            filter: true,
+            resizable: true,
+            flex: 0.5,
+            cellRenderer: (params: any) => {
+                return (
+                    <Flex
+                        alignItems="center"
+                        justifyContent="center"
+                        className="h-full w-full"
+                    >
+                        <label
+                            htmlFor="status"
+                            className="relative inline-flex items-center cursor-pointer"
+                        >
+                            <input
+                                type="checkbox"
+                                value=""
+                                className="sr-only peer"
+                                checked={params.data?.status}
+                            />
+                            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-kaytu-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600" />
+                        </label>
+                    </Flex>
+                )
+            },
+        },
+    ]
+    return temp
+}
 
 interface ITransferState {
     connectionID: string
@@ -81,6 +93,7 @@ export default function Assignments({ id }: IAssignments) {
         connectionID: '',
         status: false,
     })
+    const isDemo = useAtomValue(isDemoAtom)
 
     const {
         sendNow: sendEnable,
@@ -141,7 +154,7 @@ export default function Assignments({ id }: IAssignments) {
         <Table
             title="Assignmnets"
             id="compliance_assignments"
-            columns={columns}
+            columns={columns(isDemo)}
             onCellClicked={(event) => {
                 if (event.colDef.headerName === 'Enable') {
                     setTransfer({

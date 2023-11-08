@@ -2,7 +2,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai/index'
 import { useEffect, useState } from 'react'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
 import Services from './Tabs/Services'
 import { checkGranularity } from '../../../utilities/dateComparator'
@@ -48,7 +48,7 @@ export default function SpendDetails() {
     }, [activeTimeRange])
 
     return (
-        <Menu currentPage="spend">
+        <Layout currentPage="spend">
             <Header breadCrumb={['Details']} filter datePicker />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
@@ -86,6 +86,6 @@ export default function SpendDetails() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-        </Menu>
+        </Layout>
     )
 }

@@ -2,7 +2,7 @@ import { Flex, TextInput } from '@tremor/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import { useState } from 'react'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
 import Table, { IColumn } from '../../../components/Table'
 import { useAlertingApiV1TriggerListList } from '../../../api/alerting.gen'
@@ -53,7 +53,7 @@ export default function Alerts() {
     const { response, isLoading } = useAlertingApiV1TriggerListList()
 
     return (
-        <Menu currentPage="alerts">
+        <Layout currentPage="alerts">
             <Header />
             <Flex justifyContent="end" className="mb-4">
                 <TextInput
@@ -82,6 +82,6 @@ export default function Alerts() {
             >
                 <RenderObject obj={selectedRow} />
             </DrawerPanel>
-        </Menu>
+        </Layout>
     )
 }
