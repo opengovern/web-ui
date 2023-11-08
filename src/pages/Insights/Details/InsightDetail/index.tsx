@@ -14,7 +14,7 @@ import {
     Title,
 } from '@tremor/react'
 import { Link } from 'react-router-dom'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import dayjs, { Dayjs } from 'dayjs'
 import { useEffect, useState } from 'react'
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
@@ -28,7 +28,12 @@ import {
     useComplianceApiV1InsightDetail,
     useComplianceApiV1InsightTrendDetail,
 } from '../../../../api/compliance.gen'
-import { IFilter, notificationAtom, queryAtom } from '../../../../store'
+import {
+    IFilter,
+    isDemoAtom,
+    notificationAtom,
+    queryAtom,
+} from '../../../../store'
 import Spinner from '../../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
@@ -59,7 +64,7 @@ export const chartData = (inputData: any) => {
     }
 }
 
-const getTable = (header: any, details: any) => {
+const getTable = (header: any, details: any, isDemo: boolean) => {
     const columns: IColumn<any, any>[] = []
     const row: any[] = []
     if (header && header.length) {
@@ -73,7 +78,9 @@ const getTable = (header: any, details: any) => {
                 filter: true,
                 flex: 1,
                 cellRenderer: (param: ValueFormatterParams) => (
-                    <span className="blur-md">hahaha, you looser</span>
+                    <span className={isDemo ? 'blur-md' : ''}>
+                        {param.value}
+                    </span>
                 ),
             })
         }
@@ -148,6 +155,7 @@ export default function InsightDetail({
         'line'
     )
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const isDemo = useAtomValue(isDemoAtom)
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
@@ -427,8 +435,8 @@ export default function InsightDetail({
                         <Table
                             title="Results"
                             id="insight_detail"
-                            columns={getTable(columns, rows).columns}
-                            rowData={getTable(columns, rows).row}
+                            columns={getTable(columns, rows, isDemo).columns}
+                            rowData={getTable(columns, rows, isDemo).row}
                             downloadable
                             options={gridOptions}
                             loading={detailLoading}
