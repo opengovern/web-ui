@@ -4,6 +4,7 @@ import {
     GridOptions,
     ICellRendererParams,
     RowClickedEvent,
+    ValueFormatterParams,
 } from 'ag-grid-community'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import AccountInfo from './AccountInfo'
@@ -14,6 +15,8 @@ import {
 } from '../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
+import { useAtomValue } from 'jotai'
+import { isDemoAtom } from '../../../../../../store'
 
 interface IAccountList {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -53,117 +56,132 @@ function getBadgeText(status: string) {
     }
 }
 
-const columns: IColumn<any, any>[] = [
-    {
-        field: 'providerConnectionName',
-        headerName: 'Name',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'providerConnectionID',
-        headerName: 'ID',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        headerName: 'Account Type',
-        field: 'type',
-        type: 'string',
-        rowGroup: true,
-        enableRowGroup: true,
-        sortable: true,
-        hide: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'credentialName',
-        type: 'string',
-        headerName: 'Parent Organization Name',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'healthState',
-        type: 'string',
-        headerName: 'Health state',
-        enableRowGroup: true,
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'credentialID',
-        type: 'string',
-        headerName: 'Parent Organization ID',
-        hide: true,
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'lifecycleState',
-        type: 'string',
-        headerName: 'State',
-        enableRowGroup: true,
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                params.data?.providerConnectionName && (
-                    <Badge color={getBadgeColor(params.value)}>
-                        {getBadgeText(params.value)}
-                    </Badge>
-                )
-            )
+const columns = (isDemo: boolean) => {
+    const temp: IColumn<any, any>[] = [
+        {
+            field: 'providerConnectionName',
+            headerName: 'Name',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
         },
-    },
-    {
-        field: 'id',
-        type: 'string',
-        headerName: 'Kaytu Connection ID',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'lastInventory',
-        type: 'date',
-        headerName: 'Last Inventory',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'onboardDate',
-        type: 'date',
-        headerName: 'Onboard Date',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-]
+        {
+            field: 'providerConnectionID',
+            headerName: 'ID',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            headerName: 'Account Type',
+            field: 'type',
+            type: 'string',
+            rowGroup: true,
+            enableRowGroup: true,
+            sortable: true,
+            hide: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'credentialName',
+            type: 'string',
+            headerName: 'Parent Organization Name',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: 'healthState',
+            type: 'string',
+            headerName: 'Health state',
+            enableRowGroup: true,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'credentialID',
+            type: 'string',
+            headerName: 'Parent Organization ID',
+            hide: true,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: 'lifecycleState',
+            type: 'string',
+            headerName: 'State',
+            enableRowGroup: true,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (params: ICellRendererParams) => {
+                return (
+                    params.data?.providerConnectionName && (
+                        <Badge color={getBadgeColor(params.value)}>
+                            {getBadgeText(params.value)}
+                        </Badge>
+                    )
+                )
+            },
+        },
+        {
+            field: 'id',
+            type: 'string',
+            headerName: 'Kaytu Connection ID',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+        },
+        {
+            field: 'lastInventory',
+            type: 'date',
+            headerName: 'Last Inventory',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+        },
+        {
+            field: 'onboardDate',
+            type: 'date',
+            headerName: 'Onboard Date',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+        },
+    ]
+    return temp
+}
 
 const generateRows = (data: any) => {
     const rows = []
@@ -214,6 +232,7 @@ export default function AccountList({
     >(undefined)
     const [openInfo, setOpenInfo] = useState(false)
     const [open, setOpen] = useState(false)
+    const isDemo = useAtomValue(isDemoAtom)
 
     return (
         <>
@@ -223,7 +242,7 @@ export default function AccountList({
                 id="aws_account_list"
                 options={options}
                 rowData={generateRows(accounts)}
-                columns={columns}
+                columns={columns(isDemo)}
                 loading={loading}
                 onRowClicked={(
                     event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
@@ -243,6 +262,7 @@ export default function AccountList({
                 type={accData?.type}
                 open={openInfo}
                 onClose={() => setOpenInfo(false)}
+                isDemo={isDemo}
             />
             <NewAWSAccount
                 accounts={accounts}

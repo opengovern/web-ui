@@ -2,6 +2,7 @@ import { Badge, Button } from '@tremor/react'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useState } from 'react'
+import { useAtomValue } from 'jotai'
 import OrganizationInfo from './OrganizationInfo'
 import NewOrganization from './NewOrganization'
 import {
@@ -9,6 +10,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
 } from '../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../components/Table'
+import { isDemoAtom } from '../../../../../../store'
 
 interface IOrganizations {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -26,111 +28,94 @@ function getBadgeColor(status: string) {
     }
 }
 
-const columns: IColumn<any, any>[] = [
-    // {
-    //     field: 'connectortype',
-    //     headerName: 'Connector',
-    //     type: 'string',
-    //     width: 50,
-    //     sortable: true,
-    //     filter: true,
-    //     cellStyle: { padding: 0 },
-    //     cellRenderer: (params: ICellRendererParams) => {
-    //         return (
-    //             <Flex
-    //                 alignItems="center"
-    //                 justifyContent="center"
-    //                 className="w-full h-full"
-    //             >
-    //                 <AWSIcon id="org" />
-    //             </Flex>
-    //         )
-    //     },
-    // },
-    {
-        field: 'name',
-        headerName: 'Name',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'credentialType',
-        headerName: 'Credential Type',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'enabled',
-        headerName: 'Enabled',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-    },
-    {
-        field: 'healthStatus',
-        headerName: 'Health Status',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        flex: 1,
-        cellRenderer: (params: ICellRendererParams) => {
-            return (
-                <Badge color={getBadgeColor(params.value)}>
-                    {params.value}
-                </Badge>
-            )
+const columns = (isDemo: boolean) => {
+    const temp: IColumn<any, any>[] = [
+        {
+            field: 'name',
+            headerName: 'Name',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
         },
-    },
-    {
-        field: 'healthReason',
-        headerName: 'Health Reason',
-        type: 'string',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'total_connections',
-        headerName: 'Total Connections',
-        type: 'number',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'enabled_connections',
-        headerName: 'Enabled Connections',
-        type: 'number',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-    {
-        field: 'unhealthy_connections',
-        headerName: 'Unhealthy Connections',
-        type: 'number',
-        sortable: true,
-        filter: true,
-        resizable: true,
-        hide: true,
-        flex: 1,
-    },
-]
+        {
+            field: 'credentialType',
+            headerName: 'Credential Type',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'enabled',
+            headerName: 'Enabled',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'healthStatus',
+            headerName: 'Health Status',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (params: ICellRendererParams) => {
+                return (
+                    <Badge color={getBadgeColor(params.value)}>
+                        {params.value}
+                    </Badge>
+                )
+            },
+        },
+        {
+            field: 'healthReason',
+            headerName: 'Health Reason',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+        },
+        {
+            field: 'total_connections',
+            headerName: 'Total Connections',
+            type: 'number',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+        },
+        {
+            field: 'enabled_connections',
+            headerName: 'Enabled Connections',
+            type: 'number',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+        },
+        {
+            field: 'unhealthy_connections',
+            headerName: 'Unhealthy Connections',
+            type: 'number',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+            flex: 1,
+        },
+    ]
+    return temp
+}
 
 export default function Organizations({
     organizations,
@@ -141,6 +126,7 @@ export default function Organizations({
     const [orgData, setOrgData] = useState<
         GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
     >(undefined)
+    const isDemo = useAtomValue(isDemoAtom)
 
     return (
         <>
@@ -148,7 +134,7 @@ export default function Organizations({
                 downloadable
                 title="Organizations"
                 id="aws_org_list"
-                columns={columns}
+                columns={columns(isDemo)}
                 rowData={organizations}
                 onRowClicked={(
                     event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
@@ -167,6 +153,7 @@ export default function Organizations({
                     setOpenInfo(false)
                 }}
                 data={orgData}
+                isDemo={isDemo}
             />
             <NewOrganization
                 accounts={accounts}
