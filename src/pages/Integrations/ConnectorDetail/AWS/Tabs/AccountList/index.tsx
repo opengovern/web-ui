@@ -7,6 +7,7 @@ import {
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { PlusIcon } from '@heroicons/react/24/solid'
+import { useAtomValue } from 'jotai'
 import AccountInfo from './AccountInfo'
 import NewAWSAccount from './NewAWSAccount'
 import {
@@ -15,7 +16,6 @@ import {
 } from '../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
-import { useAtomValue } from 'jotai'
 import { isDemoAtom } from '../../../../../../store'
 
 interface IAccountList {
