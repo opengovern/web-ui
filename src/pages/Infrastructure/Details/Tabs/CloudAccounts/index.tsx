@@ -1,11 +1,11 @@
 import { Tab, TabGroup, TabList } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { Dayjs } from 'dayjs'
 import { ValueFormatterParams } from 'ag-grid-community'
 import Table, { IColumn } from '../../../../../components/Table'
-import { IFilter, notificationAtom } from '../../../../../store'
+import { IFilter, isDemoAtom, notificationAtom } from '../../../../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import { options } from '../Resources'
 
@@ -14,70 +14,73 @@ interface IConnections {
     connections: IFilter
 }
 
-const columns: IColumn<any, any>[] = [
-    {
-        field: 'connector',
-        headerName: 'Connector',
-        type: 'string',
-        width: 120,
-        sortable: true,
-        filter: true,
-        enableRowGroup: true,
-    },
-    {
-        field: 'providerConnectionName',
-        headerName: 'Account name',
-        resizable: true,
-        type: 'string',
-        sortable: true,
-        filter: true,
-        cellRenderer: (param: ValueFormatterParams) => (
-            <span className="blur-md">hahaha, you looser</span>
-        ),
-    },
-    {
-        field: 'providerConnectionID',
-        headerName: 'Account ID',
-        type: 'string',
-        resizable: true,
-        sortable: true,
-        filter: true,
-        cellRenderer: (param: ValueFormatterParams) => (
-            <span className="blur-md">hahaha, you looser</span>
-        ),
-    },
-    {
-        field: 'lifecycleState',
-        headerName: 'State',
-        type: 'string',
-        resizable: true,
-        sortable: true,
-        filter: true,
-        enableRowGroup: true,
-    },
-    {
-        field: 'resourceCount',
-        headerName: 'Resources',
-        type: 'number',
-        resizable: true,
-        sortable: true,
-    },
-    {
-        field: 'lastInventory',
-        headerName: 'Last inventory',
-        type: 'date',
-        resizable: true,
-        sortable: true,
-    },
-    {
-        field: 'onboardDate',
-        headerName: 'Onboard Date',
-        type: 'date',
-        hide: true,
-        resizable: true,
-        sortable: true,
-    },
-]
+const columns = (isDemo: boolean) => {
+    const temp: IColumn<any, any>[] = [
+        {
+            field: 'connector',
+            headerName: 'Connector',
+            type: 'string',
+            width: 120,
+            sortable: true,
+            filter: true,
+            enableRowGroup: true,
+        },
+        {
+            field: 'providerConnectionName',
+            headerName: 'Account name',
+            resizable: true,
+            type: 'string',
+            sortable: true,
+            filter: true,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className="blur-md">hahaha, you looser</span>
+            ),
+        },
+        {
+            field: 'providerConnectionID',
+            headerName: 'Account ID',
+            type: 'string',
+            resizable: true,
+            sortable: true,
+            filter: true,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className="blur-md">hahaha, you looser</span>
+            ),
+        },
+        {
+            field: 'lifecycleState',
+            headerName: 'State',
+            type: 'string',
+            resizable: true,
+            sortable: true,
+            filter: true,
+            enableRowGroup: true,
+        },
+        {
+            field: 'resourceCount',
+            headerName: 'Resources',
+            type: 'number',
+            resizable: true,
+            sortable: true,
+        },
+        {
+            field: 'lastInventory',
+            headerName: 'Last inventory',
+            type: 'date',
+            resizable: true,
+            sortable: true,
+        },
+        {
+            field: 'onboardDate',
+            headerName: 'Onboard Date',
+            type: 'date',
+            hide: true,
+            resizable: true,
+            sortable: true,
+        },
+    ]
+    return temp
+}
 
 export default function CloudAccounts({
     activeTimeRange,
@@ -86,6 +89,7 @@ export default function CloudAccounts({
     const navigate = useNavigate()
 
     const setNotification = useSetAtom(notificationAtom)
+    const isDemo = useAtomValue(isDemoAtom)
 
     const [isOnboarded, setIsOnboarded] = useState(true)
     const [index, setIndex] = useState(0)
@@ -122,7 +126,7 @@ export default function CloudAccounts({
         <Table
             title="Cloud accounts"
             id="infrastructure_connection_table"
-            columns={columns}
+            columns={columns(isDemo)}
             downloadable
             rowData={
                 accounts?.connections?.filter((acc) => {

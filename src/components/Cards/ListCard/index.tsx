@@ -1,10 +1,12 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
+import { useAtomValue } from 'jotai'
 import { SourceType } from '../../../api/api'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { getConnectorIcon } from '../ConnectorCard'
+import { isDemoAtom } from '../../../store'
 
 interface ITopListCard {
     title: string
@@ -44,6 +46,7 @@ export default function ListCard({
     isClickable = true,
 }: ITopListCard) {
     const navigate = useNavigate()
+    const isDemo = useAtomValue(isDemoAtom)
 
     const value = (item: Item) => {
         if (isPercentage) {
@@ -101,7 +104,14 @@ export default function ListCard({
                                                           String(item.connector)
                                                       ))}
                                             <Flex className="h-9">
-                                                <Text className="w-4/5 truncate blur-md">
+                                                <Text
+                                                    className={
+                                                        type === 'account' &&
+                                                        isDemo
+                                                            ? 'w-4/5 truncate blur-md'
+                                                            : 'w-4/5 truncate'
+                                                    }
+                                                >
                                                     {item.name}
                                                 </Text>
                                             </Flex>

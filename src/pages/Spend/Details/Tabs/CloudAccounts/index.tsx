@@ -3,7 +3,8 @@ import { ValueFormatterParams } from 'ag-grid-community'
 import { Select, SelectItem, Text } from '@tremor/react'
 import { Dispatch, SetStateAction } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IFilter } from '../../../../../store'
+import { useAtomValue } from 'jotai'
+import { IFilter, isDemoAtom } from '../../../../../store'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../../api/api'
 import Table, { IColumn } from '../../../../../components/Table'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
@@ -18,53 +19,62 @@ interface IConnections {
     onGranularityChange: Dispatch<SetStateAction<'monthly' | 'daily' | 'none'>>
 }
 
-const defaultColumns: IColumn<any, any>[] = [
-    {
-        field: 'connector',
-        headerName: 'Connector',
-        type: 'string',
-        width: 115,
-        enableRowGroup: true,
-        filter: true,
-        resizable: true,
-        sortable: true,
-        pinned: true,
-    },
-    {
-        field: 'dimension',
-        headerName: 'Account name',
-        type: 'string',
-        filter: true,
-        sortable: true,
-        resizable: true,
-        pivot: false,
-        pinned: true,
-    },
-    {
-        field: 'accountId',
-        headerName: 'Provider ID',
-        type: 'string',
-        filter: true,
-        sortable: true,
-        resizable: true,
-        pivot: false,
-        pinned: true,
-    },
-    {
-        field: 'totalCost',
-        headerName: 'Total cost',
-        type: 'price',
-        width: 110,
-        sortable: true,
-        aggFunc: 'sum',
-        resizable: true,
-        pivot: false,
-        pinned: true,
-        valueFormatter: (param: ValueFormatterParams) => {
-            return param.value ? exactPriceDisplay(param.value) : ''
+const defaultColumns = (isDemo: boolean) => {
+    const temp: IColumn<any, any>[] = [
+        {
+            field: 'connector',
+            headerName: 'Connector',
+            type: 'string',
+            width: 115,
+            enableRowGroup: true,
+            filter: true,
+            resizable: true,
+            sortable: true,
+            pinned: true,
         },
-    },
-]
+        {
+            field: 'dimension',
+            headerName: 'Account name',
+            type: 'string',
+            filter: true,
+            sortable: true,
+            resizable: true,
+            pivot: false,
+            pinned: true,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: 'accountId',
+            headerName: 'Provider ID',
+            type: 'string',
+            filter: true,
+            sortable: true,
+            resizable: true,
+            pivot: false,
+            pinned: true,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: 'totalCost',
+            headerName: 'Total cost',
+            type: 'price',
+            width: 110,
+            sortable: true,
+            aggFunc: 'sum',
+            resizable: true,
+            pivot: false,
+            pinned: true,
+            valueFormatter: (param: ValueFormatterParams) => {
+                return param.value ? exactPriceDisplay(param.value) : ''
+            },
+        },
+    ]
+    return temp
+}
 
 export default function CloudAccounts({
     activeTimeRange,
@@ -73,6 +83,7 @@ export default function CloudAccounts({
     onGranularityChange,
 }: IConnections) {
     const navigate = useNavigate()
+    const isDemo = useAtomValue(isDemoAtom)
 
     const columnGenerator = (
         input:
@@ -161,7 +172,7 @@ export default function CloudAccounts({
             downloadable
             id="spend_connection_table"
             loading={isLoading}
-            columns={[...defaultColumns, ...columnGenerator(response)]}
+            columns={[...defaultColumns(isDemo), ...columnGenerator(response)]}
             rowData={rowGenerator(response).finalRow}
             pinnedRow={rowGenerator(response).pinnedRow}
             options={gridOptions}
