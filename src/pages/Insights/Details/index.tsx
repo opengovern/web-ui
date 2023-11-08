@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import { filterAtom, timeAtom } from '../../../store'
 import InsightDetail from './InsightDetail'
 import KeyInsightDetail from './KeyInsightDetail'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 
 export default function InsightDetails() {
     const { id, ws } = useParams()
@@ -12,7 +12,7 @@ export default function InsightDetails() {
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     return (
-        <Menu currentPage="insights">
+        <Layout currentPage="insights">
             {isKeyInsight ? (
                 <KeyInsightDetail
                     id={id?.replace('key_insight_', '')}
@@ -27,6 +27,6 @@ export default function InsightDetails() {
                     selectedConnections={selectedConnections}
                 />
             )}
-        </Menu>
+        </Layout>
     )
 }

@@ -25,7 +25,7 @@ type IProps = {
     showSidebar?: boolean
 }
 
-export default function Menu({
+export default function Layout({
     children,
     currentPage,
     showSidebar = true,

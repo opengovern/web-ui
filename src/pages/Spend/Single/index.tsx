@@ -2,7 +2,7 @@ import { useAtomValue } from 'jotai'
 import { useParams } from 'react-router-dom'
 import { spendTimeAtom, timeAtom } from '../../../store'
 import NotFound from '../../Errors'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 import SingleSpendConnection from './SingleConnection'
 import SingleSpendMetric from './SingleMetric'
 
@@ -36,22 +36,22 @@ export default function SingleSpend() {
     const renderPage = () => {
         if (urlParams[urlParams.length - 1].startsWith('account_')) {
             return (
-                <Menu currentPage="spend">
+                <Layout currentPage="spend">
                     <SingleSpendConnection
                         activeTimeRange={activeTimeRange}
                         id={idGenerator()}
                     />
-                </Menu>
+                </Layout>
             )
         }
         if (urlParams[urlParams.length - 1].startsWith('metric_')) {
             return (
-                <Menu currentPage="spend">
+                <Layout currentPage="spend">
                     <SingleSpendMetric
                         activeTimeRange={activeTimeRange}
                         metricId={idGenerator()}
                     />
-                </Menu>
+                </Layout>
             )
         }
         return <NotFound />

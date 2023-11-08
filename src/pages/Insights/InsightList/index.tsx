@@ -20,7 +20,7 @@ import {
     RowClickedEvent,
 } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 import { useComplianceApiV1InsightList } from '../../../api/compliance.gen'
 import { filterAtom, notificationAtom, timeAtom } from '../../../store'
 import Spinner from '../../../components/Spinner'
@@ -154,7 +154,7 @@ export default function InsightList() {
     }
 
     return (
-        <Menu currentPage="insights">
+        <Layout currentPage="insights">
             <Header datePicker filter />
             <Flex alignItems="start" className="gap-4">
                 <Card className="sticky w-fit">
@@ -266,6 +266,6 @@ export default function InsightList() {
                     )}
                 </Flex>
             </Flex>
-        </Menu>
+        </Layout>
     )
 }

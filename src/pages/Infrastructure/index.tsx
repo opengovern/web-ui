@@ -12,7 +12,7 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import Menu from '../../components/Menu'
+import Layout from '../../components/Layout'
 import { filterAtom, timeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import SummaryCard from '../../components/Cards/SummaryCard'
@@ -273,7 +273,7 @@ export default function Infrastructure() {
         })
 
     return (
-        <Menu currentPage="infrastructure">
+        <Layout currentPage="infrastructure">
             <Header datePicker filter />
             {selectedConnections.connections.length === 1 ? (
                 <SingleConnection
@@ -410,6 +410,6 @@ export default function Infrastructure() {
                     </Grid>
                 </>
             )}
-        </Menu>
+        </Layout>
     )
 }

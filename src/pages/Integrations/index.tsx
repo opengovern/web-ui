@@ -1,5 +1,5 @@
 import { Flex, Grid, Title } from '@tremor/react'
-import Menu from '../../components/Menu'
+import Layout from '../../components/Layout'
 import {
     useOnboardApiV1CatalogMetricsList,
     useOnboardApiV1ConnectorList,
@@ -16,7 +16,7 @@ export default function Integrations() {
         useOnboardApiV1ConnectorList()
 
     return (
-        <Menu currentPage="integrations">
+        <Layout currentPage="integrations">
             <Header />
             <Grid numItems={3} className="gap-4 mb-10">
                 <OnboardCard
@@ -46,6 +46,6 @@ export default function Integrations() {
                     ))}
                 </Grid>
             )}
-        </Menu>
+        </Layout>
     )
 }

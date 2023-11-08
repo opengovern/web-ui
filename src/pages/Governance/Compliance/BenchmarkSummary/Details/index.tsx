@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
-import Menu from '../../../../../components/Menu'
+import Layout from '../../../../../components/Layout'
 import Policies from './Tabs/Policies'
 import Assignments from './Tabs/Assignments'
 import Findings from './Tabs/Findings'
@@ -42,7 +42,7 @@ export default function BenchmarkDetails() {
     }, [tabs])
 
     return (
-        <Menu currentPage="compliance">
+        <Layout currentPage="compliance">
             <Header
                 filter={
                     tabs === '#findings' ||
@@ -97,6 +97,6 @@ export default function BenchmarkDetails() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-        </Menu>
+        </Layout>
     )
 }

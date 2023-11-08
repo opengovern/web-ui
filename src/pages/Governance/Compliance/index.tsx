@@ -9,7 +9,7 @@ import {
     TabList,
 } from '@tremor/react'
 import { useState } from 'react'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import Spinner from '../../../components/Spinner'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
@@ -50,7 +50,7 @@ export default function Compliance() {
     } = useComplianceApiV1BenchmarksSummaryList()
 
     return (
-        <Menu currentPage="compliance">
+        <Layout currentPage="compliance">
             <Header />
             <Grid numItems={3} className="w-full gap-4 mb-4">
                 <Col numColSpan={2}>
@@ -106,6 +106,6 @@ export default function Compliance() {
             ) : (
                 <Button onClick={() => sendNow()}>Retry</Button>
             )}
-        </Menu>
+        </Layout>
     )
 }

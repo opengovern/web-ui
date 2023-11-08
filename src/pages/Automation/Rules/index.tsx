@@ -15,7 +15,7 @@ import { PlusIcon } from '@heroicons/react/24/solid'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import { QueryBuilder } from 'react-querybuilder/dist/cjs/react-querybuilder.cjs.development'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
 import {
     useAlertingApiV1RuleDeleteDelete,
@@ -107,7 +107,7 @@ export default function Rules() {
     } = useAlertingApiV1RuleDeleteDelete(String(selectedRow?.id), {}, false)
 
     return (
-        <Menu currentPage="rules">
+        <Layout currentPage="rules">
             <Header />
             <Flex className="mb-4">
                 <TabGroup
@@ -229,6 +229,6 @@ export default function Rules() {
                     </Flex>
                 </Flex>
             </DrawerPanel>
-        </Menu>
+        </Layout>
     )
 }

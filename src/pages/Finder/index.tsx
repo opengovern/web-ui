@@ -35,7 +35,7 @@ import {
 } from '@heroicons/react/24/solid'
 import { Transition } from '@headlessui/react'
 import { useAtom } from 'jotai'
-import Menu from '../../components/Menu'
+import Layout from '../../components/Layout'
 import {
     useInventoryApiV1QueryList,
     useInventoryApiV1QueryRunCreate,
@@ -179,7 +179,7 @@ export default function Finder() {
     }
 
     return (
-        <Menu currentPage="finder">
+        <Layout currentPage="finder">
             <Header />
             {categoryLoading || queryLoading ? (
                 <Spinner className="mt-56" />
@@ -513,6 +513,6 @@ export default function Finder() {
                     </Flex>
                 </Flex>
             )}
-        </Menu>
+        </Layout>
     )
 }

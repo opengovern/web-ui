@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Flex } from '@tremor/react'
+import { Flex, Tab, TabGroup, TabList } from '@tremor/react'
 import {
     BuildingOfficeIcon,
     FolderIcon,
@@ -8,7 +8,8 @@ import {
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import jwtDecode from 'jwt-decode'
-import Menu from '../../components/Menu'
+import { useAtom } from 'jotai'
+import Layout from '../../components/Layout'
 import SettingsEntitlement from './Entitlement'
 import SettingsMembers from './Members'
 import SettingsWorkspaceAPIKeys from './APIKeys'
@@ -18,6 +19,7 @@ import SettingsGitRepositories from './GitRepositories'
 import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
 import Header from '../../components/Header'
+import { isDemoAtom } from '../../store'
 
 const navigation = [
     {
@@ -118,6 +120,24 @@ export default function Settings() {
         }
     }, [currentSubPage])
 
+    const [isDemo, setIsDemo] = useAtom(isDemoAtom)
+    const [selectedMode, setSelectedMode] = useState(isDemo ? 1 : 0)
+    useEffect(() => {
+        switch (selectedMode) {
+            case 0:
+                localStorage.demoMode = 'false'
+                setIsDemo(false)
+                break
+            case 1:
+                localStorage.demoMode = 'true'
+                setIsDemo(true)
+                break
+            default:
+                localStorage.demoMode = 'false'
+                setIsDemo(false)
+        }
+    }, [selectedMode])
+
     const getRole = () => {
         if (decodedToken) {
             if (curWorkspace?.id)
@@ -131,7 +151,7 @@ export default function Settings() {
     }
 
     return (
-        <Menu currentPage="settings">
+        <Layout currentPage="settings">
             <Header />
             {isLoading || tokenLoading ? (
                 <Flex justifyContent="center" className="mt-56">
@@ -184,11 +204,24 @@ export default function Settings() {
                                     )
                                 })}
                             </ul>
+                            <TabGroup
+                                index={selectedMode}
+                                onIndexChange={setSelectedMode}
+                                className="mt-12"
+                            >
+                                <TabList
+                                    className="border border-gray-200"
+                                    variant="solid"
+                                >
+                                    <Tab>App mode</Tab>
+                                    <Tab>Demo mode</Tab>
+                                </TabList>
+                            </TabGroup>
                         </nav>
                     </Flex>
                     <Flex className="w-full h-full pl-6">{selectedTab}</Flex>
                 </Flex>
             )}
-        </Menu>
+        </Layout>
     )
 }

@@ -10,7 +10,7 @@ import {
 } from '@tremor/react'
 import { useState } from 'react'
 import dayjs from 'dayjs'
-import Menu from '../../components/Menu'
+import Layout from '../../components/Layout'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import {
     exactPriceDisplay,
@@ -128,7 +128,7 @@ export default function Home() {
     }
 
     return (
-        <Menu currentPage="home">
+        <Layout currentPage="home">
             <Header />
             <Grid
                 numItems={1}
@@ -190,6 +190,6 @@ export default function Home() {
                 </Flex>
                 {renderChart(selectedType)}
             </Card>
-        </Menu>
+        </Layout>
     )
 }

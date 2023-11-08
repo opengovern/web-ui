@@ -4,7 +4,7 @@ import { timeAtom } from '../../../store'
 import SingleConnection from './SingleConnection'
 import NotFound from '../../Errors'
 import SingleMetric from './SingleMetric'
-import Menu from '../../../components/Menu'
+import Layout from '../../../components/Layout'
 
 export default function Single() {
     const activeTimeRange = useAtomValue(timeAtom)
@@ -36,22 +36,22 @@ export default function Single() {
     const renderPage = () => {
         if (urlParams[urlParams.length - 1].startsWith('account_')) {
             return (
-                <Menu currentPage="infrastructure">
+                <Layout currentPage="infrastructure">
                     <SingleConnection
                         activeTimeRange={activeTimeRange}
                         id={idGenerator()}
                     />
-                </Menu>
+                </Layout>
             )
         }
         if (urlParams[urlParams.length - 1].startsWith('metric_')) {
             return (
-                <Menu currentPage="infrastructure">
+                <Layout currentPage="infrastructure">
                     <SingleMetric
                         activeTimeRange={activeTimeRange}
                         metricId={idGenerator()}
                     />
-                </Menu>
+                </Layout>
             )
         }
         return <NotFound />

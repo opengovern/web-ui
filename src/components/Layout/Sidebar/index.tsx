@@ -20,11 +20,12 @@ import {
     ServerStackIcon,
     ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useState } from 'react'
 import {
     automationOpenAtom,
     complianceOpenAtom,
+    isDemoAtom,
     sideBarCollapsedAtom,
 } from '../../../store'
 import { KaytuIcon } from '../../../icons/icons'
@@ -100,6 +101,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
     const [complianceHover, setComplianceHover] = useState(false)
     const [automationOpen, setAutomationOpen] = useAtom(automationOpenAtom)
     const [automationHover, setAutomationHover] = useState(false)
+    const isDemo = useAtomValue(isDemoAtom)
     const isOpen = (item: any) => {
         if (item.name === 'Governance') {
             return complianceOpen
@@ -114,8 +116,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         <Flex
             flexDirection="col"
             alignItems="start"
-            className="z-20 h-full w-fit pb-4 bg-kaytu-950"
+            className="z-20 h-full w-fit pb-4 bg-kaytu-950 relative"
         >
+            {isDemo && (
+                <Flex className="absolute -left-7 top-3 bg-rose-800 w-fit px-8 -rotate-45">
+                    <Text className="text-white">Demo</Text>
+                </Flex>
+            )}
             <Flex flexDirection="col" className="h-full w-full gap-y-5">
                 <Flex
                     alignItems="center"
