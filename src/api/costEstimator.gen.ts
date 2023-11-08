@@ -1,93 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-    Api,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
-    RequestParams,
-} from './api'
+import { Api, RequestParams } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
 
-interface IuseCostEstimatorApiV1CostAwsListState {
+interface IuseCostEstimatorApiV1CostAwsDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: number
@@ -95,7 +12,7 @@ interface IuseCostEstimatorApiV1CostAwsListState {
     error?: any
 }
 
-export const useCostEstimatorApiV1CostAwsList = (
+export const useCostEstimatorApiV1CostAwsDetail = (
     resourceId: string,
     resourceType: string,
     params: RequestParams = {},
@@ -112,10 +29,11 @@ export const useCostEstimatorApiV1CostAwsList = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] = useState<IuseCostEstimatorApiV1CostAwsListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+    const [state, setState] =
+        useState<IuseCostEstimatorApiV1CostAwsDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([resourceId, resourceType, params, autoExecute])
     )
@@ -129,7 +47,7 @@ export const useCostEstimatorApiV1CostAwsList = (
         })
         try {
             api.costEstimator
-                .apiV1CostAwsList(resourceId, resourceType, params)
+                .apiV1CostAwsDetail(resourceId, resourceType, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -183,7 +101,7 @@ export const useCostEstimatorApiV1CostAwsList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseCostEstimatorApiV1CostAzureListState {
+interface IuseCostEstimatorApiV1CostAzureDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: number
@@ -191,7 +109,7 @@ interface IuseCostEstimatorApiV1CostAzureListState {
     error?: any
 }
 
-export const useCostEstimatorApiV1CostAzureList = (
+export const useCostEstimatorApiV1CostAzureDetail = (
     resourceId: string,
     resourceType: string,
     params: RequestParams = {},
@@ -209,7 +127,7 @@ export const useCostEstimatorApiV1CostAzureList = (
     }
 
     const [state, setState] =
-        useState<IuseCostEstimatorApiV1CostAzureListState>({
+        useState<IuseCostEstimatorApiV1CostAzureDetailState>({
             isLoading: true,
             isExecuted: false,
         })
@@ -226,7 +144,7 @@ export const useCostEstimatorApiV1CostAzureList = (
         })
         try {
             api.costEstimator
-                .apiV1CostAzureList(resourceId, resourceType, params)
+                .apiV1CostAzureDetail(resourceId, resourceType, params)
                 .then((resp) => {
                     setState({
                         ...state,

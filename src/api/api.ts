@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -18,6 +19,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiAction {
     headers?: Record<string, string>
     id?: number
     method?: string
+    name?: string
     url?: string
 }
 
@@ -37,6 +39,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq {
     body?: string
     headers?: Record<string, string>
     method?: string
+    name?: string
     url?: string
 }
 
@@ -62,6 +65,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs {
     atlassian_domain?: string
     email?: string
     issue_type_id?: string
+    name?: string
     project_id?: string
 }
 
@@ -104,13 +108,14 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiScope {
 
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs {
     channel_name?: string
+    name?: string
     slack_url?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers {
-    event_type?: GithubComKaytuIoKaytuEnginePkgAlertingApiEventType
+    action?: GithubComKaytuIoKaytuEnginePkgAlertingApiAction
     response_status?: number
-    scope?: GithubComKaytuIoKaytuEnginePkgAlertingApiScope
+    rule?: GithubComKaytuIoKaytuEnginePkgAlertingApiRule
     triggered_at?: string
     value?: number
 }
@@ -119,6 +124,7 @@ export interface GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest {
     body?: string
     headers?: Record<string, string>
     method?: string
+    name?: string
     url?: string
 }
 
@@ -537,46 +543,20 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapo
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
-    /**
-     * Finding ID
-     * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1-azure_cis_v140_7_5"
-     */
-    ID?: string
-    /**
-     * Benchmark ID
-     * @example "azure_cis_v140"
-     */
+    /** @example "azure_cis_v140" */
     benchmarkID?: string
-    /**
-     * Compliance job ID
-     * @example 1
-     */
+    /** @example 1 */
     complianceJobID?: number
-    /**
-     * Connection ID
-     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
-     */
+    /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
     connectionID?: string
-    /**
-     * Cloud provider
-     * @example "Azure"
-     */
+    /** @example "Azure" */
     connector?: SourceType
-    /**
-     * Timestamp of the policy evaluation
-     * @example 1589395200
-     */
+    /** @example 1589395200 */
     evaluatedAt?: number
-    /**
-     * Evaluator name
-     * @example "steampipe-v0.5"
-     */
+    /** @example "steampipe-v0.5" */
     evaluator?: string
     parentBenchmarks?: string[]
-    /**
-     * Policy ID
-     * @example "azure_cis_v140_7_5"
-     */
+    /** @example "azure_cis_v140_7_5" */
     policyID?: string
     policyTitle?: string
     /**
@@ -589,47 +569,23 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
      * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
      */
     providerConnectionName?: string
-    /**
-     * Reason for the policy evaluation result
-     * @example "The VM is not using managed disks"
-     */
+    /** @example "The VM is not using managed disks" */
     reason?: string
     /** Resource collection */
     resourceCollection?: string
-    /**
-     * Resource ID
-     * @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"
-     */
+    /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
     resourceID?: string
-    /**
-     * Resource location
-     * @example "eastus"
-     */
+    /** @example "eastus" */
     resourceLocation?: string
-    /**
-     * Resource name
-     * @example "vm-1"
-     */
+    /** @example "vm-1" */
     resourceName?: string
-    /**
-     * Resource type
-     * @example "Microsoft.Compute/virtualMachines"
-     */
+    /** @example "Microsoft.Compute/virtualMachines" */
     resourceType?: string
-    /**
-     * Compliance result
-     * @example "alarm"
-     */
+    /** @example "alarm" */
     result?: TypesComplianceResult
-    /**
-     * Compliance severity
-     * @example "low"
-     */
+    /** @example "low" */
     severity?: TypesFindingSeverity
-    /**
-     * Whether the policy is active or not
-     * @example true
-     */
+    /** @example true */
     stateActive?: boolean
 }
 
@@ -1382,6 +1338,7 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
     accessKey: string
     accountId?: string
+    assumeAdminRoleName?: string
     assumeRoleName?: string
     assumeRolePolicyName?: string
     externalId?: string
@@ -1719,6 +1676,17 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest
     name?: string
 }
 
+export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus {
+    BootstrapStatusOnboardConnection = 'OnboardConnection',
+    BootstrapStatusCreatingWorkspace = 'CreatingWorkspace',
+    BootstrapStatusWaitingForJobs = 'WaitingForJobs',
+    BootstrapStatusFinished = 'Finished',
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse {
+    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest {
     newName?: string
 }
@@ -1845,6 +1813,7 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
 
 export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus {
     StatusProvisioned = 'PROVISIONED',
+    StatusBootstrapping = 'BOOTSTRAPPING',
     StatusProvisioning = 'PROVISIONING',
     StatusProvisioningFailed = 'PROVISIONING_FAILED',
     StatusDeleting = 'DELETING',
@@ -2744,6 +2713,8 @@ export class Api<
                 resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
+                /** Key-Value tags in key=value format to filter by */
+                tag?: string[]
                 /** timestamp for values in epoch seconds */
                 timeAt?: number
             },
@@ -3306,6 +3277,25 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving a list of compliance tag keys with their possible values.
+         *
+         * @tags compliance
+         * @name ApiV1MetadataTagComplianceList
+         * @summary List compliance tag keys
+         * @request GET:/compliance/api/v1/metadata/tag/compliance
+         * @secure
+         */
+        apiV1MetadataTagComplianceList: (params: RequestParams = {}) =>
+            this.request<Record<string, string[]>, any>({
+                path: `/compliance/api/v1/metadata/tag/compliance`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving a list of insights tag keys with their possible values.
          *
          * @tags insights
@@ -3347,18 +3337,18 @@ export class Api<
          * @description Get AWS cost for each resource
          *
          * @tags cost-estimator
-         * @name ApiV1CostAwsList
+         * @name ApiV1CostAwsDetail
          * @summary Get AWS cost
-         * @request GET:/cost_estimator/api/v1/cost/aws
+         * @request GET:/cost_estimator/api/v1/cost/aws/{resourceId}/{resourceType}
          * @secure
          */
-        apiV1CostAwsList: (
+        apiV1CostAwsDetail: (
             resourceId: string,
             resourceType: string,
             params: RequestParams = {}
         ) =>
             this.request<number, any>({
-                path: `/cost_estimator/api/v1/cost/aws`,
+                path: `/cost_estimator/api/v1/cost/aws/${resourceId}/${resourceType}`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -3369,18 +3359,18 @@ export class Api<
          * @description Get Azure cost for each resource
          *
          * @tags cost-estimator
-         * @name ApiV1CostAzureList
+         * @name ApiV1CostAzureDetail
          * @summary Get Azure cost
-         * @request GET:/cost_estimator/api/v1/cost/azure
+         * @request GET:/cost_estimator/api/v1/cost/azure/{resourceId}/{resourceType}
          * @secure
          */
-        apiV1CostAzureList: (
+        apiV1CostAzureDetail: (
             resourceId: string,
             resourceType: string,
             params: RequestParams = {}
         ) =>
             this.request<number, any>({
-                path: `/cost_estimator/api/v1/cost/azure`,
+                path: `/cost_estimator/api/v1/cost/azure/${resourceId}/${resourceType}`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -4819,6 +4809,53 @@ export class Api<
             }),
     }
     workspace = {
+        /**
+         * No description
+         *
+         * @tags workspace
+         * @name ApiV1BootstrapDetail
+         * @summary Get bootstrap status
+         * @request GET:/workspace/api/v1/bootstrap/{workspace_name}
+         * @secure
+         */
+        apiV1BootstrapDetail: (
+            workspaceName: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
+                any
+            >({
+                path: `/workspace/api/v1/bootstrap/${workspaceName}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags workspace
+         * @name ApiV1OrganizationList
+         * @summary List all organizations
+         * @request GET:/workspace/api/v1/organization
+         * @secure
+         */
+        apiV1OrganizationList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization[],
+                any
+            >({
+                path: `/workspace/api/v1/organization`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
         /**
          * No description
          *
