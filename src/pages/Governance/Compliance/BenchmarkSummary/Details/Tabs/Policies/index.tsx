@@ -100,7 +100,7 @@ const columns: IColumn<any, any>[] = [
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
         ) =>
-            `${params.data?.failedConnectionCount} out of ${params.data?.totalResourcesCount}`,
+            `${params.data?.failedResourcesCount} out of ${params.data?.totalResourcesCount}`,
         resizable: true,
     },
     {
