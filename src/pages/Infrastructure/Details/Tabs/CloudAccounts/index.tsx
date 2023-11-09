@@ -33,7 +33,7 @@ const columns = (isDemo: boolean) => {
             sortable: true,
             filter: true,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className="blur-md">hahaha, you looser</span>
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
             ),
         },
         {
@@ -44,7 +44,7 @@ const columns = (isDemo: boolean) => {
             sortable: true,
             filter: true,
             cellRenderer: (param: ValueFormatterParams) => (
-                <span className="blur-md">hahaha, you looser</span>
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
             ),
         },
         {

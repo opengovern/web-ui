@@ -585,12 +585,12 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     result?: TypesComplianceResult
     /** @example "low" */
     severity?: TypesFindingSeverity
+    sortKey?: any[]
     /** @example true */
     stateActive?: boolean
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
-    activeOnly?: boolean
     /**
      * Benchmark ID
      * @example ["azure_cis_v140"]
@@ -631,10 +631,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      * @example ["low"]
      */
     severity?: string[]
-    /**
-     * Compliance result status
-     * @example ["alarm"]
-     */
+    /** @example ["alarm"] */
     status?: TypesComplianceResult[]
 }
 
@@ -649,7 +646,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummary
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
+    afterSortKey?: any[]
     filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
+    /** @example 100 */
+    limit?: number
+    sort?: Record<string, string>
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse {
@@ -3339,7 +3340,7 @@ export class Api<
          * @tags cost-estimator
          * @name ApiV1CostAwsDetail
          * @summary Get AWS cost
-         * @request GET:/cost_estimator/api/v1/cost/aws/{resourceId}/{resourceType}
+         * @request GET:/cost_estimator/api/v1/cost/aws/{resourceType}/{resourceId}
          * @secure
          */
         apiV1CostAwsDetail: (
@@ -3348,7 +3349,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<number, any>({
-                path: `/cost_estimator/api/v1/cost/aws/${resourceId}/${resourceType}`,
+                path: `/cost_estimator/api/v1/cost/aws/${resourceType}/${resourceId}`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -3361,7 +3362,7 @@ export class Api<
          * @tags cost-estimator
          * @name ApiV1CostAzureDetail
          * @summary Get Azure cost
-         * @request GET:/cost_estimator/api/v1/cost/azure/{resourceId}/{resourceType}
+         * @request GET:/cost_estimator/api/v1/cost/azure/{resourceType}/{resourceId}
          * @secure
          */
         apiV1CostAzureDetail: (
@@ -3370,7 +3371,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<number, any>({
-                path: `/cost_estimator/api/v1/cost/azure/${resourceId}/${resourceType}`,
+                path: `/cost_estimator/api/v1/cost/azure/${resourceType}/${resourceId}`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -4828,6 +4829,28 @@ export class Api<
             >({
                 path: `/workspace/api/v1/bootstrap/${workspaceName}`,
                 method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags workspace
+         * @name ApiV1BootstrapCredentialCreate
+         * @summary Add credential for workspace to be onboarded
+         * @request POST:/workspace/api/v1/bootstrap/{workspace_name}/credential
+         * @secure
+         */
+        apiV1BootstrapCredentialCreate: (
+            workspaceName: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<number, any>({
+                path: `/workspace/api/v1/bootstrap/${workspaceName}/credential`,
+                method: 'POST',
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',

@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import {
-    GridOptions,
+    IServerSideDatasource,
     RowClickedEvent,
+    SortModelItem,
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
+import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { useComplianceApiV1FindingsCreate } from '../../../../../../../api/compliance.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../../../components/RenderObject'
@@ -103,7 +105,7 @@ const columns = (isDemo: boolean) => {
             headerName: 'Severity',
             type: 'string',
             sortable: true,
-            rowGroup: true,
+            // rowGroup: true,
             filter: true,
             hide: true,
             resizable: true,
@@ -137,9 +139,15 @@ const columns = (isDemo: boolean) => {
 export default function Findings({ id, connections }: IFinder) {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
+    const [sortModel, setSortModel] = useState<SortModelItem[]>([])
+    const [trigger, setTrigger] = useState(false)
     const isDemo = useAtomValue(isDemoAtom)
 
-    const { response: findings, isLoading } = useComplianceApiV1FindingsCreate({
+    const {
+        response: findings,
+        isLoading,
+        sendNow,
+    } = useComplianceApiV1FindingsCreate({
         filters: {
             benchmarkID: [String(id)],
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -150,31 +158,46 @@ export default function Findings({ id, connections }: IFinder) {
             connectionID: connections.connections,
             activeOnly: true,
         },
-        page: {
-            no: 1,
-            size: 10000,
-        },
+        sort: sortModel.length
+            ? { [sortModel[0].colId]: sortModel[0].sort }
+            : {},
     })
 
-    const options: GridOptions = {
-        enableGroupEdit: true,
-        columnTypes: {
-            dimension: {
-                enableRowGroup: true,
-                enablePivot: true,
-            },
-        },
-        rowGroupPanelShow: 'always',
-        groupAllowUnbalanced: true,
-        autoGroupColumnDef: {
-            headerName: 'Severity',
-            flex: 2,
-            sortable: true,
-            filter: true,
-            resizable: true,
-            // cellRendererParams: {
-            //     suppressCount: true,
-            // },
+    const getData = (sort: SortModelItem[]) => {
+        setTrigger(false)
+        console.log(sort)
+        setSortModel(sort)
+        sendNow()
+    }
+
+    const datasource: IServerSideDatasource = {
+        getRows: (params: IServerSideGetRowsParams) => {
+            if (params.request.sortModel.length > 0) {
+                if (sortModel.length > 0) {
+                    if (
+                        params.request.sortModel[0].colId !==
+                            sortModel[0].colId ||
+                        params.request.sortModel[0].sort !== sortModel[0].sort
+                    ) {
+                        setTrigger(true)
+                        getData([params.request.sortModel[0]])
+                    }
+                } else {
+                    setTrigger(true)
+                    getData([params.request.sortModel[0]])
+                }
+            } else if (sortModel.length > 0) {
+                setTrigger(true)
+                getData([])
+            }
+            if (findings) {
+                params.success({
+                    rowData: findings?.findings || [],
+                    rowCount: findings?.totalCount || 0,
+                })
+            } else {
+                params.fail()
+            }
         },
     }
 
@@ -185,17 +208,16 @@ export default function Findings({ id, connections }: IFinder) {
                 downloadable
                 id="compliance_findings"
                 columns={columns(isDemo)}
-                rowData={findings?.findings || []}
                 onCellClicked={(event: RowClickedEvent) => {
                     setFinding(event.data)
                     setOpen(true)
                 }}
-                options={options}
                 onGridReady={(e) => {
                     if (isLoading) {
                         e.api.showLoadingOverlay()
                     }
                 }}
+                serverSideDatasource={datasource}
                 loading={isLoading}
             />
             <DrawerPanel

@@ -124,7 +124,6 @@ export default function InsightList() {
         sendNow: insightSendNow,
         error: insightError,
     } = useComplianceApiV1InsightList(query)
-    console.log(insightList)
     const { response: categories } = useComplianceApiV1MetadataTagInsightList()
 
     const navigateToInsightsDetails = (id: number | undefined) => {
