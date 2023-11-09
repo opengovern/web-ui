@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import {
-    GridOptions,
     IServerSideDatasource,
     RowClickedEvent,
+    SortModelItem,
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { Title } from '@tremor/react'
@@ -139,9 +139,15 @@ const columns = (isDemo: boolean) => {
 export default function Findings({ id, connections }: IFinder) {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
+    const [sortModel, setSortModel] = useState<SortModelItem[]>([])
+    const [trigger, setTrigger] = useState(false)
     const isDemo = useAtomValue(isDemoAtom)
 
-    const { response: findings, isLoading } = useComplianceApiV1FindingsCreate({
+    const {
+        response: findings,
+        isLoading,
+        sendNow,
+    } = useComplianceApiV1FindingsCreate({
         filters: {
             benchmarkID: [String(id)],
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -152,45 +158,47 @@ export default function Findings({ id, connections }: IFinder) {
             connectionID: connections.connections,
             activeOnly: true,
         },
+        sort: sortModel.length
+            ? { [sortModel[0].colId]: sortModel[0].sort }
+            : {},
     })
+
+    const getData = (sort: SortModelItem[]) => {
+        setTrigger(false)
+        console.log(sort)
+        setSortModel(sort)
+        sendNow()
+    }
 
     const datasource: IServerSideDatasource = {
         getRows: (params: IServerSideGetRowsParams) => {
+            if (params.request.sortModel.length > 0) {
+                if (sortModel.length > 0) {
+                    if (
+                        params.request.sortModel[0].colId !==
+                            sortModel[0].colId ||
+                        params.request.sortModel[0].sort !== sortModel[0].sort
+                    ) {
+                        setTrigger(true)
+                        getData([params.request.sortModel[0]])
+                    }
+                } else {
+                    setTrigger(true)
+                    getData([params.request.sortModel[0]])
+                }
+            } else if (sortModel.length > 0) {
+                setTrigger(true)
+                getData([])
+            }
             if (findings) {
-                // supply rows for requested block to grid
                 params.success({
                     rowData: findings?.findings || [],
                     rowCount: findings?.totalCount || 0,
                 })
             } else {
-                // inform grid request failed
                 params.fail()
             }
         },
-    }
-
-    const options: GridOptions = {
-        // enableGroupEdit: true,
-        // columnTypes: {
-        //     dimension: {
-        //         enableRowGroup: true,
-        //         enablePivot: true,
-        //     },
-        // },
-        // rowGroupPanelShow: 'always',
-        // groupAllowUnbalanced: true,
-        // autoGroupColumnDef: {
-        //     headerName: 'Severity',
-        //     flex: 2,
-        //     sortable: true,
-        //     filter: true,
-        //     resizable: true,
-        //     // cellRendererParams: {
-        //     //     suppressCount: true,
-        //     // },
-        // },
-        rowModelType: 'serverSide',
-        // cacheBlockSize: 25,
     }
 
     return (
@@ -200,12 +208,10 @@ export default function Findings({ id, connections }: IFinder) {
                 downloadable
                 id="compliance_findings"
                 columns={columns(isDemo)}
-                rowData={[]}
                 onCellClicked={(event: RowClickedEvent) => {
                     setFinding(event.data)
                     setOpen(true)
                 }}
-                options={options}
                 onGridReady={(e) => {
                     if (isLoading) {
                         e.api.showLoadingOverlay()
