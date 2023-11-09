@@ -5,6 +5,7 @@ import {
     GridOptions,
     GridReadyEvent,
     ICellRendererParams,
+    IServerSideDatasource,
     NestedFieldPaths,
     RowClickedEvent,
     ValueFormatterFunc,
@@ -14,7 +15,7 @@ import 'ag-grid-enterprise'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 import 'ag-grid-community/styles/agGridMaterialFont.css'
-import { useEffect, useRef } from 'react'
+import { ReactNode, useEffect, useRef } from 'react'
 import { Button, Flex, Title } from '@tremor/react'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/20/solid'
 import {
@@ -51,14 +52,15 @@ export interface IColumn<TData, TValue> {
 interface IProps<TData, TValue> {
     id: string
     columns: IColumn<TData, TValue>[]
-    rowData: TData[] | undefined
-    pinnedRow?: any | undefined
+    rowData?: TData[] | undefined
+    pinnedRow?: TData[] | undefined
+    serverSideDatasource?: IServerSideDatasource | undefined
     onGridReady?: (event: GridReadyEvent<TData>) => void
     onCellClicked?: (event: CellClickedEvent<TData>) => void
     onRowClicked?: (event: RowClickedEvent<TData>) => void
     downloadable?: boolean
     title?: string
-    children?: any
+    children?: ReactNode
     options?: GridOptions
     loading?: boolean
 }
@@ -68,6 +70,7 @@ export default function Table<TData = any, TValue = any>({
     columns,
     rowData,
     pinnedRow,
+    serverSideDatasource,
     onGridReady,
     onCellClicked,
     onRowClicked,
@@ -104,6 +107,18 @@ export default function Table<TData = any, TValue = any>({
     useEffect(() => {
         gridRef.current?.api?.setPinnedTopRowData(pinnedRow)
     }, [pinnedRow])
+
+    useEffect(() => {
+        if (rowData) {
+            gridRef.current?.api?.setRowData(rowData || [])
+        }
+    }, [rowData])
+
+    useEffect(() => {
+        if (serverSideDatasource) {
+            gridRef.current?.api?.setServerSideDatasource(serverSideDatasource)
+        }
+    }, [serverSideDatasource])
 
     const saveVisibility = () => {
         if (visibility.current) {
@@ -216,6 +231,7 @@ export default function Table<TData = any, TValue = any>({
 
     const gridOptions: GridOptions = {
         columnDefs: buildColumnDef(),
+        rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
         pagination: true,
         paginationPageSize: 25,
         rowSelection: 'multiple',
@@ -287,7 +303,7 @@ export default function Table<TData = any, TValue = any>({
                     ref={gridRef}
                     domLayout="autoHeight"
                     gridOptions={gridOptions}
-                    rowData={rowData}
+                    // rowData={rowData}
                 />
             </div>
         </Flex>

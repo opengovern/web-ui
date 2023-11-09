@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import {
     GridOptions,
+    IServerSideDatasource,
     RowClickedEvent,
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
+import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { useComplianceApiV1FindingsCreate } from '../../../../../../../api/compliance.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../../../../components/RenderObject'
@@ -103,7 +105,7 @@ const columns = (isDemo: boolean) => {
             headerName: 'Severity',
             type: 'string',
             sortable: true,
-            rowGroup: true,
+            // rowGroup: true,
             filter: true,
             hide: true,
             resizable: true,
@@ -150,32 +152,45 @@ export default function Findings({ id, connections }: IFinder) {
             connectionID: connections.connections,
             activeOnly: true,
         },
-        page: {
-            no: 1,
-            size: 10000,
-        },
     })
 
+    const datasource: IServerSideDatasource = {
+        getRows: (params: IServerSideGetRowsParams) => {
+            if (findings) {
+                // supply rows for requested block to grid
+                params.success({
+                    rowData: findings?.findings || [],
+                    rowCount: findings?.totalCount || 0,
+                })
+            } else {
+                // inform grid request failed
+                params.fail()
+            }
+        },
+    }
+
     const options: GridOptions = {
-        enableGroupEdit: true,
-        columnTypes: {
-            dimension: {
-                enableRowGroup: true,
-                enablePivot: true,
-            },
-        },
-        rowGroupPanelShow: 'always',
-        groupAllowUnbalanced: true,
-        autoGroupColumnDef: {
-            headerName: 'Severity',
-            flex: 2,
-            sortable: true,
-            filter: true,
-            resizable: true,
-            // cellRendererParams: {
-            //     suppressCount: true,
-            // },
-        },
+        // enableGroupEdit: true,
+        // columnTypes: {
+        //     dimension: {
+        //         enableRowGroup: true,
+        //         enablePivot: true,
+        //     },
+        // },
+        // rowGroupPanelShow: 'always',
+        // groupAllowUnbalanced: true,
+        // autoGroupColumnDef: {
+        //     headerName: 'Severity',
+        //     flex: 2,
+        //     sortable: true,
+        //     filter: true,
+        //     resizable: true,
+        //     // cellRendererParams: {
+        //     //     suppressCount: true,
+        //     // },
+        // },
+        rowModelType: 'serverSide',
+        // cacheBlockSize: 25,
     }
 
     return (
@@ -185,7 +200,7 @@ export default function Findings({ id, connections }: IFinder) {
                 downloadable
                 id="compliance_findings"
                 columns={columns(isDemo)}
-                rowData={findings?.findings || []}
+                rowData={[]}
                 onCellClicked={(event: RowClickedEvent) => {
                     setFinding(event.data)
                     setOpen(true)
@@ -196,6 +211,7 @@ export default function Findings({ id, connections }: IFinder) {
                         e.api.showLoadingOverlay()
                     }
                 }}
+                serverSideDatasource={datasource}
                 loading={isLoading}
             />
             <DrawerPanel
