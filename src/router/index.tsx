@@ -25,6 +25,7 @@ import SpendDetails from '../pages/Spend/Details'
 import InfrastructureDetails from '../pages/Infrastructure/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
+import Findings from '../pages/Governance/Findings'
 
 const routes = [
     {
@@ -164,6 +165,11 @@ const authRoutes = [
         key: 'service advisor',
         path: '/:ws/service-advisor',
         component: ServiceAdvisor,
+    },
+    {
+        key: 'findings',
+        path: '/:ws/findings',
+        component: Findings,
     },
     {
         key: 'service advisor summary',

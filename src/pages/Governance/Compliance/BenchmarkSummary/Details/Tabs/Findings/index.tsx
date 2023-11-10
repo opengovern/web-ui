@@ -140,7 +140,6 @@ export default function Findings({ id, connections }: IFinder) {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
-    const [trigger, setTrigger] = useState(false)
     const isDemo = useAtomValue(isDemoAtom)
 
     const {
@@ -164,8 +163,6 @@ export default function Findings({ id, connections }: IFinder) {
     })
 
     const getData = (sort: SortModelItem[]) => {
-        setTrigger(false)
-        console.log(sort)
         setSortModel(sort)
         sendNow()
     }
@@ -179,15 +176,12 @@ export default function Findings({ id, connections }: IFinder) {
                             sortModel[0].colId ||
                         params.request.sortModel[0].sort !== sortModel[0].sort
                     ) {
-                        setTrigger(true)
                         getData([params.request.sortModel[0]])
                     }
                 } else {
-                    setTrigger(true)
                     getData([params.request.sortModel[0]])
                 }
             } else if (sortModel.length > 0) {
-                setTrigger(true)
                 getData([])
             }
             if (findings) {
