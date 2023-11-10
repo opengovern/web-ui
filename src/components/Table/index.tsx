@@ -63,6 +63,7 @@ interface IProps<TData, TValue> {
     children?: ReactNode
     options?: GridOptions
     loading?: boolean
+    fullWidth?: boolean
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -75,6 +76,7 @@ export default function Table<TData = any, TValue = any>({
     onCellClicked,
     onRowClicked,
     downloadable = false,
+    fullWidth = false,
     title,
     children,
     options,
@@ -283,7 +285,11 @@ export default function Table<TData = any, TValue = any>({
                 {!!title?.length && (
                     <Title className="font-semibold">{title}</Title>
                 )}
-                <Flex className="w-fit gap-3">
+                <Flex
+                    flexDirection={fullWidth ? 'row-reverse' : 'row'}
+                    alignItems={fullWidth ? 'start' : 'center'}
+                    className={`${fullWidth ? '' : 'w-fit'} gap-3`}
+                >
                     {downloadable && (
                         <Button
                             variant="secondary"

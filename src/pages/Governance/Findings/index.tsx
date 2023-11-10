@@ -3,6 +3,7 @@ import {
     AccordionBody,
     AccordionHeader,
     Card,
+    Divider,
     Flex,
     Text,
     TextInput,
@@ -33,6 +34,7 @@ import { RenderObject } from '../../../components/RenderObject'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Spinner from '../../../components/Spinner'
 import { benchmarkList } from '../Compliance'
+import Tag from '../../../components/Tag'
 
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -277,6 +279,7 @@ export default function Findings() {
                             </Flex>
                         </AccordionBody>
                     </Accordion>
+                    <Divider className="my-3" />
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="font-semibold text-gray-800">
@@ -349,6 +352,7 @@ export default function Findings() {
                             </Flex>
                         </AccordionBody>
                     </Accordion>
+                    <Divider className="my-3" />
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="text-gray-800 font-semibold">
@@ -382,6 +386,7 @@ export default function Findings() {
                             )}
                         </AccordionBody>
                     </Accordion>
+                    <Divider className="my-3" />
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="text-gray-800">
@@ -389,6 +394,7 @@ export default function Findings() {
                             </Text>
                         </AccordionHeader>
                     </Accordion>
+                    <Divider className="my-3" />
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="text-gray-800">
@@ -397,9 +403,9 @@ export default function Findings() {
                         </AccordionHeader>
                     </Accordion>
                 </Card>
-                <Flex className="w-full pl-6 -mt-[50px]">
+                <Flex className="w-full pl-6">
                     <Table
-                        title=" "
+                        fullWidth
                         downloadable
                         id="compliance_findings"
                         columns={columns(isDemo)}
@@ -414,7 +420,20 @@ export default function Findings() {
                         }}
                         serverSideDatasource={datasource}
                         loading={isLoading}
-                    />
+                    >
+                        <Flex
+                            className="flex-wrap gap-3"
+                            alignItems="start"
+                            justifyContent="start"
+                        >
+                            {provider.length > 0 && (
+                                <Tag
+                                    text={provider}
+                                    onClick={() => setProvider('')}
+                                />
+                            )}
+                        </Flex>
+                    </Table>
                     <DrawerPanel
                         open={open}
                         onClose={() => setOpen(false)}
