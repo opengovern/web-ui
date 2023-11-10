@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -518,6 +517,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example "azure_cis_v140"
      */
     id?: string
+    /**
+     * Last job status
+     * @example "success"
+     */
+    lastJobStatus?: string
     /** Compliance result summary */
     result?: TypesComplianceResultSummary
     /** Tags */
@@ -556,6 +560,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example "steampipe-v0.5" */
     evaluator?: string
     parentBenchmarks?: string[]
+    /** @example 1 */
+    parentComplianceJobID?: number
     /** @example "azure_cis_v140_7_5" */
     policyID?: string
     policyTitle?: string
@@ -1677,10 +1683,18 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest
     name?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest {
+    config?: any
+    connectorType?: SourceType
+}
+
 export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus {
     BootstrapStatusOnboardConnection = 'OnboardConnection',
     BootstrapStatusCreatingWorkspace = 'CreatingWorkspace',
-    BootstrapStatusWaitingForJobs = 'WaitingForJobs',
+    BootstrapStatusWaitingForDiscovery = 'WaitingForDiscovery',
+    BootstrapStatusWaitingForAnalytics = 'WaitingForAnalytics',
+    BootstrapStatusWaitingForCompliance = 'WaitingForCompliance',
+    BootstrapStatusWaitingForInsights = 'WaitingForInsights',
     BootstrapStatusFinished = 'Finished',
 }
 
@@ -1741,6 +1755,8 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
     description?: string
     /** @example "ws-698542025141040315" */
     id?: string
+    is_bootstrap_input_finished?: boolean
+    is_created?: boolean
     /** @example "kaytu" */
     name?: string
     organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
@@ -1788,6 +1804,8 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     description?: string
     /** @example "ws-698542025141040315" */
     id?: string
+    is_bootstrap_input_finished?: boolean
+    is_created?: boolean
     /** @example "kaytu" */
     name?: string
     organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
@@ -2760,6 +2778,32 @@ export class Api<
             }),
 
         /**
+         * No description
+         *
+         * @tags compliance
+         * @name ApiV1BenchmarksPoliciesPolicyIdDetail
+         * @summary Get benchmark policies
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/policies/:policyId
+         * @secure
+         */
+        apiV1BenchmarksPoliciesPolicyIdDetail: (
+            benchmarkId: string,
+            policyId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary,
+                any
+            >({
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies/${policyId}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving a summary of a benchmark and its associated checks and results.
          *
          * @tags compliance
@@ -2855,6 +2899,32 @@ export class Api<
                 any
             >({
                 path: `/compliance/api/v1/findings`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving possible values for finding filters.
+         *
+         * @tags compliance
+         * @name ApiV1FindingsFiltersCreate
+         * @summary Get possible values for finding filters
+         * @request POST:/compliance/api/v1/findings/filters
+         * @secure
+         */
+        apiV1FindingsFiltersCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+                any
+            >({
+                path: `/compliance/api/v1/findings/filters`,
                 method: 'POST',
                 body: request,
                 secure: true,
@@ -4846,10 +4916,34 @@ export class Api<
          */
         apiV1BootstrapCredentialCreate: (
             workspaceName: string,
+            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
             params: RequestParams = {}
         ) =>
             this.request<number, any>({
                 path: `/workspace/api/v1/bootstrap/${workspaceName}/credential`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags workspace
+         * @name ApiV1BootstrapFinishCreate
+         * @summary finish bootstrap
+         * @request POST:/workspace/api/v1/bootstrap/{workspace_name}/finish
+         * @secure
+         */
+        apiV1BootstrapFinishCreate: (
+            workspaceName: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<string, any>({
+                path: `/workspace/api/v1/bootstrap/${workspaceName}/finish`,
                 method: 'POST',
                 secure: true,
                 type: ContentType.Json,

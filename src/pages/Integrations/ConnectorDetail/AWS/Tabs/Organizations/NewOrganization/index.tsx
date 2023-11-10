@@ -9,24 +9,29 @@ interface INewOrganization {
     open: boolean
     onClose: () => void
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    forceFromScratch?: boolean
+    bootstrapMode?: boolean
 }
 
 export default function NewOrganization({
     open,
     onClose,
     accounts,
+    forceFromScratch = false,
+    bootstrapMode = false,
 }: INewOrganization) {
     const [option, setOption] = useState('')
-    const [show, setShow] = useState('')
+    const [show, setShow] = useState(forceFromScratch ? 'scratch' : '')
 
     const close = () => {
         setOption('')
-        setShow('')
+        setShow(forceFromScratch ? 'scratch' : '')
         onClose()
     }
 
     const render = (tab: string) => {
-        if (tab === 'scratch') return <FromScratch onClose={close} />
+        if (tab === 'scratch')
+            return <FromScratch bootstrapMode={bootstrapMode} onClose={close} />
         if (tab === 'existing')
             return <FromExisting accounts={accounts} onClose={close} />
         return (

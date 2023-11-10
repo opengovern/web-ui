@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import { Button, Flex, Grid } from '@tremor/react'
 import Layout from '../../components/Layout'
+import { useNavigate } from 'react-router-dom'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
-import CreateWorkspace from './CreateWorkspace'
 import Spinner from '../../components/Spinner'
 import Header from '../../components/Header'
+import Boostrap from './Bootstrap'
 
 export default function Workspaces() {
-    const [openDrawer, setOpenDrawer] = useState(false)
+    // const [openDrawer, setOpenDrawer] = useState(false)
+    const navigate = useNavigate()
+
     const {
         response: workspaces,
         isLoading,
@@ -27,18 +30,18 @@ export default function Workspaces() {
                         <Header>
                             <Button
                                 variant="secondary"
-                                onClick={() => setOpenDrawer(true)}
+                                onClick={() => navigate(`/new-ws`)}
                             >
                                 Add new Kaytu instance
                             </Button>
                         </Header>
-                        <CreateWorkspace
+                        {/* <CreateWorkspace
                             open={openDrawer}
                             onClose={() => {
                                 setOpenDrawer(false)
                                 refreshList()
                             }}
-                        />
+                        /> */}
                         <Grid numItems={1} className="gap-4">
                             {workspaces?.map((ws) => {
                                 return (

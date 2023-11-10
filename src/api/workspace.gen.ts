@@ -2,6 +2,77 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
+    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
+    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
@@ -38,7 +109,7 @@ export const useWorkspaceApiV1BootstrapDetail = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -119,6 +190,7 @@ interface IuseWorkspaceApiV1BootstrapCredentialCreateState {
 
 export const useWorkspaceApiV1BootstrapCredentialCreate = (
     workspaceName: string,
+    request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -128,13 +200,109 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
 
     const [state, setState] =
         useState<IuseWorkspaceApiV1BootstrapCredentialCreateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([workspaceName, request, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.workspace
+                .apiV1BootstrapCredentialCreate(workspaceName, request, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (
+        JSON.stringify([workspaceName, request, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([workspaceName, request, params, autoExecute])
+        )
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseWorkspaceApiV1BootstrapFinishCreateState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useWorkspaceApiV1BootstrapFinishCreate = (
+    workspaceName: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace('kaytu')
+    } else {
+        setWorkspace('kaytu')
+    }
+
+    const [state, setState] =
+        useState<IuseWorkspaceApiV1BootstrapFinishCreateState>({
             isLoading: true,
             isExecuted: false,
         })
@@ -151,7 +319,7 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
         })
         try {
             api.workspace
-                .apiV1BootstrapCredentialCreate(workspaceName, params)
+                .apiV1BootstrapFinishCreate(workspaceName, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -218,7 +386,7 @@ export const useWorkspaceApiV1OrganizationList = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -310,7 +478,7 @@ export const useWorkspaceApiV1OrganizationCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -401,7 +569,7 @@ export const useWorkspaceApiV1OrganizationDelete = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -492,7 +660,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -581,7 +749,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -672,7 +840,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -763,7 +931,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -860,7 +1028,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -957,7 +1125,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1053,7 +1221,7 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1144,7 +1312,7 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1236,7 +1404,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1331,7 +1499,7 @@ export const useWorkspaceApiV1WorkspacesList = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1421,7 +1589,7 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1512,7 +1680,7 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1606,7 +1774,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1702,7 +1870,7 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }

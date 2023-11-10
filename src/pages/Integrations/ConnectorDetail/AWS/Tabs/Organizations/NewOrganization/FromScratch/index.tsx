@@ -1,5 +1,6 @@
 import { Flex, Text } from '@tremor/react'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
 import ThirdStep from './ThirdStep'
@@ -9,12 +10,15 @@ import { useOnboardApiV1CredentialCreate } from '../../../../../../../../api/onb
 import Spinner from '../../../../../../../../components/Spinner'
 import { getErrorMessage } from '../../../../../../../../types/apierror'
 import { SourceType } from '../../../../../../../../api/api'
+import { useWorkspaceApiV1BootstrapCredentialCreate } from '../../../../../../../../api/workspace.gen'
 
 interface ISteps {
+    bootstrapMode: boolean
     onClose: () => void
 }
 
-export default function FromScratch({ onClose }: ISteps) {
+export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
+    const currentWorkspace = useParams<{ ws: string }>().ws
     const [stepNum, setStepNum] = useState(1)
     const [data, setData] = useState({
         accessKey: '',
@@ -49,7 +53,27 @@ export default function FromScratch({ onClose }: ISteps) {
             false
         )
 
-    if (isLoading && isExecuted) {
+    const {
+        error: bcError,
+        isLoading: bcIsLoading,
+        isExecuted: bcIsExecuted,
+        sendNow: bcSendNow,
+    } = useWorkspaceApiV1BootstrapCredentialCreate(
+        currentWorkspace || '',
+        {
+            connectorType: SourceType.CloudAWS,
+            config: {
+                accessKey: data.accessKey,
+                secretKey: data.secretKey,
+                assumeRoleName: data.roleName,
+                externalId: data.externalId,
+            },
+        },
+        {},
+        false
+    )
+
+    if ((isLoading && isExecuted) || (bcIsLoading && bcIsExecuted)) {
         return <Spinner />
     }
 
@@ -97,10 +121,17 @@ export default function FromScratch({ onClose }: ISteps) {
                         roleName={data.roleName}
                         externalId={data.externalId}
                         onPrevious={() => setStepNum(3)}
-                        error={getErrorMessage(error)}
-                        isLoading={isExecuted && isLoading}
+                        error={getErrorMessage(bootstrapMode ? bcError : error)}
+                        isLoading={
+                            (isExecuted && isLoading) ||
+                            (bcIsExecuted && bcIsLoading)
+                        }
                         onSubmit={() => {
-                            sendNow()
+                            if (bootstrapMode) {
+                                bcSendNow()
+                            } else {
+                                sendNow()
+                            }
                         }}
                     />
                 )

@@ -25,6 +25,7 @@ import SpendDetails from '../pages/Spend/Details'
 import InfrastructureDetails from '../pages/Infrastructure/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
+import Boostrap from '../pages/Workspaces/Bootstrap'
 
 const routes = [
     {
@@ -194,6 +195,16 @@ const authRoutes = [
         key: 'rules',
         path: '/:ws/rules',
         component: Rules,
+    },
+    {
+        key: 'bootstrap',
+        path: '/:ws/bootstrap',
+        component: Boostrap,
+    },
+    {
+        key: 'new-ws',
+        path: '/new-ws',
+        component: Boostrap,
     },
     {
         key: 'rules',

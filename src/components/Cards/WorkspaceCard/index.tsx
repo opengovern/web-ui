@@ -39,6 +39,7 @@ const showDelete = (status: string) => {
     switch (status) {
         case 'PROVISIONED':
         case 'PROVISIONING':
+        case 'BOOTSTRAPPING':
         case 'PROVISIONING_FAILED':
         case 'SUSPENDED':
         case 'SUSPENDING':
@@ -118,7 +119,18 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                     </Button>
                 )
             default:
-                return null
+                return (
+                    <Button
+                        variant="primary"
+                        icon={ArrowSmallRightIcon}
+                        iconPosition="right"
+                        onClick={() => {
+                            navigate(`/${workspace.name}/bootstrap`)
+                        }}
+                    >
+                        Bootstrap
+                    </Button>
+                )
         }
     }
 

@@ -13,9 +13,14 @@ import { getErrorMessage } from '../../../../../../../types/apierror'
 interface INewPrinciple {
     open: boolean
     onClose: () => void
+    useDrawer?: boolean
 }
 
-export default function NewPrincipal({ open, onClose }: INewPrinciple) {
+export default function NewPrincipal({
+    open,
+    onClose,
+    useDrawer = true,
+}: INewPrinciple) {
     const [stepNum, setStepNum] = useState(1)
     const [data, setData] = useState({
         tenId: '',
@@ -109,16 +114,29 @@ export default function NewPrincipal({ open, onClose }: INewPrinciple) {
                 return ' '
         }
     }
-    return (
-        <DrawerPanel title="New Service Principle" open={open} onClose={close}>
-            <Flex
-                flexDirection="col"
-                justifyContent="between"
-                className="h-full"
+
+    if (useDrawer) {
+        return (
+            <DrawerPanel
+                title="New Service Principle"
+                open={open}
+                onClose={close}
             >
-                <Steps steps={3} currentStep={stepNum} />
-                {showStep(stepNum)}
-            </Flex>
-        </DrawerPanel>
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="h-full"
+                >
+                    <Steps steps={3} currentStep={stepNum} />
+                    {showStep(stepNum)}
+                </Flex>
+            </DrawerPanel>
+        )
+    }
+    return (
+        <Flex flexDirection="col" justifyContent="between" className="h-full">
+            <Steps steps={3} currentStep={stepNum} />
+            {showStep(stepNum)}
+        </Flex>
     )
 }
