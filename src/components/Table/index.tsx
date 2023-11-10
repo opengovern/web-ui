@@ -236,7 +236,7 @@ export default function Table<TData = any, TValue = any>({
         paginationPageSize: 25,
         rowSelection: 'multiple',
         suppressExcelExport: true,
-        animateRows: true,
+        animateRows: false,
         getRowHeight: () => 50,
         onGridReady: (e) => {
             if (onGridReady) {

@@ -2,10 +2,10 @@ import {
     Accordion,
     AccordionBody,
     AccordionHeader,
-    Button,
     Card,
     Flex,
     Text,
+    TextInput,
     Title,
 } from '@tremor/react'
 import { useState } from 'react'
@@ -17,14 +17,22 @@ import {
 } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
+import { Checkbox, Radio, useCheckboxState } from 'pretty-checkbox-react'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
 import { isDemoAtom } from '../../../store'
 import Table, { IColumn } from '../../../components/Table'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
-import { useComplianceApiV1FindingsCreate } from '../../../api/compliance.gen'
+import {
+    useComplianceApiV1BenchmarksSummaryList,
+    useComplianceApiV1FindingsCreate,
+} from '../../../api/compliance.gen'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { RenderObject } from '../../../components/RenderObject'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import Spinner from '../../../components/Spinner'
+import { benchmarkList } from '../Compliance'
 
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -147,6 +155,11 @@ export default function Findings() {
     const [finding, setFinding] = useState<any>(undefined)
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
     const [provider, setProvider] = useState('')
+    const [connectionSearch, setConnectionSearch] = useState('')
+
+    const connectionCheckbox = useCheckboxState({ state: [] })
+    const benchmarkCheckbox = useCheckboxState({ state: [] })
+
     const isDemo = useAtomValue(isDemoAtom)
 
     const {
@@ -155,17 +168,40 @@ export default function Findings() {
         sendNow,
     } = useComplianceApiV1FindingsCreate({
         filters: {
-            // benchmarkID: [String(id)],
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             connector: provider.length ? [provider] : [],
-            // connectionID: connections.connections,
-            // activeOnly: true,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            connectionID: connectionCheckbox.state,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            benchmarkID: benchmarkCheckbox.state,
+            activeOnly: true,
         },
         sort: sortModel.length
             ? { [sortModel[0].colId]: sortModel[0].sort }
             : {},
     })
+    const { response: connections, isLoading: connectionsLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            connector: provider.length ? [provider] : [],
+            pageNumber: 1,
+            pageSize: 10000,
+            needCost: false,
+            needResourceCount: false,
+        })
+    const { response: benchmarks, isLoading: benchmarksLoading } =
+        useComplianceApiV1BenchmarksSummaryList({
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            connector: provider.length ? [provider] : [],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            connectionID: connectionCheckbox.state,
+        })
 
     const getData = (sort: SortModelItem[]) => {
         setSortModel(sort)
@@ -207,55 +243,144 @@ export default function Findings() {
                 <Card className="sticky w-fit">
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                            <Text className="text-gray-800">Provider</Text>
+                            <Text className="font-semibold text-gray-800">
+                                Provider
+                            </Text>
                         </AccordionHeader>
-                        <AccordionBody className="p-0 w-full pr-0.5 cursor-default bg-transparent">
-                            <Button
-                                variant="light"
-                                onClick={() => setProvider('')}
-                                className={`flex justify-start min-w-full truncate p-2 rounded-md ${
-                                    provider === '' ? 'bg-kaytu-100' : ''
-                                }`}
+                        <AccordionBody className="py-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
                             >
-                                <Text className="truncate hover:text-kaytu-600">
+                                <Radio
+                                    name="provider"
+                                    onClick={() => setProvider('')}
+                                    defaultChecked={provider === ''}
+                                >
                                     All
-                                </Text>
-                            </Button>
-                            <Button
-                                variant="light"
-                                onClick={() => setProvider('AWS')}
-                                className={`flex justify-start min-w-full truncate p-2 rounded-md ${
-                                    provider === 'AWS' ? 'bg-kaytu-100' : ''
-                                }`}
-                            >
-                                <Text className="truncate hover:text-kaytu-600">
+                                </Radio>
+                                <Radio
+                                    name="provider"
+                                    onClick={() => setProvider('AWS')}
+                                    defaultChecked={provider === 'AWS'}
+                                >
                                     AWS
-                                </Text>
-                            </Button>
-                            <Button
-                                variant="light"
-                                onClick={() => setProvider('Azure')}
-                                className={`flex justify-start min-w-full truncate p-2 rounded-md ${
-                                    provider === 'Azure' ? 'bg-kaytu-100' : ''
-                                }`}
-                            >
-                                <Text className="truncate hover:text-kaytu-600">
+                                </Radio>
+                                <Radio
+                                    name="provider"
+                                    onClick={() => setProvider('Azure')}
+                                    defaultChecked={provider === 'Azure'}
+                                >
                                     Azure
-                                </Text>
-                            </Button>
+                                </Radio>
+                            </Flex>
                         </AccordionBody>
                     </Accordion>
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                            <Text className="text-gray-800">
+                            <Text className="font-semibold text-gray-800">
                                 Cloud accounts
                             </Text>
                         </AccordionHeader>
+                        <AccordionBody className="py-1 px-0.5 w-full cursor-default bg-transparent">
+                            <TextInput
+                                icon={MagnifyingGlassIcon}
+                                placeholder="Search cloud accounts..."
+                                value={connectionSearch}
+                                onChange={(e) =>
+                                    setConnectionSearch(e.target.value)
+                                }
+                                className="mb-4"
+                            />
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="px-0.5 gap-2.5 overflow-y-scroll overflow-x-hidden"
+                            >
+                                {connectionsLoading ? (
+                                    <Spinner />
+                                ) : (
+                                    connections?.connections
+                                        ?.filter(
+                                            (c) =>
+                                                c?.providerConnectionName
+                                                    ?.toLowerCase()
+                                                    .includes(
+                                                        connectionSearch.toLowerCase()
+                                                    ) ||
+                                                c?.providerConnectionID
+                                                    ?.toLowerCase()
+                                                    .includes(
+                                                        connectionSearch.toLowerCase()
+                                                    )
+                                        )
+                                        .map(
+                                            (con, i) =>
+                                                i < 5 && (
+                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    // @ts-ignore
+                                                    <Checkbox
+                                                        shape="curve"
+                                                        className="!items-start"
+                                                        value={con.id}
+                                                        {...connectionCheckbox}
+                                                    >
+                                                        <Flex
+                                                            flexDirection="col"
+                                                            alignItems="start"
+                                                            className="-mt-0.5"
+                                                        >
+                                                            <Text className="text-gray-800 truncate">
+                                                                {
+                                                                    con.providerConnectionName
+                                                                }
+                                                            </Text>
+                                                            <Text className="text-xs truncate">
+                                                                {
+                                                                    con.providerConnectionID
+                                                                }
+                                                            </Text>
+                                                        </Flex>
+                                                    </Checkbox>
+                                                )
+                                        )
+                                )}
+                            </Flex>
+                        </AccordionBody>
                     </Accordion>
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                            <Text className="text-gray-800">Benchmarks</Text>
+                            <Text className="text-gray-800 font-semibold">
+                                Benchmarks
+                            </Text>
                         </AccordionHeader>
+                        <AccordionBody className="py-1 px-0.5 w-full cursor-default bg-transparent">
+                            {benchmarksLoading ? (
+                                <Spinner />
+                            ) : (
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    className="px-0.5 gap-2.5"
+                                >
+                                    {benchmarkList(
+                                        benchmarks?.benchmarkSummary
+                                    ).connected?.map((ben) => (
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        // @ts-ignore
+                                        <Checkbox
+                                            shape="curve"
+                                            className="!items-start"
+                                            value={ben.id}
+                                            {...benchmarkCheckbox}
+                                        >
+                                            {ben.title}
+                                        </Checkbox>
+                                    ))}
+                                </Flex>
+                            )}
+                        </AccordionBody>
                     </Accordion>
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
