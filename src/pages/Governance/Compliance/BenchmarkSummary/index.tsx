@@ -33,6 +33,7 @@ import ListCard from '../../../../components/Cards/ListCard'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    SourceType,
 } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 
@@ -61,12 +62,48 @@ const topList = (
     if (input) {
         for (let i = 0; i < (input.records?.length || 0); i += 1) {
             data.push({
-                name: input.records ? input.records[i].value : '',
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                name: input.records ? input.records[i].Service : '',
                 value: input.records ? input.records[i].count : 0,
             })
         }
     }
     return { data, total: input?.totalCount || 0 }
+}
+
+const topConnections = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
+        | undefined
+) => {
+    const top: {
+        data: {
+            name: string | undefined
+            value: number | undefined
+            connector: SourceType[] | SourceType | undefined
+            kaytuId: string | undefined
+        }[]
+        total: number | undefined
+    } = { data: [], total: 0 }
+    if (input && input.records) {
+        for (let i = 0; i < input.records.length; i += 1) {
+            top.data.push({
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                name: input.records[i].Connection?.providerConnectionName,
+                value: input.records[i].count,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                connector: input.records[i].Connection?.connector,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                kaytuId: input.records[i].Connection?.id,
+            })
+        }
+        top.total = input.totalCount
+    }
+    return top
 }
 
 export default function BenchmarkSummary() {
@@ -124,7 +161,6 @@ export default function BenchmarkSummary() {
         sendNow: updateDetail,
     } = useComplianceApiV1BenchmarksSummaryDetail(String(id))
     const {
-        response,
         isLoading: evaluateLoading,
         sendNow: triggerEvaluate,
         isExecuted,
@@ -307,10 +343,9 @@ export default function BenchmarkSummary() {
                         <ListCard
                             title="Top accounts"
                             loading={isLoading}
-                            items={topList(connections)}
+                            items={topConnections(connections)}
                             url="details#cloud-accounts"
                             type="account"
-                            isClickable={false}
                         />
                         <ListCard
                             title="Top services"

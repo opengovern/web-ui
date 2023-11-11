@@ -36,7 +36,7 @@ import Spinner from '../../../components/Spinner'
 import { benchmarkList } from '../Compliance'
 import Tag from '../../../components/Tag'
 
-const columns = (isDemo: boolean) => {
+export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             width: 120,

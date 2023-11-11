@@ -428,6 +428,80 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSumm
     }
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
+    /**
+     * Whether the benchmark is auto assigned or not
+     * @example true
+     */
+    autoAssign?: boolean
+    /**
+     * Whether the benchmark is baseline or not
+     * @example true
+     */
+    baseline?: boolean
+    /** Benchmark category */
+    category?: string
+    /**
+     * Benchmark children
+     * @example ["[azure_cis_v140_1"," azure_cis_v140_2]"]
+     */
+    children?: string[]
+    /**
+     * Benchmark connectors
+     * @example ["[azure]"]
+     */
+    connectors?: SourceType[]
+    /**
+     * Benchmark creation date
+     * @example "2020-01-01T00:00:00Z"
+     */
+    createdAt?: string
+    /**
+     * Benchmark description
+     * @example "The CIS Microsoft Azure Foundations Security Benchmark provides prescriptive guidance for establishing a secure baseline configuration for Microsoft Azure."
+     */
+    description?: string
+    /**
+     * Benchmark document URI
+     * @example "benchmarks/azure_cis_v140.md"
+     */
+    documentURI?: string
+    /**
+     * Whether the benchmark is enabled or not
+     * @example true
+     */
+    enabled?: boolean
+    /**
+     * Benchmark ID
+     * @example "azure_cis_v140"
+     */
+    id?: string
+    /** Benchmark logo URI */
+    logoURI?: string
+    /**
+     * Whether the benchmark is managed or not
+     * @example true
+     */
+    managed?: boolean
+    /**
+     * Benchmark policies
+     * @example ["[azure_cis_v140_1_1"," azure_cis_v140_1_2]"]
+     */
+    policies?: string[]
+    /** Benchmark tags */
+    tags?: Record<string, string[]>
+    /**
+     * Benchmark title
+     * @example "Azure CIS v1.4.0"
+     */
+    title?: string
+    /**
+     * Benchmark last update date
+     * @example "2020-01-01T00:00:00Z"
+     */
+    updatedAt?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedConnection {
     /**
      * Connection ID
@@ -518,6 +592,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example "azure_cis_v140"
      */
     id?: string
+    /**
+     * Last job status
+     * @example "success"
+     */
+    lastJobStatus?: string
     /** Compliance result summary */
     result?: TypesComplianceResultSummary
     /** Tags */
@@ -542,6 +621,15 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapo
     timestamp?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiConnectionAssignedBenchmark {
+    benchmarkId?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark
+    /**
+     * Status
+     * @example true
+     */
+    status?: boolean
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example "azure_cis_v140" */
     benchmarkID?: string
@@ -556,6 +644,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example "steampipe-v0.5" */
     evaluator?: string
     parentBenchmarks?: string[]
+    /** @example 1 */
+    parentComplianceJobID?: number
     /** @example "azure_cis_v140_7_5" */
     policyID?: string
     policyTitle?: string
@@ -883,8 +973,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSumma
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
+    connection?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     count?: number
-    value?: string
+    field?: string
+    resourceType?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType
+    service?: string
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgDescribeApiEvaluationType {
@@ -1384,6 +1477,10 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics {
     unhealthyConnections?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest {
+    state?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     /** @example "scheduled" */
     assetDiscoveryMethod?: SourceAssetDiscoveryMethodType
@@ -1677,14 +1774,25 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest
     name?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest {
+    config?: any
+    connectorType?: SourceType
+}
+
 export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus {
     BootstrapStatusOnboardConnection = 'OnboardConnection',
     BootstrapStatusCreatingWorkspace = 'CreatingWorkspace',
-    BootstrapStatusWaitingForJobs = 'WaitingForJobs',
+    BootstrapStatusWaitingForDiscovery = 'WaitingForDiscovery',
+    BootstrapStatusWaitingForAnalytics = 'WaitingForAnalytics',
+    BootstrapStatusWaitingForCompliance = 'WaitingForCompliance',
+    BootstrapStatusWaitingForInsights = 'WaitingForInsights',
     BootstrapStatusFinished = 'Finished',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse {
+    connection_count?: Record<string, number>
+    maxConnections?: number
+    minRequiredConnections?: number
     status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus
 }
 
@@ -1741,6 +1849,8 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
     description?: string
     /** @example "ws-698542025141040315" */
     id?: string
+    is_bootstrap_input_finished?: boolean
+    is_created?: boolean
     /** @example "kaytu" */
     name?: string
     organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
@@ -1788,6 +1898,8 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     description?: string
     /** @example "ws-698542025141040315" */
     id?: string
+    is_bootstrap_input_finished?: boolean
+    is_created?: boolean
     /** @example "kaytu" */
     name?: string
     organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
@@ -2632,6 +2744,31 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving all benchmark assigned to a connection with connection id
+         *
+         * @tags benchmarks_assignment
+         * @name ApiV1AssignmentsConnectionDetail
+         * @summary Get list of benchmark assignments for a connection
+         * @request GET:/compliance/api/v1/assignments/connection/{connection_id}
+         * @secure
+         */
+        apiV1AssignmentsConnectionDetail: (
+            connectionId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConnectionAssignedBenchmark[],
+                any
+            >({
+                path: `/compliance/api/v1/assignments/connection/${connectionId}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Creating a benchmark assignment for a connection.
          *
          * @tags benchmarks_assignment
@@ -2745,14 +2882,50 @@ export class Api<
          */
         apiV1BenchmarksPoliciesDetail: (
             benchmarkId: string,
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<any, any>({
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags compliance
+         * @name ApiV1BenchmarksPoliciesPolicyIdDetail
+         * @summary Get benchmark policies
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/policies/:policyId
+         * @secure
+         */
+        apiV1BenchmarksPoliciesPolicyIdDetail: (
+            benchmarkId: string,
+            policyId: string,
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+            },
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary,
                 any
             >({
-                path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies`,
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies/${policyId}`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -2855,6 +3028,32 @@ export class Api<
                 any
             >({
                 path: `/compliance/api/v1/findings`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving possible values for finding filters.
+         *
+         * @tags compliance
+         * @name ApiV1FindingsFiltersCreate
+         * @summary Get possible values for finding filters
+         * @request POST:/compliance/api/v1/findings/filters
+         * @secure
+         */
+        apiV1FindingsFiltersCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+                any
+            >({
+                path: `/compliance/api/v1/findings/filters`,
                 method: 'POST',
                 body: request,
                 secure: true,
@@ -4209,6 +4408,29 @@ export class Api<
             }),
 
         /**
+         * No description
+         *
+         * @tags onboard
+         * @name ApiV1ConnectionsStateCreate
+         * @summary Change connection lifecycle state
+         * @request POST:/onboard/api/v1/connections/{connectionId}/state
+         * @secure
+         */
+        apiV1ConnectionsStateCreate: (
+            connectionId: string,
+            data: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/onboard/api/v1/connections/${connectionId}/state`,
+                method: 'POST',
+                body: data,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
          * @description Returns list of all connectors
          *
          * @tags onboard
@@ -4846,10 +5068,34 @@ export class Api<
          */
         apiV1BootstrapCredentialCreate: (
             workspaceName: string,
+            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
             params: RequestParams = {}
         ) =>
             this.request<number, any>({
                 path: `/workspace/api/v1/bootstrap/${workspaceName}/credential`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags workspace
+         * @name ApiV1BootstrapFinishCreate
+         * @summary finish bootstrap
+         * @request POST:/workspace/api/v1/bootstrap/{workspace_name}/finish
+         * @secure
+         */
+        apiV1BootstrapFinishCreate: (
+            workspaceName: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<string, any>({
+                path: `/workspace/api/v1/bootstrap/${workspaceName}/finish`,
                 method: 'POST',
                 secure: true,
                 type: ContentType.Json,

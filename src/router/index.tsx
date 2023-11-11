@@ -26,6 +26,7 @@ import InfrastructureDetails from '../pages/Infrastructure/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
 import Findings from '../pages/Governance/Findings'
+import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
 
 const routes = [
     {
@@ -155,6 +156,11 @@ const authRoutes = [
         key: 'benchmark summary',
         path: '/:ws/compliance/:id',
         component: BenchmarkSummary,
+    },
+    {
+        key: 'benchmark single connection',
+        path: '/:ws/compliance/:id/:connection',
+        component: SingleComplianceConnection,
     },
     {
         key: 'benchmark detail',

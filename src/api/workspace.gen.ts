@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
@@ -119,6 +120,7 @@ interface IuseWorkspaceApiV1BootstrapCredentialCreateState {
 
 export const useWorkspaceApiV1BootstrapCredentialCreate = (
     workspaceName: string,
+    request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -139,6 +141,102 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([workspaceName, request, params, autoExecute])
+    )
+
+    const sendRequest = () => {
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            api.workspace
+                .apiV1BootstrapCredentialCreate(workspaceName, request, params)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    setState({
+                        ...state,
+                        error: err,
+                        response: undefined,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (
+        JSON.stringify([workspaceName, request, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([workspaceName, request, params, autoExecute])
+        )
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            sendRequest()
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        sendRequest()
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseWorkspaceApiV1BootstrapFinishCreateState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useWorkspaceApiV1BootstrapFinishCreate = (
+    workspaceName: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    if (workspace !== undefined && workspace.length > 0) {
+        setWorkspace(workspace)
+    } else {
+        setWorkspace('kaytu')
+    }
+
+    const [state, setState] =
+        useState<IuseWorkspaceApiV1BootstrapFinishCreateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([workspaceName, params, autoExecute])
     )
 
@@ -151,7 +249,7 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
         })
         try {
             api.workspace
-                .apiV1BootstrapCredentialCreate(workspaceName, params)
+                .apiV1BootstrapFinishCreate(workspaceName, params)
                 .then((resp) => {
                     setState({
                         ...state,
