@@ -300,7 +300,7 @@ interface IuseScheduleApiV1InsightTriggerUpdateState {
 }
 
 export const useScheduleApiV1InsightTriggerUpdate = (
-    insightId: string,
+    insightId: number,
     params: RequestParams = {},
     autoExecute = true
 ) => {

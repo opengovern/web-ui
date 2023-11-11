@@ -24,12 +24,14 @@ type IProps = {
         | 'finder'
         | '404'
     showSidebar?: boolean
+    hfull?: boolean
 }
 
 export default function Layout({
     children,
     currentPage,
     showSidebar = true,
+    hfull = false,
 }: IProps) {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -47,8 +49,17 @@ export default function Layout({
                     className="mt-16 bg-gray-100 dark:bg-gray-900 h-screen overflow-y-scroll overflow-x-hidden"
                     id="kaytu-container"
                 >
-                    <Flex justifyContent="center" className="px-12">
-                        <div className="max-w-7xl w-full py-8">{children}</div>
+                    <Flex
+                        justifyContent="center"
+                        className={`px-12 ${hfull ? 'h-full' : ''}`}
+                    >
+                        <div
+                            className={`max-w-7xl w-full py-8 ${
+                                hfull ? 'h-full' : ''
+                            }`}
+                        >
+                            {children}
+                        </div>
                     </Flex>
                     <Footer />
                 </Flex>

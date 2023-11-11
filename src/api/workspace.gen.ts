@@ -39,7 +39,7 @@ export const useWorkspaceApiV1BootstrapDetail = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -130,7 +130,7 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -226,7 +226,7 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -316,7 +316,7 @@ export const useWorkspaceApiV1OrganizationList = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -408,7 +408,7 @@ export const useWorkspaceApiV1OrganizationCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -499,7 +499,7 @@ export const useWorkspaceApiV1OrganizationDelete = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -590,7 +590,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -679,7 +679,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -770,7 +770,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -861,7 +861,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -958,7 +958,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1055,7 +1055,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1151,7 +1151,7 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1242,7 +1242,7 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1334,7 +1334,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1429,7 +1429,7 @@ export const useWorkspaceApiV1WorkspacesList = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1519,7 +1519,7 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1610,7 +1610,7 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1704,7 +1704,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }
@@ -1800,7 +1800,7 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace('kaytu')
     } else {
         setWorkspace('kaytu')
     }

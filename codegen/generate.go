@@ -103,6 +103,11 @@ import AxiosAPI, { setWorkspace } from './ApiConfig'
 		}
 		pmr := strings.Join(params, ",")
 
+		setWorkspace := "workspace"
+		if module == "workspace" {
+			setWorkspace = "'kaytu'"
+		}
+
 		contentAPI := fmt.Sprintf(`
 interface I%[6]sState {
 	isLoading: boolean
@@ -119,7 +124,7 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
     api.instance = AxiosAPI
 
     if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
+        setWorkspace(%[8]s)
     } else {
         setWorkspace('kaytu')
     }
@@ -190,7 +195,7 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
-`, apiName, req, resp, module, pmr, funcName, funcName[3:])
+`, apiName, req, resp, module, pmr, funcName, funcName[3:], setWorkspace)
 		apiFiles[module] += contentAPI
 	}
 
@@ -202,6 +207,9 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
 	sort.Strings(imps)
 
 	for _, k := range imps {
+		if strings.TrimSpace(k) == "any," {
+			continue
+		}
 		ims += k + "\n"
 	}
 	for k, v := range apiFiles {

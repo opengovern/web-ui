@@ -19,7 +19,7 @@ html {
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+        monospace;
 }
 
 .ag-theme-alpine {
@@ -31,7 +31,7 @@ code {
     --ag-odd-row-background-color: #f9fafb !important;
     --ag-control-panel-background-color: #f9fafb !important;
     --ag-chip-background-color: #e5e7eb !important;
-    --ag-foreground-color: #6B7280 !important;
+    --ag-foreground-color: #6b7280 !important;
     --ag-icon-font-family: 'agGridMaterial' !important;
 }
 
@@ -61,7 +61,8 @@ code {
     padding: 2px 12px;
 }
 
-.ruleGroup-addRule, .ruleGroup-addGroup {
+.ruleGroup-addRule,
+.ruleGroup-addGroup {
     border: 1px solid #6b7280;
     padding: 3px 12px;
     border-radius: 8px;

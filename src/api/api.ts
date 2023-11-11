@@ -4796,7 +4796,7 @@ export class Api<
          * @secure
          */
         apiV1InsightTriggerUpdate: (
-            insightId: string,
+            insightId: number,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
