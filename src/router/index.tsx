@@ -25,7 +25,12 @@ import SpendDetails from '../pages/Spend/Details'
 import InfrastructureDetails from '../pages/Infrastructure/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
+<<<<<<< HEAD
+import Findings from '../pages/Governance/Findings'
+import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
+=======
 import Boostrap from '../pages/Workspaces/Bootstrap'
+>>>>>>> 07ca13e2ef2c6cbda01f18f62e8fddd42177a76d
 
 const routes = [
     {
@@ -157,6 +162,11 @@ const authRoutes = [
         component: BenchmarkSummary,
     },
     {
+        key: 'benchmark single connection',
+        path: '/:ws/compliance/:id/:connection',
+        component: SingleComplianceConnection,
+    },
+    {
         key: 'benchmark detail',
         path: '/:ws/compliance/:id/details',
         component: BenchmarkDetails,
@@ -165,6 +175,11 @@ const authRoutes = [
         key: 'service advisor',
         path: '/:ws/service-advisor',
         component: ServiceAdvisor,
+    },
+    {
+        key: 'findings',
+        path: '/:ws/findings',
+        component: Findings,
     },
     {
         key: 'service advisor summary',

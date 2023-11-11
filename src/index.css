@@ -76,3 +76,9 @@ code {
 .rule-operators {
     width: 60px;
 }
+
+.pretty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -427,6 +428,80 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSumm
     }
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
+    /**
+     * Whether the benchmark is auto assigned or not
+     * @example true
+     */
+    autoAssign?: boolean
+    /**
+     * Whether the benchmark is baseline or not
+     * @example true
+     */
+    baseline?: boolean
+    /** Benchmark category */
+    category?: string
+    /**
+     * Benchmark children
+     * @example ["[azure_cis_v140_1"," azure_cis_v140_2]"]
+     */
+    children?: string[]
+    /**
+     * Benchmark connectors
+     * @example ["[azure]"]
+     */
+    connectors?: SourceType[]
+    /**
+     * Benchmark creation date
+     * @example "2020-01-01T00:00:00Z"
+     */
+    createdAt?: string
+    /**
+     * Benchmark description
+     * @example "The CIS Microsoft Azure Foundations Security Benchmark provides prescriptive guidance for establishing a secure baseline configuration for Microsoft Azure."
+     */
+    description?: string
+    /**
+     * Benchmark document URI
+     * @example "benchmarks/azure_cis_v140.md"
+     */
+    documentURI?: string
+    /**
+     * Whether the benchmark is enabled or not
+     * @example true
+     */
+    enabled?: boolean
+    /**
+     * Benchmark ID
+     * @example "azure_cis_v140"
+     */
+    id?: string
+    /** Benchmark logo URI */
+    logoURI?: string
+    /**
+     * Whether the benchmark is managed or not
+     * @example true
+     */
+    managed?: boolean
+    /**
+     * Benchmark policies
+     * @example ["[azure_cis_v140_1_1"," azure_cis_v140_1_2]"]
+     */
+    policies?: string[]
+    /** Benchmark tags */
+    tags?: Record<string, string[]>
+    /**
+     * Benchmark title
+     * @example "Azure CIS v1.4.0"
+     */
+    title?: string
+    /**
+     * Benchmark last update date
+     * @example "2020-01-01T00:00:00Z"
+     */
+    updatedAt?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedConnection {
     /**
      * Connection ID
@@ -544,6 +619,15 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapo
      * @example 1686346668
      */
     timestamp?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiConnectionAssignedBenchmark {
+    benchmarkId?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark
+    /**
+     * Status
+     * @example true
+     */
+    status?: boolean
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
@@ -889,8 +973,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSumma
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
+    connection?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     count?: number
-    value?: string
+    field?: string
+    resourceType?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType
+    service?: string
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgDescribeApiEvaluationType {
@@ -1390,6 +1477,10 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics {
     unhealthyConnections?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest {
+    state?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionLifecycleState
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
     /** @example "scheduled" */
     assetDiscoveryMethod?: SourceAssetDiscoveryMethodType
@@ -1699,6 +1790,9 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse {
+    connection_count?: Record<string, number>
+    maxConnections?: number
+    minRequiredConnections?: number
     status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus
 }
 
@@ -2650,6 +2744,31 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving all benchmark assigned to a connection with connection id
+         *
+         * @tags benchmarks_assignment
+         * @name ApiV1AssignmentsConnectionDetail
+         * @summary Get list of benchmark assignments for a connection
+         * @request GET:/compliance/api/v1/assignments/connection/{connection_id}
+         * @secure
+         */
+        apiV1AssignmentsConnectionDetail: (
+            connectionId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiConnectionAssignedBenchmark[],
+                any
+            >({
+                path: `/compliance/api/v1/assignments/connection/${connectionId}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Creating a benchmark assignment for a connection.
          *
          * @tags benchmarks_assignment
@@ -2763,17 +2882,20 @@ export class Api<
          */
         apiV1BenchmarksPoliciesDetail: (
             benchmarkId: string,
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+            },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary[],
-                any
-            >({
+            this.request<any, any>({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
-                format: 'json',
                 ...params,
             }),
 
@@ -2789,6 +2911,12 @@ export class Api<
         apiV1BenchmarksPoliciesPolicyIdDetail: (
             benchmarkId: string,
             policyId: string,
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+            },
             params: RequestParams = {}
         ) =>
             this.request<
@@ -2797,6 +2925,7 @@ export class Api<
             >({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies/${policyId}`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -4279,6 +4408,29 @@ export class Api<
             }),
 
         /**
+         * No description
+         *
+         * @tags onboard
+         * @name ApiV1ConnectionsStateCreate
+         * @summary Change connection lifecycle state
+         * @request POST:/onboard/api/v1/connections/{connectionId}/state
+         * @secure
+         */
+        apiV1ConnectionsStateCreate: (
+            connectionId: string,
+            data: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/onboard/api/v1/connections/${connectionId}/state`,
+                method: 'POST',
+                body: data,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
          * @description Returns list of all connectors
          *
          * @tags onboard
@@ -4644,7 +4796,7 @@ export class Api<
          * @secure
          */
         apiV1InsightTriggerUpdate: (
-            insightId: string,
+            insightId: number,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({

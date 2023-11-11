@@ -53,6 +53,7 @@ const navigation = [
         children: [
             { name: 'Compliance', page: 'compliance' },
             { name: 'Service Advisor', page: 'service-advisor' },
+            { name: 'Findings', page: 'findings' },
         ],
     },
     {
