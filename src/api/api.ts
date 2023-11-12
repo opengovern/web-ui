@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -4799,10 +4798,11 @@ export class Api<
             insightId: number,
             params: RequestParams = {}
         ) =>
-            this.request<void, any>({
+            this.request<number[], any>({
                 path: `/schedule/api/v1/insight/trigger/${insightId}`,
                 method: 'PUT',
                 secure: true,
+                format: 'json',
                 ...params,
             }),
 

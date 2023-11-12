@@ -1,22 +1,45 @@
 import { Card, Flex, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ChooseYourPlan } from './ChoosePlan'
 import { WorkspaceInformation } from './WorkspaceInfo'
 import { OnboardConnection } from './OnboardConnection'
 import NewOrganization from '../../Integrations/ConnectorDetail/AWS/Tabs/Organizations/NewOrganization'
 import NewPrincipal from '../../Integrations/ConnectorDetail/Azure/Tabs/Principals/NewPrincipal'
 import { Status } from './Status'
-import { useWorkspaceApiV1BootstrapFinishCreate, useWorkspaceApiV1WorkspaceCreate } from '../../../api/workspace.gen'
+import {
+    useWorkspaceApiV1BootstrapDetail,
+    useWorkspaceApiV1BootstrapFinishCreate,
+    useWorkspaceApiV1WorkspaceCreate,
+} from '../../../api/workspace.gen'
 import Layout from '../../../components/Layout'
+import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus } from '../../../api/api'
 
 export default function Boostrap() {
     const currentWorkspace = useParams<{ ws: string }>().ws
+    const navigate = useNavigate()
     const [tier, setTier] = useState('FREE')
     const [name, setName] = useState(currentWorkspace || '')
     const [step, setStep] = useState(currentWorkspace === undefined ? 1 : 3)
     const [newAWSOpen, setNewAWSOpen] = useState(false)
     const [newAzureOpen, setNewAzureOpen] = useState(false)
+
+    const {
+        response: statusResponse,
+        isExecuted: statusIsExecuted,
+        isLoading: statusIsLoading,
+        error: statusError,
+    } = useWorkspaceApiV1BootstrapDetail(name)
+
+    useEffect(() => {
+        if (
+            statusResponse?.status &&
+            statusResponse?.status !==
+                GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusOnboardConnection
+        ) {
+            setStep(4)
+        }
+    }, [statusIsLoading])
 
     const {
         isExecuted: createWorkspaceIsExecuted,
@@ -36,7 +59,11 @@ export default function Boostrap() {
     useEffect(() => {
         if (createWorkspaceIsExecuted && !createWorkspaceIsLoading) {
             if (!createWorkspaceError) {
-                setStep(3)
+                if (currentWorkspace === undefined) {
+                    navigate(`/${name}/bootstrap`)
+                } else {
+                    setStep(3)
+                }
             }
         }
     }, [createWorkspaceIsLoading])
@@ -46,11 +73,7 @@ export default function Boostrap() {
         isLoading: finishIsLoading,
         sendNow: finishSendNow,
         error: finishError,
-    } = useWorkspaceApiV1BootstrapFinishCreate(
-        currentWorkspace || '',
-        {},
-        false
-    )
+    } = useWorkspaceApiV1BootstrapFinishCreate(name || '', {}, false)
 
     useEffect(() => {
         if (finishIsExecuted && !finishIsLoading) {
@@ -102,6 +125,7 @@ export default function Boostrap() {
                             />
                             <OnboardConnection
                                 open={step === 3}
+                                workspaceName={name}
                                 doDone={finishSendNow}
                                 done={finishIsExecuted}
                                 isLoading={finishIsExecuted && finishIsLoading}
@@ -111,7 +135,7 @@ export default function Boostrap() {
                         </Card>
                     </div>
                 ) : (
-                    <Status />
+                    <Status workspaceName={name} />
                 )}
             </Flex>
         </Layout>

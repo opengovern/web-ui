@@ -25,12 +25,9 @@ import SpendDetails from '../pages/Spend/Details'
 import InfrastructureDetails from '../pages/Infrastructure/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
-<<<<<<< HEAD
 import Findings from '../pages/Governance/Findings'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
-=======
 import Boostrap from '../pages/Workspaces/Bootstrap'
->>>>>>> 07ca13e2ef2c6cbda01f18f62e8fddd42177a76d
 
 const routes = [
     {
