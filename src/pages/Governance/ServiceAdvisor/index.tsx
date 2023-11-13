@@ -81,7 +81,7 @@ export default function ServiceAdvisor() {
             ) : error === undefined ? (
                 <Grid numItems={3} className="w-full gap-4">
                     {benchmarkList(benchmarks?.benchmarkSummary)
-                        .notConnected?.sort(
+                        .serviceAdvisor?.sort(
                             (a, b) =>
                                 (b?.checks?.passedCount || 0) -
                                 (a?.checks?.passedCount || 0)

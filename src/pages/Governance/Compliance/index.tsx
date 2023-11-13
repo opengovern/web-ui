@@ -35,24 +35,33 @@ import { numberDisplay } from '../../../utilities/numericDisplay'
 export const benchmarkList = (ben: any) => {
     const connected = []
     const notConnected = []
+    const serviceAdvisor = []
+
     if (ben) {
         for (let i = 0; i < ben.length; i += 1) {
             if (
-                (ben[i].checks?.criticalCount || 0) +
-                (ben[i].checks?.highCount || 0) +
-                (ben[i].checks?.mediumCount || 0) +
-                (ben[i].checks?.lowCount || 0) +
-                (ben[i].checks?.passedCount || 0) +
-                (ben[i].checks?.unknownCount || 0)
+                ben[i].tags?.kaytu_benchmark_type &&
+                ben[i].tags?.kaytu_benchmark_type[0] === 'compliance'
             ) {
-                connected.push(ben[i])
+                if (
+                    (ben[i].checks?.criticalCount || 0) +
+                    (ben[i].checks?.highCount || 0) +
+                    (ben[i].checks?.mediumCount || 0) +
+                    (ben[i].checks?.lowCount || 0) +
+                    (ben[i].checks?.passedCount || 0) +
+                    (ben[i].checks?.unknownCount || 0)
+                ) {
+                    connected.push(ben[i])
+                } else {
+                    notConnected.push(ben[i])
+                }
             } else {
-                notConnected.push(ben[i])
+                serviceAdvisor.push(ben[i])
             }
         }
     }
 
-    return { connected, notConnected }
+    return { connected, notConnected, serviceAdvisor }
 }
 
 const activeColumns: IColumn<any, any>[] = [
@@ -83,6 +92,11 @@ const activeColumns: IColumn<any, any>[] = [
                 <Flex justifyContent="start" className="mt-1 gap-2">
                     {param.data?.tags?.category?.map((cat) => (
                         <Badge color="slate" size="xs">
+                            {cat}
+                        </Badge>
+                    ))}
+                    {param.data?.tags?.kaytu_category?.map((cat) => (
+                        <Badge color="emerald" size="xs">
                             {cat}
                         </Badge>
                     ))}
@@ -199,13 +213,14 @@ const notActiveColumns: IColumn<any, any>[] = [
     {
         width: 150,
         type: 'string',
+        resizable: false,
         cellRenderer: (
             param: ICellRendererParams<
                 | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
                 | undefined
             >
         ) => (
-            <Flex justifyContent="end">
+            <Flex justifyContent="end" className="h-full">
                 <Text color="blue">Assign connection</Text>
                 <Icon
                     icon={ChevronRightIcon}
@@ -232,6 +247,7 @@ export default function Compliance() {
     } = useComplianceApiV1BenchmarksSummaryList()
     const { response: categories } =
         useComplianceApiV1MetadataTagComplianceList()
+    console.log(benchmarks)
 
     return (
         <Layout currentPage="compliance">

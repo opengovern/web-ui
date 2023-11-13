@@ -169,6 +169,11 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                         {benchmark?.tags?.category?.map((cat) => (
                             <Badge color="slate">{cat}</Badge>
                         ))}
+                        {benchmark?.tags?.kaytu_category?.map((cat) => (
+                            <Badge color="emerald" size="xs">
+                                {cat}
+                            </Badge>
+                        ))}
                         {!!benchmark?.tags?.cis && (
                             <Badge color="sky">CIS</Badge>
                         )}

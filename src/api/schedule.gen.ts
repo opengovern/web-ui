@@ -294,7 +294,7 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
 interface IuseScheduleApiV1InsightTriggerUpdateState {
     isLoading: boolean
     isExecuted: boolean
-    response?: void
+    response?: number[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
