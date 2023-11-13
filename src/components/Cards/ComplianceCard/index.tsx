@@ -4,14 +4,12 @@ import {
     CategoryBar,
     Flex,
     Icon,
-    Subtitle,
     Text,
     Title,
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
-import { CisIcon, HipaaIcon } from '../../../icons/icons'
 import { getConnectorIcon } from '../ConnectorCard'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 
