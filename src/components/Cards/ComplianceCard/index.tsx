@@ -19,18 +19,35 @@ interface IComplianceCard {
         | undefined
 }
 
-export default function ComplianceCard({ benchmark }: IComplianceCard) {
-    const navigate = useNavigate()
-
-    const critical = benchmark?.checks?.criticalCount || 0
-    const high = benchmark?.checks?.highCount || 0
-    const medium = benchmark?.checks?.mediumCount || 0
-    const low = benchmark?.checks?.lowCount || 0
-    const passed = benchmark?.checks?.passedCount || 0
-    const unknown = benchmark?.checks?.unknownCount || 0
+export const benchmarkChecks = (
+    ben:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+        | undefined
+) => {
+    const critical = ben?.checks?.criticalCount || 0
+    const high = ben?.checks?.highCount || 0
+    const medium = ben?.checks?.mediumCount || 0
+    const low = ben?.checks?.lowCount || 0
+    const passed = ben?.checks?.passedCount || 0
+    const unknown = ben?.checks?.unknownCount || 0
 
     const total = critical + high + medium + low + passed + unknown
     const failed = critical + high + medium + low
+
+    return {
+        critical,
+        high,
+        medium,
+        low,
+        passed,
+        unknown,
+        total,
+        failed,
+    }
+}
+
+export default function ComplianceCard({ benchmark }: IComplianceCard) {
+    const navigate = useNavigate()
 
     const connector = () => {
         if (benchmark?.tags?.plugin) {
@@ -48,7 +65,11 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
             className="cursor-pointer"
             onClick={() =>
                 navigate(
-                    `${benchmark?.id}${total ? '' : '/details#assignments'}`
+                    `${benchmark?.id}${
+                        benchmarkChecks(benchmark).total
+                            ? ''
+                            : '/details#assignments'
+                    }`
                 )
             }
         >
@@ -60,27 +81,56 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                     <Title className="w-full truncate mb-3">
                         {benchmark?.title}
                     </Title>
-                    <Flex className={`mb-3 ${total ? '' : 'hidden'}`}>
+                    <Flex
+                        className={`mb-3 ${
+                            benchmarkChecks(benchmark).total ? '' : 'hidden'
+                        }`}
+                    >
                         <Text>Security score:</Text>
                         <Text className="font-semibold">
-                            {((passed / total || 0) * 100).toFixed(2)}%
+                            {(
+                                (benchmarkChecks(benchmark).passed /
+                                    benchmarkChecks(benchmark).total || 0) * 100
+                            ).toFixed(2)}{' '}
+                            %
                         </Text>
                     </Flex>
                     <CategoryBar
                         className="w-full mb-2"
                         values={[
-                            (critical / total) * 100 || 0,
-                            (high / total) * 100 || 0,
-                            (medium / total) * 100 || 0,
-                            (low / total) * 100 || 0,
-                            (passed / total) * 100 || 0,
-                            critical + high + medium + low + passed > 0
-                                ? (unknown / total) * 100 || 0
+                            (benchmarkChecks(benchmark).critical /
+                                benchmarkChecks(benchmark).total) *
+                                100 || 0,
+                            (benchmarkChecks(benchmark).high /
+                                benchmarkChecks(benchmark).total) *
+                                100 || 0,
+                            (benchmarkChecks(benchmark).medium /
+                                benchmarkChecks(benchmark).total) *
+                                100 || 0,
+                            (benchmarkChecks(benchmark).low /
+                                benchmarkChecks(benchmark).total) *
+                                100 || 0,
+                            (benchmarkChecks(benchmark).passed /
+                                benchmarkChecks(benchmark).total) *
+                                100 || 0,
+                            benchmarkChecks(benchmark).critical +
+                                benchmarkChecks(benchmark).high +
+                                benchmarkChecks(benchmark).medium +
+                                benchmarkChecks(benchmark).low +
+                                benchmarkChecks(benchmark).passed >
+                            0
+                                ? (benchmarkChecks(benchmark).unknown /
+                                      benchmarkChecks(benchmark).total) *
+                                      100 || 0
                                 : 100,
                         ]}
                         markerValue={
-                            ((critical + high + medium + low) / total) * 100 ||
-                            1
+                            ((benchmarkChecks(benchmark).critical +
+                                benchmarkChecks(benchmark).high +
+                                benchmarkChecks(benchmark).medium +
+                                benchmarkChecks(benchmark).low) /
+                                benchmarkChecks(benchmark).total) *
+                                100 || 1
                         }
                         showLabels={false}
                         colors={[
@@ -92,14 +142,26 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                             'slate',
                         ]}
                     />
-                    <Flex className={total ? '' : 'hidden'}>
+                    <Flex
+                        className={
+                            benchmarkChecks(benchmark).total ? '' : 'hidden'
+                        }
+                    >
                         <Text className="text-xs">{`${numberDisplay(
-                            failed,
+                            benchmarkChecks(benchmark).failed,
                             0
-                        )} of ${numberDisplay(total, 0)} checks failed`}</Text>
-                        {!!(failed / total) && (
+                        )} of ${numberDisplay(
+                            benchmarkChecks(benchmark).total,
+                            0
+                        )} checks failed`}</Text>
+                        {!!(
+                            benchmarkChecks(benchmark).failed /
+                            benchmarkChecks(benchmark).total
+                        ) && (
                             <Text className="text-xs font-semibold">{`${Math.round(
-                                (failed / total) * 100
+                                (benchmarkChecks(benchmark).failed /
+                                    benchmarkChecks(benchmark).total) *
+                                    100
                             )}% failed`}</Text>
                         )}
                     </Flex>
@@ -116,7 +178,12 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                     </Flex>
                 </Flex>
                 <Flex justifyContent="end">
-                    <Text color="blue" className={`${total ? 'hidden' : ''}`}>
+                    <Text
+                        color="blue"
+                        className={`${
+                            benchmarkChecks(benchmark).total ? 'hidden' : ''
+                        }`}
+                    >
                         Assign connection
                     </Text>
                     <Icon
