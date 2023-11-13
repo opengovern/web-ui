@@ -8,8 +8,10 @@ import {
     Tab,
     TabGroup,
     TabList,
+    Title,
 } from '@tremor/react'
 import { useState } from 'react'
+import { Bars3Icon, Squares2X2Icon } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import {
     useComplianceApiV1BenchmarksSummaryList,
@@ -55,12 +57,13 @@ export default function Compliance() {
     } = useComplianceApiV1BenchmarksSummaryList()
     const { response: categories } =
         useComplianceApiV1MetadataTagComplianceList()
+    console.log(benchmarks)
 
     return (
         <Layout currentPage="compliance">
             <Header />
             <Grid numItems={3} className="w-full gap-4 mb-4">
-                <Col numColSpan={2}>
+                <Col numColSpan={2} className="overflow-x-scroll">
                     <TabGroup>
                         <TabList variant="solid" className="px-0">
                             <Tab
@@ -84,26 +87,73 @@ export default function Compliance() {
                     </TabGroup>
                 </Col>
                 <Col numColSpan={1}>
-                    <Flex className="h-full">
+                    <Flex className="h-full gap-3">
                         <Select
                             value={selectedProvider}
                             onValueChange={setSelectedProvider}
                             placeholder="Select provider..."
+                            className="w-full"
                         >
                             <SelectItem value="">All</SelectItem>
                             <SelectItem value="AWS">AWS</SelectItem>
                             <SelectItem value="Azure">Azure</SelectItem>
                         </Select>
+                        <TabGroup className="w-fit">
+                            <TabList variant="solid" className="px-0">
+                                <Tab className="px-4 py-2">
+                                    <Bars3Icon className="h-5" />
+                                </Tab>
+                                <Tab className="px-4 py-2">
+                                    <Squares2X2Icon className="h-5" />
+                                </Tab>
+                            </TabList>
+                        </TabGroup>
                     </Flex>
                 </Col>
             </Grid>
+            <Title className="mb-3">Active benchmarks</Title>
+            {/* eslint-disable-next-line no-nested-ternary */}
+            {isLoading ? (
+                <Spinner className="my-56" />
+            ) : error === undefined ? (
+                <Grid numItems={3} className="w-full gap-4">
+                    {benchmarkList(benchmarks?.benchmarkSummary)
+                        .connected?.sort(
+                            (a, b) =>
+                                (b?.checks?.passedCount || 0) -
+                                (a?.checks?.passedCount || 0)
+                        )
+                        .filter((bm) =>
+                            selectedProvider.length
+                                ? bm?.tags?.service?.includes(selectedProvider)
+                                : bm
+                        )
+                        .filter((bm) =>
+                            selectedCategory.length
+                                ? bm?.tags?.kaytu_category?.includes(
+                                      selectedCategory
+                                  )
+                                : bm
+                        )
+                        .map(
+                            (
+                                bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                            ) => (
+                                <ComplianceCard benchmark={bm} />
+                            )
+                        )}
+                </Grid>
+            ) : (
+                <Button onClick={() => sendNow()}>Retry</Button>
+            )}
+            <Title className="mt-6 mb-3">Not Active benchmarks</Title>
             {/* eslint-disable-next-line no-nested-ternary */}
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : error === undefined ? (
                 <Grid numItems={3} className="w-full gap-4">
                     {benchmarkList(benchmarks?.benchmarkSummary)
-                        .connected?.sort(
+                        .notConnected?.sort(
                             (a, b) =>
                                 (b?.checks?.passedCount || 0) -
                                 (a?.checks?.passedCount || 0)
