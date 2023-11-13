@@ -324,7 +324,7 @@ export default function SingleComplianceConnection() {
                             downloadable
                             id="compliance_findings"
                             columns={columns(isDemo)}
-                            onCellClicked={(event: RowClickedEvent) => {
+                            onRowClicked={(event: RowClickedEvent) => {
                                 setFinding(event.data)
                                 setOpenFinding(true)
                             }}
@@ -337,16 +337,16 @@ export default function SingleComplianceConnection() {
                             loading={isLoading}
                         />
                     </TabPanel>
+                    <DrawerPanel
+                        open={openFinding}
+                        onClose={() => setOpenFinding(false)}
+                        title="Finding Detail"
+                    >
+                        <Title>Summary</Title>
+                        <RenderObject obj={finding} />
+                    </DrawerPanel>
                 </TabPanels>
             </TabGroup>
-            <DrawerPanel
-                open={openFinding}
-                onClose={() => setOpenFinding(false)}
-                title="Finding Detail"
-            >
-                <Title>Summary</Title>
-                <RenderObject obj={finding} />
-            </DrawerPanel>
         </Layout>
     )
 }
