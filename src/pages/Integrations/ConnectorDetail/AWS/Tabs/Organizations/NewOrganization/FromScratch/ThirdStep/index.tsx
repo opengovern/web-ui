@@ -6,7 +6,9 @@ interface IStep {
         accessKey: string,
         secretKey: string,
         roleName: string,
-        externalId: string
+        adminRoleName: string,
+        externalId: string,
+        policyName: string
     ) => void
     onPrevious: () => void
 }
@@ -16,6 +18,8 @@ export default function ThirdStep({ onNext, onPrevious }: IStep) {
     const [secretKey, setSecretKey] = useState('')
     const [roleName, setRoleName] = useState('')
     const [externalId, setExternalId] = useState('')
+    const [adminRoleName, setAdminRoleName] = useState('')
+    const [policyName, setPolicyName] = useState('')
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
@@ -51,11 +55,29 @@ export default function ThirdStep({ onNext, onPrevious }: IStep) {
                 </Flex>
                 <Divider />
                 <Flex flexDirection="row">
+                    <Text>Admin Role Name</Text>
+                    <TextInput
+                        className="w-2/3"
+                        value={adminRoleName}
+                        onChange={(e) => setAdminRoleName(e.target.value)}
+                    />
+                </Flex>
+                <Divider />
+                <Flex flexDirection="row">
                     <Text>External ID</Text>
                     <TextInput
                         className="w-2/3"
                         value={externalId}
                         onChange={(e) => setExternalId(e.target.value)}
+                    />
+                </Flex>
+                <Divider />
+                <Flex flexDirection="row">
+                    <Text>Policy Name</Text>
+                    <TextInput
+                        className="w-2/3"
+                        value={policyName}
+                        onChange={(e) => setPolicyName(e.target.value)}
                     />
                 </Flex>
             </Flex>
@@ -65,13 +87,17 @@ export default function ThirdStep({ onNext, onPrevious }: IStep) {
                 </Button>
                 <Button
                     disabled={
-                        accessKey === '' ||
-                        secretKey === '' ||
-                        roleName === '' ||
-                        externalId === ''
+                        accessKey === '' || secretKey === '' || roleName === ''
                     }
                     onClick={() =>
-                        onNext(accessKey, secretKey, roleName, externalId)
+                        onNext(
+                            accessKey,
+                            secretKey,
+                            roleName,
+                            adminRoleName,
+                            externalId,
+                            policyName
+                        )
                     }
                     className="ml-3"
                 >

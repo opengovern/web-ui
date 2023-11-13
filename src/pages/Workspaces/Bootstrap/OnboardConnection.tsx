@@ -6,7 +6,9 @@ import {
     ChevronUpIcon,
     ExclamationCircleIcon,
 } from '@heroicons/react/24/outline'
+import { useEffect, useState } from 'react'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
+import { useWorkspaceApiV1BootstrapDetail } from '../../../api/workspace.gen'
 
 interface IConnector {
     onClick: () => void
@@ -35,6 +37,7 @@ function Connector({ onClick, icon, name, description, count }: IConnector) {
 interface IOnboardConnection {
     open: boolean
     done: boolean
+    workspaceName: string
     doDone: () => void
     onAWSClick: () => void
     onAzureClick: () => void
@@ -44,10 +47,39 @@ export function OnboardConnection({
     isLoading,
     open,
     done,
+    workspaceName,
     doDone,
     onAWSClick,
     onAzureClick,
 }: IOnboardConnection) {
+    const {
+        response: statusResponse,
+        isExecuted: statusIsExecuted,
+        isLoading: statusIsLoading,
+        error: statusError,
+        sendNow: refreshStatus,
+    } = useWorkspaceApiV1BootstrapDetail(workspaceName)
+
+    useEffect(() => {
+        if (statusIsExecuted && !statusIsLoading) {
+            setTimeout(() => {
+                refreshStatus()
+            }, 5000)
+        }
+    }, [statusIsLoading])
+
+    const connectionCount = statusResponse?.connection_count
+        ? Object.entries(statusResponse?.connection_count)
+        : []
+    const awsCount = connectionCount
+        .filter((item) => item[0] === 'AWS')
+        .at(0)?.[1]
+    const azureCount = connectionCount
+        .filter((item) => item[0] === 'Azure')
+        .at(0)?.[1]
+
+    const allConnectionCount = (awsCount || 0) + (azureCount || 0)
+
     return (
         <div className="p-6 border-b border-b-gray-200">
             <Flex justifyContent="between">
@@ -78,7 +110,7 @@ export function OnboardConnection({
                         <Connector
                             name="AWS"
                             description="AWS Account"
-                            count={1}
+                            count={awsCount || 0}
                             icon={AWSIcon}
                             onClick={() => {
                                 onAWSClick()
@@ -87,7 +119,7 @@ export function OnboardConnection({
                         <Connector
                             name="Azure"
                             description="Azure subscription"
-                            count={1}
+                            count={azureCount || 0}
                             icon={AzureIcon}
                             onClick={() => {
                                 onAzureClick()
@@ -95,19 +127,44 @@ export function OnboardConnection({
                         />
                     </Flex>
                     <Flex justifyContent="start" className="ml-3">
-                        <ExclamationCircleIcon className="w-4" />
-                        <Text className="ml-1">
-                            Minimum AWS account is 3 and maximum is 10
+                        <ExclamationCircleIcon
+                            className={`w-4 ${
+                                allConnectionCount <
+                                (statusResponse?.minRequiredConnections || 0)
+                                    ? 'text-red-500'
+                                    : 'text-emerald-500'
+                            }`}
+                        />
+                        <Text
+                            className={`ml-1 ${
+                                allConnectionCount <
+                                (statusResponse?.minRequiredConnections || 0)
+                                    ? 'text-red-500'
+                                    : 'text-emerald-500'
+                            }`}
+                        >
+                            Minimum of {statusResponse?.minRequiredConnections}{' '}
+                            connections are required
                         </Text>
                     </Flex>
                     <Flex justifyContent="start" className="ml-3">
                         <ExclamationCircleIcon className="w-4" />
                         <Text className="ml-1">
-                            Minimum Azure subscription is 3 and maximum is 10
+                            Maximum allowed connections are{' '}
+                            {statusResponse?.maxConnections}
                         </Text>
                     </Flex>
                     <Flex justifyContent="start" className="m-3">
-                        <Button onClick={doDone} loading={isLoading}>
+                        <Button
+                            onClick={doDone}
+                            loading={isLoading}
+                            disabled={
+                                allConnectionCount === 0 ||
+                                allConnectionCount <
+                                    (statusResponse?.minRequiredConnections ||
+                                        0)
+                            }
+                        >
                             Create
                         </Button>
                     </Flex>
