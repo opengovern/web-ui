@@ -48,6 +48,7 @@ export default function SingleComplianceConnection() {
     const isDemo = useAtomValue(isDemoAtom)
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
     const [open, setOpen] = useState(false)
+    const [openFinding, setOpenFinding] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
 
     const query = {
@@ -265,7 +266,7 @@ export default function SingleComplianceConnection() {
                             open={openDrawer}
                             onClose={() => setOpenDrawer(false)}
                         >
-                            <RenderObject obj={connection} />
+                            <RenderObject obj={con} />
                         </DrawerPanel>
                     </Flex>
                 </Card>
@@ -311,7 +312,7 @@ export default function SingleComplianceConnection() {
                                     columns={columns(isDemo)}
                                     onCellClicked={(event: RowClickedEvent) => {
                                         setFinding(event.data)
-                                        setOpen(true)
+                                        setOpenFinding(true)
                                     }}
                                     onGridReady={(e) => {
                                         if (isLoading) {
@@ -326,8 +327,8 @@ export default function SingleComplianceConnection() {
                 </TabPanels>
             </TabGroup>
             <DrawerPanel
-                open={open}
-                onClose={() => setOpen(false)}
+                open={openFinding}
+                onClose={() => setOpenFinding(false)}
                 title="Finding Detail"
             >
                 <Title>Summary</Title>
