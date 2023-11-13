@@ -42,6 +42,7 @@ import Table from '../../../../../components/Table'
 import { columns } from '../../../Findings'
 import Breakdown from '../../../../../components/Breakdown'
 import { policyColumns } from '../Details/Tabs/Policies'
+import PolicyDetail from '../Details/Tabs/Policies/Detail'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -51,6 +52,8 @@ export default function SingleComplianceConnection() {
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
     const [openFinding, setOpenFinding] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
+    const [openPolicy, setOpenPolicy] = useState(false)
+    const [policy, setPolicy] = useState<any>(undefined)
 
     const query = {
         ...(connection && {
@@ -313,6 +316,15 @@ export default function SingleComplianceConnection() {
                                     downloadable
                                     id="compliance_policies"
                                     loading={policiesLoading}
+                                    onRowClicked={(event: RowClickedEvent) => {
+                                        setPolicy(event.data)
+                                        setOpenPolicy(true)
+                                    }}
+                                    onGridReady={(e) => {
+                                        if (policiesLoading) {
+                                            e.api.showLoadingOverlay()
+                                        }
+                                    }}
                                     columns={policyColumns}
                                     rowData={policies}
                                 />
@@ -337,16 +349,21 @@ export default function SingleComplianceConnection() {
                             loading={isLoading}
                         />
                     </TabPanel>
-                    <DrawerPanel
-                        open={openFinding}
-                        onClose={() => setOpenFinding(false)}
-                        title="Finding Detail"
-                    >
-                        <Title>Summary</Title>
-                        <RenderObject obj={finding} />
-                    </DrawerPanel>
                 </TabPanels>
             </TabGroup>
+            <DrawerPanel
+                open={openFinding}
+                onClose={() => setOpenFinding(false)}
+                title="Finding Detail"
+            >
+                <Title>Summary</Title>
+                <RenderObject obj={finding} />
+            </DrawerPanel>
+            <PolicyDetail
+                selectedPolicy={policy}
+                open={openPolicy}
+                onClose={() => setOpenPolicy(false)}
+            />
         </Layout>
     )
 }

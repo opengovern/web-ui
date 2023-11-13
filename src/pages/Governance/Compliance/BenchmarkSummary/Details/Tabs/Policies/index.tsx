@@ -4,14 +4,13 @@ import {
     RowClickedEvent,
     ValueFormatterParams,
 } from 'ag-grid-community'
-import { Badge, Flex, List, ListItem, Text, Title } from '@tremor/react'
+import { Badge, Flex } from '@tremor/react'
 import { useComplianceApiV1BenchmarksPoliciesDetail } from '../../../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
 import Table, { IColumn } from '../../../../../../../components/Table'
 import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary } from '../../../../../../../api/api'
 import { numberDisplay } from '../../../../../../../utilities/numericDisplay'
-import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import PolicyDetail from './Detail'
 
 interface IPolicies {

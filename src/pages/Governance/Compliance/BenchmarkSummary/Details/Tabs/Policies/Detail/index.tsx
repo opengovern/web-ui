@@ -13,10 +13,11 @@ export default function PolicyDetail({
     open,
     onClose,
 }: IDetail) {
+    console.log(selectedPolicy)
     return (
         <DrawerPanel
             open={open}
-            onClose={() => onClose}
+            onClose={onClose}
             title={selectedPolicy?.policy?.id}
         >
             <Title className="mb-2">{selectedPolicy?.policy?.title}</Title>
@@ -33,7 +34,7 @@ export default function PolicyDetail({
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Severity</Text>
-                    {renderBadge(selectedPolicy?.severity)}
+                    {renderBadge(selectedPolicy?.policy?.severity)}
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Outcome</Text>
