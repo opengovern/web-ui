@@ -179,10 +179,10 @@ export default function BenchmarkSummary() {
     )
 
     useEffect(() => {
-        if (isExecuted && !evaluateLoading) {
+        if (isExecuted) {
             updateDetail()
         }
-    }, [evaluateLoading, isExecuted])
+    }, [isExecuted])
 
     const critical = benchmarkDetail?.checks?.criticalCount || 0
     const high = benchmarkDetail?.checks?.highCount || 0
@@ -231,9 +231,19 @@ export default function BenchmarkSummary() {
                             icon={ArrowPathRoundedSquareIcon}
                             className="mb-1"
                             onClick={() => triggerEvaluate()}
-                            loading={evaluateLoading && isExecuted}
+                            loading={
+                                !(
+                                    benchmarkDetail?.lastJobStatus ===
+                                        'FAILED' ||
+                                    benchmarkDetail?.lastJobStatus ===
+                                        'SUCCEEDED'
+                                )
+                            }
                         >
-                            Evaluate now
+                            {benchmarkDetail?.lastJobStatus === 'FAILED' ||
+                            benchmarkDetail?.lastJobStatus === 'SUCCEEDED'
+                                ? 'Evaluate now'
+                                : 'Evaluating'}
                         </Button>
                         <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
                             benchmarkDetail?.evaluatedAt
@@ -348,7 +358,7 @@ export default function BenchmarkSummary() {
                             type="account"
                         />
                         <ListCard
-                            title="Top services"
+                            title="Top resources"
                             loading={isLoading}
                             items={topList(services)}
                             url="details#services"

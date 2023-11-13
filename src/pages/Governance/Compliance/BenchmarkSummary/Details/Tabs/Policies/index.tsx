@@ -1,4 +1,9 @@
-import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
+import { useState } from 'react'
+import {
+    ICellRendererParams,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import { Badge, Flex } from '@tremor/react'
 import { useComplianceApiV1BenchmarksPoliciesDetail } from '../../../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
@@ -6,12 +11,13 @@ import Table, { IColumn } from '../../../../../../../components/Table'
 import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary } from '../../../../../../../api/api'
 import { numberDisplay } from '../../../../../../../utilities/numericDisplay'
+import PolicyDetail from './Detail'
 
 interface IPolicies {
     id: string | undefined
 }
 
-const renderBadge = (severity: any) => {
+export const renderBadge = (severity: any) => {
     if (severity) {
         if (severity === 'low') {
             return <Badge color="lime">Low</Badge>
@@ -27,14 +33,14 @@ const renderBadge = (severity: any) => {
     return ''
 }
 
-const renderStatus = (status: boolean) => {
+export const renderStatus = (status: boolean) => {
     if (status) {
         return <Badge color="emerald">Passed</Badge>
     }
     return <Badge color="rose">Failed</Badge>
 }
 
-const columns: IColumn<any, any>[] = [
+export const policyColumns: IColumn<any, any>[] = [
     {
         headerName: 'Title',
         field: 'policy.title',
@@ -73,7 +79,7 @@ const columns: IColumn<any, any>[] = [
         ),
     },
     {
-        headerName: 'Status',
+        headerName: 'Outcome',
         field: 'status',
         width: 100,
         type: 'string',
@@ -95,29 +101,33 @@ const columns: IColumn<any, any>[] = [
         },
     },
     {
-        headerName: '# of failed resources',
+        headerName: 'Failed resources %',
         field: 'resources',
         type: 'string',
+        width: 150,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
         ) =>
             `${numberDisplay(
-                params.data?.failedResourcesCount,
-                0
-            )} out of ${numberDisplay(params.data?.totalResourcesCount, 0)}`,
+                ((params.data?.failedResourcesCount || 0) /
+                    (params.data?.totalResourcesCount || 0)) *
+                    100 || 0
+            )} %`,
         resizable: true,
     },
     {
-        headerName: '# of failed accounts',
+        headerName: 'Failed accounts %',
         field: 'accounts',
         type: 'string',
+        width: 150,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
         ) =>
             `${numberDisplay(
-                params.data?.failedConnectionCount,
-                0
-            )} out of ${numberDisplay(params.data?.totalConnectionCount, 0)}`,
+                ((params.data?.failedConnectionCount || 0) /
+                    (params.data?.totalConnectionCount || 0)) *
+                    100 || 0
+            )} %`,
         resizable: true,
     },
     {
@@ -125,6 +135,7 @@ const columns: IColumn<any, any>[] = [
         field: 'evaluatedAt',
         type: 'date',
         sortable: true,
+        hide: true,
         filter: true,
         resizable: true,
         valueFormatter: (param: ValueFormatterParams) => {
@@ -151,17 +162,31 @@ const columns: IColumn<any, any>[] = [
 // }
 
 export default function Policies({ id }: IPolicies) {
+    const [open, setOpen] = useState(false)
+    const [selectedPolicy, setSelectedPolicy] = useState<any>(undefined)
+
     const { response: policies, isLoading } =
         useComplianceApiV1BenchmarksPoliciesDetail(String(id))
 
     return (
-        <Table
-            title="Policies"
-            downloadable
-            id="compliance_policies"
-            loading={isLoading}
-            columns={columns}
-            rowData={policies}
-        />
+        <>
+            <Table
+                title="Policies"
+                downloadable
+                id="compliance_policies"
+                onRowClicked={(event: RowClickedEvent) => {
+                    setSelectedPolicy(event.data)
+                    setOpen(true)
+                }}
+                loading={isLoading}
+                columns={policyColumns}
+                rowData={policies}
+            />
+            <PolicyDetail
+                selectedPolicy={selectedPolicy}
+                open={open}
+                onClose={() => setOpen(false)}
+            />
+        </>
     )
 }

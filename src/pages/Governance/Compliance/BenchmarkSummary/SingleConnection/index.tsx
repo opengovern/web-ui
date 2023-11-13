@@ -16,7 +16,7 @@ import {
 import { useParams } from 'react-router-dom'
 import clipboardCopy from 'clipboard-copy'
 import { ChevronRightIcon, Square2StackIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
     IServerSideDatasource,
@@ -34,10 +34,15 @@ import { isDemoAtom, notificationAtom } from '../../../../../store'
 import Layout from '../../../../../components/Layout'
 import {
     useComplianceApiV1AssignmentsConnectionDetail,
+    useComplianceApiV1BenchmarksPoliciesDetail,
+    useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1FindingsCreate,
 } from '../../../../../api/compliance.gen'
 import Table from '../../../../../components/Table'
 import { columns } from '../../../Findings'
+import Breakdown from '../../../../../components/Breakdown'
+import { policyColumns } from '../Details/Tabs/Policies'
+import PolicyDetail from '../Details/Tabs/Policies/Detail'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -45,8 +50,10 @@ export default function SingleComplianceConnection() {
     const setNotification = useSetAtom(notificationAtom)
     const isDemo = useAtomValue(isDemoAtom)
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
-    const [open, setOpen] = useState(false)
+    const [openFinding, setOpenFinding] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
+    const [openPolicy, setOpenPolicy] = useState(false)
+    const [policy, setPolicy] = useState<any>(undefined)
 
     const query = {
         ...(connection && {
@@ -68,29 +75,55 @@ export default function SingleComplianceConnection() {
     const [benchmark, setBenchmark] = useState(
         benchmarkList?.filter((bm) => bm.status)[0].benchmarkId?.id
     )
+    const {
+        response: benchmarkDetail,
+        isLoading: detailLoading,
+        sendNow: updateDetail,
+    } = useComplianceApiV1BenchmarksSummaryDetail(
+        benchmark || '',
+        {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            connectionID: [connection?.replace('account_', '') || ''],
+        },
+        {},
+        false
+    )
 
     const {
         response: findings,
         isLoading,
-        sendNow,
+        sendNow: updateFindings,
     } = useComplianceApiV1FindingsCreate({
         filters: {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             connectionID: [connection?.replace('account_', '') || ''],
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            benchmarkID: [benchmark],
-            activeOnly: true,
         },
         sort: sortModel.length
             ? { [sortModel[0].colId]: sortModel[0].sort }
             : {},
     })
+    const {
+        response: policies,
+        isLoading: policiesLoading,
+        sendNow: updatePolicy,
+    } = useComplianceApiV1BenchmarksPoliciesDetail(benchmark || '', {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        connectionID: [connection?.replace('account_', '') || ''],
+    })
+
+    useEffect(() => {
+        if (benchmark) {
+            updatePolicy()
+            updateDetail()
+        }
+    }, [benchmark])
 
     const getData = (sort: SortModelItem[]) => {
         setSortModel(sort)
-        sendNow()
+        updateFindings()
     }
 
     const datasource: IServerSideDatasource = {
@@ -121,12 +154,12 @@ export default function SingleComplianceConnection() {
         },
     }
 
-    // const critical = benchmarkDetail?.checks?.criticalCount || 0
-    // const high = benchmarkDetail?.checks?.highCount || 0
-    // const medium = benchmarkDetail?.checks?.mediumCount || 0
-    // const low = benchmarkDetail?.checks?.lowCount || 0
-    // const passed = benchmarkDetail?.checks?.passedCount || 0
-    // const unknown = benchmarkDetail?.checks?.unknownCount || 0
+    const critical = benchmarkDetail?.checks?.criticalCount || 0
+    const high = benchmarkDetail?.checks?.highCount || 0
+    const medium = benchmarkDetail?.checks?.mediumCount || 0
+    const low = benchmarkDetail?.checks?.lowCount || 0
+    const passed = benchmarkDetail?.checks?.passedCount || 0
+    const unknown = benchmarkDetail?.checks?.unknownCount || 0
 
     return (
         <Layout currentPage="compliance">
@@ -147,7 +180,7 @@ export default function SingleComplianceConnection() {
                                 Connection details
                             </Title>
                             {accountInfoLoading ? (
-                                <Spinner className="mt-28" />
+                                <Spinner className="my-28" />
                             ) : (
                                 <List className="mt-2">
                                     <ListItem>
@@ -238,12 +271,12 @@ export default function SingleComplianceConnection() {
                             open={openDrawer}
                             onClose={() => setOpenDrawer(false)}
                         >
-                            <RenderObject obj={connection} />
+                            <RenderObject obj={con} />
                         </DrawerPanel>
                     </Flex>
                 </Card>
-                {/* <Breakdown
-                    title="Severity breakdown"
+                <Breakdown
+                    title={`Severity breakdown for ${benchmark}`}
                     chartData={[
                         { name: 'Critical', value: critical },
                         { name: 'High', value: high },
@@ -252,8 +285,8 @@ export default function SingleComplianceConnection() {
                         { name: 'Passed', value: passed },
                         { name: 'Unknown', value: unknown },
                     ]}
-                    loading={isLoading}
-                /> */}
+                    loading={detailLoading}
+                />
             </Grid>
             <TabGroup className="mt-4">
                 <TabList className="mb-3">
@@ -270,6 +303,7 @@ export default function SingleComplianceConnection() {
                                     {bm.benchmarkId?.title}
                                 </Tab>
                             ))}
+                        <Tab>Findings</Tab>
                     </>
                 </TabList>
                 <TabPanels>
@@ -278,26 +312,58 @@ export default function SingleComplianceConnection() {
                         ?.map((bm) => (
                             <TabPanel>
                                 <Table
-                                    title={bm.benchmarkId?.title}
+                                    title={`${bm.benchmarkId?.title} policies`}
                                     downloadable
-                                    id="compliance_findings"
-                                    columns={columns(isDemo)}
-                                    onCellClicked={(event: RowClickedEvent) => {
-                                        setFinding(event.data)
-                                        setOpen(true)
+                                    id="compliance_policies"
+                                    loading={policiesLoading}
+                                    onRowClicked={(event: RowClickedEvent) => {
+                                        setPolicy(event.data)
+                                        setOpenPolicy(true)
                                     }}
                                     onGridReady={(e) => {
-                                        if (isLoading) {
+                                        if (policiesLoading) {
                                             e.api.showLoadingOverlay()
                                         }
                                     }}
-                                    serverSideDatasource={datasource}
-                                    loading={isLoading}
+                                    columns={policyColumns}
+                                    rowData={policies}
                                 />
                             </TabPanel>
                         ))}
+                    <TabPanel>
+                        <Table
+                            title="Findings"
+                            downloadable
+                            id="compliance_findings"
+                            columns={columns(isDemo)}
+                            onRowClicked={(event: RowClickedEvent) => {
+                                setFinding(event.data)
+                                setOpenFinding(true)
+                            }}
+                            onGridReady={(e) => {
+                                if (isLoading) {
+                                    e.api.showLoadingOverlay()
+                                }
+                            }}
+                            serverSideDatasource={datasource}
+                            loading={isLoading}
+                        />
+                    </TabPanel>
                 </TabPanels>
             </TabGroup>
+            <DrawerPanel
+                open={openFinding}
+                onClose={() => setOpenFinding(false)}
+                title="Finding Detail"
+            >
+                <Title>Summary</Title>
+                <RenderObject obj={finding} />
+            </DrawerPanel>
+            <PolicyDetail
+                selectedPolicy={policy}
+                open={openPolicy}
+                onClose={() => setOpenPolicy(false)}
+            />
         </Layout>
     )
 }

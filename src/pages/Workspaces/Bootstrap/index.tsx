@@ -1,4 +1,4 @@
-import { Card, Flex, Text } from '@tremor/react'
+import { Card, Flex } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ChooseYourPlan } from './ChoosePlan'
