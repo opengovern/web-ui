@@ -34,7 +34,7 @@ const renderStatus = (status: boolean) => {
     return <Badge color="rose">Failed</Badge>
 }
 
-const columns: IColumn<any, any>[] = [
+export const policyColumns: IColumn<any, any>[] = [
     {
         headerName: 'Title',
         field: 'policy.title',
@@ -160,7 +160,7 @@ export default function Policies({ id }: IPolicies) {
             downloadable
             id="compliance_policies"
             loading={isLoading}
-            columns={columns}
+            columns={policyColumns}
             rowData={policies}
         />
     )
