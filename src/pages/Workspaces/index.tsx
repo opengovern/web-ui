@@ -1,12 +1,10 @@
-import { useState } from 'react'
 import { Button, Flex, Grid } from '@tremor/react'
-import Layout from '../../components/Layout'
 import { useNavigate } from 'react-router-dom'
+import Layout from '../../components/Layout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import Spinner from '../../components/Spinner'
 import Header from '../../components/Header'
-import Boostrap from './Bootstrap'
 
 export default function Workspaces() {
     // const [openDrawer, setOpenDrawer] = useState(false)

@@ -1,4 +1,4 @@
-import { Card, Flex, Text } from '@tremor/react'
+import { Card, Flex } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ChooseYourPlan } from './ChoosePlan'
@@ -7,7 +7,10 @@ import { OnboardConnection } from './OnboardConnection'
 import NewOrganization from '../../Integrations/ConnectorDetail/AWS/Tabs/Organizations/NewOrganization'
 import NewPrincipal from '../../Integrations/ConnectorDetail/Azure/Tabs/Principals/NewPrincipal'
 import { Status } from './Status'
-import { useWorkspaceApiV1BootstrapFinishCreate, useWorkspaceApiV1WorkspaceCreate } from '../../../api/workspace.gen'
+import {
+    useWorkspaceApiV1BootstrapFinishCreate,
+    useWorkspaceApiV1WorkspaceCreate,
+} from '../../../api/workspace.gen'
 import Layout from '../../../components/Layout'
 
 export default function Boostrap() {
