@@ -92,7 +92,7 @@ import {
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
 
-interface IuseCostEstimatorApiV1CostAwsDetailState {
+interface IuseCostEstimatorApiV1CostAwsListState {
     isLoading: boolean
     isExecuted: boolean
     response?: number
@@ -100,9 +100,12 @@ interface IuseCostEstimatorApiV1CostAwsDetailState {
     error?: any
 }
 
-export const useCostEstimatorApiV1CostAwsDetail = (
-    resourceId: string,
-    resourceType: string,
+export const useCostEstimatorApiV1CostAwsList = (
+    query: {
+        resourceId: string
+
+        resourceType: string
+    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -117,13 +120,12 @@ export const useCostEstimatorApiV1CostAwsDetail = (
         setWorkspace('kaytu')
     }
 
-    const [state, setState] =
-        useState<IuseCostEstimatorApiV1CostAwsDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    const [state, setState] = useState<IuseCostEstimatorApiV1CostAwsListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([resourceId, resourceType, params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -135,7 +137,7 @@ export const useCostEstimatorApiV1CostAwsDetail = (
         })
         try {
             api.costEstimator
-                .apiV1CostAwsDetail(resourceId, resourceType, params)
+                .apiV1CostAwsList(query, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -164,13 +166,8 @@ export const useCostEstimatorApiV1CostAwsDetail = (
         }
     }
 
-    if (
-        JSON.stringify([resourceId, resourceType, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([resourceId, resourceType, params, autoExecute])
-        )
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -189,7 +186,7 @@ export const useCostEstimatorApiV1CostAwsDetail = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseCostEstimatorApiV1CostAzureDetailState {
+interface IuseCostEstimatorApiV1CostAzureListState {
     isLoading: boolean
     isExecuted: boolean
     response?: number
@@ -197,9 +194,12 @@ interface IuseCostEstimatorApiV1CostAzureDetailState {
     error?: any
 }
 
-export const useCostEstimatorApiV1CostAzureDetail = (
-    resourceId: string,
-    resourceType: string,
+export const useCostEstimatorApiV1CostAzureList = (
+    query: {
+        resourceId: string
+
+        resourceType: string
+    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -215,12 +215,12 @@ export const useCostEstimatorApiV1CostAzureDetail = (
     }
 
     const [state, setState] =
-        useState<IuseCostEstimatorApiV1CostAzureDetailState>({
+        useState<IuseCostEstimatorApiV1CostAzureListState>({
             isLoading: true,
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([resourceId, resourceType, params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -232,7 +232,7 @@ export const useCostEstimatorApiV1CostAzureDetail = (
         })
         try {
             api.costEstimator
-                .apiV1CostAzureDetail(resourceId, resourceType, params)
+                .apiV1CostAzureList(query, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -261,13 +261,8 @@ export const useCostEstimatorApiV1CostAzureDetail = (
         }
     }
 
-    if (
-        JSON.stringify([resourceId, resourceType, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([resourceId, resourceType, params, autoExecute])
-        )
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {

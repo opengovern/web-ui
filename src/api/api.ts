@@ -1245,6 +1245,13 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiPage {
     size?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection {
+    filters?: KaytuResourceCollectionFilter[]
+    id?: string
+    name?: string
+    tags?: Record<string, string[]>
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType {
     /** List supported steampipe Attributes (columns) for this resource type - Metadata (GET only) */
     attributes?: string[]
@@ -1932,6 +1939,14 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus {
     StatusDeleted = 'DELETED',
     StatusSuspending = 'SUSPENDING',
     StatusSuspended = 'SUSPENDED',
+}
+
+export interface KaytuResourceCollectionFilter {
+    account_ids?: string[]
+    connectors?: string[]
+    regions?: string[]
+    resource_types?: string[]
+    tags?: Record<string, string>
 }
 
 export enum SourceAssetDiscoveryMethodType {
@@ -3536,19 +3551,24 @@ export class Api<
          * @description Get AWS cost for each resource
          *
          * @tags cost-estimator
-         * @name ApiV1CostAwsDetail
+         * @name ApiV1CostAwsList
          * @summary Get AWS cost
-         * @request GET:/cost_estimator/api/v1/cost/aws/{resourceType}/{resourceId}
+         * @request GET:/cost_estimator/api/v1/cost/aws
          * @secure
          */
-        apiV1CostAwsDetail: (
-            resourceId: string,
-            resourceType: string,
+        apiV1CostAwsList: (
+            query: {
+                /** Connection ID */
+                resourceId: string
+                /** ResourceType */
+                resourceType: string
+            },
             params: RequestParams = {}
         ) =>
             this.request<number, any>({
-                path: `/cost_estimator/api/v1/cost/aws/${resourceType}/${resourceId}`,
+                path: `/cost_estimator/api/v1/cost/aws`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 format: 'json',
                 ...params,
@@ -3558,19 +3578,24 @@ export class Api<
          * @description Get Azure cost for each resource
          *
          * @tags cost-estimator
-         * @name ApiV1CostAzureDetail
+         * @name ApiV1CostAzureList
          * @summary Get Azure cost
-         * @request GET:/cost_estimator/api/v1/cost/azure/{resourceType}/{resourceId}
+         * @request GET:/cost_estimator/api/v1/cost/azure
          * @secure
          */
-        apiV1CostAzureDetail: (
-            resourceId: string,
-            resourceType: string,
+        apiV1CostAzureList: (
+            query: {
+                /** Connection ID */
+                resourceId: string
+                /** ResourceType */
+                resourceType: string
+            },
             params: RequestParams = {}
         ) =>
             this.request<number, any>({
-                path: `/cost_estimator/api/v1/cost/azure/${resourceType}/${resourceId}`,
+                path: `/cost_estimator/api/v1/cost/azure`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 format: 'json',
                 ...params,
@@ -4120,6 +4145,58 @@ export class Api<
                 query: query,
                 secure: true,
                 type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving list of resource collections by specified filters
+         *
+         * @tags resource_collection
+         * @name ApiV2MetadataResourceCollectionList
+         * @summary List resource collections
+         * @request GET:/inventory/api/v2/metadata/resource-collection
+         * @secure
+         */
+        apiV2MetadataResourceCollectionList: (
+            query?: {
+                /** Resource collection IDs */
+                id?: string[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection[],
+                any
+            >({
+                path: `/inventory/api/v2/metadata/resource-collection`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving resource collection by specified ID
+         *
+         * @tags resource_collection
+         * @name ApiV2MetadataResourceCollectionDetail
+         * @summary Get resource collection
+         * @request GET:/inventory/api/v2/metadata/resource-collection/{resourceCollectionId}
+         * @secure
+         */
+        apiV2MetadataResourceCollectionDetail: (
+            resourceCollectionId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
+                any
+            >({
+                path: `/inventory/api/v2/metadata/resource-collection/${resourceCollectionId}`,
+                method: 'GET',
+                secure: true,
                 format: 'json',
                 ...params,
             }),
