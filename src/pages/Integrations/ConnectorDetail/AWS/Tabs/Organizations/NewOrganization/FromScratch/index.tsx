@@ -24,7 +24,9 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
         accessKey: '',
         secretKey: '',
         roleName: '',
+        adminRoleName: '',
         externalId: '',
+        policyName: '',
     })
 
     const close = () => {
@@ -33,7 +35,9 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
             accessKey: '',
             secretKey: '',
             roleName: '',
+            adminRoleName: '',
             externalId: '',
+            policyName: '',
         })
         onClose()
     }
@@ -46,7 +50,9 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
                     accessKey: data.accessKey,
                     secretKey: data.secretKey,
                     assumeRoleName: data.roleName,
+                    assumeAdminRoleName: data.adminRoleName,
                     externalId: data.externalId,
+                    assumeRolePolicyName: data.policyName,
                 },
             },
             {},
@@ -66,7 +72,9 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
                 accessKey: data.accessKey,
                 secretKey: data.secretKey,
                 assumeRoleName: data.roleName,
+                assumeAdminRoleName: data.adminRoleName,
                 externalId: data.externalId,
+                assumeRolePolicyName: data.policyName,
             },
         },
         {},
@@ -101,13 +109,17 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
                             accessKey,
                             secretKey,
                             roleName,
-                            externalId
+                            adminRoleName,
+                            externalId,
+                            policyName
                         ) => {
                             setData({
                                 accessKey,
                                 secretKey,
                                 roleName,
+                                adminRoleName,
                                 externalId,
+                                policyName,
                             })
                             setStepNum(4)
                         }}

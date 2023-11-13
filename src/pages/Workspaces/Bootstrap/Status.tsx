@@ -1,5 +1,8 @@
 import { Button, Flex, Text, TextInput } from '@tremor/react'
 import { CheckIcon } from '@heroicons/react/20/solid'
+import { useEffect } from 'react'
+import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus } from '../../../api/api'
+import { useWorkspaceApiV1BootstrapDetail } from '../../../api/workspace.gen'
 
 interface INode {
     first?: boolean
@@ -62,10 +65,52 @@ function Node({ first, done, running, text }: INode) {
 }
 
 interface IStatus {
-    workspaceName?: string
+    workspaceName: string
 }
 
 export function Status({ workspaceName }: IStatus) {
+    const {
+        response: statusResponse,
+        isExecuted: statusIsExecuted,
+        isLoading: statusIsLoading,
+        error: statusError,
+        sendNow: refreshStatus,
+    } = useWorkspaceApiV1BootstrapDetail(workspaceName)
+
+    useEffect(() => {
+        if (statusIsExecuted && !statusIsLoading) {
+            setTimeout(() => {
+                refreshStatus()
+            }, 5000)
+        }
+    }, [statusIsLoading])
+
+    const step = (
+        stepStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus
+    ) => {
+        switch (stepStatus) {
+            case GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusOnboardConnection:
+                return 0
+            case GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusCreatingWorkspace:
+                return 1
+            case GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForDiscovery:
+                return 2
+            case GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForAnalytics:
+                return 3
+            case GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForCompliance:
+                return 4
+            case GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForInsights:
+                return 5
+            case GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusFinished:
+                return 6
+            default:
+                return -1
+        }
+    }
+
+    const stepValue = step(statusResponse?.status)
+
+    console.log(statusResponse?.status)
     return (
         <Flex justifyContent="start" className="h-full" alignItems="start">
             <Flex
@@ -79,12 +124,79 @@ export function Status({ workspaceName }: IStatus) {
                 <Text className="text-sm text-gray-800 mb-4">
                     Kaytu is working on creating your workspace
                 </Text>
-                <Node first running text="Creating Workspace" />
-                <Node text="Gathering Inventory" />
-                <Node text="Reviewing Infrastructure & Cost" />
-                <Node text="Evaluating Compliances" />
-                <Node text="Gathering Insights" />
-                <Node text="Finishing Up" />
+                <Node
+                    first
+                    running={
+                        statusResponse?.status ===
+                        GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusCreatingWorkspace
+                    }
+                    done={
+                        stepValue >
+                        step(
+                            GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusCreatingWorkspace
+                        )
+                    }
+                    text="Creating Workspace"
+                />
+                <Node
+                    running={
+                        statusResponse?.status ===
+                        GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForDiscovery
+                    }
+                    done={
+                        stepValue >
+                        step(
+                            GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForDiscovery
+                        )
+                    }
+                    text="Gathering Inventory"
+                />
+                <Node
+                    running={
+                        statusResponse?.status ===
+                        GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForAnalytics
+                    }
+                    done={
+                        stepValue >
+                        step(
+                            GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForAnalytics
+                        )
+                    }
+                    text="Reviewing Infrastructure & Cost"
+                />
+                <Node
+                    running={
+                        statusResponse?.status ===
+                        GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForCompliance
+                    }
+                    done={
+                        stepValue >
+                        step(
+                            GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForCompliance
+                        )
+                    }
+                    text="Evaluating Compliances"
+                />
+                <Node
+                    running={
+                        statusResponse?.status ===
+                        GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForInsights
+                    }
+                    done={
+                        stepValue >
+                        step(
+                            GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusWaitingForInsights
+                        )
+                    }
+                    text="Gathering Insights"
+                />
+                <Node
+                    done={
+                        statusResponse?.status ===
+                        GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusFinished
+                    }
+                    text="Finishing Up"
+                />
             </Flex>
             <Flex className="w-2/3 h-full" flexDirection="col">
                 <Text>Start the game</Text>
