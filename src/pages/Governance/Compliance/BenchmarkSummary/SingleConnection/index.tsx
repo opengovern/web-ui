@@ -16,7 +16,7 @@ import {
 import { useParams } from 'react-router-dom'
 import clipboardCopy from 'clipboard-copy'
 import { ChevronRightIcon, Square2StackIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
     IServerSideDatasource,
@@ -34,10 +34,12 @@ import { isDemoAtom, notificationAtom } from '../../../../../store'
 import Layout from '../../../../../components/Layout'
 import {
     useComplianceApiV1AssignmentsConnectionDetail,
+    useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1FindingsCreate,
 } from '../../../../../api/compliance.gen'
 import Table from '../../../../../components/Table'
 import { columns } from '../../../Findings'
+import Breakdown from '../../../../../components/Breakdown'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -68,29 +70,54 @@ export default function SingleComplianceConnection() {
     const [benchmark, setBenchmark] = useState(
         benchmarkList?.filter((bm) => bm.status)[0].benchmarkId?.id
     )
+    const {
+        response: benchmarkDetail,
+        isLoading: detailLoding,
+        sendNow: updateDetail,
+    } = useComplianceApiV1BenchmarksSummaryDetail(
+        benchmark || '',
+        {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            connectionID: [connection?.replace('account_', '') || ''],
+        },
+        {},
+        false
+    )
 
     const {
         response: findings,
         isLoading,
-        sendNow,
-    } = useComplianceApiV1FindingsCreate({
-        filters: {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connectionID: [connection?.replace('account_', '') || ''],
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            benchmarkID: [benchmark],
-            activeOnly: true,
+        sendNow: updateFindings,
+    } = useComplianceApiV1FindingsCreate(
+        {
+            filters: {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                connectionID: [connection?.replace('account_', '') || ''],
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                benchmarkID: [benchmark],
+                activeOnly: true,
+            },
+            sort: sortModel.length
+                ? { [sortModel[0].colId]: sortModel[0].sort }
+                : {},
         },
-        sort: sortModel.length
-            ? { [sortModel[0].colId]: sortModel[0].sort }
-            : {},
-    })
+        {},
+        false
+    )
+
+    useEffect(() => {
+        if (benchmark) {
+            updateFindings()
+            updateDetail()
+        }
+    }, [benchmark])
 
     const getData = (sort: SortModelItem[]) => {
         setSortModel(sort)
-        sendNow()
+        updateFindings()
     }
 
     const datasource: IServerSideDatasource = {
@@ -121,12 +148,12 @@ export default function SingleComplianceConnection() {
         },
     }
 
-    // const critical = benchmarkDetail?.checks?.criticalCount || 0
-    // const high = benchmarkDetail?.checks?.highCount || 0
-    // const medium = benchmarkDetail?.checks?.mediumCount || 0
-    // const low = benchmarkDetail?.checks?.lowCount || 0
-    // const passed = benchmarkDetail?.checks?.passedCount || 0
-    // const unknown = benchmarkDetail?.checks?.unknownCount || 0
+    const critical = benchmarkDetail?.checks?.criticalCount || 0
+    const high = benchmarkDetail?.checks?.highCount || 0
+    const medium = benchmarkDetail?.checks?.mediumCount || 0
+    const low = benchmarkDetail?.checks?.lowCount || 0
+    const passed = benchmarkDetail?.checks?.passedCount || 0
+    const unknown = benchmarkDetail?.checks?.unknownCount || 0
 
     return (
         <Layout currentPage="compliance">
@@ -147,7 +174,7 @@ export default function SingleComplianceConnection() {
                                 Connection details
                             </Title>
                             {accountInfoLoading ? (
-                                <Spinner className="mt-28" />
+                                <Spinner className="my-28" />
                             ) : (
                                 <List className="mt-2">
                                     <ListItem>
@@ -242,7 +269,7 @@ export default function SingleComplianceConnection() {
                         </DrawerPanel>
                     </Flex>
                 </Card>
-                {/* <Breakdown
+                <Breakdown
                     title="Severity breakdown"
                     chartData={[
                         { name: 'Critical', value: critical },
@@ -252,8 +279,8 @@ export default function SingleComplianceConnection() {
                         { name: 'Passed', value: passed },
                         { name: 'Unknown', value: unknown },
                     ]}
-                    loading={isLoading}
-                /> */}
+                    loading={detailLoding}
+                />
             </Grid>
             <TabGroup className="mt-4">
                 <TabList className="mb-3">
@@ -298,6 +325,14 @@ export default function SingleComplianceConnection() {
                         ))}
                 </TabPanels>
             </TabGroup>
+            <DrawerPanel
+                open={open}
+                onClose={() => setOpen(false)}
+                title="Finding Detail"
+            >
+                <Title>Summary</Title>
+                <RenderObject obj={finding} />
+            </DrawerPanel>
         </Layout>
     )
 }
