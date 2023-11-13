@@ -111,12 +111,6 @@ export const useInventoryApiV1QueryList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseInventoryApiV1QueryListState>({
         isLoading: true,
         isExecuted: false,
@@ -133,6 +127,12 @@ export const useInventoryApiV1QueryList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV1QueryList(request, params)
                 .then((resp) => {
@@ -201,12 +201,6 @@ export const useInventoryApiV1QueryRunCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseInventoryApiV1QueryRunCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -223,6 +217,12 @@ export const useInventoryApiV1QueryRunCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV1QueryRunCreate(request, params)
                 .then((resp) => {
@@ -290,12 +290,6 @@ export const useInventoryApiV1QueryRunHistoryList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV1QueryRunHistoryListState>({
             isLoading: true,
@@ -313,6 +307,12 @@ export const useInventoryApiV1QueryRunHistoryList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV1QueryRunHistoryList(params)
                 .then((resp) => {
@@ -383,12 +383,6 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsCategoriesListState>({
             isLoading: true,
@@ -406,6 +400,12 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsCategoriesList(query, params)
                 .then((resp) => {
@@ -491,12 +491,6 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsCompositionDetailState>({
             isLoading: true,
@@ -514,6 +508,12 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsCompositionDetail(key, query, params)
                 .then((resp) => {
@@ -608,12 +608,6 @@ export const useInventoryApiV2AnalyticsMetricList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsMetricListState>({
             isLoading: true,
@@ -631,6 +625,12 @@ export const useInventoryApiV2AnalyticsMetricList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsMetricList(query, params)
                 .then((resp) => {
@@ -703,12 +703,6 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsMetricsListListState>({
             isLoading: true,
@@ -726,6 +720,12 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsMetricsListList(query, params)
                 .then((resp) => {
@@ -794,12 +794,6 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsMetricsDetailState>({
             isLoading: true,
@@ -817,6 +811,12 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsMetricsDetail(metricId, params)
                 .then((resp) => {
@@ -897,12 +897,6 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsSpendCompositionListState>({
             isLoading: true,
@@ -920,6 +914,12 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsSpendCompositionList(query, params)
                 .then((resp) => {
@@ -1008,12 +1008,6 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsSpendMetricListState>({
             isLoading: true,
@@ -1031,6 +1025,12 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsSpendMetricList(query, params)
                 .then((resp) => {
@@ -1115,12 +1115,6 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsSpendTableListState>({
             isLoading: true,
@@ -1138,6 +1132,12 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsSpendTableList(query, params)
                 .then((resp) => {
@@ -1220,12 +1220,6 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsSpendTrendListState>({
             isLoading: true,
@@ -1243,6 +1237,12 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsSpendTrendList(query, params)
                 .then((resp) => {
@@ -1319,12 +1319,6 @@ export const useInventoryApiV2AnalyticsTableList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsTableListState>({
             isLoading: true,
@@ -1342,6 +1336,12 @@ export const useInventoryApiV2AnalyticsTableList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsTableList(query, params)
                 .then((resp) => {
@@ -1426,12 +1426,6 @@ export const useInventoryApiV2AnalyticsTagList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseInventoryApiV2AnalyticsTagListState>(
         {
             isLoading: true,
@@ -1450,6 +1444,12 @@ export const useInventoryApiV2AnalyticsTagList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsTagList(query, params)
                 .then((resp) => {
@@ -1538,12 +1538,6 @@ export const useInventoryApiV2AnalyticsTrendList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2AnalyticsTrendListState>({
             isLoading: true,
@@ -1561,6 +1555,12 @@ export const useInventoryApiV2AnalyticsTrendList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2AnalyticsTrendList(query, params)
                 .then((resp) => {
@@ -1631,12 +1631,6 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataResourceCollectionListState>({
             isLoading: true,
@@ -1654,6 +1648,12 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2MetadataResourceCollectionList(query, params)
                 .then((resp) => {
@@ -1722,12 +1722,6 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2MetadataResourceCollectionDetailState>({
             isLoading: true,
@@ -1745,6 +1739,12 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2MetadataResourceCollectionDetail(
                     resourceCollectionId,
@@ -1830,12 +1830,6 @@ export const useInventoryApiV2ResourcesMetricDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseInventoryApiV2ResourcesMetricDetailState>({
             isLoading: true,
@@ -1853,6 +1847,12 @@ export const useInventoryApiV2ResourcesMetricDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.inventory
                 .apiV2ResourcesMetricDetail(resourceType, query, params)
                 .then((resp) => {

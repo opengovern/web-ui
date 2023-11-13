@@ -50,6 +50,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -109,12 +110,6 @@ export const useMetadataApiV1FilterList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseMetadataApiV1FilterListState>({
         isLoading: true,
         isExecuted: false,
@@ -131,6 +126,12 @@ export const useMetadataApiV1FilterList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.metadata
                 .apiV1FilterList(params)
                 .then((resp) => {
@@ -199,12 +200,6 @@ export const useMetadataApiV1FilterCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseMetadataApiV1FilterCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -221,6 +216,12 @@ export const useMetadataApiV1FilterCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.metadata
                 .apiV1FilterCreate(req, params)
                 .then((resp) => {
@@ -289,12 +290,6 @@ export const useMetadataApiV1MetadataCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseMetadataApiV1MetadataCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -311,6 +306,12 @@ export const useMetadataApiV1MetadataCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.metadata
                 .apiV1MetadataCreate(req, params)
                 .then((resp) => {
@@ -379,12 +380,6 @@ export const useMetadataApiV1MetadataDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseMetadataApiV1MetadataDetailState>({
         isLoading: true,
         isExecuted: false,
@@ -401,6 +396,12 @@ export const useMetadataApiV1MetadataDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.metadata
                 .apiV1MetadataDetail(key, params)
                 .then((resp) => {

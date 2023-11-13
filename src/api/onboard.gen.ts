@@ -50,6 +50,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -112,12 +113,6 @@ export const useOnboardApiV1CatalogMetricsList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseOnboardApiV1CatalogMetricsListState>(
         {
             isLoading: true,
@@ -136,6 +131,12 @@ export const useOnboardApiV1CatalogMetricsList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1CatalogMetricsList(query, params)
                 .then((resp) => {
@@ -206,12 +207,6 @@ export const useOnboardApiV1ConnectionGroupsList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionGroupsListState>({
             isLoading: true,
@@ -229,6 +224,12 @@ export const useOnboardApiV1ConnectionGroupsList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1ConnectionGroupsList(query, params)
                 .then((resp) => {
@@ -300,12 +301,6 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionGroupsDetailState>({
             isLoading: true,
@@ -323,6 +318,12 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1ConnectionGroupsDetail(connectionGroupName, query, params)
                 .then((resp) => {
@@ -434,12 +435,6 @@ export const useOnboardApiV1ConnectionsSummaryList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionsSummaryListState>({
             isLoading: true,
@@ -457,6 +452,12 @@ export const useOnboardApiV1ConnectionsSummaryList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1ConnectionsSummaryList(query, params)
                 .then((resp) => {
@@ -526,12 +527,6 @@ export const useOnboardApiV1ConnectionsStateCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseOnboardApiV1ConnectionsStateCreateState>({
             isLoading: true,
@@ -549,6 +544,12 @@ export const useOnboardApiV1ConnectionsStateCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1ConnectionsStateCreate(connectionId, data, params)
                 .then((resp) => {
@@ -618,12 +619,6 @@ export const useOnboardApiV1ConnectorList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseOnboardApiV1ConnectorListState>({
         isLoading: true,
         isExecuted: false,
@@ -640,6 +635,12 @@ export const useOnboardApiV1ConnectorList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1ConnectorList(params)
                 .then((resp) => {
@@ -723,12 +724,6 @@ export const useOnboardApiV1CredentialList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseOnboardApiV1CredentialListState>({
         isLoading: true,
         isExecuted: false,
@@ -745,6 +740,12 @@ export const useOnboardApiV1CredentialList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1CredentialList(query, params)
                 .then((resp) => {
@@ -813,12 +814,6 @@ export const useOnboardApiV1CredentialCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseOnboardApiV1CredentialCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -835,6 +830,12 @@ export const useOnboardApiV1CredentialCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1CredentialCreate(config, params)
                 .then((resp) => {
@@ -903,12 +904,6 @@ export const useOnboardApiV1CredentialDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseOnboardApiV1CredentialDetailState>({
         isLoading: true,
         isExecuted: false,
@@ -925,6 +920,12 @@ export const useOnboardApiV1CredentialDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1CredentialDetail(credentialId, params)
                 .then((resp) => {
@@ -994,12 +995,6 @@ export const useOnboardApiV1CredentialUpdate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseOnboardApiV1CredentialUpdateState>({
         isLoading: true,
         isExecuted: false,
@@ -1016,6 +1011,12 @@ export const useOnboardApiV1CredentialUpdate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1CredentialUpdate(credentialId, config, params)
                 .then((resp) => {
@@ -1089,12 +1090,6 @@ export const useOnboardApiV1CredentialDelete = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseOnboardApiV1CredentialDeleteState>({
         isLoading: true,
         isExecuted: false,
@@ -1111,6 +1106,12 @@ export const useOnboardApiV1CredentialDelete = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1CredentialDelete(credentialId, params)
                 .then((resp) => {
@@ -1179,12 +1180,6 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseOnboardApiV1CredentialAutoonboardCreateState>({
             isLoading: true,
@@ -1202,6 +1197,12 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1CredentialAutoonboardCreate(credentialId, params)
                 .then((resp) => {
@@ -1270,12 +1271,6 @@ export const useOnboardApiV1SourceAwsCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseOnboardApiV1SourceAwsCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -1292,6 +1287,12 @@ export const useOnboardApiV1SourceAwsCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1SourceAwsCreate(request, params)
                 .then((resp) => {
@@ -1360,12 +1361,6 @@ export const useOnboardApiV1SourceAzureCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseOnboardApiV1SourceAzureCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -1382,6 +1377,12 @@ export const useOnboardApiV1SourceAzureCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1SourceAzureCreate(request, params)
                 .then((resp) => {
@@ -1450,12 +1451,6 @@ export const useOnboardApiV1SourceDelete = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseOnboardApiV1SourceDeleteState>({
         isLoading: true,
         isExecuted: false,
@@ -1472,6 +1467,12 @@ export const useOnboardApiV1SourceDelete = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1SourceDelete(sourceId, params)
                 .then((resp) => {
@@ -1543,12 +1544,6 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseOnboardApiV1SourceHealthcheckDetailState>({
             isLoading: true,
@@ -1566,6 +1561,12 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.onboard
                 .apiV1SourceHealthcheckDetail(sourceId, query, params)
                 .then((resp) => {

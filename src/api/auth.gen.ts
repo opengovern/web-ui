@@ -50,6 +50,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -110,12 +111,6 @@ export const useAuthApiV1KeyCreateCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAuthApiV1KeyCreateCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -132,6 +127,12 @@ export const useAuthApiV1KeyCreateCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.auth
                 .apiV1KeyCreateCreate(request, params)
                 .then((resp) => {
@@ -200,12 +201,6 @@ export const useAuthApiV1KeyDeleteDelete = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAuthApiV1KeyDeleteDeleteState>({
         isLoading: true,
         isExecuted: false,
@@ -222,6 +217,12 @@ export const useAuthApiV1KeyDeleteDelete = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.auth
                 .apiV1KeyDeleteDelete(id, params)
                 .then((resp) => {
@@ -289,12 +290,6 @@ export const useAuthApiV1KeysList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAuthApiV1KeysListState>({
         isLoading: true,
         isExecuted: false,
@@ -311,6 +306,12 @@ export const useAuthApiV1KeysList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.auth
                 .apiV1KeysList(params)
                 .then((resp) => {
@@ -379,12 +380,6 @@ export const useAuthApiV1UserInviteCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAuthApiV1UserInviteCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -401,6 +396,12 @@ export const useAuthApiV1UserInviteCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.auth
                 .apiV1UserInviteCreate(request, params)
                 .then((resp) => {
@@ -469,12 +470,6 @@ export const useAuthApiV1UserRoleBindingUpdate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingUpdateState>(
         {
             isLoading: true,
@@ -493,6 +488,12 @@ export const useAuthApiV1UserRoleBindingUpdate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.auth
                 .apiV1UserRoleBindingUpdate(request, params)
                 .then((resp) => {
@@ -563,12 +564,6 @@ export const useAuthApiV1UserRoleBindingDelete = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingDeleteState>(
         {
             isLoading: true,
@@ -587,6 +582,12 @@ export const useAuthApiV1UserRoleBindingDelete = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.auth
                 .apiV1UserRoleBindingDelete(query, params)
                 .then((resp) => {
@@ -654,12 +655,6 @@ export const useAuthApiV1UserRoleBindingsList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAuthApiV1UserRoleBindingsListState>({
         isLoading: true,
         isExecuted: false,
@@ -676,6 +671,12 @@ export const useAuthApiV1UserRoleBindingsList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.auth
                 .apiV1UserRoleBindingsList(params)
                 .then((resp) => {
@@ -744,12 +745,6 @@ export const useAuthApiV1UserDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAuthApiV1UserDetailState>({
         isLoading: true,
         isExecuted: false,
@@ -766,6 +761,12 @@ export const useAuthApiV1UserDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.auth
                 .apiV1UserDetail(userId, params)
                 .then((resp) => {
@@ -834,12 +835,6 @@ export const useAuthApiV1UsersList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAuthApiV1UsersListState>({
         isLoading: true,
         isExecuted: false,
@@ -856,6 +851,12 @@ export const useAuthApiV1UsersList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.auth
                 .apiV1UsersList(request, params)
                 .then((resp) => {
@@ -923,12 +924,6 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseAuthApiV1WorkspaceRoleBindingsListState>({
             isLoading: true,
@@ -946,6 +941,12 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.auth
                 .apiV1WorkspaceRoleBindingsList(params)
                 .then((resp) => {

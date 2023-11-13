@@ -50,6 +50,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -110,12 +111,6 @@ export const useAiApiV1GptRunCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAiApiV1GptRunCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -132,6 +127,12 @@ export const useAiApiV1GptRunCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.ai
                 .apiV1GptRunCreate(query, params)
                 .then((resp) => {

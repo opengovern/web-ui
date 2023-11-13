@@ -123,12 +123,6 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(%[8]s)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<I%[6]sState>({
             isLoading: true,
@@ -146,7 +140,13 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
 			isExecuted: true,
 		})
         try {
-            api.%[4]s
+			if (workspace !== undefined && workspace.length > 0) {
+				setWorkspace(%[8]s)
+			} else {
+				setWorkspace('kaytu')
+			}
+
+			api.%[4]s
                 .%[1]s(%[5]s)
                 .then((resp) => {
                     setState({

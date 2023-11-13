@@ -118,7 +118,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                         Resume
                     </Button>
                 )
-            default:
+            case 'BOOTSTRAPPING':
                 return (
                     <Button
                         variant="primary"
@@ -131,6 +131,21 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                         Bootstrap
                     </Button>
                 )
+            default:
+                return null
+            // default:
+            //     return (
+            //         <Button
+            //             variant="primary"
+            //             icon={ArrowSmallRightIcon}
+            //             iconPosition="right"
+            //             onClick={() => {
+            //                 navigate(`/${workspace.name}/bootstrap`)
+            //             }}
+            //         >
+            //             Bootstrap
+            //         </Button>
+            //     )
         }
     }
 

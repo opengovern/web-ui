@@ -50,6 +50,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -110,12 +111,6 @@ export const useWorkspaceApiV1BootstrapDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseWorkspaceApiV1BootstrapDetailState>({
         isLoading: true,
         isExecuted: false,
@@ -132,6 +127,12 @@ export const useWorkspaceApiV1BootstrapDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1BootstrapDetail(workspaceName, params)
                 .then((resp) => {
@@ -201,12 +202,6 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1BootstrapCredentialCreateState>({
             isLoading: true,
@@ -224,6 +219,12 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1BootstrapCredentialCreate(workspaceName, request, params)
                 .then((resp) => {
@@ -297,12 +298,6 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1BootstrapFinishCreateState>({
             isLoading: true,
@@ -320,6 +315,12 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1BootstrapFinishCreate(workspaceName, params)
                 .then((resp) => {
@@ -387,12 +388,6 @@ export const useWorkspaceApiV1OrganizationList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseWorkspaceApiV1OrganizationListState>(
         {
             isLoading: true,
@@ -411,6 +406,12 @@ export const useWorkspaceApiV1OrganizationList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1OrganizationList(params)
                 .then((resp) => {
@@ -479,12 +480,6 @@ export const useWorkspaceApiV1OrganizationCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1OrganizationCreateState>({
             isLoading: true,
@@ -502,6 +497,12 @@ export const useWorkspaceApiV1OrganizationCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1OrganizationCreate(request, params)
                 .then((resp) => {
@@ -570,12 +571,6 @@ export const useWorkspaceApiV1OrganizationDelete = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1OrganizationDeleteState>({
             isLoading: true,
@@ -593,6 +588,12 @@ export const useWorkspaceApiV1OrganizationDelete = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1OrganizationDelete(organizationId, params)
                 .then((resp) => {
@@ -661,12 +662,6 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -683,6 +678,12 @@ export const useWorkspaceApiV1WorkspaceCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspaceCreate(request, params)
                 .then((resp) => {
@@ -750,12 +751,6 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceCurrentListState>({
             isLoading: true,
@@ -773,6 +768,12 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspaceCurrentList(params)
                 .then((resp) => {
@@ -841,12 +842,6 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceDeleteState>({
         isLoading: true,
         isExecuted: false,
@@ -863,6 +858,12 @@ export const useWorkspaceApiV1WorkspaceDelete = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspaceDelete(workspaceId, params)
                 .then((resp) => {
@@ -932,12 +933,6 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceNameCreateState>({
             isLoading: true,
@@ -955,6 +950,12 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspaceNameCreate(workspaceId, request, params)
                 .then((resp) => {
@@ -1029,12 +1030,6 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceOrganizationCreateState>({
             isLoading: true,
@@ -1052,6 +1047,12 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspaceOrganizationCreate(workspaceId, request, params)
                 .then((resp) => {
@@ -1126,12 +1127,6 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceOwnerCreateState>({
             isLoading: true,
@@ -1149,6 +1144,12 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspaceOwnerCreate(workspaceId, request, params)
                 .then((resp) => {
@@ -1222,12 +1223,6 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceResumeCreateState>({
             isLoading: true,
@@ -1245,6 +1240,12 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspaceResumeCreate(workspaceId, params)
                 .then((resp) => {
@@ -1313,12 +1314,6 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceSuspendCreateState>({
             isLoading: true,
@@ -1336,6 +1331,12 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspaceSuspendCreate(workspaceId, params)
                 .then((resp) => {
@@ -1405,12 +1406,6 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspaceTierCreateState>({
             isLoading: true,
@@ -1428,6 +1423,12 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspaceTierCreate(workspaceId, request, params)
                 .then((resp) => {
@@ -1500,12 +1501,6 @@ export const useWorkspaceApiV1WorkspacesList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesListState>({
         isLoading: true,
         isExecuted: false,
@@ -1522,6 +1517,12 @@ export const useWorkspaceApiV1WorkspacesList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspacesList(params)
                 .then((resp) => {
@@ -1590,12 +1591,6 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesByidDetailState>({
             isLoading: true,
@@ -1613,6 +1608,12 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspacesByidDetail(workspaceId, params)
                 .then((resp) => {
@@ -1681,12 +1682,6 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesLimitsByidDetailState>({
             isLoading: true,
@@ -1704,6 +1699,12 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspacesLimitsByidDetail(workspaceId, params)
                 .then((resp) => {
@@ -1775,12 +1776,6 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseWorkspaceApiV1WorkspacesLimitsDetailState>({
             isLoading: true,
@@ -1798,6 +1793,12 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspacesLimitsDetail(workspaceName, query, params)
                 .then((resp) => {
@@ -1871,12 +1872,6 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace('kaytu')
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesDetailState>(
         {
             isLoading: true,
@@ -1895,6 +1890,12 @@ export const useWorkspaceApiV1WorkspacesDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace('kaytu')
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.workspace
                 .apiV1WorkspacesDetail(workspaceId, params)
                 .then((resp) => {

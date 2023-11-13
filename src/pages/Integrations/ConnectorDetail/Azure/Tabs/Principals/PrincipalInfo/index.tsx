@@ -38,13 +38,13 @@ export default function PrincipalInfo({
         isExecuted: isDeleteExecuted,
         isLoading: isDeleteLoading,
         sendNow: deleteNow,
-    } = useOnboardApiV1CredentialDelete(id, {}, false)
+    } = useOnboardApiV1CredentialDelete(data?.id || '', {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,
         isLoading: isDiscoverLoading,
         sendNow: discoverNow,
-    } = useOnboardApiV1CredentialAutoonboardCreate(id, {}, false)
+    } = useOnboardApiV1CredentialAutoonboardCreate(data?.id || '', {}, false)
 
     useEffect(() => {
         if (isDeleteExecuted && !isDeleteLoading) {

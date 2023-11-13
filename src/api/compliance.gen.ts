@@ -50,6 +50,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -110,12 +111,6 @@ export const useComplianceApiV1AiPolicyRemediationCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1AiPolicyRemediationCreateState>({
             isLoading: true,
@@ -133,6 +128,12 @@ export const useComplianceApiV1AiPolicyRemediationCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1AiPolicyRemediationCreate(policyId, params)
                 .then((resp) => {
@@ -201,12 +202,6 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1AssignmentsBenchmarkDetailState>({
             isLoading: true,
@@ -224,6 +219,12 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1AssignmentsBenchmarkDetail(benchmarkId, params)
                 .then((resp) => {
@@ -292,12 +293,6 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1AssignmentsConnectionDetailState>({
             isLoading: true,
@@ -315,6 +310,12 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1AssignmentsConnectionDetail(connectionId, params)
                 .then((resp) => {
@@ -390,12 +391,6 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1AssignmentsConnectionCreateState>({
             isLoading: true,
@@ -413,6 +408,12 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1AssignmentsConnectionCreate(benchmarkId, query, params)
                 .then((resp) => {
@@ -490,12 +491,6 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1AssignmentsConnectionDeleteState>({
             isLoading: true,
@@ -513,6 +508,12 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1AssignmentsConnectionDelete(benchmarkId, query, params)
                 .then((resp) => {
@@ -595,12 +596,6 @@ export const useComplianceApiV1BenchmarksSummaryList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1BenchmarksSummaryListState>({
             isLoading: true,
@@ -618,6 +613,12 @@ export const useComplianceApiV1BenchmarksSummaryList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1BenchmarksSummaryList(query, params)
                 .then((resp) => {
@@ -691,12 +692,6 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1BenchmarksPoliciesDetailState>({
             isLoading: true,
@@ -714,6 +709,12 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1BenchmarksPoliciesDetail(benchmarkId, query, params)
                 .then((resp) => {
@@ -790,12 +791,6 @@ export const useComplianceApiV1BenchmarksPoliciesPolicyIdDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1BenchmarksPoliciesPolicyIdDetailState>({
             isLoading: true,
@@ -813,6 +808,12 @@ export const useComplianceApiV1BenchmarksPoliciesPolicyIdDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1BenchmarksPoliciesPolicyIdDetail(
                     benchmarkId,
@@ -902,12 +903,6 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1BenchmarksSummaryDetailState>({
             isLoading: true,
@@ -925,6 +920,12 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1BenchmarksSummaryDetail(benchmarkId, query, params)
                 .then((resp) => {
@@ -1008,12 +1009,6 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1BenchmarksTrendDetailState>({
             isLoading: true,
@@ -1031,6 +1026,12 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1BenchmarksTrendDetail(benchmarkId, query, params)
                 .then((resp) => {
@@ -1101,12 +1102,6 @@ export const useComplianceApiV1FindingsCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseComplianceApiV1FindingsCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -1123,6 +1118,12 @@ export const useComplianceApiV1FindingsCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1FindingsCreate(request, params)
                 .then((resp) => {
@@ -1191,12 +1192,6 @@ export const useComplianceApiV1FindingsFiltersCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1FindingsFiltersCreateState>({
             isLoading: true,
@@ -1214,6 +1209,12 @@ export const useComplianceApiV1FindingsFiltersCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1FindingsFiltersCreate(request, params)
                 .then((resp) => {
@@ -1287,12 +1288,6 @@ export const useComplianceApiV1FindingsAccountsDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1FindingsAccountsDetailState>({
             isLoading: true,
@@ -1310,6 +1305,12 @@ export const useComplianceApiV1FindingsAccountsDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1FindingsAccountsDetail(benchmarkId, query, params)
                 .then((resp) => {
@@ -1385,12 +1386,6 @@ export const useComplianceApiV1FindingsServicesDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1FindingsServicesDetailState>({
             isLoading: true,
@@ -1408,6 +1403,12 @@ export const useComplianceApiV1FindingsServicesDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1FindingsServicesDetail(benchmarkId, query, params)
                 .then((resp) => {
@@ -1497,12 +1498,6 @@ export const useComplianceApiV1FindingsCountDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1FindingsCountDetailState>({
             isLoading: true,
@@ -1520,6 +1515,12 @@ export const useComplianceApiV1FindingsCountDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1FindingsCountDetail(benchmarkId, field, query, params)
                 .then((resp) => {
@@ -1613,12 +1614,6 @@ export const useComplianceApiV1FindingsTopDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1FindingsTopDetailState>({
             isLoading: true,
@@ -1636,6 +1631,12 @@ export const useComplianceApiV1FindingsTopDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1FindingsTopDetail(
                     benchmarkId,
@@ -1742,12 +1743,6 @@ export const useComplianceApiV1InsightList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseComplianceApiV1InsightListState>({
         isLoading: true,
         isExecuted: false,
@@ -1764,6 +1759,12 @@ export const useComplianceApiV1InsightList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1InsightList(query, params)
                 .then((resp) => {
@@ -1846,12 +1847,6 @@ export const useComplianceApiV1InsightGroupList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1InsightGroupListState>({
             isLoading: true,
@@ -1869,6 +1864,12 @@ export const useComplianceApiV1InsightGroupList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1InsightGroupList(query, params)
                 .then((resp) => {
@@ -1948,12 +1949,6 @@ export const useComplianceApiV1InsightGroupDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1InsightGroupDetailState>({
             isLoading: true,
@@ -1971,6 +1966,12 @@ export const useComplianceApiV1InsightGroupDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1InsightGroupDetail(insightGroupId, query, params)
                 .then((resp) => {
@@ -2057,12 +2058,6 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1InsightGroupTrendDetailState>({
             isLoading: true,
@@ -2080,6 +2075,12 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1InsightGroupTrendDetail(insightGroupId, query, params)
                 .then((resp) => {
@@ -2164,12 +2165,6 @@ export const useComplianceApiV1InsightDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseComplianceApiV1InsightDetailState>({
         isLoading: true,
         isExecuted: false,
@@ -2186,6 +2181,12 @@ export const useComplianceApiV1InsightDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1InsightDetail(insightId, query, params)
                 .then((resp) => {
@@ -2267,12 +2268,6 @@ export const useComplianceApiV1InsightTrendDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1InsightTrendDetailState>({
             isLoading: true,
@@ -2290,6 +2285,12 @@ export const useComplianceApiV1InsightTrendDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1InsightTrendDetail(insightId, query, params)
                 .then((resp) => {
@@ -2358,12 +2359,6 @@ export const useComplianceApiV1MetadataInsightDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1MetadataInsightDetailState>({
             isLoading: true,
@@ -2381,6 +2376,12 @@ export const useComplianceApiV1MetadataInsightDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1MetadataInsightDetail(insightId, params)
                 .then((resp) => {
@@ -2448,12 +2449,6 @@ export const useComplianceApiV1MetadataTagComplianceList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1MetadataTagComplianceListState>({
             isLoading: true,
@@ -2471,6 +2466,12 @@ export const useComplianceApiV1MetadataTagComplianceList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1MetadataTagComplianceList(params)
                 .then((resp) => {
@@ -2538,12 +2539,6 @@ export const useComplianceApiV1MetadataTagInsightList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseComplianceApiV1MetadataTagInsightListState>({
             isLoading: true,
@@ -2561,6 +2556,12 @@ export const useComplianceApiV1MetadataTagInsightList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1MetadataTagInsightList(params)
                 .then((resp) => {
@@ -2628,12 +2629,6 @@ export const useComplianceApiV1QueriesSyncList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseComplianceApiV1QueriesSyncListState>(
         {
             isLoading: true,
@@ -2652,6 +2647,12 @@ export const useComplianceApiV1QueriesSyncList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.compliance
                 .apiV1QueriesSyncList(params)
                 .then((resp) => {

@@ -225,7 +225,7 @@ export default function AccountInfo({
                                     >
                                         {
                                             data?.metadata?.account_organization
-                                                .Arn
+                                                ?.Arn
                                         }
                                     </Text>
                                 </Flex>
@@ -316,7 +316,7 @@ export default function AccountInfo({
                                         <Text className="text-black">
                                             {
                                                 data?.metadata
-                                                    ?.account_organization.Id
+                                                    ?.account_organization?.Id
                                             }
                                         </Text>
                                     </Flex>
@@ -327,7 +327,7 @@ export default function AccountInfo({
                                             {
                                                 data?.metadata
                                                     ?.account_organization
-                                                    .MasterAccountArn
+                                                    ?.MasterAccountArn
                                             }
                                         </Text>
                                     </Flex>
@@ -338,7 +338,7 @@ export default function AccountInfo({
                                             {
                                                 data?.metadata
                                                     ?.account_organization
-                                                    .MasterAccountEmail
+                                                    ?.MasterAccountEmail
                                             }
                                         </Text>
                                     </Flex>

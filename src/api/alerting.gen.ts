@@ -50,6 +50,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -110,12 +111,6 @@ export const useAlertingApiV1ActionCreateCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseAlertingApiV1ActionCreateCreateState>({
             isLoading: true,
@@ -133,6 +128,12 @@ export const useAlertingApiV1ActionCreateCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1ActionCreateCreate(request, params)
                 .then((resp) => {
@@ -201,12 +202,6 @@ export const useAlertingApiV1ActionDeleteDelete = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseAlertingApiV1ActionDeleteDeleteState>({
             isLoading: true,
@@ -224,6 +219,12 @@ export const useAlertingApiV1ActionDeleteDelete = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1ActionDeleteDelete(actionId, params)
                 .then((resp) => {
@@ -292,12 +293,6 @@ export const useAlertingApiV1ActionJiraCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAlertingApiV1ActionJiraCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -314,6 +309,12 @@ export const useAlertingApiV1ActionJiraCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1ActionJiraCreate(request, params)
                 .then((resp) => {
@@ -381,12 +382,6 @@ export const useAlertingApiV1ActionListList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAlertingApiV1ActionListListState>({
         isLoading: true,
         isExecuted: false,
@@ -403,6 +398,12 @@ export const useAlertingApiV1ActionListList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1ActionListList(params)
                 .then((resp) => {
@@ -471,12 +472,6 @@ export const useAlertingApiV1ActionSlackCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAlertingApiV1ActionSlackCreateState>(
         {
             isLoading: true,
@@ -495,6 +490,12 @@ export const useAlertingApiV1ActionSlackCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1ActionSlackCreate(request, params)
                 .then((resp) => {
@@ -564,12 +565,6 @@ export const useAlertingApiV1ActionUpdateUpdate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseAlertingApiV1ActionUpdateUpdateState>({
             isLoading: true,
@@ -587,6 +582,12 @@ export const useAlertingApiV1ActionUpdateUpdate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1ActionUpdateUpdate(actionId, request, params)
                 .then((resp) => {
@@ -657,12 +658,6 @@ export const useAlertingApiV1RuleCreateCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAlertingApiV1RuleCreateCreateState>({
         isLoading: true,
         isExecuted: false,
@@ -679,6 +674,12 @@ export const useAlertingApiV1RuleCreateCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1RuleCreateCreate(request, params)
                 .then((resp) => {
@@ -747,12 +748,6 @@ export const useAlertingApiV1RuleDeleteDelete = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAlertingApiV1RuleDeleteDeleteState>({
         isLoading: true,
         isExecuted: false,
@@ -769,6 +764,12 @@ export const useAlertingApiV1RuleDeleteDelete = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1RuleDeleteDelete(ruleId, params)
                 .then((resp) => {
@@ -836,12 +837,6 @@ export const useAlertingApiV1RuleListList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAlertingApiV1RuleListListState>({
         isLoading: true,
         isExecuted: false,
@@ -858,6 +853,12 @@ export const useAlertingApiV1RuleListList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1RuleListList(params)
                 .then((resp) => {
@@ -927,12 +928,6 @@ export const useAlertingApiV1RuleUpdateUpdate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAlertingApiV1RuleUpdateUpdateState>({
         isLoading: true,
         isExecuted: false,
@@ -949,6 +944,12 @@ export const useAlertingApiV1RuleUpdateUpdate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1RuleUpdateUpdate(ruleId, request, params)
                 .then((resp) => {
@@ -1017,12 +1018,6 @@ export const useAlertingApiV1RuleTriggerDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAlertingApiV1RuleTriggerDetailState>(
         {
             isLoading: true,
@@ -1041,6 +1036,12 @@ export const useAlertingApiV1RuleTriggerDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1RuleTriggerDetail(ruleId, params)
                 .then((resp) => {
@@ -1108,12 +1109,6 @@ export const useAlertingApiV1TriggerListList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseAlertingApiV1TriggerListListState>({
         isLoading: true,
         isExecuted: false,
@@ -1130,6 +1125,12 @@ export const useAlertingApiV1TriggerListList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.alerting
                 .apiV1TriggerListList(params)
                 .then((resp) => {

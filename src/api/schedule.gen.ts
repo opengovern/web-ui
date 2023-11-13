@@ -50,6 +50,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
@@ -110,12 +111,6 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseScheduleApiV1ComplianceTriggerUpdateState>({
             isLoading: true,
@@ -133,6 +128,12 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1ComplianceTriggerUpdate(benchmarkId, params)
                 .then((resp) => {
@@ -203,12 +204,6 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseScheduleApiV1DescribeConnectionStatusUpdateState>({
             isLoading: true,
@@ -226,6 +221,12 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1DescribeConnectionStatusUpdate(query, params)
                 .then((resp) => {
@@ -297,12 +298,6 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseScheduleApiV1DescribeTriggerUpdateState>({
             isLoading: true,
@@ -320,6 +315,12 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1DescribeTriggerUpdate(connectionId, query, params)
                 .then((resp) => {
@@ -390,12 +391,6 @@ export const useScheduleApiV1InsightTriggerUpdate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseScheduleApiV1InsightTriggerUpdateState>({
             isLoading: true,
@@ -413,6 +408,12 @@ export const useScheduleApiV1InsightTriggerUpdate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1InsightTriggerUpdate(insightId, params)
                 .then((resp) => {
@@ -485,12 +486,6 @@ export const useScheduleApiV1StacksList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseScheduleApiV1StacksListState>({
         isLoading: true,
         isExecuted: false,
@@ -507,6 +502,12 @@ export const useScheduleApiV1StacksList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1StacksList(query, params)
                 .then((resp) => {
@@ -583,12 +584,6 @@ export const useScheduleApiV1StacksCreateCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseScheduleApiV1StacksCreateCreateState>({
             isLoading: true,
@@ -606,6 +601,12 @@ export const useScheduleApiV1StacksCreateCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1StacksCreateCreate(data, params)
                 .then((resp) => {
@@ -676,12 +677,6 @@ export const useScheduleApiV1StacksResourceList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseScheduleApiV1StacksResourceListState>({
             isLoading: true,
@@ -699,6 +694,12 @@ export const useScheduleApiV1StacksResourceList = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1StacksResourceList(query, params)
                 .then((resp) => {
@@ -767,12 +768,6 @@ export const useScheduleApiV1StacksDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseScheduleApiV1StacksDetailState>({
         isLoading: true,
         isExecuted: false,
@@ -789,6 +784,12 @@ export const useScheduleApiV1StacksDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1StacksDetail(stackId, params)
                 .then((resp) => {
@@ -857,12 +858,6 @@ export const useScheduleApiV1StacksDelete = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] = useState<IuseScheduleApiV1StacksDeleteState>({
         isLoading: true,
         isExecuted: false,
@@ -879,6 +874,12 @@ export const useScheduleApiV1StacksDelete = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1StacksDelete(stackId, params)
                 .then((resp) => {
@@ -948,12 +949,6 @@ export const useScheduleApiV1StacksFindingsCreate = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseScheduleApiV1StacksFindingsCreateState>({
             isLoading: true,
@@ -971,6 +966,12 @@ export const useScheduleApiV1StacksFindingsCreate = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1StacksFindingsCreate(stackId, request, params)
                 .then((resp) => {
@@ -1046,12 +1047,6 @@ export const useScheduleApiV1StacksInsightDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseScheduleApiV1StacksInsightDetailState>({
             isLoading: true,
@@ -1069,6 +1064,12 @@ export const useScheduleApiV1StacksInsightDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1StacksInsightDetail(stackId, query, params)
                 .then((resp) => {
@@ -1144,12 +1145,6 @@ export const useScheduleApiV1StacksInsightsDetail = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    if (workspace !== undefined && workspace.length > 0) {
-        setWorkspace(workspace)
-    } else {
-        setWorkspace('kaytu')
-    }
-
     const [state, setState] =
         useState<IuseScheduleApiV1StacksInsightsDetailState>({
             isLoading: true,
@@ -1167,6 +1162,12 @@ export const useScheduleApiV1StacksInsightsDetail = (
             isExecuted: true,
         })
         try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
             api.schedule
                 .apiV1StacksInsightsDetail(stackId, query, params)
                 .then((resp) => {

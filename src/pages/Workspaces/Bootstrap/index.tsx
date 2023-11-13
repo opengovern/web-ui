@@ -99,6 +99,7 @@ export default function Boostrap() {
                 <NewPrincipal
                     open={newAzureOpen}
                     onClose={() => setNewAzureOpen(false)}
+                    bootstrapMode
                 />
             )}
             <Flex justifyContent="center" flexDirection="row">

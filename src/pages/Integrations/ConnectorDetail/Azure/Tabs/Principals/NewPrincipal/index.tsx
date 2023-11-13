@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Flex } from '@tremor/react'
+import { useParams } from 'react-router-dom'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import Steps from '../../../../../../../components/Steps'
 import FirstStep from './FirstStep'
@@ -9,18 +10,22 @@ import { SourceType } from '../../../../../../../api/api'
 import FinalStep from './FinalStep'
 import Spinner from '../../../../../../../components/Spinner'
 import { getErrorMessage } from '../../../../../../../types/apierror'
+import { useWorkspaceApiV1BootstrapCredentialCreate } from '../../../../../../../api/workspace.gen'
 
 interface INewPrinciple {
     open: boolean
     onClose: () => void
     useDrawer?: boolean
+    bootstrapMode?: boolean
 }
 
 export default function NewPrincipal({
     open,
     onClose,
     useDrawer = true,
+    bootstrapMode = false,
 }: INewPrinciple) {
+    const currentWorkspace = useParams<{ ws: string }>().ws
     const [stepNum, setStepNum] = useState(1)
     const [data, setData] = useState({
         tenId: '',
@@ -42,7 +47,7 @@ export default function NewPrincipal({
             config: {
                 clientId: data.appId,
                 secretId: data.secId,
-                tenantId: data.appId,
+                tenantId: data.tenId,
                 objectId: data.objectId,
                 clientSecret: data.clientSecret,
                 subscriptionId: data.subscriptionId,
@@ -53,25 +58,58 @@ export default function NewPrincipal({
         false
     )
 
+    const {
+        error: bcError,
+        isLoading: bcIsLoading,
+        isExecuted: bcIsExecuted,
+        sendNow: bcSendNow,
+    } = useWorkspaceApiV1BootstrapCredentialCreate(
+        currentWorkspace || '',
+        {
+            connectorType: SourceType.CloudAzure,
+            config: {
+                clientId: data.appId,
+                secretId: data.secId,
+                tenantId: data.tenId,
+                objectId: data.objectId,
+                clientSecret: data.clientSecret,
+                subscriptionId: data.subscriptionId,
+            },
+        },
+        {},
+        false
+    )
     const close = () => {
         setStepNum(1)
         onClose()
     }
 
     useEffect(() => {
-        if (isExecuted && !isLoading && error) {
+        if (bootstrapMode) {
+            if (bcIsExecuted && !bcIsLoading && bcError) {
+                setStepNum(2)
+            }
+        } else if (isExecuted && !isLoading && error) {
             setStepNum(2)
         }
     }, [isLoading])
 
     useEffect(() => {
         if (stepNum === 3) {
-            sendNow()
+            if (bootstrapMode) {
+                bcSendNow()
+            } else {
+                sendNow()
+            }
         }
     }, [stepNum])
 
     const showStep = (s: number) => {
-        if (isLoading && isExecuted) {
+        if (bootstrapMode) {
+            if (bcIsLoading && bcIsExecuted) {
+                return <Spinner />
+            }
+        } else if (isLoading && isExecuted) {
             return <Spinner />
         }
 
@@ -87,7 +125,7 @@ export default function NewPrincipal({
                 return (
                     <SecondStep
                         onPrevious={() => setStepNum(1)}
-                        error={getErrorMessage(error)}
+                        error={getErrorMessage(bootstrapMode ? bcError : error)}
                         onNext={(
                             appId,
                             tenId,

@@ -69,7 +69,8 @@ code {
     background-color: white;
 }
 
-.editor .ruleGroup-addRule, .editor .ruleGroup-addGroup {
+.editor .ruleGroup-addRule,
+.editor .ruleGroup-addGroup {
     opacity: 0;
 }
 

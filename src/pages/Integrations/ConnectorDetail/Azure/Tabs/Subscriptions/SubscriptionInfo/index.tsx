@@ -63,7 +63,7 @@ export default function SubscriptionInfo({
         isExecuted: isHealthCheckExecuted,
         isLoading: isHealthCheckLoading,
         sendNow: runHealthCheckNow,
-    } = useOnboardApiV1SourceHealthcheckDetail(data?.id || '', {})
+    } = useOnboardApiV1SourceHealthcheckDetail(data?.id || '', {}, {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,
