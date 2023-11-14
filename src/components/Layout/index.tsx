@@ -17,6 +17,7 @@ type IProps = {
         | 'compliance'
         | 'service-advisor'
         | 'findings'
+        | 'resource-collection'
         | 'settings'
         | 'stack'
         | 'rules'

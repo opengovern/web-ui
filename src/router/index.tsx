@@ -28,6 +28,7 @@ import Alerts from '../pages/Automation/Alerts'
 import Findings from '../pages/Governance/Findings'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
 import Boostrap from '../pages/Workspaces/Bootstrap'
+import ResourceCollection from '../pages/ResourceCollection'
 
 const routes = [
     {
@@ -222,6 +223,11 @@ const authRoutes = [
         key: 'rules',
         path: '/:ws/alerts',
         component: Alerts,
+    },
+    {
+        key: 'resource-collection',
+        path: '/:ws/resource-collection',
+        component: ResourceCollection,
     },
 ]
 

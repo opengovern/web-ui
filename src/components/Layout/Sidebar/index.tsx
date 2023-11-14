@@ -17,6 +17,7 @@ import {
     HomeIcon,
     LightBulbIcon,
     MagnifyingGlassIcon,
+    RectangleStackIcon,
     ServerStackIcon,
     ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
@@ -60,15 +61,16 @@ const navigation = [
         name: 'Insights',
         page: 'insights',
         icon: DocumentChartBarIcon,
-        // children: [
-        //     { name: 'Key Insights', page: 'key-insights' },
-        //     { name: 'All Insights', page: 'all-insights' },
-        // ],
     },
     {
         name: 'Finder',
         page: 'finder',
         icon: MagnifyingGlassIcon,
+    },
+    {
+        name: 'Resource Collection',
+        page: 'resource-collection',
+        icon: RectangleStackIcon,
     },
     {
         name: 'Integrations',
