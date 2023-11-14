@@ -110,7 +110,6 @@ export function Status({ workspaceName }: IStatus) {
 
     const stepValue = step(statusResponse?.status)
 
-    console.log(statusResponse?.status)
     return (
         <Flex justifyContent="start" className="h-full" alignItems="start">
             <Flex

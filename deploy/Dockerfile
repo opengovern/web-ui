@@ -12,9 +12,9 @@ COPY . /app/
 # Prepare the container for building React
 RUN npm install
 RUN npm run build
-RUN npm i @sentry/cli
-RUN npx sentry-cli sourcemaps inject --org sentry --project kaytu-app ./build
-RUN SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} npx sentry-cli --url https://sen.kaytu.io/ sourcemaps upload --org sentry --release ${APP_VERSION} --project kaytu-app ./build
+# RUN npm i @sentry/cli
+# RUN npx sentry-cli sourcemaps inject --org sentry --project kaytu-app ./build
+# RUN SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN} npx sentry-cli --url https://sen.kaytu.io/ sourcemaps upload --org sentry --release ${APP_VERSION} --project kaytu-app ./build
 
 # Prepare nginx
 FROM docker.io/nginx:1.25.0-alpine
