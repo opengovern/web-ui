@@ -232,7 +232,7 @@ const authRoutes = [
     },
     {
         key: 'resource collection detail',
-        path: '/:ws/resource-collection/:resource_id',
+        path: '/:ws/resource-collection/:resourceId',
         component: ResourceCollectionDetail,
     },
     {

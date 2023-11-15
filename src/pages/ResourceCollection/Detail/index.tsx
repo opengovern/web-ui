@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import {
+    BarList,
     Button,
     Callout,
     Card,
@@ -29,7 +30,10 @@ import {
 import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse } from '../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+} from '../../../api/api'
 import Chart from '../../../components/Chart'
 import {
     camelCaseToLabel,
@@ -67,8 +71,29 @@ const pieData = (
     return data.reverse()
 }
 
+const barData = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | undefined
+) => {
+    const data: any[] = []
+    if (input && input.connections) {
+        // eslint-disable-next-line array-callback-return
+        input.connections.map((c, i) => {
+            if (i < 5) {
+                data.push({
+                    name: c.providerConnectionName,
+                    value: c.resourceCount,
+                })
+            }
+        })
+    }
+    return data
+}
+
 export default function ResourceCollectionDetail() {
     const { resourceId } = useParams()
+    console.log(resourceId)
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
@@ -114,9 +139,13 @@ export default function ResourceCollectionDetail() {
         useComplianceApiV1BenchmarksSummaryList({
             resourceCollection: [resourceId || ''],
         })
-    const { response: infrastructureKPI, isLoading: infrastructureKPILoading } =
-        useInventoryApiV2AnalyticsMetricList({
-            resourceCollection: [resourceId || ''],
+    const { response: accountInfo, isLoading: accountInfoLoading } =
+        useOnboardApiV1ConnectionsSummaryList({
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            ...query,
+            needCost: false,
+            sortBy: 'resource_count',
         })
     const { response: resourceTrend, isLoading: resourceTrendLoading } =
         useInventoryApiV2AnalyticsTrendList({
@@ -125,14 +154,7 @@ export default function ResourceCollectionDetail() {
             // @ts-ignore
             granularity: selectedGranularity,
         })
-    const { response: accounts, isLoading: accountIsLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
-            ...query,
-            pageSize: 0,
-            pageNumber: 1,
-            needCost: false,
-        })
-    console.log(accounts)
+    console.log(detail)
 
     return (
         <Layout currentPage="resource-collection">
@@ -190,22 +212,32 @@ export default function ResourceCollectionDetail() {
                     <Title className="font-semibold mb-2">
                         Key performance indicator
                     </Title>
-                    <TabGroup>
+                    <TabGroup className="h-[300px]">
                         <TabList>
                             <Tab>Compliance</Tab>
                             <Tab>Infrastructure</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <Chart
-                                    labels={[]}
-                                    chartType="doughnut"
-                                    chartData={pieData(complianceKPI)}
-                                    loading={complianceKPILoading}
-                                    colorful
+                                <Flex className="-mt-5">
+                                    <Chart
+                                        labels={[]}
+                                        chartType="doughnut"
+                                        chartData={pieData(complianceKPI)}
+                                        loading={complianceKPILoading}
+                                        colorful
+                                    />
+                                </Flex>
+                            </TabPanel>
+                            <TabPanel>
+                                <Title className="font-semibold mb-3">
+                                    Top accounts
+                                </Title>
+                                <BarList
+                                    data={barData(accountInfo)}
+                                    color="slate"
                                 />
                             </TabPanel>
-                            <TabPanel>ok</TabPanel>
                         </TabPanels>
                     </TabGroup>
                 </Card>
@@ -236,12 +268,12 @@ export default function ResourceCollectionDetail() {
                             <Grid numItems={6} className="gap-4">
                                 <Col numColSpan={1}>
                                     <SummaryCard
-                                        title="Accounts"
+                                        title="Resources"
                                         metric={numericDisplay(
-                                            accounts?.connectionCount
+                                            accountInfo?.totalResourceCount
                                         )}
                                         url="infrastructure-details#cloud-accounts"
-                                        loading={accountIsLoading}
+                                        loading={accountInfoLoading}
                                         border={false}
                                     />
                                 </Col>
