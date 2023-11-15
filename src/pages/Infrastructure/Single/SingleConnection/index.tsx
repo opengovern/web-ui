@@ -68,7 +68,7 @@ const options: GridOptions = {
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
     id: string | undefined
-    resourceId: string | undefined
+    resourceId?: string | undefined
 }
 
 export default function SingleConnection({
