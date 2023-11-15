@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -1246,10 +1247,19 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiPage {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection {
+    created_at?: string
+    description?: string
     filters?: KaytuResourceCollectionFilter[]
     id?: string
     name?: string
+    status?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionStatus
     tags?: Record<string, string[]>
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionStatus {
+    ResourceCollectionStatusUnknown = '',
+    ResourceCollectionStatusActive = 'active',
+    ResourceCollectionStatusInactive = 'inactive',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType {
@@ -1933,6 +1943,7 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
 export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus {
     StatusProvisioned = 'PROVISIONED',
     StatusBootstrapping = 'BOOTSTRAPPING',
+    StatusReserved = 'RESERVED',
     StatusProvisioning = 'PROVISIONING',
     StatusProvisioningFailed = 'PROVISIONING_FAILED',
     StatusDeleting = 'DELETING',

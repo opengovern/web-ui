@@ -16,7 +16,10 @@ import {
 } from '@tremor/react'
 import { TableCellsIcon } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
-import { useInventoryApiV2MetadataResourceCollectionDetail } from '../../../api/inventory.gen'
+import {
+    useInventoryApiV2AnalyticsMetricList,
+    useInventoryApiV2MetadataResourceCollectionDetail,
+} from '../../../api/inventory.gen'
 import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
@@ -48,7 +51,11 @@ export default function ResourceCollectionDetail() {
         useComplianceApiV1BenchmarksSummaryList({
             resourceCollection: [id || ''],
         })
-    console.log(complianceKPI)
+    const { response: infrasructureKPI, isLoading: infrasructureKPILoading } =
+        useInventoryApiV2AnalyticsMetricList({
+            resourceCollection: [id || ''],
+        })
+    console.log(infrasructureKPI)
 
     return (
         <Layout currentPage="resource-collection">
@@ -121,6 +128,7 @@ export default function ResourceCollectionDetail() {
                                             colorful
                                         />
                                     </TabPanel>
+                                    <TabPanel>ok</TabPanel>
                                 </TabPanels>
                             </TabGroup>
                         </Card>
