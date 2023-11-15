@@ -37,9 +37,14 @@ import { dateDisplay } from '../../../../utilities/dateDisplay'
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
     metricId: string | undefined
+    resourceId: string | undefined
 }
 
-export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
+export default function SingleMetric({
+    activeTimeRange,
+    metricId,
+    resourceId,
+}: ISingle) {
     const selectedConnections = useAtomValue(filterAtom)
     const { id, metric } = useParams()
     const isDemo = useAtomValue(isDemoAtom)
@@ -64,6 +69,7 @@ export default function SingleMetric({ activeTimeRange, metricId }: ISingle) {
             ? [String(id).replace('account_', '')]
             : selectedConnections.connections,
         ...(metricId && { ids: [metricId] }),
+        ...(resourceId && { resourceCollection: [resourceId] }),
         ...(selectedConnections.connectionGroup && {
             connectionGroup: selectedConnections.connectionGroup,
         }),

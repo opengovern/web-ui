@@ -232,8 +232,23 @@ const authRoutes = [
     },
     {
         key: 'resource collection detail',
-        path: '/:ws/resource-collection/:id',
+        path: '/:ws/resource-collection/:resource_id',
         component: ResourceCollectionDetail,
+    },
+    {
+        key: 'resource collection infrastructure metrics',
+        path: '/:ws/resource-collection/:resourceId/infrastructure-details',
+        component: InfrastructureDetails,
+    },
+    {
+        key: 'resource collection infrastructure single 2',
+        path: '/:ws/resource-collection/:resourceId/infrastructure-details/:id',
+        component: Single,
+    },
+    {
+        key: 'resource collection infrastructure single metric 2',
+        path: '/:ws/resource-collection/:resourceId/infrastructure-details/:id/:metric',
+        component: Single,
     },
 ]
 

@@ -68,9 +68,14 @@ const options: GridOptions = {
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
     id: string | undefined
+    resourceId: string | undefined
 }
 
-export default function SingleConnection({ activeTimeRange, id }: ISingle) {
+export default function SingleConnection({
+    activeTimeRange,
+    id,
+    resourceId,
+}: ISingle) {
     const [openDrawer, setOpenDrawer] = useState(false)
     const setNotification = useSetAtom(notificationAtom)
     const navigate = useNavigate()
@@ -104,6 +109,9 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
     const query = {
         ...(id && {
             connectionId: [id],
+        }),
+        ...(resourceId && {
+            resourceCollection: [resourceId],
         }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),
