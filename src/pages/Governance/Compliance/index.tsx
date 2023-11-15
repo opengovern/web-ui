@@ -64,7 +64,7 @@ export const benchmarkList = (ben: any) => {
     return { connected, notConnected, serviceAdvisor }
 }
 
-const activeColumns: IColumn<any, any>[] = [
+export const activeColumns: IColumn<any, any>[] = [
     {
         width: 120,
         field: 'connectors',

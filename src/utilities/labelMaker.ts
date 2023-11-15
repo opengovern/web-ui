@@ -13,3 +13,8 @@ export const kebabCaseToLabel = (string: string) =>
             .toLowerCase()
             .replace(/([-_][a-z])/g, (group) => group.replace('-', ' '))
     )
+
+export const camelCaseToLabel = (s: string) => {
+    const result = s.replace(/([A-Z])/g, ' $1')
+    return result.charAt(0).toUpperCase() + result.slice(1)
+}

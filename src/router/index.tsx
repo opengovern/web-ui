@@ -28,6 +28,8 @@ import Alerts from '../pages/Automation/Alerts'
 import Findings from '../pages/Governance/Findings'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
 import Boostrap from '../pages/Workspaces/Bootstrap'
+import ResourceCollection from '../pages/ResourceCollection'
+import ResourceCollectionDetail from '../pages/ResourceCollection/Detail'
 
 const routes = [
     {
@@ -219,9 +221,34 @@ const authRoutes = [
         component: Boostrap,
     },
     {
-        key: 'rules',
+        key: 'alerts',
         path: '/:ws/alerts',
         component: Alerts,
+    },
+    {
+        key: 'resource collection',
+        path: '/:ws/resource-collection',
+        component: ResourceCollection,
+    },
+    {
+        key: 'resource collection detail',
+        path: '/:ws/resource-collection/:resource_id',
+        component: ResourceCollectionDetail,
+    },
+    {
+        key: 'resource collection infrastructure metrics',
+        path: '/:ws/resource-collection/:resourceId/infrastructure-details',
+        component: InfrastructureDetails,
+    },
+    {
+        key: 'resource collection infrastructure single 2',
+        path: '/:ws/resource-collection/:resourceId/infrastructure-details/:id',
+        component: Single,
+    },
+    {
+        key: 'resource collection infrastructure single metric 2',
+        path: '/:ws/resource-collection/:resourceId/infrastructure-details/:id/:metric',
+        component: Single,
     },
 ]
 

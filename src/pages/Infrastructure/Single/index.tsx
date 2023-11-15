@@ -8,7 +8,7 @@ import Layout from '../../../components/Layout'
 
 export default function Single() {
     const activeTimeRange = useAtomValue(timeAtom)
-    const { id, metric } = useParams()
+    const { id, metric, resourceId } = useParams()
     const urlParams = window.location.pathname.split('/')
 
     const idGenerator = () => {
@@ -40,6 +40,7 @@ export default function Single() {
                     <SingleConnection
                         activeTimeRange={activeTimeRange}
                         id={idGenerator()}
+                        resourceId={resourceId}
                     />
                 </Layout>
             )
@@ -50,6 +51,7 @@ export default function Single() {
                     <SingleMetric
                         activeTimeRange={activeTimeRange}
                         metricId={idGenerator()}
+                        resourceId={resourceId}
                     />
                 </Layout>
             )

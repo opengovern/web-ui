@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/costEstimator.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/costEstimator.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/inventory.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/inventory.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/schedule.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/schedule.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Cards/ComplianceCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Cards/ComplianceCard/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/ServiceAdvisor/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/ServiceAdvisor/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Infrastructure/Single/SingleConnection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Infrastructure/Single/SingleConnection/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +16,11 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="TypeScript File" />
+        <option value="com.haulmont.rcb.palette" />
+        <option value="com.haulmont.rcb.previews" />
+        <option value="com.haulmont.rcb.index" />
+        <option value="com.haulmont.rcb.useInitial" />
+        <option value="com.haulmont.rcb.README" />
         <option value="TypeScript JSX File" />
       </list>
     </option>
@@ -45,27 +43,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;demo&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Sevices&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.prettier&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "demo",
+    "last_opened_file_path": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Sevices",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.stylelint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/prettier",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="ReactDesignerToolWindowState">
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.rcb.reactComponents" value="false" />
+        <entry key="com.haulmont.rcb.reactInspector" value="false" />
+      </map>
+    </option>
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Sevices" />
@@ -229,7 +235,8 @@
       <workItem from="1699599769078" duration="3307000" />
       <workItem from="1699605660330" duration="15837000" />
       <workItem from="1699714799022" duration="2619000" />
-      <workItem from="1699858757658" duration="16949000" />
+      <workItem from="1699858757658" duration="19403000" />
+      <workItem from="1699966088006" duration="11241000" />
     </task>
     <servers />
   </component>
