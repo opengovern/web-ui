@@ -50,6 +50,7 @@ interface IChart {
     error?: string
     onRefresh?: () => void
     onClick?: (param?: any) => void
+    colorful?: boolean
 }
 
 export default function Chart({
@@ -65,6 +66,7 @@ export default function Chart({
     error,
     onRefresh,
     onClick,
+    colorful = false,
 }: IChart) {
     const options = () => {
         if (
@@ -130,14 +132,23 @@ export default function Chart({
                         return numberDisplay(Number(value), 0)
                     },
                 },
-                color: [
-                    '#1D4F85',
-                    '#2970BC',
-                    '#6DA4DF',
-                    '#96BEE8',
-                    '#C0D8F1',
-                    '#D0D4DA',
-                ],
+                color: colorful
+                    ? [
+                          '#780000',
+                          '#DC0000',
+                          '#FD8C00',
+                          '#FDC500',
+                          '#10B880',
+                          '#D0D4DA',
+                      ]
+                    : [
+                          '#1D4F85',
+                          '#2970BC',
+                          '#6DA4DF',
+                          '#96BEE8',
+                          '#C0D8F1',
+                          '#D0D4DA',
+                      ],
             }
         }
         if (chartType === 'doughnut') {
@@ -193,14 +204,23 @@ export default function Chart({
                         overflow: 'truncate',
                     },
                 },
-                color: [
-                    '#0D2239',
-                    '#1D4F85',
-                    '#1E7CE0',
-                    '#6DA4DF',
-                    '#C0D8F1',
-                    '#D0D4DA',
-                ],
+                color: colorful
+                    ? [
+                          '#780000',
+                          '#DC0000',
+                          '#FD8C00',
+                          '#FDC500',
+                          '#10B880',
+                          '#D0D4DA',
+                      ]
+                    : [
+                          '#0D2239',
+                          '#1D4F85',
+                          '#1E7CE0',
+                          '#6DA4DF',
+                          '#C0D8F1',
+                          '#D0D4DA',
+                      ],
             }
         }
         if (chartType === 'half-doughnut') {

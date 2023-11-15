@@ -148,20 +148,20 @@ export default function SingleConnection({ activeTimeRange, id }: ISingle) {
                 />
             )}
             <Grid numItems={2} className="w-full gap-4">
-                <Card className="w-full">
+                <Card>
                     <Flex
                         flexDirection="col"
                         alignItems="start"
                         className="h-full"
                     >
                         <Flex flexDirection="col" alignItems="start">
-                            <Title className="font-semibold">
+                            <Title className="font-semibold mb-2">
                                 Connection details
                             </Title>
                             {accountInfoLoading ? (
                                 <Spinner className="mt-28" />
                             ) : (
-                                <List className="mt-2">
+                                <List>
                                     <ListItem>
                                         <Text>Connector</Text>
                                         <Text className="text-gray-800">
