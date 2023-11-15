@@ -51,6 +51,7 @@ export default function Single() {
                     <SingleMetric
                         activeTimeRange={activeTimeRange}
                         metricId={idGenerator()}
+                        resourceId={resourceId}
                     />
                 </Layout>
             )
