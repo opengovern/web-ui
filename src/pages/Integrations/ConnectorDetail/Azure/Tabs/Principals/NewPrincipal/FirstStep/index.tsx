@@ -1,4 +1,5 @@
 import { Bold, Button, Flex, Text } from '@tremor/react'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface IStep {
     onNext: () => void
@@ -6,6 +7,7 @@ interface IStep {
 }
 
 export default function FirstStep({ onNext, onPrevious }: IStep) {
+    const navigate = useNavigate()
     return (
         <Flex flexDirection="col" justifyContent="between" className="h-full">
             <Flex flexDirection="col" alignItems="start">
@@ -14,8 +16,14 @@ export default function FirstStep({ onNext, onPrevious }: IStep) {
                     Please refer to this guid to deploy the IAM role via AWS
                     CloudFormation Stacks and then click on Next:
                 </Text>
+
                 <Button variant="light">
-                    Refer to guide, by clicking this link
+                    <Link
+                        to="https://kaytu.io/docs/latest/onboard_azure/"
+                        target="_blank"
+                    >
+                        Refer to guide, by clicking this link
+                    </Link>
                 </Button>
             </Flex>
             <Flex flexDirection="row" justifyContent="end">
