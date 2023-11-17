@@ -35,6 +35,7 @@ import { numberDisplay } from '../../../utilities/numericDisplay'
 export const benchmarkList = (ben: any) => {
     const connected = []
     const notConnected = []
+    const all = []
     const serviceAdvisor = []
 
     if (ben) {
@@ -55,13 +56,14 @@ export const benchmarkList = (ben: any) => {
                 } else {
                     notConnected.push(ben[i])
                 }
+                all.push(ben[i])
             } else {
                 serviceAdvisor.push(ben[i])
             }
         }
     }
 
-    return { connected, notConnected, serviceAdvisor }
+    return { connected, notConnected, serviceAdvisor, all }
 }
 
 export const activeColumns: IColumn<any, any>[] = [
