@@ -42,7 +42,7 @@ export const benchmarkList = (ben: any) => {
         for (let i = 0; i < ben.length; i += 1) {
             if (
                 ben[i].tags?.kaytu_benchmark_type &&
-                ben[i].tags?.kaytu_benchmark_type[0] === 'compliance'
+                ben[i].tags?.kaytu_benchmark_type.includes('compliance')
             ) {
                 if (
                     (ben[i].checks?.criticalCount || 0) +
