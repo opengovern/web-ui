@@ -47,7 +47,7 @@ const defaultColumns = (isDemo: boolean) => {
         },
         {
             field: 'accountId',
-            headerName: 'Provider ID',
+            headerName: 'Connector ID',
             type: 'string',
             filter: true,
             sortable: true,

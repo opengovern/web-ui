@@ -25,7 +25,7 @@ export default function PolicyDetail({
             <Title className="font-semibold">Metadata</Title>
             <List>
                 <ListItem className="py-6 flex items-start">
-                    <Text>Provider</Text>
+                    <Text>Connector</Text>
                     <Text>{selectedPolicy?.policy?.connector}</Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">

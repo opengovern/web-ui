@@ -68,7 +68,7 @@ export const activeColumns: IColumn<any, any>[] = [
     {
         width: 120,
         field: 'connectors',
-        headerName: 'Provider',
+        headerName: 'Connector',
         sortable: true,
         filter: true,
         enableRowGroup: true,
@@ -161,7 +161,7 @@ const notActiveColumns: IColumn<any, any>[] = [
     {
         width: 120,
         field: 'connectors',
-        headerName: 'Provider',
+        headerName: 'Connector',
         sortable: true,
         filter: true,
         enableRowGroup: true,
@@ -322,7 +322,7 @@ export default function Compliance() {
                         <Select
                             value={selectedProvider}
                             onValueChange={setSelectedProvider}
-                            placeholder="Select provider..."
+                            placeholder="Select connector..."
                             className="w-full"
                         >
                             <SelectItem value="">All</SelectItem>

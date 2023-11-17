@@ -68,7 +68,7 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'providerConnectionName',
-            headerName: 'Account Name',
+            headerName: 'Account name',
             type: 'string',
             enableRowGroup: true,
             sortable: true,
