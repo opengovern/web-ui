@@ -247,7 +247,6 @@ export default function Compliance() {
     } = useComplianceApiV1BenchmarksSummaryList()
     const { response: categories } =
         useComplianceApiV1MetadataTagComplianceList()
-    console.log(benchmarks)
 
     return (
         <Layout currentPage="compliance">
@@ -295,10 +294,10 @@ export default function Compliance() {
                         >
                             <TabList variant="solid" className="px-0">
                                 <Tab className="px-4 py-2">
-                                    <Bars3Icon className="h-5" />
+                                    <Squares2X2Icon className="h-5" />
                                 </Tab>
                                 <Tab className="px-4 py-2">
-                                    <Squares2X2Icon className="h-5" />
+                                    <Bars3Icon className="h-5" />
                                 </Tab>
                             </TabList>
                         </TabGroup>
@@ -311,7 +310,7 @@ export default function Compliance() {
                 <Spinner className="my-56" />
             ) : // eslint-disable-next-line no-nested-ternary
             error === undefined ? (
-                index === 0 ? (
+                index === 1 ? (
                     <Table
                         id="connected_compliance"
                         rowData={benchmarkList(benchmarks?.benchmarkSummary)
@@ -381,7 +380,7 @@ export default function Compliance() {
                 <Spinner className="mt-56" />
             ) : // eslint-disable-next-line no-nested-ternary
             error === undefined ? (
-                index === 0 ? (
+                index === 1 ? (
                     <Table
                         id="not_connected_compliance"
                         rowData={benchmarkList(benchmarks?.benchmarkSummary)

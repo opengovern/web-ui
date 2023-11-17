@@ -233,6 +233,7 @@ export default function Table<TData = any, TValue = any>({
 
     const gridOptions: GridOptions = {
         columnDefs: buildColumnDef(),
+        rowData,
         rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
         pagination: true,
         paginationPageSize: 25,

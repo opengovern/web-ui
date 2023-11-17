@@ -201,7 +201,7 @@ export default function Finder() {
                     {openSearch ? (
                         <Card className="sticky w-fit">
                             <TextInput
-                                className="w-full mb-6"
+                                className="w-56 mb-6"
                                 icon={MagnifyingGlassIcon}
                                 placeholder="Search..."
                                 value={searchCategory}
@@ -446,6 +446,7 @@ export default function Finder() {
                                         rowData={queries?.filter(
                                             (q) => q.tags?.popular
                                         )}
+                                        loading={queryLoading}
                                         onRowClicked={(e) => {
                                             setCode(
                                                 `-- ${e.data?.title}\n\n${e.data?.query}` ||
@@ -467,6 +468,7 @@ export default function Finder() {
                                         id="query_table"
                                         columns={columns}
                                         rowData={queries}
+                                        loading={queryLoading}
                                         onRowClicked={(e) => {
                                             setCode(
                                                 `-- ${e.data?.title}\n\n${e.data?.query}` ||
