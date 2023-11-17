@@ -361,7 +361,7 @@ export default function BenchmarkSummary() {
                             title="Top resources"
                             loading={isLoading}
                             items={topList(services)}
-                            url="details#services"
+                            url="details#resources"
                             type="service"
                             isClickable={false}
                         />

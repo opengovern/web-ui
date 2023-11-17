@@ -23,7 +23,6 @@ import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import Layout from '../../../components/Layout'
 import {
-    useInventoryApiV2AnalyticsMetricList,
     useInventoryApiV2AnalyticsTrendList,
     useInventoryApiV2MetadataResourceCollectionDetail,
 } from '../../../api/inventory.gen'
@@ -83,7 +82,7 @@ const barData = (
             if (i < 5) {
                 data.push({
                     name: c.providerConnectionName,
-                    value: c.resourceCount,
+                    value: c.resourceCount || 0,
                 })
             }
         })
@@ -93,7 +92,6 @@ const barData = (
 
 export default function ResourceCollectionDetail() {
     const { resourceId } = useParams()
-    console.log(resourceId)
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
@@ -139,6 +137,7 @@ export default function ResourceCollectionDetail() {
         useComplianceApiV1BenchmarksSummaryList({
             resourceCollection: [resourceId || ''],
         })
+    console.log(complianceKPI)
     const { response: accountInfo, isLoading: accountInfoLoading } =
         useOnboardApiV1ConnectionsSummaryList({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -154,7 +153,6 @@ export default function ResourceCollectionDetail() {
             // @ts-ignore
             granularity: selectedGranularity,
         })
-    console.log(detail)
 
     return (
         <Layout currentPage="resource-collection">

@@ -13,7 +13,7 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Bars3Icon, Squares2X2Icon } from '@heroicons/react/24/outline'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
@@ -35,13 +35,14 @@ import { numberDisplay } from '../../../utilities/numericDisplay'
 export const benchmarkList = (ben: any) => {
     const connected = []
     const notConnected = []
+    const all = []
     const serviceAdvisor = []
 
     if (ben) {
         for (let i = 0; i < ben.length; i += 1) {
             if (
                 ben[i].tags?.kaytu_benchmark_type &&
-                ben[i].tags?.kaytu_benchmark_type[0] === 'compliance'
+                ben[i].tags?.kaytu_benchmark_type.includes('compliance')
             ) {
                 if (
                     (ben[i].checks?.criticalCount || 0) +
@@ -55,20 +56,21 @@ export const benchmarkList = (ben: any) => {
                 } else {
                     notConnected.push(ben[i])
                 }
+                all.push(ben[i])
             } else {
                 serviceAdvisor.push(ben[i])
             }
         }
     }
 
-    return { connected, notConnected, serviceAdvisor }
+    return { connected, notConnected, serviceAdvisor, all }
 }
 
 export const activeColumns: IColumn<any, any>[] = [
     {
         width: 120,
         field: 'connectors',
-        headerName: 'Provider',
+        headerName: 'Connector',
         sortable: true,
         filter: true,
         enableRowGroup: true,
@@ -161,7 +163,7 @@ const notActiveColumns: IColumn<any, any>[] = [
     {
         width: 120,
         field: 'connectors',
-        headerName: 'Provider',
+        headerName: 'Connector',
         sortable: true,
         filter: true,
         enableRowGroup: true,
@@ -245,16 +247,35 @@ export default function Compliance() {
         error,
         sendNow,
     } = useComplianceApiV1BenchmarksSummaryList()
+    const [selectedState, setSelectedState] = useState('active')
+    const [stateIndex, setStateIndex] = useState(0)
+
+    useEffect(() => {
+        switch (selectedState) {
+            case '':
+                setStateIndex(0)
+                break
+            case 'active':
+                setStateIndex(1)
+                break
+            case 'not-active':
+                setStateIndex(2)
+                break
+            default:
+                setStateIndex(0)
+                break
+        }
+    }, [selectedState])
+
     const { response: categories } =
         useComplianceApiV1MetadataTagComplianceList()
-    console.log(benchmarks)
 
     return (
         <Layout currentPage="compliance">
             <Header />
             <Grid numItems={3} className="w-full gap-4 mb-4">
                 <Col numColSpan={2} className="overflow-x-scroll">
-                    <TabGroup>
+                    {/* <TabGroup>
                         <TabList variant="solid" className="px-0">
                             <Tab
                                 className="px-4 py-2"
@@ -262,7 +283,7 @@ export default function Compliance() {
                             >
                                 All
                             </Tab>
-                            {/* eslint-disable-next-line react/jsx-no-useless-fragment */}
+                             eslint-disable-next-line react/jsx-no-useless-fragment
                             <>
                                 {categories?.kaytu_category.map((cat) => (
                                     <Tab
@@ -274,6 +295,28 @@ export default function Compliance() {
                                 ))}
                             </>
                         </TabList>
+                    </TabGroup> */}
+                    <TabGroup index={stateIndex}>
+                        <TabList variant="solid" className="px-0">
+                            <Tab
+                                className="px-4 py-2"
+                                onClick={() => setSelectedState('')}
+                            >
+                                All
+                            </Tab>
+                            <Tab
+                                className="px-4 py-2"
+                                onClick={() => setSelectedState('active')}
+                            >
+                                Active
+                            </Tab>
+                            <Tab
+                                className="px-4 py-2"
+                                onClick={() => setSelectedState('not-active')}
+                            >
+                                Not active
+                            </Tab>
+                        </TabList>
                     </TabGroup>
                 </Col>
                 <Col numColSpan={1}>
@@ -281,7 +324,7 @@ export default function Compliance() {
                         <Select
                             value={selectedProvider}
                             onValueChange={setSelectedProvider}
-                            placeholder="Select provider..."
+                            placeholder="Select connector..."
                             className="w-full"
                         >
                             <SelectItem value="">All</SelectItem>
@@ -295,155 +338,169 @@ export default function Compliance() {
                         >
                             <TabList variant="solid" className="px-0">
                                 <Tab className="px-4 py-2">
-                                    <Bars3Icon className="h-5" />
+                                    <Squares2X2Icon className="h-5" />
                                 </Tab>
                                 <Tab className="px-4 py-2">
-                                    <Squares2X2Icon className="h-5" />
+                                    <Bars3Icon className="h-5" />
                                 </Tab>
                             </TabList>
                         </TabGroup>
                     </Flex>
                 </Col>
             </Grid>
-            <Title className="mb-3">Active benchmarks</Title>
-            {/* eslint-disable-next-line no-nested-ternary */}
-            {isLoading ? (
-                <Spinner className="my-56" />
-            ) : // eslint-disable-next-line no-nested-ternary
-            error === undefined ? (
-                index === 0 ? (
-                    <Table
-                        id="connected_compliance"
-                        rowData={benchmarkList(benchmarks?.benchmarkSummary)
-                            .connected?.sort(
-                                (a, b) =>
-                                    (b?.checks?.passedCount || 0) -
-                                    (a?.checks?.passedCount || 0)
-                            )
-                            .filter((bm) =>
-                                selectedProvider.length
-                                    ? bm?.tags?.service?.includes(
-                                          selectedProvider
-                                      )
-                                    : bm
-                            )
-                            .filter((bm) =>
-                                selectedCategory.length
-                                    ? bm?.tags?.kaytu_category?.includes(
-                                          selectedCategory
-                                      )
-                                    : bm
-                            )}
-                        columns={activeColumns}
-                        onRowClicked={(event) => {
-                            if (event.data) {
-                                navigate(event.data.id)
-                            }
-                        }}
-                    />
-                ) : (
-                    <Grid numItems={3} className="w-full gap-4">
-                        {benchmarkList(benchmarks?.benchmarkSummary)
-                            .connected?.sort(
-                                (a, b) =>
-                                    (b?.checks?.passedCount || 0) -
-                                    (a?.checks?.passedCount || 0)
-                            )
-                            .filter((bm) =>
-                                selectedProvider.length
-                                    ? bm?.tags?.service?.includes(
-                                          selectedProvider
-                                      )
-                                    : bm
-                            )
-                            .filter((bm) =>
-                                selectedCategory.length
-                                    ? bm?.tags?.kaytu_category?.includes(
-                                          selectedCategory
-                                      )
-                                    : bm
-                            )
-                            .map(
-                                (
-                                    bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                ) => (
-                                    <ComplianceCard benchmark={bm} />
+            {(selectedState === '' || selectedState === 'active') && (
+                <div className="mb-6">
+                    <Title className="mb-3">Active benchmarks</Title>
+                    {/* eslint-disable-next-line no-nested-ternary */}
+                    {isLoading ? (
+                        <Spinner className="my-56" />
+                    ) : // eslint-disable-next-line no-nested-ternary
+                    error === undefined ? (
+                        index === 1 ? (
+                            <Table
+                                id="connected_compliance"
+                                rowData={benchmarkList(
+                                    benchmarks?.benchmarkSummary
                                 )
-                            )}
-                    </Grid>
-                )
-            ) : (
-                <Button onClick={() => sendNow()}>Retry</Button>
+                                    .connected?.sort(
+                                        (a, b) =>
+                                            (b?.checks?.passedCount || 0) -
+                                            (a?.checks?.passedCount || 0)
+                                    )
+                                    .filter((bm) =>
+                                        selectedProvider.length
+                                            ? bm?.tags?.service?.includes(
+                                                  selectedProvider
+                                              )
+                                            : bm
+                                    )
+                                    .filter((bm) =>
+                                        selectedCategory.length
+                                            ? bm?.tags?.kaytu_category?.includes(
+                                                  selectedCategory
+                                              )
+                                            : bm
+                                    )}
+                                columns={activeColumns}
+                                onRowClicked={(event) => {
+                                    if (event.data) {
+                                        navigate(event.data.id)
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <Grid numItems={3} className="w-full gap-4">
+                                {benchmarkList(benchmarks?.benchmarkSummary)
+                                    .connected?.sort(
+                                        (a, b) =>
+                                            (b?.checks?.passedCount || 0) -
+                                            (a?.checks?.passedCount || 0)
+                                    )
+                                    .filter((bm) =>
+                                        selectedProvider.length
+                                            ? bm?.tags?.service?.includes(
+                                                  selectedProvider
+                                              )
+                                            : bm
+                                    )
+                                    .filter((bm) =>
+                                        selectedCategory.length
+                                            ? bm?.tags?.kaytu_category?.includes(
+                                                  selectedCategory
+                                              )
+                                            : bm
+                                    )
+                                    .map(
+                                        (
+                                            bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                                        ) => (
+                                            <ComplianceCard benchmark={bm} />
+                                        )
+                                    )}
+                            </Grid>
+                        )
+                    ) : (
+                        <Button onClick={() => sendNow()}>Retry</Button>
+                    )}
+                </div>
             )}
-            <Title className="mt-6 mb-3">Not Active benchmarks</Title>
-            {/* eslint-disable-next-line no-nested-ternary */}
-            {isLoading ? (
-                <Spinner className="mt-56" />
-            ) : // eslint-disable-next-line no-nested-ternary
-            error === undefined ? (
-                index === 0 ? (
-                    <Table
-                        id="not_connected_compliance"
-                        rowData={benchmarkList(benchmarks?.benchmarkSummary)
-                            .notConnected?.sort(
-                                (a, b) =>
-                                    (b?.checks?.passedCount || 0) -
-                                    (a?.checks?.passedCount || 0)
-                            )
-                            .filter((bm) =>
-                                selectedProvider.length
-                                    ? bm?.tags?.service?.includes(
-                                          selectedProvider
-                                      )
-                                    : bm
-                            )
-                            .filter((bm) =>
-                                selectedCategory.length
-                                    ? bm?.tags?.kaytu_category?.includes(
-                                          selectedCategory
-                                      )
-                                    : bm
-                            )}
-                        columns={notActiveColumns}
-                        onRowClicked={(event) => {
-                            if (event.data) {
-                                navigate(`${event.data.id}/details#assignments`)
-                            }
-                        }}
-                    />
-                ) : (
-                    <Grid numItems={3} className="w-full gap-4">
-                        {benchmarkList(benchmarks?.benchmarkSummary)
-                            .notConnected?.sort(
-                                (a, b) =>
-                                    (b?.checks?.passedCount || 0) -
-                                    (a?.checks?.passedCount || 0)
-                            )
-                            .filter((bm) =>
-                                selectedProvider.length
-                                    ? bm?.tags?.service?.includes(
-                                          selectedProvider
-                                      )
-                                    : bm
-                            )
-                            .filter((bm) =>
-                                selectedCategory.length
-                                    ? bm?.tags?.kaytu_category?.includes(
-                                          selectedCategory
-                                      )
-                                    : bm
-                            )
-                            .map(
-                                (
-                                    bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                                ) => (
-                                    <ComplianceCard benchmark={bm} />
+            {(selectedState === '' || selectedState === 'not-active') && (
+                <>
+                    <Title className="mb-3">Not Active benchmarks</Title>
+                    {/* eslint-disable-next-line no-nested-ternary */}
+                    {isLoading ? (
+                        <Spinner className="mt-56" />
+                    ) : // eslint-disable-next-line no-nested-ternary
+                    error === undefined ? (
+                        index === 1 ? (
+                            <Table
+                                id="not_connected_compliance"
+                                rowData={benchmarkList(
+                                    benchmarks?.benchmarkSummary
                                 )
-                            )}
-                    </Grid>
-                )
-            ) : (
-                <Button onClick={() => sendNow()}>Retry</Button>
+                                    .notConnected?.sort(
+                                        (a, b) =>
+                                            (b?.checks?.passedCount || 0) -
+                                            (a?.checks?.passedCount || 0)
+                                    )
+                                    .filter((bm) =>
+                                        selectedProvider.length
+                                            ? bm?.tags?.service?.includes(
+                                                  selectedProvider
+                                              )
+                                            : bm
+                                    )
+                                    .filter((bm) =>
+                                        selectedCategory.length
+                                            ? bm?.tags?.kaytu_category?.includes(
+                                                  selectedCategory
+                                              )
+                                            : bm
+                                    )}
+                                columns={notActiveColumns}
+                                onRowClicked={(event) => {
+                                    if (event.data) {
+                                        navigate(
+                                            `${event.data.id}/details#assignments`
+                                        )
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <Grid numItems={3} className="w-full gap-4">
+                                {benchmarkList(benchmarks?.benchmarkSummary)
+                                    .notConnected?.sort(
+                                        (a, b) =>
+                                            (b?.checks?.passedCount || 0) -
+                                            (a?.checks?.passedCount || 0)
+                                    )
+                                    .filter((bm) =>
+                                        selectedProvider.length
+                                            ? bm?.tags?.service?.includes(
+                                                  selectedProvider
+                                              )
+                                            : bm
+                                    )
+                                    .filter((bm) =>
+                                        selectedCategory.length
+                                            ? bm?.tags?.kaytu_category?.includes(
+                                                  selectedCategory
+                                              )
+                                            : bm
+                                    )
+                                    .map(
+                                        (
+                                            bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                                        ) => (
+                                            <ComplianceCard benchmark={bm} />
+                                        )
+                                    )}
+                            </Grid>
+                        )
+                    ) : (
+                        <Button onClick={() => sendNow()}>Retry</Button>
+                    )}
+                </>
             )}
         </Layout>
     )

@@ -26,7 +26,7 @@ export default function BenchmarkDetails() {
             case '#cloud-accounts':
                 setSelectedTab(1)
                 break
-            case '#services':
+            case '#resources':
                 setSelectedTab(2)
                 break
             case '#assignments':
@@ -47,7 +47,7 @@ export default function BenchmarkDetails() {
                 filter={
                     tabs === '#findings' ||
                     tabs === '#cloud-accounts' ||
-                    tabs === '#services'
+                    tabs === '#resources'
                 }
             />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
@@ -56,7 +56,7 @@ export default function BenchmarkDetails() {
                     <Tab onClick={() => navigate('#cloud-accounts')}>
                         Cloud accounts
                     </Tab>
-                    <Tab onClick={() => navigate('#services')}>Services</Tab>
+                    <Tab onClick={() => navigate('#resources')}>Resources</Tab>
                     <Tab onClick={() => navigate('#assignments')}>
                         Assignments
                     </Tab>

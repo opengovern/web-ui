@@ -100,7 +100,7 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 0.5,
             valueFormatter: (param: ValueFormatterParams) => {
-                return `${param.value ? Number(param.value).toFixed(2) : ''}%`
+                return `${param.value ? Number(param.value).toFixed(2) : '0'}%`
             },
         },
         {

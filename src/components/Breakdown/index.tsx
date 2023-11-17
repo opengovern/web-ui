@@ -82,6 +82,7 @@ export default function Breakdown({
                 chartType="doughnut"
                 isCost={isCost}
                 loading={loading}
+                colorful
             />
             {!!seeMore && (
                 <Button

@@ -18,7 +18,12 @@ import {
 } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
-import { Checkbox, Radio, useCheckboxState } from 'pretty-checkbox-react'
+import {
+    Checkbox,
+    Radio,
+    useCheckboxState,
+    useRadioState,
+} from 'pretty-checkbox-react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
@@ -28,6 +33,7 @@ import { dateTimeDisplay } from '../../../utilities/dateDisplay'
 import {
     useComplianceApiV1BenchmarksSummaryList,
     useComplianceApiV1FindingsCreate,
+    useComplianceApiV1FindingsFiltersCreate,
 } from '../../../api/compliance.gen'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { RenderObject } from '../../../components/RenderObject'
@@ -35,6 +41,7 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Spinner from '../../../components/Spinner'
 import { benchmarkList } from '../Compliance'
 import Tag from '../../../components/Tag'
+import { snakeCaseToLabel } from '../../../utilities/labelMaker'
 
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -59,14 +66,37 @@ export const columns = (isDemo: boolean) => {
             flex: 1,
         },
         {
-            field: 'policyTitle',
-            headerName: 'Policy Title',
+            field: 'benchmarkID',
+            headerName: 'Benchmark ID',
             type: 'string',
             enableRowGroup: true,
             sortable: true,
             filter: true,
             resizable: true,
             flex: 1,
+        },
+        {
+            field: 'policyTitle',
+            headerName: 'Policy title',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'providerConnectionName',
+            headerName: 'Account name',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
         },
         {
             field: 'providerConnectionID',
@@ -83,21 +113,8 @@ export const columns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'providerConnectionName',
-            headerName: 'Account Name',
-            type: 'string',
-            enableRowGroup: true,
-            sortable: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
-            ),
-        },
-        {
             field: 'connectionID',
-            headerName: 'Kaytu Connection ID',
+            headerName: 'Kaytu connection ID',
             type: 'string',
             hide: true,
             enableRowGroup: true,
@@ -158,9 +175,14 @@ export default function Findings() {
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
     const [provider, setProvider] = useState('')
     const [connectionSearch, setConnectionSearch] = useState('')
+    const [policySearch, setPolicySearch] = useState('')
+    const [resourceSearch, setResourceSearch] = useState('')
 
     const connectionCheckbox = useCheckboxState({ state: [] })
     const benchmarkCheckbox = useCheckboxState({ state: [] })
+    const policyCheckbox = useCheckboxState({ state: [] })
+    const resourceCheckbox = useCheckboxState({ state: [] })
+    const severityRadio = useRadioState({ state: '' })
 
     const isDemo = useAtomValue(isDemoAtom)
 
@@ -179,12 +201,19 @@ export default function Findings() {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             benchmarkID: benchmarkCheckbox.state,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            resourceTypeID: resourceCheckbox.state,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            policyID: policyCheckbox.state,
             activeOnly: true,
         },
         sort: sortModel.length
             ? { [sortModel[0].colId]: sortModel[0].sort }
             : {},
     })
+
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -204,6 +233,8 @@ export default function Findings() {
             // @ts-ignore
             connectionID: connectionCheckbox.state,
         })
+    const { response: filters, isLoading: filtersLoading } =
+        useComplianceApiV1FindingsFiltersCreate({})
 
     const getData = (sort: SortModelItem[]) => {
         setSortModel(sort)
@@ -246,10 +277,10 @@ export default function Findings() {
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="font-semibold text-gray-800">
-                                Provider
+                                Connector
                             </Text>
                         </AccordionHeader>
-                        <AccordionBody className="py-1 px-0.5 w-full cursor-default bg-transparent">
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
                             <Flex
                                 flexDirection="col"
                                 alignItems="start"
@@ -286,7 +317,7 @@ export default function Findings() {
                                 Cloud accounts
                             </Text>
                         </AccordionHeader>
-                        <AccordionBody className="py-1 px-0.5 w-full cursor-default bg-transparent">
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
                             <TextInput
                                 icon={MagnifyingGlassIcon}
                                 placeholder="Search cloud accounts..."
@@ -359,7 +390,7 @@ export default function Findings() {
                                 Benchmarks
                             </Text>
                         </AccordionHeader>
-                        <AccordionBody className="py-1 px-0.5 w-full cursor-default bg-transparent">
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
                             {benchmarksLoading ? (
                                 <Spinner />
                             ) : (
@@ -389,19 +420,129 @@ export default function Findings() {
                     <Divider className="my-3" />
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                            <Text className="text-gray-800">
+                            <Text className="text-gray-800 font-semibold">
                                 Cloud services
                             </Text>
                         </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <TextInput
+                                icon={MagnifyingGlassIcon}
+                                placeholder="Search cloud services..."
+                                value={policySearch}
+                                onChange={(e) =>
+                                    setPolicySearch(e.target.value)
+                                }
+                                className="mb-4"
+                            />
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="px-0.5 gap-2.5 overflow-y-scroll overflow-x-hidden"
+                            >
+                                {filtersLoading ? (
+                                    <Spinner />
+                                ) : (
+                                    filters?.policyID
+                                        ?.filter((p) =>
+                                            p
+                                                ?.toLowerCase()
+                                                .includes(
+                                                    policySearch.toLowerCase()
+                                                )
+                                        )
+                                        .map(
+                                            (p, i) =>
+                                                i < 5 && (
+                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    // @ts-ignore
+                                                    <Checkbox
+                                                        shape="curve"
+                                                        className="!items-start"
+                                                        value={p}
+                                                        {...policyCheckbox}
+                                                    >
+                                                        {p}
+                                                    </Checkbox>
+                                                )
+                                        )
+                                )}
+                            </Flex>
+                        </AccordionBody>
                     </Accordion>
                     <Divider className="my-3" />
                     <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                            <Text className="text-gray-800">
+                            <Text className="text-gray-800 font-semibold">
                                 Resource types
                             </Text>
                         </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <TextInput
+                                icon={MagnifyingGlassIcon}
+                                placeholder="Search resource types..."
+                                value={resourceSearch}
+                                onChange={(e) =>
+                                    setResourceSearch(e.target.value)
+                                }
+                                className="mb-4"
+                            />
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="px-0.5 gap-2.5 overflow-y-scroll overflow-x-hidden"
+                            >
+                                {filtersLoading ? (
+                                    <Spinner />
+                                ) : (
+                                    filters?.resourceTypeID
+                                        ?.filter((p) =>
+                                            p
+                                                ?.toLowerCase()
+                                                .includes(
+                                                    resourceSearch.toLowerCase()
+                                                )
+                                        )
+                                        .map(
+                                            (p, i) =>
+                                                i < 5 && (
+                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                    // @ts-ignore
+                                                    <Checkbox
+                                                        shape="curve"
+                                                        className="!items-start"
+                                                        value={p}
+                                                        {...resourceCheckbox}
+                                                    >
+                                                        {p}
+                                                    </Checkbox>
+                                                )
+                                        )
+                                )}
+                            </Flex>
+                        </AccordionBody>
                     </Accordion>
+                    {/* <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="text-gray-800">Severity</Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="px-0.5 gap-2.5"
+                            >
+                                {filters?.severity?.map((s) => (
+                                    <Radio
+                                        name="severity"
+                                        onClick={() => setProvider('')}
+                                        defaultChecked={provider === ''}
+                                    >
+                                        {snakeCaseToLabel(s)}
+                                    </Radio>
+                                ))}
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion> */}
                 </Card>
                 <Flex className="w-full pl-6">
                     <Table
@@ -420,6 +561,7 @@ export default function Findings() {
                         }}
                         serverSideDatasource={datasource}
                         loading={isLoading}
+                        options={{ rowModelType: 'serverSide' }}
                     >
                         <Flex
                             className="flex-wrap gap-3"
