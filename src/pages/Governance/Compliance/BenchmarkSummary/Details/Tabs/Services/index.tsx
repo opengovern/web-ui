@@ -31,7 +31,7 @@ const rowGenerator = (data: any) => {
 const columns: IColumn<any, any>[] = [
     {
         field: 'serviceName',
-        headerName: 'Service name',
+        headerName: 'Resource name',
         type: 'string',
         sortable: true,
         filter: true,
@@ -40,7 +40,7 @@ const columns: IColumn<any, any>[] = [
     },
     {
         field: 'serviceLabel',
-        headerName: 'Service label',
+        headerName: 'Resource label',
         type: 'string',
         sortable: true,
         filter: true,
@@ -92,7 +92,7 @@ const columns: IColumn<any, any>[] = [
         resizable: true,
         flex: 0.5,
         valueFormatter: (param: ValueFormatterParams) => {
-            return `${param.value ? Number(param.value).toFixed(2) : ''}%`
+            return `${param.value ? Number(param.value).toFixed(2) : '0'}%`
         },
     },
     {
@@ -135,7 +135,7 @@ export default function Services({ id, connections }: IFinder) {
     return (
         <>
             <Table
-                title="Services"
+                title="Resources"
                 downloadable
                 id="compliance_services"
                 columns={columns}

@@ -4,7 +4,7 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
 import DateRangePicker from '../DateRangePicker'
 import Filter from '../Filter'
-import { kebabCaseToLabel } from '../../utilities/labelMaker'
+import { kebabCaseToLabel, snakeCaseToLabel } from '../../utilities/labelMaker'
 
 interface IHeader {
     filter?: boolean
@@ -83,7 +83,7 @@ export default function Header({
                                 {i === subPages().length - 1 &&
                                 breadCrumb?.length
                                     ? breadCrumb
-                                    : page}
+                                    : snakeCaseToLabel(page)}
                             </Button>
                         </Flex>
                     ))}
