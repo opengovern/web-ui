@@ -1256,6 +1256,31 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection {
     tags?: Record<string, string[]>
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape {
+    categories?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscapeCategory[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscapeCategory {
+    description?: string
+    id?: string
+    name?: string
+    subcategories?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscapeSubcategory[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscapeItem {
+    description?: string
+    id?: string
+    logo_uri?: string
+    name?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscapeSubcategory {
+    description?: string
+    id?: string
+    items?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscapeItem[]
+    name?: string
+}
+
 export enum GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionStatus {
     ResourceCollectionStatusUnknown = '',
     ResourceCollectionStatusActive = 'active',
@@ -4213,6 +4238,30 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving resource collection landscape by specified ID
+         *
+         * @tags resource_collection
+         * @name ApiV2MetadataResourceCollectionLandscapeDetail
+         * @summary Get resource collection landscape
+         * @request GET:/inventory/api/v2/metadata/resource-collection/{resourceCollectionId}/landscape
+         * @secure
+         */
+        apiV2MetadataResourceCollectionLandscapeDetail: (
+            resourceCollectionId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
+                any
+            >({
+                path: `/inventory/api/v2/metadata/resource-collection/${resourceCollectionId}/landscape`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving metrics for a specific resource type.
          *
          * @tags resource
@@ -4446,6 +4495,8 @@ export class Api<
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Connection IDs */
                 connectionId?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
                 /** Connection Groups */
                 connectionGroups?: string[]
                 /** lifecycle state filter */

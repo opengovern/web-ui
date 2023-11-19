@@ -323,6 +323,8 @@ export const useOnboardApiV1ConnectionsSummaryList = (
 
         connectionId?: string[]
 
+        resourceCollection?: string[]
+
         connectionGroups?: string[]
 
         lifecycleState?:
