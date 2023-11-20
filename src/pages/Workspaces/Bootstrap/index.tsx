@@ -13,7 +13,6 @@ import {
     useWorkspaceApiV1WorkspaceCreate,
 } from '../../../api/workspace.gen'
 import Layout from '../../../components/Layout'
-import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus } from '../../../api/api'
 
 export default function Boostrap() {
     const currentWorkspace = useParams<{ ws: string }>().ws
@@ -32,11 +31,7 @@ export default function Boostrap() {
     } = useWorkspaceApiV1BootstrapDetail(name)
 
     useEffect(() => {
-        if (
-            statusResponse?.status &&
-            statusResponse?.status !==
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus.BootstrapStatusOnboardConnection
-        ) {
+        if ((statusResponse?.workspaceCreationStatus?.done || 0) !== 0) {
             setStep(4)
         }
     }, [statusIsLoading])
