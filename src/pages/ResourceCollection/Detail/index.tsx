@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom'
 import {
     BarList,
-    Button,
     Callout,
     Card,
     Col,
@@ -18,7 +17,6 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { TableCellsIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import Layout from '../../../components/Layout'
@@ -163,12 +161,9 @@ export default function ResourceCollectionDetail() {
                 filter
                 datePicker
             />
-            <Flex className="mb-4">
-                <Flex flexDirection="col" alignItems="start">
-                    <Title className="font-semibold">{detail?.name}</Title>
-                    <Text>{detail?.description}</Text>
-                </Flex>
-                <Button icon={TableCellsIcon}>Tech landscape</Button>
+            <Flex flexDirection="col" alignItems="start" className="mb-4">
+                <Title className="font-semibold">{detail?.name}</Title>
+                <Text>{detail?.description}</Text>
             </Flex>
             <Grid numItems={2} className="w-full gap-4 mb-4">
                 <Card>
@@ -242,10 +237,12 @@ export default function ResourceCollectionDetail() {
             </Grid>
             <TabGroup>
                 <TabList className="mb-3">
+                    <Tab>Landscape</Tab>
                     <Tab>Compliance</Tab>
                     <Tab>Infrastructure</Tab>
                 </TabList>
                 <TabPanels>
+                    <TabPanel>hi</TabPanel>
                     <TabPanel>
                         <Table
                             title={`${detail?.name} benchmarks`}

@@ -1735,7 +1735,7 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseInventoryApiV2MetadataResourceCollectionLandscapeDetailState {
+interface IuseInventoryApiV2ResourceCollectionLandscapeDetailState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape
@@ -1743,7 +1743,7 @@ interface IuseInventoryApiV2MetadataResourceCollectionLandscapeDetailState {
     error?: any
 }
 
-export const useInventoryApiV2MetadataResourceCollectionLandscapeDetail = (
+export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
     resourceCollectionId: string,
     params: RequestParams = {},
     autoExecute = true
@@ -1754,12 +1754,10 @@ export const useInventoryApiV2MetadataResourceCollectionLandscapeDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseInventoryApiV2MetadataResourceCollectionLandscapeDetailState>(
-            {
-                isLoading: true,
-                isExecuted: false,
-            }
-        )
+        useState<IuseInventoryApiV2ResourceCollectionLandscapeDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([resourceCollectionId, params, autoExecute])
     )
@@ -1779,7 +1777,7 @@ export const useInventoryApiV2MetadataResourceCollectionLandscapeDetail = (
             }
 
             api.inventory
-                .apiV2MetadataResourceCollectionLandscapeDetail(
+                .apiV2ResourceCollectionLandscapeDetail(
                     resourceCollectionId,
                     params
                 )

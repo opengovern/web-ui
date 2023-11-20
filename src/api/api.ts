@@ -1820,21 +1820,20 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest 
     connectorType?: SourceType
 }
 
-export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus {
-    BootstrapStatusOnboardConnection = 'OnboardConnection',
-    BootstrapStatusCreatingWorkspace = 'CreatingWorkspace',
-    BootstrapStatusWaitingForDiscovery = 'WaitingForDiscovery',
-    BootstrapStatusWaitingForAnalytics = 'WaitingForAnalytics',
-    BootstrapStatusWaitingForCompliance = 'WaitingForCompliance',
-    BootstrapStatusWaitingForInsights = 'WaitingForInsights',
-    BootstrapStatusFinished = 'Finished',
+export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress {
+    done?: number
+    total?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse {
+    analyticsStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
+    complianceStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
     connection_count?: Record<string, number>
+    discoveryStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
+    insightsStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
     maxConnections?: number
     minRequiredConnections?: number
-    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatus
+    workspaceCreationStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest {
@@ -4241,12 +4240,12 @@ export class Api<
          * @description Retrieving resource collection landscape by specified ID
          *
          * @tags resource_collection
-         * @name ApiV2MetadataResourceCollectionLandscapeDetail
+         * @name ApiV2ResourceCollectionLandscapeDetail
          * @summary Get resource collection landscape
-         * @request GET:/inventory/api/v2/metadata/resource-collection/{resourceCollectionId}/landscape
+         * @request GET:/inventory/api/v2/resource-collection/{resourceCollectionId}/landscape
          * @secure
          */
-        apiV2MetadataResourceCollectionLandscapeDetail: (
+        apiV2ResourceCollectionLandscapeDetail: (
             resourceCollectionId: string,
             params: RequestParams = {}
         ) =>
@@ -4254,7 +4253,7 @@ export class Api<
                 GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
                 any
             >({
-                path: `/inventory/api/v2/metadata/resource-collection/${resourceCollectionId}/landscape`,
+                path: `/inventory/api/v2/resource-collection/${resourceCollectionId}/landscape`,
                 method: 'GET',
                 secure: true,
                 format: 'json',

@@ -1,6 +1,7 @@
 import { Button, Flex, TextInput } from '@tremor/react'
 import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Table, { IColumn } from '../../components/Table'
@@ -47,6 +48,7 @@ const resourceCollectionColumns: IColumn<any, any>[] = [
 
 export default function ResourceCollection() {
     const navigate = useNavigate()
+    const [search, setSearch] = useState('')
 
     const { response, isLoading } =
         useInventoryApiV2MetadataResourceCollectionList()
@@ -57,13 +59,23 @@ export default function ResourceCollection() {
             <Table
                 id="resource_collection"
                 columns={resourceCollectionColumns}
-                rowData={response}
+                rowData={
+                    search.length
+                        ? response?.filter((r) =>
+                              r.name
+                                  ?.toLowerCase()
+                                  .includes(search.toLowerCase())
+                          )
+                        : response
+                }
                 loading={isLoading}
                 onRowClicked={(e) => navigate(e.data.id)}
                 fullWidth
             >
                 <Flex className="w-fit gap-3">
                     <TextInput
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                         icon={MagnifyingGlassIcon}
                         placeholder="Search resources..."
                     />
