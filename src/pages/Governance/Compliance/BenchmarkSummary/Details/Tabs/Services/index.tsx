@@ -15,6 +15,7 @@ import { IFilter } from '../../../../../../../store'
 interface IFinder {
     id: string | undefined
     connections: IFilter
+    resourceId: string | undefined
 }
 
 const rowGenerator = (data: any) => {
@@ -110,7 +111,7 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
-export default function Services({ id, connections }: IFinder) {
+export default function Services({ id, connections, resourceId }: IFinder) {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
 
@@ -118,6 +119,9 @@ export default function Services({ id, connections }: IFinder) {
         useComplianceApiV1FindingsServicesDetail(id || '', {
             connectionId: connections.connections,
             connectionGroup: connections.connectionGroup,
+            ...(resourceId && {
+                resourceCollection: [resourceId],
+            }),
         })
 
     const options: GridOptions = {

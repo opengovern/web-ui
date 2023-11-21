@@ -432,7 +432,7 @@ export default function Compliance() {
             )}
             {(selectedState === '' || selectedState === 'not-active') && (
                 <>
-                    <Title className="mb-3">Not Active benchmarks</Title>
+                    <Title className="mb-3">Not active benchmarks</Title>
                     {/* eslint-disable-next-line no-nested-ternary */}
                     {isLoading ? (
                         <Spinner className="mt-56" />

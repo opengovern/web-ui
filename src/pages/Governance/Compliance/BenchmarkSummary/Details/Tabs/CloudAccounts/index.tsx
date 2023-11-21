@@ -16,6 +16,7 @@ import { IFilter, isDemoAtom } from '../../../../../../../store'
 interface IFinder {
     id: string | undefined
     connections: IFilter
+    resourceId: string | undefined
 }
 
 const rowGenerator = (data: any) => {
@@ -120,7 +121,11 @@ const columns = (isDemo: boolean) => {
     return temp
 }
 
-export default function CloudAccounts({ id, connections }: IFinder) {
+export default function CloudAccounts({
+    id,
+    connections,
+    resourceId,
+}: IFinder) {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
     const isDemo = useAtomValue(isDemoAtom)
@@ -129,6 +134,9 @@ export default function CloudAccounts({ id, connections }: IFinder) {
         useComplianceApiV1FindingsAccountsDetail(id || '', {
             connectionId: connections.connections,
             connectionGroup: connections.connectionGroup,
+            ...(resourceId && {
+                resourceCollection: [resourceId],
+            }),
         })
 
     const options: GridOptions = {

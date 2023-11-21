@@ -236,6 +236,21 @@ const authRoutes = [
         component: ResourceCollectionDetail,
     },
     {
+        key: 'benchmark summary',
+        path: '/:ws/resource-collection/:resourceId/:id',
+        component: BenchmarkSummary,
+    },
+    {
+        key: 'service advisor detail',
+        path: '/:ws/resource-collection/:resourceId/:id/details',
+        component: BenchmarkDetails,
+    },
+    {
+        key: 'benchmark single connection',
+        path: '/:ws/resource-collection/:resourceId/:id/:connection',
+        component: SingleComplianceConnection,
+    },
+    {
         key: 'resource collection infrastructure metrics',
         path: '/:ws/resource-collection/:resourceId/infrastructure-details',
         component: InfrastructureDetails,

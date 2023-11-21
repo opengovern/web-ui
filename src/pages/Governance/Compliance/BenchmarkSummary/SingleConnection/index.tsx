@@ -46,7 +46,7 @@ import PolicyDetail from '../Details/Tabs/Policies/Detail'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { connection } = useParams()
+    const { connection, resourceId } = useParams()
     const setNotification = useSetAtom(notificationAtom)
     const isDemo = useAtomValue(isDemoAtom)
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
@@ -58,6 +58,9 @@ export default function SingleComplianceConnection() {
     const query = {
         ...(connection && {
             connectionId: [connection.replace('account_', '')],
+        }),
+        ...(resourceId && {
+            resourceCollection: [resourceId],
         }),
     }
     const { response: accountInfo, isLoading: accountInfoLoading } =
