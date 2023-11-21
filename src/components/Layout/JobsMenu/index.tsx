@@ -131,7 +131,9 @@ export default function JobsMenu() {
                     <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
                         <Card className="w-96">
                             <Flex justifyContent="between">
-                                <Title>Recents Jobs</Title>
+                                <Title className="font-bold text-gray-800">
+                                    Recents Jobs
+                                </Title>
                                 <Button
                                     size="xs"
                                     variant="light"
@@ -139,7 +141,7 @@ export default function JobsMenu() {
                                     iconPosition="right"
                                     onClick={() => setOpen(true)}
                                 >
-                                    View more
+                                    See All
                                 </Button>
                             </Flex>
                             {recentJobs?.map((job, idx) => {
@@ -186,16 +188,17 @@ export default function JobsMenu() {
                                             flexDirection="row"
                                             justifyContent="between"
                                         >
-                                            <Text>{String('discovery')}</Text>
+                                            <Text className="text-gray-800">
+                                                {String(job.type)}
+                                            </Text>
                                             <Legend
                                                 categories={[jobStatus]}
                                                 colors={[jobColor]}
                                             />
                                         </Flex>
                                         <Flex>
-                                            <Text>
-                                                {job.title} -
-                                                {job.connectionProviderName}
+                                            <Text className="w-full text-gray-500 truncate">
+                                                {job.title} - {job.connectionID}
                                             </Text>
                                         </Flex>
                                     </Flex>
