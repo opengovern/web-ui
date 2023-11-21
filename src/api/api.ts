@@ -1883,6 +1883,8 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
+    /** @example "kaytu" */
+    aws_user_arn?: string
     /** @example "2023-05-17T14:39:02.707659Z" */
     createdAt?: string
     /** @example "Lorem ipsum dolor sit amet, consectetur adipiscing elit." */
@@ -1932,6 +1934,8 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage 
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
+    /** @example "kaytu" */
+    aws_user_arn?: string
     /** @example "2023-05-17T14:39:02.707659Z" */
     createdAt?: string
     /** @example "Lorem ipsum dolor sit amet, consectetur adipiscing elit." */
