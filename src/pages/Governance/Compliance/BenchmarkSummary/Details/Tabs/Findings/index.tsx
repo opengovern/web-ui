@@ -18,6 +18,7 @@ import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
 interface IFinder {
     id: string | undefined
     connections: IFilter
+    resourceId: string | undefined
 }
 
 const columns = (isDemo: boolean) => {
@@ -136,7 +137,7 @@ const columns = (isDemo: boolean) => {
     return temp
 }
 
-export default function Findings({ id, connections }: IFinder) {
+export default function Findings({ id, connections, resourceId }: IFinder) {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
@@ -155,6 +156,9 @@ export default function Findings({ id, connections }: IFinder) {
                 ? [connections.provider]
                 : [],
             connectionID: connections.connections,
+            ...(resourceId && {
+                resourceCollection: [resourceId],
+            }),
             activeOnly: true,
         },
         sort: sortModel.length

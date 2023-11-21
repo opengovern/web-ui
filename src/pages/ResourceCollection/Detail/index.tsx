@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import {
     BarList,
     Button,
@@ -21,7 +21,6 @@ import {
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import { ValueFormatterParams } from 'ag-grid-community'
 import Layout from '../../../components/Layout'
 import {
     useInventoryApiV2AnalyticsTrendList,
@@ -43,7 +42,7 @@ import {
 import { dateDisplay, dateTimeDisplay } from '../../../utilities/dateDisplay'
 import Table, { IColumn } from '../../../components/Table'
 import { activeColumns, benchmarkList } from '../../Governance/Compliance'
-import { filterAtom, timeAtom } from '../../../store'
+import { timeAtom } from '../../../store'
 import {
     checkGranularity,
     generateItems,
@@ -113,7 +112,7 @@ const complianceColumns: IColumn<any, any>[] = [
 export default function ResourceCollectionDetail() {
     const { resourceId } = useParams()
     const activeTimeRange = useAtomValue(timeAtom)
-    const selectedConnections = useAtomValue(filterAtom)
+    const navigate = useNavigate()
     const [openDrawer, setOpenDrawer] = useState(false)
 
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
@@ -142,12 +141,7 @@ export default function ResourceCollectionDetail() {
     }, [selectedIndex])
 
     const query = {
-        ...(selectedConnections.provider !== '' && {
-            connector: [selectedConnections.provider],
-        }),
         resourceCollection: [resourceId || ''],
-        connectionId: selectedConnections.connections,
-        connectionGroup: selectedConnections.connectionGroup,
         startTime: activeTimeRange.start.unix(),
         endTime: activeTimeRange.end.unix(),
     }
@@ -182,7 +176,6 @@ export default function ResourceCollectionDetail() {
                 breadCrumb={[
                     detail ? detail.name : 'Resource collection detail',
                 ]}
-                filter
                 datePicker
             />
             <Flex flexDirection="col" alignItems="start" className="mb-4">
@@ -331,6 +324,17 @@ export default function ResourceCollectionDetail() {
                                     (a?.checks?.passedCount || 0)
                             )}
                             columns={complianceColumns}
+                            onRowClicked={(event) => {
+                                if (event.data) {
+                                    if (event.data.isAssigned === 'Assigned') {
+                                        navigate(`${event.data.id}`)
+                                    } else {
+                                        navigate(
+                                            `${event.data.id}/details#assignments`
+                                        )
+                                    }
+                                }
+                            }}
                         />
                     </TabPanel>
                     <TabPanel>

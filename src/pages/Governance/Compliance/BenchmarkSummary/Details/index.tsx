@@ -13,7 +13,7 @@ import Services from './Tabs/Services'
 
 export default function BenchmarkDetails() {
     const navigate = useNavigate()
-    const { id } = useParams()
+    const { id, resourceId } = useParams()
     const selectedConnections = useAtomValue(filterAtom)
 
     const [selectedTab, setSelectedTab] = useState(0)
@@ -73,6 +73,7 @@ export default function BenchmarkDetails() {
                             <CloudAccounts
                                 id={id}
                                 connections={selectedConnections}
+                                resourceId={resourceId}
                             />
                         )}
                     </TabPanel>
@@ -81,6 +82,7 @@ export default function BenchmarkDetails() {
                             <Services
                                 id={id}
                                 connections={selectedConnections}
+                                resourceId={resourceId}
                             />
                         )}
                     </TabPanel>
@@ -92,6 +94,7 @@ export default function BenchmarkDetails() {
                             <Findings
                                 id={id}
                                 connections={selectedConnections}
+                                resourceId={resourceId}
                             />
                         )}
                     </TabPanel>

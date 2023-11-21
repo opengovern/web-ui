@@ -12,6 +12,7 @@ import { options } from '../Resources'
 interface IConnections {
     activeTimeRange: { start: Dayjs; end: Dayjs }
     connections: IFilter
+    resourceId?: string | undefined
 }
 
 const columns = (isDemo: boolean) => {
@@ -85,9 +86,9 @@ const columns = (isDemo: boolean) => {
 export default function CloudAccounts({
     activeTimeRange,
     connections,
+    resourceId,
 }: IConnections) {
     const navigate = useNavigate()
-    const { resourceId } = useParams()
 
     const setNotification = useSetAtom(notificationAtom)
     const isDemo = useAtomValue(isDemoAtom)
@@ -160,12 +161,18 @@ export default function CloudAccounts({
             }}
             options={options}
         >
-            <TabGroup className="w-fit rounded-lg border" index={index}>
-                <TabList variant="solid">
-                    <Tab onClick={() => setIsOnboarded(true)}>Onboarded</Tab>
-                    <Tab onClick={() => setIsOnboarded(false)}>Show all</Tab>
-                </TabList>
-            </TabGroup>
+            {!resourceId && (
+                <TabGroup className="w-fit rounded-lg border" index={index}>
+                    <TabList variant="solid">
+                        <Tab onClick={() => setIsOnboarded(true)}>
+                            Onboarded
+                        </Tab>
+                        <Tab onClick={() => setIsOnboarded(false)}>
+                            Show all
+                        </Tab>
+                    </TabList>
+                </TabGroup>
+            )}
         </Table>
     )
 }

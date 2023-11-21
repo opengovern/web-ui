@@ -165,7 +165,10 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                             )}% failed`}</Text>
                         )}
                     </Flex>
-                    <Flex justifyContent="start" className="mt-6 gap-2">
+                    <Flex
+                        justifyContent="start"
+                        className="mt-6 gap-2 flex-wrap"
+                    >
                         {benchmark?.tags?.category?.map((cat) => (
                             <Badge color="slate">{cat}</Badge>
                         ))}

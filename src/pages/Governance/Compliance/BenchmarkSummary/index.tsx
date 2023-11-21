@@ -107,7 +107,7 @@ const topConnections = (
 }
 
 export default function BenchmarkSummary() {
-    const { id } = useParams()
+    const { id, resourceId } = useParams()
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
@@ -130,6 +130,9 @@ export default function BenchmarkSummary() {
         }),
         ...(selectedConnections.connectionGroup && {
             connectionGroup: selectedConnections.connectionGroup,
+        }),
+        ...(resourceId && {
+            resourceCollection: [resourceId],
         }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix().toString(),

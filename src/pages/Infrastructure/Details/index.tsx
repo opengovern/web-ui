@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai/index'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import { useEffect, useState } from 'react'
@@ -14,6 +14,7 @@ export default function InfrastructureDetails() {
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const url = window.location.pathname.split('/')
+    const { resourceId } = useParams()
 
     const [selectedTab, setSelectedTab] = useState(0)
     const tabs = useLocation().hash
@@ -56,6 +57,7 @@ export default function InfrastructureDetails() {
                         <Resources
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
+                            resourceId={resourceId}
                             isSummary
                         />
                     </TabPanel>
@@ -63,6 +65,7 @@ export default function InfrastructureDetails() {
                         <CloudAccounts
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
+                            resourceId={resourceId}
                         />
                     </TabPanel>
                     <TabPanel>
