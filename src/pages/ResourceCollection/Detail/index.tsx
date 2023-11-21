@@ -23,6 +23,7 @@ import Layout from '../../../components/Layout'
 import {
     useInventoryApiV2AnalyticsTrendList,
     useInventoryApiV2MetadataResourceCollectionDetail,
+    useInventoryApiV2ResourceCollectionLandscapeDetail,
 } from '../../../api/inventory.gen'
 import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
@@ -52,6 +53,7 @@ import {
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 import { generateVisualMap, resourceTrendChart } from '../../Infrastructure'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import Landscape from '../../../components/Landscape'
 
 const pieData = (
     input:
@@ -135,7 +137,6 @@ export default function ResourceCollectionDetail() {
         useComplianceApiV1BenchmarksSummaryList({
             resourceCollection: [resourceId || ''],
         })
-    console.log(complianceKPI)
     const { response: accountInfo, isLoading: accountInfoLoading } =
         useOnboardApiV1ConnectionsSummaryList({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -151,6 +152,9 @@ export default function ResourceCollectionDetail() {
             // @ts-ignore
             granularity: selectedGranularity,
         })
+    const { response: landscape, isLoading: landscapeLoading } =
+        useInventoryApiV2ResourceCollectionLandscapeDetail(resourceId || '')
+    console.log(landscape)
 
     return (
         <Layout currentPage="resource-collection">
@@ -242,7 +246,12 @@ export default function ResourceCollectionDetail() {
                     <Tab>Infrastructure</Tab>
                 </TabList>
                 <TabPanels>
-                    <TabPanel>hi</TabPanel>
+                    <TabPanel>
+                        <Landscape
+                            data={landscape}
+                            isLoading={landscapeLoading}
+                        />
+                    </TabPanel>
                     <TabPanel>
                         <Table
                             title={`${detail?.name} benchmarks`}
