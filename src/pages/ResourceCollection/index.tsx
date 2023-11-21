@@ -79,7 +79,6 @@ export default function ResourceCollection() {
 
     const { response, isLoading } =
         useInventoryApiV2MetadataResourceCollectionList()
-    console.log(response)
 
     return (
         <Layout currentPage="resource-collection">
