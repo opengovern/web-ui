@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
+    ArrowPathIcon,
     ArrowRightIcon,
     ClipboardDocumentListIcon,
     CommandLineIcon,
@@ -10,6 +11,7 @@ import {
     BadgeDelta,
     Button,
     Card,
+    Color,
     Flex,
     Legend,
     Text,
@@ -18,27 +20,8 @@ import {
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import DrawerPanel from '../../DrawerPanel'
 import Table, { IColumn } from '../../Table'
-
-const jobs = [
-    {
-        jobID: 123,
-        type: 'Discovery',
-        accountName: 'account-1234',
-        title: 'AWS::EC2::Instances',
-    },
-    {
-        jobID: 123,
-        type: 'Insight',
-        accountName: 'all',
-        title: 'Snapshots older than a year',
-    },
-    {
-        jobID: 123,
-        type: 'Compliance',
-        accountName: 'all',
-        title: 'AWS CIS v2.0.0',
-    },
-]
+import { useScheduleApiV1JobsList } from '../../../api/schedule.gen'
+import { GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus } from '../../../api/api'
 
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -52,7 +35,7 @@ const columns = () => {
             hide: true,
         },
         {
-            field: 'type',
+            field: 'job_type',
             headerName: 'Job Type',
             type: 'string',
             sortable: true,
@@ -60,7 +43,16 @@ const columns = () => {
             resizable: true,
         },
         {
-            field: 'account_id',
+            field: 'connection_id',
+            headerName: 'Kaytu Connection ID',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+        },
+        {
+            field: 'connection_provider_id',
             headerName: 'Account ID',
             type: 'string',
             sortable: true,
@@ -69,13 +61,12 @@ const columns = () => {
             hide: true,
         },
         {
-            field: 'account_name',
+            field: 'connection_provider_name',
             headerName: 'Account Name',
             type: 'string',
             sortable: true,
             filter: true,
             resizable: true,
-            hide: true,
         },
         {
             field: 'title',
@@ -84,7 +75,6 @@ const columns = () => {
             sortable: true,
             filter: true,
             resizable: true,
-            hide: true,
         },
         {
             field: 'status',
@@ -93,9 +83,9 @@ const columns = () => {
             sortable: true,
             filter: true,
             resizable: true,
-            valueFormatter: (param: ValueFormatterParams) => {
-                return `${param.value ? Number(param.value).toFixed(2) : '0'}%`
-            },
+            // valueFormatter: (param: ValueFormatterParams) => {
+            //     return `${param.value ? Number(param.value).toFixed(2) : '0'}%`
+            // },
         },
     ]
     return temp
@@ -103,6 +93,7 @@ const columns = () => {
 
 export default function JobsMenu() {
     const [open, setOpen] = useState<boolean>(false)
+    const { response: jobs, isLoading, error } = useScheduleApiV1JobsList()
 
     const options: GridOptions = {
         enableGroupEdit: true,
@@ -116,6 +107,8 @@ export default function JobsMenu() {
         groupAllowUnbalanced: true,
     }
 
+    const recentJobs = jobs?.slice(0, 5)
+
     return (
         <>
             <Popover className="relative isolate z-50 border-0">
@@ -124,12 +117,7 @@ export default function JobsMenu() {
                     id="Jobs"
                 >
                     <span className="sr-only">Jobs</span>
-                    <Legend
-                        categories={['Jobs in progress']}
-                        colors={['red']}
-                        className="mt-3"
-                    />
-                    {/* <ClipboardDocumentListIcon className="h-6 w-6" /> */}
+                    <ArrowPathIcon className="h-6 w-6" />
                 </Popover.Button>
                 <Transition
                     as={Fragment}
@@ -141,65 +129,98 @@ export default function JobsMenu() {
                     leaveTo="opacity-0 translate-y-1"
                 >
                     <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
-                        <Card>
-                            <Title>Running Jobs</Title>
-                            {/* <Table className="mt-6">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableHeaderCell>
-                                            Job Type
-                                        </TableHeaderCell>
-                                        <TableHeaderCell>
-                                            Account Name
-                                        </TableHeaderCell>
-                                        <TableHeaderCell>Title</TableHeaderCell>
-                                    </TableRow>
-                                </TableHead>
-
-                                <TableBody>
-                                    {jobs.map((item) => (
-                                        <TableRow key={item.jobID}>
-                                            <TableCell>{item.type}</TableCell>
-                                            <TableCell>
-                                                {item.accountName}
-                                            </TableCell>
-                                            <TableCell>{item.title}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table> */}
-                            <Flex className="mt-6 pt-4 border-t">
+                        <Card className="w-96">
+                            <Flex justifyContent="between">
+                                <Title>Recents Jobs</Title>
                                 <Button
                                     size="xs"
                                     variant="light"
                                     icon={ArrowRightIcon}
                                     iconPosition="right"
+                                    onClick={() => setOpen(true)}
                                 >
                                     View more
                                 </Button>
                             </Flex>
+                            {recentJobs?.map((job, idx) => {
+                                let jobStatus = ''
+                                let jobColor: Color = 'gray'
+                                switch (job.status) {
+                                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusCreated:
+                                        jobStatus = 'created'
+                                        break
+                                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusQueued:
+                                        jobStatus = 'queued'
+                                        break
+                                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusInProgress:
+                                        jobStatus = 'in progress'
+                                        jobColor = 'orange'
+                                        break
+                                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusSuccessful:
+                                        jobStatus = 'succeeded'
+                                        jobColor = 'emerald'
+                                        break
+                                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusFailure:
+                                        jobStatus = 'failed'
+                                        jobColor = 'red'
+                                        break
+                                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusTimeout:
+                                        jobStatus = 'time out'
+                                        jobColor = 'red'
+                                        break
+                                    default:
+                                        jobStatus = String(job.status)
+                                }
+
+                                return (
+                                    <Flex
+                                        flexDirection="col"
+                                        className={`py-3 ${
+                                            idx === recentJobs.length - 1
+                                                ? ''
+                                                : 'border-b-2'
+                                        }`}
+                                    >
+                                        <Flex
+                                            className="pb-2"
+                                            flexDirection="row"
+                                            justifyContent="between"
+                                        >
+                                            <Text>{String('discovery')}</Text>
+                                            <Legend
+                                                categories={[jobStatus]}
+                                                colors={[jobColor]}
+                                            />
+                                        </Flex>
+                                        <Flex>
+                                            <Text>
+                                                {job.title} -
+                                                {job.connectionProviderName}
+                                            </Text>
+                                        </Flex>
+                                    </Flex>
+                                )
+                            })}
                         </Card>
                     </Popover.Panel>
                 </Transition>
             </Popover>
             <DrawerPanel
-                title="Jobs"
+                title="Recents Jobs"
                 open={open}
                 onClose={() => setOpen(false)}
             >
                 <Table
-                    title="Jobs"
-                    downloadable
                     id="jobs"
                     columns={columns()}
-                    // rowData={rowGenerator(findings) || []}
+                    rowData={jobs}
                     options={options}
-                    // onGridReady={(e) => {
-                    //     if (isLoading) {
-                    //         e.api.showLoadingOverlay()
-                    //     }
-                    // }}
-                    // loading={isLoading}
+                    onGridReady={(e) => {
+                        if (isLoading) {
+                            e.api.showLoadingOverlay()
+                        }
+                    }}
+                    loading={isLoading}
                 />
             </DrawerPanel>
         </>

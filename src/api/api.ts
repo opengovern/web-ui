@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -993,6 +992,32 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings {
     benchmarkIds?: string[]
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiJob {
+    connectionID?: string
+    connectionProviderID?: string
+    connectionProviderName?: string
+    id?: number
+    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus
+    title?: string
+    type?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobType
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus {
+    JobStatusCreated = 'created',
+    JobStatusQueued = 'queued',
+    JobStatusInProgress = 'in_progress',
+    JobStatusSuccessful = 'successful',
+    JobStatusFailure = 'failure',
+    JobStatusTimeout = 'timeout',
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobType {
+    JobTypeDiscovery = 'discovery',
+    JobTypeAnalytics = 'analytics',
+    JobTypeCompliance = 'compliance',
+    JobTypeInsight = 'insight',
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
     /**
      * Accounts included in the stack
@@ -1247,11 +1272,14 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiPage {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection {
+    connectors?: SourceType[]
     created_at?: string
     description?: string
     filters?: KaytuResourceCollectionFilter[]
     id?: string
+    last_evaluated_at?: string
     name?: string
+    resource_count?: number
     status?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionStatus
     tags?: Record<string, string[]>
 }
@@ -2943,12 +2971,16 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<any, any>({
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary[],
+                any
+            >({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies`,
                 method: 'GET',
                 query: query,
                 secure: true,
                 type: ContentType.Json,
+                format: 'json',
                 ...params,
             }),
 
@@ -2956,12 +2988,14 @@ export class Api<
          * No description
          *
          * @tags compliance
-         * @name ApiV1BenchmarksPoliciesPolicyIdDetail
+         * @name ApiV1BenchmarksPoliciesDetail2
          * @summary Get benchmark policies
-         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/policies/:policyId
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/policies/{policyId}
+         * @originalName apiV1BenchmarksPoliciesDetail
+         * @duplicate
          * @secure
          */
-        apiV1BenchmarksPoliciesPolicyIdDetail: (
+        apiV1BenchmarksPoliciesDetail2: (
             benchmarkId: string,
             policyId: string,
             query?: {
@@ -4201,6 +4235,8 @@ export class Api<
             query?: {
                 /** Resource collection IDs */
                 id?: string[]
+                /** Resource collection status */
+                status?: ('' | 'active' | 'inactive')[]
             },
             params: RequestParams = {}
         ) =>
@@ -4234,6 +4270,60 @@ export class Api<
                 any
             >({
                 path: `/inventory/api/v2/metadata/resource-collection/${resourceCollectionId}`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving list of resource collections by specified filters with inventory data
+         *
+         * @tags resource_collection
+         * @name ApiV2ResourceCollectionList
+         * @summary List resource collections with inventory data
+         * @request GET:/inventory/api/v2/resource-collection
+         * @secure
+         */
+        apiV2ResourceCollectionList: (
+            query?: {
+                /** Resource collection IDs */
+                id?: string[]
+                /** Resource collection status */
+                status?: ('' | 'active' | 'inactive')[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection[],
+                any
+            >({
+                path: `/inventory/api/v2/resource-collection`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving resource collection by specified ID with inventory data
+         *
+         * @tags resource_collection
+         * @name ApiV2ResourceCollectionDetail
+         * @summary Get resource collection with inventory data
+         * @request GET:/inventory/api/v2/resource-collection/{resourceCollectionId}
+         * @secure
+         */
+        apiV2ResourceCollectionDetail: (
+            resourceCollectionId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
+                any
+            >({
+                path: `/inventory/api/v2/resource-collection/${resourceCollectionId}`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
@@ -4559,13 +4649,13 @@ export class Api<
          */
         apiV1ConnectionsStateCreate: (
             connectionId: string,
-            data: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+            request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
             params: RequestParams = {}
         ) =>
             this.request<void, any>({
                 path: `/onboard/api/v1/connections/${connectionId}/state`,
                 method: 'POST',
-                body: data,
+                body: request,
                 secure: true,
                 type: ContentType.Json,
                 ...params,
@@ -4943,6 +5033,24 @@ export class Api<
             this.request<number[], any>({
                 path: `/schedule/api/v1/insight/trigger/${insightId}`,
                 method: 'PUT',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Triggers a describe job to run immediately for the given connection
+         *
+         * @tags describe
+         * @name ApiV1JobsList
+         * @summary Triggers describer
+         * @request GET:/schedule/api/v1/jobs
+         * @secure
+         */
+        apiV1JobsList: (params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiJob[], any>({
+                path: `/schedule/api/v1/jobs`,
+                method: 'GET',
                 secure: true,
                 format: 'json',
                 ...params,
