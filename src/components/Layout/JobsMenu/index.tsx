@@ -15,9 +15,9 @@ import {
     Text,
     Title,
 } from '@tremor/react'
+import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import DrawerPanel from '../../DrawerPanel'
 import Table, { IColumn } from '../../Table'
-import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 
 const jobs = [
     {
