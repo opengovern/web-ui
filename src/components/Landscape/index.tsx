@@ -39,7 +39,7 @@ export default function Landscape({ data, isLoading }: ILandscape) {
     return (
         <Card>
             {isLoading ? (
-                <Spinner className="mt-56 " />
+                <Spinner className="my-24" />
             ) : (
                 <Grid numItems={1} className="w-full gap-6">
                     {data?.categories?.map((cat) => (

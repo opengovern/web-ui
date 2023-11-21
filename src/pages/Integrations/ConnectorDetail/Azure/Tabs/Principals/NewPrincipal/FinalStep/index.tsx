@@ -18,8 +18,8 @@ export default function FinalStep({ data, health, onNext }: IStep) {
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
-                <Bold className="my-6">See details</Bold>
-                <Text className="mb-3">SPN Details & Health</Text>
+                <Bold className="my-6">See detail</Bold>
+                <Text className="mb-3">SPN Detail & Health</Text>
                 <Flex flexDirection="row">
                     <Text>Application ID</Text>
                     <Text>{data.appId}</Text>

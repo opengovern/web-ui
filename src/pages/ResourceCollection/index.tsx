@@ -2,10 +2,13 @@ import { Button, Flex, TextInput } from '@tremor/react'
 import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { ICellRendererParams } from 'ag-grid-community'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Table, { IColumn } from '../../components/Table'
 import { useInventoryApiV2MetadataResourceCollectionList } from '../../api/inventory.gen'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary } from '../../api/api'
+import Tag from '../../components/Tag'
 
 const resourceCollectionColumns: IColumn<any, any>[] = [
     {
@@ -18,27 +21,51 @@ const resourceCollectionColumns: IColumn<any, any>[] = [
         flex: 1,
     },
     {
-        field: 'created_at',
-        headerName: 'Creation date',
-        type: 'date',
+        field: 'status',
+        headerName: 'Status',
+        type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
-        flex: 1,
+        flex: 0.5,
     },
     {
         field: '',
+        headerName: 'Resource count',
+        type: 'string',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 0.5,
+    },
+    {
+        field: 'tags',
         headerName: 'Tags',
         type: 'string',
         sortable: true,
         filter: true,
         resizable: true,
-        flex: 1,
+        flex: 1.5,
+        cellRenderer: (
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
+        ) => (
+            <Flex
+                className="h-full pl-2 gap-1 flex-wrap"
+                justifyContent="center"
+                alignItems="center"
+            >
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                {Object.entries(params.value).map(([name, value]) => (
+                    <Tag text={`${name}: ${value}`} />
+                ))}
+            </Flex>
+        ),
     },
     {
-        field: 'status',
-        headerName: 'Status',
-        type: 'string',
+        field: 'created_at',
+        headerName: 'Creation date',
+        type: 'datetime',
         sortable: true,
         filter: true,
         resizable: true,

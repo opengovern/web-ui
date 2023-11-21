@@ -201,7 +201,7 @@ export default function AccountInfo({
                     </Flex>
                     <Accordion className="w-full p-0 !rounded-none border-b-0 border-x-0 border-t-gray-200">
                         <AccordionHeader className="w-full p-0 py-6 border-0">
-                            <Title>Additional details</Title>
+                            <Title>Additional detail</Title>
                         </AccordionHeader>
                         <AccordionBody className="w-full p-0 border-0">
                             <Flex

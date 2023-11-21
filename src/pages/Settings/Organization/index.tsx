@@ -42,7 +42,7 @@ export default function SettingsOrganization() {
             value: <p>{response?.organization?.country}</p>,
         },
         {
-            key: 'Contact Details',
+            key: 'Contact Detail',
             value: (
                 <>
                     <p>Name: {response?.organization?.contactName}</p>
