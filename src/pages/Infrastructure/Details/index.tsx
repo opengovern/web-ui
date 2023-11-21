@@ -13,6 +13,7 @@ export default function InfrastructureDetails() {
     const navigate = useNavigate()
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
+    const url = window.location.pathname.split('/')
 
     const [selectedTab, setSelectedTab] = useState(0)
     const tabs = useLocation().hash
@@ -34,8 +35,14 @@ export default function InfrastructureDetails() {
     }, [tabs])
 
     return (
-        <Layout currentPage="infrastructure">
-            <Header breadCrumb={['Details']} filter datePicker />
+        <Layout
+            currentPage={
+                url.includes('resource-collection')
+                    ? 'resource-collection'
+                    : 'infrastructure'
+            }
+        >
+            <Header breadCrumb={['Infrastructure detail']} filter datePicker />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#summary')}>Summary</Tab>

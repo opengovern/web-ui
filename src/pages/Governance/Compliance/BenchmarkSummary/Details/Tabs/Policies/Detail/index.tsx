@@ -13,7 +13,6 @@ export default function PolicyDetail({
     open,
     onClose,
 }: IDetail) {
-    console.log(selectedPolicy)
     return (
         <DrawerPanel
             open={open}
