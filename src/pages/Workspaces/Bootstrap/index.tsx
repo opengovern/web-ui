@@ -116,6 +116,8 @@ export default function Boostrap() {
                         onAzureClick={() => setNewAzureOpen(true)}
                     />
                 )
+            default:
+                return null
         }
         return null
     }

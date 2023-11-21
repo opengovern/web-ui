@@ -33,6 +33,18 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
         return 'border-2 border-gray-300 bg-white'
     }
 
+    const progressClass = () => {
+        if (finishedJobs !== undefined && totalJobs !== undefined) {
+            if (finishedJobs > 0) {
+                if (finishedJobs === totalJobs) {
+                    return 'w-full'
+                }
+                return `w-${finishedJobs}/${totalJobs}`
+            }
+        }
+        return ''
+    }
+
     return (
         <>
             {!first && (
@@ -68,14 +80,21 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
                         />
                     )}
                 </Flex>
-                <Flex className="pl-3">
+                <Flex className="pl-3" alignItems="start">
                     <Text className="font-medium text-sm text-gray-800">
-                        {text}{' '}
+                        {text}
+                    </Text>
+                    <Text className="font-medium text-sm text-gray-500">
                         {finishedJobs === undefined || totalJobs === undefined
                             ? ''
-                            : `[${finishedJobs}/${totalJobs}]`}
+                            : ` (${finishedJobs} of ${totalJobs} completed)`}
                     </Text>
                 </Flex>
+                <div className="w-full bg-gray-300 rounded-xl">
+                    <div
+                        className={`${progressClass()} bg-blue-600 rounded-xl`}
+                    />
+                </div>
             </Flex>
         </>
     )
