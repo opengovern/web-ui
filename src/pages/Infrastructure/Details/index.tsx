@@ -3,7 +3,6 @@ import { useAtomValue } from 'jotai/index'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { filterAtom, timeAtom } from '../../../store'
-import { checkGranularity } from '../../../utilities/dateComparator'
 import Header from '../../../components/Header'
 import Layout from '../../../components/Layout'
 import Resources from './Tabs/Resources'
@@ -43,7 +42,11 @@ export default function InfrastructureDetails() {
                     : 'infrastructure'
             }
         >
-            <Header breadCrumb={['Infrastructure detail']} filter datePicker />
+            <Header
+                breadCrumb={['Infrastructure detail']}
+                filter={!url.includes('resource-collection')}
+                datePicker
+            />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#summary')}>Summary</Tab>
