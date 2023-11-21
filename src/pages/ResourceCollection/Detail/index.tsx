@@ -18,13 +18,15 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { TableCellsIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ValueFormatterParams } from 'ag-grid-community'
 import Layout from '../../../components/Layout'
 import {
     useInventoryApiV2AnalyticsTrendList,
     useInventoryApiV2MetadataResourceCollectionDetail,
+    useInventoryApiV2ResourceCollectionLandscapeDetail,
 } from '../../../api/inventory.gen'
 import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
@@ -38,8 +40,8 @@ import {
     camelCaseToLabel,
     capitalizeFirstLetter,
 } from '../../../utilities/labelMaker'
-import { dateDisplay } from '../../../utilities/dateDisplay'
-import Table from '../../../components/Table'
+import { dateDisplay, dateTimeDisplay } from '../../../utilities/dateDisplay'
+import Table, { IColumn } from '../../../components/Table'
 import { activeColumns, benchmarkList } from '../../Governance/Compliance'
 import { filterAtom, timeAtom } from '../../../store'
 import {
@@ -54,6 +56,10 @@ import {
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 import { generateVisualMap, resourceTrendChart } from '../../Infrastructure'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import Landscape from '../../../components/Landscape'
+import Tag from '../../../components/Tag'
+import { RenderObject } from '../../../components/RenderObject'
+import DrawerPanel from '../../../components/DrawerPanel'
 
 const pieData = (
     input:
@@ -90,10 +96,25 @@ const barData = (
     return data
 }
 
+const complianceColumns: IColumn<any, any>[] = [
+    ...activeColumns,
+    {
+        width: 120,
+        field: 'isAssigned',
+        headerName: 'Assignment status',
+        sortable: true,
+        filter: true,
+        enableRowGroup: true,
+        rowGroup: true,
+        type: 'string',
+    },
+]
+
 export default function ResourceCollectionDetail() {
     const { resourceId } = useParams()
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
+    const [openDrawer, setOpenDrawer] = useState(false)
 
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
@@ -137,7 +158,6 @@ export default function ResourceCollectionDetail() {
         useComplianceApiV1BenchmarksSummaryList({
             resourceCollection: [resourceId || ''],
         })
-    console.log(complianceKPI)
     const { response: accountInfo, isLoading: accountInfoLoading } =
         useOnboardApiV1ConnectionsSummaryList({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -153,6 +173,8 @@ export default function ResourceCollectionDetail() {
             // @ts-ignore
             granularity: selectedGranularity,
         })
+    const { response: landscape, isLoading: landscapeLoading } =
+        useInventoryApiV2ResourceCollectionLandscapeDetail(resourceId || '')
 
     return (
         <Layout currentPage="resource-collection">
@@ -163,50 +185,95 @@ export default function ResourceCollectionDetail() {
                 filter
                 datePicker
             />
-            <Flex className="mb-4">
-                <Flex flexDirection="col" alignItems="start">
-                    <Title className="font-semibold">{detail?.name}</Title>
-                    <Text>{detail?.description}</Text>
-                </Flex>
-                <Button icon={TableCellsIcon}>Tech landscape</Button>
+            <Flex flexDirection="col" alignItems="start" className="mb-4">
+                <Title className="font-semibold">{detail?.name}</Title>
+                <Text>{detail?.description}</Text>
             </Flex>
             <Grid numItems={2} className="w-full gap-4 mb-4">
                 <Card>
-                    <Title className="font-semibold mb-2">
-                        Resource collection info
-                    </Title>
-                    {detailsLoading ? (
-                        <Spinner />
-                    ) : (
-                        <List>
-                            <ListItem>
-                                <Text>Creation date</Text>
-                                <Text className="text-gray-800">
-                                    {dateDisplay(detail?.created_at)}
-                                </Text>
-                            </ListItem>
-                            <ListItem>
-                                <Text>Last evaluation</Text>
-                                <Text className="text-gray-800">
-                                    {dateDisplay(detail?.created_at)}
-                                </Text>
-                            </ListItem>
-                            <ListItem>
-                                <Text>Status</Text>
-                                <Text className="text-gray-800">
-                                    {detail?.status}
-                                </Text>
-                            </ListItem>
-                            <ListItem>
-                                <Text>Tags</Text>
-                                <Text className="text-gray-800">
-                                    {detail?.name}
-                                </Text>
-                            </ListItem>
-                        </List>
-                    )}
+                    <Flex
+                        flexDirection="col"
+                        alignItems="start"
+                        className="h-full"
+                    >
+                        <>
+                            <Title className="font-semibold mb-2">
+                                Summary
+                            </Title>
+                            {detailsLoading ? (
+                                <Spinner />
+                            ) : (
+                                <List>
+                                    <ListItem>
+                                        <Text>Type</Text>
+                                        <Text className="text-gray-800">?</Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Resources</Text>
+                                        <Text className="text-gray-800">?</Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Providers</Text>
+                                        <Text className="text-gray-800">?</Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Services used</Text>
+                                        <Text className="text-gray-800">?</Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Status</Text>
+                                        <Text className="text-gray-800">
+                                            {detail?.status}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Last evaluation</Text>
+                                        <Text className="text-gray-800">
+                                            {dateTimeDisplay(
+                                                detail?.created_at
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Tags</Text>
+                                        <Flex
+                                            justifyContent="end"
+                                            className="w-2/3 flex-wrap gap-1"
+                                        >
+                                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                                            {/* @ts-ignore */}
+                                            {Object.entries(detail?.tags).map(
+                                                ([name, value]) => (
+                                                    <Tag
+                                                        text={`${name}: ${value}`}
+                                                    />
+                                                )
+                                            )}
+                                        </Flex>
+                                    </ListItem>
+                                </List>
+                            )}
+                        </>
+                        <Flex justifyContent="end">
+                            <Button
+                                variant="light"
+                                icon={ChevronRightIcon}
+                                iconPosition="right"
+                                onClick={() => setOpenDrawer(true)}
+                            >
+                                see more
+                            </Button>
+                        </Flex>
+                        <DrawerPanel
+                            title="Resource collection detail"
+                            open={openDrawer}
+                            onClose={() => setOpenDrawer(false)}
+                        >
+                            <RenderObject obj={detail} />
+                        </DrawerPanel>
+                    </Flex>
                 </Card>
-                <Card>
+                <Card className="h-full">
                     <Title className="font-semibold mb-2">
                         Key performance indicator
                     </Title>
@@ -216,16 +283,14 @@ export default function ResourceCollectionDetail() {
                             <Tab>Infrastructure</Tab>
                         </TabList>
                         <TabPanels>
-                            <TabPanel>
-                                <Flex className="-mt-5">
-                                    <Chart
-                                        labels={[]}
-                                        chartType="doughnut"
-                                        chartData={pieData(complianceKPI)}
-                                        loading={complianceKPILoading}
-                                        colorful
-                                    />
-                                </Flex>
+                            <TabPanel className="mt-0">
+                                <Chart
+                                    labels={[]}
+                                    chartType="doughnut"
+                                    chartData={pieData(complianceKPI)}
+                                    loading={complianceKPILoading}
+                                    colorful
+                                />
                             </TabPanel>
                             <TabPanel>
                                 <Title className="font-semibold mb-3">
@@ -242,10 +307,17 @@ export default function ResourceCollectionDetail() {
             </Grid>
             <TabGroup>
                 <TabList className="mb-3">
+                    <Tab>Landscape</Tab>
                     <Tab>Compliance</Tab>
                     <Tab>Infrastructure</Tab>
                 </TabList>
                 <TabPanels>
+                    <TabPanel>
+                        <Landscape
+                            data={landscape}
+                            isLoading={landscapeLoading}
+                        />
+                    </TabPanel>
                     <TabPanel>
                         <Table
                             title={`${detail?.name} benchmarks`}
@@ -253,12 +325,12 @@ export default function ResourceCollectionDetail() {
                             id="connected_compliance"
                             rowData={benchmarkList(
                                 complianceKPI?.benchmarkSummary
-                            ).connected?.sort(
+                            ).all?.sort(
                                 (a, b) =>
                                     (b?.checks?.passedCount || 0) -
                                     (a?.checks?.passedCount || 0)
                             )}
-                            columns={activeColumns}
+                            columns={complianceColumns}
                         />
                     </TabPanel>
                     <TabPanel>

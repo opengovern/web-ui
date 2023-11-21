@@ -33,9 +33,8 @@ import Table, { IColumn } from '../../../components/Table'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 
 export const benchmarkList = (ben: any) => {
-    const connected = []
-    const notConnected = []
-    const all = []
+    const connected: any[] = []
+    const notConnected: any[] = []
     const serviceAdvisor = []
 
     if (ben) {
@@ -52,16 +51,20 @@ export const benchmarkList = (ben: any) => {
                     (ben[i].checks?.passedCount || 0) +
                     (ben[i].checks?.unknownCount || 0)
                 ) {
-                    connected.push(ben[i])
+                    const b = ben[i]
+                    b.isAssigned = 'Assigned'
+                    connected.push(b)
                 } else {
+                    const b = ben[i]
+                    b.isAssigned = 'Not assigned'
                     notConnected.push(ben[i])
                 }
-                all.push(ben[i])
             } else {
                 serviceAdvisor.push(ben[i])
             }
         }
     }
+    const all = [...connected, ...notConnected]
 
     return { connected, notConnected, serviceAdvisor, all }
 }
@@ -88,33 +91,34 @@ export const activeColumns: IColumn<any, any>[] = [
                 | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
                 | undefined
             >
-        ) => (
-            <Flex flexDirection="col" alignItems="start">
-                <Text>{param.value}</Text>
-                <Flex justifyContent="start" className="mt-1 gap-2">
-                    {param.data?.tags?.category?.map((cat) => (
-                        <Badge color="slate" size="xs">
-                            {cat}
-                        </Badge>
-                    ))}
-                    {param.data?.tags?.kaytu_category?.map((cat) => (
-                        <Badge color="emerald" size="xs">
-                            {cat}
-                        </Badge>
-                    ))}
-                    {!!param.data?.tags?.cis && (
-                        <Badge color="sky" size="xs">
-                            CIS
-                        </Badge>
-                    )}
-                    {!!param.data?.tags?.hipaa && (
-                        <Badge color="blue" size="xs">
-                            Hipaa
-                        </Badge>
-                    )}
+        ) =>
+            param.value && (
+                <Flex flexDirection="col" alignItems="start">
+                    <Text>{param.value}</Text>
+                    <Flex justifyContent="start" className="mt-1 gap-2">
+                        {param.data?.tags?.category?.map((cat) => (
+                            <Badge color="slate" size="xs">
+                                {cat}
+                            </Badge>
+                        ))}
+                        {param.data?.tags?.kaytu_category?.map((cat) => (
+                            <Badge color="emerald" size="xs">
+                                {cat}
+                            </Badge>
+                        ))}
+                        {!!param.data?.tags?.cis && (
+                            <Badge color="sky" size="xs">
+                                CIS
+                            </Badge>
+                        )}
+                        {!!param.data?.tags?.hipaa && (
+                            <Badge color="blue" size="xs">
+                                Hipaa
+                            </Badge>
+                        )}
+                    </Flex>
                 </Flex>
-            </Flex>
-        ),
+            ),
     },
     {
         headerName: 'Security score',
@@ -129,6 +133,7 @@ export const activeColumns: IColumn<any, any>[] = [
                 | undefined
             >
         ) =>
+            param.data &&
             `${(
                 (benchmarkChecks(param.data).passed /
                     benchmarkChecks(param.data).total) *

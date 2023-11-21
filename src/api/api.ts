@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -1882,6 +1883,8 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
+    /** @example "kaytu" */
+    aws_user_arn?: string
     /** @example "2023-05-17T14:39:02.707659Z" */
     createdAt?: string
     /** @example "Lorem ipsum dolor sit amet, consectetur adipiscing elit." */
@@ -1931,6 +1934,8 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage 
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
+    /** @example "kaytu" */
+    aws_user_arn?: string
     /** @example "2023-05-17T14:39:02.707659Z" */
     createdAt?: string
     /** @example "Lorem ipsum dolor sit amet, consectetur adipiscing elit." */
@@ -4239,12 +4244,12 @@ export class Api<
          * @description Retrieving resource collection landscape by specified ID
          *
          * @tags resource_collection
-         * @name ApiV2MetadataResourceCollectionLandscapeDetail
+         * @name ApiV2ResourceCollectionLandscapeDetail
          * @summary Get resource collection landscape
-         * @request GET:/inventory/api/v2/metadata/resource-collection/{resourceCollectionId}/landscape
+         * @request GET:/inventory/api/v2/resource-collection/{resourceCollectionId}/landscape
          * @secure
          */
-        apiV2MetadataResourceCollectionLandscapeDetail: (
+        apiV2ResourceCollectionLandscapeDetail: (
             resourceCollectionId: string,
             params: RequestParams = {}
         ) =>
@@ -4252,7 +4257,7 @@ export class Api<
                 GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
                 any
             >({
-                path: `/inventory/api/v2/metadata/resource-collection/${resourceCollectionId}/landscape`,
+                path: `/inventory/api/v2/resource-collection/${resourceCollectionId}/landscape`,
                 method: 'GET',
                 secure: true,
                 format: 'json',

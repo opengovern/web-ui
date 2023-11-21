@@ -260,7 +260,7 @@ export default function SingleConnection({
                             </Button>
                         </Flex>
                         <DrawerPanel
-                            title="Connection details"
+                            title="Connection detail"
                             open={openDrawer}
                             onClose={() => setOpenDrawer(false)}
                         >
