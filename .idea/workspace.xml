@@ -6,13 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Landscape/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Landscape/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Infrastructure/Single/SingleConnection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Infrastructure/Single/SingleConnection/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/AccountList/AccountInfo/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/AccountList/AccountInfo/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Principals/NewPrincipal/FinalStep/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Principals/NewPrincipal/FinalStep/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/ResourceCollection/Detail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ResourceCollection/Detail/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ResourceCollection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ResourceCollection/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Settings/Organization/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Settings/Organization/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -251,7 +246,7 @@
       <workItem from="1700413772501" duration="285000" />
       <workItem from="1700414153844" duration="4794000" />
       <workItem from="1700559795946" duration="168000" />
-      <workItem from="1700559969060" duration="6649000" />
+      <workItem from="1700559969060" duration="8259000" />
     </task>
     <servers />
   </component>

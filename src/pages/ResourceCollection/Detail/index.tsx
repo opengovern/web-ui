@@ -21,6 +21,7 @@ import {
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ValueFormatterParams } from 'ag-grid-community'
 import Layout from '../../../components/Layout'
 import {
     useInventoryApiV2AnalyticsTrendList,
@@ -40,7 +41,7 @@ import {
     capitalizeFirstLetter,
 } from '../../../utilities/labelMaker'
 import { dateDisplay, dateTimeDisplay } from '../../../utilities/dateDisplay'
-import Table from '../../../components/Table'
+import Table, { IColumn } from '../../../components/Table'
 import { activeColumns, benchmarkList } from '../../Governance/Compliance'
 import { filterAtom, timeAtom } from '../../../store'
 import {
@@ -94,6 +95,20 @@ const barData = (
     }
     return data
 }
+
+const complianceColumns: IColumn<any, any>[] = [
+    ...activeColumns,
+    {
+        width: 120,
+        field: 'isAssigned',
+        headerName: 'Assignment status',
+        sortable: true,
+        filter: true,
+        enableRowGroup: true,
+        rowGroup: true,
+        type: 'string',
+    },
+]
 
 export default function ResourceCollectionDetail() {
     const { resourceId } = useParams()
@@ -310,12 +325,12 @@ export default function ResourceCollectionDetail() {
                             id="connected_compliance"
                             rowData={benchmarkList(
                                 complianceKPI?.benchmarkSummary
-                            ).connected?.sort(
+                            ).all?.sort(
                                 (a, b) =>
                                     (b?.checks?.passedCount || 0) -
                                     (a?.checks?.passedCount || 0)
                             )}
-                            columns={activeColumns}
+                            columns={complianceColumns}
                         />
                     </TabPanel>
                     <TabPanel>
