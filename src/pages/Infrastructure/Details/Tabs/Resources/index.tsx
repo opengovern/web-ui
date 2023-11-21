@@ -1,6 +1,6 @@
 import { GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Dayjs } from 'dayjs'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
 import Table, { IColumn } from '../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiMetric } from '../../../../../api/api'
@@ -102,6 +102,7 @@ export default function Resources({
 }: IResources) {
     const navigate = useNavigate()
     const setNotification = useSetAtom(notificationAtom)
+    const { resourceId } = useParams()
 
     const query = {
         ...(connections.provider && {
@@ -112,6 +113,9 @@ export default function Resources({
         }),
         ...(connections.connectionGroup && {
             connectionGroup: connections.connectionGroup,
+        }),
+        ...(resourceId && {
+            resourceCollection: [resourceId],
         }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),

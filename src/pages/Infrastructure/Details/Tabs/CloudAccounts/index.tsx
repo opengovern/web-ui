@@ -1,5 +1,5 @@
 import { Tab, TabGroup, TabList } from '@tremor/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { Dayjs } from 'dayjs'
@@ -87,6 +87,7 @@ export default function CloudAccounts({
     connections,
 }: IConnections) {
     const navigate = useNavigate()
+    const { resourceId } = useParams()
 
     const setNotification = useSetAtom(notificationAtom)
     const isDemo = useAtomValue(isDemoAtom)
@@ -108,6 +109,9 @@ export default function CloudAccounts({
         }),
         ...(connections.connectionGroup && {
             connectionGroup: connections.connectionGroup,
+        }),
+        ...(resourceId && {
+            resourceCollection: [resourceId],
         }),
         ...(activeTimeRange.start && {
             startTime: activeTimeRange.start.unix(),

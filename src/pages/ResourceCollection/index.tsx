@@ -79,6 +79,7 @@ export default function ResourceCollection() {
 
     const { response, isLoading } =
         useInventoryApiV2MetadataResourceCollectionList()
+    console.log(response)
 
     return (
         <Layout currentPage="resource-collection">
@@ -102,13 +103,14 @@ export default function ResourceCollection() {
                 <Flex className="w-fit gap-3">
                     <TextInput
                         value={search}
+                        className="w-56"
                         onChange={(e) => setSearch(e.target.value)}
                         icon={MagnifyingGlassIcon}
                         placeholder="Search resources..."
                     />
-                    <Button icon={PlusIcon}>
+                    {/* <Button icon={PlusIcon}>
                         Create new resource collection
-                    </Button>
+                    </Button> */}
                 </Flex>
             </Table>
         </Layout>

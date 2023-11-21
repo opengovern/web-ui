@@ -152,15 +152,16 @@ export const activeColumns: IColumn<any, any>[] = [
                 | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
                 | undefined
             >
-        ) => (
-            <Flex flexDirection="col" alignItems="start">
-                <Text>{benchmarkChecks(param.data).failed}</Text>
-                <Text className="!text-sm text-gray-400">{`of ${numberDisplay(
-                    benchmarkChecks(param.data).total,
-                    0
-                )} checks failed`}</Text>
-            </Flex>
-        ),
+        ) =>
+            param.data && (
+                <Flex flexDirection="col" alignItems="start">
+                    <Text>{benchmarkChecks(param.data).failed}</Text>
+                    <Text className="!text-sm text-gray-400">{`of ${numberDisplay(
+                        benchmarkChecks(param.data).total,
+                        0
+                    )} checks failed`}</Text>
+                </Flex>
+            ),
     },
 ]
 
