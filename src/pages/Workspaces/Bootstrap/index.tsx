@@ -78,6 +78,48 @@ export default function Boostrap() {
         }
     }, [finishIsLoading])
 
+    const page = () => {
+        switch (step) {
+            case 1:
+                return (
+                    <ChooseYourPlan
+                        open={step === 1}
+                        tier={tier}
+                        setTier={setTier}
+                        onDone={() => setStep(2)}
+                        done={step > 1}
+                    />
+                )
+            case 2:
+                return (
+                    <WorkspaceInformation
+                        open={step === 2}
+                        name={name}
+                        setName={setName}
+                        isLoading={
+                            createWorkspaceIsExecuted &&
+                            createWorkspaceIsLoading
+                        }
+                        onDone={createWorkspaceSendNow}
+                        done={step > 2}
+                    />
+                )
+            case 3:
+                return (
+                    <OnboardConnection
+                        open={step === 3}
+                        workspaceName={name}
+                        doDone={finishSendNow}
+                        done={finishIsExecuted}
+                        isLoading={finishIsExecuted && finishIsLoading}
+                        onAWSClick={() => setNewAWSOpen(true)}
+                        onAzureClick={() => setNewAzureOpen(true)}
+                    />
+                )
+        }
+        return null
+    }
+
     return (
         <Layout currentPage="infrastructure" showSidebar={false} hfull>
             {newAWSOpen && (
@@ -100,35 +142,7 @@ export default function Boostrap() {
             <Flex justifyContent="center" flexDirection="row">
                 {step < 4 ? (
                     <div className="max-w-6xl w-2/3">
-                        <Card className="p-0">
-                            <ChooseYourPlan
-                                open={step === 1}
-                                tier={tier}
-                                setTier={setTier}
-                                onDone={() => setStep(2)}
-                                done={step > 1}
-                            />
-                            <WorkspaceInformation
-                                open={step === 2}
-                                name={name}
-                                setName={setName}
-                                isLoading={
-                                    createWorkspaceIsExecuted &&
-                                    createWorkspaceIsLoading
-                                }
-                                onDone={createWorkspaceSendNow}
-                                done={step > 2}
-                            />
-                            <OnboardConnection
-                                open={step === 3}
-                                workspaceName={name}
-                                doDone={finishSendNow}
-                                done={finishIsExecuted}
-                                isLoading={finishIsExecuted && finishIsLoading}
-                                onAWSClick={() => setNewAWSOpen(true)}
-                                onAzureClick={() => setNewAzureOpen(true)}
-                            />
-                        </Card>
+                        <Card className="p-0">{page()}</Card>
                     </div>
                 ) : (
                     <Status workspaceName={name} />
