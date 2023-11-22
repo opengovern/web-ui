@@ -37,6 +37,7 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
                 source_type: SourceType.CloudAWS,
                 config: {
                     assumeRoleName: data.roleName,
+                    assumeAdminRoleName: data.roleName,
                 },
             },
             {},
@@ -54,6 +55,7 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
             connectorType: SourceType.CloudAWS,
             config: {
                 assumeRoleName: data.roleName,
+                assumeAdminRoleName: data.roleName,
             },
         },
         {},

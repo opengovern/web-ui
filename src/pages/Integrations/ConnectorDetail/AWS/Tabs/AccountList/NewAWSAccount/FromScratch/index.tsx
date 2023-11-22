@@ -45,6 +45,7 @@ export default function FromScratch({ close }: ISteps) {
                     accessKey: '',
                     secretKey: '',
                     assumeRoleName: data.roleARN,
+                    assumeAdminRoleName: data.roleARN,
                     accountId: data.accountID,
                 },
             },
