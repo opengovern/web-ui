@@ -166,9 +166,10 @@ export default function Assignments({ id }: IAssignments) {
             loading={isLoading}
             rowData={
                 assignments?.connections?.sort(
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    (a, b) => b.status - a.status
+                    (a, b) =>
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        b.providerConnectionName - a.providerConnectionName
                 ) || []
             }
         >
