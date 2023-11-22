@@ -19,14 +19,14 @@ export default function InfrastructureDetails() {
     const tabs = useLocation().hash
     useEffect(() => {
         switch (tabs) {
-            case '#summary':
+            // case '#summary':
+            //     setSelectedTab(0)
+            //     break
+            case '#resources':
                 setSelectedTab(0)
                 break
             case '#cloud-accounts':
                 setSelectedTab(1)
-                break
-            case '#services':
-                setSelectedTab(2)
                 break
             default:
                 setSelectedTab(0)
@@ -49,19 +49,25 @@ export default function InfrastructureDetails() {
             />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
-                    <Tab onClick={() => navigate('#summary')}>Summary</Tab>
+                    {/* <Tab onClick={() => navigate('#summary')}>Summary</Tab> */}
+                    <Tab onClick={() => navigate('#resources')}>Resources</Tab>
                     <Tab onClick={() => navigate('#cloud-accounts')}>
                         Cloud accounts
                     </Tab>
-                    <Tab onClick={() => navigate('#services')}>Services</Tab>
                 </TabList>
                 <TabPanels>
-                    <TabPanel>
+                    {/* <TabPanel>
                         <Resources
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
                             resourceId={resourceId}
                             isSummary
+                        />
+                    </TabPanel> */}
+                    <TabPanel>
+                        <Resources
+                            activeTimeRange={activeTimeRange}
+                            connections={selectedConnections}
                         />
                     </TabPanel>
                     <TabPanel>
@@ -69,12 +75,6 @@ export default function InfrastructureDetails() {
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
                             resourceId={resourceId}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <Resources
-                            activeTimeRange={activeTimeRange}
-                            connections={selectedConnections}
                         />
                     </TabPanel>
                 </TabPanels>

@@ -39,7 +39,7 @@ export const rowGenerator = (data: any) => {
 
 export const defaultColumns: IColumn<any, any>[] = [
     {
-        headerName: 'Connectors',
+        headerName: 'Connector',
         field: 'connectors',
         type: 'string',
         filter: true,
@@ -80,7 +80,7 @@ export const defaultColumns: IColumn<any, any>[] = [
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
             params.data?.name &&
-            badgeDelta(params.data?.old_count, params.data?.count),
+            badgeDelta(params.data?.old_count, params.data?.count, true),
     },
 ]
 

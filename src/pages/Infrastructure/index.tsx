@@ -387,7 +387,7 @@ export default function Infrastructure() {
                                 oldChartData={pieData(composition).oldData}
                                 activeTime={activeTimeRange}
                                 loading={compositionLoading}
-                                seeMore="infrastructure-details#category"
+                                seeMore="infrastructure-details#resources"
                             />
                         </Col>
                         <Col numColSpan={1} numColSpanLg={3} className="h-full">

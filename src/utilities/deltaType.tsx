@@ -21,14 +21,27 @@ export const badgeTypeByDelta = (
 export const percentageByChange = (oldValue?: number, newValue?: number) => {
     const changes =
         (((newValue || 0) - (oldValue || 0)) / (oldValue || 0)) * 100.0
-    return Math.abs(changes).toFixed(1)
+    return Math.abs(changes).toFixed(2)
 }
 
-export const badgeDelta = (oldValue?: number, newValue?: number) => {
+export const deltaChange = (oldValue?: number, newValue?: number) => {
+    return Math.abs((newValue || 0) - (oldValue || 0))
+}
+
+export const badgeDelta = (
+    oldValue?: number,
+    newValue?: number,
+    isDelta?: boolean
+) => {
     return oldValue !== 0 ? (
         <ChangeDelta
             deltaType={badgeTypeByDelta(oldValue, newValue)}
-            change={percentageByChange(oldValue, newValue)}
+            change={
+                isDelta
+                    ? deltaChange(oldValue, newValue)
+                    : percentageByChange(oldValue, newValue)
+            }
+            isDelta={isDelta}
         />
     ) : (
         ''

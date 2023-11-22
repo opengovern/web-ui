@@ -1,8 +1,10 @@
 import { BadgeDelta, DeltaType, Flex, Text } from '@tremor/react'
+import { numberDisplay } from '../../utilities/numericDisplay'
 
 interface IChangeDelta {
     deltaType: DeltaType | undefined
-    change: string | undefined
+    change: string | number | undefined
+    isDelta?: boolean
 }
 
 const changeColor = (delta: DeltaType | undefined) => {
@@ -20,11 +22,18 @@ const changeColor = (delta: DeltaType | undefined) => {
     }
 }
 
-export default function ChangeDelta({ deltaType, change }: IChangeDelta) {
+export default function ChangeDelta({
+    deltaType,
+    change,
+    isDelta,
+}: IChangeDelta) {
     return (
-        <Flex className="w-fit min-w-fit gap-1">
+        <Flex className="w-fit min-w-fit gap-1 h-full">
             <BadgeDelta size="sm" deltaType={deltaType} />
-            <Text color={changeColor(deltaType)}>{`${change} %`}</Text>
+            <Text color={changeColor(deltaType)}>{`${numberDisplay(
+                change,
+                isDelta ? 0 : 2
+            )} ${isDelta ? '' : '%'}`}</Text>
         </Flex>
     )
 }
