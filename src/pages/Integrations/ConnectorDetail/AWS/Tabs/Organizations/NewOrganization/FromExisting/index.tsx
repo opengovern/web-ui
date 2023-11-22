@@ -16,7 +16,6 @@ interface ISteps {
 
 interface IData {
     roleName: string
-    externalID: string
 }
 
 export default function FromExisting({ onClose, accounts }: ISteps) {
@@ -24,7 +23,6 @@ export default function FromExisting({ onClose, accounts }: ISteps) {
     const [credentialID, setCredentialID] = useState<string>('')
     const [data, setData] = useState<IData>({
         roleName: '',
-        externalID: '',
     })
 
     const close = () => {
@@ -32,7 +30,6 @@ export default function FromExisting({ onClose, accounts }: ISteps) {
         setCredentialID('')
         setData({
             roleName: '',
-            externalID: '',
         })
         onClose()
     }
@@ -43,7 +40,6 @@ export default function FromExisting({ onClose, accounts }: ISteps) {
             {
                 config: {
                     assumeRoleName: data.roleName,
-                    externalId: data.externalID,
                 },
             },
             {},
@@ -76,10 +72,9 @@ export default function FromExisting({ onClose, accounts }: ISteps) {
             case 2:
                 return (
                     <SecondStep
-                        onNext={(roleName, externalID) => {
+                        onNext={(roleName) => {
                             setData({
                                 roleName,
-                                externalID,
                             })
                             setStepNum(3)
                         }}
@@ -95,7 +90,6 @@ export default function FromExisting({ onClose, accounts }: ISteps) {
                         }}
                         isLoading={isLoading && isExecuted}
                         error={getErrorMessage(error)}
-                        externalId={data.externalID}
                         roleName={data.roleName}
                     />
                 )

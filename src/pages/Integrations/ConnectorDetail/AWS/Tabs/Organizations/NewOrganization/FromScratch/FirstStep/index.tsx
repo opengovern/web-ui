@@ -1,4 +1,5 @@
 import { Bold, Button, Flex, Text } from '@tremor/react'
+import { Link } from 'react-router-dom'
 
 interface IStep {
     onNext: () => void
@@ -15,7 +16,12 @@ export default function FirstStep({ onNext, onPrevious }: IStep) {
                     CloudFormation Stacks and then click on Next:
                 </Text>
                 <Button variant="light">
-                    Refer to guide, by clicking this link
+                    <Link
+                        to="https://kaytu.io/docs/latest/onboard_aws/"
+                        target="_blank"
+                    >
+                        Refer to guide, by clicking this link
+                    </Link>
                 </Button>
             </Flex>
             <Flex flexDirection="row" justifyContent="end">

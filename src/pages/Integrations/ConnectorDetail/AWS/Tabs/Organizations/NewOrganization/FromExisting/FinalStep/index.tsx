@@ -4,7 +4,6 @@ interface IStep {
     onPrevious: () => void
     onSubmit: () => void
     roleName: string
-    externalId: string
     isLoading: boolean
     error: string
 }
@@ -13,7 +12,6 @@ export default function FinalStep({
     onPrevious,
     onSubmit,
     roleName,
-    externalId,
     isLoading,
     error,
 }: IStep) {
@@ -29,11 +27,6 @@ export default function FinalStep({
                 <Flex flexDirection="row">
                     <Text>Role Name</Text>
                     <Text className="text-black">{roleName}</Text>
-                </Flex>
-                <Divider />
-                <Flex flexDirection="row">
-                    <Text>External ID</Text>
-                    <Text className="text-black">{externalId}</Text>
                 </Flex>
                 <Flex flexDirection="row">
                     <Text>{error}</Text>

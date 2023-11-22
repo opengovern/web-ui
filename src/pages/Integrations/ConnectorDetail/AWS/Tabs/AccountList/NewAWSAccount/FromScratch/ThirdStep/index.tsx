@@ -2,8 +2,8 @@ import { Bold, Button, Divider, Flex, Text, TextInput } from '@tremor/react'
 import { useState } from 'react'
 
 interface IKeyData {
-    accessKey: string
-    secretKey: string
+    roleArn: string
+    accountID: string
 }
 
 interface IStep {
@@ -14,8 +14,8 @@ interface IStep {
 
 export default function ThirdStep({ error, onNext, onPrevious }: IStep) {
     const [data, setData] = useState<IKeyData>({
-        accessKey: '',
-        secretKey: '',
+        roleArn: '',
+        accountID: '',
     })
     return (
         <Flex flexDirection="col" className="h-full">
@@ -25,23 +25,23 @@ export default function ThirdStep({ error, onNext, onPrevious }: IStep) {
                 </Bold>
                 <Text className="mb-3">Provide the Keys the CLI generates</Text>
                 <Flex flexDirection="row">
-                    <Text>Access Key</Text>
+                    <Text>Role ARN</Text>
                     <TextInput
                         className="w-2/3"
-                        value={data.accessKey}
+                        value={data.roleArn}
                         onChange={(e) =>
-                            setData({ ...data, accessKey: e.target.value })
+                            setData({ ...data, roleArn: e.target.value })
                         }
                     />
                 </Flex>
                 <Divider />
                 <Flex flexDirection="row">
-                    <Text>Secret Key</Text>
+                    <Text>Account ID</Text>
                     <TextInput
                         className="w-2/3"
-                        value={data.secretKey}
+                        value={data.accountID}
                         onChange={(e) =>
-                            setData({ ...data, secretKey: e.target.value })
+                            setData({ ...data, accountID: e.target.value })
                         }
                     />
                 </Flex>
@@ -54,7 +54,7 @@ export default function ThirdStep({ error, onNext, onPrevious }: IStep) {
                     Back
                 </Button>
                 <Button
-                    disabled={data.accessKey === '' || data.secretKey === ''}
+                    disabled={data.roleArn === '' || data.accountID === ''}
                     onClick={() => onNext(data)}
                     className="ml-3"
                 >

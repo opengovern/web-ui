@@ -21,23 +21,13 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
     const currentWorkspace = useParams<{ ws: string }>().ws
     const [stepNum, setStepNum] = useState(1)
     const [data, setData] = useState({
-        accessKey: '',
-        secretKey: '',
         roleName: '',
-        adminRoleName: '',
-        externalId: '',
-        policyName: '',
     })
 
     const close = () => {
         setStepNum(1)
         setData({
-            accessKey: '',
-            secretKey: '',
             roleName: '',
-            adminRoleName: '',
-            externalId: '',
-            policyName: '',
         })
         onClose()
     }
@@ -47,12 +37,7 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
             {
                 source_type: SourceType.CloudAWS,
                 config: {
-                    accessKey: data.accessKey,
-                    secretKey: data.secretKey,
                     assumeRoleName: data.roleName,
-                    assumeAdminRoleName: data.adminRoleName,
-                    externalId: data.externalId,
-                    assumeRolePolicyName: data.policyName,
                 },
             },
             {},
@@ -69,12 +54,7 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
         {
             connectorType: SourceType.CloudAWS,
             config: {
-                accessKey: data.accessKey,
-                secretKey: data.secretKey,
                 assumeRoleName: data.roleName,
-                assumeAdminRoleName: data.adminRoleName,
-                externalId: data.externalId,
-                assumeRolePolicyName: data.policyName,
             },
         },
         {},
@@ -105,21 +85,9 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
                 return (
                     <ThirdStep
                         onPrevious={() => setStepNum(2)}
-                        onNext={(
-                            accessKey,
-                            secretKey,
-                            roleName,
-                            adminRoleName,
-                            externalId,
-                            policyName
-                        ) => {
+                        onNext={(roleName) => {
                             setData({
-                                accessKey,
-                                secretKey,
                                 roleName,
-                                adminRoleName,
-                                externalId,
-                                policyName,
                             })
                             setStepNum(4)
                         }}
@@ -128,10 +96,7 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
             case 4:
                 return (
                     <FinalStep
-                        accessKeyParam={data.accessKey}
-                        secretKey={data.secretKey}
                         roleName={data.roleName}
-                        externalId={data.externalId}
                         onPrevious={() => setStepNum(3)}
                         error={getErrorMessage(bootstrapMode ? bcError : error)}
                         isLoading={
