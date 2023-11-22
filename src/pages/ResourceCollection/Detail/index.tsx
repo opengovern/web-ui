@@ -24,7 +24,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import {
     useInventoryApiV2AnalyticsTrendList,
-    useInventoryApiV2MetadataResourceCollectionDetail,
+    useInventoryApiV2ResourceCollectionDetail,
     useInventoryApiV2ResourceCollectionLandscapeDetail,
 } from '../../../api/inventory.gen'
 import Header from '../../../components/Header'
@@ -53,7 +53,7 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
-import { generateVisualMap, resourceTrendChart } from '../../Infrastructure'
+import { resourceTrendChart } from '../../Infrastructure'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Landscape from '../../../components/Landscape'
 import Tag from '../../../components/Tag'
@@ -147,7 +147,7 @@ export default function ResourceCollectionDetail() {
     }
 
     const { response: detail, isLoading: detailsLoading } =
-        useInventoryApiV2MetadataResourceCollectionDetail(resourceId || '')
+        useInventoryApiV2ResourceCollectionDetail(resourceId || '')
     const { response: complianceKPI, isLoading: complianceKPILoading } =
         useComplianceApiV1BenchmarksSummaryList({
             resourceCollection: [resourceId || ''],
@@ -197,22 +197,26 @@ export default function ResourceCollectionDetail() {
                                 <Spinner />
                             ) : (
                                 <List>
-                                    <ListItem>
+                                    {/* <ListItem>
                                         <Text>Type</Text>
                                         <Text className="text-gray-800">?</Text>
-                                    </ListItem>
+                                    </ListItem> */}
                                     <ListItem>
                                         <Text>Resources</Text>
-                                        <Text className="text-gray-800">?</Text>
+                                        <Text className="text-gray-800">
+                                            {detail?.resource_count}
+                                        </Text>
                                     </ListItem>
                                     <ListItem>
-                                        <Text>Providers</Text>
-                                        <Text className="text-gray-800">?</Text>
+                                        <Text>Connector</Text>
+                                        <Text className="text-gray-800">
+                                            {detail?.connectors}
+                                        </Text>
                                     </ListItem>
-                                    <ListItem>
+                                    {/* <ListItem>
                                         <Text>Services used</Text>
-                                        <Text className="text-gray-800">?</Text>
-                                    </ListItem>
+                                        <Text className="text-gray-800">{detail?.resource_count}</Text>
+                                    </ListItem> */}
                                     <ListItem>
                                         <Text>Status</Text>
                                         <Text className="text-gray-800">
@@ -223,7 +227,7 @@ export default function ResourceCollectionDetail() {
                                         <Text>Last evaluation</Text>
                                         <Text className="text-gray-800">
                                             {dateTimeDisplay(
-                                                detail?.created_at
+                                                detail?.last_evaluated_at
                                             )}
                                         </Text>
                                     </ListItem>

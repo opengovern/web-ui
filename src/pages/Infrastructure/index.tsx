@@ -264,7 +264,6 @@ export default function Infrastructure() {
             pageNumber: 1,
             sortBy: 'count',
         })
-    console.log(servicesResponse)
 
     return (
         <Layout currentPage="infrastructure">

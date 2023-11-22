@@ -6,7 +6,10 @@ import { ICellRendererParams } from 'ag-grid-community'
 import Layout from '../../components/Layout'
 import Header from '../../components/Header'
 import Table, { IColumn } from '../../components/Table'
-import { useInventoryApiV2MetadataResourceCollectionList } from '../../api/inventory.gen'
+import {
+    useInventoryApiV2MetadataResourceCollectionList,
+    useInventoryApiV2ResourceCollectionList,
+} from '../../api/inventory.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary } from '../../api/api'
 import Tag from '../../components/Tag'
 
@@ -30,9 +33,9 @@ const resourceCollectionColumns: IColumn<any, any>[] = [
         flex: 0.5,
     },
     {
-        field: '',
+        field: 'resource_count',
         headerName: 'Resource count',
-        type: 'string',
+        type: 'number',
         sortable: true,
         filter: true,
         resizable: true,
@@ -77,8 +80,7 @@ export default function ResourceCollection() {
     const navigate = useNavigate()
     const [search, setSearch] = useState('')
 
-    const { response, isLoading } =
-        useInventoryApiV2MetadataResourceCollectionList()
+    const { response, isLoading } = useInventoryApiV2ResourceCollectionList()
 
     return (
         <Layout currentPage="resource-collection">
