@@ -123,7 +123,7 @@ const columns = () => {
             },
         },
         {
-            field: 'failure_reason',
+            field: 'failureReason',
             headerName: 'Failure Reason',
             type: 'string',
             sortable: true,
