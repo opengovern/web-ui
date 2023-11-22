@@ -996,10 +996,13 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiJob {
     connectionID?: string
     connectionProviderID?: string
     connectionProviderName?: string
+    createdAt?: string
+    failureReason?: string
     id?: number
     status?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus
     title?: string
     type?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobType
+    updatedAt?: string
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus {
@@ -1912,6 +1915,8 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier {
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
     /** @example "kaytu" */
+    aws_unique_id?: string
+    /** @example "kaytu" */
     aws_user_arn?: string
     /** @example "2023-05-17T14:39:02.707659Z" */
     createdAt?: string
@@ -1962,6 +1967,8 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage 
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
+    /** @example "kaytu" */
+    aws_unique_id?: string
     /** @example "kaytu" */
     aws_user_arn?: string
     /** @example "2023-05-17T14:39:02.707659Z" */
@@ -5039,18 +5046,25 @@ export class Api<
             }),
 
         /**
-         * @description Triggers a describe job to run immediately for the given connection
+         * No description
          *
-         * @tags describe
+         * @tags scheduler
          * @name ApiV1JobsList
-         * @summary Triggers describer
+         * @summary Lists all jobs
          * @request GET:/schedule/api/v1/jobs
          * @secure
          */
-        apiV1JobsList: (params: RequestParams = {}) =>
+        apiV1JobsList: (
+            query?: {
+                /** Limit */
+                limit?: number
+            },
+            params: RequestParams = {}
+        ) =>
             this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiJob[], any>({
                 path: `/schedule/api/v1/jobs`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 format: 'json',
                 ...params,

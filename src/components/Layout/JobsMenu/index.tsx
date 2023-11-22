@@ -122,6 +122,15 @@ const columns = () => {
                 return <Badge color={jobColor}>{jobStatus}</Badge>
             },
         },
+        {
+            field: 'failure_reason',
+            headerName: 'Failure Reason',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            hide: true,
+        },
     ]
     return temp
 }

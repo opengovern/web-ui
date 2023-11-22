@@ -42,7 +42,7 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
                 return `w-${finishedJobs}/${totalJobs}`
             }
         }
-        return ''
+        return 'w-0'
     }
 
     return (
@@ -50,7 +50,7 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
             {!first && (
                 <Flex className="relative" aria-hidden="true">
                     <div
-                        className={`h-4 w-0.5 ml-4 ${
+                        className={`h-6 w-0.5 ml-3.5 ${
                             nodeRunning || nodeDone
                                 ? 'bg-kaytu-500'
                                 : 'bg-gray-200'
@@ -80,21 +80,24 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
                         />
                     )}
                 </Flex>
-                <Flex className="pl-3" alignItems="start">
-                    <Text className="font-medium text-sm text-gray-800">
-                        {text}
-                    </Text>
-                    <Text className="font-medium text-sm text-gray-500">
-                        {finishedJobs === undefined || totalJobs === undefined
-                            ? ''
-                            : ` (${finishedJobs} of ${totalJobs} completed)`}
-                    </Text>
+                <Flex flexDirection="col" className="pl-3">
+                    <Flex alignItems="start">
+                        <Text className="font-medium text-sm text-gray-800">
+                            {text}
+                        </Text>
+                        <Text className="font-medium text-sm text-gray-500">
+                            {finishedJobs === undefined ||
+                            totalJobs === undefined
+                                ? ''
+                                : ` (${finishedJobs} of ${totalJobs} completed)`}
+                        </Text>
+                    </Flex>
+                    <div className="w-full h-1 mt-2 bg-gray-300 rounded-xl">
+                        <div
+                            className={`${progressClass()} h-1 bg-gradient-to-r from-kaytu-400 to-kaytu-800 rounded-xl`}
+                        />
+                    </div>
                 </Flex>
-                <div className="w-full bg-gray-300 rounded-xl">
-                    <div
-                        className={`${progressClass()} bg-blue-600 rounded-xl`}
-                    />
-                </div>
             </Flex>
         </>
     )

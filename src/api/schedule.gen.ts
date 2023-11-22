@@ -475,6 +475,9 @@ interface IuseScheduleApiV1JobsListState {
 }
 
 export const useScheduleApiV1JobsList = (
+    query?: {
+        limit?: number
+    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -488,7 +491,7 @@ export const useScheduleApiV1JobsList = (
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -506,7 +509,7 @@ export const useScheduleApiV1JobsList = (
             }
 
             api.schedule
-                .apiV1JobsList(params)
+                .apiV1JobsList(query, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -535,8 +538,8 @@ export const useScheduleApiV1JobsList = (
         }
     }
 
-    if (JSON.stringify([params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {

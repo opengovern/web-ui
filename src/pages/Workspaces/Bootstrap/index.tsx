@@ -142,7 +142,7 @@ export default function Boostrap() {
                 />
             )}
             <Flex justifyContent="center" flexDirection="row">
-                {step < 4 ? (
+                {step < 3 ? (
                     <div className="max-w-6xl w-2/3">
                         <Card className="p-0">{page()}</Card>
                     </div>
