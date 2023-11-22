@@ -429,18 +429,18 @@ export default function ResourceCollectionDetail() {
                                 }
                                 chartType={selectedChart}
                                 loading={resourceTrendLoading}
-                                visualMap={
-                                    generateVisualMap(
-                                        resourceTrendChart(resourceTrend).flag,
-                                        resourceTrendChart(resourceTrend).label
-                                    ).visualMap
-                                }
-                                markArea={
-                                    generateVisualMap(
-                                        resourceTrendChart(resourceTrend).flag,
-                                        resourceTrendChart(resourceTrend).label
-                                    ).markArea
-                                }
+                                // visualMap={
+                                //     generateVisualMap(
+                                //         resourceTrendChart(resourceTrend).flag,
+                                //         resourceTrendChart(resourceTrend).label
+                                //     ).visualMap
+                                // }
+                                // markArea={
+                                //     generateVisualMap(
+                                //         resourceTrendChart(resourceTrend).flag,
+                                //         resourceTrendChart(resourceTrend).label
+                                //     ).markArea
+                                // }
                                 onClick={(p) => setSelectedDatapoint(p)}
                             />
                         </Card>

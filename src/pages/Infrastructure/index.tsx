@@ -237,13 +237,6 @@ export default function Infrastructure() {
         endTime: activeTimeRange.end.unix(),
     }
 
-    const { response: accounts, isLoading: accountIsLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
-            ...query,
-            pageSize: 0,
-            pageNumber: 1,
-            needCost: false,
-        })
     const { response: resourceTrend, isLoading: resourceTrendLoading } =
         useInventoryApiV2AnalyticsTrendList({
             ...query,
@@ -271,6 +264,7 @@ export default function Infrastructure() {
             pageNumber: 1,
             sortBy: 'count',
         })
+    console.log(servicesResponse)
 
     return (
         <Layout currentPage="infrastructure">
@@ -284,18 +278,25 @@ export default function Infrastructure() {
                 <>
                     <Card className="mb-4">
                         <Grid numItems={6} className="gap-4">
-                            <Col numColSpan={1}>
-                                <SummaryCard
-                                    title="Accounts"
-                                    metric={numericDisplay(
-                                        accounts?.connectionCount
-                                    )}
-                                    url="infrastructure-details#cloud-accounts"
-                                    loading={accountIsLoading}
-                                    border={false}
-                                />
-                            </Col>
-                            <Col numColSpan={3} />
+                            <SummaryCard
+                                title="Resources"
+                                metric={numericDisplay(
+                                    servicesResponse?.total_metrics
+                                )}
+                                url="infrastructure-details#resources"
+                                loading={servicesResponseLoading}
+                                border={false}
+                            />
+                            <SummaryCard
+                                title="Accounts"
+                                metric={numericDisplay(
+                                    accountsResponse?.totalDiscoveredCount
+                                )}
+                                url="infrastructure-details#cloud-accounts"
+                                loading={accountsResponseLoading}
+                                border={false}
+                            />
+                            <Col numColSpan={2} />
                             <Col numColSpan={2}>
                                 <Flex justifyContent="end" className="gap-4">
                                     <Select
@@ -364,18 +365,18 @@ export default function Infrastructure() {
                             chartData={resourceTrendChart(resourceTrend).data}
                             chartType={selectedChart}
                             loading={resourceTrendLoading}
-                            visualMap={
-                                generateVisualMap(
-                                    resourceTrendChart(resourceTrend).flag,
-                                    resourceTrendChart(resourceTrend).label
-                                ).visualMap
-                            }
-                            markArea={
-                                generateVisualMap(
-                                    resourceTrendChart(resourceTrend).flag,
-                                    resourceTrendChart(resourceTrend).label
-                                ).markArea
-                            }
+                            // visualMap={
+                            //     generateVisualMap(
+                            //         resourceTrendChart(resourceTrend).flag,
+                            //         resourceTrendChart(resourceTrend).label
+                            //     ).visualMap
+                            // }
+                            // markArea={
+                            //     generateVisualMap(
+                            //         resourceTrendChart(resourceTrend).flag,
+                            //         resourceTrendChart(resourceTrend).label
+                            //     ).markArea
+                            // }
                             onClick={(p) => setSelectedDatapoint(p)}
                         />
                     </Card>
@@ -386,7 +387,7 @@ export default function Infrastructure() {
                                 oldChartData={pieData(composition).oldData}
                                 activeTime={activeTimeRange}
                                 loading={compositionLoading}
-                                seeMore="infrastructure-details#category"
+                                seeMore="infrastructure-details#resources"
                             />
                         </Col>
                         <Col numColSpan={1} numColSpanLg={3} className="h-full">

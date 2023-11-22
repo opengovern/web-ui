@@ -39,7 +39,7 @@ export const rowGenerator = (data: any) => {
 
 export const defaultColumns: IColumn<any, any>[] = [
     {
-        headerName: 'Connectors',
+        headerName: 'Connector',
         field: 'connectors',
         type: 'string',
         filter: true,
@@ -76,11 +76,12 @@ export const defaultColumns: IColumn<any, any>[] = [
     {
         headerName: 'Change (Δ)',
         type: 'string',
+        hide: true,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
             params.data?.name &&
-            badgeDelta(params.data?.old_count, params.data?.count),
+            badgeDelta(params.data?.old_count, params.data?.count, true),
     },
 ]
 
@@ -131,7 +132,6 @@ export default function Resources({
         useInventoryApiV2AnalyticsMetricList(query)
 
     const columns: IColumn<any, any>[] = [
-        ...defaultColumns,
         {
             field: 'category',
             enableRowGroup: true,
@@ -143,6 +143,7 @@ export default function Resources({
             hide: isSummary,
             rowGroup: isSummary,
         },
+        ...defaultColumns,
     ]
 
     return (
