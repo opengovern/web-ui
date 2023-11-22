@@ -68,6 +68,7 @@ export default function InfrastructureDetails() {
                         <Resources
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
+                            resourceId={resourceId}
                         />
                     </TabPanel>
                     <TabPanel>
