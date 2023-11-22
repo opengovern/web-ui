@@ -76,6 +76,7 @@ export const defaultColumns: IColumn<any, any>[] = [
     {
         headerName: 'Change (Δ)',
         type: 'string',
+        hide: true,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
@@ -131,7 +132,6 @@ export default function Resources({
         useInventoryApiV2AnalyticsMetricList(query)
 
     const columns: IColumn<any, any>[] = [
-        ...defaultColumns,
         {
             field: 'category',
             enableRowGroup: true,
@@ -143,6 +143,7 @@ export default function Resources({
             hide: isSummary,
             rowGroup: isSummary,
         },
+        ...defaultColumns,
     ]
 
     return (
