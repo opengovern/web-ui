@@ -63,7 +63,7 @@ export default function FirstStep({ onNext, onPrevious }: IStep) {
                                 >
                                     <Flex flexDirection="row">
                                         <Text className="px-1.5 text-gray-800">
-                                            kaytu bootstrap aws
+                                            $ kaytu bootstrap aws
                                         </Text>
                                         <Flex
                                             flexDirection="col"
