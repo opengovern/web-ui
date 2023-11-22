@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
-import ThirdStep from './ThirdStep'
 import FinalStep from './FinalStep'
 import Steps from '../../../../../../../../components/Steps'
 import { useOnboardApiV1CredentialCreate } from '../../../../../../../../api/onboard.gen'
@@ -78,26 +77,19 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
                 return (
                     <SecondStep
                         onPrevious={() => setStepNum(1)}
-                        onNext={() => setStepNum(3)}
-                    />
-                )
-            case 3:
-                return (
-                    <ThirdStep
-                        onPrevious={() => setStepNum(2)}
                         onNext={(roleName) => {
                             setData({
                                 roleName,
                             })
-                            setStepNum(4)
+                            setStepNum(3)
                         }}
                     />
                 )
-            case 4:
+            case 3:
                 return (
                     <FinalStep
                         roleName={data.roleName}
-                        onPrevious={() => setStepNum(3)}
+                        onPrevious={() => setStepNum(2)}
                         error={getErrorMessage(bootstrapMode ? bcError : error)}
                         isLoading={
                             (isExecuted && isLoading) ||
@@ -125,7 +117,7 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
             className="h-full"
         >
             <Text className="my-6">Organization from new AWS account</Text>
-            <Steps steps={4} currentStep={stepNum} />
+            <Steps steps={3} currentStep={stepNum} />
             {showStep(stepNum)}
         </Flex>
     )
