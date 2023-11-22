@@ -164,7 +164,7 @@ const topAccounts = (
                 id: input.connections[i].providerConnectionID,
             })
         }
-        top.total = input.totalDiscoveredCount
+        top.total = input.totalOnboardedCount
     }
     return top
 }
@@ -279,23 +279,28 @@ export default function Infrastructure() {
                     <Card className="mb-4">
                         <Grid numItems={6} className="gap-4">
                             <SummaryCard
-                                title="Resources"
-                                metric={numericDisplay(
-                                    servicesResponse?.total_metrics
-                                )}
-                                url="infrastructure-details#resources"
-                                loading={servicesResponseLoading}
-                                border={false}
-                            />
-                            <SummaryCard
                                 title="Accounts"
                                 metric={numericDisplay(
+                                    accountsResponse?.totalOnboardedCount
+                                )}
+                                metricPrev={numericDisplay(
                                     accountsResponse?.totalDiscoveredCount
                                 )}
                                 url="infrastructure-details#cloud-accounts"
                                 loading={accountsResponseLoading}
                                 border={false}
                             />
+                            <Flex className="border-l border-l-gray-200 h-full pl-3">
+                                <SummaryCard
+                                    title="Resources"
+                                    metric={numericDisplay(
+                                        servicesResponse?.total_metrics
+                                    )}
+                                    url="infrastructure-details#resources"
+                                    loading={servicesResponseLoading}
+                                    border={false}
+                                />
+                            </Flex>
                             <Col numColSpan={2} />
                             <Col numColSpan={2}>
                                 <Flex justifyContent="end" className="gap-4">
