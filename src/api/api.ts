@@ -968,6 +968,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSumma
         high?: number
         low?: number
         medium?: number
+        none?: number
+        passed?: number
     }
 }
 
@@ -4211,8 +4213,8 @@ export class Api<
                 startTime?: number
                 /** timestamp for end in epoch seconds */
                 endTime?: number
-                /** maximum number of datapoints to return, default is 30 */
-                datapointCount?: string
+                /** Granularity of the table, default is daily */
+                granularity?: 'monthly' | 'daily' | 'yearly'
             },
             params: RequestParams = {}
         ) =>

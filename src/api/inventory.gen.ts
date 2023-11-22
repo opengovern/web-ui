@@ -1530,7 +1530,7 @@ export const useInventoryApiV2AnalyticsTrendList = (
 
         endTime?: number
 
-        datapointCount?: string
+        granularity?: 'monthly' | 'daily' | 'yearly'
     },
     params: RequestParams = {},
     autoExecute = true

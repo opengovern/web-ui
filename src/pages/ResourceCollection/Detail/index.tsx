@@ -24,7 +24,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import {
     useInventoryApiV2AnalyticsTrendList,
-    useInventoryApiV2MetadataResourceCollectionDetail,
+    useInventoryApiV2ResourceCollectionDetail,
     useInventoryApiV2ResourceCollectionLandscapeDetail,
 } from '../../../api/inventory.gen'
 import Header from '../../../components/Header'
@@ -53,7 +53,7 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
-import { generateVisualMap, resourceTrendChart } from '../../Infrastructure'
+import { resourceTrendChart } from '../../Infrastructure'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Landscape from '../../../components/Landscape'
 import Tag from '../../../components/Tag'
@@ -147,7 +147,7 @@ export default function ResourceCollectionDetail() {
     }
 
     const { response: detail, isLoading: detailsLoading } =
-        useInventoryApiV2MetadataResourceCollectionDetail(resourceId || '')
+        useInventoryApiV2ResourceCollectionDetail(resourceId || '')
     const { response: complianceKPI, isLoading: complianceKPILoading } =
         useComplianceApiV1BenchmarksSummaryList({
             resourceCollection: [resourceId || ''],
@@ -189,64 +189,63 @@ export default function ResourceCollectionDetail() {
                         alignItems="start"
                         className="h-full"
                     >
-                        <>
-                            <Title className="font-semibold mb-2">
-                                Summary
-                            </Title>
-                            {detailsLoading ? (
-                                <Spinner />
-                            ) : (
-                                <List>
-                                    <ListItem>
+                        {detailsLoading ? (
+                            <Spinner />
+                        ) : (
+                            <List>
+                                {/* <ListItem>
                                         <Text>Type</Text>
                                         <Text className="text-gray-800">?</Text>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Text>Resources</Text>
-                                        <Text className="text-gray-800">?</Text>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Text>Providers</Text>
-                                        <Text className="text-gray-800">?</Text>
-                                    </ListItem>
-                                    <ListItem>
+                                    </ListItem> */}
+                                <ListItem>
+                                    <Text>Resources</Text>
+                                    <Text className="text-gray-800">
+                                        {detail?.resource_count}
+                                    </Text>
+                                </ListItem>
+                                <ListItem>
+                                    <Text>Connector</Text>
+                                    <Text className="text-gray-800">
+                                        {detail?.connectors}
+                                    </Text>
+                                </ListItem>
+                                {/* <ListItem>
                                         <Text>Services used</Text>
-                                        <Text className="text-gray-800">?</Text>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Text>Status</Text>
-                                        <Text className="text-gray-800">
-                                            {detail?.status}
-                                        </Text>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Text>Last evaluation</Text>
-                                        <Text className="text-gray-800">
-                                            {dateTimeDisplay(
-                                                detail?.created_at
-                                            )}
-                                        </Text>
-                                    </ListItem>
-                                    <ListItem>
-                                        <Text>Tags</Text>
-                                        <Flex
-                                            justifyContent="end"
-                                            className="w-2/3 flex-wrap gap-1"
-                                        >
-                                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                            {/* @ts-ignore */}
-                                            {Object.entries(detail?.tags).map(
-                                                ([name, value]) => (
-                                                    <Tag
-                                                        text={`${name}: ${value}`}
-                                                    />
-                                                )
-                                            )}
-                                        </Flex>
-                                    </ListItem>
-                                </List>
-                            )}
-                        </>
+                                        <Text className="text-gray-800">{detail?.resource_count}</Text>
+                                    </ListItem> */}
+                                <ListItem>
+                                    <Text>Status</Text>
+                                    <Text className="text-gray-800">
+                                        {detail?.status}
+                                    </Text>
+                                </ListItem>
+                                <ListItem>
+                                    <Text>Last evaluation</Text>
+                                    <Text className="text-gray-800">
+                                        {dateTimeDisplay(
+                                            detail?.last_evaluated_at
+                                        )}
+                                    </Text>
+                                </ListItem>
+                                <ListItem>
+                                    <Text>Tags</Text>
+                                    <Flex
+                                        justifyContent="end"
+                                        className="w-2/3 flex-wrap gap-1"
+                                    >
+                                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                                        {/* @ts-ignore */}
+                                        {Object.entries(detail?.tags).map(
+                                            ([name, value]) => (
+                                                <Tag
+                                                    text={`${name}: ${value}`}
+                                                />
+                                            )
+                                        )}
+                                    </Flex>
+                                </ListItem>
+                            </List>
+                        )}
                         <Flex justifyContent="end">
                             <Button
                                 variant="light"
@@ -267,9 +266,6 @@ export default function ResourceCollectionDetail() {
                     </Flex>
                 </Card>
                 <Card className="h-full">
-                    <Title className="font-semibold mb-2">
-                        Key performance indicator
-                    </Title>
                     <TabGroup className="h-[300px]">
                         <TabList>
                             <Tab>Compliance</Tab>
