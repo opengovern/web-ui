@@ -1,6 +1,7 @@
 import { Dayjs } from 'dayjs'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import {
+    Button,
     Callout,
     Card,
     Col,
@@ -13,13 +14,22 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
+import clipboardCopy from 'clipboard-copy'
+import { highlight, languages } from 'prismjs'
+import Editor from 'react-simple-code-editor'
 import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsMetricsDetail,
     useInventoryApiV2AnalyticsTrendList,
 } from '../../../../api/inventory.gen'
-import { filterAtom, isDemoAtom } from '../../../../store'
+import {
+    filterAtom,
+    isDemoAtom,
+    notificationAtom,
+    queryAtom,
+} from '../../../../store'
 import Header from '../../../../components/Header'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
@@ -33,6 +43,7 @@ import Table from '../../../../components/Table'
 import { getTable } from '../../../Finder'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { dateDisplay } from '../../../../utilities/dateDisplay'
+import Modal from '../../../../components/Modal'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -46,8 +57,11 @@ export default function SingleMetric({
     resourceId,
 }: ISingle) {
     const selectedConnections = useAtomValue(filterAtom)
-    const { id, metric } = useParams()
+    const { ws, id, metric } = useParams()
     const isDemo = useAtomValue(isDemoAtom)
+    const [modalData, setModalData] = useState('')
+    const setNotification = useSetAtom(notificationAtom)
+    const setQuery = useSetAtom(queryAtom)
 
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
@@ -133,7 +147,65 @@ export default function SingleMetric({
                         <Text>{metricDetail?.id}</Text>
                     </Flex>
                 </Flex>
+                <Button
+                    variant="secondary"
+                    onClick={() =>
+                        setModalData(
+                            metricDetail?.query?.replace(
+                                '$IS_ALL_CONNECTIONS_QUERY',
+                                'true'
+                            ) || ''
+                        )
+                    }
+                >
+                    See query
+                </Button>
             </Flex>
+            <Modal open={!!modalData.length} onClose={() => setModalData('')}>
+                <Title className="font-semibold">Metric query</Title>
+                <Card className="my-4">
+                    <Editor
+                        onValueChange={() => console.log('')}
+                        highlight={(text) =>
+                            highlight(text, languages.sql, 'sql')
+                        }
+                        value={modalData}
+                        className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
+                        style={{
+                            minHeight: '200px',
+                        }}
+                        placeholder="-- write your SQL query here"
+                    />
+                </Card>
+                <Flex>
+                    <Button
+                        variant="light"
+                        icon={DocumentDuplicateIcon}
+                        iconPosition="left"
+                        onClick={() =>
+                            clipboardCopy(modalData).then(() =>
+                                setNotification({
+                                    text: 'Query copied to clipboard',
+                                    type: 'info',
+                                })
+                            )
+                        }
+                    >
+                        Copy
+                    </Button>
+                    <Flex className="w-fit gap-4">
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                setQuery(modalData)
+                            }}
+                        >
+                            <Link to={`/${ws}/finder`}>Open in finder</Link>
+                        </Button>
+                        <Button onClick={() => setModalData('')}>Close</Button>
+                    </Flex>
+                </Flex>
+            </Modal>
             <Card className="mb-4">
                 <Grid numItems={4} className="gap-4 mb-4">
                     <SummaryCard
@@ -146,15 +218,15 @@ export default function SingleMetric({
                         loading={resourceTrendLoading || metricDetailLoading}
                         border={false}
                     />
-                    <div className="pl-4 border-l border-l-gray-200">
+                    {/* <div className="pl-4 border-l border-l-gray-200">
                         <SummaryCard
                             border={false}
                             title="Evaluated"
                             // loading={detailLoading}
                             metric={10}
                         />
-                    </div>
-                    <Col />
+                    </div> */}
+                    <Col numColSpan={2} />
                     <Col>
                         <Flex justifyContent="end" className="gap-4">
                             <TabGroup
@@ -203,45 +275,43 @@ export default function SingleMetric({
                 <Chart
                     labels={resourceTrendChart(resourceTrend).label}
                     chartData={resourceTrendChart(resourceTrend).data}
-                    visualMap={
-                        generateVisualMap(
-                            resourceTrendChart(resourceTrend).flag,
-                            resourceTrendChart(resourceTrend).label
-                        ).visualMap
-                    }
-                    markArea={
-                        generateVisualMap(
-                            resourceTrendChart(resourceTrend).flag,
-                            resourceTrendChart(resourceTrend).label
-                        ).markArea
-                    }
+                    // visualMap={
+                    //     generateVisualMap(
+                    //         resourceTrendChart(resourceTrend).flag,
+                    //         resourceTrendChart(resourceTrend).label
+                    //     ).visualMap
+                    // }
+                    // markArea={
+                    //     generateVisualMap(
+                    //         resourceTrendChart(resourceTrend).flag,
+                    //         resourceTrendChart(resourceTrend).label
+                    //     ).markArea
+                    // }
                     chartType={selectedChart}
                     loading={resourceTrendLoading}
                     onClick={(p) => setSelectedDatapoint(p)}
                 />
             </Card>
-            <Card>
-                <Table
-                    title="Results"
-                    id="metric_table"
-                    loading={metricDetailLoading || isLoading}
-                    columns={
-                        getTable(
-                            queryResponse?.headers,
-                            queryResponse?.result,
-                            isDemo
-                        ).columns
-                    }
-                    rowData={
-                        getTable(
-                            queryResponse?.headers,
-                            queryResponse?.result,
-                            isDemo
-                        ).rows
-                    }
-                    downloadable
-                />
-            </Card>
+            <Table
+                title="Results"
+                id="metric_table"
+                loading={metricDetailLoading || isLoading}
+                columns={
+                    getTable(
+                        queryResponse?.headers,
+                        queryResponse?.result,
+                        isDemo
+                    ).columns
+                }
+                rowData={
+                    getTable(
+                        queryResponse?.headers,
+                        queryResponse?.result,
+                        isDemo
+                    ).rows
+                }
+                downloadable
+            />
         </>
     )
 }
