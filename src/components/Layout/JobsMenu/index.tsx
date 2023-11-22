@@ -8,6 +8,7 @@ import {
     DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline'
 import {
+    Badge,
     BadgeDelta,
     Button,
     Card,
@@ -21,7 +22,10 @@ import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import DrawerPanel from '../../DrawerPanel'
 import Table, { IColumn } from '../../Table'
 import { useScheduleApiV1JobsList } from '../../../api/schedule.gen'
-import { GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus } from '../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgDescribeApiJob,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus,
+} from '../../../api/api'
 
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -35,7 +39,7 @@ const columns = () => {
             hide: true,
         },
         {
-            field: 'job_type',
+            field: 'type',
             headerName: 'Job Type',
             type: 'string',
             sortable: true,
@@ -43,7 +47,7 @@ const columns = () => {
             resizable: true,
         },
         {
-            field: 'connection_id',
+            field: 'connectionID',
             headerName: 'Kaytu Connection ID',
             type: 'string',
             sortable: true,
@@ -52,7 +56,7 @@ const columns = () => {
             hide: true,
         },
         {
-            field: 'connection_provider_id',
+            field: 'connectionProviderID',
             headerName: 'Account ID',
             type: 'string',
             sortable: true,
@@ -61,7 +65,7 @@ const columns = () => {
             hide: true,
         },
         {
-            field: 'connection_provider_name',
+            field: 'connectionProviderName',
             headerName: 'Account Name',
             type: 'string',
             sortable: true,
@@ -83,9 +87,40 @@ const columns = () => {
             sortable: true,
             filter: true,
             resizable: true,
-            // valueFormatter: (param: ValueFormatterParams) => {
-            //     return `${param.value ? Number(param.value).toFixed(2) : '0'}%`
-            // },
+            cellRenderer: (
+                param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgDescribeApiJob>
+            ) => {
+                let jobStatus = ''
+                let jobColor: Color = 'gray'
+                switch (param.data?.status) {
+                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusCreated:
+                        jobStatus = 'created'
+                        break
+                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusQueued:
+                        jobStatus = 'queued'
+                        break
+                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusInProgress:
+                        jobStatus = 'in progress'
+                        jobColor = 'orange'
+                        break
+                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusSuccessful:
+                        jobStatus = 'succeeded'
+                        jobColor = 'emerald'
+                        break
+                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusFailure:
+                        jobStatus = 'failed'
+                        jobColor = 'red'
+                        break
+                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusTimeout:
+                        jobStatus = 'time out'
+                        jobColor = 'red'
+                        break
+                    default:
+                        jobStatus = String(param.data?.status)
+                }
+
+                return <Badge color={jobColor}>{jobStatus}</Badge>
+            },
         },
     ]
     return temp
