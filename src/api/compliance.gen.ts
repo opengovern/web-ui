@@ -603,7 +603,7 @@ export const useComplianceApiV1BenchmarksSummaryList = (
 interface IuseComplianceApiV1BenchmarksPoliciesDetailState {
     isLoading: boolean
     isExecuted: boolean
-    response?: any
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
@@ -698,7 +698,7 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseComplianceApiV1BenchmarksPoliciesPolicyIdDetailState {
+interface IuseComplianceApiV1BenchmarksPoliciesDetail2State {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary
@@ -706,7 +706,7 @@ interface IuseComplianceApiV1BenchmarksPoliciesPolicyIdDetailState {
     error?: any
 }
 
-export const useComplianceApiV1BenchmarksPoliciesPolicyIdDetail = (
+export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
     benchmarkId: string,
     policyId: string,
     query?: {
@@ -723,7 +723,7 @@ export const useComplianceApiV1BenchmarksPoliciesPolicyIdDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksPoliciesPolicyIdDetailState>({
+        useState<IuseComplianceApiV1BenchmarksPoliciesDetail2State>({
             isLoading: true,
             isExecuted: false,
         })
@@ -746,7 +746,7 @@ export const useComplianceApiV1BenchmarksPoliciesPolicyIdDetail = (
             }
 
             api.compliance
-                .apiV1BenchmarksPoliciesPolicyIdDetail(
+                .apiV1BenchmarksPoliciesDetail2(
                     benchmarkId,
                     policyId,
                     query,

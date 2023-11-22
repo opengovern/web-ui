@@ -448,7 +448,7 @@ interface IuseOnboardApiV1ConnectionsStateCreateState {
 
 export const useOnboardApiV1ConnectionsStateCreate = (
     connectionId: string,
-    data: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
+    request: GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -463,7 +463,7 @@ export const useOnboardApiV1ConnectionsStateCreate = (
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, data, params, autoExecute])
+        JSON.stringify([connectionId, request, params, autoExecute])
     )
 
     const sendRequest = () => {
@@ -481,7 +481,7 @@ export const useOnboardApiV1ConnectionsStateCreate = (
             }
 
             api.onboard
-                .apiV1ConnectionsStateCreate(connectionId, data, params)
+                .apiV1ConnectionsStateCreate(connectionId, request, params)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -511,9 +511,12 @@ export const useOnboardApiV1ConnectionsStateCreate = (
     }
 
     if (
-        JSON.stringify([connectionId, data, params, autoExecute]) !== lastInput
+        JSON.stringify([connectionId, request, params, autoExecute]) !==
+        lastInput
     ) {
-        setLastInput(JSON.stringify([connectionId, data, params, autoExecute]))
+        setLastInput(
+            JSON.stringify([connectionId, request, params, autoExecute])
+        )
     }
 
     useEffect(() => {
