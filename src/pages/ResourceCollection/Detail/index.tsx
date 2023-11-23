@@ -60,6 +60,7 @@ import Tag from '../../../components/Tag'
 import { RenderObject } from '../../../components/RenderObject'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
+import { options } from '../../Infrastructure/Details/Tabs/Resources'
 
 const pieData = (
     input:
@@ -335,6 +336,7 @@ export default function ResourceCollectionDetail() {
                                     }
                                 }
                             }}
+                            options={options}
                         />
                     </TabPanel>
                     <TabPanel>

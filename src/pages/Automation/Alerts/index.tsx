@@ -73,7 +73,7 @@ export default function Alerts() {
                 }}
             />
             <DrawerPanel
-                title="Alert details"
+                title="Alert detail"
                 open={openDrawer}
                 onClose={() => {
                     setOpenDrawer(false)

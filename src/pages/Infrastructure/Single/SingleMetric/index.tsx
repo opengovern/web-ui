@@ -44,6 +44,9 @@ import { getTable } from '../../../Finder'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { dateDisplay } from '../../../../utilities/dateDisplay'
 import Modal from '../../../../components/Modal'
+import { RowClickedEvent } from 'ag-grid-community'
+import { RenderObject } from '../../../../components/RenderObject'
+import DrawerPanel from '../../../../components/DrawerPanel'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -63,6 +66,8 @@ export default function SingleMetric({
     const setNotification = useSetAtom(notificationAtom)
     const setQuery = useSetAtom(queryAtom)
 
+    const [openDrawer, setOpenDrawer] = useState(false)
+    const [selectedRow, setSelectedRow] = useState(null)
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
@@ -293,7 +298,7 @@ export default function SingleMetric({
                 />
             </Card>
             <Table
-                title="Results"
+                title="Resource list"
                 id="metric_table"
                 loading={metricDetailLoading || isLoading}
                 columns={
@@ -311,7 +316,21 @@ export default function SingleMetric({
                     ).rows
                 }
                 downloadable
+                onRowClicked={(event: RowClickedEvent) => {
+                    setSelectedRow(event.data)
+                    setOpenDrawer(true)
+                }}
             />
+            <DrawerPanel
+                title="Resource detail"
+                open={openDrawer}
+                onClose={() => {
+                    setOpenDrawer(false)
+                    // setSelectedRow(null)
+                }}
+            >
+                <RenderObject obj={selectedRow} />
+            </DrawerPanel>
         </>
     )
 }
