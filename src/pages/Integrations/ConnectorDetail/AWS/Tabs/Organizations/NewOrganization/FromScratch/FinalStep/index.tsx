@@ -3,7 +3,9 @@ import { Bold, Button, Divider, Flex, Text } from '@tremor/react'
 interface IStep {
     onPrevious: () => void
     onSubmit: () => void
+    accountID: string
     roleName: string
+    externalID: string
     error: string
     isLoading: boolean
 }
@@ -11,7 +13,9 @@ interface IStep {
 export default function FinalStep({
     onSubmit,
     onPrevious,
+    accountID,
     roleName,
+    externalID,
     error,
     isLoading,
 }: IStep) {
@@ -25,8 +29,18 @@ export default function FinalStep({
                     minutes.
                 </Text>
                 <Flex flexDirection="row">
+                    <Text>Account ID</Text>
+                    <Text className="text-black">{accountID}</Text>
+                </Flex>
+                <Divider />
+                <Flex flexDirection="row">
                     <Text>Role Name</Text>
                     <Text className="text-black">{roleName}</Text>
+                </Flex>
+                <Divider />
+                <Flex flexDirection="row">
+                    <Text>External ID</Text>
+                    <Text className="text-black">{externalID}</Text>
                 </Flex>
                 <Divider />
                 <Flex flexDirection="row">

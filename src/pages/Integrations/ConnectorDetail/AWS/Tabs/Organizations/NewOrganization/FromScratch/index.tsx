@@ -5,7 +5,10 @@ import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
 import FinalStep from './FinalStep'
 import Steps from '../../../../../../../../components/Steps'
-import { useOnboardApiV1CredentialCreate } from '../../../../../../../../api/onboard.gen'
+import {
+    useOnboardApiV1CredentialCreate,
+    useOnboardApiV2CredentialCreate,
+} from '../../../../../../../../api/onboard.gen'
 import Spinner from '../../../../../../../../components/Spinner'
 import { getErrorMessage } from '../../../../../../../../types/apierror'
 import { SourceType } from '../../../../../../../../api/api'
@@ -20,24 +23,29 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
     const currentWorkspace = useParams<{ ws: string }>().ws
     const [stepNum, setStepNum] = useState(1)
     const [data, setData] = useState({
+        accountID: '',
         roleName: '',
+        externalId: '',
     })
 
     const close = () => {
         setStepNum(1)
         setData({
+            accountID: '',
             roleName: '',
+            externalId: '',
         })
         onClose()
     }
 
     const { error, isLoading, isExecuted, sendNow } =
-        useOnboardApiV1CredentialCreate(
+        useOnboardApiV2CredentialCreate(
             {
-                source_type: SourceType.CloudAWS,
-                config: {
+                connector: SourceType.CloudAWS,
+                awsConfig: {
+                    accountID: data.accountID,
                     assumeRoleName: data.roleName,
-                    assumeAdminRoleName: data.roleName,
+                    externalId: data.externalId,
                 },
             },
             {},
@@ -53,9 +61,10 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
         currentWorkspace || '',
         {
             connectorType: SourceType.CloudAWS,
-            config: {
+            awsConfig: {
+                accountID: data.accountID,
                 assumeRoleName: data.roleName,
-                assumeAdminRoleName: data.roleName,
+                externalId: data.externalId,
             },
         },
         {},
@@ -79,9 +88,11 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
                 return (
                     <SecondStep
                         onPrevious={() => setStepNum(1)}
-                        onNext={(roleName) => {
+                        onNext={(accountID, roleName, externalId) => {
                             setData({
+                                accountID,
                                 roleName,
+                                externalId,
                             })
                             setStepNum(3)
                         }}
@@ -90,7 +101,9 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
             case 3:
                 return (
                     <FinalStep
+                        accountID={data.accountID}
                         roleName={data.roleName}
+                        externalID={data.externalId}
                         onPrevious={() => setStepNum(2)}
                         error={getErrorMessage(bootstrapMode ? bcError : error)}
                         isLoading={
