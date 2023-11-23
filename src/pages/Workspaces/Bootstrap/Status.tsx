@@ -33,20 +33,17 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
         return 'border-2 border-gray-300 bg-white'
     }
 
-    const progressClass = () => {
+    const progressPercentage = () => {
         if (finishedJobs !== undefined && totalJobs !== undefined) {
             if (finishedJobs > 0) {
                 if (finishedJobs === totalJobs) {
-                    return 'w-full'
+                    return '100%'
                 }
-                if (totalJobs === 8) {
-                    finishedJobs = Math.round(finishedJobs / 8 * 12)
-                    totalJobs = 12
-                }
-                return `w-${finishedJobs}/${totalJobs}`
+                const percentage = (finishedJobs / totalJobs) * 100
+                return `${percentage}%`
             }
         }
-        return 'w-0'
+        return '0%'
     }
 
     return (
@@ -98,7 +95,8 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
                     </Flex>
                     <div className="w-full h-1 mt-2 bg-gray-300 rounded-xl">
                         <div
-                            className={`${progressClass()} h-1 bg-gradient-to-r from-kaytu-400 to-kaytu-800 rounded-xl`}
+                            style={{ width: progressPercentage() }}
+                            className="h-1 bg-gradient-to-r from-kaytu-400 to-kaytu-800 rounded-xl"
                         />
                     </div>
                 </Flex>
