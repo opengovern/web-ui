@@ -171,7 +171,7 @@ export default function ResourceCollectionDetail() {
         })
     const { response: landscape, isLoading: landscapeLoading } =
         useInventoryApiV2ResourceCollectionLandscapeDetail(resourceId || '')
-
+    console.log(detail)
     return (
         <Layout currentPage="resource-collection">
             <Header
@@ -199,7 +199,7 @@ export default function ResourceCollectionDetail() {
                                 </ListItem>
                                 <ListItem>
                                     <Text>Collection type</Text>
-                                    <Text className="text-gray-800">?</Text>
+                                    <Text className="text-gray-800" />
                                 </ListItem>
                                 <ListItem>
                                     <Text>Resources</Text>
@@ -213,7 +213,7 @@ export default function ResourceCollectionDetail() {
                                 <ListItem>
                                     <Text>Services used</Text>
                                     <Text className="text-gray-800">
-                                        {detail?.resource_count}
+                                        {detail?.metric_count}
                                     </Text>
                                 </ListItem>
                                 <ListItem>
