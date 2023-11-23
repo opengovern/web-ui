@@ -1278,12 +1278,14 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiPage {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection {
+    connection_count?: number
     connectors?: SourceType[]
     created_at?: string
     description?: string
     filters?: KaytuResourceCollectionFilter[]
     id?: string
     last_evaluated_at?: string
+    metric_count?: number
     name?: string
     resource_count?: number
     status?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionStatus
@@ -1849,8 +1851,26 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest
     name?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiV2AWSCredentialV2Config {
+    accountID?: string
+    assumeRoleName?: string
+    externalId?: string
+    healthCheckPolicies?: string[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request {
+    awsConfig?: GithubComKaytuIoKaytuEnginePkgOnboardApiV2AWSCredentialV2Config
+    /** @example "Azure" */
+    connector?: SourceType
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Response {
+    id?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest {
-    config?: any
+    awsConfig?: GithubComKaytuIoKaytuEnginePkgOnboardApiV2AWSCredentialV2Config
+    azureConfig?: GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredentialConfig
     connectorType?: SourceType
 }
 
@@ -4953,6 +4973,32 @@ export class Api<
                 method: 'GET',
                 query: query,
                 secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Creating connection credentials
+         *
+         * @tags onboard
+         * @name ApiV2CredentialCreate
+         * @summary Create connection credentials
+         * @request POST:/onboard/api/v2/credential
+         * @secure
+         */
+        apiV2CredentialCreate: (
+            config: GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Response,
+                any
+            >({
+                path: `/onboard/api/v2/credential`,
+                method: 'POST',
+                body: config,
+                secure: true,
+                type: ContentType.Json,
                 format: 'json',
                 ...params,
             }),
