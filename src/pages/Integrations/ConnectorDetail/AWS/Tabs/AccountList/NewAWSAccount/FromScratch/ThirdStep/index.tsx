@@ -4,6 +4,7 @@ import { useState } from 'react'
 interface IKeyData {
     roleArn: string
     accountID: string
+    externalId: string
 }
 
 interface IStep {
@@ -16,6 +17,7 @@ export default function ThirdStep({ error, onNext, onPrevious }: IStep) {
     const [data, setData] = useState<IKeyData>({
         roleArn: '',
         accountID: '',
+        externalId: '',
     })
     return (
         <Flex flexDirection="col" className="h-full">
@@ -45,6 +47,17 @@ export default function ThirdStep({ error, onNext, onPrevious }: IStep) {
                         }
                     />
                 </Flex>
+                <Divider />
+                <Flex flexDirection="row">
+                    <Text>External ID</Text>
+                    <TextInput
+                        className="w-2/3"
+                        value={data.externalId}
+                        onChange={(e) =>
+                            setData({ ...data, externalId: e.target.value })
+                        }
+                    />
+                </Flex>
                 <Flex flexDirection="row">
                     <Text className="text-red-600 pt-4">{String(error)}</Text>
                 </Flex>
@@ -54,7 +67,11 @@ export default function ThirdStep({ error, onNext, onPrevious }: IStep) {
                     Back
                 </Button>
                 <Button
-                    disabled={data.roleArn === '' || data.accountID === ''}
+                    disabled={
+                        data.roleArn === '' ||
+                        data.accountID === '' ||
+                        data.externalId === ''
+                    }
                     onClick={() => onNext(data)}
                     className="ml-3"
                 >

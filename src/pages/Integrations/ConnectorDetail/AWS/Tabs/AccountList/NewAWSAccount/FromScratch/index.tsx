@@ -18,6 +18,7 @@ interface IData {
     roleARN: string
     accountID: string
     accountName: string
+    externalId: string
 }
 
 export default function FromScratch({ close }: ISteps) {
@@ -25,6 +26,7 @@ export default function FromScratch({ close }: ISteps) {
     const [data, setData] = useState<IData>({
         roleARN: '',
         accountID: '',
+        externalId: '',
         accountName: '',
     })
 
@@ -34,6 +36,7 @@ export default function FromScratch({ close }: ISteps) {
         setData({
             roleARN: '',
             accountID: '',
+            externalId: '',
             accountName: '',
         })
     }
@@ -47,6 +50,7 @@ export default function FromScratch({ close }: ISteps) {
                     assumeRoleName: data.roleARN,
                     assumeAdminRoleName: data.roleARN,
                     accountId: data.accountID,
+                    externalId: data.externalId,
                 },
             },
             {},
@@ -95,6 +99,7 @@ export default function FromScratch({ close }: ISteps) {
                                 ...data,
                                 roleARN: info.roleArn,
                                 accountID: info.accountID,
+                                externalId: info.externalId,
                             })
                             setStepNum(4)
                         }}
