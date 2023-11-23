@@ -3,6 +3,7 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
+import { SourceType } from '../../../api/api'
 
 interface IConnectorCard {
     connector: string | undefined
@@ -12,13 +13,27 @@ interface IConnectorCard {
     description: string | undefined
 }
 
-export const getConnectorIcon = (connector: string | undefined) => {
+export const getConnectorIcon = (
+    connector: string | SourceType[] | SourceType | undefined
+) => {
     return (
-        <img
-            src={connector === 'Azure' ? AzureIcon : AWSIcon}
-            alt="connector"
-            className="w-9 h-9 mr-1"
-        />
+        <Flex className="w-fit gap-1">
+            {typeof connector === 'string' ? (
+                <img
+                    src={connector === 'Azure' ? AzureIcon : AWSIcon}
+                    alt="connector"
+                    className="w-9 h-9"
+                />
+            ) : (
+                connector?.map((c) => (
+                    <img
+                        src={c === 'Azure' ? AzureIcon : AWSIcon}
+                        alt="connector"
+                        className="w-9 h-9"
+                    />
+                ))
+            )}
+        </Flex>
     )
 }
 

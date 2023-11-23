@@ -148,11 +148,11 @@ export default function Resources({
 
     return (
         <Table
-            title={isSummary ? 'Summary' : 'Services'}
+            title={isSummary ? 'Summary' : 'Resources'}
             id={
                 isSummary
                     ? 'infrastructure_summary_table'
-                    : 'infrastructure_service_table'
+                    : 'infrastructure_resource_table'
             }
             columns={columns}
             downloadable

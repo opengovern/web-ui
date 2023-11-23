@@ -59,6 +59,7 @@ import Landscape from '../../../components/Landscape'
 import Tag from '../../../components/Tag'
 import { RenderObject } from '../../../components/RenderObject'
 import DrawerPanel from '../../../components/DrawerPanel'
+import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 
 const pieData = (
     input:
@@ -184,39 +185,42 @@ export default function ResourceCollectionDetail() {
             </Flex>
             <Grid numItems={2} className="w-full gap-4 mb-4">
                 <Card>
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        className="h-full"
-                    >
+                    <Flex flexDirection="col" alignItems="start">
                         {detailsLoading ? (
                             <Spinner />
                         ) : (
                             <List>
-                                {/* <ListItem>
-                                        <Text>Type</Text>
-                                        <Text className="text-gray-800">?</Text>
-                                    </ListItem> */}
+                                <ListItem>
+                                    <Text>Connector</Text>
+                                    <Text className="text-gray-800">
+                                        {getConnectorIcon(detail?.connectors)}
+                                    </Text>
+                                </ListItem>
+                                <ListItem>
+                                    <Text>Collection type</Text>
+                                    <Text className="text-gray-800">?</Text>
+                                </ListItem>
                                 <ListItem>
                                     <Text>Resources</Text>
+                                    <Text className="text-gray-800">
+                                        {numberDisplay(
+                                            detail?.resource_count,
+                                            0
+                                        )}
+                                    </Text>
+                                </ListItem>
+                                <ListItem>
+                                    <Text>Services used</Text>
                                     <Text className="text-gray-800">
                                         {detail?.resource_count}
                                     </Text>
                                 </ListItem>
                                 <ListItem>
-                                    <Text>Connector</Text>
-                                    <Text className="text-gray-800">
-                                        {detail?.connectors}
-                                    </Text>
-                                </ListItem>
-                                {/* <ListItem>
-                                        <Text>Services used</Text>
-                                        <Text className="text-gray-800">{detail?.resource_count}</Text>
-                                    </ListItem> */}
-                                <ListItem>
                                     <Text>Status</Text>
                                     <Text className="text-gray-800">
-                                        {detail?.status}
+                                        {capitalizeFirstLetter(
+                                            detail?.status || ''
+                                        )}
                                     </Text>
                                 </ListItem>
                                 <ListItem>
