@@ -40,8 +40,8 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
                     return 'w-full'
                 }
                 if (totalJobs === 8) {
-                    finishedJobs = finishedJobs / 8 * 12
-                    totalJobs = totalJobs / 8 * 12
+                    finishedJobs = Math.round(finishedJobs / 8 * 12)
+                    totalJobs = 12
                 }
                 return `w-${finishedJobs}/${totalJobs}`
             }
