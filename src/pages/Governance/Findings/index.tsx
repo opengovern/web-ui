@@ -547,7 +547,6 @@ export default function Findings() {
                 <Flex className="w-full pl-6">
                     <Table
                         fullWidth
-                        downloadable
                         id="compliance_findings"
                         columns={columns(isDemo)}
                         onCellClicked={(event: RowClickedEvent) => {
@@ -563,7 +562,7 @@ export default function Findings() {
                         loading={isLoading}
                         options={{ rowModelType: 'serverSide' }}
                     >
-                        <Flex
+                        {/* <Flex
                             className="flex-wrap gap-3"
                             alignItems="start"
                             justifyContent="start"
@@ -574,7 +573,7 @@ export default function Findings() {
                                     onClick={() => setProvider('')}
                                 />
                             )}
-                        </Flex>
+                        </Flex> */}
                     </Table>
                     <DrawerPanel
                         open={open}
