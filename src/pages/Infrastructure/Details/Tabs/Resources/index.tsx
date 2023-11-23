@@ -29,11 +29,12 @@ export const rowGenerator = (data: any) => {
             } else {
                 rows.push({
                     ...data[i],
-                    category: data[i].tags.category,
+                    category: data[i].tags.category[0],
                 })
             }
         }
     }
+
     return rows
 }
 
@@ -133,7 +134,7 @@ export default function Resources({
 
     const columns: IColumn<any, any>[] = [
         {
-            field: 'category',
+            field: 'tags.category',
             enableRowGroup: true,
             headerName: 'Category',
             resizable: true,
@@ -148,11 +149,11 @@ export default function Resources({
 
     return (
         <Table
-            title={isSummary ? 'Summary' : 'Services'}
+            title={isSummary ? 'Summary' : 'Resources'}
             id={
                 isSummary
                     ? 'infrastructure_summary_table'
-                    : 'infrastructure_service_table'
+                    : 'infrastructure_resource_table'
             }
             columns={columns}
             downloadable

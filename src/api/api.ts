@@ -1277,12 +1277,14 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiPage {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection {
+    connection_count?: number
     connectors?: SourceType[]
     created_at?: string
     description?: string
     filters?: KaytuResourceCollectionFilter[]
     id?: string
     last_evaluated_at?: string
+    metric_count?: number
     name?: string
     resource_count?: number
     status?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionStatus

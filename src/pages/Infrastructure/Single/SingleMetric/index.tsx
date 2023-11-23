@@ -19,6 +19,7 @@ import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 import clipboardCopy from 'clipboard-copy'
 import { highlight, languages } from 'prismjs'
 import Editor from 'react-simple-code-editor'
+import { RowClickedEvent } from 'ag-grid-community'
 import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsMetricsDetail,
@@ -33,7 +34,7 @@ import {
 import Header from '../../../../components/Header'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
-import { generateVisualMap, resourceTrendChart } from '../../index'
+import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import {
     numberDisplay,
@@ -44,6 +45,8 @@ import { getTable } from '../../../Finder'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { dateDisplay } from '../../../../utilities/dateDisplay'
 import Modal from '../../../../components/Modal'
+import { RenderObject } from '../../../../components/RenderObject'
+import DrawerPanel from '../../../../components/DrawerPanel'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -63,6 +66,8 @@ export default function SingleMetric({
     const setNotification = useSetAtom(notificationAtom)
     const setQuery = useSetAtom(queryAtom)
 
+    const [openDrawer, setOpenDrawer] = useState(false)
+    const [selectedRow, setSelectedRow] = useState(null)
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
@@ -215,18 +220,23 @@ export default function SingleMetric({
                                 ? resourceTrend[resourceTrend.length - 1]?.count
                                 : 0
                         )}
-                        loading={resourceTrendLoading || metricDetailLoading}
+                        loading={resourceTrendLoading}
                         border={false}
                     />
-                    {/* <div className="pl-4 border-l border-l-gray-200">
+                    <div className="pl-3 border-l border-l-gray-200">
                         <SummaryCard
                             border={false}
                             title="Evaluated"
-                            // loading={detailLoading}
-                            metric={10}
+                            loading={resourceTrendLoading}
+                            metric={numericDisplay(
+                                resourceTrend
+                                    ? resourceTrend[resourceTrend.length - 1]
+                                          ?.totalConnectionCount
+                                    : 0
+                            )}
                         />
-                    </div> */}
-                    <Col numColSpan={2} />
+                    </div>
+                    <Col />
                     <Col>
                         <Flex justifyContent="end" className="gap-4">
                             <TabGroup
@@ -293,7 +303,7 @@ export default function SingleMetric({
                 />
             </Card>
             <Table
-                title="Results"
+                title="Resource list"
                 id="metric_table"
                 loading={metricDetailLoading || isLoading}
                 columns={
@@ -311,7 +321,21 @@ export default function SingleMetric({
                     ).rows
                 }
                 downloadable
+                onRowClicked={(event: RowClickedEvent) => {
+                    setSelectedRow(event.data)
+                    setOpenDrawer(true)
+                }}
             />
+            <DrawerPanel
+                title="Resource detail"
+                open={openDrawer}
+                onClose={() => {
+                    setOpenDrawer(false)
+                    // setSelectedRow(null)
+                }}
+            >
+                <RenderObject obj={selectedRow} />
+            </DrawerPanel>
         </>
     )
 }
