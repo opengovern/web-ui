@@ -15,16 +15,18 @@ interface ISteps {
 }
 
 interface IData {
-    accessKey: string
-    secretKey: string
+    roleARN: string
+    accountID: string
     accountName: string
+    externalId: string
 }
 
 export default function FromScratch({ close }: ISteps) {
     const [stepNum, setStepNum] = useState(1)
     const [data, setData] = useState<IData>({
-        accessKey: '',
-        secretKey: '',
+        roleARN: '',
+        accountID: '',
+        externalId: '',
         accountName: '',
     })
 
@@ -32,8 +34,9 @@ export default function FromScratch({ close }: ISteps) {
         close()
         setStepNum(1)
         setData({
-            accessKey: '',
-            secretKey: '',
+            roleARN: '',
+            accountID: '',
+            externalId: '',
             accountName: '',
         })
     }
@@ -42,8 +45,12 @@ export default function FromScratch({ close }: ISteps) {
         useOnboardApiV1SourceAwsCreate(
             {
                 config: {
-                    accessKey: data.accessKey,
-                    secretKey: data.secretKey,
+                    accessKey: '',
+                    secretKey: '',
+                    assumeRoleName: data.roleARN,
+                    assumeAdminRoleName: data.roleARN,
+                    accountId: data.accountID,
+                    externalId: data.externalId,
                 },
             },
             {},
@@ -90,8 +97,9 @@ export default function FromScratch({ close }: ISteps) {
                         onNext={(info) => {
                             setData({
                                 ...data,
-                                accessKey: info.accessKey,
-                                secretKey: info.secretKey,
+                                roleARN: info.roleArn,
+                                accountID: info.accountID,
+                                externalId: info.externalId,
                             })
                             setStepNum(4)
                         }}
@@ -114,7 +122,6 @@ export default function FromScratch({ close }: ISteps) {
             case 5:
                 return (
                     <FinalStep
-                        accessKeyParam={data.accessKey}
                         accountID={response?.id || ''}
                         accountName={data.accountName}
                         onNext={close}

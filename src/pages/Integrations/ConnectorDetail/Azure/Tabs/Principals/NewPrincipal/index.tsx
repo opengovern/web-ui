@@ -67,7 +67,7 @@ export default function NewPrincipal({
         currentWorkspace || '',
         {
             connectorType: SourceType.CloudAzure,
-            config: {
+            azureConfig: {
                 clientId: data.appId,
                 secretId: data.secId,
                 tenantId: data.tenId,

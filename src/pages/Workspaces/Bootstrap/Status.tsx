@@ -33,12 +33,28 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
         return 'border-2 border-gray-300 bg-white'
     }
 
+    const progressClass = () => {
+        if (finishedJobs !== undefined && totalJobs !== undefined) {
+            if (finishedJobs > 0) {
+                if (finishedJobs === totalJobs) {
+                    return 'w-full'
+                }
+                if (totalJobs === 8) {
+                    finishedJobs = Math.round(finishedJobs / 8 * 12)
+                    totalJobs = 12
+                }
+                return `w-${finishedJobs}/${totalJobs}`
+            }
+        }
+        return 'w-0'
+    }
+
     return (
         <>
             {!first && (
                 <Flex className="relative" aria-hidden="true">
                     <div
-                        className={`h-4 w-0.5 ml-4 ${
+                        className={`h-6 w-0.5 ml-3.5 ${
                             nodeRunning || nodeDone
                                 ? 'bg-kaytu-500'
                                 : 'bg-gray-200'
@@ -68,13 +84,23 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
                         />
                     )}
                 </Flex>
-                <Flex className="pl-3">
-                    <Text className="font-medium text-sm text-gray-800">
-                        {text}{' '}
-                        {finishedJobs === undefined || totalJobs === undefined
-                            ? ''
-                            : `[${finishedJobs}/${totalJobs}]`}
-                    </Text>
+                <Flex flexDirection="col" className="pl-3">
+                    <Flex alignItems="start">
+                        <Text className="font-medium text-sm text-gray-800">
+                            {text}
+                        </Text>
+                        <Text className="font-medium text-sm text-gray-500">
+                            {finishedJobs === undefined ||
+                            totalJobs === undefined
+                                ? ''
+                                : ` (${finishedJobs} of ${totalJobs} completed)`}
+                        </Text>
+                    </Flex>
+                    <div className="w-full h-1 mt-2 bg-gray-300 rounded-xl">
+                        <div
+                            className={`${progressClass()} h-1 bg-gradient-to-r from-kaytu-400 to-kaytu-800 rounded-xl`}
+                        />
+                    </div>
                 </Flex>
             </Flex>
         </>

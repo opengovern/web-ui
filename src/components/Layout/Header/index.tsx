@@ -5,6 +5,7 @@ import { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import CLIMenu from '../CLIMenu'
+import JobsMenu from '../JobsMenu'
 
 interface IHeader {
     workspace: string | undefined
@@ -37,6 +38,7 @@ export default function Header({ workspace }: IHeader) {
                 <div className="h-6 w-px bg-gray-900/10 dark:bg-white/20 lg:hidden" />
                 <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
                     <div className="flex items-center gap-x-4 lg:gap-x-6">
+                        <JobsMenu />
                         <button
                             type="button"
                             className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
