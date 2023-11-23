@@ -220,18 +220,23 @@ export default function SingleMetric({
                                 ? resourceTrend[resourceTrend.length - 1]?.count
                                 : 0
                         )}
-                        loading={resourceTrendLoading || metricDetailLoading}
+                        loading={resourceTrendLoading}
                         border={false}
                     />
-                    {/* <div className="pl-4 border-l border-l-gray-200">
+                    <div className="pl-3 border-l border-l-gray-200">
                         <SummaryCard
                             border={false}
                             title="Evaluated"
-                            // loading={detailLoading}
-                            metric={10}
+                            loading={resourceTrendLoading}
+                            metric={numericDisplay(
+                                resourceTrend
+                                    ? resourceTrend[resourceTrend.length - 1]
+                                          ?.totalConnectionCount
+                                    : 0
+                            )}
                         />
-                    </div> */}
-                    <Col numColSpan={2} />
+                    </div>
+                    <Col />
                     <Col>
                         <Flex justifyContent="end" className="gap-4">
                             <TabGroup
