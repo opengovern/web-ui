@@ -90,12 +90,22 @@ export default function ResourceCollection() {
                 columns={resourceCollectionColumns}
                 rowData={
                     search.length
-                        ? response?.filter((r) =>
-                              r.name
-                                  ?.toLowerCase()
-                                  .includes(search.toLowerCase())
+                        ? response
+                              ?.filter((r) =>
+                                  r.name
+                                      ?.toLowerCase()
+                                      .includes(search.toLowerCase())
+                              )
+                              .sort(
+                                  (a, b) =>
+                                      (b.resource_count || 0) -
+                                      (a.resource_count || 0)
+                              )
+                        : response?.sort(
+                              (a, b) =>
+                                  (b.resource_count || 0) -
+                                  (a.resource_count || 0)
                           )
-                        : response
                 }
                 loading={isLoading}
                 onRowClicked={(e) => navigate(e.data.id)}
@@ -104,7 +114,7 @@ export default function ResourceCollection() {
                 <Flex className="w-fit gap-3">
                     <TextInput
                         value={search}
-                        className="w-56"
+                        className="w-80"
                         onChange={(e) => setSearch(e.target.value)}
                         icon={MagnifyingGlassIcon}
                         placeholder="Search resources..."
