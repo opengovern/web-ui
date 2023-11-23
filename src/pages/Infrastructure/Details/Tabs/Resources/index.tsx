@@ -29,11 +29,12 @@ export const rowGenerator = (data: any) => {
             } else {
                 rows.push({
                     ...data[i],
-                    category: data[i].tags.category,
+                    category: data[i].tags.category[0],
                 })
             }
         }
     }
+
     return rows
 }
 
@@ -133,7 +134,7 @@ export default function Resources({
 
     const columns: IColumn<any, any>[] = [
         {
-            field: 'category',
+            field: 'tags.category',
             enableRowGroup: true,
             headerName: 'Category',
             resizable: true,

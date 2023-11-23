@@ -134,12 +134,17 @@ export default function CloudAccounts({
             columns={columns(isDemo)}
             downloadable
             rowData={
-                accounts?.connections?.filter((acc) => {
-                    if (isOnboarded) {
-                        return acc.lifecycleState === 'ONBOARD'
-                    }
-                    return acc
-                }) || []
+                accounts?.connections
+                    ?.sort(
+                        (a, b) =>
+                            (b.resourceCount || 0) - (a.resourceCount || 0)
+                    )
+                    .filter((acc) => {
+                        if (isOnboarded) {
+                            return acc.lifecycleState === 'ONBOARD'
+                        }
+                        return acc
+                    }) || []
             }
             loading={isAccountsLoading}
             onRowClicked={(event) => {

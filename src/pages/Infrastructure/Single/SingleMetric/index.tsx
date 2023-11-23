@@ -19,6 +19,7 @@ import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 import clipboardCopy from 'clipboard-copy'
 import { highlight, languages } from 'prismjs'
 import Editor from 'react-simple-code-editor'
+import { RowClickedEvent } from 'ag-grid-community'
 import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsMetricsDetail,
@@ -33,7 +34,7 @@ import {
 import Header from '../../../../components/Header'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
-import { generateVisualMap, resourceTrendChart } from '../../index'
+import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import {
     numberDisplay,
@@ -44,7 +45,6 @@ import { getTable } from '../../../Finder'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { dateDisplay } from '../../../../utilities/dateDisplay'
 import Modal from '../../../../components/Modal'
-import { RowClickedEvent } from 'ag-grid-community'
 import { RenderObject } from '../../../../components/RenderObject'
 import DrawerPanel from '../../../../components/DrawerPanel'
 
