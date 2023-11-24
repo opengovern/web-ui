@@ -220,6 +220,9 @@ export default function SingleMetric({
                                 ? resourceTrend[resourceTrend.length - 1]?.count
                                 : 0
                         )}
+                        metricPrev={numericDisplay(
+                            resourceTrend ? resourceTrend[0]?.count : 0
+                        )}
                         loading={resourceTrendLoading}
                         border={false}
                     />
