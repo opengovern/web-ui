@@ -3,10 +3,12 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
-import ThirdStep from './ThirdStep'
 import FinalStep from './FinalStep'
 import Steps from '../../../../../../../../components/Steps'
-import { useOnboardApiV1CredentialCreate } from '../../../../../../../../api/onboard.gen'
+import {
+    useOnboardApiV1CredentialCreate,
+    useOnboardApiV2CredentialCreate,
+} from '../../../../../../../../api/onboard.gen'
 import Spinner from '../../../../../../../../components/Spinner'
 import { getErrorMessage } from '../../../../../../../../types/apierror'
 import { SourceType } from '../../../../../../../../api/api'
@@ -21,38 +23,29 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
     const currentWorkspace = useParams<{ ws: string }>().ws
     const [stepNum, setStepNum] = useState(1)
     const [data, setData] = useState({
-        accessKey: '',
-        secretKey: '',
+        accountID: '',
         roleName: '',
-        adminRoleName: '',
         externalId: '',
-        policyName: '',
     })
 
     const close = () => {
         setStepNum(1)
         setData({
-            accessKey: '',
-            secretKey: '',
+            accountID: '',
             roleName: '',
-            adminRoleName: '',
             externalId: '',
-            policyName: '',
         })
         onClose()
     }
 
     const { error, isLoading, isExecuted, sendNow } =
-        useOnboardApiV1CredentialCreate(
+        useOnboardApiV2CredentialCreate(
             {
-                source_type: SourceType.CloudAWS,
-                config: {
-                    accessKey: data.accessKey,
-                    secretKey: data.secretKey,
+                connector: SourceType.CloudAWS,
+                awsConfig: {
+                    accountID: data.accountID,
                     assumeRoleName: data.roleName,
-                    assumeAdminRoleName: data.adminRoleName,
                     externalId: data.externalId,
-                    assumeRolePolicyName: data.policyName,
                 },
             },
             {},
@@ -68,13 +61,10 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
         currentWorkspace || '',
         {
             connectorType: SourceType.CloudAWS,
-            config: {
-                accessKey: data.accessKey,
-                secretKey: data.secretKey,
+            awsConfig: {
+                accountID: data.accountID,
                 assumeRoleName: data.roleName,
-                assumeAdminRoleName: data.adminRoleName,
                 externalId: data.externalId,
-                assumeRolePolicyName: data.policyName,
             },
         },
         {},
@@ -98,41 +88,23 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
                 return (
                     <SecondStep
                         onPrevious={() => setStepNum(1)}
-                        onNext={() => setStepNum(3)}
+                        onNext={(accountID, roleName, externalId) => {
+                            setData({
+                                accountID,
+                                roleName,
+                                externalId,
+                            })
+                            setStepNum(3)
+                        }}
                     />
                 )
             case 3:
                 return (
-                    <ThirdStep
-                        onPrevious={() => setStepNum(2)}
-                        onNext={(
-                            accessKey,
-                            secretKey,
-                            roleName,
-                            adminRoleName,
-                            externalId,
-                            policyName
-                        ) => {
-                            setData({
-                                accessKey,
-                                secretKey,
-                                roleName,
-                                adminRoleName,
-                                externalId,
-                                policyName,
-                            })
-                            setStepNum(4)
-                        }}
-                    />
-                )
-            case 4:
-                return (
                     <FinalStep
-                        accessKeyParam={data.accessKey}
-                        secretKey={data.secretKey}
+                        accountID={data.accountID}
                         roleName={data.roleName}
-                        externalId={data.externalId}
-                        onPrevious={() => setStepNum(3)}
+                        externalID={data.externalId}
+                        onPrevious={() => setStepNum(2)}
                         error={getErrorMessage(bootstrapMode ? bcError : error)}
                         isLoading={
                             (isExecuted && isLoading) ||
@@ -160,7 +132,7 @@ export default function FromScratch({ onClose, bootstrapMode }: ISteps) {
             className="h-full"
         >
             <Text className="my-6">Organization from new AWS account</Text>
-            <Steps steps={4} currentStep={stepNum} />
+            <Steps steps={3} currentStep={stepNum} />
             {showStep(stepNum)}
         </Flex>
     )

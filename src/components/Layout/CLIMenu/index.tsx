@@ -40,7 +40,7 @@ function classNames(...classes: any) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function CLIMenu() {
+export function CLITabs() {
     const [currentTab, setCurrentTab] = useState<number>(0)
     const [showCopied, setShowCopied] = useState<boolean>(false)
 
@@ -48,6 +48,86 @@ export default function CLIMenu() {
         return tabs.at(currentTab)
     }
 
+    return (
+        <>
+            <div>
+                <nav className="isolate flex divide-x divide-gray-200 rounded-lg shadow">
+                    {tabs.map((tab, tabIdx) => (
+                        <Flex
+                            flexDirection="row"
+                            justifyContent="center"
+                            className={classNames(
+                                currentTab === tabIdx
+                                    ? 'bg-kaytu-50 text-kaytu-800 fill-blue-600'
+                                    : 'bg-gray-50 text-gray-600 fill-gray-600 hover:text-gray-700',
+                                tabIdx === 0 ? 'rounded-l-lg' : '',
+                                tabIdx === tabs.length - 1
+                                    ? 'rounded-r-lg'
+                                    : '',
+                                'group cursor-pointer relative min-w-0 flex-1 overflow-hidden py-4 px-4 text-center text-sm font-medium focus:z-10'
+                            )}
+                            onClick={() => setCurrentTab(tabIdx)}
+                        >
+                            {tab.icon}
+                            <span>{tab.name}</span>
+                            <span
+                                aria-hidden="true"
+                                className={classNames(
+                                    'bg-transparent',
+                                    'absolute inset-x-0 bottom-0 h-0.5'
+                                )}
+                            />
+                        </Flex>
+                    ))}
+                </nav>
+            </div>
+            <Flex flexDirection="col" justifyContent="start">
+                <a
+                    href={getCurrentTab()?.href}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    <Button className="my-8 bg-kaytu-600">
+                        Download for {getCurrentTab()?.name}
+                    </Button>
+                </a>
+
+                {getCurrentTab()?.commands && (
+                    <Card
+                        className="w-2/3 text-gray-800 font-mono cursor-pointer p-2.5"
+                        onClick={() => {
+                            setShowCopied(true)
+                            setTimeout(() => {
+                                setShowCopied(false)
+                            }, 2000)
+                            clipboardCopy(getCurrentTab()?.clipboard || '')
+                        }}
+                    >
+                        <Flex flexDirection="row">
+                            <Text className="px-1.5 text-gray-800">
+                                {getCurrentTab()?.commands}
+                            </Text>
+                            <Flex flexDirection="col" className="h-5 w-5">
+                                <DocumentDuplicateIcon className="h-5 w-5 text-kaytu-600 cursor-pointer" />
+                                <Text
+                                    className={`${
+                                        showCopied ? '' : 'hidden'
+                                    } absolute -bottom-4 bg-kaytu-600 text-white rounded-md p-1`}
+                                >
+                                    Copied!
+                                </Text>
+                            </Flex>
+                        </Flex>
+                    </Card>
+                )}
+
+                <Text className="mt-3 mb-8 text-gray-400" />
+            </Flex>
+        </>
+    )
+}
+
+export default function CLIMenu() {
     return (
         <Popover className="relative isolate z-50 border-0">
             <Popover.Button
@@ -68,84 +148,7 @@ export default function CLIMenu() {
             >
                 <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
                     <div className="w-screen max-w-md flex-auto overflow-hidden rounded-lg bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
-                        <div>
-                            <nav className="isolate flex divide-x divide-gray-200 rounded-lg shadow">
-                                {tabs.map((tab, tabIdx) => (
-                                    <Flex
-                                        flexDirection="row"
-                                        justifyContent="center"
-                                        className={classNames(
-                                            currentTab === tabIdx
-                                                ? 'bg-kaytu-50 text-kaytu-800 fill-blue-600'
-                                                : 'bg-gray-50 text-gray-600 fill-gray-600 hover:text-gray-700',
-                                            tabIdx === 0 ? 'rounded-l-lg' : '',
-                                            tabIdx === tabs.length - 1
-                                                ? 'rounded-r-lg'
-                                                : '',
-                                            'group cursor-pointer relative min-w-0 flex-1 overflow-hidden py-4 px-4 text-center text-sm font-medium focus:z-10'
-                                        )}
-                                        onClick={() => setCurrentTab(tabIdx)}
-                                    >
-                                        {tab.icon}
-                                        <span>{tab.name}</span>
-                                        <span
-                                            aria-hidden="true"
-                                            className={classNames(
-                                                'bg-transparent',
-                                                'absolute inset-x-0 bottom-0 h-0.5'
-                                            )}
-                                        />
-                                    </Flex>
-                                ))}
-                            </nav>
-                        </div>
-                        <Flex flexDirection="col" justifyContent="start">
-                            <a
-                                href={getCurrentTab()?.href}
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                <Button className="my-8 bg-kaytu-600">
-                                    Download for {getCurrentTab()?.name}
-                                </Button>
-                            </a>
-
-                            {getCurrentTab()?.commands && (
-                                <Card
-                                    className="w-2/3 text-gray-800 font-mono cursor-pointer p-2.5"
-                                    onClick={() => {
-                                        setShowCopied(true)
-                                        setTimeout(() => {
-                                            setShowCopied(false)
-                                        }, 2000)
-                                        clipboardCopy(
-                                            getCurrentTab()?.clipboard || ''
-                                        )
-                                    }}
-                                >
-                                    <Flex flexDirection="row">
-                                        <Text className="px-1.5 text-gray-800">
-                                            {getCurrentTab()?.commands}
-                                        </Text>
-                                        <Flex
-                                            flexDirection="col"
-                                            className="h-5 w-5"
-                                        >
-                                            <DocumentDuplicateIcon className="h-5 w-5 text-kaytu-600 cursor-pointer" />
-                                            <Text
-                                                className={`${
-                                                    showCopied ? '' : 'hidden'
-                                                } absolute -bottom-4 bg-kaytu-600 text-white rounded-md p-1`}
-                                            >
-                                                Copied!
-                                            </Text>
-                                        </Flex>
-                                    </Flex>
-                                </Card>
-                            )}
-
-                            <Text className="mt-3 mb-8 text-gray-400" />
-                        </Flex>
+                        <CLITabs />
                     </div>
                 </Popover.Panel>
             </Transition>

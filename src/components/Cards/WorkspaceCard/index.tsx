@@ -1,5 +1,5 @@
 import { Badge, Button, Card, Flex, Grid, Text, Title } from '@tremor/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowPathIcon, ArrowSmallRightIcon } from '@heroicons/react/24/solid'
 import {
@@ -73,16 +73,33 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
         sendNow: callSuspend,
         isExecuted: eS,
     } = useWorkspaceApiV1WorkspaceSuspendCreate(workspace.id || '', {}, false)
+    useEffect(() => {
+        if (eS && !suspendLoading) {
+            refreshList()
+        }
+    }, [suspendLoading])
+
     const {
         isLoading: resumeLoading,
         sendNow: callResume,
         isExecuted: eR,
     } = useWorkspaceApiV1WorkspaceResumeCreate(workspace.id || '', {}, false)
+    useEffect(() => {
+        if (eR && !resumeLoading) {
+            refreshList()
+        }
+    }, [resumeLoading])
+
     const {
         isLoading: deleteLoading,
         sendNow: callDelete,
         isExecuted: eD,
     } = useWorkspaceApiV1WorkspaceDelete(workspace.id || '', {}, false)
+    useEffect(() => {
+        if (eD && !deleteLoading) {
+            refreshList()
+        }
+    }, [deleteLoading])
 
     const details = {
         Tier: workspace.tier,
@@ -157,7 +174,6 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                 onConfirm={callDelete}
                 onClose={() => {
                     setDeleteConfirmation(false)
-                    refreshList()
                 }}
             />
             <ConfirmModal
@@ -166,7 +182,6 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                 onConfirm={callSuspend}
                 onClose={() => {
                     setSuspendConfirmation(false)
-                    refreshList()
                 }}
             />
             <Card key={workspace.name}>

@@ -33,12 +33,25 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
         return 'border-2 border-gray-300 bg-white'
     }
 
+    const progressPercentage = () => {
+        if (finishedJobs !== undefined && totalJobs !== undefined) {
+            if (finishedJobs > 0) {
+                if (finishedJobs === totalJobs) {
+                    return '100%'
+                }
+                const percentage = (finishedJobs / totalJobs) * 100
+                return `${percentage}%`
+            }
+        }
+        return '0%'
+    }
+
     return (
         <>
             {!first && (
                 <Flex className="relative" aria-hidden="true">
                     <div
-                        className={`h-4 w-0.5 ml-4 ${
+                        className={`h-6 w-0.5 ml-3.5 ${
                             nodeRunning || nodeDone
                                 ? 'bg-kaytu-500'
                                 : 'bg-gray-200'
@@ -68,13 +81,24 @@ function Node({ first, done, running, totalJobs, finishedJobs, text }: INode) {
                         />
                     )}
                 </Flex>
-                <Flex className="pl-3">
-                    <Text className="font-medium text-sm text-gray-800">
-                        {text}{' '}
-                        {finishedJobs === undefined || totalJobs === undefined
-                            ? ''
-                            : `[${finishedJobs}/${totalJobs}]`}
-                    </Text>
+                <Flex flexDirection="col" className="pl-3">
+                    <Flex alignItems="start">
+                        <Text className="font-medium text-sm text-gray-800">
+                            {text}
+                        </Text>
+                        <Text className="font-medium text-sm text-gray-500">
+                            {finishedJobs === undefined ||
+                            totalJobs === undefined
+                                ? ''
+                                : ` (${finishedJobs} of ${totalJobs} completed)`}
+                        </Text>
+                    </Flex>
+                    <div className="w-full h-1 mt-2 bg-gray-300 rounded-xl">
+                        <div
+                            style={{ width: progressPercentage() }}
+                            className="h-1 bg-gradient-to-r from-kaytu-400 to-kaytu-800 rounded-xl"
+                        />
+                    </div>
                 </Flex>
             </Flex>
         </>
@@ -172,7 +196,12 @@ export function Status({ workspaceName }: IStatus) {
                 <Node done={finished} text="Finishing Up" />
                 <Button
                     className="mt-8"
-                    disabled={!finished}
+                    disabled={
+                        !(
+                            analyticsTotal > 0 &&
+                            analyticsDone === analyticsTotal
+                        )
+                    }
                     onClick={() => navigate(`/${workspaceName}`)}
                 >
                     Access the workspace

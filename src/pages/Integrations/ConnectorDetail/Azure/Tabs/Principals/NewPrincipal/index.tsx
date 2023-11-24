@@ -67,7 +67,7 @@ export default function NewPrincipal({
         currentWorkspace || '',
         {
             connectorType: SourceType.CloudAzure,
-            config: {
+            azureConfig: {
                 clientId: data.appId,
                 secretId: data.secId,
                 tenantId: data.tenId,
@@ -85,14 +85,16 @@ export default function NewPrincipal({
     }
 
     useEffect(() => {
-        if (bootstrapMode) {
-            if (bcIsExecuted && !bcIsLoading && bcError) {
-                setStepNum(2)
-            }
-        } else if (isExecuted && !isLoading && error) {
+        if (isExecuted && !isLoading && error) {
             setStepNum(2)
         }
     }, [isLoading])
+
+    useEffect(() => {
+        if (bcIsExecuted && !bcIsLoading && bcError) {
+            setStepNum(2)
+        }
+    }, [bcIsLoading])
 
     useEffect(() => {
         if (stepNum === 3) {
@@ -124,6 +126,12 @@ export default function NewPrincipal({
             case 2:
                 return (
                     <SecondStep
+                        iAppId={data.appId}
+                        iObjectId={data.objectId}
+                        iClientSecret={data.clientSecret}
+                        iSecId={data.secId}
+                        iTenId={data.tenId}
+                        iSubscriptionId={data.subscriptionId}
                         onPrevious={() => setStepNum(1)}
                         error={getErrorMessage(bootstrapMode ? bcError : error)}
                         onNext={(
