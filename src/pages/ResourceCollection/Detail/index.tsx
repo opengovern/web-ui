@@ -292,7 +292,7 @@ export default function ResourceCollectionDetail() {
                     <Card className="h-full">
                         <TabGroup>
                             <Flex>
-                                <Title>KPI</Title>
+                                <Title className="font-semibold">KPI</Title>
                                 <TabList className="w-1/2">
                                     <Tab>Compliance</Tab>
                                     <Tab>Infrastructure</Tab>
