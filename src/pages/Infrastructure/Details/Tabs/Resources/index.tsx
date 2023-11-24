@@ -157,7 +157,15 @@ export default function Resources({
             }
             columns={columns}
             downloadable
-            rowData={rowGenerator(resources?.metrics)}
+            rowData={rowGenerator(resources?.metrics).sort((a, b) => {
+                if (a.category < b.category) {
+                    return -1
+                }
+                if (a.category > b.category) {
+                    return 1
+                }
+                return 0
+            })}
             loading={resourcesLoading}
             onRowClicked={(event) => {
                 if (event.data) {

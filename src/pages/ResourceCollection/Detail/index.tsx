@@ -20,7 +20,11 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
+import {
+    ChevronDownIcon,
+    ChevronRightIcon,
+    ChevronUpIcon,
+} from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import {
     useInventoryApiV2AnalyticsTrendList,
@@ -116,6 +120,7 @@ export default function ResourceCollectionDetail() {
     const activeTimeRange = useAtomValue(timeAtom)
     const navigate = useNavigate()
     const [openDrawer, setOpenDrawer] = useState(false)
+    const [showSummary, setShowSummary] = useState(false)
 
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
@@ -171,7 +176,7 @@ export default function ResourceCollectionDetail() {
         })
     const { response: landscape, isLoading: landscapeLoading } =
         useInventoryApiV2ResourceCollectionLandscapeDetail(resourceId || '')
-    console.log(detail)
+
     return (
         <Layout currentPage="resource-collection">
             <Header
@@ -180,125 +185,204 @@ export default function ResourceCollectionDetail() {
                 ]}
                 datePicker
             />
-            <Flex flexDirection="col" alignItems="start" className="mb-4">
-                <Title className="font-semibold">{detail?.name}</Title>
-                <Text>{detail?.description}</Text>
+            <Flex alignItems="end" className="mb-4">
+                <Flex flexDirection="col" alignItems="start">
+                    <Title className="font-semibold">{detail?.name}</Title>
+                    <Text>{detail?.description}</Text>
+                </Flex>
+                <Button
+                    variant="light"
+                    onClick={() => setShowSummary(!showSummary)}
+                    icon={showSummary ? ChevronUpIcon : ChevronDownIcon}
+                >{`${showSummary ? 'hide' : 'show'} summary`}</Button>
             </Flex>
-            <Grid numItems={2} className="w-full gap-4 mb-4">
-                <Card>
-                    <Flex flexDirection="col" alignItems="start">
-                        {detailsLoading ? (
-                            <Spinner />
-                        ) : (
-                            <List>
-                                <ListItem>
-                                    <Text>Connector</Text>
-                                    <Text className="text-gray-800">
-                                        {getConnectorIcon(detail?.connectors)}
-                                    </Text>
-                                </ListItem>
-                                <ListItem>
-                                    <Text>Collection type</Text>
-                                    <Text className="text-gray-800" />
-                                </ListItem>
-                                <ListItem>
-                                    <Text>Resources</Text>
-                                    <Text className="text-gray-800">
-                                        {numberDisplay(
-                                            detail?.resource_count,
-                                            0
-                                        )}
-                                    </Text>
-                                </ListItem>
-                                <ListItem>
-                                    <Text>Services used</Text>
-                                    <Text className="text-gray-800">
-                                        {detail?.metric_count}
-                                    </Text>
-                                </ListItem>
-                                <ListItem>
-                                    <Text>Status</Text>
-                                    <Text className="text-gray-800">
-                                        {capitalizeFirstLetter(
-                                            detail?.status || ''
-                                        )}
-                                    </Text>
-                                </ListItem>
-                                <ListItem>
-                                    <Text>Last evaluation</Text>
-                                    <Text className="text-gray-800">
-                                        {dateTimeDisplay(
-                                            detail?.last_evaluated_at
-                                        )}
-                                    </Text>
-                                </ListItem>
-                                <ListItem>
-                                    <Text>Tags</Text>
-                                    <Flex
-                                        justifyContent="end"
-                                        className="w-2/3 flex-wrap gap-1"
-                                    >
-                                        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                                        {/* @ts-ignore */}
-                                        {Object.entries(detail?.tags).map(
-                                            ([name, value]) => (
-                                                <Tag
-                                                    text={`${name}: ${value}`}
-                                                />
-                                            )
-                                        )}
-                                    </Flex>
-                                </ListItem>
-                            </List>
-                        )}
-                        <Flex justifyContent="end">
-                            <Button
-                                variant="light"
-                                icon={ChevronRightIcon}
-                                iconPosition="right"
-                                onClick={() => setOpenDrawer(true)}
-                            >
-                                see more
-                            </Button>
-                        </Flex>
-                        <DrawerPanel
-                            title="Resource collection detail"
-                            open={openDrawer}
-                            onClose={() => setOpenDrawer(false)}
+            {showSummary && (
+                <Grid numItems={2} className="w-full gap-4 mb-4">
+                    <Card>
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            className="h-full"
                         >
-                            <RenderObject obj={detail} />
-                        </DrawerPanel>
-                    </Flex>
-                </Card>
-                <Card className="h-full">
-                    <TabGroup className="h-[300px]">
-                        <TabList>
-                            <Tab>Compliance</Tab>
-                            <Tab>Infrastructure</Tab>
-                        </TabList>
-                        <TabPanels>
-                            <TabPanel className="mt-0">
-                                <Chart
-                                    labels={[]}
-                                    chartType="doughnut"
-                                    chartData={pieData(complianceKPI)}
-                                    loading={complianceKPILoading}
-                                    colorful
-                                />
-                            </TabPanel>
-                            <TabPanel>
-                                <Title className="font-semibold mb-3">
-                                    Top accounts
-                                </Title>
-                                <BarList
-                                    data={barData(accountInfo)}
-                                    color="slate"
-                                />
-                            </TabPanel>
-                        </TabPanels>
-                    </TabGroup>
-                </Card>
-            </Grid>
+                            {detailsLoading ? (
+                                <Spinner className="my-24" />
+                            ) : (
+                                <List>
+                                    <ListItem>
+                                        <Text>Connector</Text>
+                                        <Text className="text-gray-800">
+                                            {getConnectorIcon(
+                                                detail?.connectors
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Resources</Text>
+                                        <Text className="text-gray-800">
+                                            {numberDisplay(
+                                                detail?.resource_count,
+                                                0
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Services used</Text>
+                                        <Text className="text-gray-800">
+                                            {detail?.metric_count}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Status</Text>
+                                        <Text className="text-gray-800">
+                                            {capitalizeFirstLetter(
+                                                detail?.status || ''
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Last evaluation</Text>
+                                        <Text className="text-gray-800">
+                                            {dateTimeDisplay(
+                                                detail?.last_evaluated_at
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Text>Tags</Text>
+                                        <Flex
+                                            justifyContent="end"
+                                            className="w-2/3 flex-wrap gap-1"
+                                        >
+                                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                                            {/* @ts-ignore */}
+                                            {Object.entries(detail?.tags).map(
+                                                ([name, value]) => (
+                                                    <Tag
+                                                        text={`${name}: ${value}`}
+                                                    />
+                                                )
+                                            )}
+                                        </Flex>
+                                    </ListItem>
+                                </List>
+                            )}
+                            <Flex justifyContent="end">
+                                <Button
+                                    variant="light"
+                                    icon={ChevronRightIcon}
+                                    iconPosition="right"
+                                    onClick={() => setOpenDrawer(true)}
+                                >
+                                    see more
+                                </Button>
+                            </Flex>
+                            <DrawerPanel
+                                title="Resource collection detail"
+                                open={openDrawer}
+                                onClose={() => setOpenDrawer(false)}
+                            >
+                                <List>
+                                    <ListItem>
+                                        <Text>Connector</Text>
+                                        <Text className="text-gray-800">
+                                            {getConnectorIcon(
+                                                detail?.connectors
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Resources</Text>
+                                        <Text className="text-gray-800">
+                                            {numberDisplay(
+                                                detail?.resource_count,
+                                                0
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Services used</Text>
+                                        <Text className="text-gray-800">
+                                            {detail?.metric_count}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Status</Text>
+                                        <Text className="text-gray-800">
+                                            {capitalizeFirstLetter(
+                                                detail?.status || ''
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Date created</Text>
+                                        <Text className="text-gray-800">
+                                            {dateTimeDisplay(
+                                                detail?.created_at
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Last evaluation</Text>
+                                        <Text className="text-gray-800">
+                                            {dateTimeDisplay(
+                                                detail?.last_evaluated_at
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Tags</Text>
+                                        <Flex
+                                            justifyContent="end"
+                                            className="w-2/3 flex-wrap gap-1"
+                                        >
+                                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                                            {/* @ts-ignore */}
+                                            {Object.entries(detail?.tags).map(
+                                                ([name, value]) => (
+                                                    <Tag
+                                                        text={`${name}: ${value}`}
+                                                    />
+                                                )
+                                            )}
+                                        </Flex>
+                                    </ListItem>
+                                </List>
+                            </DrawerPanel>
+                        </Flex>
+                    </Card>
+                    <Card className="h-full">
+                        <TabGroup>
+                            <Flex>
+                                <Title className="font-semibold">KPI</Title>
+                                <TabList className="w-1/2">
+                                    <Tab>Compliance</Tab>
+                                    <Tab>Infrastructure</Tab>
+                                </TabList>
+                            </Flex>
+                            <TabPanels>
+                                <TabPanel className="mt-0">
+                                    <Chart
+                                        labels={[]}
+                                        chartType="doughnut"
+                                        chartData={pieData(complianceKPI)}
+                                        loading={complianceKPILoading}
+                                        colorful
+                                    />
+                                </TabPanel>
+                                <TabPanel>
+                                    <Title className="font-semibold mb-3">
+                                        Top accounts
+                                    </Title>
+                                    <BarList
+                                        data={barData(accountInfo)}
+                                        color="slate"
+                                    />
+                                </TabPanel>
+                            </TabPanels>
+                        </TabGroup>
+                    </Card>
+                </Grid>
+            )}
             <TabGroup>
                 <TabList className="mb-3">
                     <Tab>Landscape</Tab>

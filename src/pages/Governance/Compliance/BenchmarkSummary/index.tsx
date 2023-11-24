@@ -255,16 +255,16 @@ export default function BenchmarkSummary() {
                 </Flex>
             )}
             <Card className="mb-4">
-                <Grid numItems={7} className="w-full">
+                <Grid numItems={7} className="w-full mb-6">
                     <SummaryCard
-                        title="Score"
+                        title="Security score"
                         metric={`${((passed / total) * 100).toFixed(2)} %`}
                         border={false}
                         loading={isLoading}
                         url="details"
                     />
                     <Col numColSpan={2}>
-                        <Flex
+                        {/* <Flex
                             flexDirection="col"
                             justifyContent="center"
                             className="h-full"
@@ -305,7 +305,7 @@ export default function BenchmarkSummary() {
                                     )}% failed`}</Text>
                                 )}
                             </Flex>
-                        </Flex>
+                        </Flex> */}
                     </Col>
                     <Col numColSpan={3} />
                     <Flex justifyContent="end">
@@ -325,10 +325,10 @@ export default function BenchmarkSummary() {
                         </TabGroup>
                     </Flex>
                 </Grid>
-                <Flex justifyContent="end" className="mt-6 gap-2.5">
+                {/* <Flex justifyContent="end" className="mt-6 gap-2.5">
                     <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
                     <Text>Score</Text>
-                </Flex>
+                </Flex> */}
                 <Chart
                     labels={generateLineData(benchmarkTrend).label}
                     chartData={generateLineData(benchmarkTrend).data}
@@ -339,7 +339,7 @@ export default function BenchmarkSummary() {
             <Grid numItems={5} className="w-full gap-4">
                 <Col numColSpan={2}>
                     <Breakdown
-                        title="Severity breakdown"
+                        title="Findings be severity"
                         chartData={[
                             { name: 'Critical', value: critical },
                             { name: 'High', value: high },
@@ -349,19 +349,20 @@ export default function BenchmarkSummary() {
                             { name: 'Unknown', value: unknown },
                         ]}
                         loading={isLoading}
+                        colorful
                     />
                 </Col>
                 <Col numColSpanLg={3} className="h-full">
                     <Grid numItems={2} className="w-full h-full gap-4">
                         <ListCard
-                            title="Top accounts"
+                            title="Top accounts with alarms"
                             loading={isLoading}
                             items={topConnections(connections)}
                             url="details#cloud-accounts"
                             type="account"
                         />
                         <ListCard
-                            title="Top resources"
+                            title="Top resource types with alarms"
                             loading={isLoading}
                             items={topList(services)}
                             url="details#resources"
