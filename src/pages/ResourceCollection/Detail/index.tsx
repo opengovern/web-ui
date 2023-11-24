@@ -217,10 +217,6 @@ export default function ResourceCollectionDetail() {
                                         </Text>
                                     </ListItem>
                                     <ListItem>
-                                        <Text>Collection type</Text>
-                                        <Text className="text-gray-800" />
-                                    </ListItem>
-                                    <ListItem>
                                         <Text>Resources</Text>
                                         <Text className="text-gray-800">
                                             {numberDisplay(
@@ -293,10 +289,6 @@ export default function ResourceCollectionDetail() {
                                                 detail?.connectors
                                             )}
                                         </Text>
-                                    </ListItem>
-                                    <ListItem className="py-6">
-                                        <Text>Collection type</Text>
-                                        <Text className="text-gray-800" />
                                     </ListItem>
                                     <ListItem className="py-6">
                                         <Text>Resources</Text>
