@@ -28,7 +28,7 @@ export default function Boostrap() {
         isExecuted: statusIsExecuted,
         isLoading: statusIsLoading,
         error: statusError,
-    } = useWorkspaceApiV1BootstrapDetail(name)
+    } = useWorkspaceApiV1BootstrapDetail(name, {}, step > 2)
 
     useEffect(() => {
         if ((statusResponse?.workspaceCreationStatus?.done || 0) !== 0) {

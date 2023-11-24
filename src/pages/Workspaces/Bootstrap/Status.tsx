@@ -196,7 +196,12 @@ export function Status({ workspaceName }: IStatus) {
                 <Node done={finished} text="Finishing Up" />
                 <Button
                     className="mt-8"
-                    disabled={!finished}
+                    disabled={
+                        !(
+                            analyticsTotal > 0 &&
+                            analyticsDone === analyticsTotal
+                        )
+                    }
                     onClick={() => navigate(`/${workspaceName}`)}
                 >
                     Access the workspace
