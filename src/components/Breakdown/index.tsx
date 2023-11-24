@@ -23,6 +23,7 @@ interface IBreakdown {
     isCost?: boolean
     title?: string
     loading: boolean
+    colorful?: boolean
 }
 
 export default function Breakdown({
@@ -33,6 +34,7 @@ export default function Breakdown({
     seeMore,
     isCost = false,
     title,
+    colorful = false,
 }: IBreakdown) {
     const navigate = useNavigate()
     const [selectedIndex, setSelectedIndex] = useState(1)
@@ -82,6 +84,7 @@ export default function Breakdown({
                 chartType="doughnut"
                 isCost={isCost}
                 loading={loading}
+                colorful={colorful}
             />
             {!!seeMore && (
                 <Button
