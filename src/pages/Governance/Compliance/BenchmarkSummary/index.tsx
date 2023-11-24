@@ -163,11 +163,8 @@ export default function BenchmarkSummary() {
         isLoading,
         sendNow: updateDetail,
     } = useComplianceApiV1BenchmarksSummaryDetail(String(id))
-    const {
-        isLoading: evaluateLoading,
-        sendNow: triggerEvaluate,
-        isExecuted,
-    } = useScheduleApiV1ComplianceTriggerUpdate(String(id), {}, false)
+    const { sendNow: triggerEvaluate, isExecuted } =
+        useScheduleApiV1ComplianceTriggerUpdate(String(id), {}, false)
     const { response: connections } = useComplianceApiV1FindingsTopDetail(
         String(id),
         'connectionID',
