@@ -49,6 +49,7 @@ import Table, { IColumn } from '../../components/Table'
 import Header from '../../components/Header'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../api/api'
 import { isDemoAtom, queryAtom } from '../../store'
+import { snakeCaseToLabel } from '../../utilities/labelMaker'
 
 export const getTable = (headers: any, details: any, isDemo: boolean) => {
     const columns: IColumn<any, any>[] = []
@@ -58,7 +59,7 @@ export const getTable = (headers: any, details: any, isDemo: boolean) => {
             const isHide = headers[i][0] === '_'
             columns.push({
                 field: headers[i],
-                headerName: headers[i],
+                headerName: snakeCaseToLabel(headers[i]),
                 type: 'string',
                 sortable: true,
                 hide: isHide,

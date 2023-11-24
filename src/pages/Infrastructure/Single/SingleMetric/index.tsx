@@ -306,6 +306,11 @@ export default function SingleMetric({
                 title="Resource list"
                 id="metric_table"
                 loading={metricDetailLoading || isLoading}
+                onGridReady={(e) => {
+                    if (metricDetailLoading || isLoading) {
+                        e.api.showLoadingOverlay()
+                    }
+                }}
                 columns={
                     getTable(
                         queryResponse?.headers,
