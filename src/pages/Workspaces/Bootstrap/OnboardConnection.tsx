@@ -129,18 +129,18 @@ export function OnboardConnection({
                     <Flex justifyContent="start" className="ml-3">
                         <ExclamationCircleIcon
                             className={`w-4 ${
-                                allConnectionCount <
-                                (statusResponse?.minRequiredConnections || 0)
-                                    ? 'text-red-500'
-                                    : 'text-emerald-500'
+                                allConnectionCount >=
+                                (statusResponse?.minRequiredConnections || 9999)
+                                    ? 'text-emerald-500'
+                                    : 'text-red-500'
                             }`}
                         />
                         <Text
                             className={`ml-1 ${
-                                allConnectionCount <
-                                (statusResponse?.minRequiredConnections || 0)
-                                    ? 'text-red-500'
-                                    : 'text-emerald-500'
+                                allConnectionCount >=
+                                (statusResponse?.minRequiredConnections || 9999)
+                                    ? 'text-emerald-500'
+                                    : 'text-red-500'
                             }`}
                         >
                             Minimum of {statusResponse?.minRequiredConnections}{' '}

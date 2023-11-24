@@ -25,6 +25,7 @@ export default function SecondStep({ onNext, onPrevious }: IStep) {
                         onChange={(e) => setAccountID(e.target.value)}
                     />
                 </Flex>
+                <Divider />
                 <Flex flexDirection="row">
                     <Text>Role Name</Text>
                     <TextInput
@@ -33,6 +34,7 @@ export default function SecondStep({ onNext, onPrevious }: IStep) {
                         onChange={(e) => setRoleName(e.target.value)}
                     />
                 </Flex>
+                <Divider />
                 <Flex flexDirection="row">
                     <Text>External ID</Text>
                     <TextInput

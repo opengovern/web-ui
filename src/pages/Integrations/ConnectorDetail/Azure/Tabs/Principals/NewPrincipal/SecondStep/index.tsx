@@ -2,6 +2,12 @@ import { useState } from 'react'
 import { Bold, Button, Divider, Flex, Text, TextInput } from '@tremor/react'
 
 interface IStep {
+    iAppId: string
+    iTenId: string
+    iSecId: string
+    iObjectId: string
+    iClientSecret: string
+    iSubscriptionId: string
     error: string
     onNext: (
         appId: string,
@@ -14,13 +20,23 @@ interface IStep {
     onPrevious: () => void
 }
 
-export default function SecondStep({ error, onNext, onPrevious }: IStep) {
-    const [appId, setAppId] = useState('')
-    const [tenId, setTenId] = useState('')
-    const [secId, setSecId] = useState('')
-    const [objectId, setObjectId] = useState('')
-    const [clientSecret, setClientSecret] = useState('')
-    const [subscriptionId, setSubscriptionId] = useState('')
+export default function SecondStep({
+    iAppId,
+    iTenId,
+    iSecId,
+    iObjectId,
+    iClientSecret,
+    iSubscriptionId,
+    error,
+    onNext,
+    onPrevious,
+}: IStep) {
+    const [appId, setAppId] = useState(iAppId)
+    const [tenId, setTenId] = useState(iTenId)
+    const [secId, setSecId] = useState(iSecId)
+    const [objectId, setObjectId] = useState(iObjectId)
+    const [clientSecret, setClientSecret] = useState(iClientSecret)
+    const [subscriptionId, setSubscriptionId] = useState(iSubscriptionId)
 
     return (
         <Flex flexDirection="col" className="h-full">

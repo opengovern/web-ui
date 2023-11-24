@@ -1,6 +1,7 @@
 import { Button, Flex, Grid } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import Layout from '../../components/Layout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
@@ -28,6 +29,13 @@ export default function Workspaces() {
                 <Flex justifyContent="center" flexDirection="row">
                     <div className="max-w-6xl w-2/3">
                         <Header>
+                            <Button
+                                variant="secondary"
+                                onClick={refreshList}
+                                className="mx-2"
+                            >
+                                <ArrowPathIcon className="h-5 text-kaytu-500" />
+                            </Button>
                             <Button
                                 variant="secondary"
                                 onClick={() => navigate(`/new-ws`)}

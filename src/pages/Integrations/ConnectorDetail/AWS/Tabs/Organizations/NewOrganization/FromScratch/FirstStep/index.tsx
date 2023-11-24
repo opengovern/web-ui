@@ -2,6 +2,7 @@ import {
     Bold,
     Button,
     Card,
+    Divider,
     Flex,
     Tab,
     TabGroup,
@@ -10,11 +11,13 @@ import {
     TabPanels,
     Text,
 } from '@tremor/react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import clipboardCopy from 'clipboard-copy'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 import { CLITabs } from '../../../../../../../../../components/Layout/CLIMenu'
+import { useWorkspaceApiV1WorkspacesList } from '../../../../../../../../../api/workspace.gen'
+import Spinner from '../../../../../../../../../components/Spinner'
 
 interface IStep {
     onNext: () => void
@@ -22,7 +25,23 @@ interface IStep {
 }
 
 export default function FirstStep({ onNext, onPrevious }: IStep) {
+    const workspace = useParams<{ ws: string }>().ws
     const [showCopied, setShowCopied] = useState<boolean>(false)
+
+    const { response: workspaceList, isLoading } =
+        useWorkspaceApiV1WorkspacesList()
+
+    if (isLoading) {
+        return (
+            <Flex justifyContent="center" className="mt-56">
+                <Spinner />
+            </Flex>
+        )
+    }
+
+    const currentWS = workspaceList?.find(
+        (w) => w.name !== undefined && w.name === workspace
+    )
 
     return (
         <Flex flexDirection="col" className="h-full">
@@ -83,14 +102,24 @@ export default function FirstStep({ onNext, onPrevious }: IStep) {
                             </Flex>
                         </TabPanel>
                         <TabPanel>
-                            <Button variant="light">
-                                <Link
-                                    to="https://kaytu.io/docs/latest/onboard_aws/"
-                                    target="_blank"
-                                >
-                                    Refer to guide, by clicking this link
-                                </Link>
-                            </Button>
+                            <Flex flexDirection="col" alignItems="start">
+                                <Button variant="light">
+                                    <Link
+                                        to="https://kaytu.io/docs/latest/onboard_aws/"
+                                        target="_blank"
+                                    >
+                                        Refer to guide, by clicking this link
+                                    </Link>
+                                </Button>
+                                <Divider />
+                                <Text className="font-bold">
+                                    Kaytu Management IAM User:
+                                </Text>
+                                <Text>{currentWS?.aws_user_arn}</Text>
+                                <Divider />
+                                <Text className="font-bold">Handshake ID:</Text>
+                                <Text>{currentWS?.aws_unique_id}</Text>
+                            </Flex>
                         </TabPanel>
                     </TabPanels>
                 </TabGroup>
