@@ -285,7 +285,76 @@ export default function ResourceCollectionDetail() {
                                 open={openDrawer}
                                 onClose={() => setOpenDrawer(false)}
                             >
-                                <RenderObject obj={detail} />
+                                <List>
+                                    <ListItem>
+                                        <Text>Connector</Text>
+                                        <Text className="text-gray-800">
+                                            {getConnectorIcon(
+                                                detail?.connectors
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Collection type</Text>
+                                        <Text className="text-gray-800" />
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Resources</Text>
+                                        <Text className="text-gray-800">
+                                            {numberDisplay(
+                                                detail?.resource_count,
+                                                0
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Services used</Text>
+                                        <Text className="text-gray-800">
+                                            {detail?.metric_count}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Status</Text>
+                                        <Text className="text-gray-800">
+                                            {capitalizeFirstLetter(
+                                                detail?.status || ''
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Date created</Text>
+                                        <Text className="text-gray-800">
+                                            {dateTimeDisplay(
+                                                detail?.created_at
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Last evaluation</Text>
+                                        <Text className="text-gray-800">
+                                            {dateTimeDisplay(
+                                                detail?.last_evaluated_at
+                                            )}
+                                        </Text>
+                                    </ListItem>
+                                    <ListItem className="py-6">
+                                        <Text>Tags</Text>
+                                        <Flex
+                                            justifyContent="end"
+                                            className="w-2/3 flex-wrap gap-1"
+                                        >
+                                            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                                            {/* @ts-ignore */}
+                                            {Object.entries(detail?.tags).map(
+                                                ([name, value]) => (
+                                                    <Tag
+                                                        text={`${name}: ${value}`}
+                                                    />
+                                                )
+                                            )}
+                                        </Flex>
+                                    </ListItem>
+                                </List>
                             </DrawerPanel>
                         </Flex>
                     </Card>
