@@ -171,7 +171,7 @@ export default function ResourceCollectionDetail() {
         })
     const { response: landscape, isLoading: landscapeLoading } =
         useInventoryApiV2ResourceCollectionLandscapeDetail(resourceId || '')
-    console.log(detail)
+
     return (
         <Layout currentPage="resource-collection">
             <Header
