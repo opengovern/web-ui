@@ -6,6 +6,8 @@ import {
     Card,
     Flex,
     Icon,
+    Select,
+    SelectItem,
     Tab,
     TabGroup,
     TabList,
@@ -23,7 +25,7 @@ import {
     MagnifyingGlassIcon,
     PlayCircleIcon,
 } from '@heroicons/react/24/outline'
-import { Fragment, useEffect, useState } from 'react' // eslint-disable-next-line import/no-extraneous-dependencies
+import { Fragment, useEffect, useMemo, useState } from 'react' // eslint-disable-next-line import/no-extraneous-dependencies
 import { highlight, languages } from 'prismjs' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/components/prism-sql' // eslint-disable-next-line import/no-extraneous-dependencies
 import 'prismjs/themes/prism.css'
@@ -50,6 +52,7 @@ import Header from '../../components/Header'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../api/api'
 import { isDemoAtom, queryAtom } from '../../store'
 import { snakeCaseToLabel } from '../../utilities/labelMaker'
+import { numberDisplay } from '../../utilities/numericDisplay'
 
 export const getTable = (headers: any, details: any, isDemo: boolean) => {
     const columns: IColumn<any, any>[] = []
@@ -86,9 +89,12 @@ export const getTable = (headers: any, details: any, isDemo: boolean) => {
             rows.push(row)
         }
     }
+    const count = rows.length
+
     return {
         columns,
         rows,
+        count,
     }
 }
 
@@ -132,6 +138,7 @@ export default function Finder() {
     const [openSearch, setOpenSearch] = useState(true)
     const [showEditor, setShowEditor] = useState(false)
     const isDemo = useAtomValue(isDemoAtom)
+    const [pageSize, setPageSize] = useState(1000)
 
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
@@ -146,7 +153,7 @@ export default function Finder() {
         error,
     } = useInventoryApiV1QueryRunCreate(
         {
-            page: { no: 1, size: 5000 },
+            page: { no: 1, size: pageSize },
             query: code,
         },
         {},
@@ -182,6 +189,25 @@ export default function Finder() {
             }
         })
     }
+
+    const memoRows = useMemo(
+        () =>
+            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
+                .rows,
+        [queryResponse, isDemo]
+    )
+    const memoColumns = useMemo(
+        () =>
+            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
+                .columns,
+        [queryResponse, isDemo]
+    )
+    const memoCount = useMemo(
+        () =>
+            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
+                .count,
+        [queryResponse, isDemo]
+    )
 
     return (
         <Layout currentPage="finder">
@@ -324,11 +350,54 @@ export default function Finder() {
                                         )}
                                     </Card>
                                     <Flex className="w-full mt-4">
-                                        <Flex>
+                                        <Flex justifyContent="start">
+                                            <Select
+                                                className="w-56"
+                                                placeholder={`Result count: ${numberDisplay(
+                                                    pageSize,
+                                                    0
+                                                )}`}
+                                            >
+                                                <SelectItem
+                                                    value="1000"
+                                                    onClick={() =>
+                                                        setPageSize(1000)
+                                                    }
+                                                >
+                                                    1,000
+                                                </SelectItem>
+                                                <SelectItem
+                                                    value="3000"
+                                                    onClick={() =>
+                                                        setPageSize(5000)
+                                                    }
+                                                >
+                                                    3,000
+                                                </SelectItem>
+                                                <SelectItem
+                                                    value="5000"
+                                                    onClick={() =>
+                                                        setPageSize(5000)
+                                                    }
+                                                >
+                                                    5,000
+                                                </SelectItem>
+                                                <SelectItem
+                                                    value="10000"
+                                                    onClick={() =>
+                                                        setPageSize(10000)
+                                                    }
+                                                >
+                                                    10,000
+                                                </SelectItem>
+                                            </Select>
                                             {!isLoading &&
                                                 isExecuted &&
                                                 error && (
-                                                    <Flex justifyContent="start">
+                                                    <Flex
+                                                        justifyContent="start"
+                                                        className="w-fit"
+                                                    >
                                                         <Icon
                                                             icon={
                                                                 ExclamationCircleIcon
@@ -345,7 +414,10 @@ export default function Finder() {
                                             {!isLoading &&
                                                 isExecuted &&
                                                 queryResponse && (
-                                                    <Flex justifyContent="start">
+                                                    <Flex
+                                                        justifyContent="start"
+                                                        className="w-fit"
+                                                    >
                                                         <Icon
                                                             icon={
                                                                 CheckCircleIcon
@@ -353,12 +425,20 @@ export default function Finder() {
                                                             color="emerald"
                                                         />
                                                         <Text color="emerald">
-                                                            Success
+                                                            {`Success ${
+                                                                memoCount ===
+                                                                pageSize
+                                                                    ? `(for ${numberDisplay(
+                                                                          pageSize,
+                                                                          0
+                                                                      )} results)`
+                                                                    : ''
+                                                            }`}
                                                         </Text>
                                                     </Flex>
                                                 )}
                                         </Flex>
-                                        <Flex className="w-fit gap-x-6">
+                                        <Flex className="w-fit gap-x-3">
                                             {!!code.length && (
                                                 <Button
                                                     variant="light"
@@ -493,20 +573,8 @@ export default function Finder() {
                                         <Table
                                             title="Query results"
                                             id="finder_table"
-                                            columns={
-                                                getTable(
-                                                    queryResponse?.headers,
-                                                    queryResponse?.result,
-                                                    isDemo
-                                                ).columns
-                                            }
-                                            rowData={
-                                                getTable(
-                                                    queryResponse?.headers,
-                                                    queryResponse?.result,
-                                                    isDemo
-                                                ).rows
-                                            }
+                                            columns={memoColumns}
+                                            rowData={memoRows}
                                             downloadable
                                             onRowClicked={(
                                                 event: RowClickedEvent
