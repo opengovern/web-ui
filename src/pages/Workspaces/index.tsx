@@ -40,7 +40,7 @@ export default function Workspaces() {
                                 variant="secondary"
                                 onClick={() => navigate(`/new-ws`)}
                             >
-                                Add new Kaytu instance
+                                Add new Kaytu workspace
                             </Button>
                         </Header>
                         {/* <CreateWorkspace
