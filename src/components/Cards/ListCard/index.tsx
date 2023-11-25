@@ -72,7 +72,7 @@ export default function ListCard({
                             {items?.data.map((item: Item) => (
                                 <ListItem
                                     key={item.name}
-                                    className={`py-1 ${
+                                    className={`max-w-full py-1 ${
                                         isClickable ? 'cursor-pointer' : ''
                                     }`}
                                 >
@@ -94,7 +94,10 @@ export default function ListCard({
                                                 : undefined
                                         }
                                     >
-                                        <Flex justifyContent="start">
+                                        <Flex
+                                            justifyContent="start"
+                                            className="max-w-[80%]"
+                                        >
                                             {item.connector &&
                                                 (item.connector[0].length > 1
                                                     ? getConnectorIcon(
@@ -103,21 +106,20 @@ export default function ListCard({
                                                     : getConnectorIcon(
                                                           String(item.connector)
                                                       ))}
-                                            <Flex className="h-9">
-                                                <Text
-                                                    className={
-                                                        type === 'account' &&
-                                                        isDemo
-                                                            ? 'w-4/5 truncate blur-md'
-                                                            : 'w-4/5 truncate'
-                                                    }
-                                                >
-                                                    {item.name}
-                                                </Text>
-                                            </Flex>
+                                            <Text
+                                                className={
+                                                    type === 'account' && isDemo
+                                                        ? 'ml-1 truncate blur-md'
+                                                        : 'ml-1 truncate'
+                                                }
+                                            >
+                                                {item.name}
+                                            </Text>
                                         </Flex>
                                         {item.value && (
-                                            <Text>{value(item)}</Text>
+                                            <Text className="ml-2 min-w-fit">
+                                                {value(item)}
+                                            </Text>
                                         )}
                                     </Flex>
                                 </ListItem>
