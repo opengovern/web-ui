@@ -264,6 +264,7 @@ export default function Infrastructure() {
             pageNumber: 1,
             sortBy: 'count',
         })
+    console.log(servicesResponse)
 
     return (
         <Layout currentPage="infrastructure">
@@ -276,7 +277,7 @@ export default function Infrastructure() {
             ) : (
                 <>
                     <Card className="mb-4">
-                        <Grid numItems={6} className="gap-4">
+                        <Grid numItems={5} className="gap-4">
                             <SummaryCard
                                 title="Accounts"
                                 metric={numericDisplay(
@@ -291,16 +292,21 @@ export default function Infrastructure() {
                             />
                             <Flex className="border-l border-l-gray-200 h-full pl-3">
                                 <SummaryCard
-                                    title="Resources"
+                                    title={`Sum of ${
+                                        servicesResponse?.total_metrics || 0
+                                    } resources`}
                                     metric={numericDisplay(
-                                        servicesResponse?.total_metrics
+                                        servicesResponse?.total_count
+                                    )}
+                                    metricPrev={numericDisplay(
+                                        servicesResponse?.total_old_count
                                     )}
                                     url="infrastructure-details#resources"
                                     loading={servicesResponseLoading}
                                     border={false}
                                 />
                             </Flex>
-                            <Col numColSpan={2} />
+                            <Col />
                             <Col numColSpan={2}>
                                 <Flex justifyContent="end" className="gap-4">
                                     <Select
