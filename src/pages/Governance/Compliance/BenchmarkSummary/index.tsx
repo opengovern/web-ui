@@ -171,9 +171,9 @@ export default function BenchmarkSummary() {
         5,
         topQuery
     )
-    const { response: services } = useComplianceApiV1FindingsTopDetail(
+    const { response: resources } = useComplianceApiV1FindingsTopDetail(
         String(id),
-        'service',
+        'resourceType',
         5,
         topQuery
     )
@@ -361,7 +361,7 @@ export default function BenchmarkSummary() {
                         <ListCard
                             title="Top resource types with alarms"
                             loading={isLoading}
-                            items={topList(services)}
+                            items={topList(resources)}
                             url="details#resources"
                             type="service"
                             isClickable={false}
