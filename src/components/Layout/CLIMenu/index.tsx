@@ -26,7 +26,7 @@ const tabs = [
         name: 'Linux',
         href: 'https://github.com/kaytu-io/cli/releases',
         icon: <LinuxIcon className="w-5 h-5 m-1" />,
-        commands: '$ snap install kaytu',
+        // commands: '$ snap install kaytu',
         clipboard: 'snap install kaytu',
     },
     {

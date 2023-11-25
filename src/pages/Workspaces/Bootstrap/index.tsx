@@ -141,7 +141,12 @@ export default function Boostrap() {
                     bootstrapMode
                 />
             )}
-            <Flex justifyContent="center" flexDirection="row">
+            <Flex
+                justifyContent="center"
+                flexDirection="row"
+                className="h-full"
+                alignItems="start"
+            >
                 {step < 4 ? (
                     <div className="max-w-6xl w-2/3">
                         <Card className="p-0">{page()}</Card>
