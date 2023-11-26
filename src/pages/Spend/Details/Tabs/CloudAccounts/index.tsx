@@ -23,7 +23,7 @@ const defaultColumns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'connector',
-            headerName: 'Connector',
+            headerName: 'Cloud provider',
             type: 'string',
             width: 115,
             enableRowGroup: true,
@@ -47,12 +47,26 @@ const defaultColumns = (isDemo: boolean) => {
         },
         {
             field: 'accountId',
-            headerName: 'Connector ID',
+            headerName: 'Account ID',
             type: 'string',
             filter: true,
             sortable: true,
             resizable: true,
             pivot: false,
+            pinned: true,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: '',
+            headerName: 'Connection ID',
+            type: 'string',
+            filter: true,
+            sortable: true,
+            resizable: true,
+            pivot: false,
+            hide: false,
             pinned: true,
             cellRenderer: (param: ValueFormatterParams) => (
                 <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
@@ -132,7 +146,21 @@ export default function CloudAccounts({
                               return v
                           })
                     : []
-            columns = [...dynamicCols]
+            columns = [
+                ...dynamicCols,
+                {
+                    field: 'percent',
+                    headerName: '%',
+                    type: 'string',
+                    width: 90,
+                    pinned: true,
+                    aggFunc: 'sum',
+                    resizable: true,
+                    valueFormatter: (param: ValueFormatterParams) => {
+                        return param.value ? `${param.value.toFixed(2)}%` : ''
+                    },
+                },
+            ]
         }
         return columns
     }

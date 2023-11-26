@@ -25,7 +25,7 @@ export const rowGenerator = (
     loading: boolean
 ) => {
     let sum = 0
-    const finalRow = []
+    const roww = []
     const granularity: any = {}
     let pinnedRow = [
         { totalCost: sum, dimension: 'Total cost', ...granularity },
@@ -71,12 +71,13 @@ export const rowGenerator = (
             { totalCost: sum, dimension: 'Total cost', ...granularity },
         ]
         for (let i = 0; i < rows.length; i += 1) {
-            finalRow.push({
+            roww.push({
                 ...rows[i],
                 percent: (rows[i].totalCost / sum) * 100,
             })
         }
     }
+    const finalRow = roww.sort((a, b) => b.totalCost - a.totalCost)
     return {
         finalRow,
         pinnedRow,
@@ -258,10 +259,9 @@ export default function Services({
         {
             field: 'percent',
             headerName: '%',
-            type: 'number',
+            type: 'string',
             width: 90,
             pinned: true,
-            sortable: true,
             aggFunc: 'sum',
             resizable: true,
             valueFormatter: (param: ValueFormatterParams) => {
