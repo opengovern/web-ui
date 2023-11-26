@@ -45,6 +45,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Connector',
             sortable: true,
             filter: true,
+            hide: true,
             enableRowGroup: true,
             type: 'string',
         },
@@ -81,9 +82,10 @@ export const columns = (isDemo: boolean) => {
         },
         {
             field: 'providerConnectionName',
-            headerName: 'Account name',
+            headerName: 'Cloud provider name',
             type: 'string',
             enableRowGroup: true,
+            hide: true,
             sortable: false,
             filter: true,
             resizable: true,
@@ -94,7 +96,7 @@ export const columns = (isDemo: boolean) => {
         },
         {
             field: 'providerConnectionID',
-            headerName: 'Account ID',
+            headerName: 'Cloud provider ID',
             type: 'string',
             hide: true,
             enableRowGroup: true,
@@ -118,8 +120,19 @@ export const columns = (isDemo: boolean) => {
             flex: 1,
         },
         {
-            field: 'resourceID',
-            headerName: 'Resource ID',
+            field: 'resourceType',
+            headerName: 'Resource type',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'resourceName',
+            headerName: 'Resource name',
+            hide: true,
             type: 'string',
             enableRowGroup: true,
             sortable: true,
@@ -139,18 +152,9 @@ export const columns = (isDemo: boolean) => {
             flex: 0.5,
         },
         {
-            field: 'reason',
-            headerName: 'Reason',
-            type: 'string',
-            sortable: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
-        },
-        {
             field: 'evaluatedAt',
             headerName: 'Last checked',
-            type: 'date',
+            type: 'datetime',
             sortable: true,
             filter: true,
             resizable: true,
@@ -275,6 +279,7 @@ export default function Findings() {
             ? { [sortModel[0].colId]: sortModel[0].sort }
             : {},
     })
+    console.log(findings)
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
