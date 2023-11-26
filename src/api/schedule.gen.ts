@@ -111,6 +111,7 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -124,7 +125,7 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
         JSON.stringify([benchmarkId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -138,8 +139,9 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1ComplianceTriggerUpdate(benchmarkId, params)
+                .apiV1ComplianceTriggerUpdate(benchmarkId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -150,13 +152,20 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -174,7 +183,10 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -183,7 +195,10 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -204,6 +219,7 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -217,7 +233,7 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -231,8 +247,9 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1DescribeConnectionStatusUpdate(query, params)
+                .apiV1DescribeConnectionStatusUpdate(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -243,13 +260,20 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -267,7 +291,10 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -276,7 +303,10 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -298,6 +328,7 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -311,7 +342,7 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
         JSON.stringify([connectionId, query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -325,8 +356,9 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1DescribeTriggerUpdate(connectionId, query, params)
+                .apiV1DescribeTriggerUpdate(connectionId, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -337,13 +369,20 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -363,7 +402,10 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -372,7 +414,10 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -391,6 +436,7 @@ export const useScheduleApiV1InsightTriggerUpdate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -404,7 +450,7 @@ export const useScheduleApiV1InsightTriggerUpdate = (
         JSON.stringify([insightId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -418,8 +464,9 @@ export const useScheduleApiV1InsightTriggerUpdate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1InsightTriggerUpdate(insightId, params)
+                .apiV1InsightTriggerUpdate(insightId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -430,13 +477,20 @@ export const useScheduleApiV1InsightTriggerUpdate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -454,7 +508,10 @@ export const useScheduleApiV1InsightTriggerUpdate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -463,7 +520,10 @@ export const useScheduleApiV1InsightTriggerUpdate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -484,6 +544,7 @@ export const useScheduleApiV1JobsList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -496,7 +557,7 @@ export const useScheduleApiV1JobsList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -510,8 +571,9 @@ export const useScheduleApiV1JobsList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1JobsList(query, params)
+                .apiV1JobsList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -522,13 +584,20 @@ export const useScheduleApiV1JobsList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -546,7 +615,10 @@ export const useScheduleApiV1JobsList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -555,7 +627,10 @@ export const useScheduleApiV1JobsList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -578,6 +653,7 @@ export const useScheduleApiV1StacksList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -590,7 +666,7 @@ export const useScheduleApiV1StacksList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -604,8 +680,9 @@ export const useScheduleApiV1StacksList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksList(query, params)
+                .apiV1StacksList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -616,13 +693,20 @@ export const useScheduleApiV1StacksList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -640,7 +724,10 @@ export const useScheduleApiV1StacksList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -649,7 +736,10 @@ export const useScheduleApiV1StacksList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -676,6 +766,7 @@ export const useScheduleApiV1StacksCreateCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -689,7 +780,7 @@ export const useScheduleApiV1StacksCreateCreate = (
         JSON.stringify([data, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -703,8 +794,9 @@ export const useScheduleApiV1StacksCreateCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksCreateCreate(data, params)
+                .apiV1StacksCreateCreate(data, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -715,13 +807,20 @@ export const useScheduleApiV1StacksCreateCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -739,7 +838,10 @@ export const useScheduleApiV1StacksCreateCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -748,7 +850,10 @@ export const useScheduleApiV1StacksCreateCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -769,6 +874,7 @@ export const useScheduleApiV1StacksResourceList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -782,7 +888,7 @@ export const useScheduleApiV1StacksResourceList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -796,8 +902,9 @@ export const useScheduleApiV1StacksResourceList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksResourceList(query, params)
+                .apiV1StacksResourceList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -808,13 +915,20 @@ export const useScheduleApiV1StacksResourceList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -832,7 +946,10 @@ export const useScheduleApiV1StacksResourceList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -841,7 +958,10 @@ export const useScheduleApiV1StacksResourceList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -860,6 +980,7 @@ export const useScheduleApiV1StacksDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -872,7 +993,7 @@ export const useScheduleApiV1StacksDetail = (
         JSON.stringify([stackId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -886,8 +1007,9 @@ export const useScheduleApiV1StacksDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksDetail(stackId, params)
+                .apiV1StacksDetail(stackId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -898,13 +1020,20 @@ export const useScheduleApiV1StacksDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -922,7 +1051,10 @@ export const useScheduleApiV1StacksDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -931,7 +1063,10 @@ export const useScheduleApiV1StacksDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -950,6 +1085,7 @@ export const useScheduleApiV1StacksDelete = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -962,7 +1098,7 @@ export const useScheduleApiV1StacksDelete = (
         JSON.stringify([stackId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -976,8 +1112,9 @@ export const useScheduleApiV1StacksDelete = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksDelete(stackId, params)
+                .apiV1StacksDelete(stackId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -988,13 +1125,20 @@ export const useScheduleApiV1StacksDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1012,7 +1156,10 @@ export const useScheduleApiV1StacksDelete = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1021,7 +1168,10 @@ export const useScheduleApiV1StacksDelete = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1041,6 +1191,7 @@ export const useScheduleApiV1StacksFindingsCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1054,7 +1205,7 @@ export const useScheduleApiV1StacksFindingsCreate = (
         JSON.stringify([stackId, request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1068,8 +1219,9 @@ export const useScheduleApiV1StacksFindingsCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksFindingsCreate(stackId, request, params)
+                .apiV1StacksFindingsCreate(stackId, request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1080,13 +1232,20 @@ export const useScheduleApiV1StacksFindingsCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1104,7 +1263,10 @@ export const useScheduleApiV1StacksFindingsCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1113,7 +1275,10 @@ export const useScheduleApiV1StacksFindingsCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1139,6 +1304,7 @@ export const useScheduleApiV1StacksInsightDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1152,7 +1318,7 @@ export const useScheduleApiV1StacksInsightDetail = (
         JSON.stringify([stackId, query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1166,8 +1332,9 @@ export const useScheduleApiV1StacksInsightDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksInsightDetail(stackId, query, params)
+                .apiV1StacksInsightDetail(stackId, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1178,13 +1345,20 @@ export const useScheduleApiV1StacksInsightDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1202,7 +1376,10 @@ export const useScheduleApiV1StacksInsightDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1211,7 +1388,10 @@ export const useScheduleApiV1StacksInsightDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1237,6 +1417,7 @@ export const useScheduleApiV1StacksInsightsDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1250,7 +1431,7 @@ export const useScheduleApiV1StacksInsightsDetail = (
         JSON.stringify([stackId, query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1264,8 +1445,9 @@ export const useScheduleApiV1StacksInsightsDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1StacksInsightsDetail(stackId, query, params)
+                .apiV1StacksInsightsDetail(stackId, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1276,13 +1458,20 @@ export const useScheduleApiV1StacksInsightsDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1300,7 +1489,10 @@ export const useScheduleApiV1StacksInsightsDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1309,7 +1501,10 @@ export const useScheduleApiV1StacksInsightsDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }

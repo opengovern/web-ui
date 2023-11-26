@@ -111,6 +111,7 @@ export const useAlertingApiV1ActionCreateCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -124,7 +125,7 @@ export const useAlertingApiV1ActionCreateCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -138,8 +139,9 @@ export const useAlertingApiV1ActionCreateCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionCreateCreate(request, params)
+                .apiV1ActionCreateCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -150,13 +152,20 @@ export const useAlertingApiV1ActionCreateCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -174,7 +183,10 @@ export const useAlertingApiV1ActionCreateCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -183,7 +195,10 @@ export const useAlertingApiV1ActionCreateCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -202,6 +217,7 @@ export const useAlertingApiV1ActionDeleteDelete = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -215,7 +231,7 @@ export const useAlertingApiV1ActionDeleteDelete = (
         JSON.stringify([actionId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -229,8 +245,9 @@ export const useAlertingApiV1ActionDeleteDelete = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionDeleteDelete(actionId, params)
+                .apiV1ActionDeleteDelete(actionId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -241,13 +258,20 @@ export const useAlertingApiV1ActionDeleteDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -265,7 +289,10 @@ export const useAlertingApiV1ActionDeleteDelete = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -274,7 +301,10 @@ export const useAlertingApiV1ActionDeleteDelete = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -293,6 +323,7 @@ export const useAlertingApiV1ActionJiraCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -305,7 +336,7 @@ export const useAlertingApiV1ActionJiraCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -319,8 +350,9 @@ export const useAlertingApiV1ActionJiraCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionJiraCreate(request, params)
+                .apiV1ActionJiraCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -331,13 +363,20 @@ export const useAlertingApiV1ActionJiraCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -355,7 +394,10 @@ export const useAlertingApiV1ActionJiraCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -364,7 +406,10 @@ export const useAlertingApiV1ActionJiraCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -382,6 +427,7 @@ export const useAlertingApiV1ActionListList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -394,7 +440,7 @@ export const useAlertingApiV1ActionListList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -408,8 +454,9 @@ export const useAlertingApiV1ActionListList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionListList(params)
+                .apiV1ActionListList(paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -420,13 +467,20 @@ export const useAlertingApiV1ActionListList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -444,7 +498,10 @@ export const useAlertingApiV1ActionListList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -453,7 +510,10 @@ export const useAlertingApiV1ActionListList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -472,6 +532,7 @@ export const useAlertingApiV1ActionSlackCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -486,7 +547,7 @@ export const useAlertingApiV1ActionSlackCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -500,8 +561,9 @@ export const useAlertingApiV1ActionSlackCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionSlackCreate(request, params)
+                .apiV1ActionSlackCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -512,13 +574,20 @@ export const useAlertingApiV1ActionSlackCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -536,7 +605,10 @@ export const useAlertingApiV1ActionSlackCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -545,7 +617,10 @@ export const useAlertingApiV1ActionSlackCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -565,6 +640,7 @@ export const useAlertingApiV1ActionUpdateUpdate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -578,7 +654,7 @@ export const useAlertingApiV1ActionUpdateUpdate = (
         JSON.stringify([actionId, request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -592,8 +668,9 @@ export const useAlertingApiV1ActionUpdateUpdate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1ActionUpdateUpdate(actionId, request, params)
+                .apiV1ActionUpdateUpdate(actionId, request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -604,13 +681,20 @@ export const useAlertingApiV1ActionUpdateUpdate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -630,7 +714,10 @@ export const useAlertingApiV1ActionUpdateUpdate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -639,7 +726,10 @@ export const useAlertingApiV1ActionUpdateUpdate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -658,6 +748,7 @@ export const useAlertingApiV1RuleCreateCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -670,7 +761,7 @@ export const useAlertingApiV1RuleCreateCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -684,8 +775,9 @@ export const useAlertingApiV1RuleCreateCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1RuleCreateCreate(request, params)
+                .apiV1RuleCreateCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -696,13 +788,20 @@ export const useAlertingApiV1RuleCreateCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -720,7 +819,10 @@ export const useAlertingApiV1RuleCreateCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -729,7 +831,10 @@ export const useAlertingApiV1RuleCreateCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -748,6 +853,7 @@ export const useAlertingApiV1RuleDeleteDelete = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -760,7 +866,7 @@ export const useAlertingApiV1RuleDeleteDelete = (
         JSON.stringify([ruleId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -774,8 +880,9 @@ export const useAlertingApiV1RuleDeleteDelete = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1RuleDeleteDelete(ruleId, params)
+                .apiV1RuleDeleteDelete(ruleId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -786,13 +893,20 @@ export const useAlertingApiV1RuleDeleteDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -810,7 +924,10 @@ export const useAlertingApiV1RuleDeleteDelete = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -819,7 +936,10 @@ export const useAlertingApiV1RuleDeleteDelete = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -837,6 +957,7 @@ export const useAlertingApiV1RuleListList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -849,7 +970,7 @@ export const useAlertingApiV1RuleListList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -863,8 +984,9 @@ export const useAlertingApiV1RuleListList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1RuleListList(params)
+                .apiV1RuleListList(paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -875,13 +997,20 @@ export const useAlertingApiV1RuleListList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -899,7 +1028,10 @@ export const useAlertingApiV1RuleListList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -908,7 +1040,10 @@ export const useAlertingApiV1RuleListList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -928,6 +1063,7 @@ export const useAlertingApiV1RuleUpdateUpdate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -940,7 +1076,7 @@ export const useAlertingApiV1RuleUpdateUpdate = (
         JSON.stringify([ruleId, request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -954,8 +1090,9 @@ export const useAlertingApiV1RuleUpdateUpdate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1RuleUpdateUpdate(ruleId, request, params)
+                .apiV1RuleUpdateUpdate(ruleId, request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -966,13 +1103,20 @@ export const useAlertingApiV1RuleUpdateUpdate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -990,7 +1134,10 @@ export const useAlertingApiV1RuleUpdateUpdate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -999,7 +1146,10 @@ export const useAlertingApiV1RuleUpdateUpdate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1018,6 +1168,7 @@ export const useAlertingApiV1RuleTriggerDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1032,7 +1183,7 @@ export const useAlertingApiV1RuleTriggerDetail = (
         JSON.stringify([ruleId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1046,8 +1197,9 @@ export const useAlertingApiV1RuleTriggerDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1RuleTriggerDetail(ruleId, params)
+                .apiV1RuleTriggerDetail(ruleId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1058,13 +1210,20 @@ export const useAlertingApiV1RuleTriggerDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1082,7 +1241,10 @@ export const useAlertingApiV1RuleTriggerDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1091,7 +1253,10 @@ export const useAlertingApiV1RuleTriggerDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1109,6 +1274,7 @@ export const useAlertingApiV1TriggerListList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1121,7 +1287,7 @@ export const useAlertingApiV1TriggerListList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1135,8 +1301,9 @@ export const useAlertingApiV1TriggerListList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.alerting
-                .apiV1TriggerListList(params)
+                .apiV1TriggerListList(paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1147,13 +1314,20 @@ export const useAlertingApiV1TriggerListList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1171,7 +1345,10 @@ export const useAlertingApiV1TriggerListList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1180,7 +1357,10 @@ export const useAlertingApiV1TriggerListList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }

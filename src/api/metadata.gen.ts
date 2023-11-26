@@ -110,6 +110,7 @@ export const useMetadataApiV1FilterList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -122,7 +123,7 @@ export const useMetadataApiV1FilterList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -136,8 +137,9 @@ export const useMetadataApiV1FilterList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.metadata
-                .apiV1FilterList(params)
+                .apiV1FilterList(paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -148,13 +150,20 @@ export const useMetadataApiV1FilterList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -172,7 +181,10 @@ export const useMetadataApiV1FilterList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -181,7 +193,10 @@ export const useMetadataApiV1FilterList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -200,6 +215,7 @@ export const useMetadataApiV1FilterCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -212,7 +228,7 @@ export const useMetadataApiV1FilterCreate = (
         JSON.stringify([req, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -226,8 +242,9 @@ export const useMetadataApiV1FilterCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.metadata
-                .apiV1FilterCreate(req, params)
+                .apiV1FilterCreate(req, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -238,13 +255,20 @@ export const useMetadataApiV1FilterCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -262,7 +286,10 @@ export const useMetadataApiV1FilterCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -271,7 +298,10 @@ export const useMetadataApiV1FilterCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -290,6 +320,7 @@ export const useMetadataApiV1MetadataCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -302,7 +333,7 @@ export const useMetadataApiV1MetadataCreate = (
         JSON.stringify([req, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -316,8 +347,9 @@ export const useMetadataApiV1MetadataCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.metadata
-                .apiV1MetadataCreate(req, params)
+                .apiV1MetadataCreate(req, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -328,13 +360,20 @@ export const useMetadataApiV1MetadataCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -352,7 +391,10 @@ export const useMetadataApiV1MetadataCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -361,7 +403,10 @@ export const useMetadataApiV1MetadataCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -380,6 +425,7 @@ export const useMetadataApiV1MetadataDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -392,7 +438,7 @@ export const useMetadataApiV1MetadataDetail = (
         JSON.stringify([key, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -406,8 +452,9 @@ export const useMetadataApiV1MetadataDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.metadata
-                .apiV1MetadataDetail(key, params)
+                .apiV1MetadataDetail(key, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -418,13 +465,20 @@ export const useMetadataApiV1MetadataDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -442,7 +496,10 @@ export const useMetadataApiV1MetadataDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -451,7 +508,10 @@ export const useMetadataApiV1MetadataDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }

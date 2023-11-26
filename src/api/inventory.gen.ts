@@ -111,6 +111,7 @@ export const useInventoryApiV1QueryList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -123,7 +124,7 @@ export const useInventoryApiV1QueryList = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -137,8 +138,9 @@ export const useInventoryApiV1QueryList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV1QueryList(request, params)
+                .apiV1QueryList(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -149,13 +151,20 @@ export const useInventoryApiV1QueryList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -173,7 +182,10 @@ export const useInventoryApiV1QueryList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -182,7 +194,10 @@ export const useInventoryApiV1QueryList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -201,6 +216,7 @@ export const useInventoryApiV1QueryRunCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -213,7 +229,7 @@ export const useInventoryApiV1QueryRunCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -227,8 +243,9 @@ export const useInventoryApiV1QueryRunCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV1QueryRunCreate(request, params)
+                .apiV1QueryRunCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -239,13 +256,20 @@ export const useInventoryApiV1QueryRunCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -263,7 +287,10 @@ export const useInventoryApiV1QueryRunCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -272,7 +299,10 @@ export const useInventoryApiV1QueryRunCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -290,6 +320,7 @@ export const useInventoryApiV1QueryRunHistoryList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -303,7 +334,7 @@ export const useInventoryApiV1QueryRunHistoryList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -317,8 +348,9 @@ export const useInventoryApiV1QueryRunHistoryList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV1QueryRunHistoryList(params)
+                .apiV1QueryRunHistoryList(paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -329,13 +361,20 @@ export const useInventoryApiV1QueryRunHistoryList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -353,7 +392,10 @@ export const useInventoryApiV1QueryRunHistoryList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -362,7 +404,10 @@ export const useInventoryApiV1QueryRunHistoryList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -383,6 +428,7 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -396,7 +442,7 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -410,8 +456,9 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsCategoriesList(query, params)
+                .apiV2AnalyticsCategoriesList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -422,13 +469,20 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -446,7 +500,10 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -455,7 +512,10 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -491,6 +551,7 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -504,7 +565,7 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
         JSON.stringify([key, query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -518,8 +579,9 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsCompositionDetail(key, query, params)
+                .apiV2AnalyticsCompositionDetail(key, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -530,13 +592,20 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -554,7 +623,10 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -563,7 +635,10 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -608,6 +683,7 @@ export const useInventoryApiV2AnalyticsMetricList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -621,7 +697,7 @@ export const useInventoryApiV2AnalyticsMetricList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -635,8 +711,9 @@ export const useInventoryApiV2AnalyticsMetricList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsMetricList(query, params)
+                .apiV2AnalyticsMetricList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -647,13 +724,20 @@ export const useInventoryApiV2AnalyticsMetricList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -671,7 +755,10 @@ export const useInventoryApiV2AnalyticsMetricList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -680,7 +767,10 @@ export const useInventoryApiV2AnalyticsMetricList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -703,6 +793,7 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -716,7 +807,7 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -730,8 +821,9 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsMetricsListList(query, params)
+                .apiV2AnalyticsMetricsListList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -742,13 +834,20 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -766,7 +865,10 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -775,7 +877,10 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -794,6 +899,7 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -807,7 +913,7 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
         JSON.stringify([metricId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -821,8 +927,9 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsMetricsDetail(metricId, params)
+                .apiV2AnalyticsMetricsDetail(metricId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -833,13 +940,20 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -857,7 +971,10 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -866,7 +983,10 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -897,6 +1017,7 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -910,7 +1031,7 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -924,8 +1045,9 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsSpendCompositionList(query, params)
+                .apiV2AnalyticsSpendCompositionList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -936,13 +1058,20 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -960,7 +1089,10 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -969,7 +1101,10 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1008,6 +1143,7 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1021,7 +1157,7 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1035,8 +1171,9 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsSpendMetricList(query, params)
+                .apiV2AnalyticsSpendMetricList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1047,13 +1184,20 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1071,7 +1215,10 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1080,7 +1227,10 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1115,6 +1265,7 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1128,7 +1279,7 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1142,8 +1293,9 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsSpendTableList(query, params)
+                .apiV2AnalyticsSpendTableList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1154,13 +1306,20 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1178,7 +1337,10 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1187,7 +1349,10 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1220,6 +1385,7 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1233,7 +1399,7 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1247,8 +1413,9 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsSpendTrendList(query, params)
+                .apiV2AnalyticsSpendTrendList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1259,13 +1426,20 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1283,7 +1457,10 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1292,7 +1469,10 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1319,6 +1499,7 @@ export const useInventoryApiV2AnalyticsTableList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1332,7 +1513,7 @@ export const useInventoryApiV2AnalyticsTableList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1346,8 +1527,9 @@ export const useInventoryApiV2AnalyticsTableList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsTableList(query, params)
+                .apiV2AnalyticsTableList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1358,13 +1540,20 @@ export const useInventoryApiV2AnalyticsTableList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1382,7 +1571,10 @@ export const useInventoryApiV2AnalyticsTableList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1391,7 +1583,10 @@ export const useInventoryApiV2AnalyticsTableList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1426,6 +1621,7 @@ export const useInventoryApiV2AnalyticsTagList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1440,7 +1636,7 @@ export const useInventoryApiV2AnalyticsTagList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1454,8 +1650,9 @@ export const useInventoryApiV2AnalyticsTagList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsTagList(query, params)
+                .apiV2AnalyticsTagList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1466,13 +1663,20 @@ export const useInventoryApiV2AnalyticsTagList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1490,7 +1694,10 @@ export const useInventoryApiV2AnalyticsTagList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1499,7 +1706,10 @@ export const useInventoryApiV2AnalyticsTagList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1538,6 +1748,7 @@ export const useInventoryApiV2AnalyticsTrendList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1551,7 +1762,7 @@ export const useInventoryApiV2AnalyticsTrendList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1565,8 +1776,9 @@ export const useInventoryApiV2AnalyticsTrendList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2AnalyticsTrendList(query, params)
+                .apiV2AnalyticsTrendList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1577,13 +1789,20 @@ export const useInventoryApiV2AnalyticsTrendList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1601,7 +1820,10 @@ export const useInventoryApiV2AnalyticsTrendList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1610,7 +1832,10 @@ export const useInventoryApiV2AnalyticsTrendList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1633,6 +1858,7 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1646,7 +1872,7 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1660,8 +1886,9 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2MetadataResourceCollectionList(query, params)
+                .apiV2MetadataResourceCollectionList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1672,13 +1899,20 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1696,7 +1930,10 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1705,7 +1942,10 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1724,6 +1964,7 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1737,7 +1978,7 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
         JSON.stringify([resourceCollectionId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1751,10 +1992,11 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
                 .apiV2MetadataResourceCollectionDetail(
                     resourceCollectionId,
-                    params
+                    paramsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -1766,13 +2008,20 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1795,7 +2044,10 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1804,7 +2056,10 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1827,6 +2082,7 @@ export const useInventoryApiV2ResourceCollectionList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1840,7 +2096,7 @@ export const useInventoryApiV2ResourceCollectionList = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1854,8 +2110,9 @@ export const useInventoryApiV2ResourceCollectionList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2ResourceCollectionList(query, params)
+                .apiV2ResourceCollectionList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1866,13 +2123,20 @@ export const useInventoryApiV2ResourceCollectionList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1890,7 +2154,10 @@ export const useInventoryApiV2ResourceCollectionList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1899,7 +2166,10 @@ export const useInventoryApiV2ResourceCollectionList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1918,6 +2188,7 @@ export const useInventoryApiV2ResourceCollectionDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1931,7 +2202,7 @@ export const useInventoryApiV2ResourceCollectionDetail = (
         JSON.stringify([resourceCollectionId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1945,8 +2216,12 @@ export const useInventoryApiV2ResourceCollectionDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2ResourceCollectionDetail(resourceCollectionId, params)
+                .apiV2ResourceCollectionDetail(
+                    resourceCollectionId,
+                    paramsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1957,13 +2232,20 @@ export const useInventoryApiV2ResourceCollectionDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1986,7 +2268,10 @@ export const useInventoryApiV2ResourceCollectionDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1995,7 +2280,10 @@ export const useInventoryApiV2ResourceCollectionDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -2014,6 +2302,7 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -2027,7 +2316,7 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
         JSON.stringify([resourceCollectionId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -2041,10 +2330,11 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
                 .apiV2ResourceCollectionLandscapeDetail(
                     resourceCollectionId,
-                    params
+                    paramsSignal
                 )
                 .then((resp) => {
                     setState({
@@ -2056,13 +2346,20 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -2085,7 +2382,10 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -2094,7 +2394,10 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -2122,6 +2425,7 @@ export const useInventoryApiV2ResourcesMetricDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -2135,7 +2439,7 @@ export const useInventoryApiV2ResourcesMetricDetail = (
         JSON.stringify([resourceType, query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -2149,8 +2453,9 @@ export const useInventoryApiV2ResourcesMetricDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.inventory
-                .apiV2ResourcesMetricDetail(resourceType, query, params)
+                .apiV2ResourcesMetricDetail(resourceType, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2161,13 +2466,20 @@ export const useInventoryApiV2ResourcesMetricDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -2187,7 +2499,10 @@ export const useInventoryApiV2ResourcesMetricDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -2196,7 +2511,10 @@ export const useInventoryApiV2ResourcesMetricDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }

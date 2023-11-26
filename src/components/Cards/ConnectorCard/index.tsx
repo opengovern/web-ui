@@ -17,7 +17,7 @@ export const getConnectorIcon = (
     connector: string | SourceType[] | SourceType | undefined
 ) => {
     return (
-        <Flex className="w-fit gap-1">
+        <Flex className="w-9 h-9 gap-1">
             {typeof connector === 'string' ? (
                 <img
                     src={connector === 'Azure' ? AzureIcon : AWSIcon}

@@ -94,7 +94,10 @@ export default function ListCard({
                                                 : undefined
                                         }
                                     >
-                                        <Flex justifyContent="start">
+                                        <Flex
+                                            justifyContent="start"
+                                            className="w-4/5"
+                                        >
                                             {item.connector &&
                                                 (item.connector[0].length > 1
                                                     ? getConnectorIcon(
@@ -103,13 +106,13 @@ export default function ListCard({
                                                     : getConnectorIcon(
                                                           String(item.connector)
                                                       ))}
-                                            <Flex className="h-9">
+                                            <Flex className="h-9 w-4/5">
                                                 <Text
                                                     className={
                                                         type === 'account' &&
                                                         isDemo
-                                                            ? 'w-4/5 truncate blur-md'
-                                                            : 'w-4/5 truncate'
+                                                            ? 'truncate blur-md'
+                                                            : 'truncate'
                                                     }
                                                 >
                                                     {item.name}
