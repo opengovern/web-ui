@@ -74,7 +74,7 @@ export default function ListCard({
                                     key={item.name}
                                     className={`max-w-full py-1 ${
                                         isClickable ? 'cursor-pointer' : ''
-                                    }`}
+                                    } ${item.connector ? '' : 'py-3'}`}
                                 >
                                     <Flex
                                         className={`py-1 rounded-md ${
