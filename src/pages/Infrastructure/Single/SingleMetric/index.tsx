@@ -7,6 +7,8 @@ import {
     Col,
     Flex,
     Grid,
+    Select,
+    SelectItem,
     Tab,
     TabGroup,
     TabList,
@@ -72,6 +74,7 @@ export default function SingleMetric({
         'line'
     )
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const [pageSize, setPageSize] = useState(1000)
 
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
@@ -101,8 +104,9 @@ export default function SingleMetric({
     }
     const { response: resourceTrend, isLoading: resourceTrendLoading } =
         useInventoryApiV2AnalyticsTrendList(query)
-    const { response: metricDetail, isLoading: metricDetailLoading } =
-        useInventoryApiV2AnalyticsMetricsDetail(metricId || '')
+    const { response: metricDetail } = useInventoryApiV2AnalyticsMetricsDetail(
+        metricId || ''
+    )
 
     const {
         response: queryResponse,
@@ -110,7 +114,7 @@ export default function SingleMetric({
         sendNow,
     } = useInventoryApiV1QueryRunCreate(
         {
-            page: { no: 1, size: 1000 },
+            page: { no: 1, size: pageSize },
             query: metricDetail?.finderQuery,
         },
         {},
@@ -121,7 +125,7 @@ export default function SingleMetric({
         if (metricDetail && metricDetail.finderQuery) {
             sendNow()
         }
-    }, [metricDetail])
+    }, [metricDetail, pageSize])
 
     return (
         <>
@@ -308,9 +312,9 @@ export default function SingleMetric({
             <Table
                 title="Resource list"
                 id="metric_table"
-                loading={metricDetailLoading || isLoading}
+                loading={isLoading}
                 onGridReady={(e) => {
-                    if (metricDetailLoading || isLoading) {
+                    if (isLoading) {
                         e.api.showLoadingOverlay()
                     }
                 }}
@@ -333,7 +337,28 @@ export default function SingleMetric({
                     setSelectedRow(event.data)
                     setOpenDrawer(true)
                 }}
-            />
+            >
+                <Select
+                    className="w-56"
+                    placeholder={`Result count: ${numberDisplay(pageSize, 0)}`}
+                >
+                    <SelectItem value="1000" onClick={() => setPageSize(1000)}>
+                        1,000
+                    </SelectItem>
+                    <SelectItem value="3000" onClick={() => setPageSize(5000)}>
+                        3,000
+                    </SelectItem>
+                    <SelectItem value="5000" onClick={() => setPageSize(5000)}>
+                        5,000
+                    </SelectItem>
+                    <SelectItem
+                        value="10000"
+                        onClick={() => setPageSize(10000)}
+                    >
+                        10,000
+                    </SelectItem>
+                </Select>
+            </Table>
             <DrawerPanel
                 title="Resource detail"
                 open={openDrawer}
