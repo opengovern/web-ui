@@ -90,12 +90,29 @@ export default function FindingDetail({
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Policy name</Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Benchmark title</Text>
+                    <Text className="text-gray-800">{finding?.policyID}</Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Benchmark name</Text>
+                    <Text className="text-gray-800">
+                        {finding?.parentBenchmarks
+                            ? finding?.parentBenchmarks[
+                                  // eslint-disable-next-line no-unsafe-optional-chaining
+                                  finding?.parentBenchmarks.length - 1
+                              ]
+                            : ''}
+                    </Text>
+                </ListItem>
+                <ListItem className="py-6 flex items-start">
+                    <Text>Benchmark title</Text>
+                    <Text className="text-gray-800">
+                        {finding?.parentBenchmarkNames
+                            ? finding?.parentBenchmarkNames[
+                                  // eslint-disable-next-line no-unsafe-optional-chaining
+                                  finding?.parentBenchmarkNames.length - 1
+                              ]
+                            : ''}
+                    </Text>
                 </ListItem>
             </List>
             <Divider />
