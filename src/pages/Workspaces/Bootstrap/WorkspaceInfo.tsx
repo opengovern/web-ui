@@ -11,6 +11,7 @@ interface IWorkspaceInformation {
     isLoading: boolean
     setName: (name: string) => void
     done: boolean
+    errorMessage: string
     onDone: () => void
 }
 export function WorkspaceInformation({
@@ -19,6 +20,7 @@ export function WorkspaceInformation({
     isLoading,
     setName,
     done,
+    errorMessage,
     onDone,
 }: IWorkspaceInformation) {
     return (
@@ -63,6 +65,13 @@ export function WorkspaceInformation({
                             onChange={(e) => setName(e.target.value)}
                         />
                     </Flex>
+                    {errorMessage.length > 0 && (
+                        <Flex justifyContent="start">
+                            <Text className="font-normal text-sm text-red-700">
+                                {errorMessage}
+                            </Text>
+                        </Flex>
+                    )}
                     <Flex justifyContent="start" className="mt-3">
                         <Button onClick={onDone} loading={isLoading}>
                             Next

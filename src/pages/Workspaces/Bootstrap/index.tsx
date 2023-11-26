@@ -13,6 +13,7 @@ import {
     useWorkspaceApiV1WorkspaceCreate,
 } from '../../../api/workspace.gen'
 import Layout from '../../../components/Layout'
+import { getErrorMessage } from '../../../types/apierror'
 
 export default function Boostrap() {
     const currentWorkspace = useParams<{ ws: string }>().ws
@@ -100,6 +101,7 @@ export default function Boostrap() {
                             createWorkspaceIsExecuted &&
                             createWorkspaceIsLoading
                         }
+                        errorMessage={getErrorMessage(createWorkspaceError)}
                         onDone={createWorkspaceSendNow}
                         done={step > 2}
                     />

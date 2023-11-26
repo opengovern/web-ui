@@ -1,6 +1,7 @@
 import { Button, Flex, Text } from '@tremor/react'
 import { CheckIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import { useWorkspaceApiV1BootstrapDetail } from '../../../api/workspace.gen'
 
 interface INode {
@@ -117,6 +118,14 @@ export function Status({ workspaceName }: IStatus) {
         error: statusError,
         sendNow: refreshStatus,
     } = useWorkspaceApiV1BootstrapDetail(workspaceName)
+
+    useEffect(() => {
+        if (statusIsExecuted && !statusIsLoading) {
+            setTimeout(() => {
+                refreshStatus()
+            }, 5000)
+        }
+    }, [statusIsLoading])
 
     const wsCreateDone = statusResponse?.workspaceCreationStatus?.done || 0
     const wsCreateTotal = statusResponse?.workspaceCreationStatus?.total || 0
