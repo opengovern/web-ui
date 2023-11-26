@@ -18,14 +18,11 @@ export default function SpendDetails() {
     const tabs = useLocation().hash
     useEffect(() => {
         switch (tabs) {
-            case '#summary':
+            case '#services':
                 setSelectedTab(0)
                 break
             case '#cloud-accounts':
                 setSelectedTab(1)
-                break
-            case '#services':
-                setSelectedTab(2)
                 break
             default:
                 setSelectedTab(0)
@@ -52,11 +49,10 @@ export default function SpendDetails() {
             <Header breadCrumb={['Details']} filter datePicker />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
-                    <Tab onClick={() => navigate('#summary')}>Summary</Tab>
+                    <Tab onClick={() => navigate('#services')}>Services</Tab>
                     <Tab onClick={() => navigate('#cloud-accounts')}>
                         Cloud accounts
                     </Tab>
-                    <Tab onClick={() => navigate('#services')}>Services</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
@@ -65,19 +61,10 @@ export default function SpendDetails() {
                             connections={selectedConnections}
                             selectedGranularity={selectedGranularity}
                             onGranularityChange={setSelectedGranularity}
-                            isSummary
                         />
                     </TabPanel>
                     <TabPanel>
                         <CloudAccounts
-                            activeTimeRange={activeTimeRange}
-                            connections={selectedConnections}
-                            selectedGranularity={selectedGranularity}
-                            onGranularityChange={setSelectedGranularity}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <Services
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
                             selectedGranularity={selectedGranularity}

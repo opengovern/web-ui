@@ -2,7 +2,7 @@ import { Dayjs } from 'dayjs'
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
 import { Select, SelectItem, Text } from '@tremor/react'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useMemo } from 'react'
 import { IFilter } from '../../../../../store'
 import { useInventoryApiV2AnalyticsSpendTableList } from '../../../../../api/inventory.gen'
 import Table, { IColumn } from '../../../../../components/Table'
@@ -19,7 +19,10 @@ interface IServices {
 }
 
 export const rowGenerator = (
-    input: GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[] | undefined
+    input:
+        | GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[]
+        | undefined,
+    loading: boolean
 ) => {
     let sum = 0
     const finalRow = []
@@ -27,7 +30,7 @@ export const rowGenerator = (
     let pinnedRow = [
         { totalCost: sum, dimension: 'Total cost', ...granularity },
     ]
-    if (input) {
+    if (!loading) {
         const rows =
             input?.map((row) => {
                 let temp = {}
@@ -83,7 +86,7 @@ export const rowGenerator = (
 export const defaultColumns: IColumn<any, any>[] = [
     {
         field: 'connector',
-        headerName: 'Connector',
+        headerName: 'Cloud provider',
         type: 'string',
         width: 115,
         enableRowGroup: true,
@@ -276,8 +279,8 @@ export default function Services({
             id={isSummary ? 'spend_summary_table' : 'spend_service_table'}
             loading={isLoading}
             columns={columns}
-            rowData={rowGenerator(response).finalRow}
-            pinnedRow={rowGenerator(response).pinnedRow}
+            rowData={rowGenerator(response, isLoading).finalRow}
+            pinnedRow={rowGenerator(response, isLoading).pinnedRow}
             options={gridOptions}
             onRowClicked={(event) => {
                 if (event.data.category.length) {
