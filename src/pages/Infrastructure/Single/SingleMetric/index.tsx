@@ -7,6 +7,7 @@ import {
     Col,
     Flex,
     Grid,
+    Icon,
     Select,
     SelectItem,
     Tab,
@@ -15,13 +16,17 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 import clipboardCopy from 'clipboard-copy'
 import { highlight, languages } from 'prismjs'
 import Editor from 'react-simple-code-editor'
 import { RowClickedEvent } from 'ag-grid-community'
+import {
+    CheckCircleIcon,
+    ExclamationCircleIcon,
+} from '@heroicons/react/24/solid'
 import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsMetricsDetail,
@@ -49,6 +54,7 @@ import { dateDisplay } from '../../../../utilities/dateDisplay'
 import Modal from '../../../../components/Modal'
 import { RenderObject } from '../../../../components/RenderObject'
 import DrawerPanel from '../../../../components/DrawerPanel'
+import { getErrorMessage } from '../../../../types/apierror'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -111,6 +117,8 @@ export default function SingleMetric({
     const {
         response: queryResponse,
         isLoading,
+        isExecuted,
+        error,
         sendNow,
     } = useInventoryApiV1QueryRunCreate(
         {
@@ -126,6 +134,25 @@ export default function SingleMetric({
             sendNow()
         }
     }, [metricDetail, pageSize])
+
+    const memoRows = useMemo(
+        () =>
+            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
+                .rows,
+        [queryResponse, isDemo]
+    )
+    const memoColumns = useMemo(
+        () =>
+            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
+                .columns,
+        [queryResponse, isDemo]
+    )
+    const memoCount = useMemo(
+        () =>
+            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
+                .count,
+        [queryResponse, isDemo]
+    )
 
     return (
         <>
@@ -318,46 +345,81 @@ export default function SingleMetric({
                         e.api.showLoadingOverlay()
                     }
                 }}
-                columns={
-                    getTable(
-                        queryResponse?.headers,
-                        queryResponse?.result,
-                        isDemo
-                    ).columns
-                }
-                rowData={
-                    getTable(
-                        queryResponse?.headers,
-                        queryResponse?.result,
-                        isDemo
-                    ).rows
-                }
+                columns={memoColumns}
+                rowData={memoRows}
                 downloadable
                 onRowClicked={(event: RowClickedEvent) => {
                     setSelectedRow(event.data)
                     setOpenDrawer(true)
                 }}
+                fullWidth
             >
-                <Select
-                    className="w-56"
-                    placeholder={`Result count: ${numberDisplay(pageSize, 0)}`}
-                >
-                    <SelectItem value="1000" onClick={() => setPageSize(1000)}>
-                        1,000
-                    </SelectItem>
-                    <SelectItem value="3000" onClick={() => setPageSize(5000)}>
-                        3,000
-                    </SelectItem>
-                    <SelectItem value="5000" onClick={() => setPageSize(5000)}>
-                        5,000
-                    </SelectItem>
-                    <SelectItem
-                        value="10000"
-                        onClick={() => setPageSize(10000)}
+                <Flex flexDirection="row-reverse" className="pl-3">
+                    <Select
+                        className="w-56"
+                        placeholder={`Result count: ${numberDisplay(
+                            pageSize,
+                            0
+                        )}`}
                     >
-                        10,000
-                    </SelectItem>
-                </Select>
+                        <SelectItem
+                            value="1000"
+                            onClick={() => setPageSize(1000)}
+                        >
+                            1,000
+                        </SelectItem>
+                        <SelectItem
+                            value="3000"
+                            onClick={() => setPageSize(3000)}
+                        >
+                            3,000
+                        </SelectItem>
+                        <SelectItem
+                            value="5000"
+                            onClick={() => setPageSize(5000)}
+                        >
+                            5,000
+                        </SelectItem>
+                        <SelectItem
+                            value="10000"
+                            onClick={() => setPageSize(10000)}
+                        >
+                            10,000
+                        </SelectItem>
+                    </Select>
+                    {!isLoading && isExecuted && error && (
+                        <Flex justifyContent="start" className="w-fit">
+                            <Icon icon={ExclamationCircleIcon} color="rose" />
+                            <Text color="rose">{getErrorMessage(error)}</Text>
+                        </Flex>
+                    )}
+                    {!isLoading && isExecuted && queryResponse && (
+                        <Flex justifyContent="start" className="w-fit">
+                            {memoCount === pageSize ? (
+                                <>
+                                    <Icon
+                                        icon={ExclamationCircleIcon}
+                                        color="amber"
+                                    />
+                                    <Text color="amber">
+                                        {`Results are truncated for ${numberDisplay(
+                                            pageSize,
+                                            0
+                                        )} rows`}
+                                    </Text>
+                                </>
+                            ) : (
+                                <>
+                                    <Icon
+                                        icon={CheckCircleIcon}
+                                        color="emerald"
+                                    />
+                                    <Text color="emerald">Success</Text>
+                                </>
+                            )}
+                        </Flex>
+                    )}
+                </Flex>
             </Table>
             <DrawerPanel
                 title="Resource detail"

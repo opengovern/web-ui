@@ -369,7 +369,7 @@ export default function Finder() {
                                                 <SelectItem
                                                     value="3000"
                                                     onClick={() =>
-                                                        setPageSize(5000)
+                                                        setPageSize(3000)
                                                     }
                                                 >
                                                     3,000
