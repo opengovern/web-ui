@@ -43,6 +43,7 @@ import { columns } from '../../../Findings'
 import Breakdown from '../../../../../components/Breakdown'
 import { policyColumns } from '../Details/Tabs/Policies'
 import PolicyDetail from '../Details/Tabs/Policies/Detail'
+import FindingDetail from '../../../Findings/Detail'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -354,14 +355,11 @@ export default function SingleComplianceConnection() {
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
-            <DrawerPanel
+            <FindingDetail
+                finding={finding}
                 open={openFinding}
                 onClose={() => setOpenFinding(false)}
-                title="Finding Detail"
-            >
-                <Title>Summary</Title>
-                <RenderObject obj={finding} />
-            </DrawerPanel>
+            />
             <PolicyDetail
                 selectedPolicy={policy}
                 open={openPolicy}

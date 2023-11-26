@@ -264,7 +264,6 @@ export default function Infrastructure() {
             pageNumber: 1,
             sortBy: 'count',
         })
-    console.log(servicesResponse)
 
     return (
         <Layout currentPage="infrastructure">
@@ -279,30 +278,30 @@ export default function Infrastructure() {
                     <Card className="mb-4">
                         <Grid numItems={5} className="gap-4">
                             <SummaryCard
-                                title="Accounts"
+                                title={`Sum of ${
+                                    servicesResponse?.total_metrics || 0
+                                } resources`}
                                 metric={numericDisplay(
-                                    accountsResponse?.totalOnboardedCount
+                                    servicesResponse?.total_count
                                 )}
                                 metricPrev={numericDisplay(
-                                    accountsResponse?.totalDiscoveredCount
+                                    servicesResponse?.total_old_count
                                 )}
-                                url="infrastructure-details#cloud-accounts"
-                                loading={accountsResponseLoading}
+                                url="infrastructure-details#resources"
+                                loading={servicesResponseLoading}
                                 border={false}
                             />
                             <Flex className="border-l border-l-gray-200 h-full pl-3">
                                 <SummaryCard
-                                    title={`Sum of ${
-                                        servicesResponse?.total_metrics || 0
-                                    } resources`}
+                                    title="Accounts"
                                     metric={numericDisplay(
-                                        servicesResponse?.total_count
+                                        accountsResponse?.totalOnboardedCount
                                     )}
                                     metricPrev={numericDisplay(
-                                        servicesResponse?.total_old_count
+                                        accountsResponse?.totalDiscoveredCount
                                     )}
-                                    url="infrastructure-details#resources"
-                                    loading={servicesResponseLoading}
+                                    url="infrastructure-details#cloud-accounts"
+                                    loading={accountsResponseLoading}
                                     border={false}
                                 />
                             </Flex>

@@ -173,8 +173,8 @@ export default function CloudAccounts({
             id="spend_connection_table"
             loading={isLoading}
             columns={[...defaultColumns(isDemo), ...columnGenerator(response)]}
-            rowData={rowGenerator(response).finalRow}
-            pinnedRow={rowGenerator(response).pinnedRow}
+            rowData={rowGenerator(response, isLoading).finalRow}
+            pinnedRow={rowGenerator(response, isLoading).pinnedRow}
             options={gridOptions}
             onRowClicked={(event) => {
                 if (event.data.connectionId) {

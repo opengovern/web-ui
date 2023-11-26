@@ -369,7 +369,7 @@ export default function Finder() {
                                                 <SelectItem
                                                     value="3000"
                                                     onClick={() =>
-                                                        setPageSize(5000)
+                                                        setPageSize(3000)
                                                     }
                                                 >
                                                     3,000
@@ -418,23 +418,35 @@ export default function Finder() {
                                                         justifyContent="start"
                                                         className="w-fit"
                                                     >
-                                                        <Icon
-                                                            icon={
-                                                                CheckCircleIcon
-                                                            }
-                                                            color="emerald"
-                                                        />
-                                                        <Text color="emerald">
-                                                            {`Success ${
-                                                                memoCount ===
-                                                                pageSize
-                                                                    ? `(for ${numberDisplay(
-                                                                          pageSize,
-                                                                          0
-                                                                      )} results)`
-                                                                    : ''
-                                                            }`}
-                                                        </Text>
+                                                        {memoCount ===
+                                                        pageSize ? (
+                                                            <>
+                                                                <Icon
+                                                                    icon={
+                                                                        ExclamationCircleIcon
+                                                                    }
+                                                                    color="amber"
+                                                                />
+                                                                <Text color="amber">
+                                                                    {`Results are truncated for ${numberDisplay(
+                                                                        pageSize,
+                                                                        0
+                                                                    )} rows`}
+                                                                </Text>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <Icon
+                                                                    icon={
+                                                                        CheckCircleIcon
+                                                                    }
+                                                                    color="emerald"
+                                                                />
+                                                                <Text color="emerald">
+                                                                    Success
+                                                                </Text>
+                                                            </>
+                                                        )}
                                                     </Flex>
                                                 )}
                                         </Flex>

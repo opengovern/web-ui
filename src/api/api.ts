@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -427,6 +428,15 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSumm
     }
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark {
+    benchmarkId?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark
+    /**
+     * Status
+     * @example true
+     */
+    status?: boolean
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
     /**
      * Whether the benchmark is auto assigned or not
@@ -618,15 +628,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapo
      * @example 1686346668
      */
     timestamp?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiConnectionAssignedBenchmark {
-    benchmarkId?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark
-    /**
-     * Status
-     * @example true
-     */
-    status?: boolean
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
@@ -2872,10 +2873,35 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiConnectionAssignedBenchmark[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark[],
                 any
             >({
                 path: `/compliance/api/v1/assignments/connection/${connectionId}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving all benchmark assigned to a resource collection with resource collection id
+         *
+         * @tags benchmarks_assignment
+         * @name ApiV1AssignmentsResourceCollectionDetail
+         * @summary Get list of benchmark assignments for a resource collection
+         * @request GET:/compliance/api/v1/assignments/resource_collection/{resource_collection_id}
+         * @secure
+         */
+        apiV1AssignmentsResourceCollectionDetail: (
+            resourceCollectionId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark[],
+                any
+            >({
+                path: `/compliance/api/v1/assignments/resource_collection/${resourceCollectionId}`,
                 method: 'GET',
                 secure: true,
                 type: ContentType.Json,

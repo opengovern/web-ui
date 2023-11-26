@@ -284,7 +284,7 @@ export default function Table<TData = any, TValue = any>({
                 }
             >
                 {!!title?.length && (
-                    <Title className="font-semibold">{title}</Title>
+                    <Title className="font-semibold min-w-fit">{title}</Title>
                 )}
                 <Flex
                     flexDirection={fullWidth ? 'row-reverse' : 'row'}

@@ -62,9 +62,18 @@ const topList = (
     if (input) {
         for (let i = 0; i < (input.records?.length || 0); i += 1) {
             data.push({
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                name: input.records ? input.records[i].Service : '',
+                // eslint-disable-next-line no-nested-ternary
+                name: input.records
+                    ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
+                      input.records[i].ResourceType.resource_name.length
+                        ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                          // @ts-ignore
+                          input.records[i].ResourceType.resource_name
+                        : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                          // @ts-ignore
+                          input.records[i].ResourceType.resource_type
+                    : '',
                 value: input.records ? input.records[i].count : 0,
             })
         }
@@ -171,9 +180,9 @@ export default function BenchmarkSummary() {
         5,
         topQuery
     )
-    const { response: services } = useComplianceApiV1FindingsTopDetail(
+    const { response: resources } = useComplianceApiV1FindingsTopDetail(
         String(id),
-        'service',
+        'resourceType',
         5,
         topQuery
     )
@@ -361,7 +370,7 @@ export default function BenchmarkSummary() {
                         <ListCard
                             title="Top resource types with alarms"
                             loading={isLoading}
-                            items={topList(services)}
+                            items={topList(resources)}
                             url="details#resources"
                             type="service"
                             isClickable={false}
