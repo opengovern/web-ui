@@ -111,6 +111,7 @@ export const useAiApiV1GptRunCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -123,7 +124,7 @@ export const useAiApiV1GptRunCreate = (
         JSON.stringify([query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -137,8 +138,9 @@ export const useAiApiV1GptRunCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.ai
-                .apiV1GptRunCreate(query, params)
+                .apiV1GptRunCreate(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -149,13 +151,20 @@ export const useAiApiV1GptRunCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -173,7 +182,10 @@ export const useAiApiV1GptRunCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -182,7 +194,10 @@ export const useAiApiV1GptRunCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }

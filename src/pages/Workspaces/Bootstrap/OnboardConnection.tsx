@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from 'react'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
 import { useWorkspaceApiV1BootstrapDetail } from '../../../api/workspace.gen'
+import Spinner from '../../../components/Spinner'
 
 interface IConnector {
     onClick: () => void
@@ -52,6 +53,7 @@ export function OnboardConnection({
     onAWSClick,
     onAzureClick,
 }: IOnboardConnection) {
+    const [firstLoading, setFirstLoading] = useState(true)
     const {
         response: statusResponse,
         isExecuted: statusIsExecuted,
@@ -62,6 +64,7 @@ export function OnboardConnection({
 
     useEffect(() => {
         if (statusIsExecuted && !statusIsLoading) {
+            setFirstLoading(false)
             setTimeout(() => {
                 refreshStatus()
             }, 5000)
@@ -100,7 +103,12 @@ export function OnboardConnection({
                     )}
                 </div>
             </Flex>
-            {open && (
+            {firstLoading && (
+                <Flex className="h-60">
+                    <Spinner />
+                </Flex>
+            )}
+            {open && !firstLoading && (
                 <>
                     <Text className="text-gray-500 m-3">
                         The setup steps vary depending on the cloud service you

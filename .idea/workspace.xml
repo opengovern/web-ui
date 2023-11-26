@@ -6,9 +6,25 @@
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Cards/CardWithList/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/codegen/generate.go" beforeDir="false" afterPath="$PROJECT_DIR$/codegen/generate.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/ai.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/ai.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/alerting.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/alerting.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/auth.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/auth.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/compliance.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/compliance.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/costEstimator.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/costEstimator.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/inventory.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/inventory.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/metadata.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/metadata.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/onboard.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/onboard.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/schedule.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/schedule.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/workspace.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/workspace.gen.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Cards/ConnectorCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Cards/ConnectorCard/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Cards/ListCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Cards/ListCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Layout/CLIMenu/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout/CLIMenu/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Workspaces/Bootstrap/OnboardConnection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Workspaces/Bootstrap/OnboardConnection.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Workspaces/Bootstrap/Status.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Workspaces/Bootstrap/Status.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Workspaces/Bootstrap/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Workspaces/Bootstrap/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Workspaces/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Workspaces/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,27 +62,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;demo&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Sevices&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Merging demo",
+    "last_opened_file_path": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Sevices",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.stylelint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/prettier",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -254,7 +270,8 @@
       <workItem from="1700750942305" duration="1850000" />
       <workItem from="1700768993862" duration="655000" />
       <workItem from="1700830428313" duration="8298000" />
-      <workItem from="1700938138421" duration="2136000" />
+      <workItem from="1700938138421" duration="2760000" />
+      <workItem from="1700988348481" duration="1060000" />
     </task>
     <servers />
   </component>
@@ -281,7 +298,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/api/api.ts</url>
-          <line>761</line>
+          <line>765</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">

@@ -642,6 +642,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     evaluatedAt?: number
     /** @example "steampipe-v0.5" */
     evaluator?: string
+    /** @example ["Azure CIS v1.4.0"] */
+    parentBenchmarkNames?: string[]
     parentBenchmarks?: string[]
     /** @example 1 */
     parentComplianceJobID?: number
@@ -670,6 +672,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     resourceName?: string
     /** @example "Microsoft.Compute/virtualMachines" */
     resourceType?: string
+    /** @example "Virtual Machine" */
+    resourceTypeName?: string
     /** @example "alarm" */
     result?: TypesComplianceResult
     /** @example "low" */
@@ -1752,6 +1756,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
      * @example 50
      */
     unhealthy_connections?: number
+    version?: number
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgOnboardApiCredentialType {
@@ -3263,7 +3268,7 @@ export class Api<
                 resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
-                /** Severities to filter by */
+                /** Severities to filter by defaults to all severities except passed */
                 severities?: (
                     | 'none'
                     | 'passed'
@@ -3310,7 +3315,7 @@ export class Api<
                 resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
-                /** Severities to filter by */
+                /** Severities to filter by defaults to all severities except passed */
                 severities?: (
                     | 'none'
                     | 'passed'

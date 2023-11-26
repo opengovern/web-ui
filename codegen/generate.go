@@ -119,6 +119,7 @@ interface I%[6]sState {
 
 export const %[6]s = (%[2]s, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -132,7 +133,7 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
         JSON.stringify([%[5]s, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
 		setState({
 			...state,
 			error: undefined,
@@ -146,8 +147,9 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
 				setWorkspace('kaytu')
 			}
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
 			api.%[4]s
-                .%[1]s(%[5]s)
+                .%[1]s(%[5]sSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -158,13 +160,20 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -182,7 +191,10 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -191,8 +203,11 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
-    }
+		controller.abort()
+		const newController = new AbortController()
+		setController(newController)
+		sendRequest(newController)
+	}
     return { response, isLoading, isExecuted, error, sendNow }
 }
 `, apiName, req, resp, module, pmr, funcName, funcName[3:], setWorkspace)

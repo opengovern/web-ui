@@ -156,11 +156,7 @@ export function Status({ workspaceName }: IStatus) {
 
     return (
         <Flex justifyContent="start" className="h-full" alignItems="start">
-            <Flex
-                className="w-1/3 h-full"
-                flexDirection="col"
-                alignItems="start"
-            >
+            <Flex className="w-1/3" flexDirection="col" alignItems="start">
                 <Text className="font-bold text-sm text-gray-800">
                     In Progress
                 </Text>
@@ -208,7 +204,15 @@ export function Status({ workspaceName }: IStatus) {
                 </Button>
             </Flex>
             <Flex className="w-2/3 h-full" flexDirection="col">
-                <Text>Start the game</Text>
+                <Text>
+                    Let&apos;s play a game of minesweeper while you&apos;re
+                    waiting
+                </Text>
+                <iframe
+                    className="w-full h-full"
+                    title="Play a game while you are waiting"
+                    src="https://minesweeper.us/"
+                />
             </Flex>
         </Flex>
     )

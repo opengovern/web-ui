@@ -111,6 +111,7 @@ export const useWorkspaceApiV1BootstrapDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -123,7 +124,7 @@ export const useWorkspaceApiV1BootstrapDetail = (
         JSON.stringify([workspaceName, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -137,8 +138,9 @@ export const useWorkspaceApiV1BootstrapDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1BootstrapDetail(workspaceName, params)
+                .apiV1BootstrapDetail(workspaceName, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -149,13 +151,20 @@ export const useWorkspaceApiV1BootstrapDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -173,7 +182,10 @@ export const useWorkspaceApiV1BootstrapDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -182,7 +194,10 @@ export const useWorkspaceApiV1BootstrapDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -202,6 +217,7 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -215,7 +231,7 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
         JSON.stringify([workspaceName, request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -229,8 +245,13 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1BootstrapCredentialCreate(workspaceName, request, params)
+                .apiV1BootstrapCredentialCreate(
+                    workspaceName,
+                    request,
+                    paramsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -241,13 +262,20 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -270,7 +298,10 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -279,7 +310,10 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -298,6 +332,7 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -311,7 +346,7 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
         JSON.stringify([workspaceName, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -325,8 +360,9 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1BootstrapFinishCreate(workspaceName, params)
+                .apiV1BootstrapFinishCreate(workspaceName, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -337,13 +373,20 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -361,7 +404,10 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -370,7 +416,10 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -388,6 +437,7 @@ export const useWorkspaceApiV1OrganizationList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -402,7 +452,7 @@ export const useWorkspaceApiV1OrganizationList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -416,8 +466,9 @@ export const useWorkspaceApiV1OrganizationList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1OrganizationList(params)
+                .apiV1OrganizationList(paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -428,13 +479,20 @@ export const useWorkspaceApiV1OrganizationList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -452,7 +510,10 @@ export const useWorkspaceApiV1OrganizationList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -461,7 +522,10 @@ export const useWorkspaceApiV1OrganizationList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -480,6 +544,7 @@ export const useWorkspaceApiV1OrganizationCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -493,7 +558,7 @@ export const useWorkspaceApiV1OrganizationCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -507,8 +572,9 @@ export const useWorkspaceApiV1OrganizationCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1OrganizationCreate(request, params)
+                .apiV1OrganizationCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -519,13 +585,20 @@ export const useWorkspaceApiV1OrganizationCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -543,7 +616,10 @@ export const useWorkspaceApiV1OrganizationCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -552,7 +628,10 @@ export const useWorkspaceApiV1OrganizationCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -571,6 +650,7 @@ export const useWorkspaceApiV1OrganizationDelete = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -584,7 +664,7 @@ export const useWorkspaceApiV1OrganizationDelete = (
         JSON.stringify([organizationId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -598,8 +678,9 @@ export const useWorkspaceApiV1OrganizationDelete = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1OrganizationDelete(organizationId, params)
+                .apiV1OrganizationDelete(organizationId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -610,13 +691,20 @@ export const useWorkspaceApiV1OrganizationDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -634,7 +722,10 @@ export const useWorkspaceApiV1OrganizationDelete = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -643,7 +734,10 @@ export const useWorkspaceApiV1OrganizationDelete = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -662,6 +756,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -674,7 +769,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
         JSON.stringify([request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -688,8 +783,9 @@ export const useWorkspaceApiV1WorkspaceCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceCreate(request, params)
+                .apiV1WorkspaceCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -700,13 +796,20 @@ export const useWorkspaceApiV1WorkspaceCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -724,7 +827,10 @@ export const useWorkspaceApiV1WorkspaceCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -733,7 +839,10 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -751,6 +860,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -764,7 +874,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -778,8 +888,9 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceCurrentList(params)
+                .apiV1WorkspaceCurrentList(paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -790,13 +901,20 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -814,7 +932,10 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -823,7 +944,10 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -842,6 +966,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -854,7 +979,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
         JSON.stringify([workspaceId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -868,8 +993,9 @@ export const useWorkspaceApiV1WorkspaceDelete = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceDelete(workspaceId, params)
+                .apiV1WorkspaceDelete(workspaceId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -880,13 +1006,20 @@ export const useWorkspaceApiV1WorkspaceDelete = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -904,7 +1037,10 @@ export const useWorkspaceApiV1WorkspaceDelete = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -913,7 +1049,10 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -933,6 +1072,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -946,7 +1086,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
         JSON.stringify([workspaceId, request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -960,8 +1100,9 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceNameCreate(workspaceId, request, params)
+                .apiV1WorkspaceNameCreate(workspaceId, request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -972,13 +1113,20 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1001,7 +1149,10 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1010,7 +1161,10 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1030,6 +1184,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1043,7 +1198,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
         JSON.stringify([workspaceId, request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1057,8 +1212,13 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceOrganizationCreate(workspaceId, request, params)
+                .apiV1WorkspaceOrganizationCreate(
+                    workspaceId,
+                    request,
+                    paramsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1069,13 +1229,20 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1098,7 +1265,10 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1107,7 +1277,10 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1127,6 +1300,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1140,7 +1314,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
         JSON.stringify([workspaceId, request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1154,8 +1328,9 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceOwnerCreate(workspaceId, request, params)
+                .apiV1WorkspaceOwnerCreate(workspaceId, request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1166,13 +1341,20 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1195,7 +1377,10 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1204,7 +1389,10 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1223,6 +1411,7 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1236,7 +1425,7 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
         JSON.stringify([workspaceId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1250,8 +1439,9 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceResumeCreate(workspaceId, params)
+                .apiV1WorkspaceResumeCreate(workspaceId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1262,13 +1452,20 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1286,7 +1483,10 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1295,7 +1495,10 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1314,6 +1517,7 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1327,7 +1531,7 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
         JSON.stringify([workspaceId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1341,8 +1545,9 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceSuspendCreate(workspaceId, params)
+                .apiV1WorkspaceSuspendCreate(workspaceId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1353,13 +1558,20 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1377,7 +1589,10 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1386,7 +1601,10 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1406,6 +1624,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1419,7 +1638,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
         JSON.stringify([workspaceId, request, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1433,8 +1652,9 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspaceTierCreate(workspaceId, request, params)
+                .apiV1WorkspaceTierCreate(workspaceId, request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1445,13 +1665,20 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1474,7 +1701,10 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1483,7 +1713,10 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1501,6 +1734,7 @@ export const useWorkspaceApiV1WorkspacesList = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1513,7 +1747,7 @@ export const useWorkspaceApiV1WorkspacesList = (
         JSON.stringify([params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1527,8 +1761,9 @@ export const useWorkspaceApiV1WorkspacesList = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspacesList(params)
+                .apiV1WorkspacesList(paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1539,13 +1774,20 @@ export const useWorkspaceApiV1WorkspacesList = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1563,7 +1805,10 @@ export const useWorkspaceApiV1WorkspacesList = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1572,7 +1817,10 @@ export const useWorkspaceApiV1WorkspacesList = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1591,6 +1839,7 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1604,7 +1853,7 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
         JSON.stringify([workspaceId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1618,8 +1867,9 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspacesByidDetail(workspaceId, params)
+                .apiV1WorkspacesByidDetail(workspaceId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1630,13 +1880,20 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1654,7 +1911,10 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1663,7 +1923,10 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1682,6 +1945,7 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1695,7 +1959,7 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
         JSON.stringify([workspaceId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1709,8 +1973,9 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspacesLimitsByidDetail(workspaceId, params)
+                .apiV1WorkspacesLimitsByidDetail(workspaceId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1721,13 +1986,20 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1745,7 +2017,10 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1754,7 +2029,10 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1776,6 +2054,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1789,7 +2068,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
         JSON.stringify([workspaceName, query, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1803,8 +2082,9 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspacesLimitsDetail(workspaceName, query, params)
+                .apiV1WorkspacesLimitsDetail(workspaceName, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1815,13 +2095,20 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1844,7 +2131,10 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1853,7 +2143,10 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
@@ -1872,6 +2165,7 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     autoExecute = true
 ) => {
     const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
@@ -1886,7 +2180,7 @@ export const useWorkspaceApiV1WorkspacesDetail = (
         JSON.stringify([workspaceId, params, autoExecute])
     )
 
-    const sendRequest = () => {
+    const sendRequest = (abortCtrl: AbortController) => {
         setState({
             ...state,
             error: undefined,
@@ -1900,8 +2194,9 @@ export const useWorkspaceApiV1WorkspacesDetail = (
                 setWorkspace('kaytu')
             }
 
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
-                .apiV1WorkspacesDetail(workspaceId, params)
+                .apiV1WorkspacesDetail(workspaceId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1912,13 +2207,20 @@ export const useWorkspaceApiV1WorkspacesDetail = (
                     })
                 })
                 .catch((err) => {
-                    setState({
-                        ...state,
-                        error: err,
-                        response: undefined,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
                 })
         } catch (err) {
             setState({
@@ -1936,7 +2238,10 @@ export const useWorkspaceApiV1WorkspacesDetail = (
 
     useEffect(() => {
         if (autoExecute) {
-            sendRequest()
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
         }
     }, [lastInput])
 
@@ -1945,7 +2250,10 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     const { isExecuted } = state
     const { error } = state
     const sendNow = () => {
-        sendRequest()
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }

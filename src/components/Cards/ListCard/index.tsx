@@ -96,7 +96,7 @@ export default function ListCard({
                                     >
                                         <Flex
                                             justifyContent="start"
-                                            className="max-w-[80%]"
+                                            className="w-4/5"
                                         >
                                             {item.connector &&
                                                 (item.connector[0].length > 1
