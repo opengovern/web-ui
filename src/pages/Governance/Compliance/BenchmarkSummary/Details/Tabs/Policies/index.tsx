@@ -42,7 +42,7 @@ export const renderStatus = (status: boolean) => {
 
 export const policyColumns: IColumn<any, any>[] = [
     {
-        headerName: 'Title',
+        headerName: 'Policy title',
         field: 'policy.title',
         type: 'string',
         sortable: true,
@@ -60,7 +60,7 @@ export const policyColumns: IColumn<any, any>[] = [
     },
     {
         headerName: 'Severity',
-        field: 'severity',
+        field: 'policy.severity',
         width: 120,
         type: 'string',
         sortable: true,
