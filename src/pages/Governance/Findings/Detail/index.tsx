@@ -130,9 +130,13 @@ export default function FindingDetail({
             <List>
                 <ListItem className="py-6 flex items-start">
                     <Text>Finding ID</Text>
+                    <Text className="text-gray-800">{finding?.resourceID}</Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Cloud account ID</Text>
+                    <Text className="text-gray-800">
+                        {finding?.providerConnectionID}
+                    </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Connection ID</Text>
@@ -151,9 +155,6 @@ export default function FindingDetail({
                     <Text className="text-gray-800">
                         {finding?.resourceTypeName}
                     </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Kaytu connection ID</Text>
                 </ListItem>
             </List>
         </DrawerPanel>
