@@ -5,6 +5,8 @@ import {
     Card,
     Divider,
     Flex,
+    List,
+    ListItem,
     Text,
     TextInput,
     Title,
@@ -35,7 +37,11 @@ import { RenderObject } from '../../../components/RenderObject'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Spinner from '../../../components/Spinner'
 import { benchmarkList } from '../Compliance'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse } from '../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+} from '../../../api/api'
+import FindingDetail from './Detail'
 
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -209,7 +215,9 @@ const datasource = (
 
 export default function Findings() {
     const [open, setOpen] = useState(false)
-    const [finding, setFinding] = useState<any>(undefined)
+    const [finding, setFinding] = useState<
+        GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
+    >(undefined)
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
     const [provider, setProvider] = useState('')
     const [connectionSearch, setConnectionSearch] = useState('')
@@ -658,14 +666,11 @@ export default function Findings() {
                         loading={isLoading}
                         options={{ rowModelType: 'serverSide' }}
                     />
-                    <DrawerPanel
+                    <FindingDetail
+                        finding={finding}
                         open={open}
                         onClose={() => setOpen(false)}
-                        title="Finding Detail"
-                    >
-                        <Title>Summary</Title>
-                        <RenderObject obj={finding} />
-                    </DrawerPanel>
+                    />
                 </Flex>
             </Flex>
         </Layout>
