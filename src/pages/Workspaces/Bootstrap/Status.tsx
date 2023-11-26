@@ -1,6 +1,5 @@
-import { Button, Flex, Text, TextInput } from '@tremor/react'
+import { Button, Flex, Text } from '@tremor/react'
 import { CheckIcon } from '@heroicons/react/20/solid'
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useWorkspaceApiV1BootstrapDetail } from '../../../api/workspace.gen'
 
@@ -119,14 +118,6 @@ export function Status({ workspaceName }: IStatus) {
         sendNow: refreshStatus,
     } = useWorkspaceApiV1BootstrapDetail(workspaceName)
 
-    useEffect(() => {
-        if (statusIsExecuted && !statusIsLoading) {
-            setTimeout(() => {
-                refreshStatus()
-            }, 5000)
-        }
-    }, [statusIsLoading])
-
     const wsCreateDone = statusResponse?.workspaceCreationStatus?.done || 0
     const wsCreateTotal = statusResponse?.workspaceCreationStatus?.total || 0
 
@@ -198,7 +189,11 @@ export function Status({ workspaceName }: IStatus) {
                             analyticsDone === analyticsTotal
                         )
                     }
-                    onClick={() => navigate(`/${workspaceName}`)}
+                    onClick={() => {
+                        // we shouldn't use useNavigate because we need to make sure
+                        // an auth0 token refresh happens before entring the workspace
+                        window.location.href = `/${workspaceName}`
+                    }}
                 >
                     Access the workspace
                 </Button>

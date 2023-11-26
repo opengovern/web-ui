@@ -117,7 +117,9 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                         icon={ArrowSmallRightIcon}
                         iconPosition="right"
                         onClick={() => {
-                            navigate(`/${workspace.name}`)
+                            // we shouldn't use useNavigate because we need to make sure
+                            // an auth0 token refresh happens before entring the workspace
+                            window.location.href = `/${workspace.name}`
                         }}
                     >
                         Access
