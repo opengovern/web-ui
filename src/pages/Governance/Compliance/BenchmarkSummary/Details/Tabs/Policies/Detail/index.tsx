@@ -13,6 +13,7 @@ export default function PolicyDetail({
     open,
     onClose,
 }: IDetail) {
+    console.log(selectedPolicy)
     return (
         <DrawerPanel
             open={open}
@@ -24,7 +25,7 @@ export default function PolicyDetail({
             <Title className="font-semibold">Metadata</Title>
             <List>
                 <ListItem className="py-6 flex items-start">
-                    <Text>Connector</Text>
+                    <Text>Cloud provider</Text>
                     <Text>{selectedPolicy?.policy?.connector}</Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
@@ -43,7 +44,7 @@ export default function PolicyDetail({
             <Title className="font-semibold mt-4">Metadata</Title>
             <List>
                 <ListItem className="py-6 flex items-start">
-                    <Text># of failed resources</Text>
+                    <Text># of resources with alarms</Text>
                     <Text>{`${numberDisplay(
                         selectedPolicy?.failedResourcesCount,
                         0
@@ -61,7 +62,7 @@ export default function PolicyDetail({
                     )} %`}</Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
-                    <Text># of failed accounts</Text>
+                    <Text># of accounts with alarms</Text>
                     <Text>{`${numberDisplay(
                         selectedPolicy?.failedConnectionCount,
                         0
