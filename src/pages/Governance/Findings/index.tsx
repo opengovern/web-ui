@@ -287,7 +287,6 @@ export default function Findings() {
             ? { [sortModel[0].colId]: sortModel[0].sort }
             : {},
     })
-    console.log(findings)
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({

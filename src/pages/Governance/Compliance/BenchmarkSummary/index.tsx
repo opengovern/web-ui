@@ -186,7 +186,6 @@ export default function BenchmarkSummary() {
         5,
         topQuery
     )
-    console.log(resources)
 
     useEffect(() => {
         if (isExecuted) {
