@@ -9,7 +9,7 @@ import {
     TextInput,
     Title,
 } from '@tremor/react'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
     IServerSideDatasource,
     RowClickedEvent,
@@ -18,12 +18,7 @@ import {
 } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
-import {
-    Checkbox,
-    Radio,
-    useCheckboxState,
-    useRadioState,
-} from 'pretty-checkbox-react'
+import { Checkbox, Radio, useCheckboxState } from 'pretty-checkbox-react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
@@ -40,8 +35,7 @@ import { RenderObject } from '../../../components/RenderObject'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Spinner from '../../../components/Spinner'
 import { benchmarkList } from '../Compliance'
-import Tag from '../../../components/Tag'
-import { snakeCaseToLabel } from '../../../utilities/labelMaker'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse } from '../../../api/api'
 
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -80,7 +74,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Policy title',
             type: 'string',
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -90,7 +84,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Account name',
             type: 'string',
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -104,7 +98,7 @@ export const columns = (isDemo: boolean) => {
             type: 'string',
             hide: true,
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -169,6 +163,46 @@ export const columns = (isDemo: boolean) => {
     return temp
 }
 
+const severity = ['Critical', 'High', 'Medium', 'Low', 'None', 'Passed']
+
+const datasource = (
+    sort: SortModelItem[],
+    recall: any,
+    result:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse
+        | undefined,
+    loading: boolean,
+    err: boolean
+) => {
+    return {
+        getRows: (params: IServerSideGetRowsParams) => {
+            if (params.request.sortModel.length > 0) {
+                if (sort.length > 0) {
+                    if (
+                        params.request.sortModel[0].colId !== sort[0].colId ||
+                        params.request.sortModel[0].sort !== sort[0].sort
+                    ) {
+                        recall([params.request.sortModel[0]])
+                    }
+                } else {
+                    recall([params.request.sortModel[0]])
+                }
+            } else if (sort.length > 0) {
+                recall([])
+            }
+            if (!loading && result) {
+                params.success({
+                    rowData: result?.findings || [],
+                    rowCount: result?.totalCount || 0,
+                })
+            }
+            if (err) {
+                params.fail()
+            }
+        },
+    }
+}
+
 export default function Findings() {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
@@ -177,18 +211,43 @@ export default function Findings() {
     const [connectionSearch, setConnectionSearch] = useState('')
     const [policySearch, setPolicySearch] = useState('')
     const [resourceSearch, setResourceSearch] = useState('')
+    const [status, setStatus] = useState<'compliant' | 'non-compliant' | 'any'>(
+        'non-compliant'
+    )
 
     const connectionCheckbox = useCheckboxState({ state: [] })
     const benchmarkCheckbox = useCheckboxState({ state: [] })
     const policyCheckbox = useCheckboxState({ state: [] })
     const resourceCheckbox = useCheckboxState({ state: [] })
-    const severityRadio = useRadioState({ state: '' })
+    const severityCheckbox = useCheckboxState({
+        state: ['critical', 'high', 'medium', 'low', 'none'],
+    })
+
+    useEffect(() => {
+        switch (status) {
+            case 'non-compliant':
+                severityCheckbox.setState([
+                    'critical',
+                    'high',
+                    'medium',
+                    'low',
+                    'none',
+                ])
+                break
+            case 'compliant':
+                severityCheckbox.setState(['passed'])
+                break
+            default:
+                break
+        }
+    }, [status])
 
     const isDemo = useAtomValue(isDemoAtom)
 
     const {
         response: findings,
         isLoading,
+        error,
         sendNow,
     } = useComplianceApiV1FindingsCreate({
         filters: {
@@ -207,6 +266,9 @@ export default function Findings() {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             policyID: policyCheckbox.state,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            severity: severityCheckbox.state,
             activeOnly: true,
         },
         sort: sortModel.length
@@ -241,43 +303,23 @@ export default function Findings() {
         sendNow()
     }
 
-    const datasource: IServerSideDatasource = {
-        getRows: (params: IServerSideGetRowsParams) => {
-            if (params.request.sortModel.length > 0) {
-                if (sortModel.length > 0) {
-                    if (
-                        params.request.sortModel[0].colId !==
-                            sortModel[0].colId ||
-                        params.request.sortModel[0].sort !== sortModel[0].sort
-                    ) {
-                        getData([params.request.sortModel[0]])
-                    }
-                } else {
-                    getData([params.request.sortModel[0]])
-                }
-            } else if (sortModel.length > 0) {
-                getData([])
-            }
-            if (findings) {
-                params.success({
-                    rowData: findings?.findings || [],
-                    rowCount: findings?.totalCount || 0,
-                })
-            } else {
-                params.fail()
-            }
-        },
-    }
+    const ds: IServerSideDatasource = useMemo(
+        () => datasource(sortModel, getData, findings, isLoading, error),
+        [findings, sortModel]
+    )
 
     return (
         <Layout currentPage="findings">
             <Header />
             <Flex alignItems="start">
                 <Card className="sticky w-fit">
-                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                    <Accordion
+                        defaultOpen
+                        className="w-56 border-0 rounded-none bg-transparent mb-1"
+                    >
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="font-semibold text-gray-800">
-                                Connector
+                                Cloud provider
                             </Text>
                         </AccordionHeader>
                         <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
@@ -307,6 +349,77 @@ export default function Findings() {
                                 >
                                     Azure
                                 </Radio>
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                    <Divider className="my-3" />
+                    <Accordion
+                        defaultOpen
+                        className="w-56 border-0 rounded-none bg-transparent mb-1"
+                    >
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="font-semibold text-gray-800">
+                                Finding status
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
+                            >
+                                <Radio
+                                    name="status"
+                                    onClick={() => setStatus('compliant')}
+                                    defaultChecked={status === 'compliant'}
+                                >
+                                    Compliant
+                                </Radio>
+                                <Radio
+                                    name="status"
+                                    onClick={() => setStatus('non-compliant')}
+                                    defaultChecked={status === 'non-compliant'}
+                                >
+                                    Non-compliant
+                                </Radio>
+                                <Radio
+                                    name="status"
+                                    onClick={() => setStatus('any')}
+                                    defaultChecked={status === 'any'}
+                                >
+                                    Any
+                                </Radio>
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                    <Divider className="my-3" />
+                    <Accordion
+                        defaultOpen
+                        className="w-56 border-0 rounded-none bg-transparent mb-1"
+                    >
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="font-semibold text-gray-800">
+                                Severity
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
+                            >
+                                {severity.map((s) => (
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    <Checkbox
+                                        shape="curve"
+                                        className="!items-start"
+                                        value={s.toLowerCase()}
+                                        {...severityCheckbox}
+                                    >
+                                        {s}
+                                    </Checkbox>
+                                ))}
                             </Flex>
                         </AccordionBody>
                     </Accordion>
@@ -521,28 +634,6 @@ export default function Findings() {
                             </Flex>
                         </AccordionBody>
                     </Accordion>
-                    {/* <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
-                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                            <Text className="text-gray-800">Severity</Text>
-                        </AccordionHeader>
-                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
-                            <Flex
-                                flexDirection="col"
-                                alignItems="start"
-                                className="px-0.5 gap-2.5"
-                            >
-                                {filters?.severity?.map((s) => (
-                                    <Radio
-                                        name="severity"
-                                        onClick={() => setProvider('')}
-                                        defaultChecked={provider === ''}
-                                    >
-                                        {snakeCaseToLabel(s)}
-                                    </Radio>
-                                ))}
-                            </Flex>
-                        </AccordionBody>
-                    </Accordion> */}
                 </Card>
                 <Flex className="w-full pl-6">
                     <Table
@@ -558,23 +649,10 @@ export default function Findings() {
                                 e.api.showLoadingOverlay()
                             }
                         }}
-                        serverSideDatasource={datasource}
+                        serverSideDatasource={ds}
                         loading={isLoading}
                         options={{ rowModelType: 'serverSide' }}
-                    >
-                        {/* <Flex
-                            className="flex-wrap gap-3"
-                            alignItems="start"
-                            justifyContent="start"
-                        >
-                            {provider.length > 0 && (
-                                <Tag
-                                    text={provider}
-                                    onClick={() => setProvider('')}
-                                />
-                            )}
-                        </Flex> */}
-                    </Table>
+                    />
                     <DrawerPanel
                         open={open}
                         onClose={() => setOpen(false)}
