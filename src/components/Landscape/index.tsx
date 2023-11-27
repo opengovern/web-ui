@@ -24,15 +24,15 @@ const parentCardWidth = (num: number) => {
 
 const parentCardSize = (num: number) => {
     if (num <= 4) {
-        return 2
+        return 3
     }
     if (num <= 8) {
-        return 4
+        return 5
     }
     if (num <= 12) {
-        return 6
+        return 7
     }
-    return 8
+    return 9
 }
 
 export default function Landscape({ data, isLoading }: ILandscape) {
@@ -70,13 +70,13 @@ export default function Landscape({ data, isLoading }: ILandscape) {
                                                         </Text>
                                                         <Divider className="my-2" />
                                                         <Grid
-                                                            numItems={
+                                                            numItems={Math.floor(
                                                                 parentCardSize(
                                                                     sub.items
                                                                         ?.length ||
                                                                         0
                                                                 ) / 2
-                                                            }
+                                                            )}
                                                             numItemsLg={parentCardSize(
                                                                 sub.items
                                                                     ?.length ||
@@ -95,7 +95,7 @@ export default function Landscape({ data, isLoading }: ILandscape) {
                                                                             className="p-1 border border-white rounded-md hover:border-kaytu-200 transition-all"
                                                                         >
                                                                             <img
-                                                                                className="h-16 w-16"
+                                                                                className="h-10 w-10 rounded-md"
                                                                                 src={
                                                                                     item.logo_uri
                                                                                 }

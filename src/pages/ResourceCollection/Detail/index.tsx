@@ -20,7 +20,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
     ChevronDownIcon,
     ChevronRightIcon,
@@ -269,8 +269,6 @@ export default function ResourceCollectionDetail() {
     const { response } = useComplianceApiV1AssignmentsResourceCollectionDetail(
         resourceId || ''
     )
-    console.log(response)
-    console.log(complianceKPI)
     const { response: accountInfo, isLoading: accountInfoLoading } =
         useOnboardApiV1ConnectionsSummaryList({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -288,6 +286,8 @@ export default function ResourceCollectionDetail() {
         })
     const { response: landscape, isLoading: landscapeLoading } =
         useInventoryApiV2ResourceCollectionLandscapeDetail(resourceId || '')
+
+    const rows = useMemo(() => bmList(response, complianceKPI), [response])
 
     return (
         <Layout currentPage="resource-collection">
@@ -512,8 +512,8 @@ export default function ResourceCollectionDetail() {
                         <Table
                             title={`${detail?.name} benchmarks`}
                             downloadable
-                            id="connected_compliance"
-                            rowData={bmList(response, complianceKPI)}
+                            id="resource_collection_bm"
+                            rowData={rows}
                             columns={complianceColumns}
                             onRowClicked={(event) => {
                                 if (event.data) {
