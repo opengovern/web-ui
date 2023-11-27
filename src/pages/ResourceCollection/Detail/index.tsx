@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import {
+    Badge,
     BarList,
     Button,
     Callout,
@@ -25,6 +26,7 @@ import {
     ChevronRightIcon,
     ChevronUpIcon,
 } from '@heroicons/react/24/outline'
+import { ICellRendererParams } from 'ag-grid-community'
 import Layout from '../../../components/Layout'
 import {
     useInventoryApiV2AnalyticsTrendList,
@@ -33,8 +35,13 @@ import {
 } from '../../../api/inventory.gen'
 import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
-import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import {
+    useComplianceApiV1AssignmentsResourceCollectionDetail,
+    useComplianceApiV1BenchmarksSummaryList,
+} from '../../../api/compliance.gen'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
 } from '../../../api/api'
@@ -45,7 +52,6 @@ import {
 } from '../../../utilities/labelMaker'
 import { dateDisplay, dateTimeDisplay } from '../../../utilities/dateDisplay'
 import Table, { IColumn } from '../../../components/Table'
-import { activeColumns, benchmarkList } from '../../Governance/Compliance'
 import { timeAtom } from '../../../store'
 import {
     checkGranularity,
@@ -61,10 +67,10 @@ import { resourceTrendChart } from '../../Infrastructure'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Landscape from '../../../components/Landscape'
 import Tag from '../../../components/Tag'
-import { RenderObject } from '../../../components/RenderObject'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
 import { options } from '../../Infrastructure/Details/Tabs/Resources'
+import { benchmarkChecks } from '../../../components/Cards/ComplianceCard'
 
 const pieData = (
     input:
@@ -102,11 +108,100 @@ const barData = (
 }
 
 const complianceColumns: IColumn<any, any>[] = [
-    ...activeColumns,
     {
         width: 120,
-        field: 'isAssigned',
-        headerName: 'Assignment status',
+        field: 'connectors',
+        headerName: 'Connector',
+        sortable: true,
+        filter: true,
+        enableRowGroup: true,
+        type: 'string',
+    },
+    {
+        field: 'title',
+        headerName: 'Benchmark title',
+        sortable: true,
+        filter: true,
+        enableRowGroup: true,
+        type: 'string',
+        cellRenderer: (
+            param: ICellRendererParams<
+                | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                | undefined
+            >
+        ) =>
+            param.value && (
+                <Flex flexDirection="col" alignItems="start">
+                    <Text>{param.value}</Text>
+                    <Flex justifyContent="start" className="mt-1 gap-2">
+                        {param.data?.tags?.category?.map((cat) => (
+                            <Badge color="slate" size="xs">
+                                {cat}
+                            </Badge>
+                        ))}
+                        {param.data?.tags?.kaytu_category?.map((cat) => (
+                            <Badge color="emerald" size="xs">
+                                {cat}
+                            </Badge>
+                        ))}
+                        {!!param.data?.tags?.cis && (
+                            <Badge color="sky" size="xs">
+                                CIS
+                            </Badge>
+                        )}
+                        {!!param.data?.tags?.hipaa && (
+                            <Badge color="blue" size="xs">
+                                Hipaa
+                            </Badge>
+                        )}
+                    </Flex>
+                </Flex>
+            ),
+    },
+    {
+        headerName: 'Security score (resource collection)',
+        width: 150,
+        sortable: true,
+        filter: true,
+        enableRowGroup: true,
+        type: 'number',
+        cellRenderer: (
+            param: ICellRendererParams<
+                | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                | undefined
+            >
+        ) =>
+            param.data &&
+            `${(
+                (benchmarkChecks(param.data).passed /
+                    benchmarkChecks(param.data).total) *
+                100
+            ).toFixed(2)} %`,
+    },
+    {
+        headerName: 'Security score (underlying account)',
+        width: 150,
+        sortable: true,
+        filter: true,
+        enableRowGroup: true,
+        type: 'number',
+        cellRenderer: (
+            param: ICellRendererParams<
+                | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                | undefined
+            >
+        ) =>
+            param.data &&
+            `${(
+                (benchmarkChecks(param.data).passed /
+                    benchmarkChecks(param.data).total) *
+                100
+            ).toFixed(2)} %`,
+    },
+    {
+        width: 120,
+        field: 'status',
+        headerName: 'Status',
         sortable: true,
         filter: true,
         enableRowGroup: true,
@@ -114,6 +209,24 @@ const complianceColumns: IColumn<any, any>[] = [
         type: 'string',
     },
 ]
+
+const bmList = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark[]
+        | undefined
+) => {
+    const rows = []
+    if (input) {
+        for (let i = 0; i < input.length; i += 1) {
+            if (input[i].status) {
+                rows.push({ ...input[i].benchmarkId, status: 'Assigned' })
+            } else {
+                rows.push({ ...input[i].benchmarkId, status: 'Not assigned' })
+            }
+        }
+    }
+    return rows
+}
 
 export default function ResourceCollectionDetail() {
     const { resourceId } = useParams()
@@ -159,6 +272,10 @@ export default function ResourceCollectionDetail() {
         useComplianceApiV1BenchmarksSummaryList({
             resourceCollection: [resourceId || ''],
         })
+    const { response } = useComplianceApiV1AssignmentsResourceCollectionDetail(
+        resourceId || ''
+    )
+    console.log(response)
     const { response: accountInfo, isLoading: accountInfoLoading } =
         useOnboardApiV1ConnectionsSummaryList({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -401,13 +518,7 @@ export default function ResourceCollectionDetail() {
                             title={`${detail?.name} benchmarks`}
                             downloadable
                             id="connected_compliance"
-                            rowData={benchmarkList(
-                                complianceKPI?.benchmarkSummary
-                            ).all?.sort(
-                                (a, b) =>
-                                    (b?.checks?.passedCount || 0) -
-                                    (a?.checks?.passedCount || 0)
-                            )}
+                            rowData={bmList(response)}
                             columns={complianceColumns}
                             onRowClicked={(event) => {
                                 if (event.data) {
