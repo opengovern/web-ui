@@ -81,7 +81,7 @@ export const activeColumns: IColumn<any, any>[] = [
     },
     {
         field: 'title',
-        headerName: 'Compliance',
+        headerName: 'Benchmark title',
         sortable: true,
         filter: true,
         enableRowGroup: true,
