@@ -21,7 +21,7 @@ import {
 import { filterAtom, IFilter, spendTimeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
-import { dateDisplay } from '../../utilities/dateDisplay'
+import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import {
     exactPriceDisplay,
@@ -105,7 +105,8 @@ export const costTrendChart = (
     trend:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
         | undefined,
-    chart: 'line' | 'bar' | 'area'
+    chart: 'line' | 'bar' | 'area',
+    granularity: 'monthly' | 'daily' | 'yearly'
 ) => {
     const label = []
     const data: any = []
@@ -113,7 +114,11 @@ export const costTrendChart = (
     if (trend) {
         if (chart === 'bar' || chart === 'line') {
             for (let i = 0; i < trend?.length; i += 1) {
-                label.push(dateDisplay(trend[i]?.date))
+                label.push(
+                    granularity === 'monthly'
+                        ? monthDisplay(trend[i]?.date)
+                        : dateDisplay(trend[i]?.date)
+                )
                 data.push(trend[i]?.count)
                 if (
                     trend[i].totalConnectionCount !==
@@ -125,7 +130,11 @@ export const costTrendChart = (
         }
         if (chart === 'area') {
             for (let i = 0; i < trend?.length; i += 1) {
-                label.push(dateDisplay(trend[i]?.date))
+                label.push(
+                    granularity === 'monthly'
+                        ? monthDisplay(trend[i]?.date)
+                        : dateDisplay(trend[i]?.date)
+                )
                 if (i === 0) {
                     data.push(trend[i]?.count)
                 } else {
@@ -363,10 +372,18 @@ export default function Spend() {
                         </Flex>
                         <Chart
                             labels={
-                                costTrendChart(costTrend, selectedChart).label
+                                costTrendChart(
+                                    costTrend,
+                                    selectedChart,
+                                    selectedGranularity
+                                ).label
                             }
                             chartData={
-                                costTrendChart(costTrend, selectedChart).data
+                                costTrendChart(
+                                    costTrend,
+                                    selectedChart,
+                                    selectedGranularity
+                                ).data
                             }
                             chartType={selectedChart}
                             isCost

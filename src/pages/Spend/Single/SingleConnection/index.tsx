@@ -460,12 +460,18 @@ export default function SingleSpendConnection({
                             </Flex>
                             <Chart
                                 labels={
-                                    costTrendChart(costTrend, selectedChart)
-                                        .label
+                                    costTrendChart(
+                                        costTrend,
+                                        selectedChart,
+                                        selectedGranularity
+                                    ).label
                                 }
                                 chartData={
-                                    costTrendChart(costTrend, selectedChart)
-                                        .data
+                                    costTrendChart(
+                                        costTrend,
+                                        selectedChart,
+                                        selectedGranularity
+                                    ).data
                                 }
                                 chartType={selectedChart}
                                 isCost

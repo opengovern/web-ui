@@ -30,7 +30,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     SourceType,
 } from '../../api/api'
-import { dateDisplay } from '../../utilities/dateDisplay'
+import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
 import Chart from '../../components/Chart'
 import Breakdown from '../../components/Breakdown'
 import ListCard from '../../components/Cards/ListCard'
@@ -42,14 +42,19 @@ import SingleConnection from './Single/SingleConnection'
 export const resourceTrendChart = (
     trend:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[]
-        | undefined
+        | undefined,
+    granularity: 'monthly' | 'daily' | 'yearly'
 ) => {
     const label = []
     const data: any = []
     const flag = []
     if (trend) {
         for (let i = 0; i < trend?.length; i += 1) {
-            label.push(dateDisplay(trend[i]?.date))
+            label.push(
+                granularity === 'monthly'
+                    ? monthDisplay(trend[i]?.date)
+                    : dateDisplay(trend[i]?.date)
+            )
             data.push(trend[i]?.count)
             if (
                 trend[i].totalConnectionCount !==
@@ -370,8 +375,18 @@ export default function Infrastructure() {
                             <Text>Resources</Text>
                         </Flex>
                         <Chart
-                            labels={resourceTrendChart(resourceTrend).label}
-                            chartData={resourceTrendChart(resourceTrend).data}
+                            labels={
+                                resourceTrendChart(
+                                    resourceTrend,
+                                    selectedGranularity
+                                ).label
+                            }
+                            chartData={
+                                resourceTrendChart(
+                                    resourceTrend,
+                                    selectedGranularity
+                                ).data
+                            }
                             chartType={selectedChart}
                             loading={resourceTrendLoading}
                             // visualMap={
@@ -396,7 +411,7 @@ export default function Infrastructure() {
                                 oldChartData={pieData(composition).oldData}
                                 activeTime={activeTimeRange}
                                 loading={compositionLoading}
-                                seeMore="infrastructure-details#resources"
+                                seeMore="infrastructure-details#category"
                             />
                         </Col>
                         <Col numColSpan={1} numColSpanLg={3} className="h-full">

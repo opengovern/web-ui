@@ -615,9 +615,17 @@ export default function ResourceCollectionDetail() {
                                 <Text>Resources</Text>
                             </Flex>
                             <Chart
-                                labels={resourceTrendChart(resourceTrend).label}
+                                labels={
+                                    resourceTrendChart(
+                                        resourceTrend,
+                                        selectedGranularity
+                                    ).label
+                                }
                                 chartData={
-                                    resourceTrendChart(resourceTrend).data
+                                    resourceTrendChart(
+                                        resourceTrend,
+                                        selectedGranularity
+                                    ).data
                                 }
                                 chartType={selectedChart}
                                 loading={resourceTrendLoading}

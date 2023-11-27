@@ -69,6 +69,7 @@ export default function InfrastructureDetails() {
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
                             resourceId={resourceId}
+                            isSummary={tabs === '#category'}
                         />
                     </TabPanel>
                     <TabPanel>
