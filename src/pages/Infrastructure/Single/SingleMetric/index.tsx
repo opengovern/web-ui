@@ -317,8 +317,8 @@ export default function SingleMetric({
                     <Text>Resources</Text>
                 </Flex>
                 <Chart
-                    labels={resourceTrendChart(resourceTrend).label}
-                    chartData={resourceTrendChart(resourceTrend).data}
+                    labels={resourceTrendChart(resourceTrend, 'daily').label}
+                    chartData={resourceTrendChart(resourceTrend, 'daily').data}
                     // visualMap={
                     //     generateVisualMap(
                     //         resourceTrendChart(resourceTrend).flag,
