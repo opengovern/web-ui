@@ -463,8 +463,20 @@ export default function SingleSpendMetric({
                     )}
                 </Flex>
                 <Chart
-                    labels={costTrendChart(costTrend, selectedChart).label}
-                    chartData={costTrendChart(costTrend, selectedChart).data}
+                    labels={
+                        costTrendChart(
+                            costTrend,
+                            selectedChart,
+                            selectedGranularity
+                        ).label
+                    }
+                    chartData={
+                        costTrendChart(
+                            costTrend,
+                            selectedChart,
+                            selectedGranularity
+                        ).data
+                    }
                     chartType={selectedChart}
                     isCost
                     loading={costTrendLoading}
