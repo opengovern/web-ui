@@ -70,9 +70,10 @@ export const defaultColumns: IColumn<any, any>[] = [
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
-            params.data?.name && params.data?.old_count
+            params.data &&
+            (params.data?.old_count
                 ? badgeDelta(params.data?.old_count, params.data?.count)
-                : badgeDelta(1, 2),
+                : badgeDelta(1, 2)),
     },
     {
         headerName: 'Change (Δ)',
@@ -81,7 +82,7 @@ export const defaultColumns: IColumn<any, any>[] = [
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
-            params.data?.name &&
+            params.data &&
             badgeDelta(params.data?.old_count, params.data?.count, true),
     },
 ]
