@@ -5,11 +5,8 @@ import {
     Card,
     Divider,
     Flex,
-    List,
-    ListItem,
     Text,
     TextInput,
-    Title,
 } from '@tremor/react'
 import { useEffect, useMemo, useState } from 'react'
 import {
@@ -32,8 +29,6 @@ import {
     useComplianceApiV1FindingsCreate,
     useComplianceApiV1FindingsFiltersCreate,
 } from '../../../api/compliance.gen'
-import DrawerPanel from '../../../components/DrawerPanel'
-import { RenderObject } from '../../../components/RenderObject'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Spinner from '../../../components/Spinner'
 import { benchmarkList } from '../Compliance'
@@ -221,7 +216,6 @@ export default function Findings() {
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
     const [provider, setProvider] = useState('')
     const [connectionSearch, setConnectionSearch] = useState('')
-    const [policySearch, setPolicySearch] = useState('')
     const [resourceSearch, setResourceSearch] = useState('')
     const [status, setStatus] = useState<'compliant' | 'non-compliant' | 'any'>(
         'non-compliant'
@@ -229,7 +223,6 @@ export default function Findings() {
 
     const connectionCheckbox = useCheckboxState({ state: [] })
     const benchmarkCheckbox = useCheckboxState({ state: [] })
-    const policyCheckbox = useCheckboxState({ state: [] })
     const resourceCheckbox = useCheckboxState({ state: [] })
     const severityCheckbox = useCheckboxState({
         state: ['critical', 'high', 'medium', 'low', 'none'],
@@ -275,9 +268,6 @@ export default function Findings() {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             resourceTypeID: resourceCheckbox.state,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            policyID: policyCheckbox.state,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             severity: severityCheckbox.state,
@@ -540,58 +530,6 @@ export default function Findings() {
                                     ))}
                                 </Flex>
                             )}
-                        </AccordionBody>
-                    </Accordion>
-                    <Divider className="my-3" />
-                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
-                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                            <Text className="text-gray-800 font-semibold">
-                                Cloud services
-                            </Text>
-                        </AccordionHeader>
-                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
-                            <TextInput
-                                icon={MagnifyingGlassIcon}
-                                placeholder="Search cloud services..."
-                                value={policySearch}
-                                onChange={(e) =>
-                                    setPolicySearch(e.target.value)
-                                }
-                                className="mb-4"
-                            />
-                            <Flex
-                                flexDirection="col"
-                                alignItems="start"
-                                className="px-0.5 gap-2.5 overflow-y-scroll overflow-x-hidden"
-                            >
-                                {filtersLoading ? (
-                                    <Spinner />
-                                ) : (
-                                    filters?.policyID
-                                        ?.filter((p) =>
-                                            p
-                                                ?.toLowerCase()
-                                                .includes(
-                                                    policySearch.toLowerCase()
-                                                )
-                                        )
-                                        .map(
-                                            (p, i) =>
-                                                i < 5 && (
-                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                    // @ts-ignore
-                                                    <Checkbox
-                                                        shape="curve"
-                                                        className="!items-start"
-                                                        value={p}
-                                                        {...policyCheckbox}
-                                                    >
-                                                        {p}
-                                                    </Checkbox>
-                                                )
-                                        )
-                                )}
-                            </Flex>
                         </AccordionBody>
                     </Accordion>
                     <Divider className="my-3" />
