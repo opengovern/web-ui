@@ -159,7 +159,7 @@ const complianceColumns: IColumn<any, any>[] = [
             ),
     },
     {
-        headerName: 'Security score (resource collection)',
+        headerName: 'Security score',
         width: 150,
         sortable: true,
         filter: true,
@@ -174,27 +174,7 @@ const complianceColumns: IColumn<any, any>[] = [
             param.data &&
             `${(
                 (benchmarkChecks(param.data).passed /
-                    benchmarkChecks(param.data).total) *
-                100
-            ).toFixed(2)} %`,
-    },
-    {
-        headerName: 'Security score (underlying account)',
-        width: 150,
-        sortable: true,
-        filter: true,
-        enableRowGroup: true,
-        type: 'number',
-        cellRenderer: (
-            param: ICellRendererParams<
-                | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
-                | undefined
-            >
-        ) =>
-            param.data &&
-            `${(
-                (benchmarkChecks(param.data).passed /
-                    benchmarkChecks(param.data).total) *
+                    (benchmarkChecks(param.data).total || 1)) *
                 100
             ).toFixed(2)} %`,
     },
@@ -211,17 +191,31 @@ const complianceColumns: IColumn<any, any>[] = [
 ]
 
 const bmList = (
-    input:
+    assignmentList:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark[]
+        | undefined,
+    summaryList:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse
         | undefined
 ) => {
     const rows = []
-    if (input) {
-        for (let i = 0; i < input.length; i += 1) {
-            if (input[i].status) {
-                rows.push({ ...input[i].benchmarkId, status: 'Assigned' })
+    if (assignmentList && summaryList) {
+        for (let i = 0; i < assignmentList.length; i += 1) {
+            const benchmark = summaryList.benchmarkSummary?.find(
+                (bm) => bm.id === assignmentList[i].benchmarkId?.id
+            )
+            if (assignmentList[i].status) {
+                rows.push({
+                    ...assignmentList[i].benchmarkId,
+                    ...benchmark,
+                    status: 'Assigned',
+                })
             } else {
-                rows.push({ ...input[i].benchmarkId, status: 'Not assigned' })
+                rows.push({
+                    ...assignmentList[i].benchmarkId,
+                    ...benchmark,
+                    status: 'Not assigned',
+                })
             }
         }
     }
@@ -276,6 +270,7 @@ export default function ResourceCollectionDetail() {
         resourceId || ''
     )
     console.log(response)
+    console.log(complianceKPI)
     const { response: accountInfo, isLoading: accountInfoLoading } =
         useOnboardApiV1ConnectionsSummaryList({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -518,7 +513,7 @@ export default function ResourceCollectionDetail() {
                             title={`${detail?.name} benchmarks`}
                             downloadable
                             id="connected_compliance"
-                            rowData={bmList(response)}
+                            rowData={bmList(response, complianceKPI)}
                             columns={complianceColumns}
                             onRowClicked={(event) => {
                                 if (event.data) {
