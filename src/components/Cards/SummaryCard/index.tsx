@@ -17,6 +17,7 @@ type IProps = {
     title: string
     metric: string | number | undefined
     metricPrev?: string | number | undefined
+    unit?: string
     delta?: string
     deltaType?: DeltaType
     url?: string
@@ -31,6 +32,7 @@ export default function SummaryCard({
     title,
     metric,
     metricPrev,
+    unit,
     delta,
     deltaType,
     url,
@@ -74,6 +76,7 @@ export default function SummaryCard({
                 <Metric>
                     {Number(metric) ? numberDisplay(metric, 0) : metric}
                 </Metric>
+                {!!unit && <Text className="mb-0.5">{unit}</Text>}
                 {!!metricPrev && (
                     <Text className="mb-0.5">
                         from{' '}

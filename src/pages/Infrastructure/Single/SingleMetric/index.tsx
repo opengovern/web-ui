@@ -158,9 +158,7 @@ export default function SingleMetric({
         <>
             <Header
                 breadCrumb={[
-                    metricDetail
-                        ? metricDetail?.name
-                        : 'Single resource detail',
+                    metricDetail ? metricDetail?.name : 'Metric detail',
                 ]}
                 datePicker
                 filter
@@ -260,7 +258,7 @@ export default function SingleMetric({
                     <div className="pl-3 border-l border-l-gray-200">
                         <SummaryCard
                             border={false}
-                            title="Evaluated"
+                            title="Results in"
                             loading={resourceTrendLoading}
                             metric={numericDisplay(
                                 resourceTrend
@@ -268,6 +266,7 @@ export default function SingleMetric({
                                           ?.totalConnectionCount
                                     : 0
                             )}
+                            unit="Cloud accounts"
                         />
                     </div>
                     <Col />
@@ -355,38 +354,40 @@ export default function SingleMetric({
                 fullWidth
             >
                 <Flex flexDirection="row-reverse" className="pl-3">
-                    <Select
-                        className="w-56"
-                        placeholder={`Result count: ${numberDisplay(
-                            pageSize,
-                            0
-                        )}`}
+                    <Flex
+                        className="w-fit"
+                        flexDirection="row"
+                        alignItems="center"
+                        justifyContent="start"
                     >
-                        <SelectItem
-                            value="1000"
-                            onClick={() => setPageSize(1000)}
-                        >
-                            1,000
-                        </SelectItem>
-                        <SelectItem
-                            value="3000"
-                            onClick={() => setPageSize(3000)}
-                        >
-                            3,000
-                        </SelectItem>
-                        <SelectItem
-                            value="5000"
-                            onClick={() => setPageSize(5000)}
-                        >
-                            5,000
-                        </SelectItem>
-                        <SelectItem
-                            value="10000"
-                            onClick={() => setPageSize(10000)}
-                        >
-                            10,000
-                        </SelectItem>
-                    </Select>
+                        <Text className="mr-2">Maximum rows:</Text>
+                        <Select className="w-56" value="1000">
+                            <SelectItem
+                                value="1000"
+                                onClick={() => setPageSize(1000)}
+                            >
+                                1,000
+                            </SelectItem>
+                            <SelectItem
+                                value="3000"
+                                onClick={() => setPageSize(3000)}
+                            >
+                                3,000
+                            </SelectItem>
+                            <SelectItem
+                                value="5000"
+                                onClick={() => setPageSize(5000)}
+                            >
+                                5,000
+                            </SelectItem>
+                            <SelectItem
+                                value="10000"
+                                onClick={() => setPageSize(10000)}
+                            >
+                                10,000
+                            </SelectItem>
+                        </Select>
+                    </Flex>
                     {!isLoading && isExecuted && error && (
                         <Flex justifyContent="start" className="w-fit">
                             <Icon icon={ExclamationCircleIcon} color="rose" />
@@ -402,10 +403,10 @@ export default function SingleMetric({
                                         color="amber"
                                     />
                                     <Text color="amber">
-                                        {`Results are truncated for ${numberDisplay(
+                                        {`Row limit of ${numberDisplay(
                                             pageSize,
                                             0
-                                        )} rows`}
+                                        )} reached, results are truncated`}
                                     </Text>
                                 </>
                             ) : (
