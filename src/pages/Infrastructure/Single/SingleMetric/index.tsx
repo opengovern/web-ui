@@ -244,14 +244,13 @@ export default function SingleMetric({
                 <Grid numItems={4} className="gap-4 mb-4">
                     <SummaryCard
                         title="Resource count"
-                        metric={numericDisplay(
+                        metric={
                             resourceTrend
                                 ? resourceTrend[resourceTrend.length - 1]?.count
                                 : 0
-                        )}
-                        metricPrev={numericDisplay(
-                            resourceTrend ? resourceTrend[0]?.count : 0
-                        )}
+                        }
+                        isExact
+                        metricPrev={resourceTrend ? resourceTrend[0]?.count : 0}
                         loading={resourceTrendLoading}
                         border={false}
                     />
@@ -260,12 +259,12 @@ export default function SingleMetric({
                             border={false}
                             title="Results in"
                             loading={resourceTrendLoading}
-                            metric={numericDisplay(
+                            metric={
                                 resourceTrend
                                     ? resourceTrend[resourceTrend.length - 1]
                                           ?.totalConnectionCount
                                     : 0
-                            )}
+                            }
                             unit="Cloud accounts"
                         />
                     </div>

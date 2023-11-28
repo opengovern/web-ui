@@ -2,10 +2,10 @@ import { DeltaType } from '@tremor/react'
 import ChangeDelta from '../components/ChangeDelta'
 
 export const badgeTypeByDelta = (
-    oldValue?: number,
-    newValue?: number
+    oldValue?: number | string,
+    newValue?: number | string
 ): DeltaType => {
-    const changes = (newValue || 0) - (oldValue || 0)
+    const changes = (Number(newValue) || 0) - (Number(oldValue) || 0)
     let deltaType: DeltaType = 'unchanged'
     if (changes === 0) {
         return deltaType
@@ -35,7 +35,6 @@ export const badgeDelta = (
 ) => {
     return oldValue !== 0 ? (
         <ChangeDelta
-            deltaType={badgeTypeByDelta(oldValue, newValue)}
             change={
                 isDelta
                     ? deltaChange(oldValue, newValue)

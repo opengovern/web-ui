@@ -347,14 +347,6 @@ export default function InsightDetail({
                                 metric={insightDetail?.totalResultValue}
                                 metricPrev={insightDetail?.oldTotalResultValue}
                                 loading={detailLoading}
-                                deltaType={badgeTypeByDelta(
-                                    insightDetail?.oldTotalResultValue,
-                                    insightDetail?.totalResultValue
-                                )}
-                                delta={`${percentageByChange(
-                                    insightDetail?.oldTotalResultValue,
-                                    insightDetail?.totalResultValue
-                                )}%`}
                             />
                             {insightDetail?.result &&
                                 !!insightDetail?.result[0]?.connections

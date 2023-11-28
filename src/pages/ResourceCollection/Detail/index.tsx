@@ -535,9 +535,7 @@ export default function ResourceCollectionDetail() {
                                 <Col numColSpan={1}>
                                     <SummaryCard
                                         title="Resources"
-                                        metric={numericDisplay(
-                                            accountInfo?.totalResourceCount
-                                        )}
+                                        metric={accountInfo?.totalResourceCount}
                                         url="infrastructure-details#cloud-accounts"
                                         loading={accountInfoLoading}
                                         border={false}

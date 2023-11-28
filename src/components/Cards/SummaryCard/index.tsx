@@ -1,31 +1,28 @@
-import {
-    BadgeDelta,
-    Button,
-    Card,
-    DeltaType,
-    Flex,
-    Metric,
-    Text,
-} from '@tremor/react'
+import { Button, Card, Flex, Metric, Text } from '@tremor/react'
 import { ArrowPathIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../Spinner'
-import { numberDisplay } from '../../../utilities/numericDisplay'
+import {
+    numberDisplay,
+    numericDisplay,
+} from '../../../utilities/numericDisplay'
 import ChangeDelta from '../../ChangeDelta'
+import { badgeTypeByDelta } from '../../../utilities/deltaType'
 
 type IProps = {
     title: string
     metric: string | number | undefined
     metricPrev?: string | number | undefined
     unit?: string
-    delta?: string
-    deltaType?: DeltaType
     url?: string
     loading?: boolean
     border?: boolean
     blueBorder?: boolean
     error?: string
     onRefresh?: () => void
+    isExact?: boolean
+    isPrice?: boolean
+    isPercentage?: boolean
 }
 
 export default function SummaryCard({
@@ -33,14 +30,15 @@ export default function SummaryCard({
     metric,
     metricPrev,
     unit,
-    delta,
-    deltaType,
     url,
     loading = false,
     border = true,
     blueBorder = false,
     error,
     onRefresh,
+    isExact = false,
+    isPrice = false,
+    isPercentage = false,
 }: IProps) {
     const navigate = useNavigate()
 
@@ -68,22 +66,47 @@ export default function SummaryCard({
             )
         }
         return (
-            <Flex
-                justifyContent="start"
-                alignItems="end"
-                className="gap-1 mb-1"
-            >
-                <Metric>
-                    {Number(metric) ? numberDisplay(metric, 0) : metric}
-                </Metric>
-                {!!unit && <Text className="mb-0.5">{unit}</Text>}
-                {!!metricPrev && (
-                    <Text className="mb-0.5">
-                        from{' '}
-                        {Number(metricPrev)
-                            ? numberDisplay(metricPrev, 0)
-                            : metricPrev}
-                    </Text>
+            <Flex flexDirection="col">
+                <Flex
+                    justifyContent="start"
+                    alignItems="end"
+                    className="gap-1 mb-1"
+                >
+                    <Metric>
+                        {isExact
+                            ? `${isPrice ? '$' : ''}${numberDisplay(
+                                  metric,
+                                  isExact && isPrice ? 2 : 0
+                              )}${isPercentage ? '%' : ''}`
+                            : `${isPrice ? '$' : ''}${numericDisplay(metric)}${
+                                  isPercentage ? '%' : ''
+                              }`}
+                    </Metric>
+                    {!!unit && <Text className="mb-0.5">{unit}</Text>}
+                    {!!metricPrev && (
+                        <Text className="mb-0.5">
+                            from{' '}
+                            {isExact
+                                ? `${isPrice ? '$' : ''}${numberDisplay(
+                                      metricPrev,
+                                      isExact && isPrice ? 2 : 0
+                                  )}${isPercentage ? '%' : ''}`
+                                : `${isPrice ? '$' : ''}${numericDisplay(
+                                      metricPrev
+                                  )}${isPercentage ? '%' : ''}`}
+                        </Text>
+                    )}
+                </Flex>
+                {metricPrev && (
+                    <Flex className="mt-1">
+                        <ChangeDelta
+                            change={numberDisplay(
+                                ((Number(metricPrev) - Number(metric)) /
+                                    Number(metric)) *
+                                    100
+                            )}
+                        />
+                    </Flex>
                 )}
             </Flex>
         )
@@ -108,28 +131,23 @@ export default function SummaryCard({
                     <Spinner />
                 </div>
             ) : (
-                <>
-                    <Flex alignItems="baseline">
-                        <Flex>{value()}</Flex>
-                        {border && (
-                            <div className="justify-self-end">
-                                {url && (
-                                    <Button
-                                        size="xs"
-                                        variant="light"
-                                        icon={ChevronRightIcon}
-                                        iconPosition="right"
-                                    >
-                                        See more
-                                    </Button>
-                                )}
-                            </div>
-                        )}
-                    </Flex>
-                    {delta && !delta.includes('Infinity') && (
-                        <ChangeDelta deltaType={deltaType} change={delta} />
+                <Flex alignItems="baseline">
+                    <Flex>{value()}</Flex>
+                    {border && (
+                        <div className="justify-self-end">
+                            {url && (
+                                <Button
+                                    size="xs"
+                                    variant="light"
+                                    icon={ChevronRightIcon}
+                                    iconPosition="right"
+                                >
+                                    See more
+                                </Button>
+                            )}
+                        </div>
                     )}
-                </>
+                </Flex>
             )}
         </Card>
     )

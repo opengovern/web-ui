@@ -381,9 +381,11 @@ export default function SingleSpendMetric({
                 <Grid numItems={4} className="gap-4">
                     <SummaryCard
                         title={getConnections(selectedConnections)}
-                        metric={exactPriceDisplay(metricDetail?.total_cost)}
+                        metric={metricDetail?.total_cost}
                         loading={metricDetailLoading}
                         border={false}
+                        isPrice
+                        isExact
                     />
                     <div className="pl-4 border-l border-l-gray-200">
                         <SummaryCard
@@ -391,6 +393,8 @@ export default function SingleSpendMetric({
                             title="Evaluated"
                             loading={isLoading}
                             metric={response?.length}
+                            isPrice
+                            isExact
                         />
                     </div>
                     <Col numColSpan={2}>

@@ -1,37 +1,60 @@
-import { BadgeDelta, DeltaType, Flex, Text } from '@tremor/react'
+import { BadgeDelta, Color, DeltaType, Flex, Text } from '@tremor/react'
 import { numberDisplay } from '../../utilities/numericDisplay'
 
 interface IChangeDelta {
-    deltaType: DeltaType | undefined
     change: string | number | undefined
     isDelta?: boolean
 }
 
-const changeColor = (delta: DeltaType | undefined) => {
-    switch (delta) {
-        case 'decrease':
-        case 'moderateDecrease':
-            return 'rose'
-        case 'increase':
-        case 'moderateIncrease':
-            return 'emerald'
-        case 'unchanged':
-            return 'amber'
-        default:
-            return 'slate'
+const properties = (
+    change: string | number | undefined,
+    isDelta: boolean | undefined
+) => {
+    let color: Color = 'amber'
+    let delta: DeltaType = 'unchanged'
+    if (isDelta) {
+        if (Number(change) > 0) {
+            color = 'rose'
+            delta = 'decrease'
+        }
+        if (Number(change) < 0) {
+            color = 'emerald'
+            delta = 'increase'
+        }
+    } else {
+        if (Number(change) > 0) {
+            color = 'rose'
+            if (Math.abs(Number(change)) > 10) {
+                delta = 'decrease'
+            } else {
+                delta = 'moderateDecrease'
+            }
+        }
+        if (Number(change) < 0) {
+            color = 'emerald'
+            if (Number(change) > 10) {
+                delta = 'increase'
+            } else {
+                delta = 'moderateIncrease'
+            }
+        }
+    }
+
+    return {
+        color,
+        delta,
     }
 }
 
-export default function ChangeDelta({
-    deltaType,
-    change,
-    isDelta,
-}: IChangeDelta) {
+export default function ChangeDelta({ change, isDelta }: IChangeDelta) {
     return (
-        <Flex className="w-fit min-w-fit gap-1 h-full">
-            <BadgeDelta size="sm" deltaType={deltaType} />
-            <Text color={changeColor(deltaType)}>{`${numberDisplay(
-                change,
+        <Flex className="w-fit min-w-fit gap-1.5 h-full">
+            <BadgeDelta
+                size="sm"
+                deltaType={properties(change, isDelta).delta}
+            />
+            <Text color={properties(change, isDelta).color}>{`${numberDisplay(
+                Math.abs(Number(change)),
                 isDelta ? 0 : 2
             )} ${isDelta ? '' : '%'}`}</Text>
         </Flex>

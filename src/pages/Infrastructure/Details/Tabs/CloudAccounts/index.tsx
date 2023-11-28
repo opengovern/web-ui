@@ -49,15 +49,6 @@ const columns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'lifecycleState',
-            headerName: 'State',
-            type: 'string',
-            resizable: true,
-            sortable: true,
-            filter: true,
-            enableRowGroup: true,
-        },
-        {
             field: 'resourceCount',
             headerName: 'Resources',
             type: 'number',
@@ -93,14 +84,6 @@ export default function CloudAccounts({
     const setNotification = useSetAtom(notificationAtom)
     const isDemo = useAtomValue(isDemoAtom)
 
-    const [isOnboarded, setIsOnboarded] = useState(true)
-    const [index, setIndex] = useState(0)
-    useEffect(() => {
-        if (isOnboarded) {
-            setIndex(0)
-        } else setIndex(1)
-    }, [isOnboarded])
-
     const query = {
         ...(connections.provider && {
             connector: [connections.provider],
@@ -120,7 +103,7 @@ export default function CloudAccounts({
         ...(activeTimeRange.end && {
             endTime: activeTimeRange.end.unix(),
         }),
-        pageSize: 1000,
+        pageSize: 5000,
         needCost: false,
     }
 
@@ -140,10 +123,10 @@ export default function CloudAccounts({
                             (b.resourceCount || 0) - (a.resourceCount || 0)
                     )
                     .filter((acc) => {
-                        if (isOnboarded) {
-                            return acc.lifecycleState === 'ONBOARD'
-                        }
-                        return acc
+                        return (
+                            acc.lifecycleState === 'ONBOARD' ||
+                            acc.lifecycleState === 'IN_PROGRESS'
+                        )
                     }) || []
             }
             loading={isAccountsLoading}
@@ -165,19 +148,6 @@ export default function CloudAccounts({
                 }
             }}
             options={options}
-        >
-            {!resourceId && (
-                <TabGroup className="w-fit rounded-lg border" index={index}>
-                    <TabList variant="solid">
-                        <Tab onClick={() => setIsOnboarded(true)}>
-                            Onboarded
-                        </Tab>
-                        <Tab onClick={() => setIsOnboarded(false)}>
-                            Show all
-                        </Tab>
-                    </TabList>
-                </TabGroup>
-            )}
-        </Table>
+        />
     )
 }
