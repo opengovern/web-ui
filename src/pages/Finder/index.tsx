@@ -356,7 +356,7 @@ export default function Finder() {
                                             </Text>
                                             <Select
                                                 className="w-56"
-                                                value="1000"
+                                                placeholder="1,000"
                                             >
                                                 <SelectItem
                                                     value="1000"

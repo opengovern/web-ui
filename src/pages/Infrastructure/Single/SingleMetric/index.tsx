@@ -361,7 +361,7 @@ export default function SingleMetric({
                         justifyContent="start"
                     >
                         <Text className="mr-2">Maximum rows:</Text>
-                        <Select className="w-56" value="1000">
+                        <Select className="w-56" placeholder="1,000">
                             <SelectItem
                                 value="1000"
                                 onClick={() => setPageSize(1000)}
