@@ -1,4 +1,9 @@
-import { GridOptions, ICellRendererParams } from 'ag-grid-community'
+import {
+    GridOptions,
+    ICellRendererParams,
+    ValueFormatterParams,
+    ValueFormatterService,
+} from 'ag-grid-community'
 import { Dayjs } from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
@@ -74,6 +79,12 @@ export const defaultColumns: IColumn<any, any>[] = [
             (params.data?.old_count
                 ? badgeDelta(params.data?.old_count, params.data?.count)
                 : badgeDelta(1, 2)),
+        valueFormatter: (params: ValueFormatterParams) =>
+            `${
+                (((params.data?.old_count || 0) - (params.data?.count || 0)) /
+                    (params.data?.count || 1)) *
+                100
+            } %`,
     },
     {
         headerName: 'Change (Δ)',
@@ -84,6 +95,8 @@ export const defaultColumns: IColumn<any, any>[] = [
         ) =>
             params.data &&
             badgeDelta(params.data?.old_count, params.data?.count, true),
+        valueFormatter: (params: ValueFormatterParams) =>
+            `${(params.data?.old_count || 0) - (params.data?.count || 0)}`,
     },
 ]
 
