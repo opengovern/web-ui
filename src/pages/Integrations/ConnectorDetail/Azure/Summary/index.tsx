@@ -1,6 +1,7 @@
 import { Grid } from '@tremor/react'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
 import {
+    exactPriceDisplay,
     numberDisplay,
     numericDisplay,
 } from '../../../../../utilities/numericDisplay'
@@ -44,14 +45,12 @@ export default function AzureSummary({
             />
             <SummaryCard
                 title="Service Principals"
-                metric={String(
-                    numericDisplay(principalsSummary?.totalCredentialCount)
-                )}
+                metric={principalsSummary?.totalCredentialCount}
                 loading={principalsLoading}
             />
             <SummaryCard
                 title="Billing Accounts"
-                metric={`$${numberDisplay(subscriptionsSummary?.totalCost, 0)}`}
+                metric={subscriptionsSummary?.totalCost}
                 loading={subscriptionsLoading}
             />
         </Grid>

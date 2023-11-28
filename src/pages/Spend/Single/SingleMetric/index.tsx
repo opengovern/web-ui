@@ -381,7 +381,7 @@ export default function SingleSpendMetric({
                 <Grid numItems={4} className="gap-4">
                     <SummaryCard
                         title={getConnections(selectedConnections)}
-                        metric={exactPriceDisplay(metricDetail?.total_cost)}
+                        metric={metricDetail?.total_cost}
                         loading={metricDetailLoading}
                         border={false}
                     />

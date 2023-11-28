@@ -291,9 +291,7 @@ export default function Spend() {
                             <Col numColSpan={1}>
                                 <SummaryCard
                                     title={getConnections(selectedConnections)}
-                                    metric={exactPriceDisplay(
-                                        accountCostResponse?.totalCost
-                                    )}
+                                    metric={accountCostResponse?.totalCost}
                                     loading={accountCostLoading}
                                     url="spend-details#cloud-accounts"
                                     border={false}

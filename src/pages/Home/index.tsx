@@ -137,7 +137,7 @@ export default function Home() {
             >
                 <SummaryCard
                     title="Cloud accounts"
-                    metric={numberDisplay(summary?.connectionCount, 0)}
+                    metric={summary?.connectionCount}
                     loading={limitsLoading}
                     error={getErrorMessage(summaryError)}
                     onRefresh={summaryRefresh}
@@ -145,7 +145,7 @@ export default function Home() {
                 />
                 <SummaryCard
                     title="Metrics"
-                    metric={numberDisplay(services?.total_metrics, 0)}
+                    metric={services?.total_metrics}
                     loading={servicesIsLoading}
                     error={getErrorMessage(servicesError)}
                     onRefresh={serviceRefresh}
@@ -153,7 +153,7 @@ export default function Home() {
                 />
                 <SummaryCard
                     title="Resource count"
-                    metric={numberDisplay(summary?.totalResourceCount, 0)}
+                    metric={summary?.totalResourceCount}
                     loading={limitsLoading}
                     error={getErrorMessage(summaryError)}
                     onRefresh={summaryRefresh}
@@ -161,7 +161,7 @@ export default function Home() {
                 />
                 <SummaryCard
                     title="Total spend"
-                    metric={exactPriceDisplay(summary?.totalCost, 0)}
+                    metric={summary?.totalCost}
                     loading={limitsLoading}
                     error={getErrorMessage(summaryError)}
                     onRefresh={summaryRefresh}

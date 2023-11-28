@@ -284,12 +284,8 @@ export default function Infrastructure() {
                         <Grid numItems={5} className="gap-4">
                             <SummaryCard
                                 title="Resources"
-                                metric={numericDisplay(
-                                    servicesResponse?.total_count
-                                )}
-                                metricPrev={numericDisplay(
-                                    servicesResponse?.total_old_count
-                                )}
+                                metric={servicesResponse?.total_count}
+                                metricPrev={servicesResponse?.total_old_count}
                                 url="infrastructure-details#resources"
                                 loading={servicesResponseLoading}
                                 border={false}
@@ -297,12 +293,12 @@ export default function Infrastructure() {
                             <Flex className="border-l border-l-gray-200 h-full pl-3">
                                 <SummaryCard
                                     title="Accounts"
-                                    metric={numericDisplay(
+                                    metric={
                                         accountsResponse?.totalOnboardedCount
-                                    )}
-                                    metricPrev={numericDisplay(
+                                    }
+                                    metricPrev={
                                         accountsResponse?.totalDiscoveredCount
-                                    )}
+                                    }
                                     url="infrastructure-details#cloud-accounts"
                                     loading={accountsResponseLoading}
                                     border={false}

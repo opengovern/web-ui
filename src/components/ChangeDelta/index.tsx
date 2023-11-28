@@ -31,7 +31,7 @@ export default function ChangeDelta({
         <Flex className="w-fit min-w-fit gap-1 h-full">
             <BadgeDelta size="sm" deltaType={deltaType} />
             <Text color={changeColor(deltaType)}>{`${numberDisplay(
-                change,
+                Math.abs(Number(change)),
                 isDelta ? 0 : 2
             )} ${isDelta ? '' : '%'}`}</Text>
         </Flex>

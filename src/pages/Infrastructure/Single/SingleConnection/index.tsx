@@ -286,12 +286,8 @@ export default function SingleConnection({
                             <Grid numItems={6} className="gap-4">
                                 <SummaryCard
                                     title=""
-                                    metric={numericDisplay(
-                                        connection?.resourceCount
-                                    )}
-                                    metricPrev={numericDisplay(
-                                        connection?.oldResourceCount
-                                    )}
+                                    metric={connection?.resourceCount}
+                                    metricPrev={connection?.oldResourceCount}
                                     loading={resourceTrendLoading}
                                     border={false}
                                 />

@@ -34,9 +34,7 @@ export default function AWSSummary({
             />
             <SummaryCard
                 title="AWS Organizations"
-                metric={String(
-                    numericDisplay(credential?.totalCredentialCount)
-                )}
+                metric={credential?.totalCredentialCount}
                 loading={credentialLoading}
             />
         </Grid>
