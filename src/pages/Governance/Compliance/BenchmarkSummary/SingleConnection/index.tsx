@@ -188,7 +188,7 @@ export default function SingleComplianceConnection() {
                             ) : (
                                 <List className="mt-2">
                                     <ListItem>
-                                        <Text>Connector</Text>
+                                        <Text>Cloud Provider</Text>
                                         <Text className="text-gray-800">
                                             {con?.connector}
                                         </Text>

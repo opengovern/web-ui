@@ -40,7 +40,7 @@ export const rowGenerator = (data: any) => {
 
 export const defaultColumns: IColumn<any, any>[] = [
     {
-        headerName: 'Connector',
+        headerName: 'Cloud Provider',
         field: 'connectors',
         type: 'string',
         filter: true,
@@ -150,7 +150,7 @@ export default function Resources({
 
     return (
         <Table
-            title={isSummary ? 'Summary' : 'Resources'}
+            title={isSummary ? 'Summary' : 'Metric list'}
             id={
                 isSummary
                     ? 'infrastructure_summary_table'

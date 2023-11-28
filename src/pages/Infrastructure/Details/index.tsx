@@ -50,7 +50,7 @@ export default function InfrastructureDetails() {
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     {/* <Tab onClick={() => navigate('#summary')}>Summary</Tab> */}
-                    <Tab onClick={() => navigate('#resources')}>Resources</Tab>
+                    <Tab onClick={() => navigate('#resources')}>Metrics</Tab>
                     <Tab onClick={() => navigate('#cloud-accounts')}>
                         Cloud accounts
                     </Tab>

@@ -144,7 +144,7 @@ export default function Home() {
                     blueBorder
                 />
                 <SummaryCard
-                    title="Services"
+                    title="Metrics"
                     metric={numberDisplay(services?.total_metrics, 0)}
                     loading={servicesIsLoading}
                     error={getErrorMessage(servicesError)}

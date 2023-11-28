@@ -26,7 +26,7 @@ const columns = (isDemo: boolean) => {
         {
             width: 120,
             field: 'connector',
-            headerName: 'Connector',
+            headerName: 'Cloud Provider',
             sortable: true,
             filter: true,
             enableRowGroup: true,

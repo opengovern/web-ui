@@ -283,9 +283,7 @@ export default function Infrastructure() {
                     <Card className="mb-4">
                         <Grid numItems={5} className="gap-4">
                             <SummaryCard
-                                title={`Sum of ${
-                                    servicesResponse?.total_metrics || 0
-                                } resources`}
+                                title="Resources"
                                 metric={numericDisplay(
                                     servicesResponse?.total_count
                                 )}
@@ -417,14 +415,14 @@ export default function Infrastructure() {
                         <Col numColSpan={1} numColSpanLg={3} className="h-full">
                             <Grid numItems={2} className="w-full h-full gap-4">
                                 <ListCard
-                                    title="Top accounts"
+                                    title="Top Cloud Accounts"
                                     loading={accountsResponseLoading}
                                     items={topAccounts(accountsResponse)}
                                     url="infrastructure-details#cloud-accounts"
                                     type="account"
                                 />
                                 <ListCard
-                                    title="Top resources"
+                                    title="Top Metrics"
                                     loading={servicesResponseLoading}
                                     items={topServices(servicesResponse)}
                                     url="infrastructure-details#resources"

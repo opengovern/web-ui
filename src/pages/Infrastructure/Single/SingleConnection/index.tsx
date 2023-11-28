@@ -171,7 +171,7 @@ export default function SingleConnection({
                             ) : (
                                 <List>
                                     <ListItem>
-                                        <Text>Connector</Text>
+                                        <Text>Cloud Provider</Text>
                                         <Text className="text-gray-800">
                                             {connection?.connector}
                                         </Text>

@@ -35,7 +35,7 @@ import { chartData } from '../InsightDetail'
 
 const columns: IColumn<any, any>[] = [
     {
-        headerName: 'Connector',
+        headerName: 'Cloud Provider',
         field: 'connector',
         type: 'string',
         width: 120,

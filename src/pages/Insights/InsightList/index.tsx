@@ -33,7 +33,7 @@ import { badgeDelta } from '../../../utilities/deltaType'
 
 const columns: IColumn<any, any>[] = [
     {
-        headerName: 'Connector',
+        headerName: 'Cloud Provider',
         field: 'connector',
         type: 'string',
         sortable: true,

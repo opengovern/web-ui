@@ -111,7 +111,7 @@ const complianceColumns: IColumn<any, any>[] = [
     {
         width: 120,
         field: 'connectors',
-        headerName: 'Connector',
+        headerName: 'Cloud Provider',
         sortable: true,
         filter: true,
         enableRowGroup: true,

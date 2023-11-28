@@ -19,7 +19,7 @@ const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'connector',
-            headerName: 'Connector',
+            headerName: 'Cloud Provider',
             type: 'string',
             width: 120,
             sortable: true,
@@ -129,7 +129,7 @@ export default function CloudAccounts({
 
     return (
         <Table
-            title="Cloud accounts"
+            title="Cloud accounts list"
             id="infrastructure_connection_table"
             columns={columns(isDemo)}
             downloadable
