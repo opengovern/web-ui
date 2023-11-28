@@ -165,7 +165,7 @@ export default function KeyInsightDetail({
                         <Grid numItems={4} className="w-full gap-4 mb-4">
                             <SummaryCard
                                 border={false}
-                                title="Total result"
+                                title="Total results"
                                 metric={insightDetail?.totalResultValue}
                                 metricPrev={insightDetail?.oldTotalResultValue}
                                 loading={detailLoading}

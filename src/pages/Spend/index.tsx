@@ -295,6 +295,8 @@ export default function Spend() {
                                     loading={accountCostLoading}
                                     url="spend-details#cloud-accounts"
                                     border={false}
+                                    isPrice
+                                    isExact
                                 />
                             </Col>
                             <Col numColSpan={3} />

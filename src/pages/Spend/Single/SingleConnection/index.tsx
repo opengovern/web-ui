@@ -375,6 +375,8 @@ export default function SingleSpendConnection({
                                     metric={accountInfo?.totalCost}
                                     loading={accountInfoLoading}
                                     border={false}
+                                    isPrice
+                                    isExact
                                 />
                                 <Col numColSpan={3} />
                                 <Col numColSpan={2}>

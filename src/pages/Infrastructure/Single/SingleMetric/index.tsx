@@ -249,6 +249,7 @@ export default function SingleMetric({
                                 ? resourceTrend[resourceTrend.length - 1]?.count
                                 : 0
                         }
+                        isExact
                         metricPrev={resourceTrend ? resourceTrend[0]?.count : 0}
                         loading={resourceTrendLoading}
                         border={false}

@@ -264,7 +264,8 @@ export default function BenchmarkSummary() {
                 <Grid numItems={7} className="w-full mb-6">
                     <SummaryCard
                         title="Security score"
-                        metric={`${((passed / total) * 100).toFixed(2)} %`}
+                        metric={((passed / total) * 100).toFixed(2)}
+                        isPercentage
                         border={false}
                         loading={isLoading}
                         url="details"

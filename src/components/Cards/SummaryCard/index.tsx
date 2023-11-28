@@ -22,6 +22,7 @@ type IProps = {
     onRefresh?: () => void
     isExact?: boolean
     isPrice?: boolean
+    isPercentage?: boolean
 }
 
 export default function SummaryCard({
@@ -37,6 +38,7 @@ export default function SummaryCard({
     onRefresh,
     isExact = false,
     isPrice = false,
+    isPercentage = false,
 }: IProps) {
     const navigate = useNavigate()
 
@@ -75,8 +77,10 @@ export default function SummaryCard({
                             ? `${isPrice ? '$' : ''}${numberDisplay(
                                   metric,
                                   isExact && isPrice ? 2 : 0
-                              )}`
-                            : `${isPrice ? '$' : ''}${numericDisplay(metric)}`}
+                              )}${isPercentage ? '%' : ''}`
+                            : `${isPrice ? '$' : ''}${numericDisplay(metric)}${
+                                  isPercentage ? '%' : ''
+                              }`}
                     </Metric>
                     {!!unit && <Text className="mb-0.5">{unit}</Text>}
                     {!!metricPrev && (
@@ -86,17 +90,16 @@ export default function SummaryCard({
                                 ? `${isPrice ? '$' : ''}${numberDisplay(
                                       metricPrev,
                                       isExact && isPrice ? 2 : 0
-                                  )}`
+                                  )}${isPercentage ? '%' : ''}`
                                 : `${isPrice ? '$' : ''}${numericDisplay(
                                       metricPrev
-                                  )}`}
+                                  )}${isPercentage ? '%' : ''}`}
                         </Text>
                     )}
                 </Flex>
                 {metricPrev && (
                     <Flex className="mt-1">
                         <ChangeDelta
-                            deltaType={badgeTypeByDelta(metricPrev, metric)}
                             change={numberDisplay(
                                 ((Number(metricPrev) - Number(metric)) /
                                     Number(metric)) *

@@ -35,7 +35,6 @@ export const badgeDelta = (
 ) => {
     return oldValue !== 0 ? (
         <ChangeDelta
-            deltaType={badgeTypeByDelta(oldValue, newValue)}
             change={
                 isDelta
                     ? deltaChange(oldValue, newValue)
