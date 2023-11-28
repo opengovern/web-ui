@@ -329,8 +329,8 @@ export default function InsightDetail({
                                         setQuery(modalData)
                                     }}
                                 >
-                                    <Link to={`/${ws}/finder`}>
-                                        Open in finder
+                                    <Link to={`/${ws}/query`}>
+                                        Open in Query
                                     </Link>
                                 </Button>
                                 <Button onClick={() => setModalData('')}>

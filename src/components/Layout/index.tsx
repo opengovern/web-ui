@@ -22,7 +22,7 @@ type IProps = {
         | 'stack'
         | 'rules'
         | 'alerts'
-        | 'finder'
+        | 'query'
         | '404'
     showSidebar?: boolean
     hfull?: boolean

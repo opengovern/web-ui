@@ -63,8 +63,8 @@ const navigation = [
         icon: DocumentChartBarIcon,
     },
     {
-        name: 'Finder',
-        page: 'finder',
+        name: 'Query',
+        page: 'query',
         icon: MagnifyingGlassIcon,
     },
     {

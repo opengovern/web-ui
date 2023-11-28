@@ -236,7 +236,7 @@ export default function SingleMetric({
                                 setQuery(modalData)
                             }}
                         >
-                            <Link to={`/${ws}/finder`}>Open in finder</Link>
+                            <Link to={`/${ws}/query`}>Open in Query</Link>
                         </Button>
                         <Button onClick={() => setModalData('')}>Close</Button>
                     </Flex>

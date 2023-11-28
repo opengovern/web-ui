@@ -201,8 +201,8 @@ const authRoutes = [
         component: Stack,
     },
     {
-        key: 'finder',
-        path: '/:ws/finder',
+        key: 'query',
+        path: '/:ws/query',
         component: Finder,
     },
     {

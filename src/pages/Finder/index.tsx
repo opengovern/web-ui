@@ -210,7 +210,7 @@ export default function Finder() {
     )
 
     return (
-        <Layout currentPage="finder">
+        <Layout currentPage="query">
             <Header />
             {categoryLoading || queryLoading ? (
                 <Spinner className="mt-56" />
@@ -351,12 +351,12 @@ export default function Finder() {
                                     </Card>
                                     <Flex className="w-full mt-4">
                                         <Flex justifyContent="start">
+                                            <Text className="mr-2">
+                                                Maximum rows:
+                                            </Text>
                                             <Select
                                                 className="w-56"
-                                                placeholder={`Result count: ${numberDisplay(
-                                                    pageSize,
-                                                    0
-                                                )}`}
+                                                value="1000"
                                             >
                                                 <SelectItem
                                                     value="1000"
@@ -391,64 +391,6 @@ export default function Finder() {
                                                     10,000
                                                 </SelectItem>
                                             </Select>
-                                            {!isLoading &&
-                                                isExecuted &&
-                                                error && (
-                                                    <Flex
-                                                        justifyContent="start"
-                                                        className="w-fit"
-                                                    >
-                                                        <Icon
-                                                            icon={
-                                                                ExclamationCircleIcon
-                                                            }
-                                                            color="rose"
-                                                        />
-                                                        <Text color="rose">
-                                                            {getErrorMessage(
-                                                                error
-                                                            )}
-                                                        </Text>
-                                                    </Flex>
-                                                )}
-                                            {!isLoading &&
-                                                isExecuted &&
-                                                queryResponse && (
-                                                    <Flex
-                                                        justifyContent="start"
-                                                        className="w-fit"
-                                                    >
-                                                        {memoCount ===
-                                                        pageSize ? (
-                                                            <>
-                                                                <Icon
-                                                                    icon={
-                                                                        ExclamationCircleIcon
-                                                                    }
-                                                                    color="amber"
-                                                                />
-                                                                <Text color="amber">
-                                                                    {`Results are truncated for ${numberDisplay(
-                                                                        pageSize,
-                                                                        0
-                                                                    )} rows`}
-                                                                </Text>
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <Icon
-                                                                    icon={
-                                                                        CheckCircleIcon
-                                                                    }
-                                                                    color="emerald"
-                                                                />
-                                                                <Text color="emerald">
-                                                                    Success
-                                                                </Text>
-                                                            </>
-                                                        )}
-                                                    </Flex>
-                                                )}
                                         </Flex>
                                         <Flex className="w-fit gap-x-3">
                                             {!!code.length && (
@@ -473,6 +415,60 @@ export default function Finder() {
                                                 Run query
                                             </Button>
                                         </Flex>
+                                    </Flex>
+                                    <Flex className="w-full">
+                                        {!isLoading && isExecuted && error && (
+                                            <Flex
+                                                justifyContent="start"
+                                                className="w-fit"
+                                            >
+                                                <Icon
+                                                    icon={ExclamationCircleIcon}
+                                                    color="rose"
+                                                />
+                                                <Text color="rose">
+                                                    {getErrorMessage(error)}
+                                                </Text>
+                                            </Flex>
+                                        )}
+                                        {!isLoading &&
+                                            isExecuted &&
+                                            queryResponse && (
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="w-fit"
+                                                >
+                                                    {memoCount === pageSize ? (
+                                                        <>
+                                                            <Icon
+                                                                icon={
+                                                                    ExclamationCircleIcon
+                                                                }
+                                                                color="amber"
+                                                                className="ml-0 pl-0"
+                                                            />
+                                                            <Text color="amber">
+                                                                {`Row limit of ${numberDisplay(
+                                                                    pageSize,
+                                                                    0
+                                                                )} reached, results are truncated`}
+                                                            </Text>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Icon
+                                                                icon={
+                                                                    CheckCircleIcon
+                                                                }
+                                                                color="emerald"
+                                                            />
+                                                            <Text color="emerald">
+                                                                Success
+                                                            </Text>
+                                                        </>
+                                                    )}
+                                                </Flex>
+                                            )}
                                     </Flex>
                                 </Flex>
                             </Transition.Child>
