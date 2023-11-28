@@ -392,19 +392,11 @@ export default function Filter() {
                                                 onClick={() => {
                                                     setConnections(
                                                         (prevState) => {
-                                                            const arr =
-                                                                prevState
-                                                            arr.splice(
-                                                                arr.indexOf(
-                                                                    arr.find(
-                                                                        (s) =>
-                                                                            s?.id ===
-                                                                            c?.id
-                                                                    )
-                                                                ),
-                                                                1
+                                                            return prevState.filter(
+                                                                (s) =>
+                                                                    s?.id !==
+                                                                    c?.id
                                                             )
-                                                            return arr
                                                         }
                                                     )
                                                 }}
