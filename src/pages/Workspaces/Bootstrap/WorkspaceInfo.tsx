@@ -32,7 +32,7 @@ export function WorkspaceInformation({
                         className={done ? 'text-emerald-500' : 'text-gray-500'}
                     />
                     <Text className="ml-2 text-sm text-gray-800">
-                        2. Workspace Information
+                        1. Workspace Information
                     </Text>
                 </Flex>
                 <div>
@@ -47,8 +47,7 @@ export function WorkspaceInformation({
                 <div className="m-6">
                     <Flex justifyContent="start">
                         <Text className="font-normal text-sm text-gray-500">
-                            The setup steps vary depending on the cloud service
-                            you choose.
+                            Choose a unique name for your workspace.
                         </Text>
                     </Flex>
                     <Flex

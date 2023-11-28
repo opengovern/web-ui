@@ -92,7 +92,7 @@ export function OnboardConnection({
                         className={done ? 'text-emerald-500' : 'text-gray-500'}
                     />
                     <Text className="ml-2 text-sm text-gray-800">
-                        3. Select your connections
+                        2. Onboard your AWS accounts & Azure Subscriptions
                     </Text>
                 </Flex>
                 <div>
@@ -111,7 +111,7 @@ export function OnboardConnection({
             {open && !firstLoading && (
                 <>
                     <Text className="text-gray-500 m-3">
-                        The setup steps vary depending on the cloud service you
+                        The setup steps vary depending on the cloud provider you
                         choose.
                     </Text>
                     <Flex justifyContent="start">
@@ -152,13 +152,13 @@ export function OnboardConnection({
                             }`}
                         >
                             Minimum of {statusResponse?.minRequiredConnections}{' '}
-                            connections are required
+                            accounts are required
                         </Text>
                     </Flex>
                     <Flex justifyContent="start" className="ml-3">
                         <ExclamationCircleIcon className="w-4" />
                         <Text className="ml-1">
-                            Maximum allowed connections are{' '}
+                            Maximum allowed accounts are{' '}
                             {statusResponse?.maxConnections}
                         </Text>
                     </Flex>
@@ -173,7 +173,7 @@ export function OnboardConnection({
                                         0)
                             }
                         >
-                            Create
+                            Finish
                         </Button>
                     </Flex>
                 </>

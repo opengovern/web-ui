@@ -103,6 +103,8 @@ export default function Table<TData = any, TValue = any>({
     useEffect(() => {
         if (loading) {
             gridRef.current?.api?.showLoadingOverlay()
+        } else {
+            gridRef.current?.api?.hideOverlay()
         }
     }, [loading])
 

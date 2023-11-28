@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ChooseYourPlan } from './ChoosePlan'
 import { WorkspaceInformation } from './WorkspaceInfo'
 import { OnboardConnection } from './OnboardConnection'
-import NewOrganization from '../../Integrations/ConnectorDetail/AWS/Tabs/Organizations/NewOrganization'
 import NewPrincipal from '../../Integrations/ConnectorDetail/Azure/Tabs/Principals/NewPrincipal'
 import { Status } from './Status'
 import {
@@ -14,13 +13,14 @@ import {
 } from '../../../api/workspace.gen'
 import Layout from '../../../components/Layout'
 import { getErrorMessage } from '../../../types/apierror'
+import OnboardDrawer from '../../Integrations/Onboard/AWS'
 
 export default function Boostrap() {
     const currentWorkspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
     const [tier, setTier] = useState('FREE')
     const [name, setName] = useState(currentWorkspace || '')
-    const [step, setStep] = useState(currentWorkspace === undefined ? 1 : 3)
+    const [step, setStep] = useState(currentWorkspace === undefined ? 2 : 3)
     const [newAWSOpen, setNewAWSOpen] = useState(false)
     const [newAzureOpen, setNewAzureOpen] = useState(false)
 
@@ -81,16 +81,16 @@ export default function Boostrap() {
 
     const page = () => {
         switch (step) {
-            case 1:
-                return (
-                    <ChooseYourPlan
-                        open={step === 1}
-                        tier={tier}
-                        setTier={setTier}
-                        onDone={() => setStep(2)}
-                        done={step > 1}
-                    />
-                )
+            // case 1:
+            //     return (
+            //         <ChooseYourPlan
+            //             open={step === 1}
+            //             tier={tier}
+            //             setTier={setTier}
+            //             onDone={() => setStep(2)}
+            //             done={step > 1}
+            //         />
+            //     )
             case 2:
                 return (
                     <WorkspaceInformation
@@ -127,11 +127,9 @@ export default function Boostrap() {
     return (
         <Layout currentPage="infrastructure" showSidebar={false} hfull>
             {newAWSOpen && (
-                <NewOrganization
+                <OnboardDrawer
                     open={newAWSOpen}
                     onClose={() => setNewAWSOpen(false)}
-                    accounts={[]}
-                    forceFromScratch
                     bootstrapMode
                 />
             )}
