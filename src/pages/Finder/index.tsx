@@ -37,6 +37,7 @@ import {
 } from '@heroicons/react/24/solid'
 import { Transition } from '@headlessui/react'
 import { useAtom, useAtomValue } from 'jotai'
+import { send } from 'process'
 import Layout from '../../components/Layout'
 import {
     useInventoryApiV1QueryList,
@@ -159,6 +160,12 @@ export default function Finder() {
         {},
         false
     )
+
+    useEffect(() => {
+        if (isExecuted && !isLoading && code.trim().length > 0) {
+            sendNow()
+        }
+    }, [pageSize])
 
     useEffect(() => {
         if (queryResponse?.query?.length) {
