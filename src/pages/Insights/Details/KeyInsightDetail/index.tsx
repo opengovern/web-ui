@@ -20,11 +20,7 @@ import {
 } from '../../../../api/compliance.gen'
 import { IFilter } from '../../../../store'
 import Spinner from '../../../../components/Spinner'
-import {
-    badgeDelta,
-    badgeTypeByDelta,
-    percentageByChange,
-} from '../../../../utilities/deltaType'
+import { badgeDelta } from '../../../../utilities/deltaType'
 import Header from '../../../../components/Header'
 import Chart from '../../../../components/Chart'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
@@ -173,14 +169,6 @@ export default function KeyInsightDetail({
                                 metric={insightDetail?.totalResultValue}
                                 metricPrev={insightDetail?.oldTotalResultValue}
                                 loading={detailLoading}
-                                deltaType={badgeTypeByDelta(
-                                    insightDetail?.oldTotalResultValue,
-                                    insightDetail?.totalResultValue
-                                )}
-                                delta={`${percentageByChange(
-                                    insightDetail?.oldTotalResultValue,
-                                    insightDetail?.totalResultValue
-                                )}%`}
                             />
                             <Col />
                             <Col numColSpan={2}>

@@ -1,12 +1,4 @@
-import {
-    BadgeDelta,
-    Button,
-    Card,
-    DeltaType,
-    Flex,
-    Metric,
-    Text,
-} from '@tremor/react'
+import { Button, Card, Flex, Metric, Text } from '@tremor/react'
 import { ArrowPathIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../Spinner'
@@ -18,8 +10,6 @@ type IProps = {
     metric: string | number | undefined
     metricPrev?: string | number | undefined
     unit?: string
-    delta?: string
-    deltaType?: DeltaType
     url?: string
     loading?: boolean
     border?: boolean
@@ -33,8 +23,6 @@ export default function SummaryCard({
     metric,
     metricPrev,
     unit,
-    delta,
-    deltaType,
     url,
     loading = false,
     border = true,
@@ -126,8 +114,8 @@ export default function SummaryCard({
                             </div>
                         )}
                     </Flex>
-                    {delta && !delta.includes('Infinity') && (
-                        <ChangeDelta deltaType={deltaType} change={delta} />
+                    {metricPrev && (
+                        <ChangeDelta deltaType="moderateDecrease" change={10} />
                     )}
                 </>
             )}
