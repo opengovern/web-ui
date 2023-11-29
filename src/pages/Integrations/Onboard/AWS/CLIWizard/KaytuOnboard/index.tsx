@@ -10,33 +10,8 @@ interface IKaytuOnboard {
 }
 
 export function KaytuOnboard({ bootstrapMode, onPrev, onNext }: IKaytuOnboard) {
-    const [exclude, setExclude] = useState<string[]>([''])
+    const [ou, setOU] = useState<string>('')
     const [profile, setProfile] = useState('')
-
-    const updateExclude = (idx: number, newValue: string) => {
-        const newExclude: string[] = []
-        exclude.forEach((element, index) => {
-            const trimmed = index === idx ? newValue.trim() : element.trim()
-            if (trimmed.length > 0) {
-                newExclude.push(trimmed)
-            }
-        })
-        newExclude.push('')
-        setExclude(newExclude)
-    }
-
-    const renderExclude = () => {
-        return exclude.map((st, idx) => {
-            return (
-                <TextInput
-                    value={st}
-                    className="mb-2"
-                    placeholder="OU to exclude ..."
-                    onChange={(e) => updateExclude(idx, e.target.value)}
-                />
-            )
-        })
-    }
 
     const command = () => {
         let txt = 'kaytu onboard aws'
@@ -44,10 +19,8 @@ export function KaytuOnboard({ bootstrapMode, onPrev, onNext }: IKaytuOnboard) {
         if (bootstrapMode) {
             txt = `${txt} -b`
         }
-
-        const excludeList = exclude.filter((v) => v.trim().length > 0).join(',')
-        if (excludeList.length > 0) {
-            txt = `${txt} --exclude ${excludeList}`
+        if (ou.length > 0) {
+            txt = `${txt} --ou ${ou}`
         }
         if (profile.length > 0) {
             txt = `${txt} --profile ${profile}`
@@ -65,9 +38,14 @@ export function KaytuOnboard({ bootstrapMode, onPrev, onNext }: IKaytuOnboard) {
                     onChange={(e) => setProfile(e.target.value)}
                 />
                 <Text className="mb-2">
-                    Provide Organization Units to exclude
+                    Provide Organization Units (Root OU will be used if not
+                    specified)
                 </Text>
-                {renderExclude()}
+                <TextInput
+                    value={ou}
+                    className="mb-2"
+                    onChange={(e) => setOU(e.target.value)}
+                />
 
                 <Text className="mt-4 mb-2">
                     Run this command on your terminal
