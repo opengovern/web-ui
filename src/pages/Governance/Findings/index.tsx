@@ -178,10 +178,12 @@ const datasource = (
         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse
         | undefined,
     loading: boolean,
-    err: boolean
+    err: boolean,
+    handleParam: any
 ) => {
     return {
         getRows: (params: IServerSideGetRowsParams) => {
+            handleParam(params)
             if (params.request.sortModel.length > 0) {
                 if (sort.length > 0) {
                     if (
@@ -243,6 +245,9 @@ export default function Findings() {
     const [status, setStatus] = useState<'compliant' | 'non-compliant' | 'any'>(
         'non-compliant'
     )
+    const [sortKey, setSortKey] = useState('')
+    const [tableParam, setTableParam] = useState<IServerSideGetRowsParams>()
+    const [lastPage, setLastPage] = useState(100)
 
     const connectionCheckbox = useCheckboxState({ state: [] })
     const benchmarkCheckbox = useCheckboxState({ state: [] })
@@ -299,7 +304,10 @@ export default function Findings() {
         sort: sortModel.length
             ? { [sortModel[0].colId]: sortModel[0].sort }
             : {},
+        limit: 100,
+        afterSortKey: [sortKey],
     })
+    console.log(findings)
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -307,7 +315,7 @@ export default function Findings() {
             // @ts-ignore
             connector: provider.length ? [provider] : [],
             pageNumber: 1,
-            pageSize: 10000,
+            pageSize: 2000,
             needCost: false,
             needResourceCount: false,
         })
@@ -328,8 +336,33 @@ export default function Findings() {
         sendNow()
     }
 
+    const handleParam = (param: IServerSideGetRowsParams) => {
+        setTableParam(param)
+    }
+
+    useEffect(() => {
+        if (tableParam?.request.startRow === lastPage) {
+            const list = findings?.findings
+            if (list) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                setSortKey(list[list?.length - 1].sortKey[0] || '')
+            }
+            sendNow()
+        }
+    }, [tableParam])
+
     const ds: IServerSideDatasource = useMemo(
-        () => datasource(sortModel, getData, findings, isLoading, error),
+        () =>
+            datasource(
+                sortModel,
+                getData,
+                findings,
+                isLoading,
+                error,
+                handleParam
+            ),
         [findings, sortModel]
     )
 
