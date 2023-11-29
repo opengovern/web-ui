@@ -517,7 +517,7 @@ export default function ResourceCollectionDetail() {
                             columns={complianceColumns}
                             onRowClicked={(event) => {
                                 if (event.data) {
-                                    if (event.data.isAssigned === 'Assigned') {
+                                    if (event.data.status === 'Assigned') {
                                         navigate(`${event.data.id}`)
                                     } else {
                                         navigate(
