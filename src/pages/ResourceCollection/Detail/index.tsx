@@ -63,13 +63,13 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
-import { resourceTrendChart } from '../../Infrastructure'
+import { resourceTrendChart } from '../../Assets'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Landscape from '../../../components/Landscape'
 import Tag from '../../../components/Tag'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
-import { options } from '../../Infrastructure/Details/Tabs/Resources'
+import { options } from '../../Assets/Details/Tabs/Resources'
 import { benchmarkChecks } from '../../../components/Cards/ComplianceCard'
 
 const pieData = (

@@ -111,7 +111,7 @@ export default function CloudAccounts({
     return (
         <Table
             title="Cloud accounts list"
-            id="infrastructure_connection_table"
+            id="asset_connection_table"
             columns={columns(isDemo)}
             downloadable
             rowData={

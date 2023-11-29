@@ -173,11 +173,7 @@ export default function Resources({
     return (
         <Table
             title={isSummary ? 'Summary' : 'Metric list'}
-            id={
-                isSummary
-                    ? 'infrastructure_summary_table'
-                    : 'infrastructure_resource_table'
-            }
+            id={isSummary ? 'asset_summary_table' : 'asset_resource_table'}
             columns={columns}
             downloadable
             rowData={rowGenerator(resources?.metrics).sort((a, b) => {

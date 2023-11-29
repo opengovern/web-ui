@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import Infrastructure from '../pages/Infrastructure'
+import Assets from '../pages/Assets'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
 import { CallbackPage } from '../pages/Callback'
@@ -15,14 +15,14 @@ import BenchmarkSummary from '../pages/Governance/Compliance/BenchmarkSummary'
 import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
-import Single from '../pages/Infrastructure/Single'
+import Single from '../pages/Assets/Single'
 import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import InsightDetails from '../pages/Insights/Details'
 import InsightList from '../pages/Insights/InsightList'
 import BenchmarkDetails from '../pages/Governance/Compliance/BenchmarkSummary/Details'
 import SpendDetails from '../pages/Spend/Details'
-import InfrastructureDetails from '../pages/Infrastructure/Details'
+import AssetDetails from '../pages/Assets/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
 import Findings from '../pages/Governance/Findings'
@@ -68,7 +68,7 @@ const authRoutes = [
     {
         key: 'infrastructure',
         path: '/:ws/infrastructure',
-        component: Infrastructure,
+        component: Assets,
     },
     {
         key: 'infrastructure single',
@@ -83,7 +83,7 @@ const authRoutes = [
     {
         key: 'infrastructure metrics',
         path: '/:ws/infrastructure/infrastructure-details',
-        component: InfrastructureDetails,
+        component: AssetDetails,
     },
     {
         key: 'infrastructure single 2',
@@ -253,7 +253,7 @@ const authRoutes = [
     {
         key: 'resource collection infrastructure metrics',
         path: '/:ws/resource-collection/:resourceId/infrastructure-details',
-        component: InfrastructureDetails,
+        component: AssetDetails,
     },
     {
         key: 'resource collection infrastructure single 2',

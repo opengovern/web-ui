@@ -1,7 +1,6 @@
 import { Card, Flex } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ChooseYourPlan } from './ChoosePlan'
 import { WorkspaceInformation } from './WorkspaceInfo'
 import { OnboardConnection } from './OnboardConnection'
 import NewPrincipal from '../../Integrations/ConnectorDetail/Azure/Tabs/Principals/NewPrincipal'
@@ -125,7 +124,7 @@ export default function Boostrap() {
     }
 
     return (
-        <Layout currentPage="infrastructure" showSidebar={false} hfull>
+        <Layout currentPage="asset" showSidebar={false} hfull>
             {newAWSOpen && (
                 <OnboardDrawer
                     open={newAWSOpen}
