@@ -35,6 +35,7 @@ import { benchmarkList } from '../Compliance'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
 } from '../../../api/api'
 import FindingDetail from './Detail'
 
@@ -206,6 +207,23 @@ const datasource = (
             }
         },
     }
+}
+
+const filteredConnectionsList = (
+    connection:
+        | GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+        | undefined,
+    filter: string
+) => {
+    return connection?.filter(
+        (c) =>
+            c?.providerConnectionName
+                ?.toLowerCase()
+                .includes(filter.toLowerCase()) ||
+            c?.providerConnectionID
+                ?.toLowerCase()
+                .includes(filter.toLowerCase())
+    )
 }
 
 export default function Findings() {
@@ -450,21 +468,11 @@ export default function Findings() {
                                 {connectionsLoading ? (
                                     <Spinner />
                                 ) : (
-                                    connections?.connections
-                                        ?.filter(
-                                            (c) =>
-                                                c?.providerConnectionName
-                                                    ?.toLowerCase()
-                                                    .includes(
-                                                        connectionSearch.toLowerCase()
-                                                    ) ||
-                                                c?.providerConnectionID
-                                                    ?.toLowerCase()
-                                                    .includes(
-                                                        connectionSearch.toLowerCase()
-                                                    )
-                                        )
-                                        .map(
+                                    <>
+                                        {filteredConnectionsList(
+                                            connections?.connections,
+                                            connectionSearch
+                                        )?.map(
                                             (con, i) =>
                                                 i < 5 && (
                                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -493,7 +501,11 @@ export default function Findings() {
                                                         </Flex>
                                                     </Checkbox>
                                                 )
-                                        )
+                                        )}
+                                        <Flex justifyContent="end">
+                                            <Text>+ more</Text>
+                                        </Flex>
+                                    </>
                                 )}
                             </Flex>
                         </AccordionBody>
