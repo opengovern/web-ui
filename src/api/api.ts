@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -1677,6 +1676,15 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount {
     tags?: Record<string, any>
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest {
+    awsConfig?: GithubComKaytuIoKaytuEnginePkgOnboardApiV2AWSCredentialV2Config
+    name?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse {
+    id?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest {
     config?: any
     /** @example "Azure" */
@@ -1877,6 +1885,7 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest 
     awsConfig?: GithubComKaytuIoKaytuEnginePkgOnboardApiV2AWSCredentialV2Config
     azureConfig?: GithubComKaytuIoKaytuEnginePkgOnboardApiAzureCredentialConfig
     connectorType?: SourceType
+    singleConnection?: boolean
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress {
@@ -4413,42 +4422,6 @@ export class Api<
                 format: 'json',
                 ...params,
             }),
-
-        /**
-         * @description Retrieving metrics for a specific resource type.
-         *
-         * @tags resource
-         * @name ApiV2ResourcesMetricDetail
-         * @summary List resource-type metrics
-         * @request GET:/inventory/api/v2/resources/metric/{resourceType}
-         * @secure
-         */
-        apiV2ResourcesMetricDetail: (
-            resourceType: string,
-            query?: {
-                /** Connection IDs to filter by - mutually exclusive with connectionGroup */
-                connectionId?: string[]
-                /** Connection group to filter by - mutually exclusive with connectionId */
-                connectionGroup?: string[]
-                /** timestamp for resource count in epoch seconds */
-                endTime?: number
-                /** timestamp for resource count change comparison in epoch seconds */
-                startTime?: number
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType,
-                any
-            >({
-                path: `/inventory/api/v2/resources/metric/${resourceType}`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
     }
     metadata = {
         /**
@@ -4625,6 +4598,32 @@ export class Api<
                 path: `/onboard/api/v1/connection-groups/${connectionGroupName}`,
                 method: 'GET',
                 query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Creating AWS connection
+         *
+         * @tags onboard
+         * @name ApiV1ConnectionsAwsCreate
+         * @summary Create AWS connection
+         * @request POST:/onboard/api/v1/connections/aws
+         * @secure
+         */
+        apiV1ConnectionsAwsCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse,
+                any
+            >({
+                path: `/onboard/api/v1/connections/aws`,
+                method: 'POST',
+                body: request,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',

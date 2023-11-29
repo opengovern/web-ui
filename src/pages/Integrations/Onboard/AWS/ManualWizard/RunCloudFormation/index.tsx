@@ -1,16 +1,17 @@
 import { Button, Text, Flex, TextInput, Divider } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import axios from 'axios'
 import { CodeBlock } from '../../../../../../components/CodeBlock'
 import {
     useWorkspaceApiV1BootstrapCredentialCreate,
     useWorkspaceApiV1WorkspacesList,
 } from '../../../../../../api/workspace.gen'
-import Spinner from '../../../../../../components/Spinner'
 import { SourceType } from '../../../../../../api/api'
 import { getErrorMessage } from '../../../../../../types/apierror'
-import { useOnboardApiV2CredentialCreate } from '../../../../../../api/onboard.gen'
+import {
+    useOnboardApiV1ConnectionsAwsCreate,
+    useOnboardApiV2CredentialCreate,
+} from '../../../../../../api/onboard.gen'
 
 interface IRunCloudFormation {
     bootstrapMode: boolean
@@ -39,7 +40,6 @@ export function RunCloudFormation({
         'KaytuOrganizationCrossAccountRole'
     )
     const [handshakeID, setHandshakeID] = useState<string>('')
-    const [template, setTemplate] = useState<string>('')
 
     useEffect(() => {
         if (isExecuted && !isLoading) {
@@ -49,6 +49,24 @@ export function RunCloudFormation({
 
     const templateURL =
         'https://raw.githubusercontent.com/kaytu-io/cli/main/cmd/onboard/template.yaml'
+
+    const {
+        isLoading: scIsLoading,
+        isExecuted: scIsExecuted,
+        error: scError,
+        sendNow: scSendNow,
+    } = useOnboardApiV1ConnectionsAwsCreate(
+        {
+            name: '',
+            awsConfig: {
+                accountID,
+                assumeRoleName: roleName,
+                externalId: handshakeID,
+            },
+        },
+        {},
+        false
+    )
 
     const {
         isLoading: cIsLoading,
@@ -103,9 +121,19 @@ export function RunCloudFormation({
         }
     }, [cIsLoading])
 
+    useEffect(() => {
+        if (scIsExecuted && !scIsLoading) {
+            if (scError === undefined || scError === null) {
+                onNext()
+            }
+        }
+    }, [scIsLoading])
+
     const sendNow = () => {
         if (bootstrapMode) {
             bcSendNow()
+        } else if (accountType === 'single') {
+            scSendNow()
         } else {
             cSendNow()
         }
@@ -114,6 +142,9 @@ export function RunCloudFormation({
     const isCreateLoading = () => {
         if (bootstrapMode) {
             return bcIsExecuted && bcIsLoading
+        }
+        if (accountType === 'single') {
+            return scIsExecuted && scIsLoading
         }
         return cIsExecuted && cIsLoading
     }
