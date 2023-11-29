@@ -306,7 +306,7 @@ export default function ResourceCollectionDetail() {
                     variant="light"
                     onClick={() => setShowSummary(!showSummary)}
                     icon={showSummary ? ChevronUpIcon : ChevronDownIcon}
-                >{`${showSummary ? 'hide' : 'show'} summary`}</Button>
+                >{`${showSummary ? 'Hide' : 'Show'} summary`}</Button>
             </Flex>
             {showSummary && (
                 <Grid numItems={2} className="w-full gap-4 mb-4">
@@ -385,7 +385,7 @@ export default function ResourceCollectionDetail() {
                                     iconPosition="right"
                                     onClick={() => setOpenDrawer(true)}
                                 >
-                                    see more
+                                    See more
                                 </Button>
                             </Flex>
                             <DrawerPanel

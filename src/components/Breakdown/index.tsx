@@ -94,7 +94,7 @@ export default function Breakdown({
                     className="absolute bottom-6 right-6"
                     onClick={() => navigate(`${seeMore}`)}
                 >
-                    see more
+                    See more
                 </Button>
             )}
         </Card>

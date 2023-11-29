@@ -344,7 +344,7 @@ export default function SingleSpendConnection({
                                 iconPosition="right"
                                 onClick={() => setOpenDrawer(true)}
                             >
-                                see more
+                                See more
                             </Button>
                         </Flex>
                         <DrawerPanel
