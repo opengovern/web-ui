@@ -207,17 +207,6 @@ export function Status({ workspaceName }: IStatus) {
                     Access the workspace
                 </Button>
             </Flex>
-            <Flex className="w-2/3 h-full" flexDirection="col">
-                <Text>
-                    Let&apos;s play a game of minesweeper while you&apos;re
-                    waiting
-                </Text>
-                <iframe
-                    className="w-full h-full"
-                    title="Play a game while you are waiting"
-                    src="https://minesweeper.us/"
-                />
-            </Flex>
         </Flex>
     )
 }
