@@ -2,7 +2,6 @@ import {
     GridOptions,
     ICellRendererParams,
     ValueFormatterParams,
-    ValueFormatterService,
 } from 'ag-grid-community'
 import { Dayjs } from 'dayjs'
 import { useNavigate } from 'react-router-dom'
@@ -29,12 +28,24 @@ export const rowGenerator = (data: any) => {
                     rows.push({
                         ...data[i],
                         category: data[i].tags.category[j],
+                        change_percent:
+                            (((data[i].old_count || 0) - (data[i].count || 0)) /
+                                (data[i].count || 1)) *
+                            100,
+                        change_delta:
+                            (data[i].old_count || 0) - (data[i].count || 0),
                     })
                 }
             } else {
                 rows.push({
                     ...data[i],
                     category: data[i].tags.category[0],
+                    change_percent:
+                        (((data[i].old_count || 0) - (data[i].count || 0)) /
+                            (data[i].count || 1)) *
+                        100,
+                    change_delta:
+                        (data[i].old_count || 0) - (data[i].count || 0),
                 })
             }
         }
@@ -70,7 +81,9 @@ export const defaultColumns: IColumn<any, any>[] = [
     },
     {
         headerName: 'Change (%)',
-        type: 'string',
+        field: 'change_percent',
+        sortable: true,
+        type: 'number',
         filter: true,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
@@ -79,16 +92,12 @@ export const defaultColumns: IColumn<any, any>[] = [
             (params.data?.old_count
                 ? badgeDelta(params.data?.old_count, params.data?.count)
                 : badgeDelta(1, 2)),
-        valueFormatter: (params: ValueFormatterParams) =>
-            `${
-                (((params.data?.old_count || 0) - (params.data?.count || 0)) /
-                    (params.data?.count || 1)) *
-                100
-            } %`,
     },
     {
         headerName: 'Change (Δ)',
-        type: 'string',
+        field: 'change_delta',
+        sortable: true,
+        type: 'number',
         hide: true,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
