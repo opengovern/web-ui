@@ -17,7 +17,6 @@ import {
 import Spinner from '../../../components/Spinner'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
-import { useInventoryApiV2ResourcesMetricDetail } from '../../../api/inventory.gen'
 import { dateDisplay } from '../../../utilities/dateDisplay'
 
 export default function SettingsEntitlement() {
@@ -35,10 +34,10 @@ export default function SettingsEntitlement() {
             !loadingCurrentWS
         )
 
-    const { response: metricsResp, isLoading: metricsLoading } =
-        useInventoryApiV2ResourcesMetricDetail('AWS::EC2::Instance')
+    // const { response: metricsResp, isLoading: metricsLoading } =
+    // useInventoryApiV2ResourcesMetricDetail('AWS::EC2::Instance')
 
-    const noOfHosts = metricsResp?.count || 0
+    const noOfHosts = 0 // metricsResp?.count || 0
 
     const currentUsers = response?.currentUsers || 0
     const currentConnections = response?.currentConnections || 0
@@ -91,7 +90,7 @@ export default function SettingsEntitlement() {
         },
     ]
 
-    return isLoading || loadingCurrentWS || ownerIsLoading || metricsLoading ? (
+    return isLoading || loadingCurrentWS || ownerIsLoading ? (
         <Flex justifyContent="center" className="mt-56">
             <Spinner />
         </Flex>
