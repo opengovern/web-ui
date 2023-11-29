@@ -286,7 +286,7 @@ export default function Assets() {
                                 title="Resources"
                                 metric={servicesResponse?.total_count}
                                 metricPrev={servicesResponse?.total_old_count}
-                                url="asset-details#resources"
+                                url="assets-details#resources"
                                 loading={servicesResponseLoading}
                                 border={false}
                             />
@@ -299,7 +299,7 @@ export default function Assets() {
                                     metricPrev={
                                         accountsResponse?.totalDiscoveredCount
                                     }
-                                    url="asset-details#cloud-accounts"
+                                    url="assets-details#cloud-accounts"
                                     loading={accountsResponseLoading}
                                     border={false}
                                 />
@@ -405,7 +405,7 @@ export default function Assets() {
                                 oldChartData={pieData(composition).oldData}
                                 activeTime={activeTimeRange}
                                 loading={compositionLoading}
-                                seeMore="asset-details#category"
+                                seeMore="assets-details#category"
                             />
                         </Col>
                         <Col numColSpan={1} numColSpanLg={3} className="h-full">
@@ -414,14 +414,14 @@ export default function Assets() {
                                     title="Top Cloud Accounts"
                                     loading={accountsResponseLoading}
                                     items={topAccounts(accountsResponse)}
-                                    url="asset-details#cloud-accounts"
+                                    url="assets-details#cloud-accounts"
                                     type="account"
                                 />
                                 <ListCard
                                     title="Top Metrics"
                                     loading={servicesResponseLoading}
                                     items={topServices(servicesResponse)}
-                                    url="asset-details#resources"
+                                    url="assets-details#resources"
                                     type="service"
                                 />
                             </Grid>

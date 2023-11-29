@@ -536,7 +536,7 @@ export default function ResourceCollectionDetail() {
                                     <SummaryCard
                                         title="Resources"
                                         metric={accountInfo?.totalResourceCount}
-                                        url="infrastructure-details#cloud-accounts"
+                                        url="assets-details#cloud-accounts"
                                         loading={accountInfoLoading}
                                         border={false}
                                     />
