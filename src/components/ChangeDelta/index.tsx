@@ -15,28 +15,30 @@ const properties = (
     if (isDelta) {
         if (Number(change) > 0) {
             color = 'rose'
-            delta = 'decrease'
+            // delta = 'decrease'
+            delta = 'moderateDecrease'
         }
         if (Number(change) < 0) {
             color = 'emerald'
-            delta = 'increase'
+            // delta = 'increase'
+            delta = 'moderateIncrease'
         }
     } else {
         if (Number(change) > 0) {
             color = 'rose'
-            if (Math.abs(Number(change)) > 10) {
-                delta = 'decrease'
-            } else {
-                delta = 'moderateDecrease'
-            }
+            // if (Math.abs(Number(change)) > 10) {
+            //     delta = 'decrease'
+            // } else {
+            delta = 'moderateDecrease'
+            // }
         }
         if (Number(change) < 0) {
             color = 'emerald'
-            if (Number(change) > 10) {
-                delta = 'increase'
-            } else {
-                delta = 'moderateIncrease'
-            }
+            // if (Number(change) > 10) {
+            //     delta = 'increase'
+            // } else {
+            delta = 'moderateIncrease'
+            // }
         }
     }
 

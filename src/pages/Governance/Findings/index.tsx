@@ -35,6 +35,7 @@ import { benchmarkList } from '../Compliance'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
 } from '../../../api/api'
 import FindingDetail from './Detail'
 
@@ -177,10 +178,12 @@ const datasource = (
         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse
         | undefined,
     loading: boolean,
-    err: boolean
+    err: boolean,
+    handleParam: any
 ) => {
     return {
         getRows: (params: IServerSideGetRowsParams) => {
+            handleParam(params)
             if (params.request.sortModel.length > 0) {
                 if (sort.length > 0) {
                     if (
@@ -208,6 +211,28 @@ const datasource = (
     }
 }
 
+const filteredConnectionsList = (
+    connection:
+        | GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+        | undefined,
+    filter: string
+) => {
+    const result = connection?.filter(
+        (c) =>
+            c?.providerConnectionName
+                ?.toLowerCase()
+                .includes(filter.toLowerCase()) ||
+            c?.providerConnectionID
+                ?.toLowerCase()
+                .includes(filter.toLowerCase())
+    )
+    const count = result?.length || 0
+    return {
+        result,
+        count,
+    }
+}
+
 export default function Findings() {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<
@@ -220,6 +245,9 @@ export default function Findings() {
     const [status, setStatus] = useState<'compliant' | 'non-compliant' | 'any'>(
         'non-compliant'
     )
+    const [sortKey, setSortKey] = useState('')
+    const [tableParam, setTableParam] = useState<IServerSideGetRowsParams>()
+    const [lastPage, setLastPage] = useState(100)
 
     const connectionCheckbox = useCheckboxState({ state: [] })
     const benchmarkCheckbox = useCheckboxState({ state: [] })
@@ -276,7 +304,10 @@ export default function Findings() {
         sort: sortModel.length
             ? { [sortModel[0].colId]: sortModel[0].sort }
             : {},
+        limit: 100,
+        afterSortKey: [sortKey],
     })
+    console.log(findings)
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -284,7 +315,7 @@ export default function Findings() {
             // @ts-ignore
             connector: provider.length ? [provider] : [],
             pageNumber: 1,
-            pageSize: 10000,
+            pageSize: 2000,
             needCost: false,
             needResourceCount: false,
         })
@@ -305,8 +336,33 @@ export default function Findings() {
         sendNow()
     }
 
+    const handleParam = (param: IServerSideGetRowsParams) => {
+        setTableParam(param)
+    }
+
+    useEffect(() => {
+        if (tableParam?.request.startRow === lastPage) {
+            const list = findings?.findings
+            if (list) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                setSortKey(list[list?.length - 1].sortKey[0] || '')
+            }
+            sendNow()
+        }
+    }, [tableParam])
+
     const ds: IServerSideDatasource = useMemo(
-        () => datasource(sortModel, getData, findings, isLoading, error),
+        () =>
+            datasource(
+                sortModel,
+                getData,
+                findings,
+                isLoading,
+                error,
+                handleParam
+            ),
         [findings, sortModel]
     )
 
@@ -450,21 +506,11 @@ export default function Findings() {
                                 {connectionsLoading ? (
                                     <Spinner />
                                 ) : (
-                                    connections?.connections
-                                        ?.filter(
-                                            (c) =>
-                                                c?.providerConnectionName
-                                                    ?.toLowerCase()
-                                                    .includes(
-                                                        connectionSearch.toLowerCase()
-                                                    ) ||
-                                                c?.providerConnectionID
-                                                    ?.toLowerCase()
-                                                    .includes(
-                                                        connectionSearch.toLowerCase()
-                                                    )
-                                        )
-                                        .map(
+                                    <>
+                                        {filteredConnectionsList(
+                                            connections?.connections,
+                                            connectionSearch
+                                        ).result?.map(
                                             (con, i) =>
                                                 i < 5 && (
                                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -493,7 +539,23 @@ export default function Findings() {
                                                         </Flex>
                                                     </Checkbox>
                                                 )
-                                        )
+                                        )}
+                                        <Flex justifyContent="end">
+                                            <Text>
+                                                {filteredConnectionsList(
+                                                    connections?.connections,
+                                                    connectionSearch
+                                                ).count > 5
+                                                    ? `+ ${
+                                                          filteredConnectionsList(
+                                                              connections?.connections,
+                                                              connectionSearch
+                                                          ).count - 5
+                                                      } more`
+                                                    : ''}
+                                            </Text>
+                                        </Flex>
+                                    </>
                                 )}
                             </Flex>
                         </AccordionBody>

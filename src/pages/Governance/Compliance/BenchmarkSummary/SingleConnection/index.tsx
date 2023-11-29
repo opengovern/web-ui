@@ -267,7 +267,7 @@ export default function SingleComplianceConnection() {
                                 iconPosition="right"
                                 onClick={() => setOpenDrawer(true)}
                             >
-                                see more
+                                See more
                             </Button>
                         </Flex>
                         <DrawerPanel

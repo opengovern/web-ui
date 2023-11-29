@@ -420,7 +420,7 @@ export default function InsightDetail({
                                     variant="secondary"
                                     onClick={() => setDetailsDate('')}
                                 >
-                                    Show All
+                                    Show all
                                 </Button>
                             </Flex>
                         )}
