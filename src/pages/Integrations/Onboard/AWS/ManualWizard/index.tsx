@@ -286,7 +286,9 @@ export default function ManualWizard({
                     />
                 )
             default:
-                return <Finish onClose={onClose} />
+                return (
+                    <Finish onClose={onClose} bootstrapMode={bootstrapMode} />
+                )
         }
     }
     return (

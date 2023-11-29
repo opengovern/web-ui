@@ -9,6 +9,7 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboar
 import Table, { IColumn } from '../../../../../components/Table'
 
 interface IFinish {
+    bootstrapMode: boolean
     onClose: () => void
 }
 
@@ -71,9 +72,13 @@ const columns: IColumn<any, any>[] = [
     },
 ]
 
-export function Finish({ onClose }: IFinish) {
+export function Finish({ bootstrapMode, onClose }: IFinish) {
     const { response, isLoading, error } =
-        useOnboardApiV1ConnectionsSummaryList({ connector: ['AWS'] })
+        useOnboardApiV1ConnectionsSummaryList(
+            { connector: ['AWS'] },
+            {},
+            !bootstrapMode
+        )
 
     const options: GridOptions = {
         enableGroupEdit: true,
@@ -112,23 +117,27 @@ export function Finish({ onClose }: IFinish) {
                         Your accounts are onboarded
                     </Text>
                 </Flex>
-                <Text className="mb-2">
-                    Here&apos;s all the AWS accounts which have been onboarded
-                    to Kaytu
-                </Text>
-                <Flex
-                    flexDirection="col"
-                    justifyContent="start"
-                    alignItems="start"
-                >
-                    <Table
-                        id="aws_account_list"
-                        options={options}
-                        rowData={response?.connections}
-                        columns={columns}
-                        loading={isLoading}
-                    />
-                </Flex>
+                {!bootstrapMode && (
+                    <>
+                        <Text className="mb-2">
+                            Here&apos;s all the AWS accounts which have been
+                            onboarded to Kaytu
+                        </Text>
+                        <Flex
+                            flexDirection="col"
+                            justifyContent="start"
+                            alignItems="start"
+                        >
+                            <Table
+                                id="aws_account_list"
+                                options={options}
+                                rowData={response?.connections}
+                                columns={columns}
+                                loading={isLoading}
+                            />
+                        </Flex>
+                    </>
+                )}
             </Flex>
             <Flex flexDirection="row" justifyContent="end">
                 <Button variant="secondary" onClick={() => onClose()}>

@@ -103,7 +103,9 @@ export default function CLIWizard({
                     />
                 )
             default:
-                return <Finish onClose={onClose} />
+                return (
+                    <Finish onClose={onClose} bootstrapMode={bootstrapMode} />
+                )
         }
     }
     return (

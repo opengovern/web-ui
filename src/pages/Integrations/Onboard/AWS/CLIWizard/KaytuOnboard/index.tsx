@@ -46,15 +46,19 @@ export function KaytuOnboard({
                     className="mb-4"
                     onChange={(e) => setProfile(e.target.value)}
                 />
-                <Text className="mb-2">
-                    Provide Organization Units (Root OU will be used if not
-                    specified)
-                </Text>
-                <TextInput
-                    value={ou}
-                    className="mb-2"
-                    onChange={(e) => setOU(e.target.value)}
-                />
+                {orgOrSingle === 'organization' && (
+                    <>
+                        <Text className="mb-2">
+                            Provide Organization Units (Root OU will be used if
+                            not specified)
+                        </Text>
+                        <TextInput
+                            value={ou}
+                            className="mb-2"
+                            onChange={(e) => setOU(e.target.value)}
+                        />
+                    </>
+                )}
 
                 <Text className="mt-4 mb-2">
                     Run this command on your terminal
