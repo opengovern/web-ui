@@ -64,6 +64,7 @@ interface IProps<TData, TValue> {
     options?: GridOptions
     loading?: boolean
     fullWidth?: boolean
+    fullHeight?: boolean
 }
 
 export default function Table<TData = any, TValue = any>({
@@ -77,6 +78,7 @@ export default function Table<TData = any, TValue = any>({
     onRowClicked,
     downloadable = false,
     fullWidth = false,
+    fullHeight = false,
     title,
     children,
     options,
@@ -279,7 +281,10 @@ export default function Table<TData = any, TValue = any>({
     }
 
     return (
-        <Flex flexDirection="col" className="w-full">
+        <Flex
+            flexDirection="col"
+            className={`w-full ${fullHeight ? 'h-full' : ''}`}
+        >
             <Flex
                 className={
                     !!title?.length || downloadable || children ? 'mb-3' : ''
@@ -307,7 +312,11 @@ export default function Table<TData = any, TValue = any>({
                     {children}
                 </Flex>
             </Flex>
-            <div className="w-full ag-theme-alpine">
+            <div
+                className={`w-full ag-theme-alpine ${
+                    fullHeight ? 'h-full' : ''
+                }`}
+            >
                 <AgGridReact
                     ref={gridRef}
                     domLayout="autoHeight"

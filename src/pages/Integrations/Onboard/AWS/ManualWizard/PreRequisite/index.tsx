@@ -20,7 +20,8 @@ export function PreRequisite({ accountType, onPrev, onNext }: IPreRequisite) {
         label: string
     ) => {
         return (
-            <Switch
+            <Checkbox
+                shape="curve"
                 id={id}
                 name={id}
                 checked={state}
@@ -32,7 +33,7 @@ export function PreRequisite({ accountType, onPrev, onNext }: IPreRequisite) {
                 <label htmlFor={id} className="text-sm text-gray-500">
                     {label}
                 </label>
-            </Switch>
+            </Checkbox>
         )
     }
 

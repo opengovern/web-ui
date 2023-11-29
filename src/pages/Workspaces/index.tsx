@@ -9,7 +9,6 @@ import Spinner from '../../components/Spinner'
 import Header from '../../components/Header'
 
 export default function Workspaces() {
-    // const [openDrawer, setOpenDrawer] = useState(false)
     const navigate = useNavigate()
 
     const {
@@ -43,13 +42,6 @@ export default function Workspaces() {
                                 Add new Kaytu workspace
                             </Button>
                         </Header>
-                        {/* <CreateWorkspace
-                            open={openDrawer}
-                            onClose={() => {
-                                setOpenDrawer(false)
-                                refreshList()
-                            }}
-                        /> */}
                         <Grid numItems={1} className="gap-4">
                             {workspaces?.map((ws) => {
                                 return (

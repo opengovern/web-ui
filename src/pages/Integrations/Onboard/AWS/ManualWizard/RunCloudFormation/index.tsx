@@ -35,7 +35,9 @@ export function RunCloudFormation({
         (w) => w.name !== undefined && w.name === workspace
     )
     const [accountID, setAccountID] = useState<string>('')
-    const [roleName, setRoleName] = useState<string>('KaytuReadOnlyRole')
+    const [roleName, setRoleName] = useState<string>(
+        'KaytuOrganizationCrossAccountRole'
+    )
     const [handshakeID, setHandshakeID] = useState<string>('')
     const [template, setTemplate] = useState<string>('')
 
@@ -45,15 +47,8 @@ export function RunCloudFormation({
         }
     }, [isLoading])
 
-    useEffect(() => {
-        axios
-            .get(
-                'https://raw.githubusercontent.com/kaytu-io/cli/main/cmd/onboard/template.yaml'
-            )
-            .then((response) => {
-                setTemplate(String(response.data))
-            })
-    }, [])
+    const templateURL =
+        'https://raw.githubusercontent.com/kaytu-io/cli/main/cmd/onboard/template.yaml'
 
     const {
         isLoading: cIsLoading,
@@ -118,9 +113,9 @@ export function RunCloudFormation({
 
     const isCreateLoading = () => {
         if (bootstrapMode) {
-            return bcIsLoading
+            return bcIsExecuted && bcIsLoading
         }
-        return cIsLoading
+        return cIsExecuted && cIsLoading
     }
 
     return (
@@ -129,26 +124,42 @@ export function RunCloudFormation({
                 <Text className="font-bold mb-4">
                     Provide these parameters when running Stack/StackSet:
                 </Text>
-                <Text className="font-bold">Kaytu Management IAM User:</Text>
-                <Text className="mb-4">
-                    {isLoading ? <Spinner /> : currentWS?.aws_user_arn}
+                <Text className="font-bold mb-2">
+                    Kaytu Management IAM User:
                 </Text>
-                <Text className="font-bold">Handshake ID:</Text>
-                <Text className="mb-6">
-                    {isLoading ? <Spinner /> : currentWS?.aws_unique_id}
-                </Text>
+                <Flex className="mb-6">
+                    <CodeBlock
+                        loading={isLoading}
+                        command={currentWS?.aws_user_arn || ''}
+                    />
+                </Flex>
+                <Text className="font-bold mb-2">Handshake ID:</Text>
+                <Flex className="mb-6">
+                    <CodeBlock
+                        loading={isLoading}
+                        command={currentWS?.aws_unique_id || ''}
+                    />
+                </Flex>
 
                 <Text className="mb-2">
                     1. Run the following Stack. Click here for directions
                 </Text>
-                <CodeBlock command={template} truncate />
+                <a href={templateURL} download="template.yaml">
+                    <Text className="text-kaytu-600 underline">
+                        Download Stack template
+                    </Text>
+                </a>
                 {accountType === 'organization' && (
                     <>
                         <Text className="mt-6 mb-2">
                             2. Run the following StackSet. Click here for
                             directions
                         </Text>
-                        <CodeBlock command={template} truncate />
+                        <a href={templateURL} download="template.yaml">
+                            <Text className="text-kaytu-600 underline">
+                                Download StackSet template
+                            </Text>
+                        </a>
                     </>
                 )}
                 <Divider />

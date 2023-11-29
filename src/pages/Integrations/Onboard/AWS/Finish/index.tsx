@@ -99,25 +99,25 @@ export function Finish({ onClose }: IFinish) {
 
     return (
         <Flex flexDirection="col" className="h-full">
-            <Flex flexDirection="col" alignItems="start">
+            <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Bold className="my-6">Finished!</Bold>
                 <Flex
                     flexDirection="col"
                     justifyContent="start"
                     alignItems="start"
-                    className=""
+                    className="h-full"
                 >
-                    <Text>
+                    <Text className="mb-2">
                         Here&apos;s all the AWS accounts which have been
                         onboarded to Kaytu
                     </Text>
                     <Table
-                        title="AWS Accounts"
                         id="aws_account_list"
                         options={options}
                         rowData={response?.connections}
                         columns={columns}
                         loading={isLoading}
+                        fullHeight
                     />
                 </Flex>
             </Flex>

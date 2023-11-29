@@ -5,6 +5,7 @@ import {
     ChevronRightIcon,
     ChevronUpIcon,
     ExclamationCircleIcon,
+    PlusIcon,
 } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
@@ -29,7 +30,10 @@ function Connector({ onClick, icon, name, description, count }: IConnector) {
             <Text className="text-gray-800 font-bold py-1.5">{name}</Text>
             <Flex justifyContent="between">
                 <Text className="text-gray-500">{description}</Text>
-                <ChevronRightIcon className="text-kaytu-600 w-4" />
+                <Flex flexDirection="row" className="w-fit">
+                    <PlusIcon className="text-kaytu-600 w-4" />
+                    <Text className="text-kaytu-600">Add</Text>
+                </Flex>
             </Flex>
         </Card>
     )
@@ -60,7 +64,7 @@ export function OnboardConnection({
         isLoading: statusIsLoading,
         error: statusError,
         sendNow: refreshStatus,
-    } = useWorkspaceApiV1BootstrapDetail(workspaceName)
+    } = useWorkspaceApiV1BootstrapDetail(workspaceName, {}, open)
 
     useEffect(() => {
         if (statusIsExecuted && !statusIsLoading) {
@@ -103,7 +107,7 @@ export function OnboardConnection({
                     )}
                 </div>
             </Flex>
-            {firstLoading && (
+            {open && firstLoading && (
                 <Flex className="h-60">
                     <Spinner />
                 </Flex>
