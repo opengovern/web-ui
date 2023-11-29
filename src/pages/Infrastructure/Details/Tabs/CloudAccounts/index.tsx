@@ -1,7 +1,5 @@
-import { Tab, TabGroup, TabList } from '@tremor/react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useEffect, useState } from 'react'
 import { Dayjs } from 'dayjs'
 import { ValueFormatterParams } from 'ag-grid-community'
 import Table, { IColumn } from '../../../../../components/Table'
