@@ -1,4 +1,4 @@
-import { Flex, Text } from '@tremor/react'
+import { Bold, Flex, Text } from '@tremor/react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { PreRequisite } from './PreRequisite'
@@ -21,6 +21,19 @@ export default function ManualWizard({
 }: IManualWizard) {
     const [step, setStep] = useState(1)
 
+    const title = () => {
+        switch (step) {
+            case 1:
+                return 'Prerequisite'
+            case 2:
+                return 'Create CloudFormation Stack'
+            case 3:
+                return 'Create CloudFormation StackSet'
+            default:
+                return 'Check your accounts'
+        }
+    }
+
     const render = () => {
         switch (step) {
             case 1:
@@ -40,6 +53,15 @@ export default function ManualWizard({
                         onNext={() => setStep(3)}
                     />
                 )
+            case 3:
+                return (
+                    <RunCloudFormation
+                        bootstrapMode={bootstrapMode}
+                        accountType={orgOrSingle}
+                        onPrev={() => setStep(2)}
+                        onNext={() => setStep(4)}
+                    />
+                )
             default:
                 return <Finish onClose={onClose} />
         }
@@ -52,6 +74,13 @@ export default function ManualWizard({
             className="h-full"
         >
             <Steps steps={4} currentStep={step + 1} />
+            <Bold className="text-gray-800 font-bold mb-5">
+                <span className="text-gray-400">
+                    {step + 1}/{4}.
+                </span>{' '}
+                {title()}
+            </Bold>
+
             {render()}
         </Flex>
     )

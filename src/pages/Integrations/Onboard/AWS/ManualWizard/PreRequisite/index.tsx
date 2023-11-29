@@ -1,5 +1,5 @@
-import { Button, Card, Title, Text, Flex, Bold } from '@tremor/react'
-import { Checkbox, Switch, useCheckboxState } from 'pretty-checkbox-react'
+import { Button, Text, Flex, Bold } from '@tremor/react'
+import { Checkbox } from 'pretty-checkbox-react'
 import { useState } from 'react'
 
 interface IPreRequisite {
@@ -17,7 +17,8 @@ export function PreRequisite({ accountType, onPrev, onNext }: IPreRequisite) {
         id: string,
         state: boolean,
         setState: (v: boolean) => void,
-        label: string
+        label: string,
+        expanded: string
     ) => {
         return (
             <Checkbox
@@ -45,19 +46,22 @@ export function PreRequisite({ accountType, onPrev, onNext }: IPreRequisite) {
                         'understanding',
                         understanding,
                         setUnderstanding,
-                        'I understanding how no-password secure onboarding works'
+                        'I understanding how no-password secure onboarding works',
+                        ''
                     )}
                     {item(
                         'adminAccess',
                         adminAccess,
                         setAdminAccess,
-                        'I have administrative access to AWS Organization Account'
+                        'I have administrative access to AWS Organization Account',
+                        ''
                     )}
                     {item(
                         'stack',
                         stack,
                         setStack,
-                        'I have the ability to run AWS Stacks and AWS StackSets'
+                        'I have the ability to run AWS Stacks and AWS StackSets',
+                        ''
                     )}
                 </>
             )
@@ -68,19 +72,22 @@ export function PreRequisite({ accountType, onPrev, onNext }: IPreRequisite) {
                     'understanding',
                     understanding,
                     setUnderstanding,
-                    'I understanding how no-password secure onboarding works'
+                    'I understanding how no-password secure onboarding works',
+                    ''
                 )}
                 {item(
                     'adminAccess',
                     adminAccess,
                     setAdminAccess,
-                    'I have administrative access to AWS Account'
+                    'I have administrative access to AWS Account',
+                    ''
                 )}
                 {item(
                     'stack',
                     stack,
                     setStack,
-                    'I have the ability to run AWS Stacks'
+                    'I have the ability to run AWS Stacks',
+                    ''
                 )}
             </>
         )
@@ -89,7 +96,9 @@ export function PreRequisite({ accountType, onPrev, onNext }: IPreRequisite) {
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
-                <Bold className="mb-4">Prerequisite</Bold>
+                <Text className="text-gray-900 mb-4">
+                    All boxes are required
+                </Text>
                 <Flex
                     flexDirection="col"
                     justifyContent="start"

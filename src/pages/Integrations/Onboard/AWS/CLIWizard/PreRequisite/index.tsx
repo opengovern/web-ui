@@ -102,9 +102,6 @@ export function PreRequisite({ accountType, onPrev, onNext }: IPreRequisite) {
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
-                <Bold className="text-gray-800 font-bold mb-5">
-                    <span className="text-gray-400">2/5.</span> Prerequisite
-                </Bold>
                 <Text className="text-gray-900 mb-4">
                     All boxes are required
                 </Text>

@@ -1,4 +1,4 @@
-import { Flex, Text } from '@tremor/react'
+import { Bold, Flex, Text } from '@tremor/react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { PreRequisite } from './PreRequisite'
@@ -21,6 +21,16 @@ export default function CLIWizard({
 }: ICLIWizard) {
     const [step, setStep] = useState(1)
 
+    const title = () => {
+        switch (step) {
+            case 1:
+                return 'Prerequisite'
+            case 2:
+                return 'Onboard your accounts using CLI'
+            default:
+                return 'Check your accounts'
+        }
+    }
     const render = () => {
         switch (step) {
             case 1:
@@ -52,6 +62,12 @@ export default function CLIWizard({
             className="h-full"
         >
             <Steps steps={4} currentStep={step + 1} />
+            <Bold className="text-gray-800 font-bold mb-5">
+                <span className="text-gray-400">
+                    {step + 1}/{4}.
+                </span>{' '}
+                {title()}
+            </Bold>
             {render()}
         </Flex>
     )

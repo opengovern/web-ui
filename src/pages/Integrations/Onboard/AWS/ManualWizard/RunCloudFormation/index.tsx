@@ -1,6 +1,7 @@
-import { Button, Text, Flex, TextInput, Divider } from '@tremor/react'
+import { Button, Text, Flex, TextInput, Divider, Bold } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { ArrowDownIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
 import { CodeBlock } from '../../../../../../components/CodeBlock'
 import {
     useWorkspaceApiV1BootstrapCredentialCreate,
@@ -153,18 +154,29 @@ export function RunCloudFormation({
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" justifyContent="start" alignItems="start">
-                <Text className="font-bold mb-4">
-                    Provide these parameters when running Stack/StackSet:
+                <Text className="mb-4 text-gray-900">
+                    <span className="text-kaytu-500">i.</span> You should
+                    download the following template and run CloudFormation Stack
+                    in your AWS Portal
                 </Text>
-                <Text className="font-bold mb-2">
-                    Kaytu Management IAM User:
+                <a
+                    href={templateURL}
+                    target="_blank"
+                    download="template.yaml"
+                    rel="noreferrer"
+                >
+                    <Button variant="secondary">
+                        <Flex flexDirection="row">
+                            <ArrowDownTrayIcon className="w-4 mr-2" />
+                            Stack Template
+                        </Flex>
+                    </Button>
+                </a>
+                <Divider />
+                <Text className="mb-4 text-gray-900">
+                    <span className="text-kaytu-500">ii.</span> Fill these
+                    parameters when running Stack
                 </Text>
-                <Flex className="mb-6">
-                    <CodeBlock
-                        loading={isLoading}
-                        command={currentWS?.aws_user_arn || ''}
-                    />
-                </Flex>
                 <Text className="font-bold mb-2">Handshake ID:</Text>
                 <Flex className="mb-6">
                     <CodeBlock
@@ -172,32 +184,20 @@ export function RunCloudFormation({
                         command={currentWS?.aws_unique_id || ''}
                     />
                 </Flex>
-
-                <Text className="mb-2">
-                    1. Run the following Stack. Click here for directions
+                <Text className="font-bold mb-2">
+                    Kaytu Management IAM User:
                 </Text>
-                <a href={templateURL} download="template.yaml">
-                    <Text className="text-kaytu-600 underline">
-                        Download Stack template
-                    </Text>
-                </a>
-                {accountType === 'organization' && (
-                    <>
-                        <Text className="mt-6 mb-2">
-                            2. Run the following StackSet. Click here for
-                            directions
-                        </Text>
-                        <a href={templateURL} download="template.yaml">
-                            <Text className="text-kaytu-600 underline">
-                                Download StackSet template
-                            </Text>
-                        </a>
-                    </>
-                )}
+                <Flex className="">
+                    <CodeBlock
+                        loading={isLoading}
+                        command={currentWS?.aws_user_arn || ''}
+                    />
+                </Flex>
                 <Divider />
-
-                <Text className="mb-2">
-                    Provide these information after Stack is finished
+                <Text className="mb-4 text-gray-900">
+                    <span className="text-kaytu-500">iii.</span> Provide these
+                    information after Stack is finished, you can go to Output
+                    tab of Stack to find it.
                 </Text>
                 <Text className="mb-2">Role Name*</Text>
                 <TextInput
@@ -217,7 +217,6 @@ export function RunCloudFormation({
                     className="mb-2"
                     onChange={(e) => setHandshakeID(e.target.value)}
                 />
-
                 <Text className="text-red-600 mb-2">
                     {getErrorMessage(bcError)}
                     {getErrorMessage(cError)}

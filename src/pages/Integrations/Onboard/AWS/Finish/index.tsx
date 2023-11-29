@@ -4,6 +4,7 @@ import {
     ICellRendererParams,
     ValueFormatterParams,
 } from 'ag-grid-community'
+import { CheckCircleIcon } from '@heroicons/react/24/outline'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import Table, { IColumn } from '../../../../../components/Table'
 
@@ -99,25 +100,33 @@ export function Finish({ onClose }: IFinish) {
 
     return (
         <Flex flexDirection="col" className="h-full">
-            <Flex flexDirection="col" alignItems="start" className="h-full">
-                <Bold className="my-6">Finished!</Bold>
+            <Flex flexDirection="col" alignItems="start" className="mb-2">
+                <Flex
+                    flexDirection="col"
+                    justifyContent="center"
+                    alignItems="center"
+                    className="mb-6"
+                >
+                    <CheckCircleIcon className="w-9 text-emerald-600" />
+                    <Text className="text-emerald-600">
+                        Your accounts are onboarded
+                    </Text>
+                </Flex>
+                <Text className="mb-2">
+                    Here&apos;s all the AWS accounts which have been onboarded
+                    to Kaytu
+                </Text>
                 <Flex
                     flexDirection="col"
                     justifyContent="start"
                     alignItems="start"
-                    className="h-full"
                 >
-                    <Text className="mb-2">
-                        Here&apos;s all the AWS accounts which have been
-                        onboarded to Kaytu
-                    </Text>
                     <Table
                         id="aws_account_list"
                         options={options}
                         rowData={response?.connections}
                         columns={columns}
                         loading={isLoading}
-                        fullHeight
                     />
                 </Flex>
             </Flex>

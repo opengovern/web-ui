@@ -3,11 +3,12 @@ import { useState } from 'react'
 import Steps from '../../../../../components/Steps'
 
 interface IOrgOrSinglePage {
+    total: number
     onPrev: () => void
     onNext: (value: 'organization' | 'single') => void
 }
 
-export function OrgOrSinglePage({ onPrev, onNext }: IOrgOrSinglePage) {
+export function OrgOrSinglePage({ total, onPrev, onNext }: IOrgOrSinglePage) {
     const [option, setOption] = useState<'organization' | 'single'>(
         'organization'
     )
@@ -15,9 +16,10 @@ export function OrgOrSinglePage({ onPrev, onNext }: IOrgOrSinglePage) {
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
-                <Steps steps={5} currentStep={1} />
+                <Steps steps={total} currentStep={1} />
                 <Bold className="text-gray-800 font-bold mb-5">
-                    <span className="text-gray-400">1/5.</span> Onboarding Type
+                    <span className="text-gray-400">1/{total}.</span> Onboarding
+                    Type
                 </Bold>
                 <Text className="text-gray-900 mb-4">
                     Please select the following based on your requirement

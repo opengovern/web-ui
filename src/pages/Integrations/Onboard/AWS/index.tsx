@@ -39,6 +39,7 @@ export default function OnboardDrawer({
         if (orgOrSingle === undefined) {
             return (
                 <OrgOrSinglePage
+                    total={cliOrManual === 'cli' ? 4 : 5}
                     onPrev={() => setCliOrManual(undefined)}
                     onNext={setOrgOrSingle}
                 />
