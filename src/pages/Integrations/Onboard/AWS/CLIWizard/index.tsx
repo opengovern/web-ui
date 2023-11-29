@@ -1,7 +1,6 @@
 import { Bold, Flex, Text } from '@tremor/react'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { PreRequisite } from './PreRequisite'
+import { PreRequisite } from '../PreRequisite'
 import { KaytuOnboard } from './KaytuOnboard'
 import { Finish } from '../Finish'
 import Steps from '../../../../../components/Steps'
@@ -31,12 +30,65 @@ export default function CLIWizard({
                 return 'Check your accounts'
         }
     }
+
+    const preRequisiteList = () => {
+        if (orgOrSingle === 'organization') {
+            return [
+                {
+                    title: (
+                        <Text>
+                            I understanding how no-password secure onboarding
+                            works
+                        </Text>
+                    ),
+                },
+                {
+                    title: (
+                        <Text>
+                            I have administrative access to AWS Organization
+                            Account
+                        </Text>
+                    ),
+                },
+                {
+                    title: (
+                        <Text>
+                            AWS CLI is installed & logged-in to Organization
+                            master account
+                        </Text>
+                    ),
+                },
+                {
+                    title: <Text>Kaytu CLI installed & logged-in</Text>,
+                },
+            ]
+        }
+        return [
+            {
+                title: (
+                    <Text>
+                        I understanding how no-password secure onboarding works
+                    </Text>
+                ),
+            },
+            {
+                title: <Text>I have administrative access to AWS Account</Text>,
+            },
+            {
+                title: <Text>AWS CLI is installed & logged-in</Text>,
+            },
+            {
+                title: <Text>Kaytu CLI installed & logged-in</Text>,
+            },
+        ]
+    }
+
     const render = () => {
         switch (step) {
             case 1:
                 return (
                     <PreRequisite
-                        accountType={orgOrSingle}
+                        items={preRequisiteList()}
                         onPrev={onPrev}
                         onNext={() => setStep(2)}
                     />

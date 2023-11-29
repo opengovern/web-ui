@@ -1,10 +1,17 @@
 import { Bold, Flex, Text } from '@tremor/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { PreRequisite } from './PreRequisite'
+import { PreRequisite } from '../PreRequisite'
 import Steps from '../../../../../components/Steps'
 import { Finish } from '../Finish'
 import { RunCloudFormation } from './RunCloudFormation'
+import {
+    useOnboardApiV1ConnectionsAwsCreate,
+    useOnboardApiV2CredentialCreate,
+} from '../../../../../api/onboard.gen'
+import { SourceType } from '../../../../../api/api'
+import { useWorkspaceApiV1BootstrapCredentialCreate } from '../../../../../api/workspace.gen'
+import { getErrorMessage } from '../../../../../types/apierror'
 
 interface IManualWizard {
     bootstrapMode: boolean
@@ -19,7 +26,123 @@ export default function ManualWizard({
     orgOrSingle,
     bootstrapMode,
 }: IManualWizard) {
+    const workspace = useParams<{ ws: string }>().ws
     const [step, setStep] = useState(1)
+    const [accountID, setAccountID] = useState<string>('')
+    const [roleName, setRoleName] = useState<string>(
+        'KaytuOrganizationCrossAccountRole'
+    )
+    const [handshakeID, setHandshakeID] = useState<string>('')
+
+    const {
+        isLoading: scIsLoading,
+        isExecuted: scIsExecuted,
+        error: scError,
+        sendNow: scSendNow,
+    } = useOnboardApiV1ConnectionsAwsCreate(
+        {
+            name: '',
+            awsConfig: {
+                accountID,
+                assumeRoleName: roleName,
+                externalId: handshakeID,
+            },
+        },
+        {},
+        false
+    )
+
+    const {
+        isLoading: cIsLoading,
+        isExecuted: cIsExecuted,
+        error: cError,
+        sendNow: cSendNow,
+    } = useOnboardApiV2CredentialCreate(
+        {
+            connector: SourceType.CloudAWS,
+            awsConfig: {
+                accountID,
+                assumeRoleName: roleName,
+                externalId: handshakeID,
+            },
+        },
+        {},
+        false
+    )
+
+    const {
+        isLoading: bcIsLoading,
+        isExecuted: bcIsExecuted,
+        error: bcError,
+        sendNow: bcSendNow,
+    } = useWorkspaceApiV1BootstrapCredentialCreate(
+        workspace || '',
+        {
+            singleConnection: orgOrSingle === 'single',
+            connectorType: SourceType.CloudAWS,
+            awsConfig: {
+                accountID,
+                assumeRoleName: roleName,
+                externalId: handshakeID,
+            },
+        },
+        {},
+        false
+    )
+
+    useEffect(() => {
+        if (bcIsExecuted && !bcIsLoading) {
+            if (bcError === undefined || bcError === null) {
+                setStep(4)
+            }
+        }
+    }, [bcIsLoading])
+
+    useEffect(() => {
+        if (cIsExecuted && !cIsLoading) {
+            if (cError === undefined || cError === null) {
+                setStep(4)
+            }
+        }
+    }, [cIsLoading])
+
+    useEffect(() => {
+        if (scIsExecuted && !scIsLoading) {
+            if (scError === undefined || scError === null) {
+                setStep(4)
+            }
+        }
+    }, [scIsLoading])
+
+    const sendNow = () => {
+        if (bootstrapMode) {
+            bcSendNow()
+        } else if (orgOrSingle === 'single') {
+            scSendNow()
+        } else {
+            cSendNow()
+        }
+    }
+
+    const errorMessage = () => {
+        if (bootstrapMode) {
+            return getErrorMessage(bcError)
+        }
+        if (orgOrSingle === 'single') {
+            return getErrorMessage(scError)
+        }
+        return getErrorMessage(cError)
+    }
+
+    const isCreateLoading = () => {
+        if (bootstrapMode) {
+            return bcIsExecuted && bcIsLoading
+        }
+        if (orgOrSingle === 'single') {
+            return scIsExecuted && scIsLoading
+        }
+        return cIsExecuted && cIsLoading
+    }
 
     const title = () => {
         switch (step) {
@@ -34,12 +157,74 @@ export default function ManualWizard({
         }
     }
 
+    const preRequisites = () => {
+        if (orgOrSingle === 'organization') {
+            return [
+                {
+                    title: (
+                        <Text className="text-kaytu-600 underline cursor-pointer">
+                            I understanding how no-password secure onboarding
+                            works
+                        </Text>
+                    ),
+                    expanded: (
+                        <Text>
+                            In the process of onboarding your account no
+                            credentials will be passed to Kaytu. Kaytu only has
+                            Read-only access to your resources{' '}
+                            <a
+                                className="text-kaytu-600 underline"
+                                target="_blank"
+                                href="https://repost.aws/knowledge-center/cross-account-access-iam"
+                                rel="noreferrer"
+                            >
+                                using a trust relationship created on your
+                                account.
+                            </a>
+                        </Text>
+                    ),
+                },
+                {
+                    title: (
+                        <Text>
+                            I have administrative access to AWS Organization
+                            Account
+                        </Text>
+                    ),
+                },
+                {
+                    title: (
+                        <Text>
+                            I have the ability to run AWS Stacks and AWS
+                            StackSets
+                        </Text>
+                    ),
+                },
+            ]
+        }
+        return [
+            {
+                title: (
+                    <Text>
+                        I understanding how no-password secure onboarding works
+                    </Text>
+                ),
+            },
+            {
+                title: <Text>I have administrative access to AWS Account</Text>,
+            },
+            {
+                title: <Text>I have the ability to run AWS Stacks</Text>,
+            },
+        ]
+    }
+
     const render = () => {
         switch (step) {
             case 1:
                 return (
                     <PreRequisite
-                        accountType={orgOrSingle}
+                        items={preRequisites()}
                         onPrev={onPrev}
                         onNext={() => setStep(2)}
                     />
@@ -47,19 +232,43 @@ export default function ManualWizard({
             case 2:
                 return (
                     <RunCloudFormation
-                        bootstrapMode={bootstrapMode}
-                        accountType={orgOrSingle}
+                        accountID={accountID}
+                        setAccountID={setAccountID}
+                        roleName={roleName}
+                        setRoleName={setRoleName}
+                        handshakeID={handshakeID}
+                        setHandshakeID={setHandshakeID}
+                        loading={isCreateLoading()}
+                        errorMsg={
+                            orgOrSingle === 'single' ? errorMessage() : ''
+                        }
+                        askForFields
+                        isStackSet={false}
                         onPrev={() => setStep(1)}
-                        onNext={() => setStep(3)}
+                        onNext={() => {
+                            if (orgOrSingle === 'single') {
+                                sendNow()
+                            } else {
+                                setStep(3)
+                            }
+                        }}
                     />
                 )
             case 3:
                 return (
                     <RunCloudFormation
-                        bootstrapMode={bootstrapMode}
-                        accountType={orgOrSingle}
+                        accountID={accountID}
+                        setAccountID={setAccountID}
+                        roleName={roleName}
+                        setRoleName={setRoleName}
+                        handshakeID={handshakeID}
+                        setHandshakeID={setHandshakeID}
+                        loading={isCreateLoading()}
+                        errorMsg={errorMessage()}
+                        askForFields={false}
+                        isStackSet
                         onPrev={() => setStep(2)}
-                        onNext={() => setStep(4)}
+                        onNext={() => sendNow()}
                     />
                 )
             default:
@@ -73,10 +282,13 @@ export default function ManualWizard({
             alignItems="start"
             className="h-full"
         >
-            <Steps steps={4} currentStep={step + 1} />
+            <Steps
+                steps={orgOrSingle === 'organization' ? 5 : 4}
+                currentStep={step + 1}
+            />
             <Bold className="text-gray-800 font-bold mb-5">
                 <span className="text-gray-400">
-                    {step + 1}/{4}.
+                    {step + 1}/{orgOrSingle === 'organization' ? 5 : 4}.
                 </span>{' '}
                 {title()}
             </Bold>
