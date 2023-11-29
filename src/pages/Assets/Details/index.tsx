@@ -43,7 +43,7 @@ export default function AssetDetails() {
             }
         >
             <Header
-                breadCrumb={['asset detail']}
+                breadCrumb={['Assets detail']}
                 filter={!url.includes('resource-collection')}
                 datePicker
             />

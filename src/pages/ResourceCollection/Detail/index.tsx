@@ -468,7 +468,7 @@ export default function ResourceCollectionDetail() {
                                 <Title className="font-semibold">KPI</Title>
                                 <TabList className="w-1/2">
                                     <Tab>Compliance</Tab>
-                                    <Tab>Infrastructure</Tab>
+                                    <Tab>Assets</Tab>
                                 </TabList>
                             </Flex>
                             <TabPanels>
@@ -499,7 +499,7 @@ export default function ResourceCollectionDetail() {
                 <TabList className="mb-3">
                     <Tab>Landscape</Tab>
                     <Tab>Compliance</Tab>
-                    <Tab>Infrastructure</Tab>
+                    <Tab>Assets</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
