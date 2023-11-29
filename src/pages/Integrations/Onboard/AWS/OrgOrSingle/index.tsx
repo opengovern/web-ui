@@ -15,13 +15,18 @@ export function OrgOrSinglePage({ onPrev, onNext }: IOrgOrSinglePage) {
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
-                <Steps steps={4} currentStep={1} />
-                <Text>Select one of the two options:</Text>
+                <Steps steps={5} currentStep={1} />
+                <Bold className="text-gray-800 font-bold mb-5">
+                    <span className="text-gray-400">1/5.</span> Onboarding Type
+                </Bold>
+                <Text className="text-gray-900 mb-4">
+                    Please select the following based on your requirement
+                </Text>
                 <Flex flexDirection="col" className="w-full mt-2">
                     <Flex
                         flexDirection="row"
                         justifyContent="start"
-                        className="mb-2 w-full"
+                        className="mb-3 w-full"
                         onClick={() => setOption('organization')}
                     >
                         <input

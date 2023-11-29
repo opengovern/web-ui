@@ -35,6 +35,7 @@ export default function CLIWizard({
                 return (
                     <KaytuOnboard
                         bootstrapMode={bootstrapMode}
+                        orgOrSingle={orgOrSingle}
                         onPrev={() => setStep(1)}
                         onNext={() => setStep(3)}
                     />

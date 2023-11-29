@@ -5,11 +5,17 @@ import { CodeBlock } from '../../../../../../components/CodeBlock'
 
 interface IKaytuOnboard {
     bootstrapMode: boolean
+    orgOrSingle: 'organization' | 'single'
     onPrev: () => void
     onNext: () => void
 }
 
-export function KaytuOnboard({ bootstrapMode, onPrev, onNext }: IKaytuOnboard) {
+export function KaytuOnboard({
+    bootstrapMode,
+    orgOrSingle,
+    onPrev,
+    onNext,
+}: IKaytuOnboard) {
     const [ou, setOU] = useState<string>('')
     const [profile, setProfile] = useState('')
 
@@ -18,6 +24,9 @@ export function KaytuOnboard({ bootstrapMode, onPrev, onNext }: IKaytuOnboard) {
 
         if (bootstrapMode) {
             txt = `${txt} -b`
+        }
+        if (orgOrSingle === 'single') {
+            txt = `${txt} -s`
         }
         if (ou.length > 0) {
             txt = `${txt} --ou ${ou}`
