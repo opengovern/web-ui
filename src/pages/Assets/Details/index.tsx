@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { useAtomValue } from 'jotai/index'
+import { useAtomValue } from 'jotai'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { filterAtom, timeAtom } from '../../../store'
@@ -8,7 +8,7 @@ import Layout from '../../../components/Layout'
 import Resources from './Tabs/Resources'
 import CloudAccounts from './Tabs/CloudAccounts'
 
-export default function InfrastructureDetails() {
+export default function AssetDetails() {
     const navigate = useNavigate()
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
@@ -39,11 +39,11 @@ export default function InfrastructureDetails() {
             currentPage={
                 url.includes('resource-collection')
                     ? 'resource-collection'
-                    : 'infrastructure'
+                    : 'asset'
             }
         >
             <Header
-                breadCrumb={['Infrastructure detail']}
+                breadCrumb={['Assets detail']}
                 filter={!url.includes('resource-collection')}
                 datePicker
             />

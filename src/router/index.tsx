@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import Infrastructure from '../pages/Infrastructure'
+import Assets from '../pages/Assets'
 import NotFound from '../pages/Errors'
 import { AuthenticationGuard } from '../components/Auth0/authentication-guard'
 import { CallbackPage } from '../pages/Callback'
@@ -15,14 +15,14 @@ import BenchmarkSummary from '../pages/Governance/Compliance/BenchmarkSummary'
 import Home from '../pages/Home'
 import Stack from '../pages/Stack'
 import Finder from '../pages/Finder'
-import Single from '../pages/Infrastructure/Single'
+import Single from '../pages/Assets/Single'
 import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import InsightDetails from '../pages/Insights/Details'
 import InsightList from '../pages/Insights/InsightList'
 import BenchmarkDetails from '../pages/Governance/Compliance/BenchmarkSummary/Details'
 import SpendDetails from '../pages/Spend/Details'
-import InfrastructureDetails from '../pages/Infrastructure/Details'
+import AssetDetails from '../pages/Assets/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
 import Findings from '../pages/Governance/Findings'
@@ -66,33 +66,33 @@ const authRoutes = [
         component: Workspaces,
     },
     {
-        key: 'infrastructure',
-        path: '/:ws/infrastructure',
-        component: Infrastructure,
+        key: 'assets',
+        path: '/:ws/assets',
+        component: Assets,
     },
     {
-        key: 'infrastructure single',
-        path: '/:ws/infrastructure/:id',
+        key: 'assets single',
+        path: '/:ws/assets/:id',
         component: Single,
     },
     {
-        key: 'infrastructure single metric',
-        path: '/:ws/infrastructure/:id/:metric',
+        key: 'assets single metric',
+        path: '/:ws/assets/:id/:metric',
         component: Single,
     },
     {
-        key: 'infrastructure metrics',
-        path: '/:ws/infrastructure/infrastructure-details',
-        component: InfrastructureDetails,
+        key: 'assets metrics',
+        path: '/:ws/assets/assets-details',
+        component: AssetDetails,
     },
     {
-        key: 'infrastructure single 2',
-        path: '/:ws/infrastructure/infrastructure-details/:id',
+        key: 'assets single 2',
+        path: '/:ws/assets/assets-details/:id',
         component: Single,
     },
     {
-        key: 'infrastructure single metric 2',
-        path: '/:ws/infrastructure/infrastructure-details/:id/:metric',
+        key: 'assets single metric 2',
+        path: '/:ws/assets/assets-details/:id/:metric',
         component: Single,
     },
     {
@@ -251,18 +251,18 @@ const authRoutes = [
         component: SingleComplianceConnection,
     },
     {
-        key: 'resource collection infrastructure metrics',
-        path: '/:ws/resource-collection/:resourceId/infrastructure-details',
-        component: InfrastructureDetails,
+        key: 'resource collection assets metrics',
+        path: '/:ws/resource-collection/:resourceId/assets-details',
+        component: AssetDetails,
     },
     {
-        key: 'resource collection infrastructure single 2',
-        path: '/:ws/resource-collection/:resourceId/infrastructure-details/:id',
+        key: 'resource collection assets single 2',
+        path: '/:ws/resource-collection/:resourceId/assets-details/:id',
         component: Single,
     },
     {
-        key: 'resource collection infrastructure single metric 2',
-        path: '/:ws/resource-collection/:resourceId/infrastructure-details/:id/:metric',
+        key: 'resource collection assets single metric 2',
+        path: '/:ws/resource-collection/:resourceId/assets-details/:id/:metric',
         component: Single,
     },
 ]

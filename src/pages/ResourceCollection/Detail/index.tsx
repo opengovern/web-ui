@@ -63,13 +63,13 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
-import { resourceTrendChart } from '../../Infrastructure'
+import { resourceTrendChart } from '../../Assets'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Landscape from '../../../components/Landscape'
 import Tag from '../../../components/Tag'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
-import { options } from '../../Infrastructure/Details/Tabs/Resources'
+import { options } from '../../Assets/Details/Tabs/Resources'
 import { benchmarkChecks } from '../../../components/Cards/ComplianceCard'
 
 const pieData = (
@@ -468,7 +468,7 @@ export default function ResourceCollectionDetail() {
                                 <Title className="font-semibold">KPI</Title>
                                 <TabList className="w-1/2">
                                     <Tab>Compliance</Tab>
-                                    <Tab>Infrastructure</Tab>
+                                    <Tab>Assets</Tab>
                                 </TabList>
                             </Flex>
                             <TabPanels>
@@ -499,7 +499,7 @@ export default function ResourceCollectionDetail() {
                 <TabList className="mb-3">
                     <Tab>Landscape</Tab>
                     <Tab>Compliance</Tab>
-                    <Tab>Infrastructure</Tab>
+                    <Tab>Assets</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
@@ -536,7 +536,7 @@ export default function ResourceCollectionDetail() {
                                     <SummaryCard
                                         title="Resources"
                                         metric={accountInfo?.totalResourceCount}
-                                        url="infrastructure-details#cloud-accounts"
+                                        url="assets-details#cloud-accounts"
                                         loading={accountInfoLoading}
                                         border={false}
                                     />

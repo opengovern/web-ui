@@ -16,7 +16,7 @@ import Layout from '../../components/Layout'
 import { filterAtom, timeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import { numberDisplay, numericDisplay } from '../../utilities/numericDisplay'
+import { numberDisplay } from '../../utilities/numericDisplay'
 import { BarChartIcon, LineChartIcon } from '../../icons/icons'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
@@ -202,7 +202,7 @@ const topServices = (
     return top
 }
 
-export default function Infrastructure() {
+export default function Assets() {
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
@@ -271,7 +271,7 @@ export default function Infrastructure() {
         })
 
     return (
-        <Layout currentPage="infrastructure">
+        <Layout currentPage="asset">
             <Header datePicker filter />
             {selectedConnections.connections.length === 1 ? (
                 <SingleConnection
@@ -286,7 +286,7 @@ export default function Infrastructure() {
                                 title="Resources"
                                 metric={servicesResponse?.total_count}
                                 metricPrev={servicesResponse?.total_old_count}
-                                url="infrastructure-details#resources"
+                                url="assets-details#resources"
                                 loading={servicesResponseLoading}
                                 border={false}
                             />
@@ -299,7 +299,7 @@ export default function Infrastructure() {
                                     metricPrev={
                                         accountsResponse?.totalDiscoveredCount
                                     }
-                                    url="infrastructure-details#cloud-accounts"
+                                    url="assets-details#cloud-accounts"
                                     loading={accountsResponseLoading}
                                     border={false}
                                 />
@@ -405,7 +405,7 @@ export default function Infrastructure() {
                                 oldChartData={pieData(composition).oldData}
                                 activeTime={activeTimeRange}
                                 loading={compositionLoading}
-                                seeMore="infrastructure-details#category"
+                                seeMore="assets-details#category"
                             />
                         </Col>
                         <Col numColSpan={1} numColSpanLg={3} className="h-full">
@@ -414,14 +414,14 @@ export default function Infrastructure() {
                                     title="Top Cloud Accounts"
                                     loading={accountsResponseLoading}
                                     items={topAccounts(accountsResponse)}
-                                    url="infrastructure-details#cloud-accounts"
+                                    url="assets-details#cloud-accounts"
                                     type="account"
                                 />
                                 <ListCard
                                     title="Top Metrics"
                                     loading={servicesResponseLoading}
                                     items={topServices(servicesResponse)}
-                                    url="infrastructure-details#resources"
+                                    url="assets-details#resources"
                                     type="service"
                                 />
                             </Grid>

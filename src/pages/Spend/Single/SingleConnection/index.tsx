@@ -54,7 +54,7 @@ import {
     LineChartIcon,
 } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
-import { generateVisualMap } from '../../../Infrastructure'
+import { generateVisualMap } from '../../../Assets'
 import Table, { IColumn } from '../../../../components/Table'
 import {
     gridOptions,

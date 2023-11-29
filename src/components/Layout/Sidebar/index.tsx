@@ -38,8 +38,8 @@ const navigation = [
         icon: HomeIcon,
     },
     {
-        name: 'Infrastructure',
-        page: 'infrastructure',
+        name: 'Assets',
+        page: 'assets',
         icon: ServerStackIcon,
     },
     {

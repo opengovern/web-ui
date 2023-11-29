@@ -1,6 +1,5 @@
 import { Button, Flex, Grid } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import Layout from '../../components/Layout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
@@ -14,7 +13,6 @@ export default function Workspaces() {
     const {
         response: workspaces,
         isLoading,
-        isExecuted,
         sendNow: refreshList,
     } = useWorkspaceApiV1WorkspacesList()
 
@@ -27,7 +25,7 @@ export default function Workspaces() {
     }, [isLoading])
 
     return (
-        <Layout currentPage="infrastructure" showSidebar={false}>
+        <Layout currentPage="asset" showSidebar={false}>
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
