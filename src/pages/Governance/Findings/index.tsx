@@ -215,7 +215,7 @@ const filteredConnectionsList = (
         | undefined,
     filter: string
 ) => {
-    return connection?.filter(
+    const result = connection?.filter(
         (c) =>
             c?.providerConnectionName
                 ?.toLowerCase()
@@ -224,6 +224,11 @@ const filteredConnectionsList = (
                 ?.toLowerCase()
                 .includes(filter.toLowerCase())
     )
+    const count = result?.length || 0
+    return {
+        result,
+        count,
+    }
 }
 
 export default function Findings() {
@@ -472,7 +477,7 @@ export default function Findings() {
                                         {filteredConnectionsList(
                                             connections?.connections,
                                             connectionSearch
-                                        )?.map(
+                                        ).result?.map(
                                             (con, i) =>
                                                 i < 5 && (
                                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -503,7 +508,19 @@ export default function Findings() {
                                                 )
                                         )}
                                         <Flex justifyContent="end">
-                                            <Text>+ more</Text>
+                                            <Text>
+                                                {filteredConnectionsList(
+                                                    connections?.connections,
+                                                    connectionSearch
+                                                ).count > 5
+                                                    ? `+ ${
+                                                          filteredConnectionsList(
+                                                              connections?.connections,
+                                                              connectionSearch
+                                                          ).count - 5
+                                                      } more`
+                                                    : ''}
+                                            </Text>
                                         </Flex>
                                     </>
                                 )}
