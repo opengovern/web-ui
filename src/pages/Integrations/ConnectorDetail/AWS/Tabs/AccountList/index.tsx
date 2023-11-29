@@ -17,6 +17,7 @@ import {
 import Table, { IColumn } from '../../../../../../components/Table'
 import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
 import { isDemoAtom } from '../../../../../../store'
+import OnboardDrawer from '../../../../Onboard/AWS'
 
 interface IAccountList {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -264,11 +265,10 @@ export default function AccountList({
                 onClose={() => setOpenInfo(false)}
                 isDemo={isDemo}
             />
-            <NewAWSAccount
-                accounts={accounts}
-                organizations={organizations}
+            <OnboardDrawer
                 open={open}
                 onClose={() => setOpen(false)}
+                bootstrapMode={false}
             />
         </>
     )

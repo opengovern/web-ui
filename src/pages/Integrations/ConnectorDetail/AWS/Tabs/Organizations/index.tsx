@@ -11,6 +11,7 @@ import {
 } from '../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { isDemoAtom } from '../../../../../../store'
+import OnboardDrawer from '../../../../Onboard/AWS'
 
 interface IOrganizations {
     accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -155,10 +156,10 @@ export default function Organizations({
                 data={orgData}
                 isDemo={isDemo}
             />
-            <NewOrganization
-                accounts={accounts}
+            <OnboardDrawer
                 open={open}
                 onClose={() => setOpen(false)}
+                bootstrapMode={false}
             />
         </>
     )

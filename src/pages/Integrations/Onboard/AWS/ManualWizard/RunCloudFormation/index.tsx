@@ -94,6 +94,7 @@ export function RunCloudFormation({
     } = useWorkspaceApiV1BootstrapCredentialCreate(
         workspace || '',
         {
+            singleConnection: accountType === 'single',
             connectorType: SourceType.CloudAWS,
             awsConfig: {
                 accountID,
