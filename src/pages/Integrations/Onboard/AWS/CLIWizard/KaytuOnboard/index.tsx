@@ -26,10 +26,10 @@ export function KaytuOnboard({
             txt = `${txt} -b`
         }
         if (orgOrSingle === 'single') {
-            txt = `${txt} -s`
+            txt = `${txt} --single-connection`
         }
         if (ou.length > 0) {
-            txt = `${txt} --ou ${ou}`
+            txt = `${txt} --organization-unit ${ou}`
         }
         if (profile.length > 0) {
             txt = `${txt} --profile ${profile}`
