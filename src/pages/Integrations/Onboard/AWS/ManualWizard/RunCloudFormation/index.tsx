@@ -11,11 +11,9 @@ interface IRunCloudFormation {
     askForFields: boolean
     isStackSet: boolean
 
-    accountID: string
-    setAccountID: (v: string) => void
-
-    roleName: string
-    setRoleName: (v: string) => void
+    roleARN: string
+    setRoleARN: (v: string) => void
+    invalidARN: boolean
 
     handshakeID: string
     setHandshakeID: (v: string) => void
@@ -29,10 +27,9 @@ export function RunCloudFormation({
     errorMsg,
     askForFields,
     isStackSet,
-    accountID,
-    setAccountID,
-    roleName,
-    setRoleName,
+    roleARN,
+    setRoleARN,
+    invalidARN,
     handshakeID,
     setHandshakeID,
     onPrev,
@@ -62,8 +59,7 @@ export function RunCloudFormation({
                 <Text className="mb-4 text-gray-900">
                     <span className="text-kaytu-500">i.</span> You should
                     download the following template and run CloudFormation{' '}
-                    {isStackSet ? 'Stack' : 'StackSet'}
-                    in your AWS Portal
+                    {isStackSet ? 'StackSet' : 'Stack'} in your AWS Portal
                 </Text>
                 <a
                     href={templateURL}
@@ -74,14 +70,14 @@ export function RunCloudFormation({
                     <Button variant="secondary">
                         <Flex flexDirection="row">
                             <ArrowDownTrayIcon className="w-4 mr-2" />
-                            {isStackSet ? 'Stack' : 'StackSet'} Template
+                            {isStackSet ? 'StackSet' : 'Stack'} Template
                         </Flex>
                     </Button>
                 </a>
                 <Divider />
                 <Text className="mb-4 text-gray-900">
                     <span className="text-kaytu-500">ii.</span> Fill these
-                    parameters when running {isStackSet ? 'Stack' : 'StackSet'}
+                    parameters when running {isStackSet ? 'StackSet' : 'Stack'}
                 </Text>
                 <Text className="font-bold mb-2">Handshake ID:</Text>
                 <Flex className="mb-6">
@@ -97,6 +93,7 @@ export function RunCloudFormation({
                     <CodeBlock
                         loading={isLoading}
                         command={currentWS?.aws_user_arn || ''}
+                        truncate
                     />
                 </Flex>
                 {askForFields && (
@@ -107,17 +104,12 @@ export function RunCloudFormation({
                             these information after Stack is finished, you can
                             go to Output tab of Stack to find it.
                         </Text>
-                        <Text className="mb-2">Role Name*</Text>
+                        <Text className="mb-2">Role ARN*</Text>
                         <TextInput
-                            value={roleName}
+                            value={roleARN}
                             className="mb-2"
-                            onChange={(e) => setRoleName(e.target.value)}
-                        />
-                        <Text className="mb-2">Account ID*</Text>
-                        <TextInput
-                            value={accountID}
-                            className="mb-2"
-                            onChange={(e) => setAccountID(e.target.value)}
+                            error={invalidARN}
+                            onChange={(e) => setRoleARN(e.target.value)}
                         />
                         <Text className="mb-2">Handshake ID*</Text>
                         <TextInput
@@ -138,9 +130,9 @@ export function RunCloudFormation({
                     onClick={() => onNext()}
                     loading={loading}
                     disabled={
-                        accountID.length === 0 ||
-                        roleName.length === 0 ||
-                        handshakeID.length === 0
+                        roleARN.length === 0 ||
+                        handshakeID.length === 0 ||
+                        invalidARN
                     }
                     className="ml-3"
                 >

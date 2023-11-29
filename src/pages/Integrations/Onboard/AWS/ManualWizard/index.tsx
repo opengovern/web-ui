@@ -28,11 +28,39 @@ export default function ManualWizard({
 }: IManualWizard) {
     const workspace = useParams<{ ws: string }>().ws
     const [step, setStep] = useState(1)
-    const [accountID, setAccountID] = useState<string>('')
-    const [roleName, setRoleName] = useState<string>(
-        'KaytuOrganizationCrossAccountRole'
-    )
+    const [roleARN, setRoleARN] = useState<string>('')
+    const [invalidARN, setInvalidARN] = useState<boolean>(false)
     const [handshakeID, setHandshakeID] = useState<string>('')
+
+    const awsConfig = () => {
+        let accountID = ''
+        let roleName = ''
+        let isInvalid = false
+
+        if (roleARN.trim().length > 0) {
+            let arr = roleARN.split('/')
+            if (arr.length === 2) {
+                roleName = arr.at(1) || ''
+                arr = roleARN.split(':')
+                if (arr.length === 6) {
+                    accountID = arr.at(4) || ''
+                } else {
+                    isInvalid = true
+                }
+            } else {
+                isInvalid = true
+            }
+        }
+
+        if (isInvalid !== invalidARN) {
+            setInvalidARN(isInvalid)
+        }
+        return {
+            accountID,
+            assumeRoleName: roleName,
+            externalId: handshakeID,
+        }
+    }
 
     const {
         isLoading: scIsLoading,
@@ -42,11 +70,7 @@ export default function ManualWizard({
     } = useOnboardApiV1ConnectionsAwsCreate(
         {
             name: '',
-            awsConfig: {
-                accountID,
-                assumeRoleName: roleName,
-                externalId: handshakeID,
-            },
+            awsConfig: awsConfig(),
         },
         {},
         false
@@ -60,11 +84,7 @@ export default function ManualWizard({
     } = useOnboardApiV2CredentialCreate(
         {
             connector: SourceType.CloudAWS,
-            awsConfig: {
-                accountID,
-                assumeRoleName: roleName,
-                externalId: handshakeID,
-            },
+            awsConfig: awsConfig(),
         },
         {},
         false
@@ -80,11 +100,7 @@ export default function ManualWizard({
         {
             singleConnection: orgOrSingle === 'single',
             connectorType: SourceType.CloudAWS,
-            awsConfig: {
-                accountID,
-                assumeRoleName: roleName,
-                externalId: handshakeID,
-            },
+            awsConfig: awsConfig(),
         },
         {},
         false
@@ -232,10 +248,9 @@ export default function ManualWizard({
             case 2:
                 return (
                     <RunCloudFormation
-                        accountID={accountID}
-                        setAccountID={setAccountID}
-                        roleName={roleName}
-                        setRoleName={setRoleName}
+                        roleARN={roleARN}
+                        setRoleARN={setRoleARN}
+                        invalidARN={invalidARN}
                         handshakeID={handshakeID}
                         setHandshakeID={setHandshakeID}
                         loading={isCreateLoading()}
@@ -257,10 +272,9 @@ export default function ManualWizard({
             case 3:
                 return (
                     <RunCloudFormation
-                        accountID={accountID}
-                        setAccountID={setAccountID}
-                        roleName={roleName}
-                        setRoleName={setRoleName}
+                        roleARN={roleARN}
+                        setRoleARN={setRoleARN}
+                        invalidARN={invalidARN}
                         handshakeID={handshakeID}
                         setHandshakeID={setHandshakeID}
                         loading={isCreateLoading()}
