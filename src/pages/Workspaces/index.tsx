@@ -18,6 +18,14 @@ export default function Workspaces() {
         sendNow: refreshList,
     } = useWorkspaceApiV1WorkspacesList()
 
+    useEffect(() => {
+        if (isExecuted && !isLoading) {
+            if (workspaces?.length === 0) {
+                navigate(`/new-ws`)
+            }
+        }
+    }, [isLoading])
+
     return (
         <Layout currentPage="infrastructure" showSidebar={false}>
             {isLoading ? (
