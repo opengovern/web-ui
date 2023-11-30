@@ -1,6 +1,7 @@
 import { Button, Flex, Grid } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
+import { useEffect } from 'react'
 import Layout from '../../components/Layout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
@@ -13,6 +14,7 @@ export default function Workspaces() {
     const {
         response: workspaces,
         isLoading,
+        isExecuted,
         sendNow: refreshList,
     } = useWorkspaceApiV1WorkspacesList()
 
