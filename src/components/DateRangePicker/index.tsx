@@ -77,62 +77,53 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
 
     const last7Days = () => {
         return {
-            start: dayjs.utc().subtract(1, 'week').startOf('day'),
-            end: dayjs.utc().endOf('day'),
+            start: dayjs().subtract(1, 'week').startOf('day'),
+            end: dayjs().endOf('day'),
         }
     }
 
     const last30Days = () => {
         return {
-            start: dayjs.utc().subtract(1, 'month').startOf('day'),
-            end: dayjs.utc().endOf('day'),
+            start: dayjs().subtract(1, 'month').startOf('day'),
+            end: dayjs().endOf('day'),
         }
     }
 
     const thisMonth = () => {
         return {
-            start: dayjs.utc().startOf('month').startOf('day'),
-            end: dayjs.utc().endOf('day'),
+            start: dayjs().startOf('month').startOf('day'),
+            end: dayjs().endOf('day'),
         }
     }
 
     const lastMonth = () => {
         return {
-            start: dayjs
-                .utc()
-                .subtract(1, 'month')
-                .startOf('month')
-                .startOf('day'),
-            end: dayjs.utc().subtract(1, 'month').endOf('month').endOf('day'),
+            start: dayjs().subtract(1, 'month').startOf('month').startOf('day'),
+            end: dayjs().subtract(1, 'month').endOf('month').endOf('day'),
         }
     }
 
     const thisQuarter = () => {
         return {
-            start: dayjs.utc().startOf('quarter').startOf('day'),
-            end: dayjs.utc().endOf('day'),
+            start: dayjs().startOf('quarter').startOf('day'),
+            end: dayjs().endOf('day'),
         }
     }
 
     const lastQuarter = () => {
         return {
-            start: dayjs
-                .utc()
+            start: dayjs()
                 .subtract(1, 'quarter')
                 .startOf('quarter')
                 .startOf('day'),
-            end: dayjs
-                .utc()
-                .subtract(1, 'quarter')
-                .endOf('quarter')
-                .endOf('day'),
+            end: dayjs().subtract(1, 'quarter').endOf('quarter').endOf('day'),
         }
     }
 
     const thisYear = () => {
         return {
-            start: dayjs.utc().startOf('year').startOf('day'),
-            end: dayjs.utc().endOf('day'),
+            start: dayjs().startOf('year').startOf('day'),
+            end: dayjs().endOf('day'),
         }
     }
 
@@ -294,9 +285,9 @@ export default function DateRangePicker() {
     }
     const maxValue = () => {
         if (isSpend) {
-            return today('UTC').subtract({ days: 2 })
+            return today(getLocalTimeZone()).subtract({ days: 2 })
         }
-        return today('UTC')
+        return today(getLocalTimeZone())
     }
     return (
         <CustomDatePicker
