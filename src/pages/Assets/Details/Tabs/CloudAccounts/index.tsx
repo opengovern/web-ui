@@ -56,14 +56,14 @@ const columns = (isDemo: boolean) => {
         {
             field: 'lastInventory',
             headerName: 'Last inventory',
-            type: 'date',
+            type: 'datetime',
             resizable: true,
             sortable: true,
         },
         {
             field: 'onboardDate',
             headerName: 'Onboard Date',
-            type: 'date',
+            type: 'datetime',
             hide: true,
             resizable: true,
             sortable: true,

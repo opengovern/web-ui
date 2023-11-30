@@ -80,6 +80,15 @@ export const defaultColumns: IColumn<any, any>[] = [
         type: 'number',
     },
     {
+        field: 'old_count',
+        resizable: true,
+        sortable: true,
+        hide: true,
+        headerName: 'Old count',
+        filter: true,
+        type: 'number',
+    },
+    {
         headerName: 'Change (%)',
         field: 'change_percent',
         sortable: true,
