@@ -26,8 +26,10 @@ const tabs = [
         name: 'Linux',
         href: 'https://github.com/kaytu-io/cli/releases',
         icon: <LinuxIcon className="w-5 h-5 m-1" />,
-        // commands: '$ snap install kaytu',
-        clipboard: 'snap install kaytu',
+        commands:
+            '$ wget -qO - https://raw.githubusercontent.com/kaytu-io/cli/main/scripts/install.sh | bash',
+        clipboard:
+            'wget -qO - https://raw.githubusercontent.com/kaytu-io/cli/main/scripts/install.sh | bash',
     },
     {
         name: 'Windows',
@@ -104,7 +106,7 @@ export function CLITabs() {
                         }}
                     >
                         <Flex flexDirection="row">
-                            <Text className="px-1.5 text-gray-800">
+                            <Text className="px-1.5 text-gray-800 truncate">
                                 {getCurrentTab()?.commands}
                             </Text>
                             <Flex flexDirection="col" className="h-5 w-5">
