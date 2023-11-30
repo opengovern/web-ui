@@ -163,11 +163,14 @@ export default function ManualWizard({
     const title = () => {
         switch (step) {
             case 1:
-                return 'Prerequisite'
+                return 'Prerequisites'
             case 2:
-                return 'Create CloudFormation Stack'
+                if (orgOrSingle === 'single') {
+                    return 'Deploying Kaytu Configuration to AWS Account'
+                }
+                return 'Onboard AWS Organization Account'
             case 3:
-                return 'Create CloudFormation StackSet'
+                return 'Deploying Configuration to Member Accounts'
             default:
                 return 'Check your accounts'
         }

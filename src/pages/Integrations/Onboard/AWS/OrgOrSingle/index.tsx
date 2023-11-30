@@ -18,8 +18,8 @@ export function OrgOrSinglePage({ total, onPrev, onNext }: IOrgOrSinglePage) {
             <Flex flexDirection="col" alignItems="start">
                 <Steps steps={total} currentStep={1} />
                 <Bold className="text-gray-800 font-bold mb-5">
-                    <span className="text-gray-400">1/{total}.</span> Onboarding
-                    Type
+                    <span className="text-gray-400">1/{total}.</span> What would
+                    you like to onboard?
                 </Bold>
                 <Text className="text-gray-900 mb-4">
                     Please select the following based on your requirement
@@ -51,7 +51,7 @@ export function OrgOrSinglePage({ total, onPrev, onNext }: IOrgOrSinglePage) {
                             checked={option === 'single'}
                         />
                         <Text className="ml-3 text-black">
-                            Onboard individual AWS Account
+                            Onboard individual AWS Accounts
                         </Text>
                     </Flex>
                 </Flex>

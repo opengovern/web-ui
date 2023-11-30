@@ -111,12 +111,6 @@ export function RunCloudFormation({
                             error={invalidARN}
                             onChange={(e) => setRoleARN(e.target.value)}
                         />
-                        <Text className="mb-2">Handshake ID*</Text>
-                        <TextInput
-                            value={handshakeID}
-                            className="mb-2"
-                            onChange={(e) => setHandshakeID(e.target.value)}
-                        />
                     </>
                 )}
 

@@ -6,12 +6,14 @@ import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import Spinner from '../../components/Spinner'
 import Header from '../../components/Header'
+import { useEffect } from 'react'
 
 export default function Workspaces() {
     const navigate = useNavigate()
 
     const {
         response: workspaces,
+        isExecuted,
         isLoading,
         sendNow: refreshList,
     } = useWorkspaceApiV1WorkspacesList()
