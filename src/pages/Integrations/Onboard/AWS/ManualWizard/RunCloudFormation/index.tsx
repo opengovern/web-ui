@@ -1,7 +1,8 @@
-import { Button, Text, Flex, TextInput, Divider } from '@tremor/react'
+import { Button, Text, Flex, TextInput, Divider, Bold } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline'
+import axios from 'axios'
 import { CodeBlock } from '../../../../../../components/CodeBlock'
 import { useWorkspaceApiV1WorkspacesList } from '../../../../../../api/workspace.gen'
 
@@ -35,9 +36,21 @@ export function RunCloudFormation({
     onPrev,
     onNext,
 }: IRunCloudFormation) {
-    const templateURL =
-        'https://raw.githubusercontent.com/kaytu-io/cli/main/cmd/onboard/template.yaml'
+    const [template, setTemplate] = useState('')
     const workspace = useParams<{ ws: string }>().ws
+
+    useEffect(() => {
+        axios
+            .get(
+                'https://raw.githubusercontent.com/kaytu-io/cli/main/cmd/onboard/template.yaml'
+            )
+            .then((resp) => {
+                setTemplate(resp.data)
+            })
+            .catch((e) => {
+                console.log(e)
+            })
+    }, [])
 
     const {
         response: workspaceList,
@@ -53,16 +66,33 @@ export function RunCloudFormation({
         }
     }, [isLoading])
 
+    const buildTemplate = () => {
+        const bt = template
+            .replaceAll(
+                // eslint-disable-next-line no-template-curly-in-string
+                '${KaytuManagementIAMUser}',
+                currentWS?.aws_user_arn || ''
+            )
+            .replaceAll(
+                // eslint-disable-next-line no-template-curly-in-string
+                '${KaytuHandshakeID}',
+                currentWS?.aws_unique_id || ''
+            )
+        const file = new Blob([bt], { type: 'text/plain' })
+        return URL.createObjectURL(file)
+    }
+
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" justifyContent="start" alignItems="start">
+                <Bold>i. Download & Create</Bold>
                 <Text className="mb-4 text-gray-900">
-                    <span className="text-kaytu-500">i.</span> You should
-                    download the following template and run CloudFormation{' '}
-                    {isStackSet ? 'StackSet' : 'Stack'} in your AWS Portal
+                    You should download the following template and run
+                    CloudFormation {isStackSet ? 'StackSet' : 'Stack'} in your
+                    AWS Portal
                 </Text>
                 <a
-                    href={templateURL}
+                    href={buildTemplate()}
                     target="_blank"
                     download="template.yaml"
                     rel="noreferrer"
@@ -74,35 +104,13 @@ export function RunCloudFormation({
                         </Flex>
                     </Button>
                 </a>
-                <Divider />
-                <Text className="mb-4 text-gray-900">
-                    <span className="text-kaytu-500">ii.</span> Fill these
-                    parameters when running {isStackSet ? 'StackSet' : 'Stack'}
-                </Text>
-                <Text className="font-bold mb-2">Handshake ID:</Text>
-                <Flex className="mb-6">
-                    <CodeBlock
-                        loading={isLoading}
-                        command={currentWS?.aws_unique_id || ''}
-                    />
-                </Flex>
-                <Text className="font-bold mb-2">
-                    Kaytu Management IAM User:
-                </Text>
-                <Flex className="">
-                    <CodeBlock
-                        loading={isLoading}
-                        command={currentWS?.aws_user_arn || ''}
-                        truncate
-                    />
-                </Flex>
                 {askForFields && (
                     <>
                         <Divider />
+                        <Bold>ii. Provide Information</Bold>
                         <Text className="mb-4 text-gray-900">
-                            <span className="text-kaytu-500">iii.</span> Provide
-                            these information after Stack is finished, you can
-                            go to Output tab of Stack to find it.
+                            Provide these information after Stack is finished,
+                            you can go to Output tab of Stack to find it.
                         </Text>
                         <Text className="mb-2">Role ARN*</Text>
                         <TextInput
