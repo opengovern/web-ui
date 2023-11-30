@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -950,6 +951,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     id?: string
     /** @example ["null"] */
     listOfTables?: string[]
+    /** @example "null" */
+    primaryTable?: string
     /**
      * @example "select
      *   -- Required Columns
@@ -1161,6 +1164,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
      * @example 21232.10443638001
      */
     daily_cost_at_start_time?: number
+    finderQuery?: string
     /**
      * @min 0
      * @example 621041.2436112489
@@ -3679,10 +3683,17 @@ export class Api<
          * @request GET:/compliance/api/v1/queries/sync
          * @secure
          */
-        apiV1QueriesSyncList: (params: RequestParams = {}) =>
+        apiV1QueriesSyncList: (
+            query?: {
+                /** Git URL */
+                configzGitURL?: string
+            },
+            params: RequestParams = {}
+        ) =>
             this.request<void, any>({
                 path: `/compliance/api/v1/queries/sync`,
                 method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 ...params,

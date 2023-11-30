@@ -2,26 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
@@ -39,60 +19,6 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiJob,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Response,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
@@ -3132,6 +3058,9 @@ interface IuseComplianceApiV1QueriesSyncListState {
 }
 
 export const useComplianceApiV1QueriesSyncList = (
+    query?: {
+        configzGitURL?: string
+    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -3148,7 +3077,7 @@ export const useComplianceApiV1QueriesSyncList = (
         }
     )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -3167,7 +3096,7 @@ export const useComplianceApiV1QueriesSyncList = (
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.compliance
-                .apiV1QueriesSyncList(paramsSignal)
+                .apiV1QueriesSyncList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3203,8 +3132,8 @@ export const useComplianceApiV1QueriesSyncList = (
         }
     }
 
-    if (JSON.stringify([params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
