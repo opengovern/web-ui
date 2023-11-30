@@ -11,7 +11,7 @@ type IProps = {
     currentPage:
         | 'home'
         | 'insights'
-        | 'asset'
+        | 'assets'
         | 'spend'
         | 'integrations'
         | 'compliance'

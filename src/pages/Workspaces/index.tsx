@@ -27,7 +27,7 @@ export default function Workspaces() {
     }, [isLoading])
 
     return (
-        <Layout currentPage="asset" showSidebar={false}>
+        <Layout currentPage="assets" showSidebar={false}>
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />

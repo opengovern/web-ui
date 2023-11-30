@@ -1,5 +1,5 @@
 import { Dayjs } from 'dayjs'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import {
     Button,
@@ -17,9 +17,20 @@ import {
 } from '@tremor/react'
 import { AgGridReact } from 'ag-grid-react'
 import { ColDef, GridOptions, ValueFormatterParams } from 'ag-grid-community'
-import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
-import { useParams } from 'react-router-dom'
-import { filterAtom, isDemoAtom } from '../../../../store'
+import {
+    ArrowDownOnSquareIcon,
+    DocumentDuplicateIcon,
+} from '@heroicons/react/24/outline'
+import { Link, useParams } from 'react-router-dom'
+import Editor from 'react-simple-code-editor'
+import { highlight, languages } from 'prismjs'
+import clipboardCopy from 'clipboard-copy'
+import {
+    filterAtom,
+    isDemoAtom,
+    notificationAtom,
+    queryAtom,
+} from '../../../../store'
 import {
     useInventoryApiV2AnalyticsMetricsDetail,
     useInventoryApiV2AnalyticsSpendMetricList,
@@ -45,8 +56,8 @@ import {
 import Chart from '../../../../components/Chart'
 import { costTrendChart, getConnections } from '../../index'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
-import { generateVisualMap } from '../../../Assets'
 import { dateDisplay } from '../../../../utilities/dateDisplay'
+import Modal from '../../../../components/Modal'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -59,7 +70,10 @@ export default function SingleSpendMetric({
 }: ISingle) {
     const selectedConnections = useAtomValue(filterAtom)
     const gridRef = useRef<AgGridReact>(null)
-    const { id, metric } = useParams()
+    const { id, metric, ws } = useParams()
+    const setNotification = useSetAtom(notificationAtom)
+    const setQuery = useSetAtom(queryAtom)
+    const [modalData, setModalData] = useState('')
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'area'
     )
@@ -376,7 +390,65 @@ export default function SingleSpendMetric({
                         <Text>{metricName ? metricName.id : ''}</Text>
                     </Flex>
                 </Flex>
+                <Button
+                    variant="secondary"
+                    onClick={() =>
+                        setModalData(
+                            metricName?.query?.replace(
+                                '$IS_ALL_CONNECTIONS_QUERY',
+                                'true'
+                            ) || ''
+                        )
+                    }
+                >
+                    See query
+                </Button>
             </Flex>
+            <Modal open={!!modalData.length} onClose={() => setModalData('')}>
+                <Title className="font-semibold">Metric query</Title>
+                <Card className="my-4">
+                    <Editor
+                        onValueChange={() => console.log('')}
+                        highlight={(text) =>
+                            highlight(text, languages.sql, 'sql')
+                        }
+                        value={modalData}
+                        className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm"
+                        style={{
+                            minHeight: '200px',
+                        }}
+                        placeholder="-- write your SQL query here"
+                    />
+                </Card>
+                <Flex>
+                    <Button
+                        variant="light"
+                        icon={DocumentDuplicateIcon}
+                        iconPosition="left"
+                        onClick={() =>
+                            clipboardCopy(modalData).then(() =>
+                                setNotification({
+                                    text: 'Query copied to clipboard',
+                                    type: 'info',
+                                })
+                            )
+                        }
+                    >
+                        Copy
+                    </Button>
+                    <Flex className="w-fit gap-4">
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                setQuery(modalData)
+                            }}
+                        >
+                            <Link to={`/${ws}/query`}>Open in Query</Link>
+                        </Button>
+                        <Button onClick={() => setModalData('')}>Close</Button>
+                    </Flex>
+                </Flex>
+            </Modal>
             <Card className="mb-4">
                 <Grid numItems={4} className="gap-4">
                     <SummaryCard
@@ -393,8 +465,6 @@ export default function SingleSpendMetric({
                             title="Evaluated"
                             loading={isLoading}
                             metric={response?.length}
-                            isPrice
-                            isExact
                         />
                     </div>
                     <Col numColSpan={2}>
@@ -507,29 +577,27 @@ export default function SingleSpendMetric({
                     }
                 />
             </Card>
-            <Card className="mt-4">
-                <Flex>
-                    <Title className="font-semibold">Spend</Title>
-                    <Flex className="gap-4 w-fit">
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                gridRef.current?.api?.exportDataAsCsv()
-                            }}
-                            icon={ArrowDownOnSquareIcon}
-                        >
-                            Download
-                        </Button>
-                    </Flex>
+            <Flex className="mt-4">
+                <Title className="font-semibold">Spend</Title>
+                <Flex className="gap-4 w-fit">
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            gridRef.current?.api?.exportDataAsCsv()
+                        }}
+                        icon={ArrowDownOnSquareIcon}
+                    >
+                        Download
+                    </Button>
                 </Flex>
-                <div className="ag-theme-alpine mt-4">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                    />
-                </div>
-            </Card>
+            </Flex>
+            <div className="ag-theme-alpine mt-4">
+                <AgGridReact
+                    ref={gridRef}
+                    domLayout="autoHeight"
+                    gridOptions={gridOptions}
+                />
+            </div>
         </>
     )
 }

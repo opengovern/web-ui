@@ -271,7 +271,7 @@ export default function Assets() {
         })
 
     return (
-        <Layout currentPage="asset">
+        <Layout currentPage="assets">
             <Header datePicker filter />
             {selectedConnections.connections.length === 1 ? (
                 <SingleConnection
