@@ -13,18 +13,18 @@ const properties = (
     let color: Color = 'amber'
     let delta: DeltaType = 'unchanged'
     if (isDelta) {
-        if (Number(change) > 0) {
+        if (Number(change) < 0) {
             color = 'rose'
             // delta = 'decrease'
             delta = 'moderateDecrease'
         }
-        if (Number(change) < 0) {
+        if (Number(change) > 0) {
             color = 'emerald'
             // delta = 'increase'
             delta = 'moderateIncrease'
         }
     } else {
-        if (Number(change) > 0) {
+        if (Number(change) < 0) {
             color = 'rose'
             // if (Math.abs(Number(change)) > 10) {
             //     delta = 'decrease'
@@ -32,7 +32,7 @@ const properties = (
             delta = 'moderateDecrease'
             // }
         }
-        if (Number(change) < 0) {
+        if (Number(change) > 0) {
             color = 'emerald'
             // if (Number(change) > 10) {
             //     delta = 'increase'

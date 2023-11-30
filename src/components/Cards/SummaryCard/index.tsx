@@ -100,11 +100,11 @@ export default function SummaryCard({
                 {metricPrev && (
                     <Flex className="mt-1">
                         <ChangeDelta
-                            change={numberDisplay(
-                                ((Number(metricPrev) - Number(metric)) /
-                                    Number(metric)) *
-                                    100
-                            )}
+                            change={
+                                ((Number(metric) - Number(metricPrev)) /
+                                    Number(metricPrev)) *
+                                100
+                            }
                         />
                     </Flex>
                 )}
