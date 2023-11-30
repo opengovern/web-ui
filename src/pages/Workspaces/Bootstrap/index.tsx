@@ -79,7 +79,7 @@ export default function Boostrap() {
     }, [finishIsLoading])
 
     return (
-        <Layout currentPage="asset" showSidebar={false} hfull>
+        <Layout currentPage="assets" showSidebar={false} hfull>
             {newAWSOpen && (
                 <OnboardDrawer
                     open={newAWSOpen}

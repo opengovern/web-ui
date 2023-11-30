@@ -39,7 +39,7 @@ export default function AssetDetails() {
             currentPage={
                 url.includes('resource-collection')
                     ? 'resource-collection'
-                    : 'asset'
+                    : 'assets'
             }
         >
             <Header

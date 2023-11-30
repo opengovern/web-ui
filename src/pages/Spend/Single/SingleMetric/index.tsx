@@ -393,8 +393,6 @@ export default function SingleSpendMetric({
                             title="Evaluated"
                             loading={isLoading}
                             metric={response?.length}
-                            isPrice
-                            isExact
                         />
                     </div>
                     <Col numColSpan={2}>
@@ -507,29 +505,27 @@ export default function SingleSpendMetric({
                     }
                 />
             </Card>
-            <Card className="mt-4">
-                <Flex>
-                    <Title className="font-semibold">Spend</Title>
-                    <Flex className="gap-4 w-fit">
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                gridRef.current?.api?.exportDataAsCsv()
-                            }}
-                            icon={ArrowDownOnSquareIcon}
-                        >
-                            Download
-                        </Button>
-                    </Flex>
+            <Flex className="mt-4">
+                <Title className="font-semibold">Spend</Title>
+                <Flex className="gap-4 w-fit">
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            gridRef.current?.api?.exportDataAsCsv()
+                        }}
+                        icon={ArrowDownOnSquareIcon}
+                    >
+                        Download
+                    </Button>
                 </Flex>
-                <div className="ag-theme-alpine mt-4">
-                    <AgGridReact
-                        ref={gridRef}
-                        domLayout="autoHeight"
-                        gridOptions={gridOptions}
-                    />
-                </div>
-            </Card>
+            </Flex>
+            <div className="ag-theme-alpine mt-4">
+                <AgGridReact
+                    ref={gridRef}
+                    domLayout="autoHeight"
+                    gridOptions={gridOptions}
+                />
+            </div>
         </>
     )
 }
