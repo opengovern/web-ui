@@ -394,7 +394,7 @@ export default function SingleSpendMetric({
                     variant="secondary"
                     onClick={() =>
                         setModalData(
-                            metricDetail?.query?.replace(
+                            metricName?.query?.replace(
                                 '$IS_ALL_CONNECTIONS_QUERY',
                                 'true'
                             ) || ''

@@ -39,7 +39,7 @@ export default function SettingsGitRepositories() {
         isLoading: loadingSyncQueries,
         isExecuted: executeSyncQueries,
         sendNow: syncQueries,
-    } = useComplianceApiV1QueriesSyncList({}, false)
+    } = useComplianceApiV1QueriesSyncList({}, {}, false)
 
     if (loadingMetricsGitURL) {
         return (
