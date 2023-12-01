@@ -29,22 +29,6 @@ export default function FinalStep({ data, health, onNext }: IStep) {
                     <Text>Tenant ID</Text>
                     <Text>{data.tenId}</Text>
                 </Flex>
-                <Divider />
-                <Flex flexDirection="row">
-                    <Text>Secret ID</Text>
-                    <Text>{data.secId}</Text>
-                </Flex>
-                <Divider />
-                <Flex flexDirection="row">
-                    <Text>Object ID</Text>
-                    <Text>{data.objectId}</Text>
-                </Flex>
-                <Divider />
-                <Flex flexDirection="row">
-                    <Text>Subscription ID</Text>
-                    <Text>{data.subscriptionId}</Text>
-                </Flex>
-                <Divider />
                 <Flex flexDirection="row">
                     <Text>SPN health</Text>
                     <Text>{health}</Text>

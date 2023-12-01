@@ -11,10 +11,10 @@ export default function FirstStep({ onNext, onPrevious }: IStep) {
     return (
         <Flex flexDirection="col" justifyContent="between" className="h-full">
             <Flex flexDirection="col" alignItems="start">
-                <Bold className="my-6">Deploy IAM Role</Bold>
+                <Bold className="my-6">Onboard your Azure SPN</Bold>
                 <Text className="mb-3">
-                    Please refer to this guid to deploy the IAM role via AWS
-                    CloudFormation Stacks and then click on Next:
+                    Please refer to this guide to create SPN and then click on
+                    Next:
                 </Text>
 
                 <Button variant="light">

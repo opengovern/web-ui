@@ -41,7 +41,7 @@ export default function SecondStep({
     return (
         <Flex flexDirection="col" className="h-full">
             <Flex flexDirection="col" alignItems="start">
-                <Bold className="my-6">Deploy IAM Role</Bold>
+                <Bold className="my-6">Onboard your Azure SPN</Bold>
                 <Text className="mb-3">
                     Please fill all the following required information.
                 </Text>
@@ -55,29 +55,20 @@ export default function SecondStep({
                 </Flex>
                 <Divider />
                 <Flex flexDirection="row">
-                    <Text>Tenant ID</Text>
-                    <TextInput
-                        className="w-2/3"
-                        value={tenId}
-                        onChange={(e) => setTenId(e.target.value)}
-                    />
-                </Flex>
-                <Divider />
-                <Flex flexDirection="row">
-                    <Text>Secret ID</Text>
-                    <TextInput
-                        className="w-2/3"
-                        value={secId}
-                        onChange={(e) => setSecId(e.target.value)}
-                    />
-                </Flex>
-                <Divider />
-                <Flex flexDirection="row">
                     <Text>Object ID</Text>
                     <TextInput
                         className="w-2/3"
                         value={objectId}
                         onChange={(e) => setObjectId(e.target.value)}
+                    />
+                </Flex>
+                <Divider />
+                <Flex flexDirection="row">
+                    <Text>Tenant ID</Text>
+                    <TextInput
+                        className="w-2/3"
+                        value={tenId}
+                        onChange={(e) => setTenId(e.target.value)}
                     />
                 </Flex>
                 <Divider />
@@ -89,15 +80,6 @@ export default function SecondStep({
                         onChange={(e) => setClientSecret(e.target.value)}
                     />
                 </Flex>
-                <Divider />
-                <Flex flexDirection="row">
-                    <Text>Subscription ID</Text>
-                    <TextInput
-                        className="w-2/3"
-                        value={subscriptionId}
-                        onChange={(e) => setSubscriptionId(e.target.value)}
-                    />
-                </Flex>
                 <Flex flexDirection="row">
                     <Text className="text-red-600 pt-4">{error}</Text>
                 </Flex>
@@ -107,7 +89,9 @@ export default function SecondStep({
                     Back
                 </Button>
                 <Button
-                    disabled={!(appId.length && tenId.length && secId.length)}
+                    disabled={
+                        !(appId.length && tenId.length && objectId.length && clientSecret.length)
+                    }
                     onClick={() =>
                         onNext(
                             appId,
