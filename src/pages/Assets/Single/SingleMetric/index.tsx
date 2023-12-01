@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
     Button,
@@ -27,6 +27,7 @@ import {
     CheckCircleIcon,
     ExclamationCircleIcon,
 } from '@heroicons/react/24/solid'
+import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
 import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsMetricsDetail,
@@ -43,10 +44,7 @@ import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
 import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
-import {
-    numberDisplay,
-    numericDisplay,
-} from '../../../../utilities/numericDisplay'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
 import Table from '../../../../components/Table'
 import { getTable } from '../../../Finder'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
@@ -113,6 +111,29 @@ export default function SingleMetric({
     const { response: metricDetail } = useInventoryApiV2AnalyticsMetricsDetail(
         metricId || ''
     )
+    const generateQuery = () => {
+        let q = ''
+        if (metric) {
+            q =
+                metricDetail?.finderPerConnectionQuery?.replace(
+                    '<CONNECTION_ID_LIST>',
+                    [String(id).replace('account_', '')]
+                        .map((a) => `'${a}'`)
+                        .join(',')
+                ) || ''
+        } else if (selectedConnections.connections.length > 0) {
+            q =
+                metricDetail?.finderPerConnectionQuery?.replace(
+                    '<CONNECTION_ID_LIST>',
+                    selectedConnections.connections
+                        .map((a) => `'${a}'`)
+                        .join(',')
+                ) || ''
+        } else {
+            q = metricDetail?.finderQuery || ''
+        }
+        return q
+    }
 
     const {
         response: queryResponse,
@@ -123,7 +144,7 @@ export default function SingleMetric({
     } = useInventoryApiV1QueryRunCreate(
         {
             page: { no: 1, size: pageSize },
-            query: metricDetail?.finderQuery,
+            query: generateQuery(),
         },
         {},
         false
@@ -133,7 +154,7 @@ export default function SingleMetric({
         if (metricDetail && metricDetail.finderQuery) {
             sendNow()
         }
-    }, [metricDetail, pageSize])
+    }, [selectedConnections.connections, metricDetail, pageSize])
 
     const memoRows = useMemo(
         () =>
@@ -153,6 +174,16 @@ export default function SingleMetric({
                 .count,
         [queryResponse, isDemo]
     )
+
+    const showTable = () => {
+        return (
+            selectedConnections.provider === '' &&
+            selectedConnections.connectionGroup.length === 0 &&
+            !resourceId &&
+            activeTimeRange.end.format('DD-MM-YYYY') ===
+                dayjs.utc().format('DD-MM-YYYY')
+        )
+    }
 
     return (
         <>
@@ -334,93 +365,106 @@ export default function SingleMetric({
                     onClick={(p) => setSelectedDatapoint(p)}
                 />
             </Card>
-            <Table
-                title="Resource list"
-                id="metric_table"
-                loading={isLoading}
-                onGridReady={(e) => {
-                    if (isLoading) {
-                        e.api.showLoadingOverlay()
-                    }
-                }}
-                columns={memoColumns}
-                rowData={memoRows}
-                downloadable
-                onRowClicked={(event: RowClickedEvent) => {
-                    setSelectedRow(event.data)
-                    setOpenDrawer(true)
-                }}
-                fullWidth
-            >
-                <Flex flexDirection="row-reverse" className="pl-3">
-                    <Flex
-                        className="w-fit"
-                        flexDirection="row"
-                        alignItems="center"
-                        justifyContent="start"
-                    >
-                        <Text className="mr-2">Maximum rows:</Text>
-                        <Select className="w-56" placeholder="1,000">
-                            <SelectItem
-                                value="1000"
-                                onClick={() => setPageSize(1000)}
-                            >
-                                1,000
-                            </SelectItem>
-                            <SelectItem
-                                value="3000"
-                                onClick={() => setPageSize(3000)}
-                            >
-                                3,000
-                            </SelectItem>
-                            <SelectItem
-                                value="5000"
-                                onClick={() => setPageSize(5000)}
-                            >
-                                5,000
-                            </SelectItem>
-                            <SelectItem
-                                value="10000"
-                                onClick={() => setPageSize(10000)}
-                            >
-                                10,000
-                            </SelectItem>
-                        </Select>
+            {showTable() ? (
+                <Table
+                    title="Resource list"
+                    id="metric_table"
+                    loading={isLoading}
+                    onGridReady={(e) => {
+                        if (isLoading) {
+                            e.api.showLoadingOverlay()
+                        }
+                    }}
+                    columns={memoColumns}
+                    rowData={memoRows}
+                    downloadable
+                    onRowClicked={(event: RowClickedEvent) => {
+                        setSelectedRow(event.data)
+                        setOpenDrawer(true)
+                    }}
+                    fullWidth
+                >
+                    <Flex flexDirection="row-reverse" className="pl-3">
+                        <Flex
+                            className="w-fit"
+                            flexDirection="row"
+                            alignItems="center"
+                            justifyContent="start"
+                        >
+                            <Text className="mr-2">Maximum rows:</Text>
+                            <Select className="w-56" placeholder="1,000">
+                                <SelectItem
+                                    value="1000"
+                                    onClick={() => setPageSize(1000)}
+                                >
+                                    1,000
+                                </SelectItem>
+                                <SelectItem
+                                    value="3000"
+                                    onClick={() => setPageSize(3000)}
+                                >
+                                    3,000
+                                </SelectItem>
+                                <SelectItem
+                                    value="5000"
+                                    onClick={() => setPageSize(5000)}
+                                >
+                                    5,000
+                                </SelectItem>
+                                <SelectItem
+                                    value="10000"
+                                    onClick={() => setPageSize(10000)}
+                                >
+                                    10,000
+                                </SelectItem>
+                            </Select>
+                        </Flex>
+                        {!isLoading && isExecuted && error && (
+                            <Flex justifyContent="start" className="w-fit">
+                                <Icon
+                                    icon={ExclamationCircleIcon}
+                                    color="rose"
+                                />
+                                <Text color="rose">
+                                    {getErrorMessage(error)}
+                                </Text>
+                            </Flex>
+                        )}
+                        {!isLoading && isExecuted && queryResponse && (
+                            <Flex justifyContent="start" className="w-fit">
+                                {memoCount === pageSize ? (
+                                    <>
+                                        <Icon
+                                            icon={ExclamationCircleIcon}
+                                            color="amber"
+                                        />
+                                        <Text color="amber">
+                                            {`Row limit of ${numberDisplay(
+                                                pageSize,
+                                                0
+                                            )} reached, results are truncated`}
+                                        </Text>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Icon
+                                            icon={CheckCircleIcon}
+                                            color="emerald"
+                                        />
+                                        <Text color="emerald">Success</Text>
+                                    </>
+                                )}
+                            </Flex>
+                        )}
                     </Flex>
-                    {!isLoading && isExecuted && error && (
-                        <Flex justifyContent="start" className="w-fit">
-                            <Icon icon={ExclamationCircleIcon} color="rose" />
-                            <Text color="rose">{getErrorMessage(error)}</Text>
-                        </Flex>
-                    )}
-                    {!isLoading && isExecuted && queryResponse && (
-                        <Flex justifyContent="start" className="w-fit">
-                            {memoCount === pageSize ? (
-                                <>
-                                    <Icon
-                                        icon={ExclamationCircleIcon}
-                                        color="amber"
-                                    />
-                                    <Text color="amber">
-                                        {`Row limit of ${numberDisplay(
-                                            pageSize,
-                                            0
-                                        )} reached, results are truncated`}
-                                    </Text>
-                                </>
-                            ) : (
-                                <>
-                                    <Icon
-                                        icon={CheckCircleIcon}
-                                        color="emerald"
-                                    />
-                                    <Text color="emerald">Success</Text>
-                                </>
-                            )}
-                        </Flex>
-                    )}
-                </Flex>
-            </Table>
+                </Table>
+            ) : (
+                <Callout title="We only support LIVE data" color="amber">
+                    To see the resource table you have to check if your end date
+                    is set to today and remove all filters the you have applied.
+                </Callout>
+            )}
+
             <DrawerPanel
                 title="Resource detail"
                 open={openDrawer}

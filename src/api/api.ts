@@ -1130,6 +1130,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesRe
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric {
     connectors?: SourceType[]
+    finderPerConnectionQuery?: string
     finderQuery?: string
     id?: string
     name?: string
@@ -1164,6 +1165,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
      * @example 21232.10443638001
      */
     daily_cost_at_start_time?: number
+    finderPerConnectionQuery?: string
     finderQuery?: string
     /**
      * @min 0
@@ -1261,6 +1263,8 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiMetric {
      * @example 100
      */
     count?: number
+    /** @example "select * from kaytu_resources where resource_type = 'aws::ec2::instance' AND connection_id IN <CONNECTION_ID_LIST>" */
+    finderPerConnectionQuery?: string
     /** @example "select * from kaytu_resources where resource_type = 'aws::ec2::instance'" */
     finderQuery?: string
     /** @example "vms" */
@@ -3841,6 +3845,8 @@ export class Api<
             query?: {
                 /** Metric type, default: assets */
                 metricType?: 'assets' | 'spend'
+                /** For assets minimum number of resources returned resourcetype must have, default 1 */
+                minCount?: number
             },
             params: RequestParams = {}
         ) =>

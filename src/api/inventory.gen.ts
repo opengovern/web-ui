@@ -350,6 +350,8 @@ interface IuseInventoryApiV2AnalyticsCategoriesListState {
 export const useInventoryApiV2AnalyticsCategoriesList = (
     query?: {
         metricType?: 'assets' | 'spend'
+
+        minCount?: number
     },
     params: RequestParams = {},
     autoExecute = true
