@@ -428,7 +428,7 @@ export default function Spend() {
                             <Breakdown
                                 chartData={pieData(composition)}
                                 loading={compositionLoading}
-                                seeMore="spend-details#services"
+                                seeMore="spend-details#category"
                                 isCost
                             />
                         </Col>

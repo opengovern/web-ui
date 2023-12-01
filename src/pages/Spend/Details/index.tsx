@@ -61,6 +61,7 @@ export default function SpendDetails() {
                             connections={selectedConnections}
                             selectedGranularity={selectedGranularity}
                             onGranularityChange={setSelectedGranularity}
+                            isSummary={tabs === '#category'}
                         />
                     </TabPanel>
                     <TabPanel>
