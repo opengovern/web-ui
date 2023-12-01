@@ -187,6 +187,17 @@ export default function AccountInfo({
                         </Flex>
                     </Flex>
                     <Divider />
+                    {data?.healthState === 'unhealthy' && (
+                        <>
+                            <Flex>
+                                <Text>Health reason</Text>
+                                <Text className="text-black">
+                                    {healthResponse?.healthReason}
+                                </Text>
+                            </Flex>
+                            <Divider />
+                        </>
+                    )}
                     <Flex className="mb-6">
                         <Text>Account lifecycle state</Text>
                         <Badge
