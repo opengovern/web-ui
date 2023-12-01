@@ -274,7 +274,19 @@ export default function Filter() {
                                         className="gap-3 flex-wrap"
                                     >
                                         {connectionGroup.map((c: string) => (
-                                            <Tag key={c} text={c} />
+                                            <Tag
+                                                key={c}
+                                                text={c}
+                                                onClick={() => {
+                                                    setConnectionGroup(
+                                                        (prevState) => {
+                                                            return prevState.filter(
+                                                                (s) => s !== c
+                                                            )
+                                                        }
+                                                    )
+                                                }}
+                                            />
                                         ))}
                                     </Flex>
                                 </TabPanel>

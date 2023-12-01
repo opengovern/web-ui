@@ -39,7 +39,7 @@ export function RenderObject({
                                     ? snakeCaseToLabel(key)
                                     : key}
                             </Text>
-                            <Text className="text-gray-900 w-3/5 whitespace-pre-wrap text-end">
+                            <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                                 {String(obj[key])}
                             </Text>
                         </ListItem>
