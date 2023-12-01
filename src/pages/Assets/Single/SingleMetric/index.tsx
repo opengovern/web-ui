@@ -114,23 +114,26 @@ export default function SingleMetric({
     const generateQuery = () => {
         let q = ''
         if (metric) {
-            q = metricDetail?.finderPerConnectionQuery.replace(
-                '<CONNECTION_ID_LIST>',
-                [String(id).replace('account_', '')]
-                    .map((a) => `'${a}'`)
-                    .join(',')
-            )
+            q =
+                metricDetail?.finderPerConnectionQuery?.replace(
+                    '<CONNECTION_ID_LIST>',
+                    [String(id).replace('account_', '')]
+                        .map((a) => `'${a}'`)
+                        .join(',')
+                ) || ''
         } else if (selectedConnections.connections.length > 0) {
-            q = metricDetail?.finderPerConnectionQuery.replace(
-                '<CONNECTION_ID_LIST>',
-                selectedConnections.connections.map((a) => `'${a}'`).join(',')
-            )
+            q =
+                metricDetail?.finderPerConnectionQuery?.replace(
+                    '<CONNECTION_ID_LIST>',
+                    selectedConnections.connections
+                        .map((a) => `'${a}'`)
+                        .join(',')
+                ) || ''
         } else {
             q = metricDetail?.finderQuery || ''
         }
         return q
     }
-    console.log(generateQuery)
 
     const {
         response: queryResponse,
@@ -141,7 +144,7 @@ export default function SingleMetric({
     } = useInventoryApiV1QueryRunCreate(
         {
             page: { no: 1, size: pageSize },
-            query: metricDetail?.finderQuery,
+            query: generateQuery(),
         },
         {},
         false
@@ -151,7 +154,7 @@ export default function SingleMetric({
         if (metricDetail && metricDetail.finderQuery) {
             sendNow()
         }
-    }, [metricDetail, pageSize])
+    }, [selectedConnections.connections, metricDetail, pageSize])
 
     const memoRows = useMemo(
         () =>
@@ -175,8 +178,8 @@ export default function SingleMetric({
     const showTable = () => {
         return (
             selectedConnections.provider === '' &&
-            selectedConnections.connections.length === 0 &&
             selectedConnections.connectionGroup.length === 0 &&
+            !resourceId &&
             activeTimeRange.end.format('DD-MM-YYYY') ===
                 dayjs.utc().format('DD-MM-YYYY')
         )
