@@ -90,7 +90,12 @@ export default function SecondStep({
                 </Button>
                 <Button
                     disabled={
-                        !(appId.length && tenId.length && objectId.length && clientSecret.length)
+                        !(
+                            appId.length &&
+                            tenId.length &&
+                            objectId.length &&
+                            clientSecret.length
+                        )
                     }
                     onClick={() =>
                         onNext(
