@@ -307,7 +307,6 @@ export default function Findings() {
         limit: 100,
         afterSortKey: [sortKey],
     })
-    console.log(findings)
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -330,6 +329,7 @@ export default function Findings() {
         })
     const { response: filters, isLoading: filtersLoading } =
         useComplianceApiV1FindingsFiltersCreate({})
+    console.log(filters)
 
     const getData = (sort: SortModelItem[]) => {
         setSortModel(sort)
