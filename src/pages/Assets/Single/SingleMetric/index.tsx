@@ -1,13 +1,19 @@
 import dayjs, { Dayjs } from 'dayjs'
 import { useAtomValue, useSetAtom } from 'jotai'
 import {
+    Accordion,
+    AccordionBody,
+    AccordionHeader,
     Button,
     Callout,
     Card,
     Col,
+    Divider,
     Flex,
     Grid,
     Icon,
+    List,
+    ListItem,
     Select,
     SelectItem,
     Tab,
@@ -53,6 +59,7 @@ import Modal from '../../../../components/Modal'
 import { RenderObject } from '../../../../components/RenderObject'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { getErrorMessage } from '../../../../types/apierror'
+import Tag from '../../../../components/Tag'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -73,7 +80,7 @@ export default function SingleMetric({
     const setQuery = useSetAtom(queryAtom)
 
     const [openDrawer, setOpenDrawer] = useState(false)
-    const [selectedRow, setSelectedRow] = useState(null)
+    const [selectedRow, setSelectedRow] = useState<any>(null)
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         'line'
     )
@@ -174,6 +181,7 @@ export default function SingleMetric({
                 .count,
         [queryResponse, isDemo]
     )
+    console.log(memoRows)
 
     const showTable = () => {
         return (
@@ -216,7 +224,7 @@ export default function SingleMetric({
                     variant="secondary"
                     onClick={() =>
                         setModalData(
-                            metricDetail?.query?.replace(
+                            generateQuery().replace(
                                 '$IS_ALL_CONNECTIONS_QUERY',
                                 'true'
                             ) || ''
@@ -473,7 +481,62 @@ export default function SingleMetric({
                     // setSelectedRow(null)
                 }}
             >
-                <RenderObject obj={selectedRow} />
+                <Accordion
+                    className="w-full p-0 !rounded-none border-0"
+                    defaultOpen
+                >
+                    <AccordionHeader className="w-full p-0 border-0">
+                        <Title>Summary</Title>
+                    </AccordionHeader>
+                    <AccordionBody className="w-full p-0 border-0">
+                        <List>
+                            <ListItem className="py-6">
+                                <Text>Resource ID</Text>
+                                <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
+                                    {selectedRow?.resource_id}
+                                </Text>
+                            </ListItem>
+                            <ListItem className="py-6">
+                                <Text>Resource type</Text>
+                                <Text className="text-gray-800">
+                                    {selectedRow?.resource_type}
+                                </Text>
+                            </ListItem>
+                            <ListItem className="py-6">
+                                <Text>Cloud provider</Text>
+                                <Text className="text-gray-800">
+                                    {selectedRow?.connector}
+                                </Text>
+                            </ListItem>
+                            <ListItem className="py-6">
+                                <Text>Resource name</Text>
+                                <Text className="text-gray-800">
+                                    {selectedRow?.name}
+                                </Text>
+                            </ListItem>
+                            <ListItem className="py-6">
+                                <Text>Cloud account ID</Text>
+                                <Text className="text-gray-800">
+                                    {selectedRow?.connection_id}
+                                </Text>
+                            </ListItem>
+                        </List>
+                    </AccordionBody>
+                </Accordion>
+                <Divider />
+                <Accordion className="w-full p-0 !rounded-none border-0">
+                    <AccordionHeader className="w-full p-0 border-0">
+                        <Title>Details</Title>
+                    </AccordionHeader>
+                    <AccordionBody className="w-full p-0 border-0">
+                        <List>
+                            <ListItem className="py-6">
+                                <Text>Tags</Text>
+                                <Tag text={selectedRow?.tags || ''} />
+                            </ListItem>
+                        </List>
+                    </AccordionBody>
+                </Accordion>
             </DrawerPanel>
         </>
     )
