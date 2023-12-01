@@ -26,10 +26,12 @@ export const exactPriceDisplay = (
     value: string | number | undefined,
     decimals = 0
 ) => {
-    return `$${parseFloat(value ? value.toString() : '0')
-        .toFixed(decimals)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+    return Number(value) || Number(value) === 0
+        ? `$${Number(value)
+              .toFixed(decimals)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+        : 'Not available'
 }
 
 export const numberDisplay = (
