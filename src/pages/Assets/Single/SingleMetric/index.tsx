@@ -111,6 +111,26 @@ export default function SingleMetric({
     const { response: metricDetail } = useInventoryApiV2AnalyticsMetricsDetail(
         metricId || ''
     )
+    const generateQuery = () => {
+        let q = ''
+        if (metric) {
+            q = metricDetail?.finderPerConnectionQuery.replace(
+                '<CONNECTION_ID_LIST>',
+                [String(id).replace('account_', '')]
+                    .map((a) => `'${a}'`)
+                    .join(',')
+            )
+        } else if (selectedConnections.connections.length > 0) {
+            q = metricDetail?.finderPerConnectionQuery.replace(
+                '<CONNECTION_ID_LIST>',
+                selectedConnections.connections.map((a) => `'${a}'`).join(',')
+            )
+        } else {
+            q = metricDetail?.finderQuery || ''
+        }
+        return q
+    }
+    console.log(generateQuery)
 
     const {
         response: queryResponse,
