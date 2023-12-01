@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from 'dayjs'
+import { Dayjs } from 'dayjs'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -362,15 +362,6 @@ export default function SingleSpendMetric({
             gridRef.current?.api?.setRowData(newRow)
         }
     }, [isLoading])
-    const showTable = () => {
-        return (
-            selectedConnections.provider === '' &&
-            selectedConnections.connections.length === 0 &&
-            selectedConnections.connectionGroup.length === 0 &&
-            activeTimeRange.end.format('DD-MM-YYYY') ===
-                dayjs.utc().subtract(2, 'day').format('DD-MM-YYYY')
-        )
-    }
 
     return (
         <>
@@ -586,36 +577,27 @@ export default function SingleSpendMetric({
                     }
                 />
             </Card>
-            {showTable() ? (
-                <>
-                    <Flex className="mt-4">
-                        <Title className="font-semibold">Spend</Title>
-                        <Flex className="gap-4 w-fit">
-                            <Button
-                                variant="secondary"
-                                onClick={() => {
-                                    gridRef.current?.api?.exportDataAsCsv()
-                                }}
-                                icon={ArrowDownOnSquareIcon}
-                            >
-                                Download
-                            </Button>
-                        </Flex>
-                    </Flex>
-                    <div className="ag-theme-alpine mt-4">
-                        <AgGridReact
-                            ref={gridRef}
-                            domLayout="autoHeight"
-                            gridOptions={gridOptions}
-                        />
-                    </div>
-                </>
-            ) : (
-                <Callout title="We only support LIVE data" color="amber">
-                    To see the resource table you have to check if your end date
-                    is set to today and remove all filters the you have applied.
-                </Callout>
-            )}
+            <Flex className="mt-4">
+                <Title className="font-semibold">Spend</Title>
+                <Flex className="gap-4 w-fit">
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            gridRef.current?.api?.exportDataAsCsv()
+                        }}
+                        icon={ArrowDownOnSquareIcon}
+                    >
+                        Download
+                    </Button>
+                </Flex>
+            </Flex>
+            <div className="ag-theme-alpine mt-4">
+                <AgGridReact
+                    ref={gridRef}
+                    domLayout="autoHeight"
+                    gridOptions={gridOptions}
+                />
+            </div>
         </>
     )
 }
