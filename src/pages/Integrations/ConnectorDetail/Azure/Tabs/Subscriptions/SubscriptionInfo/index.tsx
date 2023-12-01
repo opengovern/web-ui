@@ -173,6 +173,17 @@ export default function SubscriptionInfo({
                         </Flex>
                     </Flex>
                     <Divider />
+                    {data?.healthState === 'unhealthy' && (
+                        <>
+                            <Flex>
+                                <Text>Health reason</Text>
+                                <Text className="text-black">
+                                    {healthResponse?.healthReason}
+                                </Text>
+                            </Flex>
+                            <Divider />
+                        </>
+                    )}
                     <Flex className="mb-6">
                         <Text>Lifecycle state</Text>
                         <Badge
