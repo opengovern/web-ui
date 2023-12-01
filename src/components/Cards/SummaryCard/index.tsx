@@ -97,7 +97,7 @@ export default function SummaryCard({
                         </Text>
                     )}
                 </Flex>
-                {metricPrev && (
+                {!!metricPrev && (
                     <Flex className="mt-1">
                         <ChangeDelta
                             change={
