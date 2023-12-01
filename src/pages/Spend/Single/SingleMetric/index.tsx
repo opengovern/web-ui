@@ -462,9 +462,10 @@ export default function SingleSpendMetric({
                     <div className="pl-4 border-l border-l-gray-200">
                         <SummaryCard
                             border={false}
-                            title="Evaluated"
+                            title="Results in"
                             loading={isLoading}
                             metric={response?.length}
+                            unit="Cloud accounts"
                         />
                     </div>
                     <Col numColSpan={2}>
