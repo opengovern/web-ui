@@ -354,7 +354,7 @@ export default function InsightDetail({
                                     <div className="pl-4 border-l border-l-gray-200">
                                         <SummaryCard
                                             border={false}
-                                            title="Evaluated"
+                                            title="Results in"
                                             loading={detailLoading}
                                             metric={
                                                 insightDetail?.result
@@ -362,6 +362,7 @@ export default function InsightDetail({
                                                           ?.connections?.length
                                                     : 0
                                             }
+                                            unit="Cloud accounts"
                                         />
                                     </div>
                                 )}

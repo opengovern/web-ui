@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 import { useParams } from 'react-router-dom'
-import { spendTimeAtom, timeAtom } from '../../../store'
+import { spendTimeAtom } from '../../../store'
 import NotFound from '../../Errors'
 import Layout from '../../../components/Layout'
 import SingleSpendConnection from './SingleConnection'
