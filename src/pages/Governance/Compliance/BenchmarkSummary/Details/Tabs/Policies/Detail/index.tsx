@@ -1,4 +1,4 @@
-import { List, ListItem, Text, Title } from '@tremor/react'
+import { Divider, List, ListItem, Text, Title } from '@tremor/react'
 import { numberDisplay } from '../../../../../../../../utilities/numericDisplay'
 import DrawerPanel from '../../../../../../../../components/DrawerPanel'
 import { renderBadge, renderStatus } from '../index'
@@ -13,7 +13,6 @@ export default function PolicyDetail({
     open,
     onClose,
 }: IDetail) {
-    console.log(selectedPolicy)
     return (
         <DrawerPanel
             open={open}
@@ -41,7 +40,8 @@ export default function PolicyDetail({
                     {renderStatus(selectedPolicy?.passed)}
                 </ListItem>
             </List>
-            <Title className="font-semibold mt-4">Metadata</Title>
+            <Divider />
+            <Title className="font-semibold">Summary</Title>
             <List>
                 <ListItem className="py-6 flex items-start">
                     <Text># of resources with alarms</Text>

@@ -20,63 +20,71 @@ export default function FindingDetail({
             <List>
                 <ListItem className="py-6 flex items-start">
                     <Text>Severity</Text>
-                    <Text className="text-gray-800">{finding?.severity}</Text>
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
+                        {finding?.severity}
+                    </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>State</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.stateActive ? 'Active' : 'Not active'}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Policy name</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.policyTitle}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Reason</Text>
-                    <Text className="text-gray-800">{finding?.reason}</Text>
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
+                        {finding?.reason}
+                    </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Last checked</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {dateTimeDisplay(finding?.evaluatedAt)}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Resource name</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.resourceName}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Resource type</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.resourceType}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Root benchmark</Text>
-                    <Text className="text-gray-800">
-                        {finding?.parentBenchmarks}
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
+                        {finding?.parentBenchmarks
+                            ? finding?.parentBenchmarks[0]
+                            : ''}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Account name</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.providerConnectionName}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Account ID</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.providerConnectionID}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Resource ID</Text>
-                    <Text className="text-gray-800">{finding?.resourceID}</Text>
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
+                        {finding?.resourceID}
+                    </Text>
                 </ListItem>
             </List>
             <Divider />
@@ -84,17 +92,19 @@ export default function FindingDetail({
             <List>
                 <ListItem className="py-6 flex items-start">
                     <Text>Policy title</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.policyTitle}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Policy name</Text>
-                    <Text className="text-gray-800">{finding?.policyID}</Text>
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
+                        {finding?.policyID}
+                    </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Benchmark name</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.parentBenchmarks
                             ? finding?.parentBenchmarks[
                                   // eslint-disable-next-line no-unsafe-optional-chaining
@@ -105,7 +115,7 @@ export default function FindingDetail({
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Benchmark title</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.parentBenchmarkNames
                             ? finding?.parentBenchmarkNames[
                                   // eslint-disable-next-line no-unsafe-optional-chaining
@@ -121,7 +131,9 @@ export default function FindingDetail({
                 {finding?.parentBenchmarks?.map((h, i) => (
                     <ListItem className="py-6 flex items-start">
                         <Text>{`Level ${i}`}</Text>
-                        <Text className="text-kaytu-800">{h}</Text>
+                        <Text className="text-kaytu-800 w-3/5 whitespace-pre-wrap text-end">
+                            {h}
+                        </Text>
                     </ListItem>
                 ))}
             </List>
@@ -130,29 +142,31 @@ export default function FindingDetail({
             <List>
                 <ListItem className="py-6 flex items-start">
                     <Text>Finding ID</Text>
-                    <Text className="text-gray-800">{finding?.resourceID}</Text>
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
+                        {finding?.resourceID}
+                    </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Cloud account ID</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.providerConnectionID}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Connection ID</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.connectionID}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Compliance job ID</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.complianceJobID}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Resource type namespace</Text>
-                    <Text className="text-gray-800">
+                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
                         {finding?.resourceTypeName}
                     </Text>
                 </ListItem>
