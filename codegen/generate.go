@@ -104,7 +104,7 @@ import AxiosAPI, { setWorkspace } from './ApiConfig'
 		pmr := strings.Join(params, ",")
 
 		setWorkspace := "workspace"
-		if module == "workspace" {
+		if module == "workspace" && funcName != "useWorkspaceApiV1WorkspaceCurrentList" {
 			setWorkspace = "'kaytu'"
 		}
 
