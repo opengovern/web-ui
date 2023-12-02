@@ -579,8 +579,6 @@ export default function Findings() {
                                     {benchmarkList(
                                         benchmarks?.benchmarkSummary
                                     ).connected?.map((ben) => (
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
                                         <Checkbox
                                             shape="curve"
                                             className="!items-start"
