@@ -621,7 +621,7 @@ export default function Findings() {
                                 ) : (
                                     filters?.resourceTypeID
                                         ?.filter((p) =>
-                                            p
+                                            p.displayName
                                                 ?.toLowerCase()
                                                 .includes(
                                                     resourceSearch.toLowerCase()
@@ -635,10 +635,10 @@ export default function Findings() {
                                                     <Checkbox
                                                         shape="curve"
                                                         className="!items-start"
-                                                        value={p}
+                                                        value={p.key}
                                                         {...resourceCheckbox}
                                                     >
-                                                        {p}
+                                                        {p.displayName}
                                                     </Checkbox>
                                                 )
                                         )
