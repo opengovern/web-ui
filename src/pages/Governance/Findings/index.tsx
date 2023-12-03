@@ -501,7 +501,7 @@ export default function Findings() {
                             <Flex
                                 flexDirection="col"
                                 alignItems="start"
-                                className="px-0.5 gap-2.5 overflow-y-scroll overflow-x-hidden"
+                                className="px-0.5 gap-2.5 max-h-[200px] overflow-y-scroll overflow-x-hidden"
                             >
                                 {connectionsLoading ? (
                                     <Spinner />
@@ -512,7 +512,7 @@ export default function Findings() {
                                             connectionSearch
                                         ).result?.map(
                                             (con, i) =>
-                                                i < 5 && (
+                                                i < 100 && (
                                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                                     // @ts-ignore
                                                     <Checkbox
@@ -550,7 +550,7 @@ export default function Findings() {
                                                           filteredConnectionsList(
                                                               connections?.connections,
                                                               connectionSearch
-                                                          ).count - 5
+                                                          ).count - 100
                                                       } more`
                                                     : ''}
                                             </Text>
@@ -614,34 +614,48 @@ export default function Findings() {
                             <Flex
                                 flexDirection="col"
                                 alignItems="start"
-                                className="px-0.5 gap-2.5 overflow-y-scroll overflow-x-hidden"
+                                className="px-0.5 gap-2.5 max-h-[200px] overflow-y-scroll overflow-x-hidden"
                             >
                                 {filtersLoading ? (
                                     <Spinner />
                                 ) : (
                                     filters?.resourceTypeID
-                                        ?.filter((p) =>
-                                            p.displayName
-                                                ?.toLowerCase()
-                                                .includes(
-                                                    resourceSearch.toLowerCase()
-                                                )
+                                        ?.filter(
+                                            (p) =>
+                                                p.displayName
+                                                    ?.toLowerCase()
+                                                    .includes(
+                                                        resourceSearch.toLowerCase()
+                                                    ) ||
+                                                p.key
+                                                    ?.toLowerCase()
+                                                    .includes(
+                                                        resourceSearch.toLowerCase()
+                                                    )
                                         )
-                                        .map(
-                                            (p, i) =>
-                                                i < 5 && (
-                                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                    // @ts-ignore
-                                                    <Checkbox
-                                                        shape="curve"
-                                                        className="!items-start"
-                                                        value={p.key}
-                                                        {...resourceCheckbox}
-                                                    >
+                                        .map((p, i) => (
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            <Checkbox
+                                                shape="curve"
+                                                className="!items-start"
+                                                value={p.key}
+                                                {...resourceCheckbox}
+                                            >
+                                                <Flex
+                                                    flexDirection="col"
+                                                    alignItems="start"
+                                                    className="-mt-0.5"
+                                                >
+                                                    <Text className="text-gray-800 truncate">
                                                         {p.displayName}
-                                                    </Checkbox>
-                                                )
-                                        )
+                                                    </Text>
+                                                    <Text className="text-xs truncate">
+                                                        {p.key}
+                                                    </Text>
+                                                </Flex>
+                                            </Checkbox>
+                                        ))
                                 )}
                             </Flex>
                         </AccordionBody>
