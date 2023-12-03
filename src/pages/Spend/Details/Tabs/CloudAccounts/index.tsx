@@ -59,7 +59,7 @@ const defaultColumns = (isDemo: boolean) => {
             ),
         },
         {
-            field: '',
+            field: 'dimensionId',
             headerName: 'Connection ID',
             type: 'string',
             filter: true,

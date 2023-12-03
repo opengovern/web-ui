@@ -46,6 +46,7 @@ export const rowGenerator = (
                     dimension: row.dimensionName
                         ? row.dimensionName
                         : row.dimensionId,
+                    dimensionId: row.dimensionId,
                     category: row.category,
                     accountId: row.accountID,
                     connector: row.connector,
