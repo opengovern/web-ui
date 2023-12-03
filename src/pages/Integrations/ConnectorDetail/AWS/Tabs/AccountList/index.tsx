@@ -248,8 +248,10 @@ export default function AccountList({
                 onRowClicked={(
                     event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
                 ) => {
-                    setAccData(event.data)
-                    setOpenInfo(true)
+                    if (event.data) {
+                        setAccData(event.data)
+                        setOpenInfo(true)
+                    }
                 }}
             >
                 <Button icon={PlusIcon} onClick={() => setOpen(true)}>
