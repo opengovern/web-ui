@@ -545,7 +545,7 @@ export default function Findings() {
                                                 {filteredConnectionsList(
                                                     connections?.connections,
                                                     connectionSearch
-                                                ).count > 5
+                                                ).count > 100
                                                     ? `+ ${
                                                           filteredConnectionsList(
                                                               connections?.connections,
