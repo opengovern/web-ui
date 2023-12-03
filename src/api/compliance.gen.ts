@@ -29,6 +29,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
@@ -1469,7 +1470,7 @@ export const useComplianceApiV1FindingsCreate = (
 interface IuseComplianceApiV1FindingsFiltersCreateState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
