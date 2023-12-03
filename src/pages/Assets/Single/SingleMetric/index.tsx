@@ -54,7 +54,7 @@ import { numberDisplay } from '../../../../utilities/numericDisplay'
 import Table from '../../../../components/Table'
 import { getTable } from '../../../Finder'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
-import { dateDisplay } from '../../../../utilities/dateDisplay'
+import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Modal from '../../../../components/Modal'
 import { RenderObject } from '../../../../components/RenderObject'
 import DrawerPanel from '../../../../components/DrawerPanel'
@@ -181,7 +181,7 @@ export default function SingleMetric({
                 .count,
         [queryResponse, isDemo]
     )
-    console.log(memoRows)
+    console.log(selectedRow)
 
     const showTable = () => {
         return (
@@ -533,6 +533,18 @@ export default function SingleMetric({
                             <ListItem className="py-6">
                                 <Text>Tags</Text>
                                 <Tag text={selectedRow?.tags || ''} />
+                            </ListItem>
+                            <ListItem className="py-6">
+                                <Text>Last discovered</Text>
+                                <Text className="text-gray-800">
+                                    {dateTimeDisplay(selectedRow?.created_at)}
+                                </Text>
+                            </ListItem>
+                            <ListItem className="py-6">
+                                <Text>Kaytu connection ID</Text>
+                                <Text className="text-gray-800">
+                                    {selectedRow?.connection_id}
+                                </Text>
                             </ListItem>
                         </List>
                     </AccordionBody>
