@@ -237,8 +237,10 @@ export default function Subscriptions({
                 options={options}
                 loading={loading}
                 onRowClicked={(event: RowClickedEvent) => {
-                    setPriData(event.data)
-                    setOpenInfo(true)
+                    if (event.data) {
+                        setPriData(event.data)
+                        setOpenInfo(true)
+                    }
                 }}
             >
                 <Button icon={PlusIcon} onClick={() => setOpen(true)}>
