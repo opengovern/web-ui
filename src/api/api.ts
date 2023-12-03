@@ -684,6 +684,19 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     stateActive?: boolean
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata {
+    /**
+     * Display Name
+     * @example "displayName"
+     */
+    displayName?: string
+    /**
+     * Key
+     * @example "key"
+     */
+    key?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
     /**
      * Benchmark ID
@@ -727,6 +740,16 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
     severity?: string[]
     /** @example ["alarm"] */
     status?: TypesComplianceResult[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata {
+    benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+    connectionID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+    connector?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+    policyID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+    resourceCollection?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+    resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+    severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse {
@@ -3214,7 +3237,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
                 any
             >({
                 path: `/compliance/api/v1/findings/filters`,
