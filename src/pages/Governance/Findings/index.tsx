@@ -179,11 +179,17 @@ const datasource = (
         | undefined,
     loading: boolean,
     err: boolean,
-    handleParam: any
+    handleParam: any,
+    lastRow: number
 ) => {
     return {
         getRows: (params: IServerSideGetRowsParams) => {
             handleParam(params)
+            console.log(params)
+            // eslint-disable-next-line no-param-reassign
+            params.request.endRow = lastRow
+            // eslint-disable-next-line no-param-reassign
+            params.request.startRow = lastRow - 100
             if (params.request.sortModel.length > 0) {
                 if (sort.length > 0) {
                     if (
@@ -247,7 +253,7 @@ export default function Findings() {
     )
     const [sortKey, setSortKey] = useState('')
     const [tableParam, setTableParam] = useState<IServerSideGetRowsParams>()
-    const [lastPage, setLastPage] = useState(100)
+    const [lastRow, setLastRow] = useState(100)
 
     const connectionCheckbox = useCheckboxState({ state: [] })
     const benchmarkCheckbox = useCheckboxState({ state: [] })
@@ -329,7 +335,6 @@ export default function Findings() {
         })
     const { response: filters, isLoading: filtersLoading } =
         useComplianceApiV1FindingsFiltersCreate({})
-    console.log(filters)
 
     const getData = (sort: SortModelItem[]) => {
         setSortModel(sort)
@@ -341,13 +346,14 @@ export default function Findings() {
     }
 
     useEffect(() => {
-        if (tableParam?.request.startRow === lastPage) {
+        if (tableParam?.request.startRow === lastRow) {
             const list = findings?.findings
             if (list) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 // eslint-disable-next-line no-unsafe-optional-chaining
                 setSortKey(list[list?.length - 1].sortKey[0] || '')
+                setLastRow(tableParam?.request.endRow || 0)
             }
             sendNow()
         }
@@ -361,7 +367,8 @@ export default function Findings() {
                 findings,
                 isLoading,
                 error,
-                handleParam
+                handleParam,
+                lastRow
             ),
         [findings, sortModel]
     )

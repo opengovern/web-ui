@@ -181,7 +181,6 @@ export default function SingleMetric({
                 .count,
         [queryResponse, isDemo]
     )
-    console.log(selectedRow)
 
     const showTable = () => {
         return (
