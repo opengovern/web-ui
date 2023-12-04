@@ -62,11 +62,13 @@ const columns = (isDemo: boolean) => {
                         justifyContent="center"
                         className="h-full w-full"
                     >
+                        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                         <label
-                            htmlFor="status"
+                            htmlFor={params.data.id}
                             className="relative inline-flex items-center cursor-pointer"
                         >
                             <input
+                                id={params.data.id}
                                 type="checkbox"
                                 value=""
                                 className="sr-only peer"
