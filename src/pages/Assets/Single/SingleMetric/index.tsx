@@ -514,12 +514,6 @@ export default function SingleMetric({
                                     {selectedRow?.name}
                                 </Text>
                             </ListItem>
-                            <ListItem className="py-6">
-                                <Text>Cloud account ID</Text>
-                                <Text className="text-gray-800">
-                                    {selectedRow?.connection_id}
-                                </Text>
-                            </ListItem>
                         </List>
                     </AccordionBody>
                 </Accordion>
