@@ -1,12 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
-import * as Sentry from '@sentry/react'
-import {
-    createRoutesFromChildren,
-    matchRoutes,
-    useLocation,
-    useNavigationType,
-} from 'react-router-dom'
 import Router from './router'
 import Spinner from './components/Spinner'
 import { setAuthHeader } from './api/ApiConfig'

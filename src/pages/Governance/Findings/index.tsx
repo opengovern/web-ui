@@ -45,7 +45,7 @@ export const columns = (isDemo: boolean) => {
             width: 120,
             field: 'connector',
             headerName: 'Cloud Provider',
-            sortable: true,
+            sortable: false,
             filter: true,
             hide: true,
             enableRowGroup: true,
@@ -56,7 +56,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Policy ID',
             type: 'string',
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             hide: true,
             resizable: true,
@@ -67,7 +67,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Benchmark ID',
             type: 'string',
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -116,7 +116,7 @@ export const columns = (isDemo: boolean) => {
             type: 'string',
             hide: true,
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -126,7 +126,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Resource type',
             type: 'string',
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -137,7 +137,7 @@ export const columns = (isDemo: boolean) => {
             hide: true,
             type: 'string',
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -184,8 +184,8 @@ const datasource = (
 ) => {
     return {
         getRows: (params: IServerSideGetRowsParams) => {
-            handleParam(params)
             console.log(params)
+            handleParam(params)
             // eslint-disable-next-line no-param-reassign
             params.request.endRow = lastRow
             // eslint-disable-next-line no-param-reassign
@@ -348,13 +348,12 @@ export default function Findings() {
     useEffect(() => {
         if (tableParam?.request.startRow === lastRow) {
             const list = findings?.findings
-            if (list) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                setSortKey(list[list?.length - 1].sortKey[0] || '')
-                setLastRow(tableParam?.request.endRow || 0)
-            }
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            setSortKey(list[list?.length - 1].sortKey[0] || '')
+            setLastRow(tableParam?.request.endRow || 0)
+            console.log(lastRow)
             sendNow()
         }
     }, [tableParam])

@@ -83,3 +83,7 @@ code {
     align-items: center;
     gap: 8px;
 }
+
+.ag-paging-page-size {
+    display: none;
+}
