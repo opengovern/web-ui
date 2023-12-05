@@ -252,7 +252,7 @@ export default function Assets() {
             pageNumber: 1,
             sortBy: 'count',
         })
-    console.log(servicesResponse)
+
     return (
         <Layout currentPage="assets">
             <Header datePicker filter />
