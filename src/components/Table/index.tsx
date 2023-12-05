@@ -153,7 +153,10 @@ export default function Table<TData = any, TValue = any>({
                 v.filter = 'agNumberColumnFilter'
                 v.cellDataType = 'text'
                 v.valueFormatter = (param: any) => {
-                    return exactPriceDisplay(String(param.value)) || ''
+                    return (
+                        exactPriceDisplay(String(param.value)) ||
+                        'Not available'
+                    )
                 }
             } else if (item.type === 'number') {
                 v.filter = 'agNumberColumnFilter'
@@ -161,7 +164,7 @@ export default function Table<TData = any, TValue = any>({
                 v.valueFormatter = (param: any) => {
                     return param.value || param.value === 0
                         ? numberGroupedDisplay(String(param.value))
-                        : ''
+                        : 'Not available'
                 }
             } else if (item.type === 'date') {
                 v.filter = 'agDateColumnFilter'
@@ -182,7 +185,7 @@ export default function Table<TData = any, TValue = any>({
                         }
                         return value
                     }
-                    return ''
+                    return 'Not available'
                 }
             } else if (item.type === 'datetime') {
                 v.filter = 'agDateColumnFilter'
@@ -203,7 +206,7 @@ export default function Table<TData = any, TValue = any>({
                         }
                         return value
                     }
-                    return ''
+                    return 'Not available'
                 }
             } else if (item.type === 'connector') {
                 v.width = 50

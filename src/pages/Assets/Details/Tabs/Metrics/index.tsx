@@ -96,7 +96,6 @@ export const defaultColumns: IColumn<any, any>[] = [
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
-            // eslint-disable-next-line no-nested-ternary
             params.data
                 ? badgeDelta(params.data?.old_count, params.data?.count)
                 : badgeDelta(params.value / 100, 0),
