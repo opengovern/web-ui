@@ -5,7 +5,6 @@ import {
     GridOptions,
     GridReadyEvent,
     ICellRendererParams,
-    IDatasource,
     IServerSideDatasource,
     NestedFieldPaths,
     RowClickedEvent,
@@ -55,7 +54,7 @@ interface IProps<TData, TValue> {
     columns: IColumn<TData, TValue>[]
     rowData?: TData[] | undefined
     pinnedRow?: TData[] | undefined
-    serverSideDatasource?: IServerSideDatasource | IDatasource | undefined
+    serverSideDatasource?: IServerSideDatasource | undefined
     onGridReady?: (event: GridReadyEvent<TData>) => void
     onCellClicked?: (event: CellClickedEvent<TData>) => void
     onRowClicked?: (event: RowClickedEvent<TData>) => void
@@ -102,6 +101,14 @@ export default function Table<TData = any, TValue = any>({
             }
         }
     }
+
+    useEffect(() => {
+        if (loading) {
+            gridRef.current?.api?.showLoadingOverlay()
+        } else {
+            gridRef.current?.api?.hideOverlay()
+        }
+    }, [loading])
 
     const saveVisibility = () => {
         if (visibility.current) {
@@ -211,48 +218,28 @@ export default function Table<TData = any, TValue = any>({
     useEffect(() => {
         gridRef.current?.api?.setGridOption('columnDefs', buildColumnDef())
     }, [columns])
-
     useEffect(() => {
-        if (loading) {
-            gridRef.current?.api?.showLoadingOverlay()
-        } else {
-            gridRef.current?.api?.hideOverlay()
+        if (pinnedRow) {
+            gridRef.current?.api?.setGridOption('pinnedTopRowData', pinnedRow)
         }
-    }, [loading])
-
-    useEffect(() => {
-        gridRef.current?.api?.setGridOption('pinnedTopRowData', pinnedRow)
     }, [pinnedRow])
-
     useEffect(() => {
         if (rowData) {
             gridRef.current?.api?.setGridOption('rowData', rowData || [])
         }
     }, [rowData])
-
     useEffect(() => {
         if (serverSideDatasource) {
-            // gridRef.current?.api?.setGridOption(
-            //     'serverSideDatasource',
-            //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //     // @ts-ignore
-            //     serverSideDatasource
-            // )
             gridRef.current?.api?.setGridOption(
-                'datasource',
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
+                'serverSideDatasource',
                 serverSideDatasource
             )
         }
     }, [serverSideDatasource])
 
     const gridOptions: GridOptions = {
-        rowModelType: serverSideDatasource ? 'infinite' : 'clientSide',
-        infiniteInitialRowCount: 100,
-        maxBlocksInCache: 1000,
-        pagination: !serverSideDatasource,
-        cacheOverflowSize: 2,
+        rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
+        pagination: true,
         paginationPageSize: 25,
         rowSelection: 'multiple',
         suppressExcelExport: true,
@@ -296,7 +283,7 @@ export default function Table<TData = any, TValue = any>({
     return (
         <Flex
             flexDirection="col"
-            className={`w-full ${fullHeight ? 'max-h-full' : ''}`}
+            className={`w-full ${fullHeight ? 'h-full' : ''}`}
         >
             <Flex
                 className={
@@ -327,13 +314,14 @@ export default function Table<TData = any, TValue = any>({
             </Flex>
             <div
                 className={`w-full ag-theme-alpine ${
-                    fullHeight ? 'h-[700px]' : ''
+                    fullHeight ? 'h-full' : ''
                 }`}
             >
                 <AgGridReact
                     ref={gridRef}
-                    // domLayout="autoHeight"
+                    domLayout="autoHeight"
                     gridOptions={gridOptions}
+                    // rowData={rowData}
                 />
             </div>
         </Flex>

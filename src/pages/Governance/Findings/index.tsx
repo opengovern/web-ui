@@ -10,8 +10,6 @@ import {
 } from '@tremor/react'
 import { useEffect, useMemo, useState } from 'react'
 import {
-    IDatasource,
-    IGetRowsParams,
     IServerSideDatasource,
     RowClickedEvent,
     SortModelItem,
@@ -184,31 +182,32 @@ const datasource = (
     handleParam: any
 ) => {
     return {
-        getRows: (params: IGetRowsParams) => {
+        getRows: (params: IServerSideGetRowsParams) => {
             handleParam(params)
-            // console.log(params)
-            if (params.sortModel.length > 0) {
+            if (params.request.sortModel.length > 0) {
                 if (sort.length > 0) {
                     if (
-                        params.sortModel[0].colId !== sort[0].colId ||
-                        params.sortModel[0].sort !== sort[0].sort
+                        params.request.sortModel[0].colId !== sort[0].colId ||
+                        params.request.sortModel[0].sort !== sort[0].sort
                     ) {
-                        recall([params.sortModel[0]])
+                        recall([params.request.sortModel[0]])
                     }
                 } else {
-                    recall([params.sortModel[0]])
+                    recall([params.request.sortModel[0]])
                 }
             } else if (sort.length > 0) {
                 recall([])
             }
             if (!loading && result) {
-                params.successCallback(result.findings || [])
+                params.success({
+                    rowData: result?.findings || [],
+                    rowCount: result?.totalCount || 0,
+                })
             }
             if (err) {
-                params.failCallback()
+                params.fail()
             }
         },
-        lastRow: result?.totalCount,
     }
 }
 
@@ -247,8 +246,8 @@ export default function Findings() {
         'non-compliant'
     )
     const [sortKey, setSortKey] = useState('')
-    const [tableParam, setTableParam] = useState<IGetRowsParams>()
-    const [lastRow, setLastRow] = useState(100)
+    const [tableParam, setTableParam] = useState<IServerSideGetRowsParams>()
+    const [lastPage, setLastPage] = useState(100)
 
     const connectionCheckbox = useCheckboxState({ state: [] })
     const benchmarkCheckbox = useCheckboxState({ state: [] })
@@ -330,32 +329,31 @@ export default function Findings() {
         })
     const { response: filters, isLoading: filtersLoading } =
         useComplianceApiV1FindingsFiltersCreate({})
-    // console.log(filters)
+    console.log(filters)
 
     const getData = (sort: SortModelItem[]) => {
         setSortModel(sort)
         sendNow()
     }
 
-    const handleParam = (param: IGetRowsParams) => {
+    const handleParam = (param: IServerSideGetRowsParams) => {
         setTableParam(param)
     }
 
     useEffect(() => {
-        if (tableParam?.startRow === lastRow) {
+        if (tableParam?.request.startRow === lastPage) {
             const list = findings?.findings
             if (list) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 // eslint-disable-next-line no-unsafe-optional-chaining
                 setSortKey(list[list?.length - 1].sortKey[0] || '')
-                setLastRow(tableParam?.endRow || 100)
             }
             sendNow()
         }
     }, [tableParam])
 
-    const ds: IDatasource = useMemo(
+    const ds: IServerSideDatasource = useMemo(
         () =>
             datasource(
                 sortModel,
@@ -679,10 +677,7 @@ export default function Findings() {
                         }}
                         serverSideDatasource={ds}
                         loading={isLoading}
-                        options={{
-                            rowModelType: 'infinite',
-                        }}
-                        fullHeight
+                        options={{ rowModelType: 'serverSide' }}
                     />
                     <FindingDetail
                         finding={finding}
