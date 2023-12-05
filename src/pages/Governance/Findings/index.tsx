@@ -173,34 +173,49 @@ const severity = ['Critical', 'High', 'Medium', 'Low', 'None', 'Passed']
 
 const datasource = (
     sort: SortModelItem[],
-    recall: any,
+    getSortData: any,
+    lastRow: number,
+    getPaginationData: any,
     result:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse
         | undefined,
     loading: boolean,
-    err: boolean,
-    handleParam: any
+    err: boolean
 ) => {
     return {
         getRows: (params: IServerSideGetRowsParams) => {
-            handleParam(params)
             if (params.request.sortModel.length > 0) {
                 if (sort.length > 0) {
                     if (
                         params.request.sortModel[0].colId !== sort[0].colId ||
                         params.request.sortModel[0].sort !== sort[0].sort
                     ) {
-                        recall([params.request.sortModel[0]])
+                        getSortData([params.request.sortModel[0]])
                     }
                 } else {
-                    recall([params.request.sortModel[0]])
+                    getSortData([params.request.sortModel[0]])
                 }
             } else if (sort.length > 0) {
-                recall([])
+                getSortData([])
+            }
+            if (params.request.startRow === lastRow) {
+                getPaginationData(params.request.endRow)
             }
             if (!loading && result) {
+                const list = []
+                const { findings } = result
+                if (findings) {
+                    for (let i = 0; i < findings.length; i += 1) {
+                        list.push({
+                            ...findings[i],
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            id: findings[i].sortKey[0],
+                        })
+                    }
+                }
                 params.success({
-                    rowData: result?.findings || [],
+                    rowData: list,
                     rowCount: result?.totalCount || 0,
                 })
             }
@@ -246,7 +261,6 @@ export default function Findings() {
         'non-compliant'
     )
     const [sortKey, setSortKey] = useState('')
-    const [tableParam, setTableParam] = useState<IServerSideGetRowsParams>()
     const [lastRow, setLastRow] = useState(100)
 
     const connectionCheckbox = useCheckboxState({ state: [] })
@@ -330,37 +344,32 @@ export default function Findings() {
     const { response: filters, isLoading: filtersLoading } =
         useComplianceApiV1FindingsFiltersCreate({})
 
-    const getData = (sort: SortModelItem[]) => {
+    const getSortData = (sort: SortModelItem[]) => {
         setSortModel(sort)
         sendNow()
     }
-
-    const handleParam = (param: IServerSideGetRowsParams) => {
-        setTableParam(param)
-    }
-
-    useEffect(() => {
-        if (tableParam?.request.startRow === lastRow) {
-            const list = findings?.findings
-            if (list) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                // eslint-disable-next-line no-unsafe-optional-chaining
-                setSortKey(list[list?.length - 1].sortKey[0] || '')
-            }
-            sendNow()
+    const getPaginationData = (endRow: number) => {
+        const list = findings?.findings
+        if (list) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            // eslint-disable-next-line no-unsafe-optional-chaining
+            setSortKey(list[list?.length - 1].sortKey[0] || '')
+            setLastRow(endRow)
         }
-    }, [tableParam])
+        sendNow()
+    }
 
     const ds: IServerSideDatasource = useMemo(
         () =>
             datasource(
                 sortModel,
-                getData,
+                getSortData,
+                lastRow,
+                getPaginationData,
                 findings,
                 isLoading,
-                error,
-                handleParam
+                error
             ),
         [findings, sortModel]
     )

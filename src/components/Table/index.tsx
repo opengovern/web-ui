@@ -239,6 +239,7 @@ export default function Table<TData = any, TValue = any>({
 
     const gridOptions: GridOptions = {
         rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
+        cacheBlockSize: 25,
         pagination: true,
         paginationPageSize: 25,
         rowSelection: 'multiple',
