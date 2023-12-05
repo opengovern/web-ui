@@ -20,12 +20,12 @@ export const badgeTypeByDelta = (
 
 export const percentageByChange = (oldValue?: number, newValue?: number) => {
     const changes =
-        (((newValue || 0) - (oldValue || 0)) / (oldValue || 0)) * 100.0
-    return Math.abs(changes).toFixed(2)
+        (((newValue || 0) - (oldValue || 0)) / (newValue || 1)) * 100
+    return changes.toFixed(2)
 }
 
 export const deltaChange = (oldValue?: number, newValue?: number) => {
-    return Math.abs((newValue || 0) - (oldValue || 0))
+    return (newValue || 0) - (oldValue || 0)
 }
 
 export const badgeDelta = (

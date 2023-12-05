@@ -56,7 +56,7 @@ export const rowGenerator = (data: any) => {
 
 export const defaultColumns: IColumn<any, any>[] = [
     {
-        headerName: 'Cloud Provider',
+        headerName: 'Cloud provider',
         field: 'connectors',
         type: 'string',
         filter: true,
@@ -65,7 +65,7 @@ export const defaultColumns: IColumn<any, any>[] = [
     },
     {
         field: 'name',
-        headerName: 'Resource name',
+        headerName: 'Resource',
         resizable: true,
         filter: true,
         sortable: true,
@@ -75,7 +75,8 @@ export const defaultColumns: IColumn<any, any>[] = [
         field: 'count',
         resizable: true,
         sortable: true,
-        headerName: 'Count',
+        headerName: 'Metric count',
+        aggFunc: 'sum',
         filter: true,
         type: 'number',
     },
@@ -84,37 +85,39 @@ export const defaultColumns: IColumn<any, any>[] = [
         resizable: true,
         sortable: true,
         hide: true,
-        headerName: 'Old count',
+        headerName: 'Old metric count',
+        aggFunc: 'sum',
         filter: true,
         type: 'number',
     },
     {
         headerName: 'Change (%)',
         field: 'change_percent',
+        aggFunc: 'sum',
         sortable: true,
         type: 'number',
         filter: true,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
-            params.data &&
-            (params.data?.old_count
+            // eslint-disable-next-line no-nested-ternary
+            params.data
                 ? badgeDelta(params.data?.old_count, params.data?.count)
-                : badgeDelta(1, 2)),
+                : badgeDelta(params.value / 100, 0),
     },
     {
         headerName: 'Change (Δ)',
         field: 'change_delta',
+        aggFunc: 'sum',
         sortable: true,
         type: 'number',
         hide: true,
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
-            params.data &&
-            badgeDelta(params.data?.old_count, params.data?.count, true),
-        valueFormatter: (params: ValueFormatterParams) =>
-            `${(params.data?.old_count || 0) - (params.data?.count || 0)}`,
+            params.data
+                ? badgeDelta(params.data?.old_count, params.data?.count, true)
+                : badgeDelta(params.value, 0, true),
     },
 ]
 
