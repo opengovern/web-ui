@@ -56,12 +56,12 @@ export const defaultColumns: IColumn<any, any>[] = [
         field: 'connectors',
         type: 'string',
         filter: true,
-        width: 120,
+        width: 140,
         enableRowGroup: true,
     },
     {
         field: 'name',
-        headerName: 'Resource',
+        headerName: 'Metric',
         resizable: true,
         filter: true,
         sortable: true,
@@ -71,7 +71,7 @@ export const defaultColumns: IColumn<any, any>[] = [
         field: 'count',
         resizable: true,
         sortable: true,
-        headerName: 'Metric count',
+        headerName: 'Resource count',
         aggFunc: 'sum',
         filter: true,
         type: 'number',
@@ -81,7 +81,7 @@ export const defaultColumns: IColumn<any, any>[] = [
         resizable: true,
         sortable: true,
         hide: true,
-        headerName: 'Old metric count',
+        headerName: 'Old resource count',
         aggFunc: 'sum',
         filter: true,
         type: 'number',
@@ -96,7 +96,6 @@ export const defaultColumns: IColumn<any, any>[] = [
         cellRenderer: (
             params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgInventoryApiMetric>
         ) =>
-            // eslint-disable-next-line no-nested-ternary
             params.data
                 ? badgeDelta(params.data?.old_count, params.data?.count)
                 : badgeDelta(params.value / 100, 0),

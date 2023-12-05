@@ -31,10 +31,10 @@ import { chartData } from '../InsightDetail'
 
 const columns: IColumn<any, any>[] = [
     {
-        headerName: 'Cloud Provider',
+        headerName: 'Cloud provider',
         field: 'connector',
         type: 'string',
-        width: 120,
+        width: 140,
         enableRowGroup: true,
     },
     {

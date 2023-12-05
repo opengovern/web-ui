@@ -252,7 +252,7 @@ export default function Assets() {
             pageNumber: 1,
             sortBy: 'count',
         })
-
+    console.log(resourceTrend)
     return (
         <Layout currentPage="assets">
             <Header datePicker filter />
@@ -271,7 +271,10 @@ export default function Assets() {
                             <SummaryCard
                                 title="Resources"
                                 metric={servicesResponse?.total_count}
-                                metricPrev={servicesResponse?.total_old_count}
+                                metricPrev={
+                                    servicesResponse?.total_old_count ||
+                                    (resourceTrend && resourceTrend[0].count)
+                                }
                                 url="assets-details#metrics"
                                 loading={servicesResponseLoading}
                                 border={false}
@@ -279,10 +282,12 @@ export default function Assets() {
                         }
                         secondKPI={
                             <SummaryCard
-                                title="Accounts"
+                                title="Cloud Accounts"
                                 metric={accountsResponse?.totalOnboardedCount}
                                 metricPrev={
-                                    accountsResponse?.totalDiscoveredCount
+                                    accountsResponse?.totalDiscoveredCount ||
+                                    (resourceTrend &&
+                                        resourceTrend[0].totalConnectionCount)
                                 }
                                 url="assets-details#cloud-accounts"
                                 loading={accountsResponseLoading}

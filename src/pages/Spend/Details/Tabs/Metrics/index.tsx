@@ -90,7 +90,7 @@ export const defaultColumns: IColumn<any, any>[] = [
         field: 'connector',
         headerName: 'Cloud provider',
         type: 'string',
-        width: 115,
+        width: 140,
         enableRowGroup: true,
         filter: true,
         resizable: true,
@@ -153,7 +153,7 @@ export const gridOptions: GridOptions = {
     groupIncludeTotalFooter: true,
 }
 
-export default function Services({
+export default function Metrics({
     activeTimeRange,
     connections,
     selectedGranularity,
@@ -275,7 +275,7 @@ export default function Services({
 
     return (
         <Table
-            title={isSummary ? 'Summary' : 'Services'}
+            title="Metric list"
             downloadable
             id={isSummary ? 'spend_summary_table' : 'spend_service_table'}
             loading={isLoading}

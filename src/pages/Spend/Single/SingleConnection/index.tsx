@@ -60,7 +60,7 @@ import {
     gridOptions,
     rowGenerator,
     defaultColumns,
-} from '../../Details/Tabs/Services'
+} from '../../Details/Tabs/Metrics'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../api/api'
 
 interface ISingle {

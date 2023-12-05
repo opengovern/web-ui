@@ -1,11 +1,16 @@
 import { useNavigate } from 'react-router-dom'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { Dayjs } from 'dayjs'
-import { ValueFormatterParams } from 'ag-grid-community'
+import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import Table, { IColumn } from '../../../../../components/Table'
 import { IFilter, isDemoAtom, notificationAtom } from '../../../../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
 import { options } from '../Metrics'
+import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiMetric,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+} from '../../../../../api/api'
+import { badgeDelta } from '../../../../../utilities/deltaType'
 
 interface IConnections {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -17,9 +22,9 @@ const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'connector',
-            headerName: 'Cloud Provider',
+            headerName: 'Cloud provider',
             type: 'string',
-            width: 120,
+            width: 140,
             sortable: true,
             filter: true,
             enableRowGroup: true,
@@ -48,15 +53,61 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'resourceCount',
-            headerName: 'Resources',
+            headerName: 'Resource count',
             type: 'number',
+            aggFunc: 'sum',
             resizable: true,
             sortable: true,
+        },
+        {
+            field: 'oldResourceCount',
+            headerName: 'Old resource count',
+            type: 'number',
+            aggFunc: 'sum',
+            hide: true,
+            resizable: true,
+            sortable: true,
+        },
+        {
+            headerName: 'Change (%)',
+            field: 'change_percent',
+            aggFunc: 'sum',
+            sortable: true,
+            type: 'number',
+            filter: true,
+            cellRenderer: (
+                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+            ) =>
+                params.data
+                    ? badgeDelta(
+                          params.data?.oldResourceCount,
+                          params.data?.resourceCount
+                      )
+                    : badgeDelta(params.value / 100, 0),
+        },
+        {
+            headerName: 'Change (Δ)',
+            field: 'change_delta',
+            aggFunc: 'sum',
+            sortable: true,
+            type: 'number',
+            hide: true,
+            cellRenderer: (
+                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+            ) =>
+                params.data
+                    ? badgeDelta(
+                          params.data?.oldResourceCount,
+                          params.data?.resourceCount,
+                          true
+                      )
+                    : badgeDelta(params.value, 0, true),
         },
         {
             field: 'lastInventory',
             headerName: 'Last inventory',
             type: 'datetime',
+            hide: true,
             resizable: true,
             sortable: true,
         },
@@ -110,7 +161,7 @@ export default function CloudAccounts({
 
     return (
         <Table
-            title="Cloud accounts list"
+            title="Cloud account list"
             id="asset_connection_table"
             columns={columns(isDemo)}
             downloadable
