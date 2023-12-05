@@ -231,8 +231,8 @@ export default function SingleSpendMetric({
             const defaultCols: ColDef[] = [
                 {
                     field: 'connector',
-                    headerName: 'Cloud Provider',
-                    width: 120,
+                    headerName: 'Cloud provider',
+                    width: 140,
                     enableRowGroup: true,
                     resizable: true,
                     filter: true,

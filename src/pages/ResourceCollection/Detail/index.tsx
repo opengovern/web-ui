@@ -109,9 +109,9 @@ const barData = (
 
 const complianceColumns: IColumn<any, any>[] = [
     {
-        width: 120,
+        width: 140,
         field: 'connectors',
-        headerName: 'Cloud Provider',
+        headerName: 'Cloud provider',
         sortable: true,
         filter: true,
         enableRowGroup: true,

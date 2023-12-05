@@ -56,7 +56,7 @@ export const defaultColumns: IColumn<any, any>[] = [
         field: 'connectors',
         type: 'string',
         filter: true,
-        width: 120,
+        width: 140,
         enableRowGroup: true,
     },
     {

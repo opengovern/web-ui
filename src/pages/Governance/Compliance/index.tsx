@@ -71,9 +71,9 @@ export const benchmarkList = (ben: any) => {
 
 export const activeColumns: IColumn<any, any>[] = [
     {
-        width: 120,
+        width: 140,
         field: 'connectors',
-        headerName: 'Cloud Provider',
+        headerName: 'Cloud provider',
         sortable: true,
         filter: true,
         enableRowGroup: true,
@@ -167,9 +167,9 @@ export const activeColumns: IColumn<any, any>[] = [
 
 const notActiveColumns: IColumn<any, any>[] = [
     {
-        width: 120,
+        width: 140,
         field: 'connectors',
-        headerName: 'Cloud Provider',
+        headerName: 'Cloud provider',
         sortable: true,
         filter: true,
         enableRowGroup: true,

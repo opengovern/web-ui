@@ -90,7 +90,7 @@ export const defaultColumns: IColumn<any, any>[] = [
         field: 'connector',
         headerName: 'Cloud provider',
         type: 'string',
-        width: 115,
+        width: 140,
         enableRowGroup: true,
         filter: true,
         resizable: true,

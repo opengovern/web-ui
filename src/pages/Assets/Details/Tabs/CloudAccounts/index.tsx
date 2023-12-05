@@ -17,9 +17,9 @@ const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'connector',
-            headerName: 'Cloud Provider',
+            headerName: 'Cloud provider',
             type: 'string',
-            width: 120,
+            width: 140,
             sortable: true,
             filter: true,
             enableRowGroup: true,

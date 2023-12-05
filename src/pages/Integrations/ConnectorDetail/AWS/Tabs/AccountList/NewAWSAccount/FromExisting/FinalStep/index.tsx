@@ -13,7 +13,7 @@ interface IStep {
 const columns: ColDef[] = [
     {
         field: 'connector',
-        headerName: 'Cloud Provider',
+        headerName: 'Cloud provider',
         width: 50,
         sortable: true,
         filter: true,

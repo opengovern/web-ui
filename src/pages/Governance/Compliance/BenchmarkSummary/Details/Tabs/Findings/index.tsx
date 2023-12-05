@@ -24,9 +24,9 @@ interface IFinder {
 const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
-            width: 120,
+            width: 140,
             field: 'connector',
-            headerName: 'Cloud Provider',
+            headerName: 'Cloud provider',
             sortable: true,
             filter: true,
             enableRowGroup: true,
