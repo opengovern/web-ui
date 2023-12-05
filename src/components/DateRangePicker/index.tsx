@@ -284,6 +284,7 @@ export default function DateRangePicker() {
             sendNow()
         }
         if (
+            !isSpend &&
             currentWorkspace &&
             dayjs(currentWorkspace[0].createdAt).valueOf() >
                 activeTimeRange.start.valueOf()
