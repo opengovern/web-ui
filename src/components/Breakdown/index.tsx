@@ -53,23 +53,13 @@ export default function Breakdown({
                             <Tab className="pt-0.5 pb-1">
                                 <Text>
                                     {dateDisplay(
-                                        dayjs.utc(
-                                            activeTime?.start
-                                                .startOf('day')
-                                                .toString()
-                                        )
+                                        activeTime?.start.startOf('day')
                                     )}
                                 </Text>
                             </Tab>
                             <Tab className="pt-0.5 pb-1">
                                 <Text>
-                                    {dateDisplay(
-                                        dayjs.utc(
-                                            activeTime?.end
-                                                .endOf('day')
-                                                .toString()
-                                        )
-                                    )}
+                                    {dateDisplay(activeTime?.end.endOf('day'))}
                                 </Text>
                             </Tab>
                         </TabList>
