@@ -79,7 +79,7 @@ export default function Trends({
     isCost,
 }: ITrends) {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
-        trend && trend?.length < 2 ? 'bar' : 'line'
+        'bar'
     )
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedGranularity, setSelectedGranularity] = useState<
@@ -101,13 +101,18 @@ export default function Trends({
             onGranularityChange(selectedGranularity)
         }
     }, [selectedGranularity])
-
-    const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
-
     useEffect(() => {
         if (selectedIndex === 0) setSelectedChart('line')
         if (selectedIndex === 1) setSelectedChart('bar')
     }, [selectedIndex])
+    useEffect(() => {
+        if (trend && trend?.length < 2) {
+            setSelectedIndex(1)
+        }
+    }, [trend])
+
+    const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
+
     return (
         <Card>
             <Grid numItems={5} className="gap-4">
