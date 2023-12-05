@@ -181,7 +181,7 @@ export const getConnections = (con: IFilter) => {
     if (con.connections.length) {
         return `Spend across ${con.connections.length} accounts`
     }
-    return 'Total cost'
+    return 'Total Spend'
 }
 
 export default function Spend() {
@@ -435,7 +435,7 @@ export default function Spend() {
                         <Col numColSpan={3} className="h-full">
                             <Grid numItems={2} className="w-full h-full gap-4">
                                 <ListCard
-                                    title="Top Accounts"
+                                    title="Top Cloud Accounts"
                                     loading={accountCostLoading}
                                     items={topAccounts(accountCostResponse)}
                                     url="spend-details#cloud-accounts"
@@ -443,7 +443,7 @@ export default function Spend() {
                                     isPrice
                                 />
                                 <ListCard
-                                    title="Top Services"
+                                    title="Top Spend Metrics"
                                     loading={serviceCostLoading}
                                     items={topServices(serviceCostResponse)}
                                     url="spend-details#services"
