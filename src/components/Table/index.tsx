@@ -238,6 +238,7 @@ export default function Table<TData = any, TValue = any>({
     }, [serverSideDatasource])
 
     const gridOptions: GridOptions = {
+        columnDefs: buildColumnDef(),
         rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
         cacheBlockSize: 100,
         maxBlocksInCache: 1000,
