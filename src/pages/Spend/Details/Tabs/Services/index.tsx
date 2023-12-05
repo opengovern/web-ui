@@ -295,6 +295,7 @@ export default function Services({
             }}
         >
             <Select
+                enableClear={false}
                 value={selectedGranularity}
                 placeholder={
                     selectedGranularity

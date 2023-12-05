@@ -548,6 +548,7 @@ export default function ResourceCollectionDetail() {
                                         className="gap-4"
                                     >
                                         <Select
+                                            enableClear={false}
                                             value={selectedGranularity}
                                             placeholder={capitalizeFirstLetter(
                                                 selectedGranularity

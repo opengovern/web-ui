@@ -130,6 +130,7 @@ export default function Trends({
                     <Flex justifyContent="end" className="gap-4">
                         {!!onGranularityChange && (
                             <Select
+                                enableClear={false}
                                 value={selectedGranularity}
                                 placeholder={capitalizeFirstLetter(
                                     selectedGranularity

@@ -276,6 +276,7 @@ export default function StepThree({ onNext, onBack }: IStep) {
                 <Flex>
                     <Text className="text-gray-800">Alert type</Text>
                     <Select
+                        enableClear={false}
                         className="w-2/3"
                         value={alert}
                         onValueChange={setAlert}

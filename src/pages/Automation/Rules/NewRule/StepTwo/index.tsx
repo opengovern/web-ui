@@ -129,6 +129,7 @@ export default function StepTwo({ onNext, onBack }: IStep) {
                                     <Spinner />
                                 ) : (
                                     <Select
+                                        enableClear={false}
                                         value={connectionGroup}
                                         onChange={(v) => {
                                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment

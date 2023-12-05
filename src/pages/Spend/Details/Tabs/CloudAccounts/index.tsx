@@ -216,6 +216,7 @@ export default function CloudAccounts({
             }}
         >
             <Select
+                enableClear={false}
                 value={selectedGranularity}
                 placeholder={
                     selectedGranularity

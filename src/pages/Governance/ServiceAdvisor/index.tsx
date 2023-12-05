@@ -64,6 +64,7 @@ export default function ServiceAdvisor() {
                 <Col numColSpan={1}>
                     <Flex className="h-full">
                         <Select
+                            enableClear={false}
                             value={selectedProvider}
                             onValueChange={setSelectedProvider}
                             placeholder="Select provider..."
