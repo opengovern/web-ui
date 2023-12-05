@@ -181,7 +181,6 @@ export default function SingleMetric({
                 .count,
         [queryResponse, isDemo]
     )
-    console.log(selectedRow)
 
     const showTable = () => {
         return (
@@ -512,12 +511,6 @@ export default function SingleMetric({
                                 <Text>Resource name</Text>
                                 <Text className="text-gray-800">
                                     {selectedRow?.name}
-                                </Text>
-                            </ListItem>
-                            <ListItem className="py-6">
-                                <Text>Cloud account ID</Text>
-                                <Text className="text-gray-800">
-                                    {selectedRow?.connection_id}
                                 </Text>
                             </ListItem>
                         </List>

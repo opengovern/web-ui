@@ -247,7 +247,7 @@ export default function Findings() {
     )
     const [sortKey, setSortKey] = useState('')
     const [tableParam, setTableParam] = useState<IServerSideGetRowsParams>()
-    const [lastPage, setLastPage] = useState(100)
+    const [lastRow, setLastRow] = useState(100)
 
     const connectionCheckbox = useCheckboxState({ state: [] })
     const benchmarkCheckbox = useCheckboxState({ state: [] })
@@ -329,7 +329,6 @@ export default function Findings() {
         })
     const { response: filters, isLoading: filtersLoading } =
         useComplianceApiV1FindingsFiltersCreate({})
-    console.log(filters)
 
     const getData = (sort: SortModelItem[]) => {
         setSortModel(sort)
@@ -341,7 +340,7 @@ export default function Findings() {
     }
 
     useEffect(() => {
-        if (tableParam?.request.startRow === lastPage) {
+        if (tableParam?.request.startRow === lastRow) {
             const list = findings?.findings
             if (list) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

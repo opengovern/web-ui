@@ -110,22 +110,6 @@ export default function Table<TData = any, TValue = any>({
         }
     }, [loading])
 
-    useEffect(() => {
-        gridRef.current?.api?.setPinnedTopRowData(pinnedRow)
-    }, [pinnedRow])
-
-    useEffect(() => {
-        if (rowData) {
-            gridRef.current?.api?.setRowData(rowData || [])
-        }
-    }, [rowData])
-
-    useEffect(() => {
-        if (serverSideDatasource) {
-            gridRef.current?.api?.setServerSideDatasource(serverSideDatasource)
-        }
-    }, [serverSideDatasource])
-
     const saveVisibility = () => {
         if (visibility.current) {
             const o = Object.fromEntries(visibility.current.entries())
@@ -232,12 +216,28 @@ export default function Table<TData = any, TValue = any>({
     }
 
     useEffect(() => {
-        gridRef.current?.api?.setColumnDefs(buildColumnDef())
+        gridRef.current?.api?.setGridOption('columnDefs', buildColumnDef())
     }, [columns])
+    useEffect(() => {
+        if (pinnedRow) {
+            gridRef.current?.api?.setGridOption('pinnedTopRowData', pinnedRow)
+        }
+    }, [pinnedRow])
+    useEffect(() => {
+        if (rowData) {
+            gridRef.current?.api?.setGridOption('rowData', rowData || [])
+        }
+    }, [rowData])
+    useEffect(() => {
+        if (serverSideDatasource) {
+            gridRef.current?.api?.setGridOption(
+                'serverSideDatasource',
+                serverSideDatasource
+            )
+        }
+    }, [serverSideDatasource])
 
     const gridOptions: GridOptions = {
-        columnDefs: buildColumnDef(),
-        rowData,
         rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
         pagination: true,
         paginationPageSize: 25,
