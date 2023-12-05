@@ -60,6 +60,8 @@ interface ITrends {
     secondKPI?: ReactNode
     thirdKPI?: ReactNode
     onGranularityChange?: (gran: 'monthly' | 'daily' | 'yearly') => void
+    isPercent?: boolean
+    isCost?: boolean
 }
 
 export default function Trends({
@@ -73,6 +75,8 @@ export default function Trends({
     trend,
     trendName,
     onGranularityChange,
+    isPercent,
+    isCost,
 }: ITrends) {
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
         trend && trend?.length < 2 ? 'bar' : 'line'
@@ -191,6 +195,8 @@ export default function Trends({
                 chartData={chartData}
                 chartType={selectedChart}
                 loading={loading}
+                isPercent={isPercent}
+                isCost={isCost}
                 // visualMap={
                 //     generateVisualMap(
                 //         resourceTrendChart(resourceTrend).flag,

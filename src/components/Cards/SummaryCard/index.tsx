@@ -22,7 +22,7 @@ type IProps = {
     onRefresh?: () => void
     isExact?: boolean
     isPrice?: boolean
-    isPercentage?: boolean
+    isPercent?: boolean
 }
 
 export default function SummaryCard({
@@ -38,7 +38,7 @@ export default function SummaryCard({
     onRefresh,
     isExact = false,
     isPrice = false,
-    isPercentage = false,
+    isPercent = false,
 }: IProps) {
     const navigate = useNavigate()
 
@@ -77,9 +77,9 @@ export default function SummaryCard({
                             ? `${isPrice ? '$' : ''}${numberDisplay(
                                   metric,
                                   isExact && isPrice ? 2 : 0
-                              )}${isPercentage ? '%' : ''}`
+                              )}${isPercent ? '%' : ''}`
                             : `${isPrice ? '$' : ''}${numericDisplay(metric)}${
-                                  isPercentage ? '%' : ''
+                                  isPercent ? '%' : ''
                               }`}
                     </Metric>
                     {!!unit && <Text className="mb-0.5">{unit}</Text>}
@@ -90,10 +90,10 @@ export default function SummaryCard({
                                 ? `${isPrice ? '$' : ''}${numberDisplay(
                                       metricPrev,
                                       isExact && isPrice ? 2 : 0
-                                  )}${isPercentage ? '%' : ''}`
+                                  )}${isPercent ? '%' : ''}`
                                 : `${isPrice ? '$' : ''}${numericDisplay(
                                       metricPrev
-                                  )}${isPercentage ? '%' : ''}`}
+                                  )}${isPercent ? '%' : ''}`}
                         </Text>
                     )}
                 </Flex>
