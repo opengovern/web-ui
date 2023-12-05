@@ -46,7 +46,7 @@ export default function SpendDetails() {
 
     return (
         <Layout currentPage="spend">
-            <Header breadCrumb={['Details']} filter datePicker />
+            <Header breadCrumb={['Spend detail']} filter datePicker />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#services')}>Services</Tab>
