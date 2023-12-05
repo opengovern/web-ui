@@ -10,6 +10,8 @@ import {
 } from '@tremor/react'
 import { useEffect, useMemo, useState } from 'react'
 import {
+    IDatasource,
+    IGetRowsParams,
     IServerSideDatasource,
     RowClickedEvent,
     SortModelItem,
@@ -182,34 +184,31 @@ const datasource = (
     handleParam: any
 ) => {
     return {
-        getRows: (params: IServerSideGetRowsParams) => {
+        getRows: (params: IGetRowsParams) => {
             handleParam(params)
-            if (params.request.sortModel.length > 0) {
+            // console.log(params)
+            if (params.sortModel.length > 0) {
                 if (sort.length > 0) {
                     if (
-                        params.request.sortModel[0].colId !== sort[0].colId ||
-                        params.request.sortModel[0].sort !== sort[0].sort
+                        params.sortModel[0].colId !== sort[0].colId ||
+                        params.sortModel[0].sort !== sort[0].sort
                     ) {
-                        recall([params.request.sortModel[0]])
+                        recall([params.sortModel[0]])
                     }
                 } else {
-                    recall([params.request.sortModel[0]])
+                    recall([params.sortModel[0]])
                 }
             } else if (sort.length > 0) {
                 recall([])
             }
             if (!loading && result) {
-                params.success({
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    rowData: result?.findings,
-                    rowCount: result?.totalCount || 0,
-                })
+                params.successCallback(result.findings || [])
             }
             if (err) {
-                params.fail()
+                params.failCallback()
             }
         },
+        lastRow: result?.totalCount,
     }
 }
 
@@ -248,7 +247,7 @@ export default function Findings() {
         'non-compliant'
     )
     const [sortKey, setSortKey] = useState('')
-    const [tableParam, setTableParam] = useState<IServerSideGetRowsParams>()
+    const [tableParam, setTableParam] = useState<IGetRowsParams>()
     const [lastRow, setLastRow] = useState(100)
 
     const connectionCheckbox = useCheckboxState({ state: [] })
@@ -338,26 +337,25 @@ export default function Findings() {
         sendNow()
     }
 
-    const handleParam = (param: IServerSideGetRowsParams) => {
+    const handleParam = (param: IGetRowsParams) => {
         setTableParam(param)
     }
 
     useEffect(() => {
-        if (tableParam?.request.startRow === lastRow) {
+        if (tableParam?.startRow === lastRow) {
             const list = findings?.findings
             if (list) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 // eslint-disable-next-line no-unsafe-optional-chaining
                 setSortKey(list[list?.length - 1].sortKey[0] || '')
-                console.log(tableParam)
-                setLastRow(tableParam?.request.endRow || 100)
+                setLastRow(tableParam?.endRow || 100)
             }
             sendNow()
         }
     }, [tableParam])
 
-    const ds: IServerSideDatasource = useMemo(
+    const ds: IDatasource = useMemo(
         () =>
             datasource(
                 sortModel,
@@ -681,6 +679,10 @@ export default function Findings() {
                         }}
                         serverSideDatasource={ds}
                         loading={isLoading}
+                        options={{
+                            rowModelType: 'infinite',
+                        }}
+                        fullHeight
                     />
                     <FindingDetail
                         finding={finding}
