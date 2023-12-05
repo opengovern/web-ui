@@ -5,8 +5,6 @@ import {
     Flex,
     List,
     ListItem,
-    MultiSelect,
-    MultiSelectItem,
     Tab,
     TabGroup,
     TabList,
@@ -24,10 +22,7 @@ import {
 import { useAtom } from 'jotai'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
-import {
-    useOnboardApiV1ConnectionGroupsList,
-    useOnboardApiV1ConnectionsSummaryList,
-} from '../../api/onboard.gen'
+import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import { filterAtom } from '../../store'
 import { getConnectorIcon } from '../Cards/ConnectorCard'
 import Tag from '../Tag'
@@ -42,6 +37,10 @@ const connectionID = (list: any) => {
     }
     return idList
 }
+
+const compareArrays = (a: any[], b: any[]) =>
+    a.length === b.length &&
+    a.every((element: any, index: number) => element === b[index])
 
 export default function Filter() {
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -81,12 +80,12 @@ export default function Filter() {
     }, [connectionGroup])
 
     const [search, setSearch] = useState('')
-    const { response: groupList, isLoading: groupListLoading } =
-        useOnboardApiV1ConnectionGroupsList()
+    // const { response: groupList, isLoading: groupListLoading } =
+    //     useOnboardApiV1ConnectionGroupsList()
 
     const restFilters = () => {
         setProvider(selectedFilters.provider)
-        setConnections(findConnections)
+        setConnections(findConnections())
         setConnectionGroup(selectedFilters.connectionGroup)
     }
 
@@ -97,10 +96,10 @@ export default function Filter() {
                     selectedFilters.connectionGroup.length
                     ? false
                     : provider === selectedFilters.provider
+            // case 1:
+            //     return connectionGroup === selectedFilters.connectionGroup
             case 1:
-                return connectionGroup === selectedFilters.connectionGroup
-            case 2:
-                return connections === findConnections()
+                return compareArrays(connections, findConnections())
             default:
                 return true
         }
@@ -175,15 +174,19 @@ export default function Filter() {
                             className="rounded-lg"
                         >
                             <TabList variant="solid" className="mb-4">
-                                <Tab className="pt-0.5 pb-1 px-5">Provider</Tab>
-                                <Tab className="pt-0.5 pb-1 px-5">Group</Tab>
                                 <Tab className="pt-0.5 pb-1 px-5">
-                                    Connection
+                                    Cloud Provider
+                                </Tab>
+                                {/* <Tab className="pt-0.5 pb-1 px-5">Group</Tab> */}
+                                <Tab className="pt-0.5 pb-1 px-5">
+                                    Cloud Connections
                                 </Tab>
                             </TabList>
                             <TabPanels className="px-2">
                                 <TabPanel className="mb-[50px]">
-                                    <Title className="mb-3">Provider</Title>
+                                    <Title className="mb-3">
+                                        Cloud Provider
+                                    </Title>
                                     <Flex
                                         justifyContent="start"
                                         className="gap-6"
@@ -232,7 +235,7 @@ export default function Filter() {
                                         </label>
                                     </Flex>
                                 </TabPanel>
-                                <TabPanel>
+                                {/* <TabPanel>
                                     <Flex
                                         justifyContent="start"
                                         alignItems="end"
@@ -289,7 +292,7 @@ export default function Filter() {
                                             />
                                         ))}
                                     </Flex>
-                                </TabPanel>
+                                </TabPanel> */}
                                 <TabPanel>
                                     <Flex
                                         justifyContent="start"
