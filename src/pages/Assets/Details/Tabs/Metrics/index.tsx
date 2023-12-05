@@ -1,8 +1,4 @@
-import {
-    GridOptions,
-    ICellRendererParams,
-    ValueFormatterParams,
-} from 'ag-grid-community'
+import { GridOptions, ICellRendererParams } from 'ag-grid-community'
 import { Dayjs } from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 import { useSetAtom } from 'jotai'
@@ -133,7 +129,7 @@ export const options: GridOptions = {
     },
 }
 
-export default function Resources({
+export default function Metrics({
     activeTimeRange,
     connections,
     isSummary = false,
@@ -184,7 +180,7 @@ export default function Resources({
 
     return (
         <Table
-            title={isSummary ? 'Summary' : 'Metric list'}
+            title="Metric list"
             id={isSummary ? 'asset_summary_table' : 'asset_resource_table'}
             columns={columns}
             downloadable

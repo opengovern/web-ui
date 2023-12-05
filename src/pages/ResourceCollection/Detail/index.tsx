@@ -69,7 +69,7 @@ import Landscape from '../../../components/Landscape'
 import Tag from '../../../components/Tag'
 import DrawerPanel from '../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../components/Cards/ConnectorCard'
-import { options } from '../../Assets/Details/Tabs/Resources'
+import { options } from '../../Assets/Details/Tabs/Metrics'
 import { benchmarkChecks } from '../../../components/Cards/ComplianceCard'
 
 const pieData = (

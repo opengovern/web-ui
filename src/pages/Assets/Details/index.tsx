@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { filterAtom, timeAtom } from '../../../store'
 import Header from '../../../components/Header'
 import Layout from '../../../components/Layout'
-import Resources from './Tabs/Resources'
+import Metrics from './Tabs/Metrics'
 import CloudAccounts from './Tabs/CloudAccounts'
 
 export default function AssetDetails() {
@@ -19,10 +19,7 @@ export default function AssetDetails() {
     const tabs = useLocation().hash
     useEffect(() => {
         switch (tabs) {
-            // case '#summary':
-            //     setSelectedTab(0)
-            //     break
-            case '#resources':
+            case '#metrics':
                 setSelectedTab(0)
                 break
             case '#cloud-accounts':
@@ -49,23 +46,14 @@ export default function AssetDetails() {
             />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
-                    {/* <Tab onClick={() => navigate('#summary')}>Summary</Tab> */}
-                    <Tab onClick={() => navigate('#resources')}>Metrics</Tab>
+                    <Tab onClick={() => navigate('#metrics')}>Metrics</Tab>
                     <Tab onClick={() => navigate('#cloud-accounts')}>
                         Cloud accounts
                     </Tab>
                 </TabList>
                 <TabPanels>
-                    {/* <TabPanel>
-                        <Resources
-                            activeTimeRange={activeTimeRange}
-                            connections={selectedConnections}
-                            resourceId={resourceId}
-                            isSummary
-                        />
-                    </TabPanel> */}
                     <TabPanel>
-                        <Resources
+                        <Metrics
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
                             resourceId={resourceId}

@@ -31,7 +31,7 @@ import {
 } from '../../../../api/inventory.gen'
 import { notificationAtom } from '../../../../store'
 import Table from '../../../../components/Table'
-import { defaultColumns, rowGenerator } from '../../Details/Tabs/Resources'
+import { defaultColumns, rowGenerator } from '../../Details/Tabs/Metrics'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
 import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'
