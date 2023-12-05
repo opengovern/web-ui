@@ -239,7 +239,8 @@ export default function Table<TData = any, TValue = any>({
 
     const gridOptions: GridOptions = {
         rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
-        cacheBlockSize: 25,
+        cacheBlockSize: 100,
+        maxBlocksInCache: 1000,
         pagination: true,
         paginationPageSize: 25,
         rowSelection: 'multiple',
@@ -278,6 +279,19 @@ export default function Table<TData = any, TValue = any>({
             ],
             defaultToolPanel: '',
         },
+        // getRowId: (params) => {
+        //     const parentKeysJoined = (params.parentKeys || []).join('-')
+        //     if (params.data.id != null) {
+        //         return parentKeysJoined + params.data.id
+        //     }
+        //     const rowGroupCols = params.api.getRowGroupColumns()
+        //     const thisGroupCol = rowGroupCols[params.level]
+        //     return (
+        //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //         // @ts-ignore
+        //         parentKeysJoined + params.data[thisGroupCol.getColDef().field]
+        //     )
+        // },
         ...options,
     }
 

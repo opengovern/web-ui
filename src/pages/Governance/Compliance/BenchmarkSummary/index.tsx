@@ -36,6 +36,7 @@ import {
     SourceType,
 } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
+import Trends from '../../../../components/Trends'
 
 const generateLineData = (
     input:
@@ -119,16 +120,6 @@ export default function BenchmarkSummary() {
     const { id, resourceId } = useParams()
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
-
-    const [selectedIndex, setSelectedIndex] = useState(0)
-    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
-        'line'
-    )
-
-    useEffect(() => {
-        if (selectedIndex === 0) setSelectedChart('line')
-        if (selectedIndex === 1) setSelectedChart('bar')
-    }, [selectedIndex])
 
     const query = {
         ...(selectedConnections.provider && {
@@ -260,90 +251,26 @@ export default function BenchmarkSummary() {
                     </Flex>
                 </Flex>
             )}
-            <Card className="mb-4">
-                <Grid numItems={7} className="w-full mb-6">
+            <Trends
+                activeTimeRange={activeTimeRange}
+                trend={benchmarkTrend}
+                trendName="Security score"
+                firstKPI={
                     <SummaryCard
                         title="Security score"
                         metric={((passed / total) * 100).toFixed(2)}
-                        isPercentage
+                        isPercent
                         border={false}
                         loading={isLoading}
                         url="details"
                     />
-                    <Col numColSpan={2}>
-                        {/* <Flex
-                            flexDirection="col"
-                            justifyContent="center"
-                            className="h-full"
-                        >
-                            <CategoryBar
-                                className={`w-full mb-3 ${
-                                    total ? '' : 'hidden'
-                                }`}
-                                values={[
-                                    (critical / total) * 100 || 0,
-                                    (high / total) * 100 || 0,
-                                    (medium / total) * 100 || 0,
-                                    (low / total) * 100 || 0,
-                                    (passed / total) * 100 || 0,
-                                    critical + high + medium + low + passed > 0
-                                        ? (unknown / total) * 100 || 0
-                                        : 100,
-                                ]}
-                                markerValue={
-                                    ((critical + high + medium + low) / total) *
-                                        100 || 1
-                                }
-                                showLabels={false}
-                                colors={[
-                                    'rose',
-                                    'orange',
-                                    'amber',
-                                    'yellow',
-                                    'emerald',
-                                    'slate',
-                                ]}
-                            />
-                            <Flex className={`${total ? '' : 'hidden'}`}>
-                                <Text className="text-xs">{`${failed} of ${total} checks failed`}</Text>
-                                {!!(failed / total) && (
-                                    <Text className="text-xs font-semibold">{`${Math.round(
-                                        (failed / total) * 100
-                                    )}% failed`}</Text>
-                                )}
-                            </Flex>
-                        </Flex> */}
-                    </Col>
-                    <Col numColSpan={3} />
-                    <Flex justifyContent="end">
-                        <TabGroup
-                            index={selectedIndex}
-                            onIndexChange={setSelectedIndex}
-                            className="w-fit rounded-lg"
-                        >
-                            <TabList variant="solid">
-                                <Tab value="line">
-                                    <LineChartIcon className="h-5" />
-                                </Tab>
-                                <Tab value="bar">
-                                    <BarChartIcon className="h-5" />
-                                </Tab>
-                            </TabList>
-                        </TabGroup>
-                    </Flex>
-                </Grid>
-                {/* <Flex justifyContent="end" className="mt-6 gap-2.5">
-                    <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                    <Text>Score</Text>
-                </Flex> */}
-                <Chart
-                    labels={generateLineData(benchmarkTrend).label}
-                    chartData={generateLineData(benchmarkTrend).data}
-                    chartType={selectedChart}
-                    isPercent
-                />
-            </Card>
-            <Grid numItems={5} className="w-full gap-4">
+                }
+                labels={generateLineData(benchmarkTrend).label}
+                chartData={generateLineData(benchmarkTrend).data}
+                loading={isLoading}
+                isPercent
+            />
+            <Grid numItems={5} className="w-full gap-4 mt-4">
                 <Col numColSpan={2}>
                     <Breakdown
                         title="Findings be severity"

@@ -51,6 +51,7 @@ import {
 import { capitalizeFirstLetter } from '../../../../utilities/labelMaker'
 import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
 import Chart from '../../../../components/Chart'
+import Trends from '../../../../components/Trends'
 
 const options: GridOptions = {
     enableGroupEdit: true,
@@ -80,10 +81,6 @@ export default function SingleConnection({
     const setNotification = useSetAtom(notificationAtom)
     const navigate = useNavigate()
 
-    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
-        'line'
-    )
-    const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
@@ -91,20 +88,6 @@ export default function SingleConnection({
             ? 'daily'
             : 'monthly'
     )
-    useEffect(() => {
-        setSelectedGranularity(
-            checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
-                ? 'monthly'
-                : 'daily'
-        )
-    }, [activeTimeRange])
-
-    const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
-
-    useEffect(() => {
-        if (selectedIndex === 0) setSelectedChart('line')
-        if (selectedIndex === 1) setSelectedChart('bar')
-    }, [selectedIndex])
 
     const query = {
         ...(id && {
@@ -282,8 +265,10 @@ export default function SingleConnection({
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <Card>
-                            <Grid numItems={6} className="gap-4">
+                        <Trends
+                            activeTimeRange={activeTimeRange}
+                            trend={resourceTrend}
+                            firstKPI={
                                 <SummaryCard
                                     title=""
                                     metric={connection?.resourceCount}
@@ -291,107 +276,25 @@ export default function SingleConnection({
                                     loading={resourceTrendLoading}
                                     border={false}
                                 />
-                                <Col numColSpan={3} />
-                                <Col numColSpan={2}>
-                                    <Flex
-                                        justifyContent="end"
-                                        className="gap-4"
-                                    >
-                                        <Select
-                                            value={selectedGranularity}
-                                            placeholder={capitalizeFirstLetter(
-                                                selectedGranularity
-                                            )}
-                                            onValueChange={(v) => {
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
-                                                setSelectedGranularity(v)
-                                            }}
-                                            className="w-10"
-                                        >
-                                            {generateItems(
-                                                activeTimeRange.start,
-                                                activeTimeRange.end
-                                            )}
-                                        </Select>
-                                        <TabGroup
-                                            index={selectedIndex}
-                                            onIndexChange={setSelectedIndex}
-                                            className="w-fit rounded-lg"
-                                        >
-                                            <TabList variant="solid">
-                                                <Tab value="line">
-                                                    <LineChartIcon className="h-5" />
-                                                </Tab>
-                                                <Tab value="bar">
-                                                    <BarChartIcon className="h-5" />
-                                                </Tab>
-                                            </TabList>
-                                        </TabGroup>
-                                    </Flex>
-                                </Col>
-                            </Grid>
-                            {resourceTrend
-                                ?.filter(
-                                    (t) =>
-                                        selectedDatapoint?.color ===
-                                            '#E01D48' &&
-                                        dateDisplay(t.date) ===
-                                            selectedDatapoint?.name
-                                )
-                                .map((t) => (
-                                    <Callout
-                                        color="rose"
-                                        title="Incomplete data"
-                                        className="w-fit mt-4"
-                                    >
-                                        Checked{' '}
-                                        {numberDisplay(
-                                            t.totalSuccessfulDescribedConnectionCount,
-                                            0
-                                        )}{' '}
-                                        accounts out of{' '}
-                                        {numberDisplay(
-                                            t.totalConnectionCount,
-                                            0
-                                        )}{' '}
-                                        on {dateDisplay(t.date)}
-                                    </Callout>
-                                ))}
-                            <Flex justifyContent="end" className="mt-2 gap-2.5">
-                                <div className="h-2.5 w-2.5 rounded-full bg-kaytu-800" />
-                                <Text>Resources</Text>
-                            </Flex>
-                            <Chart
-                                labels={
-                                    resourceTrendChart(
-                                        resourceTrend,
-                                        selectedGranularity
-                                    ).label
-                                }
-                                chartData={
-                                    resourceTrendChart(
-                                        resourceTrend,
-                                        selectedGranularity
-                                    ).data
-                                }
-                                chartType={selectedChart}
-                                loading={resourceTrendLoading}
-                                // visualMap={
-                                //     generateVisualMap(
-                                //         resourceTrendChart(resourceTrend).flag,
-                                //         resourceTrendChart(resourceTrend).label
-                                //     ).visualMap
-                                // }
-                                // markArea={
-                                //     generateVisualMap(
-                                //         resourceTrendChart(resourceTrend).flag,
-                                //         resourceTrendChart(resourceTrend).label
-                                //     ).markArea
-                                // }
-                                onClick={(p) => setSelectedDatapoint(p)}
-                            />
-                        </Card>
+                            }
+                            trendName="Resources"
+                            labels={
+                                resourceTrendChart(
+                                    resourceTrend,
+                                    selectedGranularity
+                                ).label
+                            }
+                            chartData={
+                                resourceTrendChart(
+                                    resourceTrend,
+                                    selectedGranularity
+                                ).data
+                            }
+                            loading={resourceTrendLoading}
+                            onGranularityChange={(gra) =>
+                                setSelectedGranularity(gra)
+                            }
+                        />
                     </TabPanel>
                     <TabPanel>
                         <Table

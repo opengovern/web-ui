@@ -273,9 +273,6 @@ export default function Compliance() {
         }
     }, [selectedState])
 
-    const { response: categories } =
-        useComplianceApiV1MetadataTagComplianceList()
-
     return (
         <Layout currentPage="compliance">
             <Header />

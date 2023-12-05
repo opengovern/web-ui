@@ -257,9 +257,7 @@ export default function Findings() {
     const [provider, setProvider] = useState('')
     const [connectionSearch, setConnectionSearch] = useState('')
     const [resourceSearch, setResourceSearch] = useState('')
-    const [status, setStatus] = useState<'compliant' | 'non-compliant' | 'any'>(
-        'non-compliant'
-    )
+
     const [sortKey, setSortKey] = useState('')
     const [lastRow, setLastRow] = useState(100)
 
@@ -269,25 +267,6 @@ export default function Findings() {
     const severityCheckbox = useCheckboxState({
         state: ['critical', 'high', 'medium', 'low', 'none'],
     })
-
-    useEffect(() => {
-        switch (status) {
-            case 'non-compliant':
-                severityCheckbox.setState([
-                    'critical',
-                    'high',
-                    'medium',
-                    'low',
-                    'none',
-                ])
-                break
-            case 'compliant':
-                severityCheckbox.setState(['passed'])
-                break
-            default:
-                break
-        }
-    }, [status])
 
     const isDemo = useAtomValue(isDemoAtom)
 
@@ -355,7 +334,7 @@ export default function Findings() {
             // @ts-ignore
             // eslint-disable-next-line no-unsafe-optional-chaining
             setSortKey(list[list?.length - 1].sortKey[0] || '')
-            setLastRow(endRow)
+            // setLastRow(endRow)
         }
         sendNow()
     }
@@ -414,46 +393,6 @@ export default function Findings() {
                                     defaultChecked={provider === 'Azure'}
                                 >
                                     Azure
-                                </Radio>
-                            </Flex>
-                        </AccordionBody>
-                    </Accordion>
-                    <Divider className="my-3" />
-                    <Accordion
-                        defaultOpen
-                        className="w-56 border-0 rounded-none bg-transparent mb-1"
-                    >
-                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                            <Text className="font-semibold text-gray-800">
-                                Finding status
-                            </Text>
-                        </AccordionHeader>
-                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
-                            <Flex
-                                flexDirection="col"
-                                alignItems="start"
-                                className="gap-1.5"
-                            >
-                                <Radio
-                                    name="status"
-                                    onClick={() => setStatus('compliant')}
-                                    defaultChecked={status === 'compliant'}
-                                >
-                                    Compliant
-                                </Radio>
-                                <Radio
-                                    name="status"
-                                    onClick={() => setStatus('non-compliant')}
-                                    defaultChecked={status === 'non-compliant'}
-                                >
-                                    Non-compliant
-                                </Radio>
-                                <Radio
-                                    name="status"
-                                    onClick={() => setStatus('any')}
-                                    defaultChecked={status === 'any'}
-                                >
-                                    Any
                                 </Radio>
                             </Flex>
                         </AccordionBody>
