@@ -334,7 +334,7 @@ export default function Findings() {
             // @ts-ignore
             // eslint-disable-next-line no-unsafe-optional-chaining
             setSortKey(list[list?.length - 1].sortKey[0] || '')
-            setLastRow(endRow)
+            // setLastRow(endRow)
         }
         sendNow()
     }
