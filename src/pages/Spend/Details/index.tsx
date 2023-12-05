@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai/index'
 import { useEffect, useState } from 'react'
 import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
-import Services from './Tabs/Services'
+import Metrics from './Tabs/Metrics'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import { filterAtom, spendTimeAtom } from '../../../store'
 import CloudAccounts from './Tabs/CloudAccounts'
@@ -18,7 +18,7 @@ export default function SpendDetails() {
     const tabs = useLocation().hash
     useEffect(() => {
         switch (tabs) {
-            case '#services':
+            case '#metrics':
                 setSelectedTab(0)
                 break
             case '#cloud-accounts':
@@ -49,14 +49,14 @@ export default function SpendDetails() {
             <Header breadCrumb={['Spend detail']} filter datePicker />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
-                    <Tab onClick={() => navigate('#services')}>Services</Tab>
+                    <Tab onClick={() => navigate('#metrics')}>Metrics</Tab>
                     <Tab onClick={() => navigate('#cloud-accounts')}>
                         Cloud accounts
                     </Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <Services
+                        <Metrics
                             activeTimeRange={activeTimeRange}
                             connections={selectedConnections}
                             selectedGranularity={selectedGranularity}

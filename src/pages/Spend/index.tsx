@@ -444,10 +444,10 @@ export default function Spend() {
                                     isPrice
                                 />
                                 <ListCard
-                                    title="Top Spend Metrics"
+                                    title="Top Metrics"
                                     loading={serviceCostLoading}
                                     items={topServices(serviceCostResponse)}
-                                    url="spend-details#services"
+                                    url="spend-details#metrics"
                                     type="service"
                                     isPrice
                                 />

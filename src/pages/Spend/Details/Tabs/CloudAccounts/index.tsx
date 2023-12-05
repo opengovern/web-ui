@@ -10,7 +10,7 @@ import Table, { IColumn } from '../../../../../components/Table'
 import { exactPriceDisplay } from '../../../../../utilities/numericDisplay'
 import { useInventoryApiV2AnalyticsSpendTableList } from '../../../../../api/inventory.gen'
 import { capitalizeFirstLetter } from '../../../../../utilities/labelMaker'
-import { gridOptions, rowGenerator } from '../Services'
+import { gridOptions, rowGenerator } from '../Metrics'
 
 interface IConnections {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -66,7 +66,7 @@ const defaultColumns = (isDemo: boolean) => {
             sortable: true,
             resizable: true,
             pivot: false,
-            hide: false,
+            hide: true,
             pinned: true,
             cellRenderer: (param: ValueFormatterParams) => (
                 <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
@@ -196,7 +196,7 @@ export default function CloudAccounts({
 
     return (
         <Table
-            title="Cloud accounts"
+            title="Cloud account list"
             downloadable
             id="spend_connection_table"
             loading={isLoading}
