@@ -324,8 +324,8 @@ export default function DateRangePicker() {
             value={currentValue()}
             onChange={(value) => {
                 setActiveTimeRange({
-                    start: dayjs(value.start.toString()).startOf('day'),
-                    end: dayjs(value.end.toString()).endOf('day'),
+                    start: dayjs.utc(value.start.toString()).startOf('day'),
+                    end: dayjs.utc(value.end.toString()).endOf('day'),
                 })
             }}
             minValue={minValue()}
