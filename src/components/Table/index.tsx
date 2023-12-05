@@ -111,18 +111,23 @@ export default function Table<TData = any, TValue = any>({
     }, [loading])
 
     useEffect(() => {
-        gridRef.current?.api?.setPinnedTopRowData(pinnedRow)
+        gridRef.current?.api?.setGridOption('pinnedTopRowData', pinnedRow)
     }, [pinnedRow])
 
     useEffect(() => {
         if (rowData) {
-            gridRef.current?.api?.setRowData(rowData || [])
+            gridRef.current?.api?.setGridOption('rowData', rowData || [])
         }
     }, [rowData])
 
     useEffect(() => {
         if (serverSideDatasource) {
-            gridRef.current?.api?.setServerSideDatasource(serverSideDatasource)
+            gridRef.current?.api?.setGridOption(
+                'serverSideDatasource',
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                serverSideDatasource
+            )
         }
     }, [serverSideDatasource])
 
@@ -232,12 +237,10 @@ export default function Table<TData = any, TValue = any>({
     }
 
     useEffect(() => {
-        gridRef.current?.api?.setColumnDefs(buildColumnDef())
+        gridRef.current?.api?.setGridOption('columnDefs', buildColumnDef())
     }, [columns])
 
     const gridOptions: GridOptions = {
-        columnDefs: buildColumnDef(),
-        rowData,
         rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
         pagination: true,
         paginationPageSize: 25,
@@ -321,7 +324,6 @@ export default function Table<TData = any, TValue = any>({
                     ref={gridRef}
                     domLayout="autoHeight"
                     gridOptions={gridOptions}
-                    // rowData={rowData}
                 />
             </div>
         </Flex>

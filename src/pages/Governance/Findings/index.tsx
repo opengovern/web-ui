@@ -45,7 +45,7 @@ export const columns = (isDemo: boolean) => {
             width: 120,
             field: 'connector',
             headerName: 'Cloud Provider',
-            sortable: false,
+            sortable: true,
             filter: true,
             hide: true,
             enableRowGroup: true,
@@ -56,7 +56,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Policy ID',
             type: 'string',
             enableRowGroup: true,
-            sortable: false,
+            sortable: true,
             filter: true,
             hide: true,
             resizable: true,
@@ -67,7 +67,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Benchmark ID',
             type: 'string',
             enableRowGroup: true,
-            sortable: false,
+            sortable: true,
             filter: true,
             resizable: true,
             flex: 1,
@@ -116,7 +116,7 @@ export const columns = (isDemo: boolean) => {
             type: 'string',
             hide: true,
             enableRowGroup: true,
-            sortable: false,
+            sortable: true,
             filter: true,
             resizable: true,
             flex: 1,
@@ -126,7 +126,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Resource type',
             type: 'string',
             enableRowGroup: true,
-            sortable: false,
+            sortable: true,
             filter: true,
             resizable: true,
             flex: 1,
@@ -137,7 +137,7 @@ export const columns = (isDemo: boolean) => {
             hide: true,
             type: 'string',
             enableRowGroup: true,
-            sortable: false,
+            sortable: true,
             filter: true,
             resizable: true,
             flex: 1,
@@ -179,17 +179,11 @@ const datasource = (
         | undefined,
     loading: boolean,
     err: boolean,
-    handleParam: any,
-    lastRow: number
+    handleParam: any
 ) => {
     return {
         getRows: (params: IServerSideGetRowsParams) => {
-            console.log(params)
             handleParam(params)
-            // eslint-disable-next-line no-param-reassign
-            params.request.endRow = lastRow
-            // eslint-disable-next-line no-param-reassign
-            params.request.startRow = lastRow - 100
             if (params.request.sortModel.length > 0) {
                 if (sort.length > 0) {
                     if (
@@ -206,7 +200,9 @@ const datasource = (
             }
             if (!loading && result) {
                 params.success({
-                    rowData: result?.findings || [],
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    rowData: result?.findings,
                     rowCount: result?.totalCount || 0,
                 })
             }
@@ -335,6 +331,7 @@ export default function Findings() {
         })
     const { response: filters, isLoading: filtersLoading } =
         useComplianceApiV1FindingsFiltersCreate({})
+    // console.log(filters)
 
     const getData = (sort: SortModelItem[]) => {
         setSortModel(sort)
@@ -348,12 +345,14 @@ export default function Findings() {
     useEffect(() => {
         if (tableParam?.request.startRow === lastRow) {
             const list = findings?.findings
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            setSortKey(list[list?.length - 1].sortKey[0] || '')
-            setLastRow(tableParam?.request.endRow || 0)
-            console.log(lastRow)
+            if (list) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // eslint-disable-next-line no-unsafe-optional-chaining
+                setSortKey(list[list?.length - 1].sortKey[0] || '')
+                console.log(tableParam)
+                setLastRow(tableParam?.request.endRow || 100)
+            }
             sendNow()
         }
     }, [tableParam])
@@ -366,8 +365,7 @@ export default function Findings() {
                 findings,
                 isLoading,
                 error,
-                handleParam,
-                lastRow
+                handleParam
             ),
         [findings, sortModel]
     )
@@ -683,7 +681,6 @@ export default function Findings() {
                         }}
                         serverSideDatasource={ds}
                         loading={isLoading}
-                        options={{ rowModelType: 'serverSide' }}
                     />
                     <FindingDetail
                         finding={finding}
