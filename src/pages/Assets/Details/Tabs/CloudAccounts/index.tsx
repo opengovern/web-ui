@@ -5,7 +5,7 @@ import { ValueFormatterParams } from 'ag-grid-community'
 import Table, { IColumn } from '../../../../../components/Table'
 import { IFilter, isDemoAtom, notificationAtom } from '../../../../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
-import { options } from '../Resources'
+import { options } from '../Metrics'
 
 interface IConnections {
     activeTimeRange: { start: Dayjs; end: Dayjs }

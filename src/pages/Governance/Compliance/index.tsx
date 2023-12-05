@@ -325,6 +325,7 @@ export default function Compliance() {
                 <Col numColSpan={1}>
                     <Flex className="h-full gap-3">
                         <Select
+                            enableClear={false}
                             value={selectedProvider}
                             onValueChange={setSelectedProvider}
                             placeholder="Select Cloud Provider..."

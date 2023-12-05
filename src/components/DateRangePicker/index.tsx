@@ -1,6 +1,6 @@
 import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
-import { useAtom } from 'jotai'
-import { useRef, useState } from 'react'
+import { useAtom, useSetAtom } from 'jotai'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDateRangePickerState } from 'react-stately'
 import { useDateRangePicker } from 'react-aria'
 import { CalendarIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
@@ -13,6 +13,7 @@ import { FieldButton } from './Button'
 import { RangeCalendar } from './Calendar/RangeCalendar'
 import { Popover } from './Popover'
 import { Dialog } from './Dialog'
+import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 
 dayjs.extend(quarterOfYear)
 
@@ -43,7 +44,7 @@ const renderText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
 function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
     const state = useDateRangePickerState(props)
     const ref = useRef(null)
-    const [activeTimeRange, setActiveTimeRange] = useAtom(
+    const setActiveTimeRange = useSetAtom(
         window.location.pathname.split('/')[2] === 'spend'
             ? spendTimeAtom
             : timeAtom
@@ -266,9 +267,34 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
 
 export default function DateRangePicker() {
     const isSpend = window.location.pathname.split('/')[2] === 'spend'
+    const wsName = window.location.pathname.split('/')[1]
     const [activeTimeRange, setActiveTimeRange] = useAtom(
         isSpend ? spendTimeAtom : timeAtom
     )
+
+    const { response: workspaceInfo, sendNow } =
+        useWorkspaceApiV1WorkspacesList({}, false)
+    const currentWorkspace = useMemo(
+        () => workspaceInfo?.filter((ws) => ws.name === wsName),
+        [workspaceInfo]
+    )
+
+    useEffect(() => {
+        if (!currentWorkspace) {
+            sendNow()
+        }
+        if (
+            currentWorkspace &&
+            dayjs(currentWorkspace[0].createdAt).valueOf() >
+                activeTimeRange.start.valueOf()
+        ) {
+            setActiveTimeRange({
+                start: dayjs(currentWorkspace[0].createdAt),
+                end: activeTimeRange.end,
+            })
+        }
+    }, [currentWorkspace])
+
     const currentValue = () => {
         return {
             start: parseDate(
@@ -281,7 +307,11 @@ export default function DateRangePicker() {
     }
 
     const minValue = () => {
-        return parseDate('2022-12-01')
+        return parseDate(
+            currentWorkspace
+                ? dayjs(currentWorkspace[0].createdAt).format('YYYY-MM-DD')
+                : '2022-12-01'
+        )
     }
     const maxValue = () => {
         if (isSpend) {

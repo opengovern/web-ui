@@ -13,12 +13,12 @@ export const dateDisplay = (
 ) => {
     const s = subtract || 0
     if ((typeof date).toString() === 'Dayjs') {
-        return (date as Dayjs).subtract(s, 'day').format('MMM Do, YYYY')
+        return (date as Dayjs).subtract(s, 'day').format('MMM DD, YYYY')
     }
-    if (date !== undefined) {
-        return dayjs(date).subtract(s, 'day').format('MMM Do, YYYY')
+    if (date) {
+        return dayjs(date).subtract(s, 'day').format('MMM DD, YYYY')
     }
-    return ''
+    return 'Not available'
 }
 
 export const monthDisplay = (
@@ -29,10 +29,10 @@ export const monthDisplay = (
     if ((typeof date).toString() === 'Dayjs') {
         return (date as Dayjs).subtract(s, 'day').format('MMM, YYYY')
     }
-    if (date !== undefined) {
+    if (date) {
         return dayjs(date).subtract(s, 'day').format('MMM, YYYY')
     }
-    return ''
+    return 'Not available'
 }
 
 export const dateTimeDisplay = (
@@ -40,7 +40,10 @@ export const dateTimeDisplay = (
 ) => {
     // tz(dayjs.tz.guess())
     if ((typeof date).toString() === 'Dayjs') {
-        return (date as Dayjs).format('MMM Do, YYYY - kk:mm z')
+        return (date as Dayjs).format('MMM DD, YYYY kk:mm z')
     }
-    return dayjs(date).format('MMM Do, YYYY - kk:mm z')
+    if (date) {
+        return dayjs(date).format('MMM DD, YYYY kk:mm z')
+    }
+    return 'Not available'
 }

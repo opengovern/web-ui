@@ -33,6 +33,7 @@ export default function StepOne({ onNext, onBack }: IStep) {
                         <Flex>
                             <Text className="text-gray-800">Benchmark</Text>
                             <Select
+                                enableClear={false}
                                 value={compliance}
                                 onValueChange={setCompliance}
                                 className="w-2/3"
@@ -63,6 +64,7 @@ export default function StepOne({ onNext, onBack }: IStep) {
                 <Flex>
                     <Text className="text-gray-800">Event on</Text>
                     <Select
+                        enableClear={false}
                         className="w-2/3"
                         value={event}
                         onValueChange={setEvent}

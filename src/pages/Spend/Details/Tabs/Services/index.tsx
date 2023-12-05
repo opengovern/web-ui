@@ -2,7 +2,7 @@ import { Dayjs } from 'dayjs'
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
 import { Select, SelectItem, Text } from '@tremor/react'
-import { Dispatch, SetStateAction, useMemo } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { IFilter } from '../../../../../store'
 import { useInventoryApiV2AnalyticsSpendTableList } from '../../../../../api/inventory.gen'
 import Table, { IColumn } from '../../../../../components/Table'
@@ -295,6 +295,7 @@ export default function Services({
             }}
         >
             <Select
+                enableClear={false}
                 value={selectedGranularity}
                 placeholder={
                     selectedGranularity

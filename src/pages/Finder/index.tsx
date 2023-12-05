@@ -362,6 +362,7 @@ export default function Finder() {
                                                 Maximum rows:
                                             </Text>
                                             <Select
+                                                enableClear={false}
                                                 className="w-56"
                                                 placeholder="1,000"
                                             >

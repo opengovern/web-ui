@@ -272,7 +272,7 @@ export default function Assets() {
                                 title="Resources"
                                 metric={servicesResponse?.total_count}
                                 metricPrev={servicesResponse?.total_old_count}
-                                url="assets-details#resources"
+                                url="assets-details#metrics"
                                 loading={servicesResponseLoading}
                                 border={false}
                             />
@@ -333,7 +333,7 @@ export default function Assets() {
                                     title="Top Metrics"
                                     loading={servicesResponseLoading}
                                     items={topServices(servicesResponse)}
-                                    url="assets-details#resources"
+                                    url="assets-details#metrics"
                                     type="service"
                                 />
                             </Grid>

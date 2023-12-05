@@ -435,6 +435,7 @@ export default function InsightDetail({
                             loading={detailLoading}
                         >
                             <Select
+                                enableClear={false}
                                 className="h-full"
                                 onValueChange={setDetailsDate}
                                 placeholder={

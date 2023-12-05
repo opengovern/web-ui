@@ -471,6 +471,7 @@ export default function SingleSpendMetric({
                     <Col numColSpan={2}>
                         <Flex justifyContent="end" className="gap-4">
                             <Select
+                                enableClear={false}
                                 value={selectedGranularity}
                                 placeholder={capitalizeFirstLetter(
                                     selectedGranularity

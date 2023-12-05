@@ -385,6 +385,7 @@ export default function SingleSpendConnection({
                                         className="gap-4"
                                     >
                                         <Select
+                                            enableClear={false}
                                             value={selectedGranularity}
                                             placeholder={capitalizeFirstLetter(
                                                 selectedGranularity
@@ -536,6 +537,7 @@ export default function SingleSpendConnection({
                             }}
                         >
                             <Select
+                                enableClear={false}
                                 value={selectedGranularity}
                                 placeholder={
                                     selectedGranularity
