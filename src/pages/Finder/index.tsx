@@ -37,7 +37,6 @@ import {
 } from '@heroicons/react/24/solid'
 import { Transition } from '@headlessui/react'
 import { useAtom, useAtomValue } from 'jotai'
-import { send } from 'process'
 import Layout from '../../components/Layout'
 import {
     useInventoryApiV1QueryList,
@@ -197,12 +196,6 @@ export default function Finder() {
         })
     }
 
-    const memoRows = useMemo(
-        () =>
-            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
-                .rows,
-        [queryResponse, isDemo]
-    )
     const memoColumns = useMemo(
         () =>
             getTable(queryResponse?.headers, queryResponse?.result, isDemo)
@@ -590,7 +583,13 @@ export default function Finder() {
                                             title="Query results"
                                             id="finder_table"
                                             columns={memoColumns}
-                                            rowData={memoRows}
+                                            rowData={
+                                                getTable(
+                                                    queryResponse?.headers,
+                                                    queryResponse?.result,
+                                                    isDemo
+                                                ).rows
+                                            }
                                             downloadable
                                             onRowClicked={(
                                                 event: RowClickedEvent

@@ -1,6 +1,7 @@
 import { atom } from 'jotai'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse } from '../api/api'
 
 dayjs.extend(utc)
 
@@ -47,3 +48,9 @@ export const complianceOpenAtom = atom(false)
 export const automationOpenAtom = atom(false)
 export const queryAtom = atom('')
 export const isDemoAtom = atom(localStorage.demoMode === 'true')
+export const workspaceAtom = atom<{
+    list: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse[]
+    current:
+        | GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse
+        | undefined
+}>({ list: [], current: undefined })
