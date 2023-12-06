@@ -99,7 +99,7 @@ export const defaultColumns: IColumn<any, any>[] = [
     },
     {
         field: 'dimension',
-        headerName: 'Service name',
+        headerName: 'Metric',
         type: 'string',
         filter: true,
         sortable: true,
@@ -243,20 +243,20 @@ export default function Metrics({
     )
 
     const columns: IColumn<any, any>[] = [
-        ...defaultColumns,
         {
             field: 'category',
             headerName: 'Category',
             type: 'string',
             width: 130,
             rowGroup: isSummary,
-            hide: isSummary,
+            hide: false,
             filter: true,
             enableRowGroup: true,
             sortable: true,
             resizable: true,
             pinned: true,
         },
+        ...defaultColumns,
         {
             field: 'percent',
             headerName: '%',

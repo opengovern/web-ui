@@ -175,17 +175,17 @@ export default function Filter() {
                         >
                             <TabList variant="solid" className="mb-4">
                                 <Tab className="pt-0.5 pb-1 px-5">
-                                    Cloud Provider
+                                    Cloud Providers
                                 </Tab>
                                 {/* <Tab className="pt-0.5 pb-1 px-5">Group</Tab> */}
                                 <Tab className="pt-0.5 pb-1 px-5">
-                                    Cloud Connections
+                                    Cloud Accounts
                                 </Tab>
                             </TabList>
                             <TabPanels className="px-2">
                                 <TabPanel className="mb-[50px]">
                                     <Title className="mb-3">
-                                        Cloud Provider
+                                        Cloud Providers
                                     </Title>
                                     <Flex
                                         justifyContent="start"
@@ -299,9 +299,9 @@ export default function Filter() {
                                         alignItems="end"
                                         className="gap-1 mb-3"
                                     >
-                                        <Title>Connections</Title>
+                                        <Title>Cloud Accounts</Title>
                                         <Text className="mb-0.5">
-                                            (up to 20 connections)
+                                            (up to 20 accounts)
                                         </Text>
                                     </Flex>
                                     {isLoading ? (

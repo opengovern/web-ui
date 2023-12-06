@@ -205,7 +205,7 @@ export default function CloudAccounts({
             pinnedRow={rowGenerator(response, isLoading).pinnedRow}
             options={gridOptions}
             onRowClicked={(event) => {
-                if (event.data.connectionId) {
+                if (event.data.id) {
                     navigate(`account_${event.data.id}`)
                 }
             }}
