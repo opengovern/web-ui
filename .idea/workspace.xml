@@ -5,24 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/codegen/generate.go" beforeDir="false" afterPath="$PROJECT_DIR$/codegen/generate.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/ai.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/ai.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/alerting.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/alerting.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/auth.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/auth.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/compliance.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/compliance.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/costEstimator.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/costEstimator.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/inventory.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/inventory.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/metadata.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/metadata.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/onboard.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/onboard.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/schedule.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/schedule.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/workspace.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/workspace.gen.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout/JobsMenu/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout/JobsMenu/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Policies/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Policies/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/SingleConnection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/SingleConnection/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/Detail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/Detail/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/ResourceCollection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ResourceCollection/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Settings/Customization/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Settings/Customization/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Settings/Jobs/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Settings/Jobs/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Layout/Sidebar/Workspace/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout/Sidebar/Workspace/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +51,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "Merging notion-fixes",
+    "git-widget-placeholder": "notion-fixes",
     "last_opened_file_path": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Sevices",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.stylelint": "true",
@@ -278,6 +262,7 @@
       <workItem from="1701334252061" duration="4051000" />
       <workItem from="1701356806356" duration="8698000" />
       <workItem from="1701607485198" duration="51498000" />
+      <workItem from="1701901581714" duration="1375000" />
     </task>
     <servers />
   </component>
