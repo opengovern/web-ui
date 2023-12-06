@@ -2,32 +2,13 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
-    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
@@ -39,67 +20,12 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiJob,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
-    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecycleStateRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiUpdateCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Response,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
     RequestParams,
 } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
 
-interface IuseComplianceApiV1AiPolicyRemediationCreateState {
+interface IuseComplianceApiV1AiControlRemediationCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation
@@ -107,24 +33,26 @@ interface IuseComplianceApiV1AiPolicyRemediationCreateState {
     error?: any
 }
 
-export const useComplianceApiV1AiPolicyRemediationCreate = (
-    policyId: string,
+export const useComplianceApiV1AiControlRemediationCreate = (
+    controlId: string,
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1AiPolicyRemediationCreateState>({
+        useState<IuseComplianceApiV1AiControlRemediationCreateState>({
             isLoading: true,
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([policyId, params, autoExecute])
+        JSON.stringify([controlId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -143,7 +71,7 @@ export const useComplianceApiV1AiPolicyRemediationCreate = (
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.compliance
-                .apiV1AiPolicyRemediationCreate(policyId, paramsSignal)
+                .apiV1AiControlRemediationCreate(controlId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -179,8 +107,8 @@ export const useComplianceApiV1AiPolicyRemediationCreate = (
         }
     }
 
-    if (JSON.stringify([policyId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([policyId, params, autoExecute]))
+    if (JSON.stringify([controlId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([controlId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -218,7 +146,9 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -324,7 +254,9 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -430,7 +362,9 @@ export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -551,7 +485,9 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -670,7 +606,9 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -794,7 +732,9 @@ export const useComplianceApiV1BenchmarksSummaryList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -887,15 +827,15 @@ export const useComplianceApiV1BenchmarksSummaryList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseComplianceApiV1BenchmarksPoliciesDetailState {
+interface IuseComplianceApiV1BenchmarksControlsDetailState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary[]
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
-export const useComplianceApiV1BenchmarksPoliciesDetail = (
+export const useComplianceApiV1BenchmarksControlsDetail = (
     benchmarkId: string,
     query?: {
         connectionId?: string[]
@@ -905,14 +845,16 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksPoliciesDetailState>({
+        useState<IuseComplianceApiV1BenchmarksControlsDetailState>({
             isLoading: true,
             isExecuted: false,
         })
@@ -936,7 +878,7 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.compliance
-                .apiV1BenchmarksPoliciesDetail(benchmarkId, query, paramsSignal)
+                .apiV1BenchmarksControlsDetail(benchmarkId, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1000,17 +942,17 @@ export const useComplianceApiV1BenchmarksPoliciesDetail = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseComplianceApiV1BenchmarksPoliciesDetail2State {
+interface IuseComplianceApiV1BenchmarksControlsDetail2State {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
 
-export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
+export const useComplianceApiV1BenchmarksControlsDetail2 = (
     benchmarkId: string,
-    policyId: string,
+    controlId: string,
     query?: {
         connectionId?: string[]
 
@@ -1019,19 +961,21 @@ export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksPoliciesDetail2State>({
+        useState<IuseComplianceApiV1BenchmarksControlsDetail2State>({
             isLoading: true,
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, policyId, query, params, autoExecute])
+        JSON.stringify([benchmarkId, controlId, query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1050,9 +994,9 @@ export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.compliance
-                .apiV1BenchmarksPoliciesDetail2(
+                .apiV1BenchmarksControlsDetail2(
                     benchmarkId,
-                    policyId,
+                    controlId,
                     query,
                     paramsSignal
                 )
@@ -1092,11 +1036,11 @@ export const useComplianceApiV1BenchmarksPoliciesDetail2 = (
     }
 
     if (
-        JSON.stringify([benchmarkId, policyId, query, params, autoExecute]) !==
+        JSON.stringify([benchmarkId, controlId, query, params, autoExecute]) !==
         lastInput
     ) {
         setLastInput(
-            JSON.stringify([benchmarkId, policyId, query, params, autoExecute])
+            JSON.stringify([benchmarkId, controlId, query, params, autoExecute])
         )
     }
 
@@ -1146,7 +1090,9 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1267,7 +1213,9 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1375,7 +1323,9 @@ export const useComplianceApiV1FindingsCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1480,7 +1430,9 @@ export const useComplianceApiV1FindingsFiltersCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1591,7 +1543,9 @@ export const useComplianceApiV1FindingsAccountsDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1704,7 +1658,9 @@ export const useComplianceApiV1FindingsServicesDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1831,7 +1787,9 @@ export const useComplianceApiV1FindingsCountDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1967,7 +1925,9 @@ export const useComplianceApiV1FindingsTopDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2111,7 +2071,9 @@ export const useComplianceApiV1InsightList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2230,7 +2192,9 @@ export const useComplianceApiV1InsightGroupList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2347,7 +2311,9 @@ export const useComplianceApiV1InsightGroupDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2471,7 +2437,9 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2597,7 +2565,9 @@ export const useComplianceApiV1InsightDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2715,7 +2685,9 @@ export const useComplianceApiV1InsightTrendDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2821,7 +2793,9 @@ export const useComplianceApiV1MetadataInsightDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2926,7 +2900,9 @@ export const useComplianceApiV1MetadataTagComplianceList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -3031,7 +3007,9 @@ export const useComplianceApiV1MetadataTagInsightList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -3139,7 +3117,9 @@ export const useComplianceApiV1QueriesSyncList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()

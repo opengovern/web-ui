@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -460,6 +461,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
      */
     connectors?: SourceType[]
     /**
+     * Benchmark controls
+     * @example ["[azure_cis_v140_1_1"," azure_cis_v140_1_2]"]
+     */
+    controls?: string[]
+    /**
      * Benchmark creation date
      * @example "2020-01-01T00:00:00Z"
      */
@@ -491,11 +497,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
      * @example true
      */
     managed?: boolean
-    /**
-     * Benchmark policies
-     * @example ["[azure_cis_v140_1_1"," azure_cis_v140_1_2]"]
-     */
-    policies?: string[]
     /** Benchmark tags */
     tags?: Record<string, string[]>
     /**
@@ -629,6 +630,44 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapo
     timestamp?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
+    /** @example "Azure" */
+    connector?: SourceType
+    /** @example "2020-01-01T00:00:00Z" */
+    createdAt?: string
+    /** @example "Enable multi-factor authentication for all user credentials who have write access to Azure resources. These include roles like 'Service Co-Administrators', 'Subscription Owners', 'Contributors'." */
+    description?: string
+    /** @example "benchmarks/azure_cis_v140_1_1.md" */
+    documentURI?: string
+    /** @example true */
+    enabled?: boolean
+    /** @example "azure_cis_v140_1_1" */
+    id?: string
+    /** @example true */
+    managed?: boolean
+    /** @example true */
+    manualVerification?: boolean
+    /** @example "azure_ad_manual_control" */
+    queryID?: string
+    /** @example "low" */
+    severity?: TypesFindingSeverity
+    tags?: Record<string, string[]>
+    /** @example "1.1 Ensure that multi-factor authentication status is enabled for all privileged users" */
+    title?: string
+    /** @example "2020-01-01T00:00:00Z" */
+    updatedAt?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
+    control?: GithubComKaytuIoKaytuEnginePkgComplianceApiControl
+    evaluatedAt?: number
+    failedConnectionCount?: number
+    failedResourcesCount?: number
+    passed?: boolean
+    totalConnectionCount?: number
+    totalResourcesCount?: number
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example "azure_cis_v140" */
     benchmarkID?: string
@@ -638,6 +677,9 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     connectionID?: string
     /** @example "Azure" */
     connector?: SourceType
+    /** @example "azure_cis_v140_7_5" */
+    controlID?: string
+    controlTitle?: string
     /** @example 1589395200 */
     evaluatedAt?: number
     /** @example "steampipe-v0.5" */
@@ -647,9 +689,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     parentBenchmarks?: string[]
     /** @example 1 */
     parentComplianceJobID?: number
-    /** @example "azure_cis_v140_7_5" */
-    policyID?: string
-    policyTitle?: string
     /**
      * Connection ID
      * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
@@ -713,10 +752,10 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      */
     connector?: SourceType[]
     /**
-     * Policy ID
+     * Control ID
      * @example ["azure_cis_v140_7_5"]
      */
-    policyID?: string[]
+    controlID?: string[]
     /**
      * Resource Collection ID
      * @example ["example-rc"]
@@ -745,7 +784,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMe
     benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     connectionID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     connector?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
-    policyID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+    controlID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     resourceCollection?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
@@ -924,44 +963,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoin
     value?: number
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy {
-    /** @example "Azure" */
-    connector?: SourceType
-    /** @example "2020-01-01T00:00:00Z" */
-    createdAt?: string
-    /** @example "Enable multi-factor authentication for all user credentials who have write access to Azure resources. These include roles like 'Service Co-Administrators', 'Subscription Owners', 'Contributors'." */
-    description?: string
-    /** @example "benchmarks/azure_cis_v140_1_1.md" */
-    documentURI?: string
-    /** @example true */
-    enabled?: boolean
-    /** @example "azure_cis_v140_1_1" */
-    id?: string
-    /** @example true */
-    managed?: boolean
-    /** @example true */
-    manualVerification?: boolean
-    /** @example "azure_ad_manual_control" */
-    queryID?: string
-    /** @example "low" */
-    severity?: TypesFindingSeverity
-    tags?: Record<string, string[]>
-    /** @example "1.1 Ensure that multi-factor authentication status is enabled for all privileged users" */
-    title?: string
-    /** @example "2020-01-01T00:00:00Z" */
-    updatedAt?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary {
-    evaluatedAt?: number
-    failedConnectionCount?: number
-    failedResourcesCount?: number
-    passed?: boolean
-    policy?: GithubComKaytuIoKaytuEnginePkgComplianceApiPolicy
-    totalConnectionCount?: number
-    totalResourcesCount?: number
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     /** @example "Azure" */
     connector?: string
@@ -1045,11 +1046,22 @@ export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus {
     JobStatusTimeout = 'timeout',
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary {
+    count?: number
+    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus
+    type?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobType
+}
+
 export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobType {
     JobTypeDiscovery = 'discovery',
     JobTypeAnalytics = 'analytics',
     JobTypeCompliance = 'compliance',
     JobTypeInsight = 'insight',
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse {
+    jobs?: GithubComKaytuIoKaytuEnginePkgDescribeApiJob[]
+    summaries?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiStack {
@@ -1292,6 +1304,11 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiMetric {
     /** @example "vms" */
     id?: string
     /**
+     * Last time the metric was evaluated
+     * @example "2020-01-01T00:00:00Z"
+     */
+    last_evaluated?: string
+    /**
      * Resource Type
      * @example "VMs"
      */
@@ -1532,9 +1549,11 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyAutoDiscoveryMethod = 'auto_discovery_method',
     MetadataKeyDescribeJobInterval = 'describe_job_interval',
     MetadataKeyFullDiscoveryJobInterval = 'full_discovery_job_interval',
+    MetadataKeyCostDiscoveryJobInterval = 'cost_discovery_job_interval',
     MetadataKeyHealthCheckJobInterval = 'health_check_job_interval',
     MetadataKeyInsightJobInterval = 'insight_job_interval',
     MetadataKeyMetricsJobInterval = 'metrics_job_interval',
+    MetadataKeyComplianceJobInterval = 'compliance_job_interval',
     MetadataKeyDataRetention = 'data_retention_duration',
     MetadataKeyAnalyticsGitURL = 'analytics_git_url',
 }
@@ -2852,20 +2871,20 @@ export class Api<
          * No description
          *
          * @tags compliance
-         * @name ApiV1AiPolicyRemediationCreate
-         * @summary Get policy remediation using AI
-         * @request POST:/compliance/api/v1/ai/policy/{policyID}/remediation
+         * @name ApiV1AiControlRemediationCreate
+         * @summary Get control remediation using AI
+         * @request POST:/compliance/api/v1/ai/control/{controlID}/remediation
          * @secure
          */
-        apiV1AiPolicyRemediationCreate: (
-            policyId: string,
+        apiV1AiControlRemediationCreate: (
+            controlId: string,
             params: RequestParams = {}
         ) =>
             this.request<
                 GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
                 any
             >({
-                path: `/compliance/api/v1/ai/policy/${policyId}/remediation`,
+                path: `/compliance/api/v1/ai/control/${controlId}/remediation`,
                 method: 'POST',
                 secure: true,
                 type: ContentType.Json,
@@ -3055,12 +3074,12 @@ export class Api<
          * No description
          *
          * @tags compliance
-         * @name ApiV1BenchmarksPoliciesDetail
-         * @summary Get benchmark policies
-         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/policies
+         * @name ApiV1BenchmarksControlsDetail
+         * @summary Get benchmark controls
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/controls
          * @secure
          */
-        apiV1BenchmarksPoliciesDetail: (
+        apiV1BenchmarksControlsDetail: (
             benchmarkId: string,
             query?: {
                 /** Connection IDs to filter by */
@@ -3071,10 +3090,10 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[],
                 any
             >({
-                path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies`,
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/controls`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -3087,16 +3106,16 @@ export class Api<
          * No description
          *
          * @tags compliance
-         * @name ApiV1BenchmarksPoliciesDetail2
-         * @summary Get benchmark policies
-         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/policies/{policyId}
-         * @originalName apiV1BenchmarksPoliciesDetail
+         * @name ApiV1BenchmarksControlsDetail2
+         * @summary Get benchmark controls
+         * @request GET:/compliance/api/v1/benchmarks/{benchmark_id}/controls/{controlId}
+         * @originalName apiV1BenchmarksControlsDetail
          * @duplicate
          * @secure
          */
-        apiV1BenchmarksPoliciesDetail2: (
+        apiV1BenchmarksControlsDetail2: (
             benchmarkId: string,
-            policyId: string,
+            controlId: string,
             query?: {
                 /** Connection IDs to filter by */
                 connectionId?: string[]
@@ -3106,10 +3125,10 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary,
+                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
                 any
             >({
-                path: `/compliance/api/v1/benchmarks/${benchmarkId}/policies/${policyId}`,
+                path: `/compliance/api/v1/benchmarks/${benchmarkId}/controls/${controlId}`,
                 method: 'GET',
                 query: query,
                 secure: true,
@@ -3313,11 +3332,11 @@ export class Api<
             }),
 
         /**
-         * @description Retrieving the number of findings field count by policies.
+         * @description Retrieving the number of findings field count by controls.
          *
          * @tags compliance
          * @name ApiV1FindingsCountDetail
-         * @summary Get findings field count by policies
+         * @summary Get findings field count by controls
          * @request GET:/compliance/api/v1/findings/{benchmarkId}/{field}/count
          * @secure
          */
@@ -3958,7 +3977,7 @@ export class Api<
                 endTime?: number
                 /** timestamp for resource count change comparison in epoch seconds */
                 startTime?: number
-                /** Minimum number of resources with this tag value, default 1 */
+                /** Minimum number of resources with this tag value, default 0 */
                 minCount?: number
                 /** Sort by field - default is count */
                 sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
@@ -5175,10 +5194,15 @@ export class Api<
             query?: {
                 /** Limit */
                 limit?: number
+                /** Hours */
+                hours?: number
             },
             params: RequestParams = {}
         ) =>
-            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiJob[], any>({
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
+                any
+            >({
                 path: `/schedule/api/v1/jobs`,
                 method: 'GET',
                 query: query,
@@ -5800,6 +5824,27 @@ export class Api<
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Get workspace with workspace name
+         *
+         * @tags workspace
+         * @name ApiV1WorkspacesBynameDetail
+         * @summary Get workspace for workspace service
+         * @request GET:/workspace/api/v1/workspaces/byname/{workspace_name}
+         * @secure
+         */
+        apiV1WorkspacesBynameDetail: (
+            workspaceName: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/workspace/api/v1/workspaces/byname/${workspaceName}`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
                 ...params,
             }),
 
