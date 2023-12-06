@@ -153,6 +153,16 @@ export default function Chart({
         }
         if (chartType === 'doughnut') {
             return {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: (params: any) => {
+                        return `${params.data.name} (${params.percent}%):\n\n${
+                            isCost
+                                ? exactPriceDisplay(params.data.value)
+                                : numberDisplay(params.data.value, 0)
+                        }`
+                    },
+                },
                 series: [
                     {
                         type: 'pie',
@@ -160,28 +170,30 @@ export default function Chart({
                         // center: ['50%', '50%'],
                         avoidLabelOverlap: false,
                         label: {
-                            show: false,
+                            show: true,
                             position: 'center',
+                            formatter: () => {
+                                let total = 0
+                                for (
+                                    let i = 0;
+                                    i < (chartData ? chartData?.length : 0);
+                                    i += 1
+                                ) {
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    total += Number(chartData[i].value)
+                                }
+
+                                return `Total: ${
+                                    isCost
+                                        ? exactPriceDisplay(total)
+                                        : numberDisplay(total, 0)
+                                }`
+                            },
                         },
                         emphasis: {
                             label: {
-                                show: true,
-                                fontSize: 16,
-                                fontWeight: 'bold',
-                                formatter: (params: any) => {
-                                    return `${params.data.name} - ${
-                                        params.percent
-                                    }%\n\n${
-                                        isCost
-                                            ? exactPriceDisplay(
-                                                  params.data.value
-                                              )
-                                            : numberDisplay(
-                                                  params.data.value,
-                                                  0
-                                              )
-                                    }`
-                                },
+                                show: false,
                             },
                         },
                         itemStyle: {
