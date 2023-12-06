@@ -114,6 +114,15 @@ export const defaultColumns: IColumn<any, any>[] = [
                 ? badgeDelta(params.data?.old_count, params.data?.count, true)
                 : badgeDelta(params.value, 0, true),
     },
+    {
+        field: 'last_evaluated',
+        resizable: true,
+        sortable: true,
+        headerName: 'Last evaluated',
+        hide: true,
+        filter: true,
+        type: 'datetime',
+    },
 ]
 
 export const options: GridOptions = {
@@ -161,6 +170,7 @@ export default function Metrics({
     }
     const { response: resources, isLoading: resourcesLoading } =
         useInventoryApiV2AnalyticsMetricList(query)
+    console.log(resources)
 
     const columns: IColumn<any, any>[] = [
         {
