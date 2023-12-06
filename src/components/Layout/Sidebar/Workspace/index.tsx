@@ -40,7 +40,6 @@ export default function Workspace({ isCollapsed }: IWorkspace) {
             }
         }
     }, [workspace, workspaceInfo])
-    console.log(workspace)
 
     return (
         <Flex className="mt-2 h-16 shrink-0 border-b border-gray-700 relative">

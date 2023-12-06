@@ -273,7 +273,7 @@ export default function BenchmarkSummary() {
             <Grid numItems={5} className="w-full gap-4 mt-4">
                 <Col numColSpan={2}>
                     <Breakdown
-                        title="Findings be severity"
+                        title="Findings severity"
                         chartData={[
                             { name: 'Critical', value: critical },
                             { name: 'High', value: high },
