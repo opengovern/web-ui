@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Flex, Tab, TabGroup, TabList } from '@tremor/react'
 import {
+    BugAntIcon,
     BuildingOfficeIcon,
     FolderIcon,
     UserIcon,
@@ -20,6 +21,8 @@ import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
 import Header from '../../components/Header'
 import { isDemoAtom } from '../../store'
+import SettingsJobs from './Jobs'
+import SettingsCustomization from './Customization'
 
 const navigation = [
     {
@@ -58,6 +61,23 @@ const navigation = [
                 name: 'Organization Info',
                 page: '#org',
                 role: ['admin', 'editor', 'viewer'],
+            },
+        ],
+    },
+    {
+        name: 'Debug',
+        icon: BugAntIcon,
+        role: ['admin', 'editor', 'viewer'],
+        children: [
+            {
+                name: 'Jobs',
+                page: '#jobs',
+                role: ['admin', 'editor', 'viewer'],
+            },
+            {
+                name: 'Customization',
+                page: '#customization',
+                role: ['admin'],
             },
         ],
     },
@@ -114,29 +134,17 @@ export default function Settings() {
             case '#profile':
                 setSelectedTab(<SettingsProfile />)
                 break
+            case '#jobs':
+                setSelectedTab(<SettingsJobs />)
+                break
+            case '#customization':
+                setSelectedTab(<SettingsCustomization />)
+                break
             default:
                 setSelectedTab(<SettingsEntitlement />)
                 break
         }
     }, [currentSubPage])
-
-    const [isDemo, setIsDemo] = useAtom(isDemoAtom)
-    const [selectedMode, setSelectedMode] = useState(isDemo ? 1 : 0)
-    useEffect(() => {
-        switch (selectedMode) {
-            case 0:
-                localStorage.demoMode = 'false'
-                setIsDemo(false)
-                break
-            case 1:
-                localStorage.demoMode = 'true'
-                setIsDemo(true)
-                break
-            default:
-                localStorage.demoMode = 'false'
-                setIsDemo(false)
-        }
-    }, [selectedMode])
 
     const getRole = () => {
         if (decodedToken) {
@@ -204,19 +212,6 @@ export default function Settings() {
                                     )
                                 })}
                             </ul>
-                            <TabGroup
-                                index={selectedMode}
-                                onIndexChange={setSelectedMode}
-                                className="mt-12"
-                            >
-                                <TabList
-                                    className="border border-gray-200"
-                                    variant="solid"
-                                >
-                                    <Tab>App mode</Tab>
-                                    <Tab>Demo mode</Tab>
-                                </TabList>
-                            </TabGroup>
                         </nav>
                     </Flex>
                     <Flex className="w-full h-full pl-6">{selectedTab}</Flex>

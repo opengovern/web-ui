@@ -161,7 +161,7 @@ export default function JobsMenu() {
                     id="Jobs"
                 >
                     <span className="sr-only">Jobs</span>
-                    <ArrowPathIcon className="h-6 w-6" />
+                    <ClipboardDocumentListIcon className="h-6 w-6" />
                 </Popover.Button>
                 <Transition
                     as={Fragment}
