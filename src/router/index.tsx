@@ -14,7 +14,7 @@ import Compliance from '../pages/Governance/Compliance'
 import BenchmarkSummary from '../pages/Governance/Compliance/BenchmarkSummary'
 import Home from '../pages/Home'
 import Stack from '../pages/Stack'
-import Finder from '../pages/Finder'
+import Query from '../pages/Query'
 import Single from '../pages/Assets/Single'
 import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
@@ -203,7 +203,7 @@ const authRoutes = [
     {
         key: 'query',
         path: '/:ws/query',
-        component: Finder,
+        component: Query,
     },
     {
         key: 'rules',

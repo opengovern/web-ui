@@ -127,7 +127,7 @@ const columns: IColumn<
     },
 ]
 
-export default function Finder() {
+export default function Query() {
     const [loaded, setLoaded] = useState(false)
     const [savedQuery, setSavedQuery] = useAtom(queryAtom)
     const [code, setCode] = useState(savedQuery || '')
@@ -144,7 +144,6 @@ export default function Finder() {
         useInventoryApiV2AnalyticsCategoriesList()
     const { response: queries, isLoading: queryLoading } =
         useInventoryApiV1QueryList({})
-
     const {
         response: queryResponse,
         isLoading,
