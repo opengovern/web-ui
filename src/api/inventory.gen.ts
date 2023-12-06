@@ -37,7 +37,9 @@ export const useInventoryApiV1QueryList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -146,7 +148,9 @@ export const useInventoryApiV1QueryRunCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -254,7 +258,9 @@ export const useInventoryApiV1QueryRunHistoryList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -368,7 +374,9 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -495,7 +503,9 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -631,7 +641,9 @@ export const useInventoryApiV2AnalyticsMetricList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -745,7 +757,9 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -855,7 +869,9 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -977,7 +993,9 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1107,7 +1125,9 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1233,7 +1253,9 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1357,7 +1379,9 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1475,7 +1499,9 @@ export const useInventoryApiV2AnalyticsTableList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1601,7 +1627,9 @@ export const useInventoryApiV2AnalyticsTagList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1732,7 +1760,9 @@ export const useInventoryApiV2AnalyticsTrendList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1846,7 +1876,9 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1956,7 +1988,9 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2078,7 +2112,9 @@ export const useInventoryApiV2ResourceCollectionList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2188,7 +2224,9 @@ export const useInventoryApiV2ResourceCollectionDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2306,7 +2344,9 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()

@@ -25,7 +25,9 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -137,7 +139,9 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -250,7 +254,9 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -362,7 +368,9 @@ export const useScheduleApiV1InsightTriggerUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -476,7 +484,9 @@ export const useScheduleApiV1JobsList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -589,7 +599,9 @@ export const useScheduleApiV1StacksList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -706,7 +718,9 @@ export const useScheduleApiV1StacksCreateCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -818,7 +832,9 @@ export const useScheduleApiV1StacksResourceList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -928,7 +944,9 @@ export const useScheduleApiV1StacksDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1037,7 +1055,9 @@ export const useScheduleApiV1StacksDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1147,7 +1167,9 @@ export const useScheduleApiV1StacksFindingsCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1264,7 +1286,9 @@ export const useScheduleApiV1StacksInsightDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1381,7 +1405,9 @@ export const useScheduleApiV1StacksInsightsDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()

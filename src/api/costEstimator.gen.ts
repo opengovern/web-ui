@@ -21,7 +21,9 @@ export const useCostEstimatorApiV1CostAwsList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -134,7 +136,9 @@ export const useCostEstimatorApiV1CostAzureList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()

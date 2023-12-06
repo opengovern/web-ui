@@ -38,7 +38,9 @@ export const useComplianceApiV1AiControlRemediationCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -148,7 +150,9 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -258,7 +262,9 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -368,7 +374,9 @@ export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -493,7 +501,9 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -616,7 +626,9 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -744,7 +756,9 @@ export const useComplianceApiV1BenchmarksSummaryList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -859,7 +873,9 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -977,7 +993,9 @@ export const useComplianceApiV1BenchmarksControlsDetail2 = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1108,7 +1126,9 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1233,7 +1253,9 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1345,7 +1367,9 @@ export const useComplianceApiV1FindingsCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1454,7 +1478,9 @@ export const useComplianceApiV1FindingsFiltersCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1569,7 +1595,9 @@ export const useComplianceApiV1FindingsAccountsDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1686,7 +1714,9 @@ export const useComplianceApiV1FindingsServicesDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1817,7 +1847,9 @@ export const useComplianceApiV1FindingsCountDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1957,7 +1989,9 @@ export const useComplianceApiV1FindingsTopDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2105,7 +2139,9 @@ export const useComplianceApiV1InsightList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2228,7 +2264,9 @@ export const useComplianceApiV1InsightGroupList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2349,7 +2387,9 @@ export const useComplianceApiV1InsightGroupDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2477,7 +2517,9 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2607,7 +2649,9 @@ export const useComplianceApiV1InsightDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2729,7 +2773,9 @@ export const useComplianceApiV1InsightTrendDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2839,7 +2885,9 @@ export const useComplianceApiV1MetadataInsightDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2948,7 +2996,9 @@ export const useComplianceApiV1MetadataTagComplianceList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -3057,7 +3107,9 @@ export const useComplianceApiV1MetadataTagInsightList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -3169,7 +3221,9 @@ export const useComplianceApiV1QueriesSyncList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()

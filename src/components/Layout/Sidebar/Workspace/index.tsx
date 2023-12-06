@@ -52,9 +52,9 @@ export default function Workspace({ isCollapsed }: IWorkspace) {
                     <Flex>
                         <Title className="text-gray-100 ml-1.5">Kaytu</Title>
                         {showInfo ? (
-                            <ChevronLeftIcon className="w-4 text-gray-100 mr-3" />
+                            <ChevronLeftIcon className="w-4 text-gray-100 mr-5" />
                         ) : (
-                            <ChevronRightIcon className="w-4 text-gray-100 mr-3" />
+                            <ChevronRightIcon className="w-4 text-gray-100 mr-5" />
                         )}
                     </Flex>
                 )}

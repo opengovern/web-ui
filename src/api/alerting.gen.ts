@@ -30,7 +30,9 @@ export const useAlertingApiV1ActionCreateCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -140,7 +142,9 @@ export const useAlertingApiV1ActionDeleteDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -250,7 +254,9 @@ export const useAlertingApiV1ActionJiraCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -358,7 +364,9 @@ export const useAlertingApiV1ActionListList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -467,7 +475,9 @@ export const useAlertingApiV1ActionSlackCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -579,7 +589,9 @@ export const useAlertingApiV1ActionUpdateUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -691,7 +703,9 @@ export const useAlertingApiV1RuleCreateCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -800,7 +814,9 @@ export const useAlertingApiV1RuleDeleteDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -908,7 +924,9 @@ export const useAlertingApiV1RuleListList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1018,7 +1036,9 @@ export const useAlertingApiV1RuleUpdateUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1127,7 +1147,9 @@ export const useAlertingApiV1RuleTriggerDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1237,7 +1259,9 @@ export const useAlertingApiV1TriggerListList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{ ws: string }>().ws
+    const workspace = useParams<{
+        ws: string
+    }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
