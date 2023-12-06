@@ -34,7 +34,7 @@ import { isDemoAtom, notificationAtom } from '../../../../../store'
 import Layout from '../../../../../components/Layout'
 import {
     useComplianceApiV1AssignmentsConnectionDetail,
-    useComplianceApiV1BenchmarksPoliciesDetail,
+    useComplianceApiV1BenchmarksControlsDetail,
     useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1FindingsCreate,
 } from '../../../../../api/compliance.gen'
@@ -112,7 +112,7 @@ export default function SingleComplianceConnection() {
         response: policies,
         isLoading: policiesLoading,
         sendNow: updatePolicy,
-    } = useComplianceApiV1BenchmarksPoliciesDetail(benchmark || '', {
+    } = useComplianceApiV1BenchmarksControlsDetail(benchmark || '', {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         connectionID: [connection?.replace('account_', '') || ''],

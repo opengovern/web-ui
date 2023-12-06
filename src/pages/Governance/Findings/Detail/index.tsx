@@ -33,7 +33,7 @@ export default function FindingDetail({
                 <ListItem className="py-6 flex items-start">
                     <Text>Policy name</Text>
                     <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.policyTitle}
+                        {finding?.controlTitle}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
@@ -93,13 +93,13 @@ export default function FindingDetail({
                 <ListItem className="py-6 flex items-start">
                     <Text>Policy title</Text>
                     <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.policyTitle}
+                        {finding?.controlTitle}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Policy name</Text>
                     <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.policyID}
+                        {finding?.controlID}
                     </Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
