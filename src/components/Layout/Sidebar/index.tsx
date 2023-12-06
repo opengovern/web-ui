@@ -30,6 +30,7 @@ import {
     sideBarCollapsedAtom,
 } from '../../../store'
 import { KaytuIcon } from '../../../icons/icons'
+import Workspace from './Workspace'
 
 const navigation = [
     {
@@ -127,18 +128,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                 </Flex>
             )}
             <Flex flexDirection="col" className="h-full w-full gap-y-5">
-                <Flex
-                    alignItems="center"
-                    justifyContent="start"
-                    className="mt-2 h-16 shrink-0 border-b border-gray-700"
-                >
-                    <KaytuIcon
-                        className={`ml-5 ${collapsed ? 'w-8 h-8' : 'w-7 h-7'}`}
-                    />
-                    {!collapsed && (
-                        <Title className="text-slate-50 ml-1.5">kaytu</Title>
-                    )}
-                </Flex>
+                <Workspace isCollapsed={collapsed} />
                 <nav className="w-full flex flex-1 flex-col px-4 justify-between items-center">
                     <ul className="w-full">
                         {navigation.map((item) => (
