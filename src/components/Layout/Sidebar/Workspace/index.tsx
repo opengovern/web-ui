@@ -64,7 +64,7 @@ export default function Workspace({ isCollapsed }: IWorkspace) {
             {showInfo && (
                 <>
                     <Card
-                        className="absolute z-20 bg-kaytu-950 p-4"
+                        className="absolute z-20 bg-kaytu-950 p-4 w-64 rounded-tl-xl"
                         style={{
                             left: 'calc(100% + 4px)',
                             top: '4px',

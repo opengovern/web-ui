@@ -170,7 +170,6 @@ export default function Metrics({
     }
     const { response: resources, isLoading: resourcesLoading } =
         useInventoryApiV2AnalyticsMetricList(query)
-    console.log(resources)
 
     const columns: IColumn<any, any>[] = [
         {
