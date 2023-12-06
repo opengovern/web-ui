@@ -9,6 +9,7 @@ import { options } from '../Metrics'
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiMetric,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
 } from '../../../../../api/api'
 import { badgeDelta } from '../../../../../utilities/deltaType'
 
@@ -123,6 +124,30 @@ const columns = (isDemo: boolean) => {
     return temp
 }
 
+const rowGenerator = (
+    data:
+        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | undefined
+) => {
+    const rows = []
+    if (data && data.connections) {
+        for (let i = 0; i < data.connections.length; i += 1) {
+            rows.push({
+                ...data.connections[i],
+                change_percent:
+                    (((data.connections[i].oldResourceCount || 0) -
+                        (data.connections[i].resourceCount || 0)) /
+                        (data.connections[i].resourceCount || 1)) *
+                    100,
+                change_delta:
+                    (data.connections[i].oldResourceCount || 0) -
+                    (data.connections[i].resourceCount || 0),
+            })
+        }
+    }
+    return rows
+}
+
 export default function CloudAccounts({
     activeTimeRange,
     connections,
@@ -165,19 +190,16 @@ export default function CloudAccounts({
             id="asset_connection_table"
             columns={columns(isDemo)}
             downloadable
-            rowData={
-                accounts?.connections
-                    ?.sort(
-                        (a, b) =>
-                            (b.resourceCount || 0) - (a.resourceCount || 0)
+            rowData={rowGenerator(accounts)
+                ?.sort(
+                    (a, b) => (b.resourceCount || 0) - (a.resourceCount || 0)
+                )
+                .filter((acc) => {
+                    return (
+                        acc.lifecycleState === 'ONBOARD' ||
+                        acc.lifecycleState === 'IN_PROGRESS'
                     )
-                    .filter((acc) => {
-                        return (
-                            acc.lifecycleState === 'ONBOARD' ||
-                            acc.lifecycleState === 'IN_PROGRESS'
-                        )
-                    }) || []
-            }
+                })}
             loading={isAccountsLoading}
             onRowClicked={(event) => {
                 if (event.data) {
