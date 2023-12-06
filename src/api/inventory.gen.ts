@@ -54,6 +54,10 @@ export const useInventoryApiV1QueryList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -161,6 +165,10 @@ export const useInventoryApiV1QueryRunCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -268,6 +276,10 @@ export const useInventoryApiV1QueryRunHistoryList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -380,6 +392,10 @@ export const useInventoryApiV2AnalyticsCategoriesList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -505,6 +521,10 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -639,6 +659,10 @@ export const useInventoryApiV2AnalyticsMetricList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -751,6 +775,10 @@ export const useInventoryApiV2AnalyticsMetricsListList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -859,6 +887,10 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -979,6 +1011,10 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1107,6 +1143,10 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1231,6 +1271,10 @@ export const useInventoryApiV2AnalyticsSpendTableList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1353,6 +1397,10 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1469,6 +1517,10 @@ export const useInventoryApiV2AnalyticsTableList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1594,6 +1646,10 @@ export const useInventoryApiV2AnalyticsTagList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1722,6 +1778,10 @@ export const useInventoryApiV2AnalyticsTrendList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1834,6 +1894,10 @@ export const useInventoryApiV2MetadataResourceCollectionList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1942,6 +2006,10 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2062,6 +2130,10 @@ export const useInventoryApiV2ResourceCollectionList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2170,6 +2242,10 @@ export const useInventoryApiV2ResourceCollectionDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2286,6 +2362,10 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,

@@ -56,6 +56,10 @@ export const useComplianceApiV1AiControlRemediationCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -164,6 +168,10 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -272,6 +280,10 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -380,6 +392,10 @@ export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -503,6 +519,10 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -624,6 +644,10 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -750,6 +774,10 @@ export const useComplianceApiV1BenchmarksSummaryList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -863,6 +891,10 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -979,6 +1011,10 @@ export const useComplianceApiV1BenchmarksControlsDetail2 = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1108,6 +1144,10 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1231,6 +1271,10 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1340,6 +1384,10 @@ export const useComplianceApiV1FindingsCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1448,6 +1496,10 @@ export const useComplianceApiV1FindingsFiltersCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1561,6 +1613,10 @@ export const useComplianceApiV1FindingsAccountsDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1676,6 +1732,10 @@ export const useComplianceApiV1FindingsServicesDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1805,6 +1865,10 @@ export const useComplianceApiV1FindingsCountDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1943,6 +2007,10 @@ export const useComplianceApiV1FindingsTopDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2088,6 +2156,10 @@ export const useComplianceApiV1InsightList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2210,6 +2282,10 @@ export const useComplianceApiV1InsightGroupList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2329,6 +2405,10 @@ export const useComplianceApiV1InsightGroupDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2455,6 +2535,10 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2582,6 +2666,10 @@ export const useComplianceApiV1InsightDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2703,6 +2791,10 @@ export const useComplianceApiV1InsightTrendDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2811,6 +2903,10 @@ export const useComplianceApiV1MetadataInsightDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2918,6 +3014,10 @@ export const useComplianceApiV1MetadataTagComplianceList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -3025,6 +3125,10 @@ export const useComplianceApiV1MetadataTagInsightList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -3136,6 +3240,10 @@ export const useComplianceApiV1QueriesSyncList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,

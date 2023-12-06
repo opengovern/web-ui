@@ -59,6 +59,10 @@ export const useOnboardApiV1CatalogMetricsList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -169,6 +173,10 @@ export const useOnboardApiV1ConnectionGroupsList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -280,6 +288,10 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -397,6 +409,10 @@ export const useOnboardApiV1ConnectionsAwsCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -545,6 +561,10 @@ export const useOnboardApiV1ConnectionsSummaryList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -654,6 +674,10 @@ export const useOnboardApiV1ConnectionsStateCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -769,6 +793,10 @@ export const useOnboardApiV1ConnectorList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -891,6 +919,10 @@ export const useOnboardApiV1CredentialList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -998,6 +1030,10 @@ export const useOnboardApiV1CredentialCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1105,6 +1141,10 @@ export const useOnboardApiV1CredentialDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1213,6 +1253,10 @@ export const useOnboardApiV1CredentialUpdate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1325,6 +1369,10 @@ export const useOnboardApiV1CredentialDelete = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1433,6 +1481,10 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1540,6 +1592,10 @@ export const useOnboardApiV1SourceAwsCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1647,6 +1703,10 @@ export const useOnboardApiV1SourceAzureCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1754,6 +1814,10 @@ export const useOnboardApiV1SourceDelete = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1865,6 +1929,10 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1972,6 +2040,10 @@ export const useOnboardApiV2CredentialCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,

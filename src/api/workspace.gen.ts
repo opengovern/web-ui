@@ -50,6 +50,10 @@ export const useWorkspaceApiV1BootstrapDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -159,6 +163,10 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -276,6 +284,10 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -384,6 +396,10 @@ export const useWorkspaceApiV1OrganizationList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -492,6 +508,10 @@ export const useWorkspaceApiV1OrganizationCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -600,6 +620,10 @@ export const useWorkspaceApiV1OrganizationDelete = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -707,6 +731,10 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -814,6 +842,10 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -921,6 +953,10 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1030,6 +1066,10 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1144,6 +1184,10 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1262,6 +1306,10 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1375,6 +1423,10 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1483,6 +1535,10 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1592,6 +1648,10 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1703,6 +1763,10 @@ export const useWorkspaceApiV1WorkspacesList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1811,6 +1875,10 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1919,6 +1987,10 @@ export const useWorkspaceApiV1WorkspacesBynameDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2027,6 +2099,10 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2138,6 +2214,10 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -2252,6 +2332,10 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,

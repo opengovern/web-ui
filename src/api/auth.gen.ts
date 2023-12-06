@@ -47,6 +47,10 @@ export const useAuthApiV1KeyCreateCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -154,6 +158,10 @@ export const useAuthApiV1KeyDeleteDelete = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -260,6 +268,10 @@ export const useAuthApiV1KeysList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -367,6 +379,10 @@ export const useAuthApiV1UserInviteCreate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -476,6 +492,10 @@ export const useAuthApiV1UserRoleBindingUpdate = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -587,6 +607,10 @@ export const useAuthApiV1UserRoleBindingDelete = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -693,6 +717,10 @@ export const useAuthApiV1UserRoleBindingsList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -800,6 +828,10 @@ export const useAuthApiV1UserDetail = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -907,6 +939,10 @@ export const useAuthApiV1UsersList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,
@@ -1014,6 +1050,10 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
         setState({
             ...state,
             error: undefined,

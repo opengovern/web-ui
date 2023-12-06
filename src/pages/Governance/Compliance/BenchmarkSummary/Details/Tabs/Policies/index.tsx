@@ -5,13 +5,13 @@ import {
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { Badge, Flex } from '@tremor/react'
-import { useComplianceApiV1BenchmarksPoliciesDetail } from '../../../../../../../api/compliance.gen'
 import 'ag-grid-enterprise'
 import Table, { IColumn } from '../../../../../../../components/Table'
 import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary } from '../../../../../../../api/api'
 import { numberDisplay } from '../../../../../../../utilities/numericDisplay'
 import PolicyDetail from './Detail'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../../../../../api/api'
+import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../../../api/compliance.gen'
 
 interface IPolicies {
     id: string | undefined
@@ -67,14 +67,14 @@ export const policyColumns: IColumn<any, any>[] = [
         filter: true,
         resizable: true,
         cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) => (
             <Flex
                 className="h-full w-full"
                 justifyContent="center"
                 alignItems="center"
             >
-                {renderBadge(params.data?.policy?.severity)}
+                {renderBadge(params.data?.control?.severity)}
             </Flex>
         ),
     },
@@ -87,7 +87,7 @@ export const policyColumns: IColumn<any, any>[] = [
         filter: true,
         resizable: true,
         cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) => {
             return (
                 <Flex
@@ -106,7 +106,7 @@ export const policyColumns: IColumn<any, any>[] = [
         type: 'string',
         width: 150,
         cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) =>
             `${numberDisplay(
                 ((params.data?.failedResourcesCount || 0) /
@@ -121,7 +121,7 @@ export const policyColumns: IColumn<any, any>[] = [
         type: 'string',
         width: 150,
         cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) =>
             `${numberDisplay(
                 ((params.data?.failedConnectionCount || 0) /
@@ -166,7 +166,7 @@ export default function Policies({ id }: IPolicies) {
     const [selectedPolicy, setSelectedPolicy] = useState<any>(undefined)
 
     const { response: policies, isLoading } =
-        useComplianceApiV1BenchmarksPoliciesDetail(String(id))
+        useComplianceApiV1BenchmarksControlsDetail(String(id))
 
     return (
         <>

@@ -10,7 +10,7 @@ import {
     useInventoryApiV2MetadataResourceCollectionList,
     useInventoryApiV2ResourceCollectionList,
 } from '../../api/inventory.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary } from '../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../api/api'
 import Tag from '../../components/Tag'
 
 const resourceCollectionColumns: IColumn<any, any>[] = [
@@ -50,7 +50,7 @@ const resourceCollectionColumns: IColumn<any, any>[] = [
         resizable: true,
         flex: 1.5,
         cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiPolicySummary>
+            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) => (
             <Flex
                 className="h-full pl-2 gap-1 flex-wrap"
