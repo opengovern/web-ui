@@ -116,7 +116,11 @@ const columns = () => {
 }
 
 export default function SettingsJobs() {
-    const { response: jobs, isLoading, error } = useScheduleApiV1JobsList()
+    const {
+        response: jobs,
+        isLoading,
+        error,
+    } = useScheduleApiV1JobsList({ limit: 5000 })
     const options: GridOptions = {
         enableGroupEdit: true,
         columnTypes: {

@@ -87,14 +87,14 @@ function Metric({ title, metricId, min, max }: IMetric) {
             </Flex>
 
             <NumberInput
-                icon={isLoading ? Spinner : undefined}
-                disabled={isLoading}
                 value={value}
-                onValueChange={(e) => setValue(String(e))}
-                error={error !== undefined}
                 min={min}
                 max={max}
+                onValueChange={(e) => setValue(String(e))}
+                error={error !== undefined}
                 errorMessage={getErrorMessage(error)}
+                icon={isLoading ? Spinner : undefined}
+                disabled={isLoading}
             />
         </ListItem>
     )
