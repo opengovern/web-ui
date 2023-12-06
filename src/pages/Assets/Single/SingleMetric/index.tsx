@@ -164,12 +164,6 @@ export default function SingleMetric({
         }
     }, [selectedConnections.connections, metricDetail, pageSize])
 
-    const memoRows = useMemo(
-        () =>
-            getTable(queryResponse?.headers, queryResponse?.result, isDemo)
-                .rows,
-        [queryResponse, isDemo]
-    )
     const memoColumns = useMemo(
         () =>
             getTable(queryResponse?.headers, queryResponse?.result, isDemo)
@@ -185,11 +179,9 @@ export default function SingleMetric({
 
     const showTable = () => {
         return (
-            selectedConnections.provider === '' &&
-            selectedConnections.connectionGroup.length === 0 &&
             !resourceId &&
             activeTimeRange.end.format('DD-MM-YYYY') ===
-                dayjs.utc().format('DD-MM-YYYY')
+                dayjs().format('DD-MM-YYYY')
         )
     }
 
@@ -327,7 +319,13 @@ export default function SingleMetric({
                             }
                         }}
                         columns={memoColumns}
-                        rowData={memoRows}
+                        rowData={
+                            getTable(
+                                queryResponse?.headers,
+                                queryResponse?.result,
+                                isDemo
+                            ).rows
+                        }
                         downloadable
                         onRowClicked={(event: RowClickedEvent) => {
                             setSelectedRow(event.data)
@@ -417,7 +415,8 @@ export default function SingleMetric({
                     <Callout title="We only support LIVE data" color="amber">
                         To see the resource table you have to check if your end
                         date is set to today and remove all filters the you have
-                        applied.
+                        applied (like visiting this page from Resource
+                        Collection).
                     </Callout>
                 )}
             </div>
