@@ -67,6 +67,15 @@ function Metric({ title, metricId, min, max }: IMetric) {
     }, [setIsLoading])
 
     useEffect(() => {
+        try {
+            const valueInt = parseInt(value, 10)
+            if (valueInt < min || valueInt > max) {
+                return
+            }
+        } catch (e) {
+            return
+        }
+
         if (timer !== undefined && timer !== null) {
             clearTimeout(timer)
         }

@@ -134,6 +134,10 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
+		if (!api.instance.defaults.headers.common.Authorization) {
+			return 
+		}
+
 		setState({
 			...state,
 			error: undefined,
@@ -214,20 +218,25 @@ export const %[6]s = (%[2]s, autoExecute = true) => {
 		apiFiles[module] += contentAPI
 	}
 
-	ims := ""
-	var imps []string
-	for k := range imports {
-		imps = append(imps, k)
-	}
-	sort.Strings(imps)
-
-	for _, k := range imps {
-		if strings.TrimSpace(k) == "any," {
-			continue
-		}
-		ims += k + "\n"
-	}
 	for k, v := range apiFiles {
+		ims := ""
+		var imps []string
+		for k := range imports {
+			imps = append(imps, k)
+		}
+		sort.Strings(imps)
+
+		for _, k := range imps {
+			if strings.TrimSpace(k) == "any," {
+				continue
+			}
+
+			if !strings.Contains(v, strings.ReplaceAll(strings.TrimSpace(k), ",", "")) {
+				continue
+			}
+			ims += k + "\n"
+		}
+
 		apiFiles[k] = fmt.Sprintf(importFormat, ims) + v
 		// 		apiFiles[k] = importFormat + v
 		err = os.WriteFile(fmt.Sprintf("./src/api/%s.gen.ts", k), []byte(apiFiles[k]), os.ModePerm)

@@ -139,7 +139,7 @@ export default function SettingsJobs() {
             <Table
                 id="jobs"
                 columns={columns()}
-                rowData={jobs}
+                rowData={jobs?.jobs}
                 options={options}
                 onGridReady={(e) => {
                     if (isLoading) {
