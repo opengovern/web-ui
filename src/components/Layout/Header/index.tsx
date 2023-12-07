@@ -81,11 +81,13 @@ export default function Header({ workspace }: IHeader) {
                                 leaveTo="transform opacity-0 scale-95"
                             >
                                 <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white dark:bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                                    <Menu.Item key="Your profile">
-                                        {({ active }) => (
-                                            <Link
-                                                to={`/${workspace}/settings#profile`}
-                                                className={`
+                                    {workspace !== undefined &&
+                                        workspace.length > 0 && (
+                                            <Menu.Item key="Your profile">
+                                                {({ active }) => (
+                                                    <Link
+                                                        to={`/${workspace}/settings#profile`}
+                                                        className={`
                                                     ${
                                                         active
                                                             ? 'bg-gray-50'
@@ -93,11 +95,13 @@ export default function Header({ workspace }: IHeader) {
                                                     }
                                                     'block px-3 py-1 text-sm leading-6 text-gray-900'
                                                 `}
-                                            >
-                                                Your profile
-                                            </Link>
+                                                    >
+                                                        Your profile
+                                                    </Link>
+                                                )}
+                                            </Menu.Item>
                                         )}
-                                    </Menu.Item>
+
                                     <Menu.Item key="Sign out">
                                         {({ active }) => (
                                             <button

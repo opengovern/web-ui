@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { useEffect, useState } from 'react'
 import { PlusIcon } from '@heroicons/react/24/solid'
+import { useNavigate } from 'react-router-dom'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
 import { useWorkspaceApiV1BootstrapDetail } from '../../../api/workspace.gen'
 import Spinner from '../../../components/Spinner'
@@ -57,6 +58,7 @@ export function OnboardConnection({
     onAWSClick,
     onAzureClick,
 }: IOnboardConnection) {
+    const navigate = useNavigate()
     const [firstLoading, setFirstLoading] = useState(true)
     const {
         response: statusResponse,
@@ -178,6 +180,13 @@ export function OnboardConnection({
                             }
                         >
                             Finish
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            className="ml-3"
+                            onClick={() => navigate('/')}
+                        >
+                            Back
                         </Button>
                     </Flex>
                 </>

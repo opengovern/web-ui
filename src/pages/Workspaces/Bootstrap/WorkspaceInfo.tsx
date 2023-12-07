@@ -4,6 +4,7 @@ import {
     ChevronDownIcon,
     ChevronUpIcon,
 } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
 
 interface IWorkspaceInformation {
     open: boolean
@@ -23,6 +24,7 @@ export function WorkspaceInformation({
     errorMessage,
     onDone,
 }: IWorkspaceInformation) {
+    const navigate = useNavigate()
     return (
         <div className="p-6 border-b border-b-gray-200">
             <Flex justifyContent="between">
@@ -74,6 +76,13 @@ export function WorkspaceInformation({
                     <Flex justifyContent="start" className="mt-3">
                         <Button onClick={onDone} loading={isLoading}>
                             Next
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            className="ml-3"
+                            onClick={() => navigate('/')}
+                        >
+                            Back
                         </Button>
                     </Flex>
                 </div>

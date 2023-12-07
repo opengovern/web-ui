@@ -185,7 +185,7 @@ function JobCategoryItem({ title, summaries }: IJobCategoryItem) {
         )
 
         if ((inProgressJobs?.length || 0) > 0) {
-            const color: Color = 'orange'
+            const color: Color = 'neutral'
             return {
                 status: 'In Progress',
                 count:
@@ -252,9 +252,12 @@ function JobCategoryItem({ title, summaries }: IJobCategoryItem) {
             decorationColor={color}
             key={title}
             className="h-fit w-96 m-2 p-3 px-3"
-            onClick={() => setOpen(!open)}
         >
-            <Flex justifyContent="between">
+            <Flex
+                justifyContent="between"
+                className="cursor-pointer"
+                onClick={() => setOpen(!open)}
+            >
                 <Flex justifyContent="start" className="space-x-4">
                     {/* <Icon
                         variant="outlined"
@@ -276,6 +279,9 @@ function JobCategoryItem({ title, summaries }: IJobCategoryItem) {
                     data={data}
                     className="mt-2"
                     color={color}
+                    onClick={(e) => {
+                        console.log(String(e.target))
+                    }}
                     // valueFormatter={dataFormatter}
                 />
             )}
@@ -292,6 +298,9 @@ export default function JobsMenu() {
         error,
     } = useScheduleApiV1JobsList({ limit: 0 })
 
+    if (workspace === undefined || workspace === '') {
+        return null
+    }
     return (
         <Popover className="relative isolate z-50 border-0">
             <Popover.Button
