@@ -180,7 +180,7 @@ export default function Metrics({
             sortable: true,
             filter: true,
             type: 'string',
-            hide: isSummary,
+            hide: false,
             rowGroup: isSummary,
         },
         ...defaultColumns,
