@@ -532,9 +532,21 @@ export default function Query() {
                                     <Table
                                         id="popular_query_table"
                                         columns={columns}
-                                        rowData={queries?.filter(
-                                            (q) => q.tags?.popular
-                                        )}
+                                        rowData={queries
+                                            ?.filter((q) => q.tags?.popular)
+                                            .sort((a, b) => {
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                if (a.title < b.title) {
+                                                    return -1
+                                                }
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                if (a.title > b.title) {
+                                                    return 1
+                                                }
+                                                return 0
+                                            })}
                                         loading={queryLoading}
                                         onRowClicked={(e) => {
                                             setCode(
@@ -556,7 +568,19 @@ export default function Query() {
                                     <Table
                                         id="query_table"
                                         columns={columns}
-                                        rowData={queries}
+                                        rowData={queries?.sort((a, b) => {
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            if (a.title < b.title) {
+                                                return -1
+                                            }
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            if (a.title > b.title) {
+                                                return 1
+                                            }
+                                            return 0
+                                        })}
                                         loading={queryLoading}
                                         onRowClicked={(e) => {
                                             setCode(
