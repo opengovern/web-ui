@@ -76,7 +76,7 @@ export default function SummaryCard({
                         {isExact
                             ? `${isPrice ? '$' : ''}${numberDisplay(
                                   metric,
-                                  isExact && isPrice ? 2 : 0
+                                  isExact && !isPrice ? 2 : 0
                               )}${isPercent ? '%' : ''}`
                             : `${isPrice ? '$' : ''}${numericDisplay(metric)}${
                                   isPercent ? '%' : ''
