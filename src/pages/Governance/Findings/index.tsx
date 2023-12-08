@@ -53,7 +53,7 @@ export const columns = (isDemo: boolean) => {
             type: 'string',
         },
         {
-            field: 'policyID',
+            field: 'controlID',
             headerName: 'Policy ID',
             type: 'string',
             enableRowGroup: true,
@@ -74,7 +74,7 @@ export const columns = (isDemo: boolean) => {
             flex: 1,
         },
         {
-            field: 'policyTitle',
+            field: 'controlTitle',
             headerName: 'Policy title',
             type: 'string',
             enableRowGroup: true,
@@ -308,6 +308,7 @@ export default function Findings() {
         limit: 100,
         afterSortKey: [sortKey],
     })
+    console.log(findings)
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
