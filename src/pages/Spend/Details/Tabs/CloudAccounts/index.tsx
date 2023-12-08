@@ -74,7 +74,7 @@ const defaultColumns = (isDemo: boolean) => {
         },
         {
             field: 'totalCost',
-            headerName: 'Total cost',
+            headerName: 'Total spend',
             type: 'price',
             width: 110,
             sortable: true,

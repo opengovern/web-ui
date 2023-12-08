@@ -266,7 +266,7 @@ export default function SingleSpendMetric({
                 },
                 {
                     field: 'totalCost',
-                    headerName: 'Total cost',
+                    headerName: 'Total spend',
                     filter: true,
                     sortable: true,
                     aggFunc: 'sum',
@@ -349,7 +349,7 @@ export default function SingleSpendMetric({
                 })
             }
             const pinnedRow = [
-                { totalCost: sum, accountId: 'Total cost', ...granularity },
+                { totalCost: sum, accountId: 'Total spend', ...granularity },
             ]
             for (let i = 0; i < rows.length; i += 1) {
                 newRow.push({

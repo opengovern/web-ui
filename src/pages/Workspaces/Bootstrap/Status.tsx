@@ -177,7 +177,7 @@ export function Status({ workspaceName }: IStatus) {
                 <Node
                     finishedJobs={analyticsDone}
                     totalJobs={analyticsTotal}
-                    text="Reviewing Infrastructure & Cost"
+                    text="Reviewing Infrastructure & spend"
                 />
                 <Node
                     finishedJobs={complianceDone}

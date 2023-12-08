@@ -28,7 +28,7 @@ export const rowGenerator = (
     const roww = []
     const granularity: any = {}
     let pinnedRow = [
-        { totalCost: sum, dimension: 'Total cost', ...granularity },
+        { totalCost: sum, dimension: 'Total spend', ...granularity },
     ]
     if (!loading) {
         const rows =
@@ -69,7 +69,7 @@ export const rowGenerator = (
             })
         }
         pinnedRow = [
-            { totalCost: sum, dimension: 'Total cost', ...granularity },
+            { totalCost: sum, dimension: 'Total spend', ...granularity },
         ]
         for (let i = 0; i < rows.length; i += 1) {
             roww.push({
@@ -109,7 +109,7 @@ export const defaultColumns: IColumn<any, any>[] = [
     },
     {
         field: 'totalCost',
-        headerName: 'Total cost',
+        headerName: 'Total spend',
         type: 'price',
         width: 110,
         sortable: true,
