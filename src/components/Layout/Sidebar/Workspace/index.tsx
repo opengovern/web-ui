@@ -28,7 +28,11 @@ export default function Workspace({ isCollapsed }: IWorkspace) {
             sendNow()
         }
         if (workspace && wsName) {
-            if (!workspace.current || workspace.list.length < 1) {
+            if (
+                !workspace.current ||
+                workspace.list.length < 1 ||
+                workspace.current.name !== wsName
+            ) {
                 const current = workspaceInfo?.filter(
                     (ws) => ws.name === wsName
                 )
@@ -39,7 +43,7 @@ export default function Workspace({ isCollapsed }: IWorkspace) {
                 })
             }
         }
-    }, [workspace, workspaceInfo])
+    }, [workspace, workspaceInfo, wsName])
 
     return (
         <Flex className="mt-2 h-16 shrink-0 border-b border-gray-700 relative">
@@ -85,16 +89,20 @@ export default function Workspace({ isCollapsed }: IWorkspace) {
                                 <Text className="font-semibold px-2 mt-2 mb-1">
                                     WORKSPACES
                                 </Text>
-                                {workspace.list.map((ws) => (
-                                    <Flex
-                                        onClick={() => navigate(`/${ws.name}`)}
-                                        className="p-2 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
-                                    >
-                                        <Text className="text-inherit font-semibold">
-                                            {ws.name}
-                                        </Text>
-                                    </Flex>
-                                ))}
+                                {workspace.list
+                                    .filter((ws) => ws.status === 'PROVISIONED')
+                                    .map((ws) => (
+                                        <Flex
+                                            onClick={() =>
+                                                navigate(`/${ws.name}`)
+                                            }
+                                            className="p-2 rounded-md cursor-pointer text-gray-300 hover:text-gray-50 hover:bg-kaytu-800"
+                                        >
+                                            <Text className="text-inherit font-semibold">
+                                                {ws.name}
+                                            </Text>
+                                        </Flex>
+                                    ))}
                             </Flex>
                         )}
                         <Flex

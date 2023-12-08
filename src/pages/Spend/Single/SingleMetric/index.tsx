@@ -266,7 +266,7 @@ export default function SingleSpendMetric({
                 },
                 {
                     field: 'totalCost',
-                    headerName: 'Total cost',
+                    headerName: 'Total spend',
                     filter: true,
                     sortable: true,
                     aggFunc: 'sum',
@@ -349,7 +349,7 @@ export default function SingleSpendMetric({
                 })
             }
             const pinnedRow = [
-                { totalCost: sum, accountId: 'Total cost', ...granularity },
+                { totalCost: sum, accountId: 'Total spend', ...granularity },
             ]
             for (let i = 0; i < rows.length; i += 1) {
                 newRow.push({
@@ -533,7 +533,7 @@ export default function SingleSpendMetric({
                 <Flex justifyContent="end" className="mt-2 gap-2.5">
                     <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
                     {selectedChart === 'area' ? (
-                        <Text>Accumulated cost</Text>
+                        <Text>Accumulated spend</Text>
                     ) : (
                         <Text>Spend</Text>
                     )}

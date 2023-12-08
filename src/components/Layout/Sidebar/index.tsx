@@ -4,7 +4,6 @@ import {
     AccordionHeader,
     Flex,
     Text,
-    Title,
 } from '@tremor/react'
 import { Link } from 'react-router-dom'
 import {
@@ -29,7 +28,6 @@ import {
     isDemoAtom,
     sideBarCollapsedAtom,
 } from '../../../store'
-import { KaytuIcon } from '../../../icons/icons'
 import Workspace from './Workspace'
 
 const navigation = [
@@ -50,8 +48,8 @@ const navigation = [
     },
     {
         name: 'Governance',
-        page: 'compliance',
         icon: ShieldCheckIcon,
+        page: ['compliance', 'service-advisor', 'findings'],
         children: [
             { name: 'Compliance', page: 'compliance' },
             { name: 'Service Advisor', page: 'service-advisor' },
@@ -80,8 +78,8 @@ const navigation = [
     },
     {
         name: 'Automation',
-        page: 'rules',
         icon: LightBulbIcon,
+        page: ['rules, alerts'],
         children: [
             { name: 'Rules', page: 'rules' },
             { name: 'Alerts', page: 'alerts' },
@@ -185,7 +183,11 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         className={`relative p-2 group flex rounded-md text-sm my-0.5
                                                     ${
                                                         item.page ===
-                                                        currentPage
+                                                            currentPage ||
+                                                        (collapsed &&
+                                                            item.page.includes(
+                                                                currentPage
+                                                            ))
                                                             ? 'bg-kaytu-500 text-gray-200 font-semibold'
                                                             : 'text-gray-50 hover:bg-kaytu-800'
                                                     }

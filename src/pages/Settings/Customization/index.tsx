@@ -152,7 +152,7 @@ export default function SettingsCustomization() {
                 />
                 <Metric
                     metricId="cost_discovery_job_interval"
-                    title="Cost Discovery Interval (Hours)"
+                    title="Spend Discovery Interval (Hours)"
                     min={24}
                     max={120}
                 />
