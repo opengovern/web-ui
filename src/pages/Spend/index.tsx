@@ -366,7 +366,7 @@ export default function Spend() {
                         <Flex justifyContent="end" className="mt-2 gap-2.5">
                             <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
                             {selectedChart === 'area' ? (
-                                <Text>Accumulated cost</Text>
+                                <Text>Accumulated spend</Text>
                             ) : (
                                 <Text>Spend</Text>
                             )}
