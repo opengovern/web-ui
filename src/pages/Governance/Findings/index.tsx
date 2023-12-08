@@ -312,7 +312,6 @@ export default function Findings() {
         limit: 100,
         afterSortKey: [sortKey],
     })
-    console.log(findings)
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
