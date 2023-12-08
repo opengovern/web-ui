@@ -191,11 +191,6 @@ export default function Chart({
                                 }`
                             },
                         },
-                        emphasis: {
-                            label: {
-                                show: false,
-                            },
-                        },
                         itemStyle: {
                             borderRadius: 4,
                             borderColor: '#fff',
