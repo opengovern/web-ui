@@ -17,23 +17,23 @@ export default function PolicyDetail({
         <DrawerPanel
             open={open}
             onClose={onClose}
-            title={selectedPolicy?.policy?.id}
+            title={selectedPolicy?.control?.id}
         >
-            <Title className="mb-2">{selectedPolicy?.policy?.title}</Title>
-            <Text className="mb-6">{selectedPolicy?.policy?.description}</Text>
+            <Title className="mb-2">{selectedPolicy?.control?.title}</Title>
+            <Text className="mb-6">{selectedPolicy?.control?.description}</Text>
             <Title className="font-semibold">Metadata</Title>
             <List>
                 <ListItem className="py-6 flex items-start">
                     <Text>Cloud provider</Text>
-                    <Text>{selectedPolicy?.policy?.connector}</Text>
+                    <Text>{selectedPolicy?.control?.connector}</Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Policy ID</Text>
-                    <Text>{selectedPolicy?.policy?.id}</Text>
+                    <Text>{selectedPolicy?.control?.id}</Text>
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Severity</Text>
-                    {renderBadge(selectedPolicy?.policy?.severity)}
+                    {renderBadge(selectedPolicy?.control?.severity)}
                 </ListItem>
                 <ListItem className="py-6 flex items-start">
                     <Text>Outcome</Text>
