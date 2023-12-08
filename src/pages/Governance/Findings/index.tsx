@@ -8,7 +8,7 @@ import {
     Text,
     TextInput,
 } from '@tremor/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
     IServerSideDatasource,
     RowClickedEvent,
