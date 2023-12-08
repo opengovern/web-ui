@@ -167,7 +167,6 @@ export default function Policies({ id }: IPolicies) {
 
     const { response: policies, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
-    console.log(policies)
 
     return (
         <>
