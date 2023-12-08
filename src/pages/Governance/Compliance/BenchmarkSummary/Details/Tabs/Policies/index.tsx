@@ -19,16 +19,29 @@ interface IPolicies {
 
 export const renderBadge = (severity: any) => {
     if (severity) {
+        if (severity === 'none') {
+            return <Badge color="slate">None</Badge>
+        }
+        if (severity === 'passed') {
+            return <Badge color="emerald">Passed</Badge>
+        }
         if (severity === 'low') {
-            return <Badge color="lime">Low</Badge>
+            return <Badge color="yellow">Low</Badge>
         }
         if (severity === 'medium') {
-            return <Badge color="yellow">Medium</Badge>
+            return <Badge color="orange">Medium</Badge>
         }
         if (severity === 'high') {
-            return <Badge color="orange">High</Badge>
+            return <Badge color="red">High</Badge>
         }
-        return <Badge color="rose">Critical</Badge>
+        return (
+            <Badge
+                color="rose"
+                style={{ backgroundColor: '#C7919A', color: '#6E120B' }}
+            >
+                Critical
+            </Badge>
+        )
     }
     return ''
 }

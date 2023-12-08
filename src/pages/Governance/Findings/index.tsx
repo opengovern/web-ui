@@ -39,6 +39,7 @@ import {
 } from '../../../api/api'
 import FindingDetail from './Detail'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
+import { renderBadge } from '../Compliance/BenchmarkSummary/Details/Tabs/Policies'
 
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -152,7 +153,10 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             hide: true,
             resizable: true,
-            flex: 0.5,
+            width: 100,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <Flex className="h-full">{renderBadge(param.value)}</Flex>
+            ),
         },
         {
             field: 'evaluatedAt',
@@ -308,7 +312,6 @@ export default function Findings() {
         limit: 100,
         afterSortKey: [sortKey],
     })
-    console.log(findings)
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
