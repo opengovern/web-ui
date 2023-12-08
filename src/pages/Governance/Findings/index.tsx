@@ -38,6 +38,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
 } from '../../../api/api'
 import FindingDetail from './Detail'
+import { AWSIcon, AzureIcon } from '../../../icons/icons'
 
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -169,7 +170,14 @@ export const columns = (isDemo: boolean) => {
     return temp
 }
 
-const severity = ['Critical', 'High', 'Medium', 'Low', 'None', 'Passed']
+const severity = [
+    { name: 'Critical', color: '#6E120B' },
+    { name: 'High', color: '#CA2B1D' },
+    { name: 'Medium', color: '#EE9235' },
+    { name: 'Low', color: '#F4C744' },
+    { name: 'None', color: '#9BA2AE' },
+    { name: 'Passed', color: '#54B584' },
+]
 
 const datasource = (
     sort: SortModelItem[],
@@ -385,14 +393,28 @@ export default function Findings() {
                                     onClick={() => setProvider('AWS')}
                                     defaultChecked={provider === 'AWS'}
                                 >
-                                    AWS
+                                    <Flex className="gap-1">
+                                        <img
+                                            src={AWSIcon}
+                                            className="w-6"
+                                            alt="aws"
+                                        />
+                                        <Text>AWS</Text>
+                                    </Flex>
                                 </Radio>
                                 <Radio
                                     name="provider"
                                     onClick={() => setProvider('Azure')}
                                     defaultChecked={provider === 'Azure'}
                                 >
-                                    Azure
+                                    <Flex className="gap-1">
+                                        <img
+                                            src={AzureIcon}
+                                            className="w-6"
+                                            alt="azure"
+                                        />
+                                        <Text>Azure</Text>
+                                    </Flex>
                                 </Radio>
                             </Flex>
                         </AccordionBody>
@@ -419,10 +441,18 @@ export default function Findings() {
                                     <Checkbox
                                         shape="curve"
                                         className="!items-start"
-                                        value={s.toLowerCase()}
+                                        value={s.name.toLowerCase()}
                                         {...severityCheckbox}
                                     >
-                                        {s}
+                                        <Flex className="gap-1.5">
+                                            <div
+                                                className="h-4 w-1.5 rounded-sm"
+                                                style={{
+                                                    backgroundColor: s.color,
+                                                }}
+                                            />
+                                            <Text>{s.name}</Text>
+                                        </Flex>
                                     </Checkbox>
                                 ))}
                             </Flex>
