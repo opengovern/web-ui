@@ -28,7 +28,11 @@ export default function Workspace({ isCollapsed }: IWorkspace) {
             sendNow()
         }
         if (workspace && wsName) {
-            if (!workspace.current || workspace.list.length < 1) {
+            if (
+                !workspace.current ||
+                workspace.list.length < 1 ||
+                workspace.current.name !== wsName
+            ) {
                 const current = workspaceInfo?.filter(
                     (ws) => ws.name === wsName
                 )
@@ -39,7 +43,8 @@ export default function Workspace({ isCollapsed }: IWorkspace) {
                 })
             }
         }
-    }, [workspace, workspaceInfo])
+    }, [workspace, workspaceInfo, wsName])
+    console.log(workspace)
 
     return (
         <Flex className="mt-2 h-16 shrink-0 border-b border-gray-700 relative">
