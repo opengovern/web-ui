@@ -47,7 +47,7 @@ export default function Layout({
                 <Flex
                     flexDirection="col"
                     alignItems="center"
-                    className="mt-16 bg-gray-50 dark:bg-gray-900 h-screen overflow-y-scroll overflow-x-hidden"
+                    className="mt-16 bg-white dark:bg-gray-900 h-screen overflow-y-scroll overflow-x-hidden"
                     id="kaytu-container"
                 >
                     <Flex

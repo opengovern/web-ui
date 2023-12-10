@@ -214,21 +214,9 @@ const datasource = (
                 getPaginationData(params.request.endRow)
             }
             if (!loading && result) {
-                const list = []
-                const { findings } = result
-                if (findings) {
-                    for (let i = 0; i < findings.length; i += 1) {
-                        list.push({
-                            ...findings[i],
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            id: findings[i].sortKey[0],
-                        })
-                    }
-                }
                 params.success({
-                    rowData: list,
-                    rowCount: result?.totalCount || 0,
+                    rowData: result.findings || [],
+                    rowCount: result.totalCount || 0,
                 })
             }
             if (err) {
@@ -362,7 +350,7 @@ export default function Findings() {
                 isLoading,
                 error
             ),
-        [findings, sortModel]
+        [findings, sortModel, isLoading, lastRow]
     )
 
     return (
