@@ -18,27 +18,49 @@ interface IPolicies {
 }
 
 export const renderBadge = (severity: any) => {
+    const style = {
+        color: '#fff',
+        borderRadius: '8px',
+        width: '64px',
+    }
     if (severity) {
         if (severity === 'none') {
-            return <Badge color="slate">None</Badge>
+            return (
+                <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>
+                    None
+                </Badge>
+            )
         }
         if (severity === 'passed') {
-            return <Badge color="emerald">Passed</Badge>
+            return (
+                <Badge style={{ backgroundColor: '#54B584', ...style }}>
+                    Passed
+                </Badge>
+            )
         }
         if (severity === 'low') {
-            return <Badge color="yellow">Low</Badge>
+            return (
+                <Badge style={{ backgroundColor: '#F4C744', ...style }}>
+                    Low
+                </Badge>
+            )
         }
         if (severity === 'medium') {
-            return <Badge color="orange">Medium</Badge>
+            return (
+                <Badge style={{ backgroundColor: '#EE9235', ...style }}>
+                    Medium
+                </Badge>
+            )
         }
         if (severity === 'high') {
-            return <Badge color="red">High</Badge>
+            return (
+                <Badge style={{ backgroundColor: '#CA2B1D', ...style }}>
+                    High
+                </Badge>
+            )
         }
         return (
-            <Badge
-                color="rose"
-                style={{ backgroundColor: '#C7919A', color: '#6E120B' }}
-            >
+            <Badge style={{ backgroundColor: '#6E120B', ...style }}>
                 Critical
             </Badge>
         )
