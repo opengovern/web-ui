@@ -241,11 +241,15 @@ export default function Table<TData = any, TValue = any>({
     }, [serverSideDatasource])
 
     const gridOptions: GridOptions = {
-        columnDefs: buildColumnDef(),
-        rowData: rowData || [],
         rowModelType: serverSideDatasource ? 'serverSide' : 'clientSide',
-        cacheBlockSize: 100,
-        maxBlocksInCache: 1000,
+        columnDefs: buildColumnDef(),
+        ...(rowData && { rowData: rowData || [] }),
+        ...(serverSideDatasource && {
+            // serverSideDatasource,
+            cacheBlockSize: 25,
+            maxBlocksInCache: 10000,
+            // maxConcurrentDatasourceRequests: -1,
+        }),
         pagination: true,
         paginationPageSize: 25,
         rowSelection: 'multiple',
@@ -284,19 +288,6 @@ export default function Table<TData = any, TValue = any>({
             ],
             defaultToolPanel: '',
         },
-        // getRowId: (params) => {
-        //     const parentKeysJoined = (params.parentKeys || []).join('-')
-        //     if (params.data.id != null) {
-        //         return parentKeysJoined + params.data.id
-        //     }
-        //     const rowGroupCols = params.api.getRowGroupColumns()
-        //     const thisGroupCol = rowGroupCols[params.level]
-        //     return (
-        //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //         // @ts-ignore
-        //         parentKeysJoined + params.data[thisGroupCol.getColDef().field]
-        //     )
-        // },
         ...options,
     }
 
