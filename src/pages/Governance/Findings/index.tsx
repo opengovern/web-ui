@@ -696,7 +696,7 @@ export default function Findings() {
                         )}
                     </Flex>
                 </Card>
-                <Flex className="w-full pl-4">
+                <Flex className="pl-4">
                     <Table
                         fullWidth
                         id="compliance_findings"

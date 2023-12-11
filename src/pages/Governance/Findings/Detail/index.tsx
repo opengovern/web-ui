@@ -1,7 +1,25 @@
-import { Divider, List, ListItem, Text, Title } from '@tremor/react'
+import {
+    Divider,
+    Flex,
+    Grid,
+    List,
+    ListItem,
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+    Text,
+    Title,
+} from '@tremor/react'
+import { useEffect } from 'react'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../api/api'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import DrawerPanel from '../../../../components/DrawerPanel'
+import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
+import SummaryCard from '../../../../components/Cards/SummaryCard'
+import { useComplianceApiV1FindingsResourceDetail } from '../../../../api/compliance.gen'
+import Tag from '../../../../components/Tag'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
@@ -14,163 +32,65 @@ export default function FindingDetail({
     open,
     onClose,
 }: IFindingDetail) {
+    const { response, sendNow } = useComplianceApiV1FindingsResourceDetail(
+        finding?.kaytuResourceID || '',
+        {},
+        false
+    )
+    useEffect(() => {
+        if (finding) {
+            sendNow()
+        }
+    }, [finding])
+
     return (
-        <DrawerPanel open={open} onClose={onClose} title="Reason">
-            <Title>Summary</Title>
-            <List>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Severity</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.severity}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>State</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.stateActive ? 'Active' : 'Not active'}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Policy name</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.controlTitle}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Reason</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.reason}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Last checked</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {dateTimeDisplay(finding?.evaluatedAt)}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Resource name</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
+        <DrawerPanel
+            open={open}
+            onClose={onClose}
+            title={
+                <Flex justifyContent="start">
+                    {getConnectorIcon(finding?.connector)}
+                    <Title className="text-lg font-semibold my-1">
                         {finding?.resourceName}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Resource type</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.resourceType}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Root benchmark</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.parentBenchmarks
-                            ? finding?.parentBenchmarks[0]
-                            : ''}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Account name</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.providerConnectionName}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Account ID</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.providerConnectionID}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Resource ID</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.resourceID}
-                    </Text>
-                </ListItem>
-            </List>
-            <Divider />
-            <Title>Policy details</Title>
-            <List>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Policy title</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.controlTitle}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Policy name</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.controlID}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Benchmark name</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.parentBenchmarks
-                            ? finding?.parentBenchmarks[
-                                  // eslint-disable-next-line no-unsafe-optional-chaining
-                                  finding?.parentBenchmarks.length - 1
-                              ]
-                            : ''}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Benchmark title</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.parentBenchmarkNames
-                            ? finding?.parentBenchmarkNames[
-                                  // eslint-disable-next-line no-unsafe-optional-chaining
-                                  finding?.parentBenchmarkNames.length - 1
-                              ]
-                            : ''}
-                    </Text>
-                </ListItem>
-            </List>
-            <Divider />
-            <Title>Hierarchy</Title>
-            <List>
-                {finding?.parentBenchmarks?.map((h, i) => (
-                    <ListItem className="py-6 flex items-start">
-                        <Text>{`Level ${i}`}</Text>
-                        <Text className="text-kaytu-800 w-3/5 whitespace-pre-wrap text-end">
-                            {h}
-                        </Text>
-                    </ListItem>
-                ))}
-            </List>
-            <Divider />
-            <Title>Job details</Title>
-            <List>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Finding ID</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.resourceID}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Cloud account ID</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.providerConnectionID}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Connection ID</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.connectionID}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Compliance job ID</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.complianceJobID}
-                    </Text>
-                </ListItem>
-                <ListItem className="py-6 flex items-start">
-                    <Text>Resource type namespace</Text>
-                    <Text className="text-gray-800 w-3/5 whitespace-pre-wrap text-end">
-                        {finding?.resourceTypeName}
-                    </Text>
-                </ListItem>
-            </List>
+                    </Title>
+                </Flex>
+            }
+        >
+            <Grid className="w-full gap-4 mb-6" numItems={2}>
+                <SummaryCard
+                    title="Account ID"
+                    metric={finding?.providerConnectionID}
+                    isString
+                />
+                <SummaryCard
+                    title="Account name"
+                    metric={finding?.providerConnectionName}
+                    isString
+                />
+                <SummaryCard
+                    title="Region"
+                    metric={finding?.resourceLocation}
+                    isString
+                />
+                <SummaryCard
+                    title="Resource type"
+                    metric={finding?.resourceType}
+                    isString
+                />
+            </Grid>
+            <Flex justifyContent="start" className="flex-wrap gap-3 mb-6">
+                <Tag text="hi" />
+            </Flex>
+            <TabGroup>
+                <TabList>
+                    <Tab>Controls</Tab>
+                    <Tab>Resources</Tab>
+                </TabList>
+                <TabPanels>
+                    <TabPanel>controls</TabPanel>
+                    <TabPanel>resources</TabPanel>
+                </TabPanels>
+            </TabGroup>
         </DrawerPanel>
     )
 }
