@@ -18,6 +18,7 @@ import { BarChartIcon, LineChartIcon } from '../../icons/icons'
 import { dateDisplay } from '../../utilities/dateDisplay'
 import { numberDisplay } from '../../utilities/numericDisplay'
 import Chart from '../Chart'
+import { generateVisualMap, resourceTrendChart } from '../../pages/Assets'
 
 interface ITrends {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -203,18 +204,18 @@ export default function Trends({
                 loading={loading}
                 isPercent={isPercent}
                 isCost={isCost}
-                // visualMap={
-                //     generateVisualMap(
-                //         resourceTrendChart(resourceTrend).flag,
-                //         resourceTrendChart(resourceTrend).label
-                //     ).visualMap
-                // }
-                // markArea={
-                //     generateVisualMap(
-                //         resourceTrendChart(resourceTrend).flag,
-                //         resourceTrendChart(resourceTrend).label
-                //     ).markArea
-                // }
+                visualMap={
+                    generateVisualMap(
+                        resourceTrendChart(trend, selectedGranularity).flag,
+                        resourceTrendChart(trend, selectedGranularity).label
+                    ).visualMap
+                }
+                markArea={
+                    generateVisualMap(
+                        resourceTrendChart(trend, selectedGranularity).flag,
+                        resourceTrendChart(trend, selectedGranularity).label
+                    ).markArea
+                }
                 onClick={(p) => setSelectedDatapoint(p)}
             />
         </Card>

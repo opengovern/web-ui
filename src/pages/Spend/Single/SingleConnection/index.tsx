@@ -477,34 +477,38 @@ export default function SingleSpendConnection({
                                 chartType={selectedChart}
                                 isCost
                                 loading={costTrendLoading}
-                                // visualMap={
-                                //     selectedChart === 'area'
-                                //         ? undefined
-                                //         : generateVisualMap(
-                                //               costTrendChart(
-                                //                   costTrend,
-                                //                   selectedChart
-                                //               ).flag,
-                                //               costTrendChart(
-                                //                   costTrend,
-                                //                   selectedChart
-                                //               ).label
-                                //           ).visualMap
-                                // }
-                                // markArea={
-                                //     selectedChart === 'area'
-                                //         ? undefined
-                                //         : generateVisualMap(
-                                //               costTrendChart(
-                                //                   costTrend,
-                                //                   selectedChart
-                                //               ).flag,
-                                //               costTrendChart(
-                                //                   costTrend,
-                                //                   selectedChart
-                                //               ).label
-                                //           ).markArea
-                                // }
+                                visualMap={
+                                    selectedChart === 'area'
+                                        ? undefined
+                                        : generateVisualMap(
+                                              costTrendChart(
+                                                  costTrend,
+                                                  selectedChart,
+                                                  selectedGranularity
+                                              ).flag,
+                                              costTrendChart(
+                                                  costTrend,
+                                                  selectedChart,
+                                                  selectedGranularity
+                                              ).label
+                                          ).visualMap
+                                }
+                                markArea={
+                                    selectedChart === 'area'
+                                        ? undefined
+                                        : generateVisualMap(
+                                              costTrendChart(
+                                                  costTrend,
+                                                  selectedChart,
+                                                  selectedGranularity
+                                              ).flag,
+                                              costTrendChart(
+                                                  costTrend,
+                                                  selectedChart,
+                                                  selectedGranularity
+                                              ).label
+                                          ).markArea
+                                }
                                 onClick={
                                     selectedChart === 'area'
                                         ? undefined

@@ -63,7 +63,7 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
-import { resourceTrendChart } from '../../Assets'
+import { generateVisualMap, resourceTrendChart } from '../../Assets'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Landscape from '../../../components/Landscape'
 import Tag from '../../../components/Tag'
@@ -628,18 +628,30 @@ export default function ResourceCollectionDetail() {
                                 }
                                 chartType={selectedChart}
                                 loading={resourceTrendLoading}
-                                // visualMap={
-                                //     generateVisualMap(
-                                //         resourceTrendChart(resourceTrend).flag,
-                                //         resourceTrendChart(resourceTrend).label
-                                //     ).visualMap
-                                // }
-                                // markArea={
-                                //     generateVisualMap(
-                                //         resourceTrendChart(resourceTrend).flag,
-                                //         resourceTrendChart(resourceTrend).label
-                                //     ).markArea
-                                // }
+                                visualMap={
+                                    generateVisualMap(
+                                        resourceTrendChart(
+                                            resourceTrend,
+                                            selectedGranularity
+                                        ).flag,
+                                        resourceTrendChart(
+                                            resourceTrend,
+                                            selectedGranularity
+                                        ).label
+                                    ).visualMap
+                                }
+                                markArea={
+                                    generateVisualMap(
+                                        resourceTrendChart(
+                                            resourceTrend,
+                                            selectedGranularity
+                                        ).flag,
+                                        resourceTrendChart(
+                                            resourceTrend,
+                                            selectedGranularity
+                                        ).label
+                                    ).markArea
+                                }
                                 onClick={(p) => setSelectedDatapoint(p)}
                             />
                         </Card>
