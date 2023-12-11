@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Metric, Text } from '@tremor/react'
+import { Button, Card, Flex, Metric, Text, Title } from '@tremor/react'
 import { ArrowPathIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import Spinner from '../../Spinner'
@@ -7,7 +7,6 @@ import {
     numericDisplay,
 } from '../../../utilities/numericDisplay'
 import ChangeDelta from '../../ChangeDelta'
-import { badgeTypeByDelta } from '../../../utilities/deltaType'
 
 type IProps = {
     title: string
@@ -23,12 +22,14 @@ type IProps = {
     isExact?: boolean
     isPrice?: boolean
     isPercent?: boolean
+    isString?: boolean
 }
 
 export default function SummaryCard({
     title,
     metric,
     metricPrev,
+    isString = false,
     unit,
     url,
     loading = false,
@@ -72,16 +73,20 @@ export default function SummaryCard({
                     alignItems="end"
                     className="gap-1 mb-1"
                 >
-                    <Metric>
-                        {isExact
-                            ? `${isPrice ? '$' : ''}${numberDisplay(
-                                  metric,
-                                  isExact && !isPrice ? 2 : 0
-                              )}${isPercent ? '%' : ''}`
-                            : `${isPrice ? '$' : ''}${numericDisplay(metric)}${
-                                  isPercent ? '%' : ''
-                              }`}
-                    </Metric>
+                    {isString ? (
+                        <Text className="text-gray-800">{metric}</Text>
+                    ) : (
+                        <Metric>
+                            {isExact
+                                ? `${isPrice ? '$' : ''}${numberDisplay(
+                                      metric,
+                                      isExact && !isPrice ? 2 : 0
+                                  )}${isPercent ? '%' : ''}`
+                                : `${isPrice ? '$' : ''}${numericDisplay(
+                                      metric
+                                  )}${isPercent ? '%' : ''}`}
+                        </Metric>
+                    )}
                     {!!unit && <Text className="mb-0.5">{unit}</Text>}
                     {!!metricPrev && (
                         <Text className="mb-0.5">

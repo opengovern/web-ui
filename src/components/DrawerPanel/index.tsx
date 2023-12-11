@@ -6,7 +6,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 interface Iprops {
     open: boolean
     onClose: any
-    title?: string
+    title?: string | ReactNode
     children?: ReactNode
 }
 
@@ -51,9 +51,14 @@ export default function DrawerPanel({
                                     >
                                         <Dialog.Title className="absolute top-0 z-10 w-[560px] bg-white dark:bg-gray-900 px-4 text-gray-900 border-b pt-5 pb-4">
                                             <Flex>
-                                                <Title className="text-lg font-semibold my-1">
-                                                    {title}
-                                                </Title>
+                                                {typeof title === 'string' ? (
+                                                    <Title className="text-lg font-semibold my-1">
+                                                        {title}
+                                                    </Title>
+                                                ) : (
+                                                    title
+                                                )}
+
                                                 <Button
                                                     variant="light"
                                                     className="rounded-md text-gray-300 hover:text-white focus:outline-none"
