@@ -58,6 +58,7 @@ import { costTrendChart, getConnections } from '../../index'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import { dateDisplay } from '../../../../utilities/dateDisplay'
 import Modal from '../../../../components/Modal'
+import { generateVisualMap } from '../../../Assets'
 
 interface ISingle {
     activeTimeRange: { start: Dayjs; end: Dayjs }
@@ -556,22 +557,38 @@ export default function SingleSpendMetric({
                     chartType={selectedChart}
                     isCost
                     loading={costTrendLoading}
-                    // visualMap={
-                    //     selectedChart === 'area'
-                    //         ? undefined
-                    //         : generateVisualMap(
-                    //               costTrendChart(costTrend, selectedChart).flag,
-                    //               costTrendChart(costTrend, selectedChart).label
-                    //           ).visualMap
-                    // }
-                    // markArea={
-                    //     selectedChart === 'area'
-                    //         ? undefined
-                    //         : generateVisualMap(
-                    //               costTrendChart(costTrend, selectedChart).flag,
-                    //               costTrendChart(costTrend, selectedChart).label
-                    //           ).markArea
-                    // }
+                    visualMap={
+                        selectedChart === 'area'
+                            ? undefined
+                            : generateVisualMap(
+                                  costTrendChart(
+                                      costTrend,
+                                      selectedChart,
+                                      selectedGranularity
+                                  ).flag,
+                                  costTrendChart(
+                                      costTrend,
+                                      selectedChart,
+                                      selectedGranularity
+                                  ).label
+                              ).visualMap
+                    }
+                    markArea={
+                        selectedChart === 'area'
+                            ? undefined
+                            : generateVisualMap(
+                                  costTrendChart(
+                                      costTrend,
+                                      selectedChart,
+                                      selectedGranularity
+                                  ).flag,
+                                  costTrendChart(
+                                      costTrend,
+                                      selectedChart,
+                                      selectedGranularity
+                                  ).label
+                              ).markArea
+                    }
                     onClick={
                         selectedChart === 'area'
                             ? undefined
