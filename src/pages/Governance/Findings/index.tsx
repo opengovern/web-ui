@@ -8,7 +8,7 @@ import {
     Text,
     TextInput,
 } from '@tremor/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     IServerSideDatasource,
     RowClickedEvent,
@@ -183,49 +183,6 @@ const severity = [
     { name: 'Passed', color: '#54B584' },
 ]
 
-const datasource = (
-    sort: SortModelItem[],
-    getSortData: any,
-    lastRow: number,
-    getPaginationData: any,
-    result:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse
-        | undefined,
-    loading: boolean,
-    err: boolean
-) => {
-    return {
-        getRows: (params: IServerSideGetRowsParams) => {
-            if (params.request.sortModel.length > 0) {
-                if (sort.length > 0) {
-                    if (
-                        params.request.sortModel[0].colId !== sort[0].colId ||
-                        params.request.sortModel[0].sort !== sort[0].sort
-                    ) {
-                        getSortData([params.request.sortModel[0]])
-                    }
-                } else {
-                    getSortData([params.request.sortModel[0]])
-                }
-            } else if (sort.length > 0) {
-                getSortData([])
-            }
-            if (params.request.startRow === lastRow) {
-                getPaginationData(params.request.endRow)
-            }
-            if (!loading && result) {
-                params.success({
-                    rowData: result.findings || [],
-                    rowCount: result.totalCount || 0,
-                })
-            }
-            if (err) {
-                params.fail()
-            }
-        },
-    }
-}
-
 const filteredConnectionsList = (
     connection:
         | GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
@@ -300,6 +257,7 @@ export default function Findings() {
         limit: 100,
         afterSortKey: [sortKey],
     })
+    const list = findings?.findings
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -323,35 +281,61 @@ export default function Findings() {
     const { response: filters, isLoading: filtersLoading } =
         useComplianceApiV1FindingsFiltersCreate({})
 
-    const getSortData = (sort: SortModelItem[]) => {
-        setSortModel(sort)
-        sendNow()
-    }
-    const getPaginationData = (endRow: number) => {
-        const list = findings?.findings
-        if (list) {
+    const checkParams = (params: IServerSideGetRowsParams) => {
+        if (params.request.sortModel.length > 0) {
+            if (sortModel.length > 0) {
+                if (
+                    params.request.sortModel[0].colId !== sortModel[0].colId ||
+                    params.request.sortModel[0].sort !== sortModel[0].sort
+                ) {
+                    setSortModel(params.request.sortModel)
+                    sendNow()
+                }
+            } else {
+                setSortModel([])
+                sendNow()
+            }
+        }
+        if (params.request.startRow === lastRow) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             // eslint-disable-next-line no-unsafe-optional-chaining
             setSortKey(list[list?.length - 1].sortKey[0] || '')
-            // setLastRow(endRow)
+            sendNow()
+            setLastRow(params.request.endRow || 0)
         }
-        sendNow()
     }
+    const generateDatasource = (
+        response:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse
+            | undefined,
+        err: boolean
+    ) => {
+        return {
+            getRows: (params: IServerSideGetRowsParams) => {
+                checkParams(params)
+                if (response) {
+                    params.success({
+                        rowData: response.findings || [],
+                        rowCount: response.totalCount || 0,
+                    })
+                }
+                if (err) {
+                    params.fail()
+                }
+            },
+        }
+    }
+    const [rows, setRows] = useState<IServerSideDatasource>()
 
-    const ds: IServerSideDatasource = useMemo(
-        () =>
-            datasource(
-                sortModel,
-                getSortData,
-                lastRow,
-                getPaginationData,
-                findings,
-                isLoading,
-                error
-            ),
-        [findings, sortModel, isLoading, lastRow]
-    )
+    useEffect(() => {
+        if (!isLoading) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const newRows = generateDatasource(findings, error)
+            setRows(newRows)
+        }
+    }, [isLoading])
 
     return (
         <Layout currentPage="findings">
@@ -644,9 +628,12 @@ export default function Findings() {
                                 e.api.showLoadingOverlay()
                             }
                         }}
-                        serverSideDatasource={ds}
+                        serverSideDatasource={rows}
                         loading={isLoading}
-                        options={{ rowModelType: 'serverSide' }}
+                        options={{
+                            rowModelType: 'serverSide',
+                            serverSideDatasource: rows,
+                        }}
                     />
                     <FindingDetail
                         finding={finding}

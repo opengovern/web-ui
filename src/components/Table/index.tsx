@@ -246,7 +246,8 @@ export default function Table<TData = any, TValue = any>({
         ...(rowData && { rowData: rowData || [] }),
         ...(serverSideDatasource && {
             // serverSideDatasource,
-            cacheBlockSize: 100,
+            cacheBlockSize: 25,
+            maxBlocksInCache: 10000,
             // maxConcurrentDatasourceRequests: -1,
         }),
         pagination: true,
