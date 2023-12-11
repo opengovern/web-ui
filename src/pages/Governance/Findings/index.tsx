@@ -404,7 +404,7 @@ export default function Findings() {
         <Layout currentPage="findings">
             <Header />
             <Flex alignItems="start">
-                <Card className="sticky min-w-[300px] max-w-[300px]">
+                <Card className="sticky top-6 min-w-[300px] max-w-[300px]">
                     <Accordion
                         defaultOpen
                         className="border-0 rounded-none bg-transparent mb-1"
