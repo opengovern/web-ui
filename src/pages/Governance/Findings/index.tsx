@@ -365,7 +365,13 @@ export default function Findings() {
 
     const serverSideRows = useMemo(
         () => ssr(),
-        [providerFilter, benchmarkFilter, resourceFilter, severityFilter]
+        [
+            providerFilter,
+            connectionFilter,
+            benchmarkFilter,
+            resourceFilter,
+            severityFilter,
+        ]
     )
 
     return (

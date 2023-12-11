@@ -33,9 +33,7 @@ export const useWorkspaceApiV1BootstrapDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -145,9 +143,7 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -266,9 +262,7 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -377,9 +371,7 @@ export const useWorkspaceApiV1OrganizationList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -490,9 +482,7 @@ export const useWorkspaceApiV1OrganizationCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -602,9 +592,7 @@ export const useWorkspaceApiV1OrganizationDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -714,9 +702,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -824,9 +810,7 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -936,9 +920,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1048,9 +1030,7 @@ export const useWorkspaceApiV1WorkspaceNameCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1166,9 +1146,7 @@ export const useWorkspaceApiV1WorkspaceOrganizationCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1288,9 +1266,7 @@ export const useWorkspaceApiV1WorkspaceOwnerCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1405,9 +1381,7 @@ export const useWorkspaceApiV1WorkspaceResumeCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1517,9 +1491,7 @@ export const useWorkspaceApiV1WorkspaceSuspendCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1630,9 +1602,7 @@ export const useWorkspaceApiV1WorkspaceTierCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1746,9 +1716,7 @@ export const useWorkspaceApiV1WorkspacesList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1857,9 +1825,7 @@ export const useWorkspaceApiV1WorkspacesByidDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1969,9 +1935,7 @@ export const useWorkspaceApiV1WorkspacesBynameDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2081,9 +2045,7 @@ export const useWorkspaceApiV1WorkspacesLimitsByidDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2196,9 +2158,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2313,9 +2273,7 @@ export const useWorkspaceApiV1WorkspacesDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()

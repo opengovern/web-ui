@@ -5,6 +5,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
     GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
     RequestParams,
@@ -25,9 +26,7 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -139,9 +138,7 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -254,9 +251,7 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -355,6 +350,228 @@ export const useScheduleApiV1DescribeTriggerUpdate = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
+interface IuseScheduleApiV1DiscoveryResourcetypesListListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useScheduleApiV1DiscoveryResourcetypesListList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] =
+        useState<IuseScheduleApiV1DiscoveryResourcetypesListListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, autoExecute])
+    )
+
+    const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            api.schedule
+                .apiV1DiscoveryResourcetypesListList(paramsSignal)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseScheduleApiV1DiscoveryResourcetypesAccountsDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useScheduleApiV1DiscoveryResourcetypesAccountsDetail = (
+    resourceType: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] =
+        useState<IuseScheduleApiV1DiscoveryResourcetypesAccountsDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([resourceType, params, autoExecute])
+    )
+
+    const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            api.schedule
+                .apiV1DiscoveryResourcetypesAccountsDetail(
+                    resourceType,
+                    paramsSignal
+                )
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([resourceType, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([resourceType, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
 interface IuseScheduleApiV1InsightTriggerUpdateState {
     isLoading: boolean
     isExecuted: boolean
@@ -368,9 +585,7 @@ export const useScheduleApiV1InsightTriggerUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -484,9 +699,7 @@ export const useScheduleApiV1JobsList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -599,9 +812,7 @@ export const useScheduleApiV1StacksList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -718,9 +929,7 @@ export const useScheduleApiV1StacksCreateCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -832,9 +1041,7 @@ export const useScheduleApiV1StacksResourceList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -944,9 +1151,7 @@ export const useScheduleApiV1StacksDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1055,9 +1260,7 @@ export const useScheduleApiV1StacksDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1167,9 +1370,7 @@ export const useScheduleApiV1StacksFindingsCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1286,9 +1487,7 @@ export const useScheduleApiV1StacksInsightDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1405,9 +1604,7 @@ export const useScheduleApiV1StacksInsightsDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()

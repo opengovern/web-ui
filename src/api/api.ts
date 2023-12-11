@@ -14,6 +14,46 @@ export interface EchoHTTPError {
     message?: any
 }
 
+export interface EsResource {
+    /** ID is the globally unique ID of the resource. */
+    arn?: string
+    /** Tags is the list of tags associated with the resource */
+    canonical_tags?: EsTag[]
+    /** CreatedAt is when the DescribeSourceJob is created */
+    created_at?: number
+    /** Description is the description of the resource based on the describe call. */
+    description?: any
+    es_id?: string
+    es_index?: string
+    /** ID is the globally unique ID of the resource. */
+    id?: string
+    /** Location is location/region of the resource */
+    location?: string
+    /** Metadata is arbitrary data associated with each resource */
+    metadata?: Record<string, string>
+    /** Name is the name of the resource. */
+    name?: string
+    /** ResourceGroup is the group of resource (Azure only) */
+    resource_group?: string
+    /** ResourceJobID is the DescribeResourceJob ID that described this resource */
+    resource_job_id?: number
+    /** ResourceType is the type of the resource. */
+    resource_type?: string
+    /** ScheduleJobID */
+    schedule_job_id?: number
+    /** SourceID is the Source ID that the resource belongs to */
+    source_id?: string
+    /** SourceJobID is the DescribeSourceJob ID that the ResourceJobID was created for */
+    source_job_id?: number
+    /** SourceType is the type of the source of the resource, i.e. AWS Cloud, Azure Cloud. */
+    source_type?: SourceType
+}
+
+export interface EsTag {
+    key?: string
+    value?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgAlertingApiAction {
     body?: string
     headers?: Record<string, string>
@@ -684,6 +724,10 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     evaluatedAt?: number
     /** @example "steampipe-v0.5" */
     evaluator?: string
+    /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
+    kaytuResourceID?: string
+    /** @example 1 */
+    noOfOccurrences?: number
     /** @example ["Azure CIS v1.4.0"] */
     parentBenchmarkNames?: string[]
     parentBenchmarks?: string[]
@@ -816,6 +860,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse 
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse {
     services?: GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSummary[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse {
+    controls?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
+    resource?: EsResource
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse {
@@ -1057,6 +1106,11 @@ export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobType {
     JobTypeAnalytics = 'analytics',
     JobTypeCompliance = 'compliance',
     JobTypeInsight = 'insight',
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes {
+    awsResourceTypes?: string[]
+    azureResourceTypes?: string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse {
@@ -1556,6 +1610,10 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyComplianceJobInterval = 'compliance_job_interval',
     MetadataKeyDataRetention = 'data_retention_duration',
     MetadataKeyAnalyticsGitURL = 'analytics_git_url',
+    MetadataKeyAssetDiscoveryAWSPolicyARNs = 'asset_discovery_aws_policy_arns',
+    MetadataKeySpendDiscoveryAWSPolicyARNs = 'spend_discovery_aws_policy_arns',
+    MetadataKeyAssetDiscoveryAzureRoleIDs = 'asset_discovery_azure_role_ids',
+    MetadataKeySpendDiscoveryAzureRoleIDs = 'spend_discovery_azure_role_ids',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
@@ -1611,6 +1669,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiChangeConnectionLifecyc
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
+    assetDiscovery?: boolean
     /** @example "scheduled" */
     assetDiscoveryMethod?: SourceAssetDiscoveryMethodType
     /** @example "Azure" */
@@ -1674,6 +1733,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnection {
      * @example 100
      */
     resourceCount?: number
+    spendDiscovery?: boolean
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup {
@@ -1802,6 +1862,7 @@ export interface GithubComKaytuIoKaytuEnginePkgOnboardApiCredential {
      * @example 250
      */
     onboard_connections?: number
+    spendDiscovery?: boolean
     /**
      * @min 0
      * @max 1000
@@ -3261,6 +3322,31 @@ export class Api<
                 path: `/compliance/api/v1/findings/filters`,
                 method: 'POST',
                 body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving a single finding
+         *
+         * @tags compliance
+         * @name ApiV1FindingsResourceDetail
+         * @summary Get finding
+         * @request GET:/compliance/api/v1/findings/resource/{kaytu_resource_id}
+         * @secure
+         */
+        apiV1FindingsResourceDetail: (
+            kaytuResourceId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
+                any
+            >({
+                path: `/compliance/api/v1/findings/resource/${kaytuResourceId}`,
+                method: 'GET',
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -5157,6 +5243,51 @@ export class Api<
                 method: 'PUT',
                 query: query,
                 secure: true,
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags scheduler
+         * @name ApiV1DiscoveryResourcetypesListList
+         * @summary List all resource types that will be discovered
+         * @request GET:/schedule/api/v1/discovery/resourcetypes/list
+         * @secure
+         */
+        apiV1DiscoveryResourcetypesListList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
+                any
+            >({
+                path: `/schedule/api/v1/discovery/resourcetypes/list`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags scheduler
+         * @name ApiV1DiscoveryResourcetypesAccountsDetail
+         * @summary List all cloud accounts which will have the resource type enabled in discovery
+         * @request GET:/schedule/api/v1/discovery/resourcetypes/{resource_type}/accounts
+         * @secure
+         */
+        apiV1DiscoveryResourcetypesAccountsDetail: (
+            resourceType: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
+                any
+            >({
+                path: `/schedule/api/v1/discovery/resourcetypes/${resourceType}/accounts`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
                 ...params,
             }),
 
