@@ -85,7 +85,7 @@ export default function FindingDetail({
             <TabGroup>
                 <TabList>
                     <Tab>Controls</Tab>
-                    <Tab>Resources</Tab>
+                    <Tab disabled>Resources</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
