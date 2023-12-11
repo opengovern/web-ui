@@ -33,10 +33,12 @@ import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
 import Spinner from '../../../components/Spinner'
 import { benchmarkList } from '../Compliance'
 import {
+    Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
 } from '../../../api/api'
+import AxiosAPI, { setWorkspace } from '../../../api/ApiConfig'
 import FindingDetail from './Detail'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
 import { renderBadge } from '../Compliance/BenchmarkSummary/Details/Tabs/Policies'
@@ -311,6 +313,7 @@ export default function Findings() {
             | undefined,
         err: boolean
     ) => {
+        console.log('==================')
         return {
             getRows: (params: IServerSideGetRowsParams) => {
                 checkParams(params)
@@ -325,6 +328,60 @@ export default function Findings() {
                 }
             },
         }
+    }
+    const serverSideRows = {
+        getRows: (params: IServerSideGetRowsParams) => {
+            const api = new Api()
+            api.instance = AxiosAPI
+            api.compliance
+                .apiV1FindingsCreate({
+                    filters: {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        connector: provider.length ? [provider] : [],
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        connectionID: connectionCheckbox.state,
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        benchmarkID: benchmarkCheckbox.state,
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        resourceTypeID: resourceCheckbox.state,
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        severity: severityCheckbox.state,
+                        activeOnly: true,
+                    },
+                    sort: sortModel.length
+                        ? { [sortModel[0].colId]: sortModel[0].sort }
+                        : {},
+                    limit: 100,
+                    afterSortKey: [sortKey],
+                })
+                .then((resp) => {
+                    params.success({
+                        rowData: resp.data.findings || [],
+                        rowCount: resp.data.totalCount || 0,
+                    })
+                })
+                .catch((err) => {
+                    params.fail()
+                })
+
+            // console.log('--------', findings, isLoading)
+            // checkParams(params)
+            // if (findings) {
+            //     console.log(findings)
+            //     params.success({
+            //         rowData: findings.findings || [],
+            //         rowCount: findings.totalCount || 0,
+            //     })
+            // }
+            // if (error) {
+            //     params.fail()
+            // }
+        },
     }
     const [rows, setRows] = useState<IServerSideDatasource>()
 
@@ -628,11 +685,11 @@ export default function Findings() {
                                 e.api.showLoadingOverlay()
                             }
                         }}
-                        serverSideDatasource={rows}
+                        serverSideDatasource={serverSideRows}
                         loading={isLoading}
                         options={{
                             rowModelType: 'serverSide',
-                            serverSideDatasource: rows,
+                            serverSideDatasource: serverSideRows,
                         }}
                     />
                     <FindingDetail
