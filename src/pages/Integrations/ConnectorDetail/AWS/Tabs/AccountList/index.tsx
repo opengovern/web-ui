@@ -1,4 +1,4 @@
-import { Badge, Button } from '@tremor/react'
+import { Badge, Button, Color } from '@tremor/react'
 import { useState } from 'react'
 import {
     GridOptions,
@@ -13,6 +13,7 @@ import NewAWSAccount from './NewAWSAccount'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    SourceHealthStatus,
 } from '../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
@@ -117,11 +118,36 @@ const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
+            cellRenderer: (
+                params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection>
+            ) => {
+                if (params.value === undefined) {
+                    return null
+                }
+
+                let color: Color
+                let text: string
+                switch (params.value) {
+                    case SourceHealthStatus.HealthStatusHealthy:
+                        color = 'emerald'
+                        text = 'Healthy'
+                        break
+                    case SourceHealthStatus.HealthStatusUnhealthy:
+                        color = 'rose'
+                        text = 'Unhealthy'
+                        break
+                    default:
+                        color = 'neutral'
+                        text = String(params.value)
+                }
+
+                return <Badge color={color}>{text}</Badge>
+            },
         },
         {
             field: 'spendDiscovery',
             type: 'string',
-            headerName: 'Spend Discovery',
+            headerName: 'Spend Management',
             enableRowGroup: true,
             sortable: true,
             filter: true,
@@ -162,7 +188,7 @@ const columns = (isDemo: boolean) => {
             flex: 1,
             cellRenderer: (params: ICellRendererParams) => {
                 return (
-                    params.data?.providerConnectionName && (
+                    params.value !== undefined && (
                         <Badge color={getBadgeColor(params.value)}>
                             {getBadgeText(params.value)}
                         </Badge>

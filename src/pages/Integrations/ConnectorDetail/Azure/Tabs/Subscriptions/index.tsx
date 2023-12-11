@@ -127,6 +127,9 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 1,
             cellRenderer: (params: ICellRendererParams) => {
+                if (params.value === undefined) {
+                    return null
+                }
                 return (
                     <Badge color={getBadgeColor(params.value)}>
                         {getBadgeText(params.value)}
@@ -148,7 +151,7 @@ const columns = (isDemo: boolean) => {
         {
             field: 'spendDiscovery',
             type: 'string',
-            headerName: 'Spend Discovery',
+            headerName: 'Spend Management',
             enableRowGroup: true,
             sortable: true,
             filter: true,
