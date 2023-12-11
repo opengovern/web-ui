@@ -8,13 +8,8 @@ import {
     Text,
     TextInput,
 } from '@tremor/react'
-import { useEffect, useState } from 'react'
-import {
-    IServerSideDatasource,
-    RowClickedEvent,
-    SortModelItem,
-    ValueFormatterParams,
-} from 'ag-grid-community'
+import { useState } from 'react'
+import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { Checkbox, Radio, useCheckboxState } from 'pretty-checkbox-react'
@@ -26,7 +21,6 @@ import Table, { IColumn } from '../../../components/Table'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
 import {
     useComplianceApiV1BenchmarksSummaryList,
-    useComplianceApiV1FindingsCreate,
     useComplianceApiV1FindingsFiltersCreate,
 } from '../../../api/compliance.gen'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
@@ -35,10 +29,9 @@ import { benchmarkList } from '../Compliance'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
 } from '../../../api/api'
-import AxiosAPI, { setWorkspace } from '../../../api/ApiConfig'
+import AxiosAPI from '../../../api/ApiConfig'
 import FindingDetail from './Detail'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
 import { renderBadge } from '../Compliance/BenchmarkSummary/Details/Tabs/Policies'
@@ -206,19 +199,16 @@ const filteredConnectionsList = (
         count,
     }
 }
+let x: any = []
 
 export default function Findings() {
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<
         GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
     >(undefined)
-    const [sortModel, setSortModel] = useState<SortModelItem[]>([])
     const [provider, setProvider] = useState('')
     const [connectionSearch, setConnectionSearch] = useState('')
     const [resourceSearch, setResourceSearch] = useState('')
-
-    const [sortKey, setSortKey] = useState('')
-    const [lastRow, setLastRow] = useState(100)
 
     const connectionCheckbox = useCheckboxState({ state: [] })
     const benchmarkCheckbox = useCheckboxState({ state: [] })
@@ -228,38 +218,6 @@ export default function Findings() {
     })
 
     const isDemo = useAtomValue(isDemoAtom)
-
-    const {
-        response: findings,
-        isLoading,
-        error,
-        sendNow,
-    } = useComplianceApiV1FindingsCreate({
-        filters: {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connector: provider.length ? [provider] : [],
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connectionID: connectionCheckbox.state,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            benchmarkID: benchmarkCheckbox.state,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            resourceTypeID: resourceCheckbox.state,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            severity: severityCheckbox.state,
-            activeOnly: true,
-        },
-        sort: sortModel.length
-            ? { [sortModel[0].colId]: sortModel[0].sort }
-            : {},
-        limit: 100,
-        afterSortKey: [sortKey],
-    })
-    const list = findings?.findings
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
@@ -283,52 +241,6 @@ export default function Findings() {
     const { response: filters, isLoading: filtersLoading } =
         useComplianceApiV1FindingsFiltersCreate({})
 
-    const checkParams = (params: IServerSideGetRowsParams) => {
-        if (params.request.sortModel.length > 0) {
-            if (sortModel.length > 0) {
-                if (
-                    params.request.sortModel[0].colId !== sortModel[0].colId ||
-                    params.request.sortModel[0].sort !== sortModel[0].sort
-                ) {
-                    setSortModel(params.request.sortModel)
-                    sendNow()
-                }
-            } else {
-                setSortModel([])
-                sendNow()
-            }
-        }
-        if (params.request.startRow === lastRow) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            setSortKey(list[list?.length - 1].sortKey[0] || '')
-            sendNow()
-            setLastRow(params.request.endRow || 0)
-        }
-    }
-    const generateDatasource = (
-        response:
-            | GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse
-            | undefined,
-        err: boolean
-    ) => {
-        console.log('==================')
-        return {
-            getRows: (params: IServerSideGetRowsParams) => {
-                checkParams(params)
-                if (response) {
-                    params.success({
-                        rowData: response.findings || [],
-                        rowCount: response.totalCount || 0,
-                    })
-                }
-                if (err) {
-                    params.fail()
-                }
-            },
-        }
-    }
     const serverSideRows = {
         getRows: (params: IServerSideGetRowsParams) => {
             const api = new Api()
@@ -353,46 +265,34 @@ export default function Findings() {
                         severity: severityCheckbox.state,
                         activeOnly: true,
                     },
-                    sort: sortModel.length
-                        ? { [sortModel[0].colId]: sortModel[0].sort }
+                    sort: params.request.sortModel.length
+                        ? {
+                              [params.request.sortModel[0].colId]:
+                                  params.request.sortModel[0].sort,
+                          }
                         : {},
                     limit: 100,
-                    afterSortKey: [sortKey],
+                    afterSortKey: x,
                 })
                 .then((resp) => {
                     params.success({
                         rowData: resp.data.findings || [],
                         rowCount: resp.data.totalCount || 0,
                     })
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    x =
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        // eslint-disable-next-line no-unsafe-optional-chaining
+                        resp.data.findings[resp.data.findings?.length - 1]
+                            .sortKey
                 })
                 .catch((err) => {
                     params.fail()
                 })
-
-            // console.log('--------', findings, isLoading)
-            // checkParams(params)
-            // if (findings) {
-            //     console.log(findings)
-            //     params.success({
-            //         rowData: findings.findings || [],
-            //         rowCount: findings.totalCount || 0,
-            //     })
-            // }
-            // if (error) {
-            //     params.fail()
-            // }
         },
     }
-    const [rows, setRows] = useState<IServerSideDatasource>()
-
-    useEffect(() => {
-        if (!isLoading) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            const newRows = generateDatasource(findings, error)
-            setRows(newRows)
-        }
-    }, [isLoading])
 
     return (
         <Layout currentPage="findings">
@@ -680,13 +580,7 @@ export default function Findings() {
                             setFinding(event.data)
                             setOpen(true)
                         }}
-                        onGridReady={(e) => {
-                            if (isLoading) {
-                                e.api.showLoadingOverlay()
-                            }
-                        }}
                         serverSideDatasource={serverSideRows}
-                        loading={isLoading}
                         options={{
                             rowModelType: 'serverSide',
                             serverSideDatasource: serverSideRows,
