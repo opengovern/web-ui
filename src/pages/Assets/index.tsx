@@ -1,23 +1,10 @@
-import {
-    Callout,
-    Card,
-    Col,
-    Flex,
-    Grid,
-    Select,
-    Tab,
-    TabGroup,
-    TabList,
-    Text,
-} from '@tremor/react'
+import { Col, Grid } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Layout from '../../components/Layout'
 import { filterAtom, timeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import SummaryCard from '../../components/Cards/SummaryCard'
-import { numberDisplay } from '../../utilities/numericDisplay'
-import { BarChartIcon, LineChartIcon } from '../../icons/icons'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
     useInventoryApiV2AnalyticsMetricList,
@@ -31,11 +18,9 @@ import {
     SourceType,
 } from '../../api/api'
 import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
-import Chart from '../../components/Chart'
 import Breakdown from '../../components/Breakdown'
 import ListCard from '../../components/Cards/ListCard'
-import { checkGranularity, generateItems } from '../../utilities/dateComparator'
-import { capitalizeFirstLetter } from '../../utilities/labelMaker'
+import { checkGranularity } from '../../utilities/dateComparator'
 import Header from '../../components/Header'
 import SingleConnection from './Single/SingleConnection'
 import Trends from '../../components/Trends'

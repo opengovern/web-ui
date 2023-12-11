@@ -40,9 +40,7 @@ export const useOnboardApiV1CatalogMetricsList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -155,9 +153,7 @@ export const useOnboardApiV1ConnectionGroupsList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -270,9 +266,7 @@ export const useOnboardApiV1ConnectionGroupsDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -391,9 +385,7 @@ export const useOnboardApiV1ConnectionsAwsCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -543,9 +535,7 @@ export const useOnboardApiV1ConnectionsSummaryList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -656,9 +646,7 @@ export const useOnboardApiV1ConnectionsStateCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -776,9 +764,7 @@ export const useOnboardApiV1ConnectorList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -902,9 +888,7 @@ export const useOnboardApiV1CredentialList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1013,9 +997,7 @@ export const useOnboardApiV1CredentialCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1124,9 +1106,7 @@ export const useOnboardApiV1CredentialDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1236,9 +1216,7 @@ export const useOnboardApiV1CredentialUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1352,9 +1330,7 @@ export const useOnboardApiV1CredentialDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1463,9 +1439,7 @@ export const useOnboardApiV1CredentialAutoonboardCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1575,9 +1549,7 @@ export const useOnboardApiV1SourceAwsCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1686,9 +1658,7 @@ export const useOnboardApiV1SourceAzureCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1797,9 +1767,7 @@ export const useOnboardApiV1SourceDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1911,9 +1879,7 @@ export const useOnboardApiV1SourceHealthcheckDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -2023,9 +1989,7 @@ export const useOnboardApiV2CredentialCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()

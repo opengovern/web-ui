@@ -17,9 +17,7 @@ export const useAiApiV1GptRunCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()

@@ -30,9 +30,7 @@ export const useAuthApiV1KeyCreateCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -141,9 +139,7 @@ export const useAuthApiV1KeyDeleteDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -251,9 +247,7 @@ export const useAuthApiV1KeysList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -362,9 +356,7 @@ export const useAuthApiV1UserInviteCreate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -473,9 +465,7 @@ export const useAuthApiV1UserRoleBindingUpdate = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -588,9 +578,7 @@ export const useAuthApiV1UserRoleBindingDelete = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -700,9 +688,7 @@ export const useAuthApiV1UserRoleBindingsList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -811,9 +797,7 @@ export const useAuthApiV1UserDetail = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -922,9 +906,7 @@ export const useAuthApiV1UsersList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
@@ -1032,9 +1014,7 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
     params: RequestParams = {},
     autoExecute = true
 ) => {
-    const workspace = useParams<{
-        ws: string
-    }>().ws
+    const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
