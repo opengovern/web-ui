@@ -2,13 +2,14 @@ import {
     Accordion,
     AccordionBody,
     AccordionHeader,
+    Button,
     Card,
     Divider,
     Flex,
     Text,
     TextInput,
 } from '@tremor/react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import { useAtomValue } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
@@ -30,11 +31,13 @@ import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    SourceType,
 } from '../../../api/api'
 import AxiosAPI from '../../../api/ApiConfig'
 import FindingDetail from './Detail'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
 import { renderBadge } from '../Compliance/BenchmarkSummary/Details/Tabs/Policies'
+import { compareArrays } from '../../../components/Filter'
 
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
@@ -206,24 +209,103 @@ export default function Findings() {
     const [finding, setFinding] = useState<
         GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
     >(undefined)
-    const [provider, setProvider] = useState('')
     const [connectionSearch, setConnectionSearch] = useState('')
     const [resourceSearch, setResourceSearch] = useState('')
 
+    const [provider, setProvider] = useState('')
+    const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
     const connectionCheckbox = useCheckboxState({ state: [] })
+    const [connectionFilter, setConnectionFilter] = useState([])
     const benchmarkCheckbox = useCheckboxState({ state: [] })
+    const [benchmarkFilter, setBenchmarkFilter] = useState([])
     const resourceCheckbox = useCheckboxState({ state: [] })
+    const [resourceFilter, setResourceFilter] = useState([])
     const severityCheckbox = useCheckboxState({
         state: ['critical', 'high', 'medium', 'low', 'none'],
     })
+    const [severityFilter, setSeverityFilter] = useState([
+        'critical',
+        'high',
+        'medium',
+        'low',
+        'none',
+    ])
+    const applyFilters = () => {
+        x = ['']
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setProviderFilter(provider.length ? [provider] : [])
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setConnectionFilter(connectionCheckbox.state)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setBenchmarkFilter(benchmarkCheckbox.state)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setResourceFilter(resourceCheckbox.state)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setSeverityFilter(severityCheckbox.state)
+    }
+    const showApply = () => {
+        return (
+            !compareArrays(
+                providerFilter,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                provider.length ? [provider] : []
+            ) ||
+            !compareArrays(
+                connectionFilter.sort(),
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                connectionCheckbox.state.sort()
+            ) ||
+            !compareArrays(
+                benchmarkFilter.sort(),
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                benchmarkCheckbox.state.sort()
+            ) ||
+            !compareArrays(
+                resourceFilter.sort(),
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                resourceCheckbox.state.sort()
+            ) ||
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            !compareArrays(severityFilter.sort(), severityCheckbox.state.sort())
+        )
+    }
+
+    const resetFilters = () => {
+        x = ['']
+        setProviderFilter([])
+        setConnectionFilter([])
+        setBenchmarkFilter([])
+        setResourceFilter([])
+        setSeverityFilter(['critical', 'high', 'medium', 'low', 'none'])
+    }
+    const showReset = () => {
+        return (
+            providerFilter.length ||
+            connectionFilter.length ||
+            benchmarkFilter.length ||
+            resourceFilter.length ||
+            !compareArrays(
+                severityFilter.sort(),
+                ['critical', 'high', 'medium', 'low', 'none'].sort()
+            )
+        )
+    }
 
     const isDemo = useAtomValue(isDemoAtom)
 
     const { response: connections, isLoading: connectionsLoading } =
         useOnboardApiV1ConnectionsSummaryList({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connector: provider.length ? [provider] : [],
+            connector: providerFilter,
             pageNumber: 1,
             pageSize: 2000,
             needCost: false,
@@ -231,77 +313,69 @@ export default function Findings() {
         })
     const { response: benchmarks, isLoading: benchmarksLoading } =
         useComplianceApiV1BenchmarksSummaryList({
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connector: provider.length ? [provider] : [],
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            connectionID: connectionCheckbox.state,
+            connector: providerFilter,
+            connectionId: connectionFilter,
         })
     const { response: filters, isLoading: filtersLoading } =
         useComplianceApiV1FindingsFiltersCreate({})
 
-    const serverSideRows = {
-        getRows: (params: IServerSideGetRowsParams) => {
-            const api = new Api()
-            api.instance = AxiosAPI
-            api.compliance
-                .apiV1FindingsCreate({
-                    filters: {
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        connector: provider.length ? [provider] : [],
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        connectionID: connectionCheckbox.state,
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        benchmarkID: benchmarkCheckbox.state,
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        resourceTypeID: resourceCheckbox.state,
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        severity: severityCheckbox.state,
-                        activeOnly: true,
-                    },
-                    sort: params.request.sortModel.length
-                        ? {
-                              [params.request.sortModel[0].colId]:
-                                  params.request.sortModel[0].sort,
-                          }
-                        : {},
-                    limit: 100,
-                    afterSortKey: x,
-                })
-                .then((resp) => {
-                    params.success({
-                        rowData: resp.data.findings || [],
-                        rowCount: resp.data.totalCount || 0,
+    const ssr = () => {
+        return {
+            getRows: (params: IServerSideGetRowsParams) => {
+                const api = new Api()
+                api.instance = AxiosAPI
+                api.compliance
+                    .apiV1FindingsCreate({
+                        filters: {
+                            connector: providerFilter,
+                            connectionID: connectionFilter,
+                            benchmarkID: benchmarkFilter,
+                            resourceTypeID: resourceFilter,
+                            severity: severityFilter,
+                        },
+                        sort: params.request.sortModel.length
+                            ? {
+                                  [params.request.sortModel[0].colId]:
+                                      params.request.sortModel[0].sort,
+                              }
+                            : {},
+                        limit: 100,
+                        afterSortKey: x,
                     })
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    x =
+                    .then((resp) => {
+                        params.success({
+                            rowData: resp.data.findings || [],
+                            rowCount: resp.data.totalCount || 0,
+                        })
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
-                        // eslint-disable-next-line no-unsafe-optional-chaining
-                        resp.data.findings[resp.data.findings?.length - 1]
-                            .sortKey
-                })
-                .catch((err) => {
-                    params.fail()
-                })
-        },
+                        x =
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            // eslint-disable-next-line no-unsafe-optional-chaining
+                            resp.data.findings[resp.data.findings?.length - 1]
+                                .sortKey
+                    })
+                    .catch((err) => {
+                        params.fail()
+                    })
+            },
+        }
     }
+
+    const serverSideRows = useMemo(
+        () => ssr(),
+        [providerFilter, benchmarkFilter, resourceFilter, severityFilter]
+    )
 
     return (
         <Layout currentPage="findings">
             <Header />
             <Flex alignItems="start">
-                <Card className="sticky w-fit">
+                <Card className="sticky min-w-[300px] max-w-[300px]">
                     <Accordion
                         defaultOpen
-                        className="w-56 border-0 rounded-none bg-transparent mb-1"
+                        className="border-0 rounded-none bg-transparent mb-1"
                     >
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="font-semibold text-gray-800">
@@ -355,7 +429,7 @@ export default function Findings() {
                     <Divider className="my-3" />
                     <Accordion
                         defaultOpen
-                        className="w-56 border-0 rounded-none bg-transparent mb-1"
+                        className="border-0 rounded-none bg-transparent mb-1"
                     >
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="font-semibold text-gray-800">
@@ -392,7 +466,7 @@ export default function Findings() {
                         </AccordionBody>
                     </Accordion>
                     <Divider className="my-3" />
-                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                    <Accordion className="border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="font-semibold text-gray-800">
                                 Cloud accounts
@@ -471,7 +545,7 @@ export default function Findings() {
                         </AccordionBody>
                     </Accordion>
                     <Divider className="my-3" />
-                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                    <Accordion className="border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="text-gray-800 font-semibold">
                                 Benchmarks
@@ -505,7 +579,7 @@ export default function Findings() {
                         </AccordionBody>
                     </Accordion>
                     <Divider className="my-3" />
-                    <Accordion className="w-56 border-0 rounded-none bg-transparent mb-1">
+                    <Accordion className="border-0 rounded-none bg-transparent mb-1">
                         <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                             <Text className="text-gray-800 font-semibold">
                                 Resource types
@@ -570,8 +644,27 @@ export default function Findings() {
                             </Flex>
                         </AccordionBody>
                     </Accordion>
+                    <Flex flexDirection="row-reverse">
+                        {showApply() && (
+                            <Button
+                                onClick={() => applyFilters()}
+                                className="mt-4"
+                            >
+                                Apply
+                            </Button>
+                        )}
+                        {showReset() && (
+                            <Button
+                                variant="light"
+                                onClick={() => resetFilters()}
+                                className="mt-4"
+                            >
+                                Reset filters
+                            </Button>
+                        )}
+                    </Flex>
                 </Card>
-                <Flex className="w-full pl-6">
+                <Flex className="w-full pl-4">
                     <Table
                         fullWidth
                         id="compliance_findings"
