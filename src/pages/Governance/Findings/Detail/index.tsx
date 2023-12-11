@@ -20,6 +20,7 @@ import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { useComplianceApiV1FindingsResourceDetail } from '../../../../api/compliance.gen'
 import Tag from '../../../../components/Tag'
+import { renderBadge } from '../../Compliance/BenchmarkSummary/Details/Tabs/Policies'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
@@ -87,7 +88,32 @@ export default function FindingDetail({
                     <Tab>Resources</Tab>
                 </TabList>
                 <TabPanels>
-                    <TabPanel>controls</TabPanel>
+                    <TabPanel>
+                        <List>
+                            <ListItem>
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    className="gap-1 w-fit"
+                                >
+                                    <Text className="text-gray-800">title</Text>
+                                    <Text>description</Text>
+                                </Flex>
+                                {renderBadge('medium')}
+                            </ListItem>
+                            <ListItem>
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    className="gap-1 w-fit"
+                                >
+                                    <Text className="text-gray-800">title</Text>
+                                    <Text>description</Text>
+                                </Flex>
+                                {renderBadge('medium')}
+                            </ListItem>
+                        </List>
+                    </TabPanel>
                     <TabPanel>resources</TabPanel>
                 </TabPanels>
             </TabGroup>
