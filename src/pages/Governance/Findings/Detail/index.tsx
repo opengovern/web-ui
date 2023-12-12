@@ -1,5 +1,4 @@
 import {
-    Divider,
     Flex,
     Grid,
     List,
@@ -14,12 +13,10 @@ import {
 } from '@tremor/react'
 import { useEffect } from 'react'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../api/api'
-import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
-import { useComplianceApiV1FindingsResourceDetail } from '../../../../api/compliance.gen'
-import Tag from '../../../../components/Tag'
+import { useComplianceApiV1FindingsResourceCreate } from '../../../../api/compliance.gen'
 import { renderBadge } from '../../Compliance/BenchmarkSummary/Details/Tabs/Policies'
 import Spinner from '../../../../components/Spinner'
 
@@ -35,8 +32,8 @@ export default function FindingDetail({
     onClose,
 }: IFindingDetail) {
     const { response, isLoading, sendNow } =
-        useComplianceApiV1FindingsResourceDetail(
-            finding?.kaytuResourceID || '',
+        useComplianceApiV1FindingsResourceCreate(
+            { kaytuResourceId: finding?.kaytuResourceID || '' },
             {},
             false
         )
@@ -53,7 +50,7 @@ export default function FindingDetail({
             title={
                 <Flex justifyContent="start">
                     {getConnectorIcon(finding?.connector)}
-                    <Title className="text-lg font-semibold my-1">
+                    <Title className="text-lg font-semibold ml-2 my-1">
                         {finding?.resourceName}
                     </Title>
                 </Flex>
@@ -100,7 +97,7 @@ export default function FindingDetail({
                                         <Flex
                                             flexDirection="col"
                                             alignItems="start"
-                                            className="gap-1 w-fit"
+                                            className="gap-1 w-fit max-w-[80%]"
                                         >
                                             <Text className="text-gray-800">
                                                 {control.controlTitle}
