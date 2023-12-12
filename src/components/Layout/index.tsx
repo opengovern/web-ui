@@ -55,7 +55,7 @@ export default function Layout({
                         className={`px-12 ${hfull ? 'h-full' : ''}`}
                     >
                         <div
-                            className={`max-w-7xl w-full py-8 ${
+                            className={`max-w-8xl w-full py-8 ${
                                 hfull ? 'h-full' : ''
                             }`}
                         >

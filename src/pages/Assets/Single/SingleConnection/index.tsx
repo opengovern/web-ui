@@ -1,13 +1,10 @@
 import {
     Button,
-    Callout,
     Card,
-    Col,
     Flex,
     Grid,
     List,
     ListItem,
-    Select,
     Tab,
     TabGroup,
     TabList,
@@ -18,7 +15,7 @@ import {
 } from '@tremor/react'
 import { GridOptions } from 'ag-grid-community'
 import { ChevronRightIcon, Square2StackIcon } from '@heroicons/react/24/outline'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import clipboardCopy from 'clipboard-copy'
 import { Dayjs } from 'dayjs'
@@ -33,24 +30,14 @@ import { notificationAtom } from '../../../../store'
 import Table from '../../../../components/Table'
 import { defaultColumns, rowGenerator } from '../../Details/Tabs/Metrics'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
-import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../components/RenderObject'
-import { generateVisualMap, pieData, resourceTrendChart } from '../../index'
+import { pieData, resourceTrendChart } from '../../index'
 import Header from '../../../../components/Header'
-import {
-    checkGranularity,
-    generateItems,
-} from '../../../../utilities/dateComparator'
+import { checkGranularity } from '../../../../utilities/dateComparator'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
-import {
-    numberDisplay,
-    numericDisplay,
-} from '../../../../utilities/numericDisplay'
-import { capitalizeFirstLetter } from '../../../../utilities/labelMaker'
-import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
-import Chart from '../../../../components/Chart'
 import Trends from '../../../../components/Trends'
 
 const options: GridOptions = {

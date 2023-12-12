@@ -11,13 +11,13 @@ import {
 } from '@tremor/react'
 import { useMemo, useState } from 'react'
 import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { Checkbox, Radio, useCheckboxState } from 'pretty-checkbox-react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
-import { isDemoAtom } from '../../../store'
+import { isDemoAtom, notificationAtom } from '../../../store'
 import Table, { IColumn } from '../../../components/Table'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
 import {
@@ -57,7 +57,7 @@ export const columns = (isDemo: boolean) => {
             hide: false,
             type: 'string',
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -78,7 +78,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Resource type label',
             type: 'string',
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             hide: false,
             filter: true,
             resizable: true,
@@ -100,7 +100,7 @@ export const columns = (isDemo: boolean) => {
             headerName: 'Benchmark ID',
             type: 'string',
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             hide: true,
             filter: true,
             resizable: true,
@@ -150,7 +150,7 @@ export const columns = (isDemo: boolean) => {
             type: 'string',
             hide: true,
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -175,7 +175,7 @@ export const columns = (isDemo: boolean) => {
             type: 'number',
             hide: false,
             enableRowGroup: true,
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             width: 115,
@@ -184,7 +184,7 @@ export const columns = (isDemo: boolean) => {
             field: 'evaluatedAt',
             headerName: 'Last checked',
             type: 'datetime',
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -230,6 +230,8 @@ const filteredConnectionsList = (
 let x: any = []
 
 export default function Findings() {
+    const setNotification = useSetAtom(notificationAtom)
+
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<
         GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
@@ -372,7 +374,6 @@ export default function Findings() {
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
-                        console.log(resp.data)
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         x =
@@ -702,8 +703,15 @@ export default function Findings() {
                         id="compliance_findings"
                         columns={columns(isDemo)}
                         onCellClicked={(event: RowClickedEvent) => {
-                            setFinding(event.data)
-                            setOpen(true)
+                            if (event.data.kaytuResourceID) {
+                                setFinding(event.data)
+                                setOpen(true)
+                            } else {
+                                setNotification({
+                                    text: 'This finding is currently not supported',
+                                    type: 'error',
+                                })
+                            }
                         }}
                         serverSideDatasource={serverSideRows}
                         options={{

@@ -21,6 +21,7 @@ import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { useComplianceApiV1FindingsResourceDetail } from '../../../../api/compliance.gen'
 import Tag from '../../../../components/Tag'
 import { renderBadge } from '../../Compliance/BenchmarkSummary/Details/Tabs/Policies'
+import Spinner from '../../../../components/Spinner'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
@@ -33,11 +34,12 @@ export default function FindingDetail({
     open,
     onClose,
 }: IFindingDetail) {
-    const { response, sendNow } = useComplianceApiV1FindingsResourceDetail(
-        finding?.kaytuResourceID || '',
-        {},
-        false
-    )
+    const { response, isLoading, sendNow } =
+        useComplianceApiV1FindingsResourceDetail(
+            finding?.kaytuResourceID || '',
+            {},
+            false
+        )
     useEffect(() => {
         if (finding) {
             sendNow()
@@ -79,9 +81,9 @@ export default function FindingDetail({
                     isString
                 />
             </Grid>
-            <Flex justifyContent="start" className="flex-wrap gap-3 mb-6">
+            {/* <Flex justifyContent="start" className="flex-wrap gap-3 mb-6">
                 <Tag text="hi" />
-            </Flex>
+            </Flex> */}
             <TabGroup>
                 <TabList>
                     <Tab>Controls</Tab>
@@ -89,30 +91,27 @@ export default function FindingDetail({
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <List>
-                            <ListItem>
-                                <Flex
-                                    flexDirection="col"
-                                    alignItems="start"
-                                    className="gap-1 w-fit"
-                                >
-                                    <Text className="text-gray-800">title</Text>
-                                    <Text>description</Text>
-                                </Flex>
-                                {renderBadge('medium')}
-                            </ListItem>
-                            <ListItem>
-                                <Flex
-                                    flexDirection="col"
-                                    alignItems="start"
-                                    className="gap-1 w-fit"
-                                >
-                                    <Text className="text-gray-800">title</Text>
-                                    <Text>description</Text>
-                                </Flex>
-                                {renderBadge('medium')}
-                            </ListItem>
-                        </List>
+                        {isLoading ? (
+                            <Spinner className="mt-12" />
+                        ) : (
+                            <List>
+                                {response?.controls?.map((control) => (
+                                    <ListItem>
+                                        <Flex
+                                            flexDirection="col"
+                                            alignItems="start"
+                                            className="gap-1 w-fit"
+                                        >
+                                            <Text className="text-gray-800">
+                                                {control.controlTitle}
+                                            </Text>
+                                            <Text>{control.reason}</Text>
+                                        </Flex>
+                                        {renderBadge(control.severity)}
+                                    </ListItem>
+                                ))}
+                            </List>
+                        )}
                     </TabPanel>
                     <TabPanel>resources</TabPanel>
                 </TabPanels>
