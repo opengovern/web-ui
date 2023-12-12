@@ -19,10 +19,7 @@ import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../../../components/Layout'
-import {
-    useComplianceApiV1BenchmarksSummaryList,
-    useComplianceApiV1MetadataTagComplianceList,
-} from '../../../api/compliance.gen'
+import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import Spinner from '../../../components/Spinner'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import ComplianceCard, {
@@ -277,28 +274,7 @@ export default function Compliance() {
         <Layout currentPage="compliance">
             <Header />
             <Grid numItems={3} className="w-full gap-4 mb-4">
-                <Col numColSpan={2} className="overflow-x-scroll">
-                    {/* <TabGroup>
-                        <TabList variant="solid" className="px-0">
-                            <Tab
-                                className="px-4 py-2"
-                                onClick={() => setSelectedCategory('')}
-                            >
-                                All
-                            </Tab>
-                             eslint-disable-next-line react/jsx-no-useless-fragment
-                            <>
-                                {categories?.kaytu_category.map((cat) => (
-                                    <Tab
-                                        className="px-4 py-2"
-                                        onClick={() => setSelectedCategory(cat)}
-                                    >
-                                        {cat}
-                                    </Tab>
-                                ))}
-                            </>
-                        </TabList>
-                    </TabGroup> */}
+                <Col numColSpan={2}>
                     <TabGroup index={stateIndex}>
                         <TabList variant="solid" className="px-0">
                             <Tab
