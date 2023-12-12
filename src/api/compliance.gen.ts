@@ -16,6 +16,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
@@ -1552,7 +1553,7 @@ export const useComplianceApiV1FindingsFiltersCreate = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseComplianceApiV1FindingsResourceDetailState {
+interface IuseComplianceApiV1FindingsResourceCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse
@@ -1560,8 +1561,8 @@ interface IuseComplianceApiV1FindingsResourceDetailState {
     error?: any
 }
 
-export const useComplianceApiV1FindingsResourceDetail = (
-    kaytuResourceId: string,
+export const useComplianceApiV1FindingsResourceCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -1572,12 +1573,12 @@ export const useComplianceApiV1FindingsResourceDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1FindingsResourceDetailState>({
+        useState<IuseComplianceApiV1FindingsResourceCreateState>({
             isLoading: true,
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([kaytuResourceId, params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1600,7 +1601,7 @@ export const useComplianceApiV1FindingsResourceDetail = (
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.compliance
-                .apiV1FindingsResourceDetail(kaytuResourceId, paramsSignal)
+                .apiV1FindingsResourceCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1636,8 +1637,8 @@ export const useComplianceApiV1FindingsResourceDetail = (
         }
     }
 
-    if (JSON.stringify([kaytuResourceId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([kaytuResourceId, params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {

@@ -227,7 +227,7 @@ const filteredConnectionsList = (
         count,
     }
 }
-let x: any = []
+let sortKey = ''
 
 export default function Findings() {
     const setNotification = useSetAtom(notificationAtom)
@@ -258,7 +258,7 @@ export default function Findings() {
         'none',
     ])
     const applyFilters = () => {
-        x = ['']
+        sortKey = ''
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         setProviderFilter(provider.length ? [provider] : [])
@@ -308,12 +308,17 @@ export default function Findings() {
     }
 
     const resetFilters = () => {
-        x = ['']
+        sortKey = ''
         setProviderFilter([])
+        setProvider('')
         setConnectionFilter([])
+        connectionCheckbox.setState([])
         setBenchmarkFilter([])
+        benchmarkCheckbox.setState([])
         setResourceFilter([])
+        resourceCheckbox.setState([])
         setSeverityFilter(['critical', 'high', 'medium', 'low', 'none'])
+        severityCheckbox.setState(['critical', 'high', 'medium', 'low', 'none'])
     }
     const showReset = () => {
         return (
@@ -349,6 +354,9 @@ export default function Findings() {
     const ssr = () => {
         return {
             getRows: (params: IServerSideGetRowsParams) => {
+                if (params.request.sortModel.length) {
+                    sortKey = ''
+                }
                 const api = new Api()
                 api.instance = AxiosAPI
                 api.compliance
@@ -367,21 +375,25 @@ export default function Findings() {
                               }
                             : {},
                         limit: 100,
-                        afterSortKey: x,
+                        afterSortKey:
+                            params.request.startRow === 0 ||
+                            sortKey.length < 1 ||
+                            sortKey === 'none'
+                                ? []
+                                : [sortKey],
                     })
                     .then((resp) => {
                         params.success({
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        x =
+                        // eslint-disable-next-line prefer-destructuring
+                        sortKey =
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             // eslint-disable-next-line no-unsafe-optional-chaining
                             resp.data.findings[resp.data.findings?.length - 1]
-                                .sortKey
+                                .sortKey[0]
                     })
                     .catch((err) => {
                         params.fail()
@@ -424,14 +436,14 @@ export default function Findings() {
                                 <Radio
                                     name="provider"
                                     onClick={() => setProvider('')}
-                                    defaultChecked={provider === ''}
+                                    checked={provider === ''}
                                 >
                                     All
                                 </Radio>
                                 <Radio
                                     name="provider"
                                     onClick={() => setProvider('AWS')}
-                                    defaultChecked={provider === 'AWS'}
+                                    checked={provider === 'AWS'}
                                 >
                                     <Flex className="gap-1">
                                         <img
@@ -445,7 +457,7 @@ export default function Findings() {
                                 <Radio
                                     name="provider"
                                     onClick={() => setProvider('Azure')}
-                                    defaultChecked={provider === 'Azure'}
+                                    checked={provider === 'Azure'}
                                 >
                                     <Flex className="gap-1">
                                         <img
@@ -703,13 +715,16 @@ export default function Findings() {
                         id="compliance_findings"
                         columns={columns(isDemo)}
                         onCellClicked={(event: RowClickedEvent) => {
-                            if (event.data.kaytuResourceID) {
+                            if (
+                                event.data.kaytuResourceID &&
+                                event.data.kaytuResourceID.length > 0
+                            ) {
                                 setFinding(event.data)
                                 setOpen(true)
                             } else {
                                 setNotification({
-                                    text: 'This finding is currently not supported',
-                                    type: 'error',
+                                    text: 'Detail for this finding is currently not available',
+                                    type: 'warning',
                                 })
                             }
                         }}

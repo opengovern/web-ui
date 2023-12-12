@@ -862,6 +862,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsS
     services?: GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSummary[]
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest {
+    /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
+    kaytuResourceId?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse {
     controls?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
     resource?: EsResource
@@ -1614,6 +1619,7 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeySpendDiscoveryAWSPolicyARNs = 'spend_discovery_aws_policy_arns',
     MetadataKeyAssetDiscoveryAzureRoleIDs = 'asset_discovery_azure_role_ids',
     MetadataKeySpendDiscoveryAzureRoleIDs = 'spend_discovery_azure_role_ids',
+    MetadataKeyCustomizationEnabled = 'customization_enabled',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
@@ -3332,21 +3338,22 @@ export class Api<
          * @description Retrieving a single finding
          *
          * @tags compliance
-         * @name ApiV1FindingsResourceDetail
+         * @name ApiV1FindingsResourceCreate
          * @summary Get finding
-         * @request GET:/compliance/api/v1/findings/resource/{kaytu_resource_id}
+         * @request POST:/compliance/api/v1/findings/resource
          * @secure
          */
-        apiV1FindingsResourceDetail: (
-            kaytuResourceId: string,
+        apiV1FindingsResourceCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
             params: RequestParams = {}
         ) =>
             this.request<
                 GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
                 any
             >({
-                path: `/compliance/api/v1/findings/resource/${kaytuResourceId}`,
-                method: 'GET',
+                path: `/compliance/api/v1/findings/resource`,
+                method: 'POST',
+                body: request,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
