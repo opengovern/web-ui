@@ -16,10 +16,16 @@ import {
 } from '../../../api/metadata.gen'
 
 import { useComplianceApiV1QueriesSyncList } from '../../../api/compliance.gen'
+import { ConvertToBoolean } from '../../../utilities/bool'
 
 export default function SettingsGitRepositories() {
     const [updateInputs, setUpdateInputs] = useState<boolean>(false)
     const [newMetricsGitURL, setNewMetricsGitURL] = useState<string>('')
+
+    const {
+        response: customizationEnabled,
+        isLoading: loadingCustomizationEnabled,
+    } = useMetadataApiV1MetadataDetail('customization_enabled')
 
     const { response: metricsGitURL, isLoading: loadingMetricsGitURL } =
         useMetadataApiV1MetadataDetail('analytics_git_url')
@@ -41,7 +47,7 @@ export default function SettingsGitRepositories() {
         sendNow: syncQueries,
     } = useComplianceApiV1QueriesSyncList({}, {}, false)
 
-    if (loadingMetricsGitURL) {
+    if (loadingMetricsGitURL || loadingCustomizationEnabled) {
         return (
             <Flex justifyContent="center" className="mt-56">
                 <Spinner />
@@ -68,6 +74,9 @@ export default function SettingsGitRepositories() {
         )
     }
 
+    const isCustomizationEnabled =
+        ConvertToBoolean(customizationEnabled?.value || 'false') || false
+
     return (
         <Card key="summary" className="top-6">
             <Title className="font-semibold">Git Repositories</Title>
@@ -81,26 +90,47 @@ export default function SettingsGitRepositories() {
             </Flex>
             <List className="mt-4">
                 <ListItem key="metrics_git_url" className="my-1">
-                    <Flex justifyContent="start" className="truncate space-x-4">
-                        <div className="truncate">
-                            <Text className="truncate text-sm">
-                                Configuration Git URL:
+                    <Flex flexDirection="col" alignItems="start">
+                        <Flex flexDirection="row">
+                            <Flex
+                                justifyContent="start"
+                                className="truncate space-x-4"
+                            >
+                                <div className="truncate">
+                                    <Text className="truncate text-sm">
+                                        Configuration Git URL:
+                                    </Text>
+                                </div>
+                            </Flex>
+                            <TextInput
+                                className="text-sm"
+                                value={newMetricsGitURL}
+                                onChange={(e) =>
+                                    setNewMetricsGitURL(e.target.value)
+                                }
+                                icon={
+                                    executeSetMetricsGitURL &&
+                                    loadingSetMetricsGitURL
+                                        ? Spinner
+                                        : undefined
+                                }
+                                disabled={
+                                    (executeSetMetricsGitURL &&
+                                        loadingSetMetricsGitURL) ||
+                                    !isCustomizationEnabled
+                                }
+                            />
+                        </Flex>
+                        {!isCustomizationEnabled && (
+                            <Text className="text-red-500">
+                                Changing git repository feature is not enabled
+                                for you.{' '}
+                                <a href="https://kaytu.io/docs/guides/faq#customization-disabled">
+                                    Click here to see why
+                                </a>
                             </Text>
-                        </div>
+                        )}
                     </Flex>
-                    <TextInput
-                        className="text-sm"
-                        value={newMetricsGitURL}
-                        onChange={(e) => setNewMetricsGitURL(e.target.value)}
-                        icon={
-                            executeSetMetricsGitURL && loadingSetMetricsGitURL
-                                ? Spinner
-                                : undefined
-                        }
-                        disabled={
-                            executeSetMetricsGitURL && loadingSetMetricsGitURL
-                        }
-                    />
                 </ListItem>
                 <ListItem key="buttons" className="my-1">
                     <Flex justifyContent="end" className="truncate space-x-4">
