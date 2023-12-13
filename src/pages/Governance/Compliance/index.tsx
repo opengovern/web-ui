@@ -226,7 +226,7 @@ const notActiveColumns: IColumn<any, any>[] = [
             >
         ) => (
             <Flex justifyContent="end" className="h-full">
-                <Text color="blue">Assign connection</Text>
+                <Text color="blue">Assign cloud account</Text>
                 <Icon
                     icon={ChevronRightIcon}
                     color="blue"
