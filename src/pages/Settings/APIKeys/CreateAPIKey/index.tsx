@@ -11,9 +11,9 @@ import {
 } from '@tremor/react'
 import clipboardCopy from 'clipboard-copy'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
+import { useSetAtom } from 'jotai/index'
 import InformationModal from '../../../../components/Modal/InformationModal'
 import { useAuthApiV1KeyCreateCreate } from '../../../../api/auth.gen'
-import { useSetAtom } from 'jotai/index'
 import { notificationAtom } from '../../../../store'
 
 interface CreateAPIKeyProps {
