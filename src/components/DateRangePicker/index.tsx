@@ -274,7 +274,7 @@ export default function DateRangePicker() {
     useEffect(() => {
         if (
             !isSpend &&
-            currentWorkspace &&
+            currentWorkspace.current &&
             dayjs(currentWorkspace.current?.createdAt).valueOf() >
                 activeTimeRange.start.valueOf()
         ) {
@@ -298,7 +298,7 @@ export default function DateRangePicker() {
 
     const minValue = () => {
         return parseDate(
-            currentWorkspace
+            !isSpend && currentWorkspace
                 ? dayjs(currentWorkspace.current?.createdAt).format(
                       'YYYY-MM-DD'
                   )
@@ -311,6 +311,7 @@ export default function DateRangePicker() {
         }
         return today(getLocalTimeZone())
     }
+
     return (
         <CustomDatePicker
             value={currentValue()}

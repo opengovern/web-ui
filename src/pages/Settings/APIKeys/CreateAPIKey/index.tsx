@@ -11,8 +11,10 @@ import {
 } from '@tremor/react'
 import clipboardCopy from 'clipboard-copy'
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
+import { useSetAtom } from 'jotai/index'
 import InformationModal from '../../../../components/Modal/InformationModal'
 import { useAuthApiV1KeyCreateCreate } from '../../../../api/auth.gen'
+import { notificationAtom } from '../../../../store'
 
 interface CreateAPIKeyProps {
     close: () => void
@@ -43,6 +45,7 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
     const [roleValue, setRoleValue] = useState<
         'admin' | 'editor' | 'viewer' | undefined
     >()
+    const setNotification = useSetAtom(notificationAtom)
 
     const {
         response,
@@ -55,6 +58,22 @@ export default function CreateAPIKey({ close }: CreateAPIKeyProps) {
         {},
         false
     )
+
+    useEffect(() => {
+        if (isExecuted && !isLoading) {
+            setNotification({
+                text: 'API key successfully added',
+                type: 'success',
+            })
+            close()
+        }
+        if (error) {
+            setNotification({
+                text: 'Unable to add new API key',
+                type: 'error',
+            })
+        }
+    }, [isLoading, error])
 
     useEffect(() => {
         if (role === 'viewer' || role === 'editor' || role === 'admin') {

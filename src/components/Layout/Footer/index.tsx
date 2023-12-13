@@ -9,7 +9,7 @@ export default function Footer() {
             <Flex
                 flexDirection="row"
                 justifyContent="between"
-                className="max-w-8xl w-full"
+                className="max-w-7xl w-full"
             >
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a href="#">

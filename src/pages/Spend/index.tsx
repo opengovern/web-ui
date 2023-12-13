@@ -96,7 +96,7 @@ const topAccounts = (
                 kaytuId: input.connections[i].id,
             })
         }
-        top.total = input.totalDiscoveredCount
+        top.total = input.connectionCount
     }
     return top
 }
@@ -275,6 +275,7 @@ export default function Spend() {
                 startTime: activeTimeRange.start.unix(),
             }),
         })
+    console.log(accountCostResponse)
 
     return (
         <Layout currentPage="spend">

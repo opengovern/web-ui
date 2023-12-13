@@ -120,7 +120,7 @@ export default function SingleConnection({
                     breadCrumb={[
                         connection
                             ? connection?.providerConnectionName
-                            : 'Single account detail',
+                            : 'Single cloud account detail',
                     ]}
                     datePicker
                 />
@@ -134,7 +134,7 @@ export default function SingleConnection({
                     >
                         <Flex flexDirection="col" alignItems="start">
                             <Title className="font-semibold mb-2">
-                                Connection details
+                                Cloud account detail
                             </Title>
                             {accountInfoLoading ? (
                                 <Spinner className="mt-28" />

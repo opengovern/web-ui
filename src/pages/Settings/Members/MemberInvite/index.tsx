@@ -27,6 +27,7 @@ export default function MemberInvite({ close }: MemberInviteProps) {
     const {
         isExecuted,
         isLoading,
+        error,
         sendNow: createInvite,
     } = useAuthApiV1UserInviteCreate(
         { email: email || '', roleName: roleValue },
@@ -48,7 +49,13 @@ export default function MemberInvite({ close }: MemberInviteProps) {
             })
             close(true)
         }
-    }, [isLoading])
+        if (error) {
+            setNotification({
+                text: 'Unable to add new member',
+                type: 'error',
+            })
+        }
+    }, [isLoading, error])
 
     const roleItems = [
         {
