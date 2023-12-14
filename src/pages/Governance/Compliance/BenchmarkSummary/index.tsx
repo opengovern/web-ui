@@ -34,6 +34,7 @@ import {
 } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
+import Policies from './Policies'
 
 const generateLineData = (
     input:
@@ -151,16 +152,6 @@ export default function BenchmarkSummary() {
         }
     }, [isExecuted])
 
-    const critical = benchmarkDetail?.checks?.criticalCount || 0
-    const high = benchmarkDetail?.checks?.highCount || 0
-    const medium = benchmarkDetail?.checks?.mediumCount || 0
-    const low = benchmarkDetail?.checks?.lowCount || 0
-    const passed = benchmarkDetail?.checks?.passedCount || 0
-    const unknown = benchmarkDetail?.checks?.unknownCount || 0
-
-    const total = critical + high + medium + low + passed + unknown
-    const failed = critical + high + medium + low
-
     return (
         <Layout currentPage="compliance">
             <Header
@@ -218,7 +209,7 @@ export default function BenchmarkSummary() {
                     </Flex>
                 </Flex>
             )}
-            <Grid numItems={2} className="gap-4">
+            <Grid numItems={2} className="gap-4 mb-4">
                 <Card>
                     <Flex alignItems="end" className="mb-10">
                         <Flex
@@ -230,7 +221,12 @@ export default function BenchmarkSummary() {
                                 Security score
                             </Text>
                             <Title className="font-semibold">
-                                {`${((passed / total) * 100).toFixed(2)}%`}
+                                {`${(
+                                    (benchmarkChecks(benchmarkDetail).passed /
+                                        benchmarkChecks(benchmarkDetail)
+                                            .total) *
+                                    100
+                                ).toFixed(2)}%`}
                             </Title>
                         </Flex>
                         <Flex justifyContent="end" className="gap-3">
@@ -302,8 +298,8 @@ export default function BenchmarkSummary() {
                             'slate',
                         ]}
                     />
-                    <Flex className="mt-6">
-                        <Flex>
+                    <Flex className="mt-6 flex-wrap">
+                        <Flex className="w-fit gap-1">
                             <Text className="text-gray-800">Critical</Text>
                             <Text>{`(${(
                                 (benchmarkChecks(benchmarkDetail).critical /
@@ -311,7 +307,7 @@ export default function BenchmarkSummary() {
                                 100
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
-                        <Flex>
+                        <Flex className="w-fit gap-1">
                             <Text className="text-gray-800">High</Text>
                             <Text>{`(${(
                                 (benchmarkChecks(benchmarkDetail).high /
@@ -319,7 +315,7 @@ export default function BenchmarkSummary() {
                                 100
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
-                        <Flex>
+                        <Flex className="w-fit gap-1">
                             <Text className="text-gray-800">Medium</Text>
                             <Text>{`(${(
                                 (benchmarkChecks(benchmarkDetail).medium /
@@ -327,7 +323,7 @@ export default function BenchmarkSummary() {
                                 100
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
-                        <Flex>
+                        <Flex className="w-fit gap-1">
                             <Text className="text-gray-800">Low</Text>
                             <Text>{`(${(
                                 (benchmarkChecks(benchmarkDetail).low /
@@ -335,7 +331,7 @@ export default function BenchmarkSummary() {
                                 100
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
-                        <Flex>
+                        <Flex className="w-fit gap-1">
                             <Text className="text-gray-800">Passed</Text>
                             <Text>{`(${(
                                 (benchmarkChecks(benchmarkDetail).passed /
@@ -343,7 +339,7 @@ export default function BenchmarkSummary() {
                                 100
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
-                        <Flex>
+                        <Flex className="w-fit gap-1">
                             <Text className="text-gray-800">Unknown</Text>
                             <Text>{`(${(
                                 (benchmarkChecks(benchmarkDetail).unknown /
@@ -354,7 +350,7 @@ export default function BenchmarkSummary() {
                     </Flex>
                 </Card>
                 <Card>
-                    <Flex justifyContent="between" className="mb-2">
+                    <Flex justifyContent="between" className="mb-3">
                         <Title className="font-semibold">Top</Title>
                         <TabGroup
                             className="w-fit"
@@ -371,6 +367,7 @@ export default function BenchmarkSummary() {
                     {renderBars()}
                 </Card>
             </Grid>
+            <Policies id={String(id)} />
         </Layout>
     )
 }
