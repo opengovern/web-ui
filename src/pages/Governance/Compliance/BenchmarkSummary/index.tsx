@@ -33,7 +33,7 @@ import Policies from './Policies'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
 
-const topList = (
+const topResources = (
     input:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
         | undefined
@@ -82,6 +82,25 @@ const topConnections = (
     return top
 }
 
+const topControls = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
+        | undefined
+) => {
+    const top = []
+    if (input && input.records) {
+        for (let i = 0; i < input.records.length; i += 1) {
+            top.push({
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                name: input.records[i].Control?.title,
+                value: input.records[i].count || 0,
+            })
+        }
+    }
+    return top
+}
+
 export default function BenchmarkSummary() {
     const { id, resourceId } = useParams()
     const selectedConnections = useAtomValue(filterAtom)
@@ -120,6 +139,13 @@ export default function BenchmarkSummary() {
         3,
         topQuery
     )
+    const { response: controls } = useComplianceApiV1FindingsTopDetail(
+        String(id),
+        'controlID',
+        3,
+        topQuery
+    )
+    console.log(controls)
 
     const renderBars = () => {
         switch (stateIndex) {
@@ -130,11 +156,11 @@ export default function BenchmarkSummary() {
                         data={topConnections(connections, benchmarkDetail?.id)}
                     />
                 )
+            case 1:
+                return <BarList data={topControls(controls)} />
             case 2:
-                // setType('services')
-                return <BarList data={topList(resources)} />
+                return <BarList data={topResources(resources)} />
             default:
-                // setType('accounts')
                 return (
                     <BarList
                         data={topConnections(connections, benchmarkDetail?.id)}
@@ -350,10 +376,14 @@ export default function BenchmarkSummary() {
                 <Card>
                     <Flex justifyContent="between" className="mb-3">
                         <button type="button" onClick={() => setOpenTop(true)}>
-                            <Flex className="gap-1.5">
+                            {stateIndex === 0 || stateIndex === 2 ? (
+                                <Flex className="gap-1.5">
+                                    <Title className="font-semibold">Top</Title>
+                                    <ChevronRightIcon className="h-4 text-kaytu-500" />
+                                </Flex>
+                            ) : (
                                 <Title className="font-semibold">Top</Title>
-                                <ChevronRightIcon className="h-4 text-kaytu-500" />
-                            </Flex>
+                            )}
                         </button>
                         <TabGroup
                             className="w-fit"
