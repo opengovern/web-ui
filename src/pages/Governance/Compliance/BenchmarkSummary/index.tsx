@@ -16,7 +16,10 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
+import {
+    ArrowPathRoundedSquareIcon,
+    Cog6ToothIcon,
+} from '@heroicons/react/24/outline'
 import Layout from '../../../../components/Layout'
 import { filterAtom, timeAtom } from '../../../../store'
 import {
@@ -35,22 +38,6 @@ import {
 import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
 import Policies from './Policies'
-
-const generateLineData = (
-    input:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint[]
-        | undefined
-) => {
-    const data = []
-    const label = []
-    if (input) {
-        for (let i = 0; i < input.length; i += 1) {
-            label.push(dateDisplay((input[i].timestamp || 0) * 1000))
-            data.push((input[i].securityScore || 0).toFixed(2))
-        }
-    }
-    return { data, label }
-}
 
 const topList = (
     input:
@@ -81,7 +68,8 @@ const topList = (
 const topConnections = (
     input:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
-        | undefined
+        | undefined,
+    id: string | undefined
 ) => {
     const top = []
     if (input && input.records) {
@@ -90,6 +78,9 @@ const topConnections = (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 name: input.records[i].Connection?.providerConnectionName,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                href: `${id}/account_${input.records[i].Connection?.id}`,
                 value: input.records[i].count || 0,
             })
         }
@@ -137,11 +128,19 @@ export default function BenchmarkSummary() {
     const renderBars = () => {
         switch (stateIndex) {
             case 0:
-                return <BarList data={topConnections(connections)} />
+                return (
+                    <BarList
+                        data={topConnections(connections, benchmarkDetail?.id)}
+                    />
+                )
             case 2:
                 return <BarList data={topList(resources)} />
             default:
-                return <BarList data={topConnections(connections)} />
+                return (
+                    <BarList
+                        data={topConnections(connections, benchmarkDetail?.id)}
+                    />
+                )
         }
     }
 
@@ -160,7 +159,15 @@ export default function BenchmarkSummary() {
                         : 'Benchmark summary',
                 ]}
                 filter
-            />
+            >
+                <Button
+                    variant="secondary"
+                    icon={Cog6ToothIcon}
+                    className="h-9"
+                >
+                    Setting
+                </Button>
+            </Header>
             {isLoading ? (
                 <Spinner className="mb-12" />
             ) : (

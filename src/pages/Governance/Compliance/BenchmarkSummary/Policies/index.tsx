@@ -78,7 +78,7 @@ export default function Policies({ id }: IPolicies) {
         useComplianceApiV1BenchmarksControlsDetail(String(id))
 
     return (
-        <Card>
+        <Card className="max-w-full">
             <Flex className="mb-3">
                 <Title className="font-semibold">Confidentiality</Title>
                 <Button
@@ -90,9 +90,9 @@ export default function Policies({ id }: IPolicies) {
                     {`${(policies?.length || 10) - 10} more`}
                 </Button>
             </Flex>
-            <Table>
-                <TableHead>
-                    <TableRow>
+            <Table className="max-w-full">
+                <TableHead className="max-w-full">
+                    <TableRow className="max-w-full">
                         <TableHeaderCell className="w-32">
                             Control
                         </TableHeaderCell>
@@ -100,14 +100,17 @@ export default function Policies({ id }: IPolicies) {
                         <TableHeaderCell className="w-40">
                             Passed resources
                         </TableHeaderCell>
-                        <TableHeaderCell className="w-28" />
+                        <TableHeaderCell className="w-5" />
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody className="max-w-full">
                     {policies?.map(
                         (p, i) =>
                             i < 10 && (
-                                <TableRow key={`${p.control?.id || i}`}>
+                                <TableRow
+                                    className="max-w-full"
+                                    key={`${p.control?.id || i}`}
+                                >
                                     <TableCell>1.1.</TableCell>
                                     <TableCell>
                                         <Flex
