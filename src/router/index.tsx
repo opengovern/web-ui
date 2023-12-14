@@ -20,7 +20,6 @@ import SingleSpend from '../pages/Spend/Single'
 import ServiceAdvisor from '../pages/Governance/ServiceAdvisor'
 import InsightDetails from '../pages/Insights/Details'
 import InsightList from '../pages/Insights/InsightList'
-import BenchmarkDetails from '../pages/Governance/Compliance/BenchmarkSummary/Details'
 import SpendDetails from '../pages/Spend/Details'
 import AssetDetails from '../pages/Assets/Details'
 import Rules from '../pages/Automation/Rules'
@@ -166,11 +165,6 @@ const authRoutes = [
         component: SingleComplianceConnection,
     },
     {
-        key: 'benchmark detail',
-        path: '/:ws/compliance/:id/details',
-        component: BenchmarkDetails,
-    },
-    {
         key: 'service advisor',
         path: '/:ws/service-advisor',
         component: ServiceAdvisor,
@@ -184,11 +178,6 @@ const authRoutes = [
         key: 'service advisor summary',
         path: '/:ws/service-advisor/:id',
         component: BenchmarkSummary,
-    },
-    {
-        key: 'service advisor detail',
-        path: '/:ws/service-advisor/:id/details',
-        component: BenchmarkDetails,
     },
     {
         key: 'home',
@@ -239,11 +228,6 @@ const authRoutes = [
         key: 'benchmark summary',
         path: '/:ws/resource-collection/:resourceId/:id',
         component: BenchmarkSummary,
-    },
-    {
-        key: 'service advisor detail',
-        path: '/:ws/resource-collection/:resourceId/:id/details',
-        component: BenchmarkDetails,
     },
     {
         key: 'benchmark single connection',
