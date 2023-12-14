@@ -1,5 +1,5 @@
 import { ValueFormatterParams } from 'ag-grid-community'
-import { Button, Flex } from '@tremor/react'
+import { Button, Callout, Flex, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai/index'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
@@ -98,6 +98,7 @@ export default function Settings({ id }: ISettings) {
         connectionID: '',
         status: false,
     })
+    const [allEnable, setAllEnable] = useState(true)
     const isDemo = useAtomValue(isDemoAtom)
 
     const {
@@ -161,6 +162,17 @@ export default function Settings({ id }: ISettings) {
         }
     }, [enableExecuted, disableExecuted, enableLoading, disableLoading])
 
+    useEffect(() => {
+        if (assignments) {
+            const auto = assignments.connections?.filter(
+                (a) => a.status === false
+            )
+            if (auto?.length === 0) {
+                setAllEnable(true)
+            } else setAllEnable(false)
+        }
+    }, [assignments])
+
     return (
         <>
             <Button
@@ -176,55 +188,77 @@ export default function Settings({ id }: ISettings) {
                 onClose={() => setOpen(false)}
                 title="Settings"
             >
-                <Table
-                    id="compliance_assignments"
-                    columns={columns(isDemo)}
-                    onCellClicked={(event) => {
-                        if (event.colDef.headerName === 'Enable') {
-                            setTransfer({
-                                connectionID: event.data?.connectionID || '',
-                                status: !(event.data?.status || false),
-                            })
+                {allEnable ? (
+                    <Callout title="Provider requirements" color="amber">
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            className="gap-3"
+                        >
+                            <Text color="amber">
+                                You have auto-enabled all accounts
+                            </Text>
+                            <Button
+                                variant="secondary"
+                                color="amber"
+                                onClick={() => setAllEnable(false)}
+                            >
+                                Edit
+                            </Button>
+                        </Flex>
+                    </Callout>
+                ) : (
+                    <Table
+                        id="compliance_assignments"
+                        columns={columns(isDemo)}
+                        onCellClicked={(event) => {
+                            if (event.colDef.headerName === 'Enable') {
+                                setTransfer({
+                                    connectionID:
+                                        event.data?.connectionID || '',
+                                    status: !(event.data?.status || false),
+                                })
+                            }
+                        }}
+                        loading={isLoading}
+                        rowData={
+                            assignments?.connections?.sort(
+                                (a, b) =>
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    b.providerConnectionName -
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    a.providerConnectionName
+                            ) || []
                         }
-                    }}
-                    loading={isLoading}
-                    rowData={
-                        assignments?.connections?.sort(
-                            (a, b) =>
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                b.providerConnectionName -
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                a.providerConnectionName
-                        ) || []
-                    }
-                >
-                    <Flex justifyContent="end" className="gap-x-2">
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                setTransfer({
-                                    connectionID: 'all',
-                                    status: false,
-                                })
-                            }}
-                        >
-                            Disable All
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            onClick={() => {
-                                setTransfer({
-                                    connectionID: 'all',
-                                    status: true,
-                                })
-                            }}
-                        >
-                            Enable All
-                        </Button>
-                    </Flex>
-                </Table>
+                    >
+                        <Flex justifyContent="end" className="gap-x-2">
+                            <Button
+                                variant="secondary"
+                                onClick={() => {
+                                    setTransfer({
+                                        connectionID: 'all',
+                                        status: false,
+                                    })
+                                }}
+                            >
+                                Disable All
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={() => {
+                                    setTransfer({
+                                        connectionID: 'all',
+                                        status: true,
+                                    })
+                                }}
+                            >
+                                Enable All
+                            </Button>
+                        </Flex>
+                    </Table>
+                )}
             </DrawerPanel>
         </>
     )
