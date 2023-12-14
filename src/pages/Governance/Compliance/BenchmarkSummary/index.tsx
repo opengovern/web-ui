@@ -15,10 +15,8 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import {
-    ArrowPathRoundedSquareIcon,
-    Cog6ToothIcon,
-} from '@heroicons/react/24/outline'
+import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
+import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import Layout from '../../../../components/Layout'
 import { filterAtom } from '../../../../store'
 import {
@@ -33,6 +31,7 @@ import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
 import Policies from './Policies'
 import Settings from './Settings'
+import TopDetails from './TopDetails'
 
 const topList = (
     input:
@@ -87,6 +86,8 @@ export default function BenchmarkSummary() {
     const { id, resourceId } = useParams()
     const selectedConnections = useAtomValue(filterAtom)
     const [stateIndex, setStateIndex] = useState(0)
+    const [type, setType] = useState<'accounts' | 'services'>('accounts')
+    const [openTop, setOpenTop] = useState(false)
 
     const topQuery = {
         ...(selectedConnections.provider && {
@@ -123,14 +124,17 @@ export default function BenchmarkSummary() {
     const renderBars = () => {
         switch (stateIndex) {
             case 0:
+                // setType('accounts')
                 return (
                     <BarList
                         data={topConnections(connections, benchmarkDetail?.id)}
                     />
                 )
             case 2:
+                // setType('services')
                 return <BarList data={topList(resources)} />
             default:
+                // setType('accounts')
                 return (
                     <BarList
                         data={topConnections(connections, benchmarkDetail?.id)}
@@ -345,20 +349,37 @@ export default function BenchmarkSummary() {
                 </Card>
                 <Card>
                     <Flex justifyContent="between" className="mb-3">
-                        <Title className="font-semibold">Top</Title>
+                        <button type="button" onClick={() => setOpenTop(true)}>
+                            <Flex className="gap-1.5">
+                                <Title className="font-semibold">Top</Title>
+                                <ChevronRightIcon className="h-4 text-kaytu-500" />
+                            </Flex>
+                        </button>
                         <TabGroup
                             className="w-fit"
                             index={stateIndex}
                             onIndexChange={setStateIndex}
                         >
                             <TabList variant="solid">
-                                <Tab>Cloud accounts</Tab>
+                                <Tab onClick={() => setType('accounts')}>
+                                    Cloud accounts
+                                </Tab>
                                 <Tab>Controls</Tab>
-                                <Tab>Services</Tab>
+                                <Tab onClick={() => setType('services')}>
+                                    Services
+                                </Tab>
                             </TabList>
                         </TabGroup>
                     </Flex>
                     {renderBars()}
+                    <TopDetails
+                        open={openTop}
+                        onClose={() => setOpenTop(false)}
+                        id={benchmarkDetail?.id}
+                        type={type}
+                        connections={selectedConnections}
+                        resourceId={resourceId}
+                    />
                 </Card>
             </Grid>
             <Policies id={String(id)} />

@@ -8,8 +8,8 @@ import Assignments from './Tabs/Assignments'
 import Findings from './Tabs/Findings'
 import { filterAtom } from '../../../../../store'
 import Header from '../../../../../components/Header'
-import CloudAccounts from './Tabs/CloudAccounts'
-import Services from './Tabs/Services'
+import CloudAccounts from '../TopDetails/CloudAccounts'
+import Services from '../TopDetails/Services'
 
 export default function BenchmarkDetails() {
     const navigate = useNavigate()

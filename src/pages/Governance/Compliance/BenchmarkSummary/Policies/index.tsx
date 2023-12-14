@@ -111,11 +111,11 @@ export default function Policies({ id }: IPolicies) {
                                     className="max-w-full"
                                     key={`${p.control?.id || i}`}
                                 >
-                                    <TableCell>1.1.</TableCell>
+                                    <TableCell>{i}</TableCell>
                                     <TableCell>
                                         <Flex
                                             justifyContent="start"
-                                            className="gap-8"
+                                            className="gap-4"
                                         >
                                             {renderBadge(p.control?.severity)}
                                             <Text>{p.control?.title}</Text>
