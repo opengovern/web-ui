@@ -16,7 +16,10 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
+import {
+    ArrowPathRoundedSquareIcon,
+    Cog6ToothIcon,
+} from '@heroicons/react/24/outline'
 import Layout from '../../../../components/Layout'
 import { filterAtom, timeAtom } from '../../../../store'
 import {
@@ -160,7 +163,15 @@ export default function BenchmarkSummary() {
                         : 'Benchmark summary',
                 ]}
                 filter
-            />
+            >
+                <Button
+                    variant="secondary"
+                    icon={Cog6ToothIcon}
+                    className="h-9"
+                >
+                    Setting
+                </Button>
+            </Header>
             {isLoading ? (
                 <Spinner className="mb-12" />
             ) : (
