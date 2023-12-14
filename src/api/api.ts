@@ -681,12 +681,16 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
     documentURI?: string
     /** @example true */
     enabled?: boolean
+    /** @example "Multi-factor authentication adds an additional layer of security by requiring users to enter a code from a mobile device or phone in addition to their username and password when signing into Azure." */
+    explanation?: string
     /** @example "azure_cis_v140_1_1" */
     id?: string
     /** @example true */
     managed?: boolean
     /** @example true */
     manualVerification?: boolean
+    /** @example "Non-compliance to this control could result in several costs including..." */
+    nonComplianceCost?: string
     /** @example "azure_ad_manual_control" */
     queryID?: string
     /** @example "low" */
@@ -696,6 +700,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
     title?: string
     /** @example "2020-01-01T00:00:00Z" */
     updatedAt?: string
+    /** @example "Access to resources must be closely controlled to prevent malicious activity like data theft..." */
+    usefulExample?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
@@ -3274,6 +3280,70 @@ export class Api<
                 any
             >({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/trend`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags compliance
+         * @name ApiV1ControlsSummaryList
+         * @summary List controls summaries
+         * @request GET:/compliance/api/v1/controls/summary
+         * @secure
+         */
+        apiV1ControlsSummaryList: (
+            controlId?: string[],
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[],
+                any
+            >({
+                path: `/compliance/api/v1/controls/summary`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * No description
+         *
+         * @tags compliance
+         * @name ApiV1ControlsSummaryDetail
+         * @summary Get control summary
+         * @request GET:/compliance/api/v1/controls/{controlId}/summary
+         * @secure
+         */
+        apiV1ControlsSummaryDetail: (
+            controlId: string,
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
+                any
+            >({
+                path: `/compliance/api/v1/controls/${controlId}/summary`,
                 method: 'GET',
                 query: query,
                 secure: true,

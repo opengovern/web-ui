@@ -1,5 +1,7 @@
 import { useParams } from 'react-router-dom'
 import {
+    Badge,
+    BarList,
     Button,
     Card,
     CategoryBar,
@@ -25,18 +27,14 @@ import {
 import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Header from '../../../../components/Header'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
-import SummaryCard from '../../../../components/Cards/SummaryCard'
-import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
-import Chart from '../../../../components/Chart'
-import Breakdown from '../../../../components/Breakdown'
 import ListCard from '../../../../components/Cards/ListCard'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    SourceType,
 } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
-import Trends from '../../../../components/Trends'
+import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
+import Policies from './Policies'
 
 const generateLineData = (
     input:
@@ -60,26 +58,24 @@ const topList = (
         | undefined
 ) => {
     const data = []
-    if (input) {
+    if (input && input.records) {
         for (let i = 0; i < (input.records?.length || 0); i += 1) {
             data.push({
-                // eslint-disable-next-line no-nested-ternary
-                name: input.records
-                    ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                      // @ts-ignore
-                      input.records[i].ResourceType.resource_name.length
+                name:
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    input.records[i].ResourceType.resource_name.length
                         ? // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                           // @ts-ignore
                           input.records[i].ResourceType.resource_name
                         : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                           // @ts-ignore
-                          input.records[i].ResourceType.resource_type
-                    : '',
-                value: input.records ? input.records[i].count : 0,
+                          input.records[i].ResourceType.resource_type,
+                value: input.records[i].count || 0,
             })
         }
     }
-    return { data, total: input?.totalCount || 0 }
+    return data
 }
 
 const topConnections = (
@@ -87,60 +83,24 @@ const topConnections = (
         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
         | undefined
 ) => {
-    const top: {
-        data: {
-            name: string | undefined
-            value: number | undefined
-            connector: SourceType[] | SourceType | undefined
-            kaytuId: string | undefined
-        }[]
-        total: number | undefined
-    } = { data: [], total: 0 }
+    const top = []
     if (input && input.records) {
         for (let i = 0; i < input.records.length; i += 1) {
-            top.data.push({
+            top.push({
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 name: input.records[i].Connection?.providerConnectionName,
-                value: input.records[i].count,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                connector: input.records[i].Connection?.connector,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                kaytuId: input.records[i].Connection?.id,
+                value: input.records[i].count || 0,
             })
         }
-        top.total = input.totalCount
     }
     return top
 }
 
 export default function BenchmarkSummary() {
     const { id, resourceId } = useParams()
-    const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
-
-    const query = {
-        ...(selectedConnections.provider && {
-            connector: [selectedConnections.provider],
-        }),
-        ...(selectedConnections.connections && {
-            connectionId: selectedConnections.connections,
-        }),
-        ...(selectedConnections.connectionGroup && {
-            connectionGroup: selectedConnections.connectionGroup,
-        }),
-        ...(resourceId && {
-            resourceCollection: [resourceId],
-        }),
-        ...(activeTimeRange.start && {
-            startTime: activeTimeRange.start.unix().toString(),
-        }),
-        ...(activeTimeRange.end && {
-            endTime: activeTimeRange.end.unix().toString(),
-        }),
-    }
+    const [stateIndex, setStateIndex] = useState(0)
 
     const topQuery = {
         ...(selectedConnections.provider && {
@@ -154,10 +114,6 @@ export default function BenchmarkSummary() {
         }),
     }
 
-    const { response: benchmarkTrend } =
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        useComplianceApiV1BenchmarksTrendDetail(String(id), query)
     const {
         response: benchmarkDetail,
         isLoading,
@@ -168,31 +124,32 @@ export default function BenchmarkSummary() {
     const { response: connections } = useComplianceApiV1FindingsTopDetail(
         String(id),
         'connectionID',
-        5,
+        3,
         topQuery
     )
     const { response: resources } = useComplianceApiV1FindingsTopDetail(
         String(id),
         'resourceType',
-        5,
+        3,
         topQuery
     )
+
+    const renderBars = () => {
+        switch (stateIndex) {
+            case 0:
+                return <BarList data={topConnections(connections)} />
+            case 2:
+                return <BarList data={topList(resources)} />
+            default:
+                return <BarList data={topConnections(connections)} />
+        }
+    }
 
     useEffect(() => {
         if (isExecuted) {
             updateDetail()
         }
     }, [isExecuted])
-
-    const critical = benchmarkDetail?.checks?.criticalCount || 0
-    const high = benchmarkDetail?.checks?.highCount || 0
-    const medium = benchmarkDetail?.checks?.mediumCount || 0
-    const low = benchmarkDetail?.checks?.lowCount || 0
-    const passed = benchmarkDetail?.checks?.passedCount || 0
-    const unknown = benchmarkDetail?.checks?.unknownCount || 0
-
-    const total = critical + high + medium + low + passed + unknown
-    const failed = critical + high + medium + low
 
     return (
         <Layout currentPage="compliance">
@@ -203,7 +160,6 @@ export default function BenchmarkSummary() {
                         : 'Benchmark summary',
                 ]}
                 filter
-                datePicker
             />
             {isLoading ? (
                 <Spinner className="mb-12" />
@@ -251,61 +207,165 @@ export default function BenchmarkSummary() {
                     </Flex>
                 </Flex>
             )}
-            <Trends
-                activeTimeRange={activeTimeRange}
-                trend={benchmarkTrend}
-                trendName="Security score"
-                firstKPI={
-                    <SummaryCard
-                        title="Security score"
-                        metric={((passed / total) * 100).toFixed(2)}
-                        isPercent
-                        border={false}
-                        loading={isLoading}
-                        url="details"
-                    />
-                }
-                labels={generateLineData(benchmarkTrend).label}
-                chartData={generateLineData(benchmarkTrend).data}
-                loading={isLoading}
-                isPercent
-            />
-            <Grid numItems={5} className="w-full gap-4 mt-4">
-                <Col numColSpan={2}>
-                    <Breakdown
-                        title="Findings severity"
-                        chartData={[
-                            { name: 'Critical', value: critical },
-                            { name: 'High', value: high },
-                            { name: 'Medium', value: medium },
-                            { name: 'Low', value: low },
-                            { name: 'Passed', value: passed },
-                            { name: 'Unknown', value: unknown },
+            <Grid numItems={2} className="gap-4 mb-4">
+                <Card>
+                    <Flex alignItems="end" className="mb-10">
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            className="gap-1"
+                        >
+                            <Text className="font-semibold">
+                                Security score
+                            </Text>
+                            <Title className="font-semibold">
+                                {`${(
+                                    (benchmarkChecks(benchmarkDetail).passed /
+                                        benchmarkChecks(benchmarkDetail)
+                                            .total) *
+                                    100
+                                ).toFixed(2)}%`}
+                            </Title>
+                        </Flex>
+                        <Flex justifyContent="end" className="gap-3">
+                            <Flex
+                                justifyContent="start"
+                                className="w-fit gap-2"
+                            >
+                                <Text>Passed</Text>
+                                <Badge color="emerald">
+                                    {benchmarkChecks(benchmarkDetail).passed}
+                                </Badge>
+                            </Flex>
+                            <Flex
+                                justifyContent="start"
+                                className="w-fit gap-2"
+                            >
+                                <Text>Failed</Text>
+                                <Badge color="rose">
+                                    {benchmarkChecks(benchmarkDetail).total -
+                                        benchmarkChecks(benchmarkDetail).passed}
+                                </Badge>
+                            </Flex>
+                        </Flex>
+                    </Flex>
+                    <CategoryBar
+                        className="w-full mb-2"
+                        values={[
+                            (benchmarkChecks(benchmarkDetail).critical /
+                                benchmarkChecks(benchmarkDetail).total) *
+                                100 || 0,
+                            (benchmarkChecks(benchmarkDetail).high /
+                                benchmarkChecks(benchmarkDetail).total) *
+                                100 || 0,
+                            (benchmarkChecks(benchmarkDetail).medium /
+                                benchmarkChecks(benchmarkDetail).total) *
+                                100 || 0,
+                            (benchmarkChecks(benchmarkDetail).low /
+                                benchmarkChecks(benchmarkDetail).total) *
+                                100 || 0,
+                            (benchmarkChecks(benchmarkDetail).passed /
+                                benchmarkChecks(benchmarkDetail).total) *
+                                100 || 0,
+                            benchmarkChecks(benchmarkDetail).critical +
+                                benchmarkChecks(benchmarkDetail).high +
+                                benchmarkChecks(benchmarkDetail).medium +
+                                benchmarkChecks(benchmarkDetail).low +
+                                benchmarkChecks(benchmarkDetail).passed >
+                            0
+                                ? (benchmarkChecks(benchmarkDetail).unknown /
+                                      benchmarkChecks(benchmarkDetail).total) *
+                                      100 || 0
+                                : 100,
                         ]}
-                        loading={isLoading}
-                        colorful
+                        markerValue={
+                            ((benchmarkChecks(benchmarkDetail).critical +
+                                benchmarkChecks(benchmarkDetail).high +
+                                benchmarkChecks(benchmarkDetail).medium +
+                                benchmarkChecks(benchmarkDetail).low) /
+                                benchmarkChecks(benchmarkDetail).total) *
+                                100 || 1
+                        }
+                        showLabels={false}
+                        colors={[
+                            'rose',
+                            'orange',
+                            'amber',
+                            'yellow',
+                            'emerald',
+                            'slate',
+                        ]}
                     />
-                </Col>
-                <Col numColSpanLg={3} className="h-full">
-                    <Grid numItems={2} className="w-full h-full gap-4">
-                        <ListCard
-                            title="Top accounts with alarms"
-                            loading={isLoading}
-                            items={topConnections(connections)}
-                            url="details#cloud-accounts"
-                            type="account"
-                        />
-                        <ListCard
-                            title="Top resource types with alarms"
-                            loading={isLoading}
-                            items={topList(resources)}
-                            url="details#resources"
-                            type="service"
-                            isClickable={false}
-                        />
-                    </Grid>
-                </Col>
+                    <Flex className="mt-6 flex-wrap">
+                        <Flex className="w-fit gap-1">
+                            <Text className="text-gray-800">Critical</Text>
+                            <Text>{`(${(
+                                (benchmarkChecks(benchmarkDetail).critical /
+                                    benchmarkChecks(benchmarkDetail).total) *
+                                100
+                            ).toFixed(2)}%)`}</Text>
+                        </Flex>
+                        <Flex className="w-fit gap-1">
+                            <Text className="text-gray-800">High</Text>
+                            <Text>{`(${(
+                                (benchmarkChecks(benchmarkDetail).high /
+                                    benchmarkChecks(benchmarkDetail).total) *
+                                100
+                            ).toFixed(2)}%)`}</Text>
+                        </Flex>
+                        <Flex className="w-fit gap-1">
+                            <Text className="text-gray-800">Medium</Text>
+                            <Text>{`(${(
+                                (benchmarkChecks(benchmarkDetail).medium /
+                                    benchmarkChecks(benchmarkDetail).total) *
+                                100
+                            ).toFixed(2)}%)`}</Text>
+                        </Flex>
+                        <Flex className="w-fit gap-1">
+                            <Text className="text-gray-800">Low</Text>
+                            <Text>{`(${(
+                                (benchmarkChecks(benchmarkDetail).low /
+                                    benchmarkChecks(benchmarkDetail).total) *
+                                100
+                            ).toFixed(2)}%)`}</Text>
+                        </Flex>
+                        <Flex className="w-fit gap-1">
+                            <Text className="text-gray-800">Passed</Text>
+                            <Text>{`(${(
+                                (benchmarkChecks(benchmarkDetail).passed /
+                                    benchmarkChecks(benchmarkDetail).total) *
+                                100
+                            ).toFixed(2)}%)`}</Text>
+                        </Flex>
+                        <Flex className="w-fit gap-1">
+                            <Text className="text-gray-800">Unknown</Text>
+                            <Text>{`(${(
+                                (benchmarkChecks(benchmarkDetail).unknown /
+                                    benchmarkChecks(benchmarkDetail).total) *
+                                100
+                            ).toFixed(2)}%)`}</Text>
+                        </Flex>
+                    </Flex>
+                </Card>
+                <Card>
+                    <Flex justifyContent="between" className="mb-3">
+                        <Title className="font-semibold">Top</Title>
+                        <TabGroup
+                            className="w-fit"
+                            index={stateIndex}
+                            onIndexChange={setStateIndex}
+                        >
+                            <TabList variant="solid">
+                                <Tab>Cloud accounts</Tab>
+                                <Tab>Controls</Tab>
+                                <Tab>Services</Tab>
+                            </TabList>
+                        </TabGroup>
+                    </Flex>
+                    {renderBars()}
+                </Card>
             </Grid>
+            <Policies id={String(id)} />
         </Layout>
     )
 }

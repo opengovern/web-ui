@@ -1,72 +1,11 @@
-import { useState } from 'react'
-import {
-    ICellRendererParams,
-    RowClickedEvent,
-    ValueFormatterParams,
-} from 'ag-grid-community'
 import { Badge, Flex } from '@tremor/react'
-import 'ag-grid-enterprise'
-import Table, { IColumn } from '../../../../../../../components/Table'
-import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
-import { numberDisplay } from '../../../../../../../utilities/numericDisplay'
-import PolicyDetail from './Detail'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../../../../../api/api'
-import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../../../api/compliance.gen'
-
-interface IPolicies {
-    id: string | undefined
-}
-
-export const renderBadge = (severity: any) => {
-    const style = {
-        color: '#fff',
-        borderRadius: '8px',
-        width: '64px',
-    }
-    if (severity) {
-        if (severity === 'none') {
-            return (
-                <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>
-                    None
-                </Badge>
-            )
-        }
-        if (severity === 'passed') {
-            return (
-                <Badge style={{ backgroundColor: '#54B584', ...style }}>
-                    Passed
-                </Badge>
-            )
-        }
-        if (severity === 'low') {
-            return (
-                <Badge style={{ backgroundColor: '#F4C744', ...style }}>
-                    Low
-                </Badge>
-            )
-        }
-        if (severity === 'medium') {
-            return (
-                <Badge style={{ backgroundColor: '#EE9235', ...style }}>
-                    Medium
-                </Badge>
-            )
-        }
-        if (severity === 'high') {
-            return (
-                <Badge style={{ backgroundColor: '#CA2B1D', ...style }}>
-                    High
-                </Badge>
-            )
-        }
-        return (
-            <Badge style={{ backgroundColor: '#6E120B', ...style }}>
-                Critical
-            </Badge>
-        )
-    }
-    return ''
-}
+import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
+import Table, { IColumn } from '../../../../../../components/Table'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../../../../api/api'
+import { numberDisplay } from '../../../../../../utilities/numericDisplay'
+import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
+import { renderBadge } from '../../Details/Tabs/Policies'
+import DrawerPanel from '../../../../../../components/DrawerPanel'
 
 export const renderStatus = (status: boolean) => {
     if (status) {
@@ -77,7 +16,7 @@ export const renderStatus = (status: boolean) => {
 
 export const policyColumns: IColumn<any, any>[] = [
     {
-        headerName: 'Policy title',
+        headerName: 'title',
         field: 'control.title',
         type: 'string',
         sortable: true,
@@ -85,10 +24,11 @@ export const policyColumns: IColumn<any, any>[] = [
         resizable: true,
     },
     {
-        headerName: 'Policy ID',
+        headerName: 'Control ID',
         field: 'control.id',
         width: 170,
         type: 'string',
+        hide: true,
         sortable: true,
         filter: true,
         resizable: true,
@@ -153,6 +93,7 @@ export const policyColumns: IColumn<any, any>[] = [
     {
         headerName: 'Failed accounts %',
         field: 'accounts',
+        hide: true,
         type: 'string',
         width: 150,
         cellRenderer: (
@@ -179,48 +120,27 @@ export const policyColumns: IColumn<any, any>[] = [
     },
 ]
 
-// const gridOptions: GridOptions = {
-// autoGroupColumnDef: {
-//     headerName: 'Title',
-//     flex: 2,
-//     sortable: true,
-//     filter: true,
-//     resizable: true,
-//     cellRendererParams: {
-//         suppressCount: true,
-//     },
-// },
-// treeData: true,
-// getDataPath: (data: any) => {
-//     return data.path.split('/')
-// },
-// }
+interface IPolicyList {
+    policies: any
+    open: boolean
+    onClose: () => void
+    isLoading: boolean
+}
 
-export default function Policies({ id }: IPolicies) {
-    const [open, setOpen] = useState(false)
-    const [selectedPolicy, setSelectedPolicy] = useState<any>(undefined)
-
-    const { response: policies, isLoading } =
-        useComplianceApiV1BenchmarksControlsDetail(String(id))
+export default function PolicyList({
+    open,
+    onClose,
+    policies,
+    isLoading,
+}: IPolicyList) {
     return (
-        <>
+        <DrawerPanel open={open} onClose={onClose} title="Contorls">
             <Table
-                title="Policies"
-                downloadable
                 id="compliance_policies"
-                onRowClicked={(event: RowClickedEvent) => {
-                    setSelectedPolicy(event.data)
-                    setOpen(true)
-                }}
                 loading={isLoading}
                 columns={policyColumns}
                 rowData={policies}
             />
-            <PolicyDetail
-                selectedPolicy={selectedPolicy}
-                open={open}
-                onClose={() => setOpen(false)}
-            />
-        </>
+        </DrawerPanel>
     )
 }
