@@ -6,12 +6,12 @@ import {
 } from 'ag-grid-community'
 import { Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useComplianceApiV1FindingsAccountsDetail } from '../../../../../../../api/compliance.gen'
-import DrawerPanel from '../../../../../../../components/DrawerPanel'
-import { RenderObject } from '../../../../../../../components/RenderObject'
-import Table, { IColumn } from '../../../../../../../components/Table'
-import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
-import { IFilter, isDemoAtom } from '../../../../../../../store'
+import { useComplianceApiV1FindingsAccountsDetail } from '../../../../../../api/compliance.gen'
+import DrawerPanel from '../../../../../../components/DrawerPanel'
+import { RenderObject } from '../../../../../../components/RenderObject'
+import Table, { IColumn } from '../../../../../../components/Table'
+import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
+import { IFilter, isDemoAtom } from '../../../../../../store'
 
 interface IFinder {
     id: string | undefined
@@ -126,8 +126,6 @@ export default function CloudAccounts({
     connections,
     resourceId,
 }: IFinder) {
-    const [open, setOpen] = useState(false)
-    const [finding, setFinding] = useState<any>(undefined)
     const isDemo = useAtomValue(isDemoAtom)
 
     const { response: findings, isLoading } =
@@ -152,33 +150,19 @@ export default function CloudAccounts({
     }
 
     return (
-        <>
-            <Table
-                title="Cloud accounts"
-                downloadable
-                id="compliance_connections"
-                columns={columns(isDemo)}
-                rowData={rowGenerator(findings) || []}
-                onCellClicked={(event: RowClickedEvent) => {
-                    setFinding(event.data)
-                    setOpen(true)
-                }}
-                options={options}
-                onGridReady={(e) => {
-                    if (isLoading) {
-                        e.api.showLoadingOverlay()
-                    }
-                }}
-                loading={isLoading}
-            />
-            <DrawerPanel
-                open={open}
-                onClose={() => setOpen(false)}
-                title="Finding Detail"
-            >
-                <Title>Summary</Title>
-                <RenderObject obj={finding} />
-            </DrawerPanel>
-        </>
+        <Table
+            title="Cloud accounts"
+            downloadable
+            id="compliance_connections"
+            columns={columns(isDemo)}
+            rowData={rowGenerator(findings) || []}
+            options={options}
+            onGridReady={(e) => {
+                if (isLoading) {
+                    e.api.showLoadingOverlay()
+                }
+            }}
+            loading={isLoading}
+        />
     )
 }

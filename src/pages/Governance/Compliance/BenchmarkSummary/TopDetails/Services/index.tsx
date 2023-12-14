@@ -1,16 +1,8 @@
-import { useState } from 'react'
-import {
-    GridOptions,
-    RowClickedEvent,
-    ValueFormatterParams,
-} from 'ag-grid-community'
-import { Title } from '@tremor/react'
-import { useComplianceApiV1FindingsServicesDetail } from '../../../../../../../api/compliance.gen'
-import DrawerPanel from '../../../../../../../components/DrawerPanel'
-import { RenderObject } from '../../../../../../../components/RenderObject'
-import Table, { IColumn } from '../../../../../../../components/Table'
-import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
-import { IFilter } from '../../../../../../../store'
+import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
+import { useComplianceApiV1FindingsServicesDetail } from '../../../../../../api/compliance.gen'
+import Table, { IColumn } from '../../../../../../components/Table'
+import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
+import { IFilter } from '../../../../../../store'
 
 interface IFinder {
     id: string | undefined
@@ -112,9 +104,6 @@ const columns: IColumn<any, any>[] = [
 ]
 
 export default function Services({ id, connections, resourceId }: IFinder) {
-    const [open, setOpen] = useState(false)
-    const [finding, setFinding] = useState<any>(undefined)
-
     const { response: findings, isLoading } =
         useComplianceApiV1FindingsServicesDetail(id || '', {
             connectionId: connections.connections,
@@ -137,33 +126,19 @@ export default function Services({ id, connections, resourceId }: IFinder) {
     }
 
     return (
-        <>
-            <Table
-                title="Resources"
-                downloadable
-                id="compliance_services"
-                columns={columns}
-                rowData={rowGenerator(findings) || []}
-                onCellClicked={(event: RowClickedEvent) => {
-                    setFinding(event.data)
-                    setOpen(true)
-                }}
-                options={options}
-                onGridReady={(e) => {
-                    if (isLoading) {
-                        e.api.showLoadingOverlay()
-                    }
-                }}
-                loading={isLoading}
-            />
-            <DrawerPanel
-                open={open}
-                onClose={() => setOpen(false)}
-                title="Finding Detail"
-            >
-                <Title>Summary</Title>
-                <RenderObject obj={finding} />
-            </DrawerPanel>
-        </>
+        <Table
+            title="Services"
+            downloadable
+            id="compliance_services"
+            columns={columns}
+            rowData={rowGenerator(findings) || []}
+            options={options}
+            onGridReady={(e) => {
+                if (isLoading) {
+                    e.api.showLoadingOverlay()
+                }
+            }}
+            loading={isLoading}
+        />
     )
 }
