@@ -15,6 +15,7 @@ import {
 import { useState } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../api/compliance.gen'
+import PolicyList from './PolicyList'
 
 interface IPolicies {
     id: string | undefined
@@ -75,7 +76,7 @@ export default function Policies({ id }: IPolicies) {
     const [open, setOpen] = useState(false)
     const { response: policies, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
-    console.log(policies)
+
     return (
         <Card>
             <Flex className="mb-3">
@@ -131,6 +132,12 @@ export default function Policies({ id }: IPolicies) {
                     )}
                 </TableBody>
             </Table>
+            <PolicyList
+                policies={policies}
+                open={open}
+                onClose={() => setOpen(false)}
+                isLoading={isLoading}
+            />
         </Card>
     )
 }

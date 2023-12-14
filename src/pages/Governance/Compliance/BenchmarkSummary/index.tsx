@@ -99,7 +99,6 @@ const topConnections = (
 
 export default function BenchmarkSummary() {
     const { id, resourceId } = useParams()
-    const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const [stateIndex, setStateIndex] = useState(0)
 
@@ -161,7 +160,6 @@ export default function BenchmarkSummary() {
                         : 'Benchmark summary',
                 ]}
                 filter
-                datePicker
             />
             {isLoading ? (
                 <Spinner className="mb-12" />
