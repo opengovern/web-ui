@@ -1,0 +1,225 @@
+import { ValueFormatterParams } from 'ag-grid-community'
+import { Button, Flex } from '@tremor/react'
+import { useEffect, useState } from 'react'
+import { useAtomValue } from 'jotai/index'
+import { Cog6ToothIcon } from '@heroicons/react/24/outline'
+import { isDemoAtom } from '../../../../../store'
+import DrawerPanel from '../../../../../components/DrawerPanel'
+import Table, { IColumn } from '../../../../../components/Table'
+import {
+    useComplianceApiV1AssignmentsBenchmarkDetail,
+    useComplianceApiV1AssignmentsConnectionCreate,
+    useComplianceApiV1AssignmentsConnectionDelete,
+} from '../../../../../api/compliance.gen'
+
+interface ISettings {
+    id: string | undefined
+}
+
+const columns = (isDemo: boolean) => {
+    const temp: IColumn<any, any>[] = [
+        {
+            width: 120,
+            sortable: true,
+            filter: true,
+            enableRowGroup: true,
+            type: 'string',
+            field: 'connector',
+        },
+        {
+            field: 'providerConnectionName',
+            headerName: 'Connection Name',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: 'connectionID',
+            headerName: 'Connection ID',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            headerName: 'Enable',
+            sortable: true,
+            type: 'string',
+            filter: true,
+            resizable: true,
+            flex: 0.5,
+            cellRenderer: (params: any) => {
+                return (
+                    <Flex
+                        alignItems="center"
+                        justifyContent="center"
+                        className="h-full w-full"
+                    >
+                        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                        <label
+                            htmlFor={params.data.id}
+                            className="relative inline-flex items-center cursor-pointer"
+                        >
+                            <input
+                                id={params.data.id}
+                                type="checkbox"
+                                value=""
+                                className="sr-only peer"
+                                checked={params.data?.status}
+                            />
+                            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-kaytu-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600" />
+                        </label>
+                    </Flex>
+                )
+            },
+        },
+    ]
+    return temp
+}
+
+interface ITransferState {
+    connectionID: string
+    status: boolean
+}
+
+export default function Settings({ id }: ISettings) {
+    const [open, setOpen] = useState(false)
+    const [firstLoading, setFirstLoading] = useState<boolean>(true)
+    const [transfer, setTransfer] = useState<ITransferState>({
+        connectionID: '',
+        status: false,
+    })
+    const isDemo = useAtomValue(isDemoAtom)
+
+    const {
+        sendNow: sendEnable,
+        isLoading: enableLoading,
+        isExecuted: enableExecuted,
+    } = useComplianceApiV1AssignmentsConnectionCreate(
+        String(id),
+        { connectionId: [transfer.connectionID] },
+        {},
+        false
+    )
+    const {
+        sendNow: sendDisable,
+        isLoading: disableLoading,
+        isExecuted: disableExecuted,
+    } = useComplianceApiV1AssignmentsConnectionDelete(
+        String(id),
+        { connectionId: [transfer.connectionID] },
+        {},
+        false
+    )
+
+    const {
+        response: assignments,
+        isLoading,
+        sendNow: refreshList,
+    } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {}, false)
+
+    useEffect(() => {
+        if (transfer.connectionID !== '') {
+            if (transfer.status) {
+                sendEnable()
+            } else {
+                sendDisable()
+            }
+        }
+    }, [transfer])
+
+    useEffect(() => {
+        if (firstLoading) {
+            refreshList()
+        }
+        setFirstLoading(false)
+    }, [])
+
+    useEffect(() => {
+        if (enableExecuted && !enableLoading) {
+            setTransfer({ connectionID: '', status: false })
+            refreshList()
+        }
+        if (disableExecuted && !disableLoading) {
+            setTransfer({ connectionID: '', status: false })
+            refreshList()
+        }
+    }, [enableExecuted, disableExecuted, enableLoading, disableLoading])
+
+    return (
+        <>
+            <Button
+                variant="secondary"
+                icon={Cog6ToothIcon}
+                onClick={() => setOpen(true)}
+                className="h-9"
+            >
+                Settings
+            </Button>
+            <DrawerPanel
+                open={open}
+                onClose={() => setOpen(false)}
+                title="Settings"
+            >
+                <Table
+                    id="compliance_assignments"
+                    columns={columns(isDemo)}
+                    onCellClicked={(event) => {
+                        if (event.colDef.headerName === 'Enable') {
+                            setTransfer({
+                                connectionID: event.data?.connectionID || '',
+                                status: !(event.data?.status || false),
+                            })
+                        }
+                    }}
+                    loading={isLoading}
+                    rowData={
+                        assignments?.connections?.sort(
+                            (a, b) =>
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                b.providerConnectionName -
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                a.providerConnectionName
+                        ) || []
+                    }
+                >
+                    <Flex justifyContent="end" className="gap-x-2">
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                setTransfer({
+                                    connectionID: 'all',
+                                    status: false,
+                                })
+                            }}
+                        >
+                            Disable All
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                setTransfer({
+                                    connectionID: 'all',
+                                    status: true,
+                                })
+                            }}
+                        >
+                            Enable All
+                        </Button>
+                    </Flex>
+                </Table>
+            </DrawerPanel>
+        </>
+    )
+}
