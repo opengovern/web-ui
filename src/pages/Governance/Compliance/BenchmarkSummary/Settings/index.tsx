@@ -128,6 +128,12 @@ export default function Settings({ id }: ISettings) {
     } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {}, false)
 
     useEffect(() => {
+        if (id && !assignments) {
+            refreshList()
+        }
+    }, [id])
+
+    useEffect(() => {
         if (transfer.connectionID !== '') {
             if (transfer.status) {
                 sendEnable()
