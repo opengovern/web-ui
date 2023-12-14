@@ -2276,7 +2276,12 @@ interface IuseComplianceApiV1FindingsTopDetailState {
 
 export const useComplianceApiV1FindingsTopDetail = (
     benchmarkId: string,
-    field: 'resourceType' | 'connectionID' | 'resourceID' | 'service',
+    field:
+        | 'resourceType'
+        | 'connectionID'
+        | 'resourceID'
+        | 'service'
+        | 'controlID',
     count: number,
     query?: {
         connectionId?: string[]

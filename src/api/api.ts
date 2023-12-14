@@ -1065,6 +1065,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSumma
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
     connection?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
+    control?: GithubComKaytuIoKaytuEnginePkgComplianceApiControl
     count?: number
     field?: string
     resourceType?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType
@@ -3551,7 +3552,12 @@ export class Api<
          */
         apiV1FindingsTopDetail: (
             benchmarkId: string,
-            field: 'resourceType' | 'connectionID' | 'resourceID' | 'service',
+            field:
+                | 'resourceType'
+                | 'connectionID'
+                | 'resourceID'
+                | 'service'
+                | 'controlID',
             count: number,
             query?: {
                 /** Connection IDs to filter by */
@@ -5338,30 +5344,6 @@ export class Api<
                 any
             >({
                 path: `/schedule/api/v1/discovery/resourcetypes/list`,
-                method: 'GET',
-                secure: true,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags scheduler
-         * @name ApiV1DiscoveryResourcetypesAccountsDetail
-         * @summary List all cloud accounts which will have the resource type enabled in discovery
-         * @request GET:/schedule/api/v1/discovery/resourcetypes/{resource_type}/accounts
-         * @secure
-         */
-        apiV1DiscoveryResourcetypesAccountsDetail: (
-            resourceType: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
-                any
-            >({
-                path: `/schedule/api/v1/discovery/resourcetypes/${resourceType}/accounts`,
                 method: 'GET',
                 secure: true,
                 format: 'json',
