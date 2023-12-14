@@ -5,7 +5,6 @@ import {
     Button,
     Card,
     CategoryBar,
-    Col,
     Flex,
     Grid,
     Tab,
@@ -21,23 +20,19 @@ import {
     Cog6ToothIcon,
 } from '@heroicons/react/24/outline'
 import Layout from '../../../../components/Layout'
-import { filterAtom, timeAtom } from '../../../../store'
+import { filterAtom } from '../../../../store'
 import {
     useComplianceApiV1BenchmarksSummaryDetail,
-    useComplianceApiV1BenchmarksTrendDetail,
     useComplianceApiV1FindingsTopDetail,
 } from '../../../../api/compliance.gen'
-import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Header from '../../../../components/Header'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
-import ListCard from '../../../../components/Cards/ListCard'
-import {
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-} from '../../../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
 import Policies from './Policies'
+import Settings from './Settings'
 
 const topList = (
     input:
@@ -160,13 +155,7 @@ export default function BenchmarkSummary() {
                 ]}
                 filter
             >
-                <Button
-                    variant="secondary"
-                    icon={Cog6ToothIcon}
-                    className="h-9"
-                >
-                    Setting
-                </Button>
+                <Settings id={benchmarkDetail?.id} />
             </Header>
             {isLoading ? (
                 <Spinner className="mb-12" />
