@@ -1,19 +1,16 @@
 import { useParams } from 'react-router-dom'
 import {
+    Badge,
     Button,
     Card,
-    CategoryBar,
     Col,
     Flex,
     Grid,
-    Tab,
-    TabGroup,
-    TabList,
     Text,
     Title,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
 import Layout from '../../../../components/Layout'
 import { filterAtom, timeAtom } from '../../../../store'
@@ -26,8 +23,6 @@ import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Header from '../../../../components/Header'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
-import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
-import Chart from '../../../../components/Chart'
 import Breakdown from '../../../../components/Breakdown'
 import ListCard from '../../../../components/Cards/ListCard'
 import {
@@ -251,20 +246,34 @@ export default function BenchmarkSummary() {
                     </Flex>
                 </Flex>
             )}
+            <Grid numItems={2}>
+                <Card>
+                    <Flex>
+                        <SummaryCard
+                            title="Security score"
+                            metric={((passed / total) * 100).toFixed(2)}
+                            isPercent
+                            border={false}
+                            loading={isLoading}
+                            url="details"
+                        />
+                        <Flex>
+                            <Flex>
+                                <Text>Passed</Text>
+                                <Badge color="emerald">100</Badge>
+                            </Flex>
+                            <Flex>
+                                <Text>Failed</Text>
+                                <Badge color="rose">100</Badge>
+                            </Flex>
+                        </Flex>
+                    </Flex>
+                </Card>
+            </Grid>
             <Trends
                 activeTimeRange={activeTimeRange}
                 trend={benchmarkTrend}
                 trendName="Security score"
-                firstKPI={
-                    <SummaryCard
-                        title="Security score"
-                        metric={((passed / total) * 100).toFixed(2)}
-                        isPercent
-                        border={false}
-                        loading={isLoading}
-                        url="details"
-                    />
-                }
                 labels={generateLineData(benchmarkTrend).label}
                 chartData={generateLineData(benchmarkTrend).data}
                 loading={isLoading}
