@@ -36,8 +36,8 @@ import {
 import AxiosAPI from '../../../api/ApiConfig'
 import FindingDetail from './Detail'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
-import { renderBadge } from '../Compliance/BenchmarkSummary/Details/Tabs/Policies'
 import { compareArrays } from '../../../components/Filter'
+import { renderBadge } from '../Compliance/BenchmarkSummary/Policies'
 
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [

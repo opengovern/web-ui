@@ -4,8 +4,8 @@ import Table, { IColumn } from '../../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../../../../api/api'
 import { numberDisplay } from '../../../../../../utilities/numericDisplay'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
-import { renderBadge } from '../../Details/Tabs/Policies'
 import DrawerPanel from '../../../../../../components/DrawerPanel'
+import { renderBadge } from '../index'
 
 export const renderStatus = (status: boolean) => {
     if (status) {

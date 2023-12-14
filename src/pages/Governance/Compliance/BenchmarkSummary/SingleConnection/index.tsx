@@ -41,9 +41,8 @@ import {
 import Table from '../../../../../components/Table'
 import { columns } from '../../../Findings'
 import Breakdown from '../../../../../components/Breakdown'
-import { policyColumns } from '../Details/Tabs/Policies'
-import PolicyDetail from '../Details/Tabs/Policies/Detail'
 import FindingDetail from '../../../Findings/Detail'
+import { policyColumns } from '../Policies/PolicyList'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -359,11 +358,6 @@ export default function SingleComplianceConnection() {
                 finding={finding}
                 open={openFinding}
                 onClose={() => setOpenFinding(false)}
-            />
-            <PolicyDetail
-                selectedPolicy={policy}
-                open={openPolicy}
-                onClose={() => setOpenPolicy(false)}
             />
         </Layout>
     )

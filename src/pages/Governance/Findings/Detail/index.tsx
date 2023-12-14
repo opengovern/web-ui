@@ -17,8 +17,8 @@ import DrawerPanel from '../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { useComplianceApiV1FindingsResourceCreate } from '../../../../api/compliance.gen'
-import { renderBadge } from '../../Compliance/BenchmarkSummary/Details/Tabs/Policies'
 import Spinner from '../../../../components/Spinner'
+import { renderBadge } from '../../Compliance/BenchmarkSummary/Policies'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
