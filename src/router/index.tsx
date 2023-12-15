@@ -29,6 +29,7 @@ import SingleComplianceConnection from '../pages/Governance/Compliance/Benchmark
 import Boostrap from '../pages/Workspaces/Bootstrap'
 import ResourceCollection from '../pages/ResourceCollection'
 import ResourceCollectionDetail from '../pages/ResourceCollection/Detail'
+import ConnectorResourceTypes from '../pages/Integrations/ConnectorDetail/ResourceTypes'
 
 const routes = [
     {
@@ -143,6 +144,11 @@ const authRoutes = [
         key: 'connector detail',
         path: '/:ws/integrations/:connector',
         component: ConnectorDetail,
+    },
+    {
+        key: 'connector resource types',
+        path: '/:ws/integrations/:connector/resourcetypes',
+        component: ConnectorResourceTypes,
     },
     {
         key: 'settings page',

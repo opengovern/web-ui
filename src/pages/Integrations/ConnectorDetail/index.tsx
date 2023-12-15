@@ -1,6 +1,7 @@
-import { Flex, Title } from '@tremor/react'
-import { useParams } from 'react-router-dom'
+import { Button, Flex, Title } from '@tremor/react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
+import { Cog8ToothIcon } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import {
     useOnboardApiV1CatalogMetricsList,
@@ -16,6 +17,7 @@ import { StringToProvider } from '../../../types/provider'
 import Header from '../../../components/Header'
 
 export default function ConnectorDetail() {
+    const navigate = useNavigate()
     const { connector } = useParams()
 
     const activeTimeRange = useAtomValue(timeAtom)
@@ -43,7 +45,15 @@ export default function ConnectorDetail() {
         <Layout currentPage="integrations">
             <Flex flexDirection="col" alignItems="start">
                 <Header breadCrumb={[connector]} />
-                <Title className="font-semibold">{connector}</Title>
+                <Flex flexDirection="row">
+                    <Title className="font-semibold">{connector}</Title>
+                    <Button
+                        variant="secondary"
+                        onClick={() => navigate('./resourcetypes')}
+                    >
+                        <Cog8ToothIcon className="w-6" />
+                    </Button>
+                </Flex>
                 {connector === 'AWS' ? (
                     <>
                         <AWSSummary
