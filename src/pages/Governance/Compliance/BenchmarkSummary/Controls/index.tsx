@@ -14,6 +14,7 @@ import {
 } from '@tremor/react'
 import { useState } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
+import { useNavigate } from 'react-router-dom'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../api/compliance.gen'
 import PolicyList from './PolicyList'
 
@@ -72,10 +73,11 @@ export const renderBadge = (severity: any) => {
     return ''
 }
 
-export default function Policies({ id }: IPolicies) {
+export default function Controls({ id }: IPolicies) {
     const [open, setOpen] = useState(false)
-    const { response: policies, isLoading } =
+    const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
+    const navigate = useNavigate()
 
     return (
         <Card className="max-w-full">
@@ -87,7 +89,7 @@ export default function Policies({ id }: IPolicies) {
                     iconPosition="right"
                     onClick={() => setOpen(true)}
                 >
-                    {`${(policies?.length || 10) - 10} more`}
+                    {`${(controls?.length || 10) - 10} more`}
                 </Button>
             </Flex>
             <Table className="max-w-full">
@@ -104,12 +106,15 @@ export default function Policies({ id }: IPolicies) {
                     </TableRow>
                 </TableHead>
                 <TableBody className="max-w-full">
-                    {policies?.map(
+                    {controls?.map(
                         (p, i) =>
                             i < 10 && (
                                 <TableRow
-                                    className="max-w-full"
+                                    className="max-w-full cursor-pointer hover:bg-kaytu-50"
                                     key={`${p.control?.id || i}`}
+                                    onClick={() =>
+                                        navigate(String(p.control?.id))
+                                    }
                                 >
                                     <TableCell>{i}</TableCell>
                                     <TableCell>
@@ -136,7 +141,7 @@ export default function Policies({ id }: IPolicies) {
                 </TableBody>
             </Table>
             <PolicyList
-                policies={policies}
+                policies={controls}
                 open={open}
                 onClose={() => setOpen(false)}
                 isLoading={isLoading}

@@ -29,7 +29,7 @@ import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedul
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
-import Policies from './Policies'
+import Controls from './Controls'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
 
@@ -102,7 +102,7 @@ const topControls = (
 }
 
 export default function BenchmarkSummary() {
-    const { id, resourceId } = useParams()
+    const { benchmarkId, resourceId } = useParams()
     const selectedConnections = useAtomValue(filterAtom)
     const [stateIndex, setStateIndex] = useState(0)
     const [type, setType] = useState<'accounts' | 'services'>('accounts')
@@ -124,28 +124,27 @@ export default function BenchmarkSummary() {
         response: benchmarkDetail,
         isLoading,
         sendNow: updateDetail,
-    } = useComplianceApiV1BenchmarksSummaryDetail(String(id))
+    } = useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId))
     const { sendNow: triggerEvaluate, isExecuted } =
-        useScheduleApiV1ComplianceTriggerUpdate(String(id), {}, false)
+        useScheduleApiV1ComplianceTriggerUpdate(String(benchmarkId), {}, false)
     const { response: connections } = useComplianceApiV1FindingsTopDetail(
-        String(id),
+        String(benchmarkId),
         'connectionID',
         3,
         topQuery
     )
     const { response: resources } = useComplianceApiV1FindingsTopDetail(
-        String(id),
+        String(benchmarkId),
         'resourceType',
         3,
         topQuery
     )
     const { response: controls } = useComplianceApiV1FindingsTopDetail(
-        String(id),
+        String(benchmarkId),
         'controlID',
         3,
         topQuery
     )
-    console.log(controls)
 
     const renderBars = () => {
         switch (stateIndex) {
@@ -412,7 +411,7 @@ export default function BenchmarkSummary() {
                     />
                 </Card>
             </Grid>
-            <Policies id={String(id)} />
+            <Controls id={String(benchmarkId)} />
         </Layout>
     )
 }

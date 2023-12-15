@@ -29,6 +29,7 @@ import SingleComplianceConnection from '../pages/Governance/Compliance/Benchmark
 import Boostrap from '../pages/Workspaces/Bootstrap'
 import ResourceCollection from '../pages/ResourceCollection'
 import ResourceCollectionDetail from '../pages/ResourceCollection/Detail'
+import ControlDetail from '../pages/Governance/ControlDetail'
 
 const routes = [
     {
@@ -156,12 +157,17 @@ const authRoutes = [
     },
     {
         key: 'benchmark summary',
-        path: '/:ws/compliance/:id',
+        path: '/:ws/compliance/:benchmarkId',
         component: BenchmarkSummary,
     },
     {
+        key: 'benchmark summary',
+        path: '/:ws/compliance/:benchmarkId/:controlId',
+        component: ControlDetail,
+    },
+    {
         key: 'benchmark single connection',
-        path: '/:ws/compliance/:id/:connection',
+        path: '/:ws/compliance/:benchmarkId/:connectionId',
         component: SingleComplianceConnection,
     },
     {

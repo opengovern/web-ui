@@ -18,7 +18,7 @@ import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { useComplianceApiV1FindingsResourceCreate } from '../../../../api/compliance.gen'
 import Spinner from '../../../../components/Spinner'
-import { renderBadge } from '../../Compliance/BenchmarkSummary/Policies'
+import { renderBadge } from '../../Compliance/BenchmarkSummary/Controls'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
