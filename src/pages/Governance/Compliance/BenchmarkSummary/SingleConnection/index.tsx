@@ -42,7 +42,7 @@ import Table from '../../../../../components/Table'
 import { columns } from '../../../Findings'
 import Breakdown from '../../../../../components/Breakdown'
 import FindingDetail from '../../../Findings/Detail'
-import { policyColumns } from '../Controls/PolicyList'
+import { policyColumns } from '../Controls/ControlList'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)

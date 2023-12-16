@@ -16,7 +16,7 @@ import { useState } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../api/compliance.gen'
-import PolicyList from './PolicyList'
+import ControlList from './ControlList'
 
 interface IPolicies {
     id: string | undefined
@@ -82,7 +82,12 @@ export default function Controls({ id }: IPolicies) {
     return (
         <Card className="max-w-full">
             <Flex className="mb-3">
-                <Title className="font-semibold">Confidentiality</Title>
+                <Flex justifyContent="start" className="gap-2">
+                    <Title className="font-semibold">Confidentiality</Title>
+                    <Text>{`${controls?.filter((c) => c.passed).length}/${
+                        controls?.length
+                    } passed rules`}</Text>
+                </Flex>
                 <Button
                     variant="light"
                     icon={ChevronRightIcon}
@@ -95,7 +100,7 @@ export default function Controls({ id }: IPolicies) {
             <Table className="max-w-full">
                 <TableHead className="max-w-full">
                     <TableRow className="max-w-full">
-                        <TableHeaderCell className="w-32">
+                        <TableHeaderCell className="w-24">
                             Control
                         </TableHeaderCell>
                         <TableHeaderCell>Title</TableHeaderCell>
@@ -116,7 +121,7 @@ export default function Controls({ id }: IPolicies) {
                                         navigate(String(p.control?.id))
                                     }
                                 >
-                                    <TableCell>{i}</TableCell>
+                                    <TableCell>{i + 1}</TableCell>
                                     <TableCell>
                                         <Flex
                                             justifyContent="start"
@@ -140,8 +145,8 @@ export default function Controls({ id }: IPolicies) {
                     )}
                 </TableBody>
             </Table>
-            <PolicyList
-                policies={controls}
+            <ControlList
+                controls={controls}
                 open={open}
                 onClose={() => setOpen(false)}
                 isLoading={isLoading}
