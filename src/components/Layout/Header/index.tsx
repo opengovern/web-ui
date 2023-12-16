@@ -13,7 +13,7 @@ interface IHeader {
 
 export default function Header({ workspace }: IHeader) {
     const { user, logout } = useAuth0()
-    const [theme, setTheme] = useState(localStorage.theme || 'dark')
+    const [theme, setTheme] = useState(localStorage.theme || 'light')
 
     const toggleTheme = () => {
         if (localStorage.theme === 'dark') {
@@ -66,7 +66,12 @@ export default function Header({ workspace }: IHeader) {
 
                                 <span className="hidden lg:flex lg:items-center">
                                     <span className="ml-4 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100">
-                                        {user?.given_name || user?.email || ''}
+                                        {(user?.name &&
+                                            `${user?.name} ${
+                                                user?.family_name || ''
+                                            }`) ||
+                                            user?.email ||
+                                            ''}
                                     </span>
                                     <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" />
                                 </span>
@@ -92,8 +97,7 @@ export default function Header({ workspace }: IHeader) {
                                                         active
                                                             ? 'bg-gray-50'
                                                             : ''
-                                                    }
-                                                    'block px-3 py-1 text-sm leading-6 text-gray-900'
+                                                    } w-full block px-3 py-1 text-sm leading-6 text-gray-900'
                                                 `}
                                                     >
                                                         Your profile
@@ -114,8 +118,7 @@ export default function Header({ workspace }: IHeader) {
                                                         active
                                                             ? 'bg-gray-50'
                                                             : ''
-                                                    }
-                                                    'block px-3 py-1 text-sm leading-6 text-gray-900'
+                                                    } text-start w-full block px-3 py-1 text-sm leading-6 text-gray-900'
                                                 `}
                                             >
                                                 Sign out
