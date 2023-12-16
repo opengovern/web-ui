@@ -161,62 +161,58 @@ export default function Settings() {
     return (
         <Layout currentPage="settings">
             <Header />
-            {isLoading || tokenLoading ? (
-                <Flex justifyContent="center" className="mt-56">
-                    <Spinner />
-                </Flex>
-            ) : (
-                <Flex alignItems="start">
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        className="w-fit"
-                    >
-                        <nav className="w-56 text-sm">
-                            <ul className="space-y-1.5">
-                                {navigation.map((item: any) => {
-                                    if (
-                                        !item.role.includes(getRole()) &&
-                                        item.role.length > 0
-                                    ) {
-                                        return null
-                                    }
-                                    return (
-                                        <li key={item.name}>
-                                            <Flex
-                                                justifyContent="start"
-                                                className="text-gray-800 font-semibold group gap-x-3 mb-2"
-                                            >
-                                                {item.icon && (
-                                                    <item.icon className="h-5 w-5 shrink-0" />
-                                                )}
-                                                {item.name}
-                                            </Flex>
-                                            {item.children.map((child: any) => (
-                                                <Link
-                                                    to={`/${workspace}/settings${child.page}`}
-                                                    className={`${
+            <Flex alignItems="start">
+                <Flex flexDirection="col" alignItems="start" className="w-fit">
+                    <nav className="w-56 text-sm">
+                        <ul className="space-y-1.5">
+                            {navigation.map((item: any) => {
+                                if (
+                                    !item.role.includes(getRole()) &&
+                                    item.role.length > 0
+                                ) {
+                                    return null
+                                }
+                                return (
+                                    <li key={item.name}>
+                                        <Flex
+                                            justifyContent="start"
+                                            className="text-gray-800 font-semibold group gap-x-3 mb-2"
+                                        >
+                                            {item.icon && (
+                                                <item.icon className="h-5 w-5 shrink-0" />
+                                            )}
+                                            {item.name}
+                                        </Flex>
+                                        {item.children.map((child: any) => (
+                                            <Link
+                                                to={`/${workspace}/settings${child.page}`}
+                                                className={`${
+                                                    child.page ===
+                                                        currentSubPage ||
+                                                    (!currentSubPage &&
                                                         child.page ===
-                                                            currentSubPage ||
-                                                        (!currentSubPage &&
-                                                            child.page ===
-                                                                '#entitlement')
-                                                            ? 'bg-kaytu-100 rounded-lg text-gray-800'
-                                                            : 'text-gray-600'
-                                                    } group flex gap-x-3 py-2 px-8 font-medium`}
-                                                >
-                                                    {child.name}
-                                                </Link>
-                                            ))}
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        </nav>
-                    </Flex>
-                    <Flex className="w-full h-full pl-6">{selectedTab}</Flex>
+                                                            '#entitlement')
+                                                        ? 'bg-kaytu-100 rounded-lg text-gray-800'
+                                                        : 'text-gray-600'
+                                                } group flex gap-x-3 py-2 px-8 font-medium`}
+                                            >
+                                                {child.name}
+                                            </Link>
+                                        ))}
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </nav>
                 </Flex>
-            )}
+                {isLoading || tokenLoading ? (
+                    <Flex justifyContent="center" className="mt-56">
+                        <Spinner />
+                    </Flex>
+                ) : (
+                    <Flex className="w-full h-full pl-6">{selectedTab}</Flex>
+                )}
+            </Flex>
         </Layout>
     )
 }

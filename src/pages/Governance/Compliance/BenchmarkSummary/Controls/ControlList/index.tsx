@@ -1,5 +1,6 @@
 import { Badge, Flex } from '@tremor/react'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
+import { useNavigate } from 'react-router-dom'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../../../../api/api'
 import { numberDisplay } from '../../../../../../utilities/numericDisplay'
@@ -77,11 +78,11 @@ export const policyColumns: IColumn<any, any>[] = [
     },
     {
         headerName: 'Failed resources %',
-        field: 'resources',
+        field: 'failedResourcesCount',
         type: 'string',
         width: 150,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+        valueFormatter: (
+            params: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) =>
             `${numberDisplay(
                 ((params.data?.failedResourcesCount || 0) /
@@ -92,12 +93,12 @@ export const policyColumns: IColumn<any, any>[] = [
     },
     {
         headerName: 'Failed accounts %',
-        field: 'accounts',
+        field: 'failedConnectionCount',
         hide: true,
         type: 'string',
         width: 150,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+        valueFormatter: (
+            params: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) =>
             `${numberDisplay(
                 ((params.data?.failedConnectionCount || 0) /
@@ -120,26 +121,31 @@ export const policyColumns: IColumn<any, any>[] = [
     },
 ]
 
-interface IPolicyList {
-    policies: any
+interface IControlList {
+    controls:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[]
+        | undefined
     open: boolean
     onClose: () => void
     isLoading: boolean
 }
 
-export default function PolicyList({
+export default function ControlList({
     open,
     onClose,
-    policies,
+    controls,
     isLoading,
-}: IPolicyList) {
+}: IControlList) {
+    const navigate = useNavigate()
+
     return (
         <DrawerPanel open={open} onClose={onClose} title="Contorls">
             <Table
                 id="compliance_policies"
                 loading={isLoading}
                 columns={policyColumns}
-                rowData={policies}
+                rowData={controls}
+                onRowClicked={(event) => navigate(String(event.data.id))}
             />
         </DrawerPanel>
     )

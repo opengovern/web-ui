@@ -54,3 +54,4 @@ export const workspaceAtom = atom<{
         | GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse
         | undefined
 }>({ list: [], current: undefined })
+export const previewAtom = atom(localStorage.preview)

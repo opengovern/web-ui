@@ -80,7 +80,7 @@ export default function ControlDetail() {
                             See query
                         </Button>
                     </Flex>
-                    <Grid numItems={2} className="w-full gap-4 mb-4">
+                    <Grid numItems={2} className="w-full gap-4 mb-6">
                         <Card>
                             <Flex
                                 flexDirection="col"
