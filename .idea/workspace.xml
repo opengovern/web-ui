@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/ResourceTypes/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/ControlSummary/Tabs/ImpactedResources/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/ControlSummary/Tabs/ImpactedResources/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/ControlSummary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/ControlSummary/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,27 +47,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;notion-fixes&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Sevices&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Merging notion-fixes",
+    "last_opened_file_path": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Sevices",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.stylelint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/prettier",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -276,7 +276,7 @@
       <workItem from="1702550765112" duration="858000" />
       <workItem from="1702551628100" duration="14118000" />
       <workItem from="1702591372463" duration="691000" />
-      <workItem from="1702648915688" duration="8962000" />
+      <workItem from="1702648915688" duration="9192000" />
     </task>
     <servers />
   </component>
