@@ -7,18 +7,13 @@ import {
     Button,
     Callout,
     Card,
-    Col,
     Divider,
     Flex,
-    Grid,
     Icon,
     List,
     ListItem,
     Select,
     SelectItem,
-    Tab,
-    TabGroup,
-    TabList,
     Text,
     Title,
 } from '@tremor/react'
@@ -33,7 +28,6 @@ import {
     CheckCircleIcon,
     ExclamationCircleIcon,
 } from '@heroicons/react/24/solid'
-import { getLocalTimeZone, parseDate, today } from '@internationalized/date'
 import {
     useInventoryApiV1QueryRunCreate,
     useInventoryApiV2AnalyticsMetricsDetail,
@@ -46,17 +40,14 @@ import {
     queryAtom,
 } from '../../../../store'
 import Header from '../../../../components/Header'
-import { BarChartIcon, LineChartIcon } from '../../../../icons/icons'
-import Chart from '../../../../components/Chart'
 import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import Table from '../../../../components/Table'
 import { getTable } from '../../../Query'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
-import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Modal from '../../../../components/Modal'
-import { RenderObject } from '../../../../components/RenderObject'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { getErrorMessage } from '../../../../types/apierror'
 import Tag from '../../../../components/Tag'

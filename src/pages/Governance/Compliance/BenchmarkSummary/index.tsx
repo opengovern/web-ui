@@ -29,7 +29,7 @@ import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedul
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
-import Policies from './Policies'
+import Controls from './Controls'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
 
@@ -102,7 +102,7 @@ const topControls = (
 }
 
 export default function BenchmarkSummary() {
-    const { id, resourceId } = useParams()
+    const { benchmarkId, resourceId } = useParams()
     const selectedConnections = useAtomValue(filterAtom)
     const [stateIndex, setStateIndex] = useState(0)
     const [type, setType] = useState<'accounts' | 'services'>('accounts')
@@ -124,28 +124,27 @@ export default function BenchmarkSummary() {
         response: benchmarkDetail,
         isLoading,
         sendNow: updateDetail,
-    } = useComplianceApiV1BenchmarksSummaryDetail(String(id))
+    } = useComplianceApiV1BenchmarksSummaryDetail(String(benchmarkId))
     const { sendNow: triggerEvaluate, isExecuted } =
-        useScheduleApiV1ComplianceTriggerUpdate(String(id), {}, false)
+        useScheduleApiV1ComplianceTriggerUpdate(String(benchmarkId), {}, false)
     const { response: connections } = useComplianceApiV1FindingsTopDetail(
-        String(id),
+        String(benchmarkId),
         'connectionID',
         3,
         topQuery
     )
     const { response: resources } = useComplianceApiV1FindingsTopDetail(
-        String(id),
+        String(benchmarkId),
         'resourceType',
         3,
         topQuery
     )
     const { response: controls } = useComplianceApiV1FindingsTopDetail(
-        String(id),
+        String(benchmarkId),
         'controlID',
         3,
         topQuery
     )
-    console.log(controls)
 
     const renderBars = () => {
         switch (stateIndex) {
@@ -190,229 +189,279 @@ export default function BenchmarkSummary() {
             {isLoading ? (
                 <Spinner className="mb-12" />
             ) : (
-                <Flex alignItems="end" className="mb-6">
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        justifyContent="start"
-                    >
-                        <Title className="font-semibold mb-1">
-                            {benchmarkDetail?.title}
-                        </Title>
-                        <Text className="w-2/3">
-                            {benchmarkDetail?.description}
-                        </Text>
-                    </Flex>
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        className="w-fit"
-                    >
-                        <Button
-                            variant="light"
-                            icon={ArrowPathRoundedSquareIcon}
-                            className="mb-1"
-                            onClick={() => triggerEvaluate()}
-                            loading={
-                                !(
-                                    benchmarkDetail?.lastJobStatus ===
-                                        'FAILED' ||
-                                    benchmarkDetail?.lastJobStatus ===
-                                        'SUCCEEDED'
-                                )
-                            }
-                        >
-                            {benchmarkDetail?.lastJobStatus === 'FAILED' ||
-                            benchmarkDetail?.lastJobStatus === 'SUCCEEDED'
-                                ? 'Evaluate now'
-                                : 'Evaluating'}
-                        </Button>
-                        <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
-                            benchmarkDetail?.evaluatedAt
-                        )}`}</Text>
-                    </Flex>
-                </Flex>
-            )}
-            <Grid numItems={2} className="gap-4 mb-4">
-                <Card>
-                    <Flex alignItems="end" className="mb-10">
+                <>
+                    <Flex alignItems="end" className="mb-6">
                         <Flex
                             flexDirection="col"
                             alignItems="start"
-                            className="gap-1"
+                            justifyContent="start"
+                            className="gap-2"
                         >
-                            <Text className="font-semibold">
-                                Security score
-                            </Text>
                             <Title className="font-semibold">
-                                {`${(
+                                {benchmarkDetail?.title}
+                            </Title>
+                            <Text className="w-2/3">
+                                {benchmarkDetail?.description}
+                            </Text>
+                        </Flex>
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            className="w-fit"
+                        >
+                            <Button
+                                variant="light"
+                                icon={ArrowPathRoundedSquareIcon}
+                                className="mb-1"
+                                onClick={() => triggerEvaluate()}
+                                loading={
+                                    !(
+                                        benchmarkDetail?.lastJobStatus ===
+                                            'FAILED' ||
+                                        benchmarkDetail?.lastJobStatus ===
+                                            'SUCCEEDED'
+                                    )
+                                }
+                            >
+                                {benchmarkDetail?.lastJobStatus === 'FAILED' ||
+                                benchmarkDetail?.lastJobStatus === 'SUCCEEDED'
+                                    ? 'Evaluate now'
+                                    : 'Evaluating'}
+                            </Button>
+                            <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
+                                benchmarkDetail?.evaluatedAt
+                            )}`}</Text>
+                        </Flex>
+                    </Flex>
+                    <Grid numItems={2} className="gap-4 mb-4">
+                        <Card>
+                            <Flex alignItems="end" className="mb-10">
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    className="gap-1"
+                                >
+                                    <Text className="font-semibold">
+                                        Security score
+                                    </Text>
+                                    <Title className="font-semibold">
+                                        {`${(
+                                            (benchmarkChecks(benchmarkDetail)
+                                                .passed /
+                                                benchmarkChecks(benchmarkDetail)
+                                                    .total) *
+                                            100
+                                        ).toFixed(2)}%`}
+                                    </Title>
+                                </Flex>
+                                <Flex justifyContent="end" className="gap-3">
+                                    <Flex
+                                        justifyContent="start"
+                                        className="w-fit gap-2"
+                                    >
+                                        <Text>Passed</Text>
+                                        <Badge color="emerald">
+                                            {
+                                                benchmarkChecks(benchmarkDetail)
+                                                    .passed
+                                            }
+                                        </Badge>
+                                    </Flex>
+                                    <Flex
+                                        justifyContent="start"
+                                        className="w-fit gap-2"
+                                    >
+                                        <Text>Failed</Text>
+                                        <Badge color="rose">
+                                            {benchmarkChecks(benchmarkDetail)
+                                                .total -
+                                                benchmarkChecks(benchmarkDetail)
+                                                    .passed}
+                                        </Badge>
+                                    </Flex>
+                                </Flex>
+                            </Flex>
+                            <CategoryBar
+                                className="w-full mb-2"
+                                values={[
+                                    (benchmarkChecks(benchmarkDetail).critical /
+                                        benchmarkChecks(benchmarkDetail)
+                                            .total) *
+                                        100 || 0,
+                                    (benchmarkChecks(benchmarkDetail).high /
+                                        benchmarkChecks(benchmarkDetail)
+                                            .total) *
+                                        100 || 0,
+                                    (benchmarkChecks(benchmarkDetail).medium /
+                                        benchmarkChecks(benchmarkDetail)
+                                            .total) *
+                                        100 || 0,
+                                    (benchmarkChecks(benchmarkDetail).low /
+                                        benchmarkChecks(benchmarkDetail)
+                                            .total) *
+                                        100 || 0,
                                     (benchmarkChecks(benchmarkDetail).passed /
                                         benchmarkChecks(benchmarkDetail)
                                             .total) *
-                                    100
-                                ).toFixed(2)}%`}
-                            </Title>
-                        </Flex>
-                        <Flex justifyContent="end" className="gap-3">
-                            <Flex
-                                justifyContent="start"
-                                className="w-fit gap-2"
-                            >
-                                <Text>Passed</Text>
-                                <Badge color="emerald">
-                                    {benchmarkChecks(benchmarkDetail).passed}
-                                </Badge>
-                            </Flex>
-                            <Flex
-                                justifyContent="start"
-                                className="w-fit gap-2"
-                            >
-                                <Text>Failed</Text>
-                                <Badge color="rose">
-                                    {benchmarkChecks(benchmarkDetail).total -
-                                        benchmarkChecks(benchmarkDetail).passed}
-                                </Badge>
-                            </Flex>
-                        </Flex>
-                    </Flex>
-                    <CategoryBar
-                        className="w-full mb-2"
-                        values={[
-                            (benchmarkChecks(benchmarkDetail).critical /
-                                benchmarkChecks(benchmarkDetail).total) *
-                                100 || 0,
-                            (benchmarkChecks(benchmarkDetail).high /
-                                benchmarkChecks(benchmarkDetail).total) *
-                                100 || 0,
-                            (benchmarkChecks(benchmarkDetail).medium /
-                                benchmarkChecks(benchmarkDetail).total) *
-                                100 || 0,
-                            (benchmarkChecks(benchmarkDetail).low /
-                                benchmarkChecks(benchmarkDetail).total) *
-                                100 || 0,
-                            (benchmarkChecks(benchmarkDetail).passed /
-                                benchmarkChecks(benchmarkDetail).total) *
-                                100 || 0,
-                            benchmarkChecks(benchmarkDetail).critical +
-                                benchmarkChecks(benchmarkDetail).high +
-                                benchmarkChecks(benchmarkDetail).medium +
-                                benchmarkChecks(benchmarkDetail).low +
-                                benchmarkChecks(benchmarkDetail).passed >
-                            0
-                                ? (benchmarkChecks(benchmarkDetail).unknown /
-                                      benchmarkChecks(benchmarkDetail).total) *
-                                      100 || 0
-                                : 100,
-                        ]}
-                        markerValue={
-                            ((benchmarkChecks(benchmarkDetail).critical +
-                                benchmarkChecks(benchmarkDetail).high +
-                                benchmarkChecks(benchmarkDetail).medium +
-                                benchmarkChecks(benchmarkDetail).low) /
-                                benchmarkChecks(benchmarkDetail).total) *
-                                100 || 1
-                        }
-                        showLabels={false}
-                        colors={[
-                            'rose',
-                            'orange',
-                            'amber',
-                            'yellow',
-                            'emerald',
-                            'slate',
-                        ]}
-                    />
-                    <Flex className="mt-6 flex-wrap">
-                        <Flex className="w-fit gap-1">
-                            <Text className="text-gray-800">Critical</Text>
-                            <Text>{`(${(
-                                (benchmarkChecks(benchmarkDetail).critical /
-                                    benchmarkChecks(benchmarkDetail).total) *
-                                100
-                            ).toFixed(2)}%)`}</Text>
-                        </Flex>
-                        <Flex className="w-fit gap-1">
-                            <Text className="text-gray-800">High</Text>
-                            <Text>{`(${(
-                                (benchmarkChecks(benchmarkDetail).high /
-                                    benchmarkChecks(benchmarkDetail).total) *
-                                100
-                            ).toFixed(2)}%)`}</Text>
-                        </Flex>
-                        <Flex className="w-fit gap-1">
-                            <Text className="text-gray-800">Medium</Text>
-                            <Text>{`(${(
-                                (benchmarkChecks(benchmarkDetail).medium /
-                                    benchmarkChecks(benchmarkDetail).total) *
-                                100
-                            ).toFixed(2)}%)`}</Text>
-                        </Flex>
-                        <Flex className="w-fit gap-1">
-                            <Text className="text-gray-800">Low</Text>
-                            <Text>{`(${(
-                                (benchmarkChecks(benchmarkDetail).low /
-                                    benchmarkChecks(benchmarkDetail).total) *
-                                100
-                            ).toFixed(2)}%)`}</Text>
-                        </Flex>
-                        <Flex className="w-fit gap-1">
-                            <Text className="text-gray-800">Passed</Text>
-                            <Text>{`(${(
-                                (benchmarkChecks(benchmarkDetail).passed /
-                                    benchmarkChecks(benchmarkDetail).total) *
-                                100
-                            ).toFixed(2)}%)`}</Text>
-                        </Flex>
-                        <Flex className="w-fit gap-1">
-                            <Text className="text-gray-800">Unknown</Text>
-                            <Text>{`(${(
-                                (benchmarkChecks(benchmarkDetail).unknown /
-                                    benchmarkChecks(benchmarkDetail).total) *
-                                100
-                            ).toFixed(2)}%)`}</Text>
-                        </Flex>
-                    </Flex>
-                </Card>
-                <Card>
-                    <Flex justifyContent="between" className="mb-3">
-                        <button type="button" onClick={() => setOpenTop(true)}>
-                            {stateIndex === 0 || stateIndex === 2 ? (
-                                <Flex className="gap-1.5">
-                                    <Title className="font-semibold">Top</Title>
-                                    <ChevronRightIcon className="h-4 text-kaytu-500" />
+                                        100 || 0,
+                                    benchmarkChecks(benchmarkDetail).critical +
+                                        benchmarkChecks(benchmarkDetail).high +
+                                        benchmarkChecks(benchmarkDetail)
+                                            .medium +
+                                        benchmarkChecks(benchmarkDetail).low +
+                                        benchmarkChecks(benchmarkDetail)
+                                            .passed >
+                                    0
+                                        ? (benchmarkChecks(benchmarkDetail)
+                                              .unknown /
+                                              benchmarkChecks(benchmarkDetail)
+                                                  .total) *
+                                              100 || 0
+                                        : 100,
+                                ]}
+                                markerValue={
+                                    ((benchmarkChecks(benchmarkDetail)
+                                        .critical +
+                                        benchmarkChecks(benchmarkDetail).high +
+                                        benchmarkChecks(benchmarkDetail)
+                                            .medium +
+                                        benchmarkChecks(benchmarkDetail).low) /
+                                        benchmarkChecks(benchmarkDetail)
+                                            .total) *
+                                        100 || 1
+                                }
+                                showLabels={false}
+                                colors={[
+                                    'rose',
+                                    'orange',
+                                    'amber',
+                                    'yellow',
+                                    'emerald',
+                                    'slate',
+                                ]}
+                            />
+                            <Flex className="mt-6 flex-wrap">
+                                <Flex className="w-fit gap-1">
+                                    <Text className="text-gray-800">
+                                        Critical
+                                    </Text>
+                                    <Text>{`(${(
+                                        (benchmarkChecks(benchmarkDetail)
+                                            .critical /
+                                            benchmarkChecks(benchmarkDetail)
+                                                .total) *
+                                        100
+                                    ).toFixed(2)}%)`}</Text>
                                 </Flex>
-                            ) : (
-                                <Title className="font-semibold">Top</Title>
-                            )}
-                        </button>
-                        <TabGroup
-                            className="w-fit"
-                            index={stateIndex}
-                            onIndexChange={setStateIndex}
-                        >
-                            <TabList variant="solid">
-                                <Tab onClick={() => setType('accounts')}>
-                                    Cloud accounts
-                                </Tab>
-                                <Tab>Controls</Tab>
-                                <Tab onClick={() => setType('services')}>
-                                    Services
-                                </Tab>
-                            </TabList>
-                        </TabGroup>
-                    </Flex>
-                    {renderBars()}
-                    <TopDetails
-                        open={openTop}
-                        onClose={() => setOpenTop(false)}
-                        id={benchmarkDetail?.id}
-                        type={type}
-                        connections={selectedConnections}
-                        resourceId={resourceId}
-                    />
-                </Card>
-            </Grid>
-            <Policies id={String(id)} />
+                                <Flex className="w-fit gap-1">
+                                    <Text className="text-gray-800">High</Text>
+                                    <Text>{`(${(
+                                        (benchmarkChecks(benchmarkDetail).high /
+                                            benchmarkChecks(benchmarkDetail)
+                                                .total) *
+                                        100
+                                    ).toFixed(2)}%)`}</Text>
+                                </Flex>
+                                <Flex className="w-fit gap-1">
+                                    <Text className="text-gray-800">
+                                        Medium
+                                    </Text>
+                                    <Text>{`(${(
+                                        (benchmarkChecks(benchmarkDetail)
+                                            .medium /
+                                            benchmarkChecks(benchmarkDetail)
+                                                .total) *
+                                        100
+                                    ).toFixed(2)}%)`}</Text>
+                                </Flex>
+                                <Flex className="w-fit gap-1">
+                                    <Text className="text-gray-800">Low</Text>
+                                    <Text>{`(${(
+                                        (benchmarkChecks(benchmarkDetail).low /
+                                            benchmarkChecks(benchmarkDetail)
+                                                .total) *
+                                        100
+                                    ).toFixed(2)}%)`}</Text>
+                                </Flex>
+                                <Flex className="w-fit gap-1">
+                                    <Text className="text-gray-800">
+                                        Passed
+                                    </Text>
+                                    <Text>{`(${(
+                                        (benchmarkChecks(benchmarkDetail)
+                                            .passed /
+                                            benchmarkChecks(benchmarkDetail)
+                                                .total) *
+                                        100
+                                    ).toFixed(2)}%)`}</Text>
+                                </Flex>
+                                <Flex className="w-fit gap-1">
+                                    <Text className="text-gray-800">
+                                        Unknown
+                                    </Text>
+                                    <Text>{`(${(
+                                        (benchmarkChecks(benchmarkDetail)
+                                            .unknown /
+                                            benchmarkChecks(benchmarkDetail)
+                                                .total) *
+                                        100
+                                    ).toFixed(2)}%)`}</Text>
+                                </Flex>
+                            </Flex>
+                        </Card>
+                        <Card>
+                            <Flex justifyContent="between" className="mb-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenTop(true)}
+                                >
+                                    {stateIndex === 0 || stateIndex === 2 ? (
+                                        <Flex className="gap-1.5">
+                                            <Title className="font-semibold">
+                                                Top
+                                            </Title>
+                                            <ChevronRightIcon className="h-4 text-kaytu-500" />
+                                        </Flex>
+                                    ) : (
+                                        <Title className="font-semibold">
+                                            Top
+                                        </Title>
+                                    )}
+                                </button>
+                                <TabGroup
+                                    className="w-fit"
+                                    index={stateIndex}
+                                    onIndexChange={setStateIndex}
+                                >
+                                    <TabList variant="solid">
+                                        <Tab
+                                            onClick={() => setType('accounts')}
+                                        >
+                                            Cloud accounts
+                                        </Tab>
+                                        <Tab>Controls</Tab>
+                                        <Tab
+                                            onClick={() => setType('services')}
+                                        >
+                                            Services
+                                        </Tab>
+                                    </TabList>
+                                </TabGroup>
+                            </Flex>
+                            {renderBars()}
+                            <TopDetails
+                                open={openTop}
+                                onClose={() => setOpenTop(false)}
+                                id={benchmarkDetail?.id}
+                                type={type}
+                                connections={selectedConnections}
+                                resourceId={resourceId}
+                            />
+                        </Card>
+                    </Grid>
+                    <Controls id={String(benchmarkId)} />
+                </>
+            )}
         </Layout>
     )
 }

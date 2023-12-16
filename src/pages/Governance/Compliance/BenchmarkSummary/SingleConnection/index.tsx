@@ -42,22 +42,20 @@ import Table from '../../../../../components/Table'
 import { columns } from '../../../Findings'
 import Breakdown from '../../../../../components/Breakdown'
 import FindingDetail from '../../../Findings/Detail'
-import { policyColumns } from '../Policies/PolicyList'
+import { policyColumns } from '../Controls/PolicyList'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)
-    const { connection, resourceId } = useParams()
+    const { connectionId, resourceId } = useParams()
     const setNotification = useSetAtom(notificationAtom)
     const isDemo = useAtomValue(isDemoAtom)
     const [sortModel, setSortModel] = useState<SortModelItem[]>([])
     const [openFinding, setOpenFinding] = useState(false)
     const [finding, setFinding] = useState<any>(undefined)
-    const [openPolicy, setOpenPolicy] = useState(false)
-    const [policy, setPolicy] = useState<any>(undefined)
 
     const query = {
-        ...(connection && {
-            connectionId: [connection.replace('account_', '')],
+        ...(connectionId && {
+            connectionId: [connectionId.replace('account_', '')],
         }),
         ...(resourceId && {
             resourceCollection: [resourceId],
@@ -73,7 +71,7 @@ export default function SingleComplianceConnection() {
 
     const { response: benchmarkList } =
         useComplianceApiV1AssignmentsConnectionDetail(
-            connection?.replace('account_', '') || ''
+            connectionId?.replace('account_', '') || ''
         )
     const [benchmark, setBenchmark] = useState(
         benchmarkList?.filter((bm) => bm.status)[0].benchmarkId?.id
@@ -319,10 +317,6 @@ export default function SingleComplianceConnection() {
                                     downloadable
                                     id="compliance_policies"
                                     loading={policiesLoading}
-                                    onRowClicked={(event: RowClickedEvent) => {
-                                        setPolicy(event.data)
-                                        setOpenPolicy(true)
-                                    }}
                                     onGridReady={(e) => {
                                         if (policiesLoading) {
                                             e.api.showLoadingOverlay()
