@@ -25,6 +25,7 @@ import { notificationAtom } from '../../../store'
 import { severityBadge } from '../Compliance/BenchmarkSummary/Controls'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
 import Spinner from '../../../components/Spinner'
+import Detail from './Detail'
 
 export default function ControlDetail() {
     const { controlId } = useParams()
@@ -182,7 +183,9 @@ export default function ControlDetail() {
                             <TabPanel>hi</TabPanel>
                             <TabPanel>hi</TabPanel>
                             <TabPanel>hi</TabPanel>
-                            <TabPanel>hi</TabPanel>
+                            <TabPanel>
+                                <Detail control={controlDetail?.control} />
+                            </TabPanel>
                             <TabPanel>hi</TabPanel>
                         </TabPanels>
                     </TabGroup>

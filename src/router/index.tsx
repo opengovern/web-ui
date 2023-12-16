@@ -29,7 +29,7 @@ import SingleComplianceConnection from '../pages/Governance/Compliance/Benchmark
 import Boostrap from '../pages/Workspaces/Bootstrap'
 import ResourceCollection from '../pages/ResourceCollection'
 import ResourceCollectionDetail from '../pages/ResourceCollection/Detail'
-import ControlDetail from '../pages/Governance/ControlDetail'
+import ControlDetail from '../pages/Governance/ControlSummary'
 
 const routes = [
     {
