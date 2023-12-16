@@ -6,10 +6,12 @@ import {
     ListItem,
     Metric,
     ProgressBar,
+    Switch,
     Text,
     Title,
 } from '@tremor/react'
 import { useParams } from 'react-router-dom'
+import { useAtom } from 'jotai'
 import {
     useWorkspaceApiV1WorkspaceCurrentList,
     useWorkspaceApiV1WorkspacesLimitsDetail,
@@ -18,9 +20,11 @@ import Spinner from '../../../components/Spinner'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import { useAuthApiV1UserDetail } from '../../../api/auth.gen'
 import { dateDisplay } from '../../../utilities/dateDisplay'
+import { previewAtom } from '../../../store'
 
 export default function SettingsEntitlement() {
     const workspace = useParams<{ ws: string }>().ws
+    const [preview, setPreview] = useAtom(previewAtom)
 
     const { response, isLoading } = useWorkspaceApiV1WorkspacesLimitsDetail(
         workspace || ''
@@ -33,9 +37,6 @@ export default function SettingsEntitlement() {
             {},
             !loadingCurrentWS
         )
-
-    // const { response: metricsResp, isLoading: metricsLoading } =
-    // useInventoryApiV2ResourcesMetricDetail('AWS::EC2::Instance')
 
     const noOfHosts = 0 // metricsResp?.count || 0
 
@@ -63,7 +64,7 @@ export default function SettingsEntitlement() {
             value: currentWorkspace?.id,
         },
         {
-            title: 'Displayed Name',
+            title: 'Displayed name',
             value: currentWorkspace?.name,
         },
         {
@@ -71,21 +72,21 @@ export default function SettingsEntitlement() {
             value: currentWorkspace?.uri,
         },
         {
-            title: 'Workspace Owner',
+            title: 'Workspace owner',
             value: ownerResp?.userName,
         },
         {
-            title: 'Workspace Version',
+            title: 'Workspace version',
             value: currentWorkspace?.version,
         },
         {
-            title: 'Creation Date',
+            title: 'Creation date',
             value: dateDisplay(
                 currentWorkspace?.createdAt || Date.now().toString()
             ),
         },
         {
-            title: 'Workspace Tier',
+            title: 'Workspace tier',
             value: currentWorkspace?.tier,
         },
     ]
@@ -146,6 +147,17 @@ export default function SettingsEntitlement() {
                             <Text className="text-gray-800">{item.value}</Text>
                         </ListItem>
                     ))}
+                    <ListItem>
+                        <Text>Show preview features</Text>
+                        <Switch
+                            onClick={() =>
+                                preview === 'true'
+                                    ? setPreview('false')
+                                    : setPreview('true')
+                            }
+                            checked={preview === 'true'}
+                        />
+                    </ListItem>
                 </List>
             </Card>
         </Flex>
