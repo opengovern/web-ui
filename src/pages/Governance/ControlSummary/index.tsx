@@ -25,7 +25,7 @@ import { notificationAtom } from '../../../store'
 import { severityBadge } from '../Compliance/BenchmarkSummary/Controls'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
 import Spinner from '../../../components/Spinner'
-import Detail from './Detail'
+import Detail from './Tabs/Detail'
 
 export default function ControlDetail() {
     const { controlId } = useParams()
