@@ -26,6 +26,7 @@ import { severityBadge } from '../Compliance/BenchmarkSummary/Controls'
 import { dateTimeDisplay } from '../../../utilities/dateDisplay'
 import Spinner from '../../../components/Spinner'
 import Detail from './Tabs/Detail'
+import ImpactedResources from './Tabs/ImpactedResources'
 
 export default function ControlDetail() {
     const { controlId } = useParams()
@@ -186,7 +187,11 @@ export default function ControlDetail() {
                             <TabPanel>
                                 <Detail control={controlDetail?.control} />
                             </TabPanel>
-                            <TabPanel>hi</TabPanel>
+                            <TabPanel>
+                                <ImpactedResources
+                                    controlId={controlDetail?.control?.id}
+                                />
+                            </TabPanel>
                         </TabPanels>
                     </TabGroup>
                 </>

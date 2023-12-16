@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/Governance/ControlSummary/Tabs/ImpactedResources/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/ControlSummary/Detail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/ControlSummary/Detail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/ControlSummary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/ControlSummary/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,11 +84,11 @@
       <recent name="$PROJECT_DIR$/src/icons" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/Governance/ControlSummary/Tabs" />
       <recent name="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/TopDetails" />
       <recent name="$PROJECT_DIR$/src/components/Layout/Sidebar" />
       <recent name="$PROJECT_DIR$/src/pages/Infrastructure/Details/Tabs/CloudAccounts" />
       <recent name="$PROJECT_DIR$/src/pages/Infrastructure/Details/Tabs" />
-      <recent name="$PROJECT_DIR$/src/pages/Spend/Details/Tabs/Connections" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -276,7 +275,7 @@
       <workItem from="1702550765112" duration="858000" />
       <workItem from="1702551628100" duration="14118000" />
       <workItem from="1702591372463" duration="691000" />
-      <workItem from="1702648915688" duration="8068000" />
+      <workItem from="1702648915688" duration="8620000" />
     </task>
     <servers />
   </component>
