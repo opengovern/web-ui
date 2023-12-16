@@ -57,12 +57,14 @@ export default function ControlDetail() {
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="max-w-[70%] gap-2"
+                            className="gap-2"
                         >
                             <Title className="font-semibold whitespace-nowrap">
                                 {controlDetail?.control?.title}
                             </Title>
-                            <Text>{controlDetail?.control?.description}</Text>
+                            <Text className="w-2/3">
+                                {controlDetail?.control?.description}
+                            </Text>
                         </Flex>
                         <Button
                             variant="secondary"
