@@ -78,11 +78,11 @@ export const policyColumns: IColumn<any, any>[] = [
     },
     {
         headerName: 'Failed resources %',
-        field: 'resources',
+        field: 'failedResourcesCount',
         type: 'string',
         width: 150,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+        valueFormatter: (
+            params: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) =>
             `${numberDisplay(
                 ((params.data?.failedResourcesCount || 0) /
@@ -93,12 +93,12 @@ export const policyColumns: IColumn<any, any>[] = [
     },
     {
         headerName: 'Failed accounts %',
-        field: 'accounts',
+        field: 'failedConnectionCount',
         hide: true,
         type: 'string',
         width: 150,
-        cellRenderer: (
-            params: ICellRendererParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
+        valueFormatter: (
+            params: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary>
         ) =>
             `${numberDisplay(
                 ((params.data?.failedConnectionCount || 0) /
