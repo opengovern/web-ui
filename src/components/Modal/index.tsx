@@ -12,7 +12,7 @@ export default function Modal({ open, onClose, children }: IModal) {
         <Transition.Root show={open} as={Fragment}>
             <Dialog
                 as="div"
-                className="relative z-20"
+                className="relative z-50"
                 onClose={() => {
                     onClose()
                 }}
