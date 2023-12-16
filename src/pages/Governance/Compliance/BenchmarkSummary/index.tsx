@@ -340,12 +340,19 @@ export default function BenchmarkSummary() {
                                     'slate',
                                 ]}
                             />
-                            <Flex className="mt-6 flex-wrap">
+                            <Flex
+                                justifyContent="start"
+                                className="mt-6 flex-wrap gap-2"
+                            >
                                 <Flex className="w-fit gap-1">
-                                    <Text className="text-gray-800">
+                                    <div
+                                        className="h-2 w-2 rounded-full"
+                                        style={{ backgroundColor: '#F43F5E' }}
+                                    />
+                                    <Text className="text-gray-800 text-xs">
                                         Critical
                                     </Text>
-                                    <Text>{`(${(
+                                    <Text className="text-xs">{`(${(
                                         (benchmarkChecks(benchmarkDetail)
                                             .critical /
                                             benchmarkChecks(benchmarkDetail)
@@ -354,8 +361,14 @@ export default function BenchmarkSummary() {
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                                 <Flex className="w-fit gap-1">
-                                    <Text className="text-gray-800">High</Text>
-                                    <Text>{`(${(
+                                    <div
+                                        className="h-2 w-2 rounded-full"
+                                        style={{ backgroundColor: '#F87315' }}
+                                    />
+                                    <Text className="text-gray-800 text-xs">
+                                        High
+                                    </Text>
+                                    <Text className="text-xs">{`(${(
                                         (benchmarkChecks(benchmarkDetail).high /
                                             benchmarkChecks(benchmarkDetail)
                                                 .total) *
@@ -363,10 +376,14 @@ export default function BenchmarkSummary() {
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                                 <Flex className="w-fit gap-1">
-                                    <Text className="text-gray-800">
+                                    <div
+                                        className="h-2 w-2 rounded-full"
+                                        style={{ backgroundColor: '#F59E0B' }}
+                                    />
+                                    <Text className="text-gray-800 text-xs">
                                         Medium
                                     </Text>
-                                    <Text>{`(${(
+                                    <Text className="text-xs">{`(${(
                                         (benchmarkChecks(benchmarkDetail)
                                             .medium /
                                             benchmarkChecks(benchmarkDetail)
@@ -375,8 +392,14 @@ export default function BenchmarkSummary() {
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                                 <Flex className="w-fit gap-1">
-                                    <Text className="text-gray-800">Low</Text>
-                                    <Text>{`(${(
+                                    <div
+                                        className="h-2 w-2 rounded-full"
+                                        style={{ backgroundColor: '#EAB305' }}
+                                    />
+                                    <Text className="text-gray-800 text-xs">
+                                        Low
+                                    </Text>
+                                    <Text className="text-xs">{`(${(
                                         (benchmarkChecks(benchmarkDetail).low /
                                             benchmarkChecks(benchmarkDetail)
                                                 .total) *
@@ -384,10 +407,14 @@ export default function BenchmarkSummary() {
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                                 <Flex className="w-fit gap-1">
-                                    <Text className="text-gray-800">
+                                    <div
+                                        className="h-2 w-2 rounded-full"
+                                        style={{ backgroundColor: '#11B981' }}
+                                    />
+                                    <Text className="text-gray-800 text-xs">
                                         Passed
                                     </Text>
-                                    <Text>{`(${(
+                                    <Text className="text-xs">{`(${(
                                         (benchmarkChecks(benchmarkDetail)
                                             .passed /
                                             benchmarkChecks(benchmarkDetail)
@@ -396,10 +423,14 @@ export default function BenchmarkSummary() {
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                                 <Flex className="w-fit gap-1">
-                                    <Text className="text-gray-800">
+                                    <div
+                                        className="h-2 w-2 rounded-full"
+                                        style={{ backgroundColor: '#64748B' }}
+                                    />
+                                    <Text className="text-gray-800 text-xs">
                                         Unknown
                                     </Text>
-                                    <Text>{`(${(
+                                    <Text className="text-xs">{`(${(
                                         (benchmarkChecks(benchmarkDetail)
                                             .unknown /
                                             benchmarkChecks(benchmarkDetail)
