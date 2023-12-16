@@ -5,7 +5,7 @@ import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../..
 import { numberDisplay } from '../../../../../../utilities/numericDisplay'
 import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 import DrawerPanel from '../../../../../../components/DrawerPanel'
-import { renderBadge } from '../index'
+import { severityBadge } from '../index'
 
 export const renderStatus = (status: boolean) => {
     if (status) {
@@ -49,7 +49,7 @@ export const policyColumns: IColumn<any, any>[] = [
                 justifyContent="center"
                 alignItems="center"
             >
-                {renderBadge(params.data?.control?.severity)}
+                {severityBadge(params.data?.control?.severity)}
             </Flex>
         ),
     },

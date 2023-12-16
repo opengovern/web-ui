@@ -37,10 +37,6 @@ import {
 import Spinner from '../../../../components/Spinner'
 import InsightTablePanel from './InsightTablePanel'
 import { snakeCaseToLabel } from '../../../../utilities/labelMaker'
-import {
-    badgeTypeByDelta,
-    percentageByChange,
-} from '../../../../utilities/deltaType'
 import { dateDisplay } from '../../../../utilities/dateDisplay'
 import Header from '../../../../components/Header'
 import Table, { IColumn } from '../../../../components/Table'
@@ -267,6 +263,7 @@ export default function InsightDetail({
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
+                            className="max-w-[70%] gap-2"
                         >
                             <Title className="font-semibold whitespace-nowrap">
                                 {insightDetail?.shortTitle}

@@ -22,7 +22,7 @@ interface IPolicies {
     id: string | undefined
 }
 
-export const renderBadge = (severity: any) => {
+export const severityBadge = (severity: any) => {
     const style = {
         color: '#fff',
         borderRadius: '8px',
@@ -122,7 +122,7 @@ export default function Controls({ id }: IPolicies) {
                                             justifyContent="start"
                                             className="gap-4"
                                         >
-                                            {renderBadge(p.control?.severity)}
+                                            {severityBadge(p.control?.severity)}
                                             <Text>{p.control?.title}</Text>
                                         </Flex>
                                     </TableCell>
