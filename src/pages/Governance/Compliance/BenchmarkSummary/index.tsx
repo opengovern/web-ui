@@ -85,7 +85,8 @@ const topConnections = (
 const topControls = (
     input:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
-        | undefined
+        | undefined,
+    id: string | undefined
 ) => {
     const top = []
     if (input && input.records) {
@@ -94,6 +95,9 @@ const topControls = (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 name: input.records[i].Control?.title,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                href: `${id}/${input.records[i].Control?.id}`,
                 value: input.records[i].count || 0,
             })
         }
@@ -147,14 +151,17 @@ export default function BenchmarkSummary() {
     const renderBars = () => {
         switch (stateIndex) {
             case 0:
-                // setType('accounts')
                 return (
                     <BarList
                         data={topConnections(connections, benchmarkDetail?.id)}
                     />
                 )
             case 1:
-                return <BarList data={topControls(controls)} />
+                return (
+                    <BarList
+                        data={topControls(controls, benchmarkDetail?.id)}
+                    />
+                )
             case 2:
                 return <BarList data={topResources(resources)} />
             default:
