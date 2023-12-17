@@ -73,18 +73,7 @@ export default function SingleMetric({
 
     const [openDrawer, setOpenDrawer] = useState(false)
     const [selectedRow, setSelectedRow] = useState<any>(null)
-    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
-        'line'
-    )
-    const [selectedIndex, setSelectedIndex] = useState(0)
     const [pageSize, setPageSize] = useState(1000)
-
-    useEffect(() => {
-        if (selectedIndex === 0) setSelectedChart('line')
-        if (selectedIndex === 1) setSelectedChart('bar')
-    }, [selectedIndex])
-
-    const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
 
     const query = {
         ...(selectedConnections.provider && {
