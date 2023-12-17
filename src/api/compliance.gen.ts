@@ -9,6 +9,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
@@ -1564,6 +1565,125 @@ export const useComplianceApiV1ControlsSummaryDetail = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
+interface IuseComplianceApiV1ControlsTrendDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useComplianceApiV1ControlsTrendDetail = (
+    controlId: string,
+    query?: {
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        startTime?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1ControlsTrendDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([controlId, query, params, autoExecute])
+    )
+
+    const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            api.compliance
+                .apiV1ControlsTrendDetail(controlId, query, paramsSignal)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([controlId, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([controlId, query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
 interface IuseComplianceApiV1FindingsCreateState {
     isLoading: boolean
     isExecuted: boolean
@@ -1869,6 +1989,146 @@ export const useComplianceApiV1FindingsResourceCreate = (
 
     if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([request, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseComplianceApiV1FindingsTopDetailState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useComplianceApiV1FindingsTopDetail = (
+    field:
+        | 'resourceType'
+        | 'connectionID'
+        | 'resourceID'
+        | 'service'
+        | 'controlID',
+    count: number,
+    query?: {
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        resourceCollection?: string[]
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        benchmarkId?: string[]
+
+        controlId?: string[]
+
+        severities?: (
+            | 'none'
+            | 'passed'
+            | 'low'
+            | 'medium'
+            | 'high'
+            | 'critical'
+        )[]
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1FindingsTopDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([field, count, query, params, autoExecute])
+    )
+
+    const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            api.compliance
+                .apiV1FindingsTopDetail(field, count, query, paramsSignal)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (
+        JSON.stringify([field, count, query, params, autoExecute]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([field, count, query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2241,165 +2501,6 @@ export const useComplianceApiV1FindingsCountDetail = (
     ) {
         setLastInput(
             JSON.stringify([benchmarkId, field, query, params, autoExecute])
-        )
-    }
-
-    useEffect(() => {
-        if (autoExecute) {
-            controller.abort()
-            const newController = new AbortController()
-            setController(newController)
-            sendRequest(newController)
-        }
-    }, [lastInput])
-
-    const { response } = state
-    const { isLoading } = state
-    const { isExecuted } = state
-    const { error } = state
-    const sendNow = () => {
-        controller.abort()
-        const newController = new AbortController()
-        setController(newController)
-        sendRequest(newController)
-    }
-    return { response, isLoading, isExecuted, error, sendNow }
-}
-
-interface IuseComplianceApiV1FindingsTopDetailState {
-    isLoading: boolean
-    isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    error?: any
-}
-
-export const useComplianceApiV1FindingsTopDetail = (
-    benchmarkId: string,
-    field:
-        | 'resourceType'
-        | 'connectionID'
-        | 'resourceID'
-        | 'service'
-        | 'controlID',
-    count: number,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        severities?: (
-            | 'none'
-            | 'passed'
-            | 'low'
-            | 'medium'
-            | 'high'
-            | 'critical'
-        )[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
-    const workspace = useParams<{ ws: string }>().ws
-    const [controller, setController] = useState(new AbortController())
-
-    const api = new Api()
-    api.instance = AxiosAPI
-
-    const [state, setState] =
-        useState<IuseComplianceApiV1FindingsTopDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
-    const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, field, count, query, params, autoExecute])
-    )
-
-    const sendRequest = (abortCtrl: AbortController) => {
-        if (!api.instance.defaults.headers.common.Authorization) {
-            return
-        }
-
-        setState({
-            ...state,
-            error: undefined,
-            isLoading: true,
-            isExecuted: true,
-        })
-        try {
-            if (workspace !== undefined && workspace.length > 0) {
-                setWorkspace(workspace)
-            } else {
-                setWorkspace('kaytu')
-            }
-
-            const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1FindingsTopDetail(
-                    benchmarkId,
-                    field,
-                    count,
-                    query,
-                    paramsSignal
-                )
-                .then((resp) => {
-                    setState({
-                        ...state,
-                        error: undefined,
-                        response: resp.data,
-                        isLoading: false,
-                        isExecuted: true,
-                    })
-                })
-                .catch((err) => {
-                    if (
-                        err.name === 'AbortError' ||
-                        err.name === 'CanceledError'
-                    ) {
-                        // Request was aborted
-                    } else {
-                        setState({
-                            ...state,
-                            error: err,
-                            response: undefined,
-                            isLoading: false,
-                            isExecuted: true,
-                        })
-                    }
-                })
-        } catch (err) {
-            setState({
-                ...state,
-                error: err,
-                isLoading: false,
-                isExecuted: true,
-            })
-        }
-    }
-
-    if (
-        JSON.stringify([
-            benchmarkId,
-            field,
-            count,
-            query,
-            params,
-            autoExecute,
-        ]) !== lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([
-                benchmarkId,
-                field,
-                count,
-                query,
-                params,
-                autoExecute,
-            ])
         )
     }
 
