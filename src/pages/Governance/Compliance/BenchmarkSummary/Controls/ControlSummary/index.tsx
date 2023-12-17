@@ -28,6 +28,7 @@ import Spinner from '../../../../../../components/Spinner'
 import Detail from './Tabs/Detail'
 import ImpactedResources from './Tabs/ImpactedResources'
 import Benchmarks from './Tabs/Benchmarks'
+import Trend from './Tabs/Trend'
 
 export default function ControlDetail() {
     const { controlId } = useParams()
@@ -38,7 +39,7 @@ export default function ControlDetail() {
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
-    console.log(controlDetail)
+
     return (
         <Layout currentPage="compliance">
             <Header
@@ -178,14 +179,16 @@ export default function ControlDetail() {
                     <TabGroup>
                         <TabList>
                             <Tab disabled>Take action</Tab>
-                            <Tab disabled>Trend line</Tab>
+                            <Tab>Trend line</Tab>
                             <Tab>Benchmarks</Tab>
                             <Tab>Details</Tab>
                             <Tab>Impacted resources</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>hi</TabPanel>
-                            <TabPanel>hi</TabPanel>
+                            <TabPanel>
+                                <Trend controlId={controlDetail?.control?.id} />
+                            </TabPanel>
                             <TabPanel>
                                 <Benchmarks
                                     benchmarks={controlDetail?.benchmarks}
