@@ -1583,6 +1583,8 @@ export const useComplianceApiV1ControlsTrendDetail = (
         startTime?: number
 
         endTime?: number
+
+        granularity?: 'daily' | 'monthly'
     },
     params: RequestParams = {},
     autoExecute = true

@@ -67,10 +67,10 @@ export default function SettingsEntitlement() {
             title: 'Displayed name',
             value: currentWorkspace?.name,
         },
-        {
-            title: 'URL',
-            value: currentWorkspace?.uri,
-        },
+        // {
+        //     title: 'URL',
+        //     value: currentWorkspace?.,
+        // },
         {
             title: 'Workspace owner',
             value: ownerResp?.userName,

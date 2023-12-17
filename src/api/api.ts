@@ -3376,6 +3376,11 @@ export class Api<
                 startTime?: number
                 /** timestamp for end of the chart in epoch seconds */
                 endTime?: number
+                /**
+                 * granularity of the chart
+                 * @default "daily"
+                 */
+                granularity?: 'daily' | 'monthly'
             },
             params: RequestParams = {}
         ) =>
