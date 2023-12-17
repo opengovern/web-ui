@@ -18,15 +18,16 @@ import { ChevronRightIcon, Square2StackIcon } from '@heroicons/react/24/outline'
 import { useSetAtom } from 'jotai/index'
 import clipboardCopy from 'clipboard-copy'
 import { useState } from 'react'
-import Layout from '../../../components/Layout'
-import { useComplianceApiV1ControlsSummaryDetail } from '../../../api/compliance.gen'
-import Header from '../../../components/Header'
-import { notificationAtom } from '../../../store'
-import { severityBadge } from '../Compliance/BenchmarkSummary/Controls'
-import { dateTimeDisplay } from '../../../utilities/dateDisplay'
-import Spinner from '../../../components/Spinner'
+import Layout from '../../../../../../components/Layout'
+import { useComplianceApiV1ControlsSummaryDetail } from '../../../../../../api/compliance.gen'
+import Header from '../../../../../../components/Header'
+import { notificationAtom } from '../../../../../../store'
+import { severityBadge } from '../index'
+import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
+import Spinner from '../../../../../../components/Spinner'
 import Detail from './Tabs/Detail'
 import ImpactedResources from './Tabs/ImpactedResources'
+import Benchmarks from './Tabs/Benchmarks'
 
 export default function ControlDetail() {
     const { controlId } = useParams()
@@ -178,14 +179,18 @@ export default function ControlDetail() {
                         <TabList>
                             <Tab disabled>Take action</Tab>
                             <Tab disabled>Trend line</Tab>
-                            <Tab disabled>Benchmarks</Tab>
+                            <Tab>Benchmarks</Tab>
                             <Tab>Details</Tab>
                             <Tab>Impacted resources</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>hi</TabPanel>
                             <TabPanel>hi</TabPanel>
-                            <TabPanel>hi</TabPanel>
+                            <TabPanel>
+                                <Benchmarks
+                                    benchmarks={controlDetail?.benchmarks}
+                                />
+                            </TabPanel>
                             <TabPanel>
                                 <Detail control={controlDetail?.control} />
                             </TabPanel>

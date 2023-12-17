@@ -78,6 +78,7 @@ export default function Controls({ id }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
+    console.log(controls)
 
     return (
         <Card className="max-w-full">
