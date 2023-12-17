@@ -1,7 +1,7 @@
 import { Card, Flex, Subtitle, Text } from '@tremor/react'
 import { useState } from 'react'
 import parse from 'html-react-parser'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiControl } from '../../../../../api/api'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiControl } from '../../../../../../../../api/api'
 
 interface IDetail {
     control: GithubComKaytuIoKaytuEnginePkgComplianceApiControl | undefined
@@ -42,7 +42,7 @@ export default function Detail({ control }: IDetail) {
                                     : ''
                             }`}
                         >
-                            Cost fo non-compliance
+                            Cost of non-compliance
                         </Subtitle>
                     </button>
                 )}

@@ -275,7 +275,6 @@ export default function Spend() {
                 startTime: activeTimeRange.start.unix(),
             }),
         })
-    console.log(accountCostResponse)
 
     return (
         <Layout currentPage="spend">

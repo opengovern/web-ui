@@ -2,15 +2,15 @@ import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/
 import { useMemo, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai/index'
 import { RowClickedEvent } from 'ag-grid-community'
-import Table from '../../../../../components/Table'
-import FindingDetail from '../../../Findings/Detail'
-import { columns } from '../../../Findings'
-import { isDemoAtom, notificationAtom } from '../../../../../store'
+import Table from '../../../../../../../../components/Table'
+import FindingDetail from '../../../../../../Findings/Detail'
+import { columns } from '../../../../../../Findings'
+import { isDemoAtom, notificationAtom } from '../../../../../../../../store'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
-} from '../../../../../api/api'
-import AxiosAPI from '../../../../../api/ApiConfig'
+} from '../../../../../../../../api/api'
+import AxiosAPI from '../../../../../../../../api/ApiConfig'
 
 let sortKey = ''
 

@@ -175,7 +175,8 @@ export default function Trends({
                 ?.filter(
                     (t) =>
                         selectedDatapoint?.color === '#E01D48' &&
-                        dateDisplay(t.date) === selectedDatapoint?.name
+                        dateDisplay(t.date || t.timestamp * 1000) ===
+                            selectedDatapoint?.name
                 )
                 .map((t) => (
                     <Callout
@@ -183,14 +184,15 @@ export default function Trends({
                         title="Incomplete data"
                         className="w-fit mt-4"
                     >
-                        Checked{' '}
-                        {numberDisplay(
-                            t.totalSuccessfulDescribedConnectionCount,
+                        {`Checked ${numberDisplay(
+                            t.totalSuccessfulDescribedConnectionCount ||
+                                t.totalConnectionCount -
+                                    t.failedConnectionCount,
                             0
-                        )}{' '}
-                        accounts out of{' '}
-                        {numberDisplay(t.totalConnectionCount, 0)} on{' '}
-                        {dateDisplay(t.date)}
+                        )} ${trendName.toLowerCase()} out of ${numberDisplay(
+                            t.totalConnectionCount,
+                            0
+                        )} on ${dateDisplay(t.date || t.timestamp * 1000)}`}
                     </Callout>
                 ))}
             <Flex justifyContent="end" className="mt-2 gap-2.5">

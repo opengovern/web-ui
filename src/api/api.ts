@@ -710,6 +710,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
     failedConnectionCount?: number
     failedResourcesCount?: number
     passed?: boolean
+    resourceType?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType
     totalConnectionCount?: number
     totalResourcesCount?: number
 }
@@ -2058,7 +2059,6 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRe
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest {
-    description?: string
     name?: string
     organization_id?: number
     tier?: string
@@ -2094,8 +2094,6 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
     aws_user_arn?: string
     /** @example "2023-05-17T14:39:02.707659Z" */
     createdAt?: string
-    /** @example "Lorem ipsum dolor sit amet, consectetur adipiscing elit." */
-    description?: string
     /** @example "ws-698542025141040315" */
     id?: string
     is_bootstrap_input_finished?: boolean
@@ -2111,8 +2109,6 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
     status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus
     /** @example "ENTERPRISE" */
     tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
-    /** @example "https://app.kaytu.dev/kaytu" */
-    uri?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits {
@@ -2147,8 +2143,6 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     aws_user_arn?: string
     /** @example "2023-05-17T14:39:02.707659Z" */
     createdAt?: string
-    /** @example "Lorem ipsum dolor sit amet, consectetur adipiscing elit." */
-    description?: string
     /** @example "ws-698542025141040315" */
     id?: string
     is_bootstrap_input_finished?: boolean
@@ -2164,8 +2158,6 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus
     /** @example "ENTERPRISE" */
     tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
-    /** @example "https://app.kaytu.dev/kaytu" */
-    uri?: string
     /** @example "v0.45.4" */
     version?: string
 }
@@ -2178,15 +2170,12 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus {
-    StatusProvisioned = 'PROVISIONED',
-    StatusBootstrapping = 'BOOTSTRAPPING',
+    StatusReserving = 'RESERVING',
     StatusReserved = 'RESERVED',
-    StatusProvisioning = 'PROVISIONING',
-    StatusProvisioningFailed = 'PROVISIONING_FAILED',
+    StatusBootstrapping = 'BOOTSTRAPPING',
+    StatusProvisioned = 'PROVISIONED',
     StatusDeleting = 'DELETING',
     StatusDeleted = 'DELETED',
-    StatusSuspending = 'SUSPENDING',
-    StatusSuspended = 'SUSPENDED',
 }
 
 export interface KaytuResourceCollectionFilter {
@@ -5953,48 +5942,6 @@ export class Api<
                 path: `/workspace/api/v1/workspace/${workspaceId}/owner`,
                 method: 'POST',
                 body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspaceResumeCreate
-         * @summary Resume workspace
-         * @request POST:/workspace/api/v1/workspace/{workspace_id}/resume
-         * @secure
-         */
-        apiV1WorkspaceResumeCreate: (
-            workspaceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspace/${workspaceId}/resume`,
-                method: 'POST',
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspaceSuspendCreate
-         * @summary Suspend workspace
-         * @request POST:/workspace/api/v1/workspace/{workspace_id}/suspend
-         * @secure
-         */
-        apiV1WorkspaceSuspendCreate: (
-            workspaceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspace/${workspaceId}/suspend`,
-                method: 'POST',
                 secure: true,
                 type: ContentType.Json,
                 ...params,
