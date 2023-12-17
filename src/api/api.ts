@@ -691,8 +691,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
     manualVerification?: boolean
     /** @example "Non-compliance to this control could result in several costs including..." */
     nonComplianceCost?: string
-    /** @example "azure_ad_manual_control" */
-    queryID?: string
+    query?: GithubComKaytuIoKaytuEnginePkgComplianceApiQuery
     /** @example "low" */
     severity?: TypesFindingSeverity
     tags?: Record<string, string[]>
@@ -705,11 +704,24 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary {
+    benchmarks?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark[]
     control?: GithubComKaytuIoKaytuEnginePkgComplianceApiControl
     evaluatedAt?: number
     failedConnectionCount?: number
     failedResourcesCount?: number
     passed?: boolean
+    totalConnectionCount?: number
+    totalResourcesCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint {
+    failedConnectionCount?: number
+    failedResourcesCount?: number
+    /**
+     * Time
+     * @example 1686346668
+     */
+    timestamp?: number
     totalConnectionCount?: number
     totalResourcesCount?: number
 }
@@ -1627,6 +1639,8 @@ export enum GithubComKaytuIoKaytuEnginePkgMetadataModelsMetadataKey {
     MetadataKeyAssetDiscoveryAzureRoleIDs = 'asset_discovery_azure_role_ids',
     MetadataKeySpendDiscoveryAzureRoleIDs = 'spend_discovery_azure_role_ids',
     MetadataKeyCustomizationEnabled = 'customization_enabled',
+    MetadataKeyAWSDiscoveryRequiredOnly = 'aws_discovery_required_only',
+    MetadataKeyAzureDiscoveryRequiredOnly = 'azure_discovery_required_only',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgOnboardApiAWSCredentialConfig {
@@ -3354,6 +3368,42 @@ export class Api<
             }),
 
         /**
+         * No description
+         *
+         * @tags compliance
+         * @name ApiV1ControlsTrendDetail
+         * @summary Get control trend
+         * @request GET:/compliance/api/v1/controls/{controlId}/trend
+         * @secure
+         */
+        apiV1ControlsTrendDetail: (
+            controlId: string,
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+                /** timestamp for start of the chart in epoch seconds */
+                startTime?: number
+                /** timestamp for end of the chart in epoch seconds */
+                endTime?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint[],
+                any
+            >({
+                path: `/compliance/api/v1/controls/${controlId}/trend`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving all compliance run findings with respect to filters.
          *
          * @tags compliance
@@ -3425,6 +3475,61 @@ export class Api<
                 path: `/compliance/api/v1/findings/resource`,
                 method: 'POST',
                 body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving the top field by finding count.
+         *
+         * @tags compliance
+         * @name ApiV1FindingsTopDetail
+         * @summary Get top field by finding count
+         * @request GET:/compliance/api/v1/findings/top/{field}/{count}
+         * @secure
+         */
+        apiV1FindingsTopDetail: (
+            field:
+                | 'resourceType'
+                | 'connectionID'
+                | 'resourceID'
+                | 'service'
+                | 'controlID',
+            count: number,
+            query?: {
+                /** Connection IDs to filter by */
+                connectionId?: string[]
+                /** Connection groups to filter by  */
+                connectionGroup?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
+                /** Connector type to filter by */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** BenchmarkID */
+                benchmarkId?: string[]
+                /** ControlID */
+                controlId?: string[]
+                /** Severities to filter by defaults to all severities except passed */
+                severities?: (
+                    | 'none'
+                    | 'passed'
+                    | 'low'
+                    | 'medium'
+                    | 'high'
+                    | 'critical'
+                )[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+                any
+            >({
+                path: `/compliance/api/v1/findings/top/${field}/${count}`,
+                method: 'GET',
+                query: query,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
@@ -3533,58 +3638,6 @@ export class Api<
                 any
             >({
                 path: `/compliance/api/v1/findings/${benchmarkId}/${field}/count`,
-                method: 'GET',
-                query: query,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Retrieving the top field by finding count.
-         *
-         * @tags compliance
-         * @name ApiV1FindingsTopDetail
-         * @summary Get top field by finding count
-         * @request GET:/compliance/api/v1/findings/{benchmarkId}/{field}/top/{count}
-         * @secure
-         */
-        apiV1FindingsTopDetail: (
-            benchmarkId: string,
-            field:
-                | 'resourceType'
-                | 'connectionID'
-                | 'resourceID'
-                | 'service'
-                | 'controlID',
-            count: number,
-            query?: {
-                /** Connection IDs to filter by */
-                connectionId?: string[]
-                /** Connection groups to filter by  */
-                connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
-                /** Connector type to filter by */
-                connector?: ('' | 'AWS' | 'Azure')[]
-                /** Severities to filter by defaults to all severities except passed */
-                severities?: (
-                    | 'none'
-                    | 'passed'
-                    | 'low'
-                    | 'medium'
-                    | 'high'
-                    | 'critical'
-                )[]
-            },
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-                any
-            >({
-                path: `/compliance/api/v1/findings/${benchmarkId}/${field}/top/${count}`,
                 method: 'GET',
                 query: query,
                 secure: true,
