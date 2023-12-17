@@ -109,6 +109,7 @@ export default function BenchmarkSummary() {
     const [openTop, setOpenTop] = useState(false)
 
     const topQuery = {
+        ...(benchmarkId && { benchmarkId: [benchmarkId] }),
         ...(selectedConnections.provider && {
             connector: [selectedConnections.provider],
         }),
@@ -128,19 +129,16 @@ export default function BenchmarkSummary() {
     const { sendNow: triggerEvaluate, isExecuted } =
         useScheduleApiV1ComplianceTriggerUpdate(String(benchmarkId), {}, false)
     const { response: connections } = useComplianceApiV1FindingsTopDetail(
-        String(benchmarkId),
         'connectionID',
         3,
         topQuery
     )
     const { response: resources } = useComplianceApiV1FindingsTopDetail(
-        String(benchmarkId),
         'resourceType',
         3,
         topQuery
     )
     const { response: controls } = useComplianceApiV1FindingsTopDetail(
-        String(benchmarkId),
         'controlID',
         3,
         topQuery
