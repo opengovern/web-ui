@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import { ArrowPathIcon, ArrowSmallRightIcon } from '@heroicons/react/24/solid'
 import {
     useWorkspaceApiV1WorkspaceDelete,
-    useWorkspaceApiV1WorkspaceResumeCreate,
+    // useWorkspaceApiV1WorkspaceResumeCreate,
     useWorkspaceApiV1WorkspacesLimitsDetail,
-    useWorkspaceApiV1WorkspaceSuspendCreate,
+    // useWorkspaceApiV1WorkspaceSuspendCreate,
 } from '../../../api/workspace.gen'
 import ConfirmModal from '../../Modal/ConfirmModal'
 import { numericDisplay } from '../../../utilities/numericDisplay'
@@ -68,27 +68,27 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
 
     const { response: workspaceDetail, isLoading: workspaceLoading } =
         useWorkspaceApiV1WorkspacesLimitsDetail(workspace.name || '', {})
-    const {
-        isLoading: suspendLoading,
-        sendNow: callSuspend,
-        isExecuted: eS,
-    } = useWorkspaceApiV1WorkspaceSuspendCreate(workspace.id || '', {}, false)
-    useEffect(() => {
-        if (eS && !suspendLoading) {
-            refreshList()
-        }
-    }, [suspendLoading])
+    // const {
+    //     isLoading: suspendLoading,
+    //     sendNow: callSuspend,
+    //     isExecuted: eS,
+    // } = useWorkspaceApiV1WorkspaceSuspendCreate(workspace.id || '', {}, false)
+    // useEffect(() => {
+    //     if (eS && !suspendLoading) {
+    //         refreshList()
+    //     }
+    // }, [suspendLoading])
 
-    const {
-        isLoading: resumeLoading,
-        sendNow: callResume,
-        isExecuted: eR,
-    } = useWorkspaceApiV1WorkspaceResumeCreate(workspace.id || '', {}, false)
-    useEffect(() => {
-        if (eR && !resumeLoading) {
-            refreshList()
-        }
-    }, [resumeLoading])
+    // const {
+    //     isLoading: resumeLoading,
+    //     sendNow: callResume,
+    //     isExecuted: eR,
+    // } = useWorkspaceApiV1WorkspaceResumeCreate(workspace.id || '', {}, false)
+    // useEffect(() => {
+    //     if (eR && !resumeLoading) {
+    //         refreshList()
+    //     }
+    // }, [resumeLoading])
 
     const {
         isLoading: deleteLoading,
@@ -125,18 +125,18 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                         Access
                     </Button>
                 )
-            case 'SUSPENDED':
-                return (
-                    <Button
-                        variant="primary"
-                        icon={ArrowPathIcon}
-                        iconPosition="right"
-                        loading={resumeLoading && eR}
-                        onClick={() => callResume()}
-                    >
-                        Resume
-                    </Button>
-                )
+            // case 'SUSPENDED':
+            //     return (
+            //         <Button
+            //             variant="primary"
+            //             icon={ArrowPathIcon}
+            //             iconPosition="right"
+            //             loading={resumeLoading && eR}
+            //             onClick={() => callResume()}
+            //         >
+            //             Resume
+            //         </Button>
+            //     )
             case 'BOOTSTRAPPING':
                 return (
                     <Button
@@ -178,14 +178,14 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                     setDeleteConfirmation(false)
                 }}
             />
-            <ConfirmModal
+            {/* <ConfirmModal
                 title={`Are you sure you want to suspend workspace ${workspace.name}?`}
                 open={suspendConfirmation}
                 onConfirm={callSuspend}
                 onClose={() => {
                     setSuspendConfirmation(false)
                 }}
-            />
+            /> */}
             <Card key={workspace.name}>
                 <Flex flexDirection="row" className="mb-6">
                     <Flex flexDirection="row" className="w-fit">
@@ -201,7 +201,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                         </Badge>
                     </Flex>
                     <Flex flexDirection="row" className="w-fit">
-                        {showSuspend(workspace.status || '') && (
+                        {/* {showSuspend(workspace.status || '') && (
                             <Button
                                 variant="light"
                                 className="pr-2 border-r-gray-600"
@@ -210,7 +210,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                             >
                                 Suspend
                             </Button>
-                        )}
+                        )} */}
                         {showDelete(workspace.status || '') && (
                             <Button
                                 variant="light"
