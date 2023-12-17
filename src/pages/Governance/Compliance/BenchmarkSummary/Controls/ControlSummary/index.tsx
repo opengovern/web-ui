@@ -25,7 +25,10 @@ import { useState } from 'react'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
 import Layout from '../../../../../../components/Layout'
-import { useComplianceApiV1ControlsSummaryDetail } from '../../../../../../api/compliance.gen'
+import {
+    useComplianceApiV1ControlsSummaryDetail,
+    useComplianceApiV1FindingsTopDetail,
+} from '../../../../../../api/compliance.gen'
 import Header from '../../../../../../components/Header'
 import { notificationAtom, queryAtom } from '../../../../../../store'
 import { severityBadge } from '../index'
@@ -36,6 +39,41 @@ import ImpactedResources from './Tabs/ImpactedResources'
 import Benchmarks from './Tabs/Benchmarks'
 import Trend from './Tabs/Trend'
 import Modal from '../../../../../../components/Modal'
+import {
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    SourceType,
+} from '../../../../../../api/api'
+import ListCard from '../../../../../../components/Cards/ListCard'
+
+const topAccounts = (
+    input:
+        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
+        | undefined
+) => {
+    const top: {
+        data: {
+            name: string | undefined
+            value: number | undefined
+            connector: SourceType | undefined
+            id: string | undefined
+            kaytuId: string | undefined
+        }[]
+        total: number | undefined
+    } = { data: [], total: 0 }
+    if (input && input.records) {
+        for (let i = 0; i < input.records.length; i += 1) {
+            top.data.push({
+                kaytuId: input.records[i].connection?.id,
+                name: input.records[i].connection?.providerConnectionName,
+                value: input.records[i].connection?.resourceCount,
+                connector: input.records[i].connection?.connector,
+                id: input.records[i].connection?.providerConnectionID,
+            })
+        }
+        top.total = input.totalCount
+    }
+    return top
+}
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
@@ -47,6 +85,10 @@ export default function ControlDetail() {
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
+    const { response: accounts, isLoading: accountsLoading } =
+        useComplianceApiV1FindingsTopDetail('connectionID', 5, {
+            controlId: [String(controlId)],
+        })
 
     return (
         <Layout currentPage="compliance">
@@ -241,6 +283,13 @@ export default function ControlDetail() {
                                 </Flex>
                             </Flex>
                         </Card>
+                        <ListCard
+                            title="Top Cloud Accounts"
+                            loading={accountsLoading}
+                            items={topAccounts(accounts)}
+                            type="account"
+                            isClickable={false}
+                        />
                     </Grid>
                     <TabGroup>
                         <TabList>
