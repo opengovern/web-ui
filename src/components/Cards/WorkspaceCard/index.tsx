@@ -56,12 +56,15 @@ const getBadgeColor = (
 }
 
 const showDelete = (
-    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID
+    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID,
+    inputFinished?: boolean
 ) => {
     switch (status) {
         case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDProvisioned:
         case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDWaitingForCredential:
             return true
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDProvisioning:
+            return !(inputFinished || false)
         default:
             return false
     }
@@ -232,7 +235,10 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                                 Suspend
                             </Button>
                         )} */}
-                        {showDelete(workspace.status) && (
+                        {showDelete(
+                            workspace.status,
+                            workspace.is_bootstrap_input_finished
+                        ) && (
                             <Button
                                 variant="light"
                                 className="pl-2"
