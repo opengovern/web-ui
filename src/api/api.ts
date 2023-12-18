@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -2081,6 +2080,16 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization {
     url?: string
 }
 
+export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID {
+    StateIDReserving = 'RESERVING',
+    StateIDReserved = 'RESERVED',
+    StateIDWaitingForCredential = 'WAITING_FOR_CREDENTIAL',
+    StateIDProvisioning = 'PROVISIONING',
+    StateIDProvisioned = 'PROVISIONED',
+    StateIDDeleting = 'DELETING',
+    StateIDDeleted = 'DELETED',
+}
+
 export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier {
     TierFree = 'FREE',
     TierTeams = 'TEAMS',
@@ -2106,7 +2115,7 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
     /** @example "sm" */
     size?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize
     /** @example "PROVISIONED" */
-    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus
+    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID
     /** @example "ENTERPRISE" */
     tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
 }
@@ -2155,7 +2164,7 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse {
     /** @example "sm" */
     size?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize
     /** @example "PROVISIONED" */
-    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus
+    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID
     /** @example "ENTERPRISE" */
     tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
     /** @example "v0.45.4" */
@@ -2167,15 +2176,6 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
     SizeSM = 'sm',
     SizeMD = 'md',
     SizeLG = 'lg',
-}
-
-export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceStatus {
-    StatusReserving = 'RESERVING',
-    StatusReserved = 'RESERVED',
-    StatusBootstrapping = 'BOOTSTRAPPING',
-    StatusProvisioned = 'PROVISIONED',
-    StatusDeleting = 'DELETING',
-    StatusDeleted = 'DELETED',
 }
 
 export interface KaytuResourceCollectionFilter {
@@ -3302,8 +3302,9 @@ export class Api<
          * @secure
          */
         apiV1ControlsSummaryList: (
-            controlId?: string[],
             query?: {
+                /** Control IDs to filter by */
+                controlId?: string[]
                 /** Connection IDs to filter by */
                 connectionId?: string[]
                 /** Connection groups to filter by  */

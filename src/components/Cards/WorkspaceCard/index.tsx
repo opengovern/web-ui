@@ -12,7 +12,10 @@ import ConfirmModal from '../../Modal/ConfirmModal'
 import { numericDisplay } from '../../../utilities/numericDisplay'
 import Spinner from '../../Spinner'
 import { dateDisplay } from '../../../utilities/dateDisplay'
-import { GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse } from '../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
+} from '../../../api/api'
 import { capitalizeFirstLetter } from '../../../utilities/labelMaker'
 
 interface IWorkSpace {
@@ -20,40 +23,55 @@ interface IWorkSpace {
     refreshList: () => void
 }
 
-const getBadgeColor = (status: string) => {
+const getBadgeLabel = (
+    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID
+) => {
     switch (status) {
-        case 'PROVISIONED':
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDProvisioned:
+            return 'Provisioned'
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDProvisioning:
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDWaitingForCredential:
+            return 'Boostrapping'
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDDeleting:
+            return 'Deleting'
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDDeleted:
+            return 'Deleted'
+        default:
+            return capitalizeFirstLetter(String(status))
+    }
+}
+
+const getBadgeColor = (
+    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID
+) => {
+    switch (status) {
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDProvisioned:
             return 'emerald'
-        case 'SUSPENDED':
-            return 'orange'
-        case 'DELETED':
-        case 'DELETING':
-        case 'PROVISIONING_FAILED':
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDDeleting:
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDDeleted:
             return 'rose'
         default:
             return 'slate'
     }
 }
 
-const showDelete = (status: string) => {
+const showDelete = (
+    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID
+) => {
     switch (status) {
-        case 'PROVISIONED':
-        case 'PROVISIONING':
-        case 'BOOTSTRAPPING':
-        case 'PROVISIONING_FAILED':
-        case 'SUSPENDED':
-        case 'SUSPENDING':
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDProvisioned:
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDWaitingForCredential:
             return true
         default:
             return false
     }
 }
 
-const showSuspend = (status: string) => {
+const showSuspend = (
+    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID
+) => {
     switch (status) {
-        case 'PROVISIONED':
-        case 'PROVISIONING':
-        case 'PROVISIONING_FAILED':
+        case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDProvisioned:
             return true
         default:
             return false
@@ -108,9 +126,11 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
         Users: workspaceDetail?.currentUsers || 0,
     }
 
-    const getButton = (status: string) => {
+    const getButton = (
+        status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID
+    ) => {
         switch (status) {
-            case 'PROVISIONED':
+            case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDProvisioned:
                 return (
                     <Button
                         variant="primary"
@@ -137,7 +157,8 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
             //             Resume
             //         </Button>
             //     )
-            case 'BOOTSTRAPPING':
+            case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDWaitingForCredential:
+            case GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID.StateIDProvisioning:
                 return (
                     <Button
                         variant="primary"
@@ -194,10 +215,10 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                         </Title>
                         <Badge
                             size="md"
-                            color={getBadgeColor(workspace.status || '')}
+                            color={getBadgeColor(workspace.status)}
                             className="ml-2"
                         >
-                            {capitalizeFirstLetter(workspace.status || '')}
+                            {getBadgeLabel(workspace.status)}
                         </Badge>
                     </Flex>
                     <Flex flexDirection="row" className="w-fit">
@@ -211,7 +232,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                                 Suspend
                             </Button>
                         )} */}
-                        {showDelete(workspace.status || '') && (
+                        {showDelete(workspace.status) && (
                             <Button
                                 variant="light"
                                 className="pl-2"
@@ -249,7 +270,7 @@ export default function WorkspaceCard({ workspace, refreshList }: IWorkSpace) {
                             {dateDisplay(workspace.createdAt)}
                         </Text>
                     </Flex>
-                    {getButton(workspace.status || '')}
+                    {getButton(workspace.status)}
                 </Flex>
             </Card>
         </>

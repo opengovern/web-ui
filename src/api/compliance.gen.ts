@@ -1344,8 +1344,9 @@ interface IuseComplianceApiV1ControlsSummaryListState {
 }
 
 export const useComplianceApiV1ControlsSummaryList = (
-    controlId?: string[],
     query?: {
+        controlId?: string[]
+
         connectionId?: string[]
 
         connectionGroup?: string[]
@@ -1365,7 +1366,7 @@ export const useComplianceApiV1ControlsSummaryList = (
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([controlId, query, params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1388,7 +1389,7 @@ export const useComplianceApiV1ControlsSummaryList = (
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.compliance
-                .apiV1ControlsSummaryList(controlId, query, paramsSignal)
+                .apiV1ControlsSummaryList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1424,8 +1425,8 @@ export const useComplianceApiV1ControlsSummaryList = (
         }
     }
 
-    if (JSON.stringify([controlId, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([controlId, query, params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
