@@ -5,6 +5,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
@@ -743,6 +744,8 @@ export const useComplianceApiV1BenchmarksSummaryList = (
         tag?: string[]
 
         timeAt?: number
+
+        topAccountCount?: number
     },
     params: RequestParams = {},
     autoExecute = true
@@ -847,7 +850,7 @@ export const useComplianceApiV1BenchmarksSummaryList = (
 interface IuseComplianceApiV1BenchmarksControlsDetailState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[]
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
@@ -1107,6 +1110,8 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
         connector?: ('' | 'AWS' | 'Azure')[]
 
         timeAt?: number
+
+        topAccountCount?: number
     },
     params: RequestParams = {},
     autoExecute = true

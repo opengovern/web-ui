@@ -73,15 +73,53 @@ export const severityBadge = (severity: any) => {
     return ''
 }
 
+// const rows = (json: any) => {
+//     let arr: any = []
+//     let path = ''
+//     if (json) {
+//         path += `${json.title}/`
+//         if (json.policies !== null && json.policies !== undefined) {
+//             for (let i = 0; i < json.policies.length; i += 1) {
+//                 let obj = {}
+//                 obj = {
+//                     path: path + json.policies[i].title,
+//                     ...json.policies[i],
+//                 }
+//                 arr.push(obj)
+//             }
+//         }
+//         if (json.children !== null && json.children !== undefined) {
+//             for (let i = 0; i < json.children.length; i += 1) {
+//                 const res = rows(json.children[i])
+//                 arr = arr.concat(res)
+//             }
+//         }
+//     }
+//     if (arr.length) {
+//         return arr.sort((a: any, b: any) => {
+//             if (a.path < b.path) {
+//                 return -1
+//             }
+//             if (a.path > b.path) {
+//                 return 1
+//             }
+//             return 0
+//         })
+//     }
+//
+//     return arr
+// }
+
 export default function Controls({ id }: IPolicies) {
     const [open, setOpen] = useState(false)
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
+    console.log(controls)
 
     return (
         <Card className="max-w-full">
-            <Flex className="mb-3">
+            {/* <Flex className="mb-3">
                 <Flex justifyContent="start" className="gap-2">
                     <Title className="font-semibold">Confidentiality</Title>
                     <Text>{`${controls?.filter((c) => c.passed).length}/${
@@ -150,7 +188,7 @@ export default function Controls({ id }: IPolicies) {
                 open={open}
                 onClose={() => setOpen(false)}
                 isLoading={isLoading}
-            />
+            /> */}
         </Card>
     )
 }

@@ -612,6 +612,12 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment 
     resourceCollectionId?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary {
+    benchmark?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark
+    children?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary[]
+    control?: GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[]
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary {
     /** Checks summary */
     checks?: TypesSeverityResult
@@ -654,6 +660,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example "Azure CIS v1.4.0"
      */
     title?: string
+    /** Top connections */
+    topConnections?: GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation {
@@ -3131,6 +3139,11 @@ export class Api<
                 tag?: string[]
                 /** timestamp for values in epoch seconds */
                 timeAt?: number
+                /**
+                 * Top account count
+                 * @default 3
+                 */
+                topAccountCount?: number
             },
             params: RequestParams = {}
         ) =>
@@ -3167,7 +3180,7 @@ export class Api<
             params: RequestParams = {}
         ) =>
             this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[],
+                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
                 any
             >({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/controls`,
@@ -3236,6 +3249,11 @@ export class Api<
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** timestamp for values in epoch seconds */
                 timeAt?: number
+                /**
+                 * Top account count
+                 * @default 3
+                 */
+                topAccountCount?: number
             },
             params: RequestParams = {}
         ) =>

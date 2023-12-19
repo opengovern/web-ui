@@ -304,7 +304,7 @@ export default function SingleComplianceConnection() {
                                     {bm.benchmarkId?.title}
                                 </Tab>
                             ))}
-                        <Tab>Findings</Tab>
+                        <Tab disabled>Findings</Tab>
                     </>
                 </TabList>
                 <TabPanels>
@@ -323,7 +323,7 @@ export default function SingleComplianceConnection() {
                                         }
                                     }}
                                     columns={policyColumns}
-                                    rowData={policies}
+                                    // rowData={policies}
                                 />
                             </TabPanel>
                         ))}
