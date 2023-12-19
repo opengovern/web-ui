@@ -17,7 +17,6 @@ import { useEffect, useState } from 'react'
 import { Bars3Icon, Squares2X2Icon } from '@heroicons/react/24/outline'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import { useNavigate } from 'react-router-dom'
 import Layout from '../../../components/Layout'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import Spinner from '../../../components/Spinner'
@@ -26,7 +25,7 @@ import ComplianceCard, {
     benchmarkChecks,
 } from '../../../components/Cards/ComplianceCard'
 import Header from '../../../components/Header'
-import Table, { IColumn } from '../../../components/Table'
+import { IColumn } from '../../../components/Table'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import ComplianceListCard from '../../../components/Cards/ComplianceListCard'
 
@@ -241,9 +240,8 @@ const notActiveColumns: IColumn<any, any>[] = [
 
 export default function Compliance() {
     const [selectedProvider, setSelectedProvider] = useState('')
-    const [index, setIndex] = useState(0)
+    const [index, setIndex] = useState(1)
 
-    const navigate = useNavigate()
     const {
         response: benchmarks,
         isLoading,
