@@ -4,7 +4,9 @@ import {
     AccordionHeader,
     Badge,
     Card,
+    Col,
     Flex,
+    Grid,
     Table,
     TableBody,
     TableCell,
@@ -30,10 +32,10 @@ export const severityBadge = (severity: any) => {
         width: '64px',
     }
     if (severity) {
-        if (severity === 'none') {
+        if (severity === 'unknown') {
             return (
                 <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>
-                    None
+                    Unknown
                 </Badge>
             )
         }
@@ -71,7 +73,9 @@ export const severityBadge = (severity: any) => {
             </Badge>
         )
     }
-    return ''
+    return (
+        <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>Unknown</Badge>
+    )
 }
 
 const rows = (json: any) => {
@@ -176,22 +180,26 @@ export default function Controls({ id }: IPolicies) {
                                                     navigate(String(v?.id))
                                                 }
                                             >
-                                                <TableCell>{`${name.substring(
+                                                <TableCell className="w-24 min-w-[96px]">{`${name.substring(
                                                     0,
                                                     name.indexOf(' ')
                                                 )}.${i + 1}`}</TableCell>
                                                 <TableCell>
-                                                    <Flex
-                                                        justifyContent="start"
-                                                        className="gap-4"
+                                                    <Grid
+                                                        numItems={10}
+                                                        className="w-full"
                                                     >
                                                         {severityBadge(
                                                             v?.severity
                                                         )}
-                                                        <Text>{v?.title}</Text>
-                                                    </Flex>
+                                                        <Col numColSpan={9}>
+                                                            <Text className="truncate">
+                                                                {v?.title}
+                                                            </Text>
+                                                        </Col>
+                                                    </Grid>
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell className="w-40 min-w-[160px]">
                                                     {`${
                                                         (v?.totalResourcesCount ||
                                                             0) -
@@ -202,7 +210,7 @@ export default function Controls({ id }: IPolicies) {
                                                         0
                                                     }`}
                                                 </TableCell>
-                                                <TableCell>
+                                                <TableCell className="w-5 min-w-[20px]">
                                                     <ChevronRightIcon className="h-5 text-kaytu-500" />
                                                 </TableCell>
                                             </TableRow>
