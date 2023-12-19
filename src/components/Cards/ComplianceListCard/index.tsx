@@ -134,7 +134,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                             <Text className="text-xs">{`(${(
                                 (benchmarkChecks(benchmark).critical /
                                     benchmarkChecks(benchmark).total) *
-                                100
+                                    100 || 0
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
                         <Flex className="w-fit gap-1">
@@ -146,7 +146,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                             <Text className="text-xs">{`(${(
                                 (benchmarkChecks(benchmark).high /
                                     benchmarkChecks(benchmark).total) *
-                                100
+                                    100 || 0
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
                         <Flex className="w-fit gap-1">
@@ -160,7 +160,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                             <Text className="text-xs">{`(${(
                                 (benchmarkChecks(benchmark).medium /
                                     benchmarkChecks(benchmark).total) *
-                                100
+                                    100 || 0
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
                         <Flex className="w-fit gap-1">
@@ -172,7 +172,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                             <Text className="text-xs">{`(${(
                                 (benchmarkChecks(benchmark).low /
                                     benchmarkChecks(benchmark).total) *
-                                100
+                                    100 || 0
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
                         <Flex className="w-fit gap-1">
@@ -186,7 +186,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                             <Text className="text-xs">{`(${(
                                 (benchmarkChecks(benchmark).passed /
                                     benchmarkChecks(benchmark).total) *
-                                100
+                                    100 || 0
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
                         <Flex className="w-fit gap-1">
@@ -200,7 +200,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                             <Text className="text-xs">{`(${(
                                 (benchmarkChecks(benchmark).unknown /
                                     benchmarkChecks(benchmark).total) *
-                                100
+                                    100 || 0
                             ).toFixed(2)}%)`}</Text>
                         </Flex>
                     </Flex>
