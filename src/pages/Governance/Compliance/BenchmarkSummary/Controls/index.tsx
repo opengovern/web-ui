@@ -1,8 +1,12 @@
 import {
+    Accordion,
+    AccordionBody,
+    AccordionHeader,
     Badge,
-    Button,
     Card,
+    Col,
     Flex,
+    Grid,
     Table,
     TableBody,
     TableCell,
@@ -16,7 +20,6 @@ import { useState } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../api/compliance.gen'
-import ControlList from './ControlList'
 
 interface IPolicies {
     id: string | undefined
@@ -29,10 +32,10 @@ export const severityBadge = (severity: any) => {
         width: '64px',
     }
     if (severity) {
-        if (severity === 'none') {
+        if (severity === 'unknown') {
             return (
                 <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>
-                    None
+                    Unknown
                 </Badge>
             )
         }
@@ -70,125 +73,155 @@ export const severityBadge = (severity: any) => {
             </Badge>
         )
     }
-    return ''
+    return (
+        <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>Unknown</Badge>
+    )
 }
 
-// const rows = (json: any) => {
-//     let arr: any = []
-//     let path = ''
-//     if (json) {
-//         path += `${json.title}/`
-//         if (json.policies !== null && json.policies !== undefined) {
-//             for (let i = 0; i < json.policies.length; i += 1) {
-//                 let obj = {}
-//                 obj = {
-//                     path: path + json.policies[i].title,
-//                     ...json.policies[i],
-//                 }
-//                 arr.push(obj)
-//             }
-//         }
-//         if (json.children !== null && json.children !== undefined) {
-//             for (let i = 0; i < json.children.length; i += 1) {
-//                 const res = rows(json.children[i])
-//                 arr = arr.concat(res)
-//             }
-//         }
-//     }
-//     if (arr.length) {
-//         return arr.sort((a: any, b: any) => {
-//             if (a.path < b.path) {
-//                 return -1
-//             }
-//             if (a.path > b.path) {
-//                 return 1
-//             }
-//             return 0
-//         })
-//     }
-//
-//     return arr
-// }
+const rows = (json: any) => {
+    let arr: any = []
+    if (json) {
+        if (json.control !== null && json.control !== undefined) {
+            for (let i = 0; i < json.control.length; i += 1) {
+                let obj = {}
+                obj = {
+                    parentName: json.benchmark.title,
+                    ...json.control[i].control,
+                    ...json.control[i],
+                }
+                arr.push(obj)
+            }
+        }
+        if (json.children !== null && json.children !== undefined) {
+            for (let i = 0; i < json.children.length; i += 1) {
+                const res = rows(json.children[i])
+                arr = arr.concat(res)
+            }
+        }
+    }
+    if (arr.length) {
+        return arr.sort((a: any, b: any) => {
+            if (a.path < b.path) {
+                return -1
+            }
+            if (a.path > b.path) {
+                return 1
+            }
+            return 0
+        })
+    }
+
+    return arr
+}
+
+const groupBy = (input: any[], key: string) => {
+    return input.reduce((acc, currentValue) => {
+        const groupKey = currentValue[key]
+        if (!acc[groupKey]) {
+            acc[groupKey] = []
+        }
+        acc[groupKey].push(currentValue)
+        return acc
+    }, {})
+}
 
 export default function Controls({ id }: IPolicies) {
-    const [open, setOpen] = useState(false)
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
-    console.log(controls)
 
     return (
-        <Card className="max-w-full">
-            {/* <Flex className="mb-3">
-                <Flex justifyContent="start" className="gap-2">
-                    <Title className="font-semibold">Confidentiality</Title>
-                    <Text>{`${controls?.filter((c) => c.passed).length}/${
-                        controls?.length
-                    } passed rules`}</Text>
-                </Flex>
-                <Button
-                    variant="light"
-                    icon={ChevronRightIcon}
-                    iconPosition="right"
-                    onClick={() => setOpen(true)}
-                >
-                    {`${(controls?.length || 10) - 10} more`}
-                </Button>
-            </Flex>
-            <Table className="max-w-full">
-                <TableHead className="max-w-full">
-                    <TableRow className="max-w-full">
-                        <TableHeaderCell className="w-24">
-                            Control
-                        </TableHeaderCell>
-                        <TableHeaderCell>Title</TableHeaderCell>
-                        <TableHeaderCell className="w-40">
-                            Passed resources
-                        </TableHeaderCell>
-                        <TableHeaderCell className="w-5" />
-                    </TableRow>
-                </TableHead>
-                <TableBody className="max-w-full">
-                    {controls?.map(
-                        (p, i) =>
-                            i < 10 && (
-                                <TableRow
-                                    className="max-w-full cursor-pointer hover:bg-kaytu-50"
-                                    key={`${p.control?.id || i}`}
-                                    onClick={() =>
-                                        navigate(String(p.control?.id))
-                                    }
-                                >
-                                    <TableCell>{i + 1}</TableCell>
-                                    <TableCell>
-                                        <Flex
-                                            justifyContent="start"
-                                            className="gap-4"
-                                        >
-                                            {severityBadge(p.control?.severity)}
-                                            <Text>{p.control?.title}</Text>
-                                        </Flex>
-                                    </TableCell>
-                                    <TableCell>
-                                        {`${
-                                            (p?.totalResourcesCount || 0) -
-                                            (p?.failedResourcesCount || 0)
-                                        }/${p?.totalResourcesCount || 0}`}
-                                    </TableCell>
-                                    <TableCell>
-                                        <ChevronRightIcon className="h-5 text-kaytu-500" />
-                                    </TableCell>
-                                </TableRow>
-                            )
-                    )}
-                </TableBody>
-            </Table>
-            <ControlList
-                controls={controls}
-                open={open}
-                onClose={() => setOpen(false)}
-                isLoading={isLoading}
-            /> */}
-        </Card>
+        <Flex flexDirection="col" className="gap-4">
+            {Object.entries(groupBy(rows(controls), 'parentName'))?.map(
+                ([name, value]: any[]) => (
+                    <Card>
+                        <Accordion
+                            defaultOpen
+                            className="bg-transparent border-0"
+                        >
+                            <AccordionHeader className="pl-0 pr-0.5 py-2 w-full bg-transparent">
+                                <Flex>
+                                    <Flex
+                                        justifyContent="start"
+                                        className="gap-2"
+                                    >
+                                        <Title className="font-semibold">
+                                            {name}
+                                        </Title>
+                                        <Text>{`${
+                                            value?.filter((c: any) => c.passed)
+                                                .length
+                                        }/${value?.length} passed rules`}</Text>
+                                    </Flex>
+                                </Flex>
+                            </AccordionHeader>
+                            <AccordionBody className="p-0">
+                                <Table className="max-w-full">
+                                    <TableHead className="max-w-full">
+                                        <TableRow className="max-w-full">
+                                            <TableHeaderCell className="w-24">
+                                                Control
+                                            </TableHeaderCell>
+                                            <TableHeaderCell>
+                                                Title
+                                            </TableHeaderCell>
+                                            <TableHeaderCell className="w-40">
+                                                Passed resources
+                                            </TableHeaderCell>
+                                            <TableHeaderCell className="w-5" />
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody className="max-w-full">
+                                        {value.map((v: any, i: number) => (
+                                            <TableRow
+                                                className="max-w-full cursor-pointer hover:bg-kaytu-50"
+                                                key={v?.id}
+                                                onClick={() =>
+                                                    navigate(String(v?.id))
+                                                }
+                                            >
+                                                <TableCell className="w-24 min-w-[96px]">{`${name.substring(
+                                                    0,
+                                                    name.indexOf(' ')
+                                                )}.${i + 1}`}</TableCell>
+                                                <TableCell>
+                                                    <Grid
+                                                        numItems={10}
+                                                        className="w-full"
+                                                    >
+                                                        {severityBadge(
+                                                            v?.severity
+                                                        )}
+                                                        <Col numColSpan={9}>
+                                                            <Text className="truncate">
+                                                                {v?.title}
+                                                            </Text>
+                                                        </Col>
+                                                    </Grid>
+                                                </TableCell>
+                                                <TableCell className="w-40 min-w-[160px]">
+                                                    {`${
+                                                        (v?.totalResourcesCount ||
+                                                            0) -
+                                                        (v?.failedResourcesCount ||
+                                                            0)
+                                                    }/${
+                                                        v?.totalResourcesCount ||
+                                                        0
+                                                    }`}
+                                                </TableCell>
+                                                <TableCell className="w-5 min-w-[20px]">
+                                                    <ChevronRightIcon className="h-5 text-kaytu-500" />
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </AccordionBody>
+                        </Accordion>
+                    </Card>
+                )
+            )}
+        </Flex>
     )
 }
