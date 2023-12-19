@@ -5,6 +5,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
@@ -743,6 +744,8 @@ export const useComplianceApiV1BenchmarksSummaryList = (
         tag?: string[]
 
         timeAt?: number
+
+        topAccountCount?: number
     },
     params: RequestParams = {},
     autoExecute = true
@@ -847,7 +850,7 @@ export const useComplianceApiV1BenchmarksSummaryList = (
 interface IuseComplianceApiV1BenchmarksControlsDetailState {
     isLoading: boolean
     isExecuted: boolean
-    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[]
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error?: any
 }
@@ -1107,6 +1110,8 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
         connector?: ('' | 'AWS' | 'Azure')[]
 
         timeAt?: number
+
+        topAccountCount?: number
     },
     params: RequestParams = {},
     autoExecute = true
@@ -1344,8 +1349,9 @@ interface IuseComplianceApiV1ControlsSummaryListState {
 }
 
 export const useComplianceApiV1ControlsSummaryList = (
-    controlId?: string[],
     query?: {
+        controlId?: string[]
+
         connectionId?: string[]
 
         connectionGroup?: string[]
@@ -1365,7 +1371,7 @@ export const useComplianceApiV1ControlsSummaryList = (
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([controlId, query, params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1388,7 +1394,7 @@ export const useComplianceApiV1ControlsSummaryList = (
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.compliance
-                .apiV1ControlsSummaryList(controlId, query, paramsSignal)
+                .apiV1ControlsSummaryList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1424,8 +1430,8 @@ export const useComplianceApiV1ControlsSummaryList = (
         }
     }
 
-    if (JSON.stringify([controlId, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([controlId, query, params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
