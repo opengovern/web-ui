@@ -28,6 +28,7 @@ import ComplianceCard, {
 import Header from '../../../components/Header'
 import Table, { IColumn } from '../../../components/Table'
 import { numberDisplay } from '../../../utilities/numericDisplay'
+import ComplianceListCard from '../../../components/Cards/ComplianceListCard'
 
 export const benchmarkList = (ben: any) => {
     const connected: any[] = []
@@ -240,7 +241,6 @@ const notActiveColumns: IColumn<any, any>[] = [
 
 export default function Compliance() {
     const [selectedProvider, setSelectedProvider] = useState('')
-    const [selectedCategory, setSelectedCategory] = useState('')
     const [index, setIndex] = useState(0)
 
     const navigate = useNavigate()
@@ -337,39 +337,7 @@ export default function Compliance() {
                     ) : // eslint-disable-next-line no-nested-ternary
                     error === undefined ? (
                         index === 1 ? (
-                            <Table
-                                id="connected_compliance"
-                                rowData={benchmarkList(
-                                    benchmarks?.benchmarkSummary
-                                )
-                                    .connected?.sort(
-                                        (a, b) =>
-                                            (b?.checks?.passedCount || 0) -
-                                            (a?.checks?.passedCount || 0)
-                                    )
-                                    .filter((bm) =>
-                                        selectedProvider.length
-                                            ? bm?.tags?.service?.includes(
-                                                  selectedProvider
-                                              )
-                                            : bm
-                                    )
-                                    .filter((bm) =>
-                                        selectedCategory.length
-                                            ? bm?.tags?.kaytu_category?.includes(
-                                                  selectedCategory
-                                              )
-                                            : bm
-                                    )}
-                                columns={activeColumns}
-                                onRowClicked={(event) => {
-                                    if (event.data) {
-                                        navigate(event.data.id)
-                                    }
-                                }}
-                            />
-                        ) : (
-                            <Grid numItems={3} className="w-full gap-4">
+                            <Grid className="w-full gap-4">
                                 {benchmarkList(benchmarks?.benchmarkSummary)
                                     .connected?.sort(
                                         (a, b) =>
@@ -383,10 +351,28 @@ export default function Compliance() {
                                               )
                                             : bm
                                     )
+                                    .map(
+                                        (
+                                            bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                                        ) => (
+                                            <ComplianceListCard
+                                                benchmark={bm}
+                                            />
+                                        )
+                                    )}
+                            </Grid>
+                        ) : (
+                            <Grid numItems={3} className="w-full gap-4">
+                                {benchmarkList(benchmarks?.benchmarkSummary)
+                                    .connected?.sort(
+                                        (a, b) =>
+                                            (b?.checks?.passedCount || 0) -
+                                            (a?.checks?.passedCount || 0)
+                                    )
                                     .filter((bm) =>
-                                        selectedCategory.length
-                                            ? bm?.tags?.kaytu_category?.includes(
-                                                  selectedCategory
+                                        selectedProvider.length
+                                            ? bm?.tags?.service?.includes(
+                                                  selectedProvider
                                               )
                                             : bm
                                     )
@@ -413,41 +399,7 @@ export default function Compliance() {
                     ) : // eslint-disable-next-line no-nested-ternary
                     error === undefined ? (
                         index === 1 ? (
-                            <Table
-                                id="not_connected_compliance"
-                                rowData={benchmarkList(
-                                    benchmarks?.benchmarkSummary
-                                )
-                                    .notConnected?.sort(
-                                        (a, b) =>
-                                            (b?.checks?.passedCount || 0) -
-                                            (a?.checks?.passedCount || 0)
-                                    )
-                                    .filter((bm) =>
-                                        selectedProvider.length
-                                            ? bm?.tags?.service?.includes(
-                                                  selectedProvider
-                                              )
-                                            : bm
-                                    )
-                                    .filter((bm) =>
-                                        selectedCategory.length
-                                            ? bm?.tags?.kaytu_category?.includes(
-                                                  selectedCategory
-                                              )
-                                            : bm
-                                    )}
-                                columns={notActiveColumns}
-                                onRowClicked={(event) => {
-                                    if (event.data) {
-                                        navigate(
-                                            `${event.data.id}/details#assignments`
-                                        )
-                                    }
-                                }}
-                            />
-                        ) : (
-                            <Grid numItems={3} className="w-full gap-4">
+                            <Grid className="w-full gap-4">
                                 {benchmarkList(benchmarks?.benchmarkSummary)
                                     .notConnected?.sort(
                                         (a, b) =>
@@ -461,10 +413,28 @@ export default function Compliance() {
                                               )
                                             : bm
                                     )
+                                    .map(
+                                        (
+                                            bm: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
+                                        ) => (
+                                            <ComplianceListCard
+                                                benchmark={bm}
+                                            />
+                                        )
+                                    )}
+                            </Grid>
+                        ) : (
+                            <Grid numItems={3} className="w-full gap-4">
+                                {benchmarkList(benchmarks?.benchmarkSummary)
+                                    .notConnected?.sort(
+                                        (a, b) =>
+                                            (b?.checks?.passedCount || 0) -
+                                            (a?.checks?.passedCount || 0)
+                                    )
                                     .filter((bm) =>
-                                        selectedCategory.length
-                                            ? bm?.tags?.kaytu_category?.includes(
-                                                  selectedCategory
+                                        selectedProvider.length
+                                            ? bm?.tags?.service?.includes(
+                                                  selectedProvider
                                               )
                                             : bm
                                     )
