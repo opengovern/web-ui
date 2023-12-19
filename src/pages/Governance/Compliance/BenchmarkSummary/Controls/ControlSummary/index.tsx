@@ -63,11 +63,21 @@ const topAccounts = (
     if (input && input.records) {
         for (let i = 0; i < input.records.length; i += 1) {
             top.data.push({
-                kaytuId: input.records[i].connection?.id,
-                name: input.records[i].connection?.providerConnectionName,
-                value: input.records[i].connection?.resourceCount,
-                connector: input.records[i].connection?.connector,
-                id: input.records[i].connection?.providerConnectionID,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                kaytuId: input.records[i].Connection?.id,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                name: input.records[i].Connection?.providerConnectionName,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                value: input.records[i].Connection?.resourceCount,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                connector: input.records[i].Connection?.connector,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                id: input.records[i].Connection?.providerConnectionID,
             })
         }
         top.total = input.totalCount
@@ -198,7 +208,7 @@ export default function ControlDetail() {
                                         Control detail
                                     </Title>
                                     <List>
-                                        <ListItem>
+                                        <ListItem className="my-2">
                                             <Text>Control ID</Text>
                                             <Flex className="gap-1 w-fit">
                                                 <Button
@@ -220,7 +230,7 @@ export default function ControlDetail() {
                                                 </Text>
                                             </Flex>
                                         </ListItem>
-                                        <ListItem>
+                                        <ListItem className="my-3">
                                             <Text>Resource type</Text>
                                             <Flex className="gap-1 w-fit">
                                                 <Button
@@ -246,13 +256,13 @@ export default function ControlDetail() {
                                                 </Text>
                                             </Flex>
                                         </ListItem>
-                                        <ListItem>
+                                        <ListItem className="my-3">
                                             <Text>Severity</Text>
                                             {severityBadge(
                                                 controlDetail?.control?.severity
                                             )}
                                         </ListItem>
-                                        <ListItem>
+                                        <ListItem className="my-3">
                                             <Text># of findings</Text>
                                             <Text className="text-gray-800">
                                                 {
@@ -260,7 +270,7 @@ export default function ControlDetail() {
                                                 }
                                             </Text>
                                         </ListItem>
-                                        <ListItem>
+                                        <ListItem className="my-3">
                                             <Text>Last updated</Text>
                                             <Text className="text-gray-800">
                                                 {dateTimeDisplay(

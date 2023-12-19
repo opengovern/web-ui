@@ -44,7 +44,7 @@ export default function Controls({ id }: IFinder) {
     }
     const { response: controls, isLoading } =
         useComplianceApiV1FindingsTopDetail('controlID', 10000, topQuery)
-    console.log(rows(controls?.records))
+
     return (
         <Table
             id="compliance_policies"

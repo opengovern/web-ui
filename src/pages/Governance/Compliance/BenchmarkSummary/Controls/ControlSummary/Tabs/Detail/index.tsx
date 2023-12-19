@@ -1,6 +1,6 @@
-import { Card, Flex, Subtitle, Text } from '@tremor/react'
+import { Flex, Text } from '@tremor/react'
 import { useState } from 'react'
-import parse from 'html-react-parser'
+import Markdown from 'react-markdown'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControl } from '../../../../../../../../api/api'
 
 interface IDetail {
@@ -19,7 +19,7 @@ export default function Detail({ control }: IDetail) {
                         type="button"
                         onClick={() => setSelectedTab('explanation')}
                     >
-                        <Subtitle
+                        <Text
                             className={`text-gray-500 cursor-pointer ${
                                 selectedTab === 'explanation'
                                     ? 'text-kaytu-500'
@@ -27,7 +27,7 @@ export default function Detail({ control }: IDetail) {
                             }`}
                         >
                             Explanation
-                        </Subtitle>
+                        </Text>
                     </button>
                 )}
                 {!!control?.nonComplianceCost && (
@@ -35,7 +35,7 @@ export default function Detail({ control }: IDetail) {
                         type="button"
                         onClick={() => setSelectedTab('nonComplianceCost')}
                     >
-                        <Subtitle
+                        <Text
                             className={`text-gray-500 cursor-pointer ${
                                 selectedTab === 'nonComplianceCost'
                                     ? 'text-kaytu-500'
@@ -43,7 +43,7 @@ export default function Detail({ control }: IDetail) {
                             }`}
                         >
                             Cost of non-compliance
-                        </Subtitle>
+                        </Text>
                     </button>
                 )}
                 {!!control?.usefulExample && (
@@ -51,7 +51,7 @@ export default function Detail({ control }: IDetail) {
                         type="button"
                         onClick={() => setSelectedTab('usefulExample')}
                     >
-                        <Subtitle
+                        <Text
                             className={`text-gray-500 cursor-pointer ${
                                 selectedTab === 'usefulExample'
                                     ? 'text-kaytu-500'
@@ -59,7 +59,7 @@ export default function Detail({ control }: IDetail) {
                             }`}
                         >
                             Examples of usefulness
-                        </Subtitle>
+                        </Text>
                     </button>
                 )}
             </Flex>
@@ -67,9 +67,7 @@ export default function Detail({ control }: IDetail) {
                 className="pl-8 border-l border-l-gray-200"
                 style={{ width: 'calc(100% - 224px)' }}
             >
-                <Subtitle className="text-gray-800">
-                    {parse(control?.[selectedTab] || '')}
-                </Subtitle>
+                <Markdown>{control?.[selectedTab]}</Markdown>
             </div>
         </Flex>
     )
