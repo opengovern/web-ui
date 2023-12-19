@@ -76,6 +76,10 @@ function Metric({ title, metricId, min, max }: IMetric) {
             return
         }
 
+        if (value === '' || value === response?.value) {
+            return
+        }
+
         if (timer !== undefined && timer !== null) {
             clearTimeout(timer)
         }
