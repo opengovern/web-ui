@@ -109,7 +109,9 @@ export default function BenchmarkSummary() {
     const { benchmarkId, resourceId } = useParams()
     const selectedConnections = useAtomValue(filterAtom)
     const [stateIndex, setStateIndex] = useState(0)
-    const [type, setType] = useState<'accounts' | 'services'>('accounts')
+    const [type, setType] = useState<'accounts' | 'services' | 'controls'>(
+        'accounts'
+    )
     const [openTop, setOpenTop] = useState(false)
 
     const topQuery = {
@@ -362,7 +364,7 @@ export default function BenchmarkSummary() {
                                             .critical /
                                             benchmarkChecks(benchmarkDetail)
                                                 .total) *
-                                        100
+                                            100 || 0
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                                 <Flex className="w-fit gap-1">
@@ -377,7 +379,7 @@ export default function BenchmarkSummary() {
                                         (benchmarkChecks(benchmarkDetail).high /
                                             benchmarkChecks(benchmarkDetail)
                                                 .total) *
-                                        100
+                                            100 || 0
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                                 <Flex className="w-fit gap-1">
@@ -393,7 +395,7 @@ export default function BenchmarkSummary() {
                                             .medium /
                                             benchmarkChecks(benchmarkDetail)
                                                 .total) *
-                                        100
+                                            100 || 0
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                                 <Flex className="w-fit gap-1">
@@ -408,7 +410,7 @@ export default function BenchmarkSummary() {
                                         (benchmarkChecks(benchmarkDetail).low /
                                             benchmarkChecks(benchmarkDetail)
                                                 .total) *
-                                        100
+                                            100 || 0
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                                 <Flex className="w-fit gap-1">
@@ -424,7 +426,7 @@ export default function BenchmarkSummary() {
                                             .passed /
                                             benchmarkChecks(benchmarkDetail)
                                                 .total) *
-                                        100
+                                            100 || 0
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                                 <Flex className="w-fit gap-1">
@@ -440,7 +442,7 @@ export default function BenchmarkSummary() {
                                             .unknown /
                                             benchmarkChecks(benchmarkDetail)
                                                 .total) *
-                                        100
+                                            100 || 0
                                     ).toFixed(2)}%)`}</Text>
                                 </Flex>
                             </Flex>
@@ -451,18 +453,12 @@ export default function BenchmarkSummary() {
                                     type="button"
                                     onClick={() => setOpenTop(true)}
                                 >
-                                    {stateIndex === 0 || stateIndex === 2 ? (
-                                        <Flex className="gap-1.5">
-                                            <Title className="font-semibold">
-                                                Top
-                                            </Title>
-                                            <ChevronRightIcon className="h-4 text-kaytu-500" />
-                                        </Flex>
-                                    ) : (
+                                    <Flex className="gap-1.5">
                                         <Title className="font-semibold">
                                             Top
                                         </Title>
-                                    )}
+                                        <ChevronRightIcon className="h-4 text-kaytu-500" />
+                                    </Flex>
                                 </button>
                                 <TabGroup
                                     className="w-fit"
@@ -475,7 +471,11 @@ export default function BenchmarkSummary() {
                                         >
                                             Cloud accounts
                                         </Tab>
-                                        <Tab>Controls</Tab>
+                                        <Tab
+                                            onClick={() => setType('controls')}
+                                        >
+                                            Controls
+                                        </Tab>
                                         <Tab
                                             onClick={() => setType('services')}
                                         >

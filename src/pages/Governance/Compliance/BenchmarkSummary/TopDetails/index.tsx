@@ -2,12 +2,13 @@ import { IFilter } from '../../../../../store'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import CloudAccounts from './CloudAccounts'
 import Services from './Services'
+import Controls from './Controls'
 
 interface ITop {
     open: boolean
     onClose: () => void
     id: string | undefined
-    type: 'services' | 'accounts'
+    type: 'services' | 'accounts' | 'controls'
     connections: IFilter
     resourceId: string | undefined
 }
@@ -37,6 +38,8 @@ export default function TopDetails({
                         resourceId={resourceId}
                     />
                 )
+            case 'controls':
+                return <Controls id={id} />
             default:
                 return (
                     <CloudAccounts
