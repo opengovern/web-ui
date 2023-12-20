@@ -141,21 +141,23 @@ export default function Controls({ id }: IPolicies) {
                         >
                             <AccordionHeader className="pl-0 pr-0.5 py-2 w-full bg-transparent">
                                 <Flex>
-                                    <Flex
-                                        justifyContent="start"
-                                        className="gap-2"
-                                    >
+                                    <Flex>
                                         <Title className="font-semibold">
                                             {name}
                                         </Title>
-                                        <Text>{`${
-                                            value?.filter((c: any) => c.passed)
-                                                .length
-                                        }/${value?.length} passed rules`}</Text>
+                                        <div style={{ minWidth: '225px' }}>
+                                            <Text>{`${
+                                                value?.filter(
+                                                    (c: any) => c.passed
+                                                ).length
+                                            }/${
+                                                value?.length
+                                            } passed rules`}</Text>
+                                        </div>
                                     </Flex>
                                 </Flex>
                             </AccordionHeader>
-                            <AccordionBody className="p-0">
+                            <AccordionBody className="p-0 pt-4">
                                 <Table className="max-w-full">
                                     <TableHead className="max-w-full">
                                         <TableRow className="max-w-full">
