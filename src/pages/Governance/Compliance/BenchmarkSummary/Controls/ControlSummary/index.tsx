@@ -16,7 +16,10 @@ import {
 } from '@tremor/react'
 import {
     ChevronRightIcon,
+    Cog8ToothIcon,
+    CommandLineIcon,
     DocumentDuplicateIcon,
+    FolderIcon,
     Square2StackIcon,
 } from '@heroicons/react/24/outline'
 import { useSetAtom } from 'jotai/index'
@@ -156,7 +159,7 @@ export default function ControlDetail() {
                                         Control detail
                                     </Title>
                                     <List>
-                                        <ListItem className="my-2">
+                                        <ListItem>
                                             <Text>Control ID</Text>
                                             <Flex className="gap-1 w-fit">
                                                 <Button
@@ -178,7 +181,7 @@ export default function ControlDetail() {
                                                 </Text>
                                             </Flex>
                                         </ListItem>
-                                        <ListItem className="my-3">
+                                        <ListItem>
                                             <Text>Resource type</Text>
                                             <Flex className="gap-1 w-fit">
                                                 <Button
@@ -204,13 +207,13 @@ export default function ControlDetail() {
                                                 </Text>
                                             </Flex>
                                         </ListItem>
-                                        <ListItem className="my-3">
+                                        <ListItem>
                                             <Text>Severity</Text>
                                             {severityBadge(
                                                 controlDetail?.control?.severity
                                             )}
                                         </ListItem>
-                                        <ListItem className="my-3">
+                                        <ListItem>
                                             <Text># of findings</Text>
                                             <Text className="text-gray-800">
                                                 {
@@ -218,7 +221,7 @@ export default function ControlDetail() {
                                                 }
                                             </Text>
                                         </ListItem>
-                                        <ListItem className="my-3">
+                                        <ListItem>
                                             <Text>Last updated</Text>
                                             <Text className="text-gray-800">
                                                 {dateTimeDisplay(
@@ -241,6 +244,56 @@ export default function ControlDetail() {
                                 </Flex>
                             </Flex>
                         </Card>
+                        <Grid numItems={2} className="w-full gap-4">
+                            <Card>
+                                <FolderIcon className="w-6" />
+                                <Title className="font-semibold mt-2">
+                                    Manual
+                                </Title>
+                                <Flex>
+                                    <Text>Remediation</Text>
+                                    <Button
+                                        variant="light"
+                                        icon={ChevronRightIcon}
+                                        iconPosition="right"
+                                    >
+                                        See more
+                                    </Button>
+                                </Flex>
+                            </Card>
+                            <Card>
+                                <CommandLineIcon className="w-6" />
+                                <Title className="font-semibold mt-2">
+                                    Command line (CLI)
+                                </Title>
+                                <Flex>
+                                    <Text>Remediation</Text>
+                                    <Button
+                                        variant="light"
+                                        icon={ChevronRightIcon}
+                                        iconPosition="right"
+                                    >
+                                        See more
+                                    </Button>
+                                </Flex>
+                            </Card>
+                            <Card>
+                                <Cog8ToothIcon className="w-6" />
+                                <Title className="font-semibold mt-2">
+                                    Guard rails
+                                </Title>
+                                <Flex>
+                                    <Text>Remediation</Text>
+                                    <Button
+                                        variant="light"
+                                        icon={ChevronRightIcon}
+                                        iconPosition="right"
+                                    >
+                                        See more
+                                    </Button>
+                                </Flex>
+                            </Card>
+                        </Grid>
                     </Grid>
                     <TabGroup>
                         <TabList>
