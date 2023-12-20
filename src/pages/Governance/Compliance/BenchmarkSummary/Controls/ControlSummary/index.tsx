@@ -43,6 +43,7 @@ import {
     SourceType,
 } from '../../../../../../api/api'
 import ListCard from '../../../../../../components/Cards/ListCard'
+import ImpactedAccounts from './Tabs/ImpactedAccounts'
 
 const topAccounts = (
     input:
@@ -304,6 +305,7 @@ export default function ControlDetail() {
                         <TabList>
                             <Tab disabled>Take action</Tab>
                             <Tab>Impacted resources</Tab>
+                            <Tab>Impacted accounts</Tab>
                             <Tab>Benchmarks</Tab>
                             <Tab>Details</Tab>
                         </TabList>
@@ -311,6 +313,11 @@ export default function ControlDetail() {
                             <TabPanel>hi</TabPanel>
                             <TabPanel>
                                 <ImpactedResources
+                                    controlId={controlDetail?.control?.id}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <ImpactedAccounts
                                     controlId={controlDetail?.control?.id}
                                 />
                             </TabPanel>
