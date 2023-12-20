@@ -37,7 +37,6 @@ import Spinner from '../../../../../../components/Spinner'
 import Detail from './Tabs/Detail'
 import ImpactedResources from './Tabs/ImpactedResources'
 import Benchmarks from './Tabs/Benchmarks'
-import Trend from './Tabs/Trend'
 import Modal from '../../../../../../components/Modal'
 import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
@@ -304,15 +303,16 @@ export default function ControlDetail() {
                     <TabGroup>
                         <TabList>
                             <Tab disabled>Take action</Tab>
-                            <Tab>Trend line</Tab>
+                            <Tab>Impacted resources</Tab>
                             <Tab>Benchmarks</Tab>
                             <Tab>Details</Tab>
-                            <Tab>Impacted resources</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>hi</TabPanel>
                             <TabPanel>
-                                <Trend controlId={controlDetail?.control?.id} />
+                                <ImpactedResources
+                                    controlId={controlDetail?.control?.id}
+                                />
                             </TabPanel>
                             <TabPanel>
                                 <Benchmarks
@@ -321,11 +321,6 @@ export default function ControlDetail() {
                             </TabPanel>
                             <TabPanel>
                                 <Detail control={controlDetail?.control} />
-                            </TabPanel>
-                            <TabPanel>
-                                <ImpactedResources
-                                    controlId={controlDetail?.control?.id}
-                                />
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>
