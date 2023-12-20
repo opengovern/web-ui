@@ -25,10 +25,7 @@ import { useState } from 'react'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
 import Layout from '../../../../../../components/Layout'
-import {
-    useComplianceApiV1ControlsSummaryDetail,
-    useComplianceApiV1FindingsTopDetail,
-} from '../../../../../../api/compliance.gen'
+import { useComplianceApiV1ControlsSummaryDetail } from '../../../../../../api/compliance.gen'
 import Header from '../../../../../../components/Header'
 import { notificationAtom, queryAtom } from '../../../../../../store'
 import { severityBadge } from '../index'
@@ -38,52 +35,7 @@ import Detail from './Tabs/Detail'
 import ImpactedResources from './Tabs/ImpactedResources'
 import Benchmarks from './Tabs/Benchmarks'
 import Modal from '../../../../../../components/Modal'
-import {
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    SourceType,
-} from '../../../../../../api/api'
-import ListCard from '../../../../../../components/Cards/ListCard'
 import ImpactedAccounts from './Tabs/ImpactedAccounts'
-
-const topAccounts = (
-    input:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
-        | undefined
-) => {
-    const top: {
-        data: {
-            name: string | undefined
-            value: number | undefined
-            connector: SourceType | undefined
-            id: string | undefined
-            kaytuId: string | undefined
-        }[]
-        total: number | undefined
-    } = { data: [], total: 0 }
-    if (input && input.records) {
-        for (let i = 0; i < input.records.length; i += 1) {
-            top.data.push({
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                kaytuId: input.records[i].Connection?.id,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                name: input.records[i].Connection?.providerConnectionName,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                value: input.records[i].Connection?.resourceCount,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                connector: input.records[i].Connection?.connector,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                id: input.records[i].Connection?.providerConnectionID,
-            })
-        }
-        top.total = input.totalCount
-    }
-    return top
-}
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
@@ -95,10 +47,6 @@ export default function ControlDetail() {
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
-    const { response: accounts, isLoading: accountsLoading } =
-        useComplianceApiV1FindingsTopDetail('connectionID', 5, {
-            controlId: [String(controlId)],
-        })
 
     return (
         <Layout currentPage="compliance">
@@ -293,24 +241,15 @@ export default function ControlDetail() {
                                 </Flex>
                             </Flex>
                         </Card>
-                        <ListCard
-                            title="Top Cloud Accounts"
-                            loading={accountsLoading}
-                            items={topAccounts(accounts)}
-                            type="account"
-                            isClickable={false}
-                        />
                     </Grid>
                     <TabGroup>
                         <TabList>
-                            <Tab disabled>Take action</Tab>
                             <Tab>Impacted resources</Tab>
                             <Tab>Impacted accounts</Tab>
+                            <Tab>Control information</Tab>
                             <Tab>Benchmarks</Tab>
-                            <Tab>Details</Tab>
                         </TabList>
                         <TabPanels>
-                            <TabPanel>hi</TabPanel>
                             <TabPanel>
                                 <ImpactedResources
                                     controlId={controlDetail?.control?.id}
@@ -322,12 +261,12 @@ export default function ControlDetail() {
                                 />
                             </TabPanel>
                             <TabPanel>
+                                <Detail control={controlDetail?.control} />
+                            </TabPanel>
+                            <TabPanel>
                                 <Benchmarks
                                     benchmarks={controlDetail?.benchmarks}
                                 />
-                            </TabPanel>
-                            <TabPanel>
-                                <Detail control={controlDetail?.control} />
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>
