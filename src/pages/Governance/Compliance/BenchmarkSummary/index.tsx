@@ -202,12 +202,12 @@ export default function BenchmarkSummary() {
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-2"
+                            className="gap-2 w-2/3"
                         >
                             <Title className="font-semibold">
                                 {benchmarkDetail?.title}
                             </Title>
-                            <Text className="w-2/3">
+                            <Text className="w-full truncate">
                                 {benchmarkDetail?.description}
                             </Text>
                         </Flex>
