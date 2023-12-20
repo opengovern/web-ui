@@ -16,9 +16,12 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { useState } from 'react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
+import {
+    CheckCircleIcon,
+    InformationCircleIcon,
+} from '@heroicons/react/24/outline'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../api/compliance.gen'
 
 interface IPolicies {
@@ -145,15 +148,23 @@ export default function Controls({ id }: IPolicies) {
                                         <Title className="font-semibold">
                                             {name}
                                         </Title>
-                                        <div style={{ minWidth: '225px' }}>
-                                            <Text>{`${
+                                        <Flex
+                                            justifyContent="start"
+                                            className="gap-2"
+                                            style={{ width: '170px' }}
+                                        >
+                                            {value?.filter((c: any) => c.passed)
+                                                .length === value?.length ? (
+                                                <CheckCircleIcon className="w-5 text-emerald-500" />
+                                            ) : (
+                                                <InformationCircleIcon className="w-5 text-rose-900" />
+                                            )}
+                                            <Text className="font-semibold">{`Passed rules: ${
                                                 value?.filter(
                                                     (c: any) => c.passed
                                                 ).length
-                                            }/${
-                                                value?.length
-                                            } passed rules`}</Text>
-                                        </div>
+                                            }/${value?.length}`}</Text>
+                                        </Flex>
                                     </Flex>
                                 </Flex>
                             </AccordionHeader>
@@ -202,15 +213,38 @@ export default function Controls({ id }: IPolicies) {
                                                     </Grid>
                                                 </TableCell>
                                                 <TableCell className="w-40 min-w-[160px]">
-                                                    {`${
-                                                        (v?.totalResourcesCount ||
+                                                    <Flex
+                                                        justifyContent="start"
+                                                        className="gap-2"
+                                                    >
+                                                        {(v?.totalResourcesCount ||
                                                             0) -
-                                                        (v?.failedResourcesCount ||
-                                                            0)
-                                                    }/${
-                                                        v?.totalResourcesCount ||
-                                                        0
-                                                    }`}
+                                                            (v?.failedResourcesCount ||
+                                                                0) ===
+                                                        (v?.totalResourcesCount ||
+                                                            0) ? (
+                                                            <CheckCircleIcon className="w-5 text-emerald-500" />
+                                                        ) : (
+                                                            <InformationCircleIcon className="w-5 text-rose-900" />
+                                                        )}
+                                                        {`${
+                                                            (v?.totalResourcesCount ||
+                                                                0) -
+                                                            (v?.failedResourcesCount ||
+                                                                0)
+                                                        }/${
+                                                            v?.totalResourcesCount ||
+                                                            0
+                                                        } (${Math.round(
+                                                            (((v?.totalResourcesCount ||
+                                                                0) -
+                                                                (v?.failedResourcesCount ||
+                                                                    0)) /
+                                                                (v?.totalResourcesCount ||
+                                                                    1)) *
+                                                                100
+                                                        )}%)`}
+                                                    </Flex>
                                                 </TableCell>
                                                 <TableCell className="w-5 min-w-[20px]">
                                                     <ChevronRightIcon className="h-5 text-kaytu-500" />
