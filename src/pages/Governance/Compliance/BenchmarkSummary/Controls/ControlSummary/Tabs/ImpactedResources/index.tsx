@@ -17,6 +17,7 @@ let sortKey = ''
 interface IImpactedResources {
     controlId: string | undefined
 }
+
 export default function ImpactedResources({ controlId }: IImpactedResources) {
     const isDemo = useAtomValue(isDemoAtom)
     const setNotification = useSetAtom(notificationAtom)

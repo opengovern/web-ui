@@ -12,7 +12,7 @@ export default function Detail({ control }: IDetail) {
         'explanation' | 'nonComplianceCost' | 'usefulExample'
     >('explanation')
     return (
-        <Flex alignItems="start" className="mt-4">
+        <Flex alignItems="start" className="mt-6">
             <Flex flexDirection="col" alignItems="start" className="w-56 gap-3">
                 {!!control?.explanation && (
                     <button

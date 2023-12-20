@@ -16,7 +16,10 @@ import {
 } from '@tremor/react'
 import {
     ChevronRightIcon,
+    Cog8ToothIcon,
+    CommandLineIcon,
     DocumentDuplicateIcon,
+    FolderIcon,
     Square2StackIcon,
 } from '@heroicons/react/24/outline'
 import { useSetAtom } from 'jotai/index'
@@ -25,10 +28,7 @@ import { useState } from 'react'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
 import Layout from '../../../../../../components/Layout'
-import {
-    useComplianceApiV1ControlsSummaryDetail,
-    useComplianceApiV1FindingsTopDetail,
-} from '../../../../../../api/compliance.gen'
+import { useComplianceApiV1ControlsSummaryDetail } from '../../../../../../api/compliance.gen'
 import Header from '../../../../../../components/Header'
 import { notificationAtom, queryAtom } from '../../../../../../store'
 import { severityBadge } from '../index'
@@ -37,53 +37,8 @@ import Spinner from '../../../../../../components/Spinner'
 import Detail from './Tabs/Detail'
 import ImpactedResources from './Tabs/ImpactedResources'
 import Benchmarks from './Tabs/Benchmarks'
-import Trend from './Tabs/Trend'
 import Modal from '../../../../../../components/Modal'
-import {
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    SourceType,
-} from '../../../../../../api/api'
-import ListCard from '../../../../../../components/Cards/ListCard'
-
-const topAccounts = (
-    input:
-        | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
-        | undefined
-) => {
-    const top: {
-        data: {
-            name: string | undefined
-            value: number | undefined
-            connector: SourceType | undefined
-            id: string | undefined
-            kaytuId: string | undefined
-        }[]
-        total: number | undefined
-    } = { data: [], total: 0 }
-    if (input && input.records) {
-        for (let i = 0; i < input.records.length; i += 1) {
-            top.data.push({
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                kaytuId: input.records[i].Connection?.id,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                name: input.records[i].Connection?.providerConnectionName,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                value: input.records[i].Connection?.resourceCount,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                connector: input.records[i].Connection?.connector,
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                id: input.records[i].Connection?.providerConnectionID,
-            })
-        }
-        top.total = input.totalCount
-    }
-    return top
-}
+import ImpactedAccounts from './Tabs/ImpactedAccounts'
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
@@ -95,10 +50,6 @@ export default function ControlDetail() {
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
-    const { response: accounts, isLoading: accountsLoading } =
-        useComplianceApiV1FindingsTopDetail('connectionID', 5, {
-            controlId: [String(controlId)],
-        })
 
     return (
         <Layout currentPage="compliance">
@@ -208,7 +159,7 @@ export default function ControlDetail() {
                                         Control detail
                                     </Title>
                                     <List>
-                                        <ListItem className="my-2">
+                                        <ListItem>
                                             <Text>Control ID</Text>
                                             <Flex className="gap-1 w-fit">
                                                 <Button
@@ -230,7 +181,7 @@ export default function ControlDetail() {
                                                 </Text>
                                             </Flex>
                                         </ListItem>
-                                        <ListItem className="my-3">
+                                        <ListItem>
                                             <Text>Resource type</Text>
                                             <Flex className="gap-1 w-fit">
                                                 <Button
@@ -256,13 +207,13 @@ export default function ControlDetail() {
                                                 </Text>
                                             </Flex>
                                         </ListItem>
-                                        <ListItem className="my-3">
+                                        <ListItem>
                                             <Text>Severity</Text>
                                             {severityBadge(
                                                 controlDetail?.control?.severity
                                             )}
                                         </ListItem>
-                                        <ListItem className="my-3">
+                                        <ListItem>
                                             <Text># of findings</Text>
                                             <Text className="text-gray-800">
                                                 {
@@ -270,7 +221,7 @@ export default function ControlDetail() {
                                                 }
                                             </Text>
                                         </ListItem>
-                                        <ListItem className="my-3">
+                                        <ListItem>
                                             <Text>Last updated</Text>
                                             <Text className="text-gray-800">
                                                 {dateTimeDisplay(
@@ -293,38 +244,81 @@ export default function ControlDetail() {
                                 </Flex>
                             </Flex>
                         </Card>
-                        <ListCard
-                            title="Top Cloud Accounts"
-                            loading={accountsLoading}
-                            items={topAccounts(accounts)}
-                            type="account"
-                            isClickable={false}
-                        />
+                        <Grid numItems={2} className="w-full gap-4">
+                            <Card>
+                                <FolderIcon className="w-6" />
+                                <Title className="font-semibold mt-2">
+                                    Manual
+                                </Title>
+                                <Flex>
+                                    <Text>Remediation</Text>
+                                    <Button
+                                        variant="light"
+                                        icon={ChevronRightIcon}
+                                        iconPosition="right"
+                                    >
+                                        See more
+                                    </Button>
+                                </Flex>
+                            </Card>
+                            <Card>
+                                <CommandLineIcon className="w-6" />
+                                <Title className="font-semibold mt-2">
+                                    Command line (CLI)
+                                </Title>
+                                <Flex>
+                                    <Text>Remediation</Text>
+                                    <Button
+                                        variant="light"
+                                        icon={ChevronRightIcon}
+                                        iconPosition="right"
+                                    >
+                                        See more
+                                    </Button>
+                                </Flex>
+                            </Card>
+                            <Card>
+                                <Cog8ToothIcon className="w-6" />
+                                <Title className="font-semibold mt-2">
+                                    Guard rails
+                                </Title>
+                                <Flex>
+                                    <Text>Remediation</Text>
+                                    <Button
+                                        variant="light"
+                                        icon={ChevronRightIcon}
+                                        iconPosition="right"
+                                    >
+                                        See more
+                                    </Button>
+                                </Flex>
+                            </Card>
+                        </Grid>
                     </Grid>
                     <TabGroup>
                         <TabList>
-                            <Tab disabled>Take action</Tab>
-                            <Tab>Trend line</Tab>
-                            <Tab>Benchmarks</Tab>
-                            <Tab>Details</Tab>
                             <Tab>Impacted resources</Tab>
+                            <Tab>Impacted accounts</Tab>
+                            <Tab>Control information</Tab>
+                            <Tab>Benchmarks</Tab>
                         </TabList>
                         <TabPanels>
-                            <TabPanel>hi</TabPanel>
                             <TabPanel>
-                                <Trend controlId={controlDetail?.control?.id} />
+                                <ImpactedResources
+                                    controlId={controlDetail?.control?.id}
+                                />
                             </TabPanel>
                             <TabPanel>
-                                <Benchmarks
-                                    benchmarks={controlDetail?.benchmarks}
+                                <ImpactedAccounts
+                                    controlId={controlDetail?.control?.id}
                                 />
                             </TabPanel>
                             <TabPanel>
                                 <Detail control={controlDetail?.control} />
                             </TabPanel>
                             <TabPanel>
-                                <ImpactedResources
-                                    controlId={controlDetail?.control?.id}
+                                <Benchmarks
+                                    benchmarks={controlDetail?.benchmarks}
                                 />
                             </TabPanel>
                         </TabPanels>

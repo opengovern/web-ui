@@ -19,7 +19,7 @@ interface IConnections {
     resourceId?: string | undefined
 }
 
-const columns = (isDemo: boolean) => {
+export const cloudAccountColumns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'connector',
@@ -188,7 +188,7 @@ export default function CloudAccounts({
         <Table
             title="Cloud account list"
             id="asset_connection_table"
-            columns={columns(isDemo)}
+            columns={cloudAccountColumns(isDemo)}
             downloadable
             rowData={rowGenerator(accounts)
                 ?.sort(
