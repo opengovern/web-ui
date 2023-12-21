@@ -43,7 +43,6 @@ export default function FindingDetail({
             sendNow()
         }
     }, [finding])
-    console.log(response)
 
     return (
         <DrawerPanel
@@ -86,9 +85,7 @@ export default function FindingDetail({
             <TabGroup>
                 <TabList>
                     <Tab>Controls</Tab>
-                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                    {/* @ts-ignore */}
-                    <Tab disabled={!response?.Resource}>Resources</Tab>
+                    <Tab disabled={!response?.resource}>Resources</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
@@ -123,9 +120,7 @@ export default function FindingDetail({
                     <TabPanel>
                         <Title className="mb-2">JSON</Title>
                         <JSONPretty
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            json={response?.Resource}
+                            json={response?.resource}
                             className="border border-gray-200 rounded-md py-1.5 px-3 text-sm font-mono"
                             theme={{
                                 key: 'color:#2970BC;',
