@@ -215,11 +215,32 @@ export default function ControlDetail() {
                                         </ListItem>
                                         <ListItem>
                                             <Text># of findings</Text>
-                                            <Text className="text-gray-800">
-                                                {
-                                                    controlDetail?.totalResourcesCount
-                                                }
-                                            </Text>
+                                            <Flex className="gap-3 w-fit">
+                                                <Flex className="gap-1 w-fit">
+                                                    <Text className="text-gray-800">
+                                                        Passed:
+                                                    </Text>
+                                                    <Text className="text-emerald-500">
+                                                        {(controlDetail?.totalResourcesCount ||
+                                                            0) -
+                                                            (controlDetail?.failedResourcesCount ||
+                                                                0)}
+                                                    </Text>
+                                                </Flex>
+                                                <Flex className="gap-1 w-fit">
+                                                    <Text className="text-gray-800">
+                                                        Failed:
+                                                    </Text>
+                                                    <Text className="text-rose-600">
+                                                        {
+                                                            controlDetail?.failedResourcesCount
+                                                        }
+                                                    </Text>
+                                                </Flex>
+                                                <Text className="text-gray-800">
+                                                    {`Total: ${controlDetail?.totalResourcesCount}`}
+                                                </Text>
+                                            </Flex>
                                         </ListItem>
                                         <ListItem>
                                             <Text>Last updated</Text>
