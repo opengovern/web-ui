@@ -32,6 +32,7 @@ import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
 import Controls from './Controls'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
 
 const topResources = (
     input:
@@ -268,10 +269,11 @@ export default function BenchmarkSummary() {
                                     >
                                         <Text>Passed</Text>
                                         <Badge color="emerald">
-                                            {
+                                            {numberDisplay(
                                                 benchmarkChecks(benchmarkDetail)
-                                                    .passed
-                                            }
+                                                    .passed,
+                                                0
+                                            )}
                                         </Badge>
                                     </Flex>
                                     <Flex
@@ -280,10 +282,14 @@ export default function BenchmarkSummary() {
                                     >
                                         <Text>Failed</Text>
                                         <Badge color="rose">
-                                            {benchmarkChecks(benchmarkDetail)
-                                                .total -
+                                            {numberDisplay(
                                                 benchmarkChecks(benchmarkDetail)
-                                                    .passed}
+                                                    .total -
+                                                    benchmarkChecks(
+                                                        benchmarkDetail
+                                                    ).passed,
+                                                0
+                                            )}
                                         </Badge>
                                     </Flex>
                                 </Flex>
