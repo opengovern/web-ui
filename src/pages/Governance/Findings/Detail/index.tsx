@@ -12,6 +12,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect } from 'react'
+import JSONPretty from 'react-json-pretty'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../api/api'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
@@ -85,7 +86,9 @@ export default function FindingDetail({
             <TabGroup>
                 <TabList>
                     <Tab>Controls</Tab>
-                    <Tab disabled>Resources</Tab>
+                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                    {/* @ts-ignore */}
+                    <Tab disabled={!response?.Resource}>Resources</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
@@ -117,7 +120,18 @@ export default function FindingDetail({
                             </List>
                         )}
                     </TabPanel>
-                    <TabPanel>resources</TabPanel>
+                    <TabPanel>
+                        <Title className="mb-2">JSON</Title>
+                        <JSONPretty
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            json={response?.Resource}
+                            className="border border-gray-200 rounded-md py-1.5 px-3 text-sm font-mono"
+                            theme={{
+                                key: 'color:#2970BC;',
+                            }}
+                        />
+                    </TabPanel>
                 </TabPanels>
             </TabGroup>
         </DrawerPanel>
