@@ -114,19 +114,19 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                         }
                         showLabels={false}
                         colors={[
-                            'rose',
-                            'orange',
-                            'amber',
-                            'yellow',
-                            'emerald',
-                            'slate',
+                            '#6E120B',
+                            '#CA2B1D',
+                            '#EE9235',
+                            '#F4C744',
+                            '#54B584',
+                            '#9BA2AE',
                         ]}
                     />
                     <Flex justifyContent="start" className="flex-wrap gap-2">
                         <Flex className="w-fit gap-1">
                             <div
                                 className="h-2 w-2 rounded-full"
-                                style={{ backgroundColor: '#F43F5E' }}
+                                style={{ backgroundColor: '#6E120B' }}
                             />
                             <Text className="text-gray-800 text-xs">
                                 Critical
@@ -140,7 +140,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                         <Flex className="w-fit gap-1">
                             <div
                                 className="h-2 w-2 rounded-full"
-                                style={{ backgroundColor: '#F87315' }}
+                                style={{ backgroundColor: '#CA2B1D' }}
                             />
                             <Text className="text-gray-800 text-xs">High</Text>
                             <Text className="text-xs">{`(${(
@@ -152,7 +152,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                         <Flex className="w-fit gap-1">
                             <div
                                 className="h-2 w-2 rounded-full"
-                                style={{ backgroundColor: '#F59E0B' }}
+                                style={{ backgroundColor: '#EE9235' }}
                             />
                             <Text className="text-gray-800 text-xs">
                                 Medium
@@ -166,7 +166,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                         <Flex className="w-fit gap-1">
                             <div
                                 className="h-2 w-2 rounded-full"
-                                style={{ backgroundColor: '#EAB305' }}
+                                style={{ backgroundColor: '#F4C744' }}
                             />
                             <Text className="text-gray-800 text-xs">Low</Text>
                             <Text className="text-xs">{`(${(
@@ -178,7 +178,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                         <Flex className="w-fit gap-1">
                             <div
                                 className="h-2 w-2 rounded-full"
-                                style={{ backgroundColor: '#11B981' }}
+                                style={{ backgroundColor: '#54B584' }}
                             />
                             <Text className="text-gray-800 text-xs">
                                 Passed
@@ -192,7 +192,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                         <Flex className="w-fit gap-1">
                             <div
                                 className="h-2 w-2 rounded-full"
-                                style={{ backgroundColor: '#64748B' }}
+                                style={{ backgroundColor: '#9BA2AE' }}
                             />
                             <Text className="text-gray-800 text-xs">
                                 Unknown
