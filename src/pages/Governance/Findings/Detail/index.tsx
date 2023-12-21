@@ -12,6 +12,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect } from 'react'
+import JSONPretty from 'react-json-pretty'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../api/api'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
@@ -84,7 +85,7 @@ export default function FindingDetail({
             <TabGroup>
                 <TabList>
                     <Tab>Controls</Tab>
-                    <Tab disabled>Resources</Tab>
+                    <Tab disabled={!response?.resource}>Resources</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
@@ -97,12 +98,18 @@ export default function FindingDetail({
                                         <Flex
                                             flexDirection="col"
                                             alignItems="start"
-                                            className="gap-1 w-fit max-w-[80%]"
+                                            className={`gap-1 w-fit max-w-[80%] border-l-2 pl-3 ${
+                                                control.stateActive
+                                                    ? 'border-l-emerald-500'
+                                                    : 'border-l-rose-600'
+                                            }`}
                                         >
-                                            <Text className="text-gray-800">
+                                            <Text className="text-gray-800 w-full truncate">
                                                 {control.controlTitle}
                                             </Text>
-                                            <Text>{control.reason}</Text>
+                                            <Text className="w-full truncate">
+                                                {control.reason}
+                                            </Text>
                                         </Flex>
                                         {severityBadge(control.severity)}
                                     </ListItem>
@@ -110,7 +117,16 @@ export default function FindingDetail({
                             </List>
                         )}
                     </TabPanel>
-                    <TabPanel>resources</TabPanel>
+                    <TabPanel>
+                        <Title className="mb-2">JSON</Title>
+                        <JSONPretty
+                            json={response?.resource}
+                            className="border border-gray-200 rounded-md py-1.5 px-3 text-sm font-mono"
+                            theme={{
+                                key: 'color:#2970BC;',
+                            }}
+                        />
+                    </TabPanel>
                 </TabPanels>
             </TabGroup>
         </DrawerPanel>

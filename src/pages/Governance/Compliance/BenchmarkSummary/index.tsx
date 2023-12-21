@@ -32,6 +32,7 @@ import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
 import Controls from './Controls'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
 
 const topResources = (
     input:
@@ -202,12 +203,12 @@ export default function BenchmarkSummary() {
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-2"
+                            className="gap-2 w-2/3"
                         >
                             <Title className="font-semibold">
                                 {benchmarkDetail?.title}
                             </Title>
-                            <Text className="w-2/3">
+                            <Text className="w-full truncate">
                                 {benchmarkDetail?.description}
                             </Text>
                         </Flex>
@@ -268,10 +269,11 @@ export default function BenchmarkSummary() {
                                     >
                                         <Text>Passed</Text>
                                         <Badge color="emerald">
-                                            {
+                                            {numberDisplay(
                                                 benchmarkChecks(benchmarkDetail)
-                                                    .passed
-                                            }
+                                                    .passed,
+                                                0
+                                            )}
                                         </Badge>
                                     </Flex>
                                     <Flex
@@ -280,10 +282,14 @@ export default function BenchmarkSummary() {
                                     >
                                         <Text>Failed</Text>
                                         <Badge color="rose">
-                                            {benchmarkChecks(benchmarkDetail)
-                                                .total -
+                                            {numberDisplay(
                                                 benchmarkChecks(benchmarkDetail)
-                                                    .passed}
+                                                    .total -
+                                                    benchmarkChecks(
+                                                        benchmarkDetail
+                                                    ).passed,
+                                                0
+                                            )}
                                         </Badge>
                                     </Flex>
                                 </Flex>
@@ -339,12 +345,12 @@ export default function BenchmarkSummary() {
                                 }
                                 showLabels={false}
                                 colors={[
-                                    'rose',
-                                    'orange',
-                                    'amber',
-                                    'yellow',
-                                    'emerald',
-                                    'slate',
+                                    '#6E120B',
+                                    '#CA2B1D',
+                                    '#EE9235',
+                                    '#F4C744',
+                                    '#54B584',
+                                    '#9BA2AE',
                                 ]}
                             />
                             <Flex
@@ -354,7 +360,7 @@ export default function BenchmarkSummary() {
                                 <Flex className="w-fit gap-1">
                                     <div
                                         className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#F43F5E' }}
+                                        style={{ backgroundColor: '#6E120B' }}
                                     />
                                     <Text className="text-gray-800 text-xs">
                                         Critical
@@ -370,7 +376,7 @@ export default function BenchmarkSummary() {
                                 <Flex className="w-fit gap-1">
                                     <div
                                         className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#F87315' }}
+                                        style={{ backgroundColor: '#CA2B1D' }}
                                     />
                                     <Text className="text-gray-800 text-xs">
                                         High
@@ -385,7 +391,7 @@ export default function BenchmarkSummary() {
                                 <Flex className="w-fit gap-1">
                                     <div
                                         className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#F59E0B' }}
+                                        style={{ backgroundColor: '#EE9235' }}
                                     />
                                     <Text className="text-gray-800 text-xs">
                                         Medium
@@ -401,7 +407,7 @@ export default function BenchmarkSummary() {
                                 <Flex className="w-fit gap-1">
                                     <div
                                         className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#EAB305' }}
+                                        style={{ backgroundColor: '#F4C744' }}
                                     />
                                     <Text className="text-gray-800 text-xs">
                                         Low
@@ -416,7 +422,7 @@ export default function BenchmarkSummary() {
                                 <Flex className="w-fit gap-1">
                                     <div
                                         className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#11B981' }}
+                                        style={{ backgroundColor: '#54B584' }}
                                     />
                                     <Text className="text-gray-800 text-xs">
                                         Passed
@@ -432,7 +438,7 @@ export default function BenchmarkSummary() {
                                 <Flex className="w-fit gap-1">
                                     <div
                                         className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#64748B' }}
+                                        style={{ backgroundColor: '#9BA2AE' }}
                                     />
                                     <Text className="text-gray-800 text-xs">
                                         Unknown

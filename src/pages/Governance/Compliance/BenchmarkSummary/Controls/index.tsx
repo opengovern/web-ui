@@ -18,10 +18,7 @@ import {
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
-import {
-    CheckCircleIcon,
-    InformationCircleIcon,
-} from '@heroicons/react/24/outline'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../api/compliance.gen'
 import Spinner from '../../../../../components/Spinner'
 
@@ -103,17 +100,6 @@ const rows = (json: any) => {
             }
         }
     }
-    if (arr.length) {
-        return arr.sort((a: any, b: any) => {
-            if (a.path < b.path) {
-                return -1
-            }
-            if (a.path > b.path) {
-                return 1
-            }
-            return 0
-        })
-    }
 
     return arr
 }
@@ -162,7 +148,7 @@ export default function Controls({ id }: IPolicies) {
                                                 ).length === value?.length ? (
                                                     <CheckCircleIcon className="w-5 text-emerald-500" />
                                                 ) : (
-                                                    <InformationCircleIcon className="w-5 text-rose-900" />
+                                                    <XCircleIcon className="w-5 text-rose-600" />
                                                 )}
                                                 <Text className="font-semibold">{`Passed rules: ${
                                                     value?.filter(
@@ -239,7 +225,7 @@ export default function Controls({ id }: IPolicies) {
                                                                 0) ? (
                                                                 <CheckCircleIcon className="w-5 text-emerald-500" />
                                                             ) : (
-                                                                <InformationCircleIcon className="w-5 text-rose-900" />
+                                                                <XCircleIcon className="w-5 text-rose-600" />
                                                             )}
                                                             {`${
                                                                 (v?.totalResourcesCount ||

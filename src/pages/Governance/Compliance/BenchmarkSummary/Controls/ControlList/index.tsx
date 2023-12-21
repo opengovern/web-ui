@@ -1,10 +1,8 @@
 import { Badge, Flex } from '@tremor/react'
-import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
+import { ICellRendererParams } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../../../../api/api'
-import { numberDisplay } from '../../../../../../utilities/numericDisplay'
-import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 import DrawerPanel from '../../../../../../components/DrawerPanel'
 import { severityBadge } from '../index'
 

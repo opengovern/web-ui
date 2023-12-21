@@ -134,12 +134,12 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                         }
                         showLabels={false}
                         colors={[
-                            'rose',
-                            'orange',
-                            'amber',
-                            'yellow',
-                            'emerald',
-                            'slate',
+                            '#6E120B',
+                            '#CA2B1D',
+                            '#EE9235',
+                            '#F4C744',
+                            '#54B584',
+                            '#9BA2AE',
                         ]}
                     />
                     <Flex
