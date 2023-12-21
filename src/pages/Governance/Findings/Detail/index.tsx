@@ -42,6 +42,7 @@ export default function FindingDetail({
             sendNow()
         }
     }, [finding])
+    console.log(response)
 
     return (
         <DrawerPanel
@@ -97,12 +98,18 @@ export default function FindingDetail({
                                         <Flex
                                             flexDirection="col"
                                             alignItems="start"
-                                            className="gap-1 w-fit max-w-[80%]"
+                                            className={`gap-1 w-fit max-w-[80%] border-l-2 pl-3 ${
+                                                control.stateActive
+                                                    ? 'border-l-emerald-500'
+                                                    : 'border-l-rose-600'
+                                            }`}
                                         >
-                                            <Text className="text-gray-800">
+                                            <Text className="text-gray-800 w-full truncate">
                                                 {control.controlTitle}
                                             </Text>
-                                            <Text>{control.reason}</Text>
+                                            <Text className="w-full truncate">
+                                                {control.reason}
+                                            </Text>
                                         </Flex>
                                         {severityBadge(control.severity)}
                                     </ListItem>
