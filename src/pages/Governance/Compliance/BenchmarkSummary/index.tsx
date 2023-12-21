@@ -195,7 +195,7 @@ export default function BenchmarkSummary() {
                 <Settings id={benchmarkDetail?.id} />
             </Header>
             {isLoading ? (
-                <Spinner className="mb-12" />
+                <Spinner className="mt-56" />
             ) : (
                 <>
                     <Flex alignItems="end" className="mb-6">
@@ -258,7 +258,7 @@ export default function BenchmarkSummary() {
                                                 .passed /
                                                 benchmarkChecks(benchmarkDetail)
                                                     .total) *
-                                            100
+                                                100 || 0
                                         ).toFixed(2)}%`}
                                     </Title>
                                 </Flex>
@@ -313,6 +313,7 @@ export default function BenchmarkSummary() {
                                         benchmarkChecks(benchmarkDetail)
                                             .total) *
                                         100 || 0,
+                                    1,
                                     (benchmarkChecks(benchmarkDetail).passed /
                                         benchmarkChecks(benchmarkDetail)
                                             .total) *
@@ -357,6 +358,9 @@ export default function BenchmarkSummary() {
                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                     // @ts-ignore
                                     '#F4C744',
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    '#000',
                                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                     // @ts-ignore
                                     '#54B584',
