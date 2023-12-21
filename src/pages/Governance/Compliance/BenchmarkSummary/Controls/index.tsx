@@ -103,17 +103,6 @@ const rows = (json: any) => {
             }
         }
     }
-    if (arr.length) {
-        return arr.sort((a: any, b: any) => {
-            if (a.path < b.path) {
-                return -1
-            }
-            if (a.path > b.path) {
-                return 1
-            }
-            return 0
-        })
-    }
 
     return arr
 }
@@ -133,6 +122,7 @@ export default function Controls({ id }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
+    console.log(controls)
 
     return (
         <Flex flexDirection="col" className="gap-4">
