@@ -99,7 +99,7 @@ export default function FindingDetail({
                                             flexDirection="col"
                                             alignItems="start"
                                             className={`gap-1 w-fit max-w-[80%] border-l-2 pl-3 ${
-                                                control.stateActive
+                                                control.severity === 'passed'
                                                     ? 'border-l-emerald-500'
                                                     : 'border-l-rose-600'
                                             }`}
