@@ -90,6 +90,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                             (benchmarkChecks(benchmark).low /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
+                            1,
                             (benchmarkChecks(benchmark).passed /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
@@ -126,6 +127,9 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             '#F4C744',
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            '#000',
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             '#54B584',
