@@ -108,7 +108,6 @@ export default function ImpactedAccounts({ controlId }: IImpactedAccounts) {
         useComplianceApiV1FindingsTopDetail('connectionID', 10000, {
             controlId: [String(controlId)],
         })
-    console.log(accounts)
     return (
         <Table
             id="impacted_accounts"
