@@ -129,7 +129,8 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                             ((benchmarkChecks(benchmark).critical +
                                 benchmarkChecks(benchmark).high +
                                 benchmarkChecks(benchmark).medium +
-                                benchmarkChecks(benchmark).low) /
+                                benchmarkChecks(benchmark).low +
+                                1) /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 1
                         }
