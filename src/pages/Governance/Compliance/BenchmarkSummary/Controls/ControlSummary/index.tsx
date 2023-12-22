@@ -4,6 +4,7 @@ import {
     Card,
     Flex,
     Grid,
+    Icon,
     List,
     ListItem,
     Tab,
@@ -18,6 +19,7 @@ import {
     ChevronRightIcon,
     Cog8ToothIcon,
     CommandLineIcon,
+    CreditCardIcon,
     DocumentDuplicateIcon,
     FolderIcon,
     Square2StackIcon,
@@ -32,13 +34,13 @@ import { useComplianceApiV1ControlsSummaryDetail } from '../../../../../../api/c
 import Header from '../../../../../../components/Header'
 import { notificationAtom, queryAtom } from '../../../../../../store'
 import { severityBadge } from '../index'
-import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 import Spinner from '../../../../../../components/Spinner'
 import Detail from './Tabs/Detail'
 import ImpactedResources from './Tabs/ImpactedResources'
 import Benchmarks from './Tabs/Benchmarks'
 import Modal from '../../../../../../components/Modal'
 import ImpactedAccounts from './Tabs/ImpactedAccounts'
+import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
@@ -72,9 +74,14 @@ export default function ControlDetail() {
                             justifyContent="start"
                             className="gap-2"
                         >
-                            <Title className="font-semibold whitespace-nowrap">
-                                {controlDetail?.control?.title}
-                            </Title>
+                            <Flex className="gap-3 w-fit">
+                                <Title className="font-semibold whitespace-nowrap">
+                                    {controlDetail?.control?.title}
+                                </Title>
+                                {severityBadge(
+                                    controlDetail?.control?.severity
+                                )}
+                            </Flex>
                             <Text className="w-2/3">
                                 {controlDetail?.control?.description}
                             </Text>
@@ -208,41 +215,31 @@ export default function ControlDetail() {
                                             </Flex>
                                         </ListItem>
                                         <ListItem>
-                                            <Text>Severity</Text>
-                                            {severityBadge(
-                                                controlDetail?.control?.severity
-                                            )}
-                                        </ListItem>
-                                        <ListItem>
                                             <Text># of findings</Text>
-                                            <Flex className="gap-3 w-fit">
-                                                <Flex className="gap-1 w-fit">
-                                                    <Text className="text-gray-800">
-                                                        Passed:
-                                                    </Text>
-                                                    <Text className="text-emerald-500">
-                                                        {(controlDetail?.totalResourcesCount ||
-                                                            0) -
-                                                            (controlDetail?.failedResourcesCount ||
-                                                                0)}
-                                                    </Text>
-                                                </Flex>
-                                                <Flex className="gap-1 w-fit">
-                                                    <Text className="text-gray-800">
-                                                        Failed:
-                                                    </Text>
-                                                    <Text className="text-rose-600">
-                                                        {
-                                                            controlDetail?.failedResourcesCount
-                                                        }
-                                                    </Text>
-                                                </Flex>
-                                                <Text className="text-gray-800">
-                                                    {`Total: ${controlDetail?.totalResourcesCount}`}
-                                                </Text>
-                                            </Flex>
+                                            <Text className="text-gray-800">
+                                                {
+                                                    controlDetail?.totalResourcesCount
+                                                }
+                                            </Text>
                                         </ListItem>
                                         <ListItem>
+                                            <Text># of passed findings</Text>
+                                            <Text className="text-emerald-500">
+                                                {(controlDetail?.totalResourcesCount ||
+                                                    0) -
+                                                    (controlDetail?.failedResourcesCount ||
+                                                        0)}
+                                            </Text>
+                                        </ListItem>
+                                        <ListItem>
+                                            <Text># of failed findings</Text>
+                                            <Text className="text-rose-600">
+                                                {
+                                                    controlDetail?.failedResourcesCount
+                                                }
+                                            </Text>
+                                        </ListItem>
+                                        {/* <ListItem>
                                             <Text>Last updated</Text>
                                             <Text className="text-gray-800">
                                                 {dateTimeDisplay(
@@ -250,7 +247,7 @@ export default function ControlDetail() {
                                                         ?.updatedAt
                                                 )}
                                             </Text>
-                                        </ListItem>
+                                        </ListItem> */}
                                     </List>
                                 </Flex>
                                 <Flex justifyContent="end">
@@ -265,56 +262,103 @@ export default function ControlDetail() {
                                 </Flex>
                             </Flex>
                         </Card>
-                        <Grid numItems={2} className="w-full gap-4">
-                            <Card>
-                                <FolderIcon className="w-6" />
-                                <Title className="font-semibold mt-2">
-                                    Manual
-                                </Title>
-                                <Flex>
-                                    <Text>Remediation</Text>
-                                    <Button
-                                        variant="light"
-                                        icon={ChevronRightIcon}
-                                        iconPosition="right"
-                                    >
-                                        See more
-                                    </Button>
-                                </Flex>
-                            </Card>
-                            <Card>
-                                <CommandLineIcon className="w-6" />
-                                <Title className="font-semibold mt-2">
-                                    Command line (CLI)
-                                </Title>
-                                <Flex>
-                                    <Text>Remediation</Text>
-                                    <Button
-                                        variant="light"
-                                        icon={ChevronRightIcon}
-                                        iconPosition="right"
-                                    >
-                                        See more
-                                    </Button>
-                                </Flex>
-                            </Card>
-                            <Card>
-                                <Cog8ToothIcon className="w-6" />
-                                <Title className="font-semibold mt-2">
-                                    Guard rails
-                                </Title>
-                                <Flex>
-                                    <Text>Remediation</Text>
-                                    <Button
-                                        variant="light"
-                                        icon={ChevronRightIcon}
-                                        iconPosition="right"
-                                    >
-                                        See more
-                                    </Button>
-                                </Flex>
-                            </Card>
-                        </Grid>
+                        <Flex
+                            flexDirection="col"
+                            alignItems="start"
+                            className="h-full"
+                        >
+                            <Title className="mb-2">Remediation</Title>
+                            <Grid numItems={2} className="w-full gap-4">
+                                <Card>
+                                    <Flex className="mb-2.5">
+                                        <Flex
+                                            justifyContent="start"
+                                            className="w-fit gap-3"
+                                        >
+                                            <Icon
+                                                icon={FolderIcon}
+                                                variant="light"
+                                                color="sky"
+                                            />
+                                            <Title className="font-semibold">
+                                                Manual
+                                            </Title>
+                                        </Flex>
+                                        <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                    </Flex>
+                                    <Text>
+                                        Step by Step Guided solution to resolve
+                                        instances of non-compliance
+                                    </Text>
+                                </Card>
+                                <Card>
+                                    <Flex className="mb-2.5">
+                                        <Flex
+                                            justifyContent="start"
+                                            className="w-fit gap-3"
+                                        >
+                                            <Icon
+                                                icon={CommandLineIcon}
+                                                variant="light"
+                                                color="sky"
+                                            />
+                                            <Title className="font-semibold">
+                                                Command line (CLI)
+                                            </Title>
+                                        </Flex>
+                                        <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                    </Flex>
+                                    <Text>
+                                        Guided steps to resolve the issue
+                                        utilizing CLI
+                                    </Text>
+                                </Card>
+                                <Card>
+                                    <Flex className="mb-2.5">
+                                        <Flex
+                                            justifyContent="start"
+                                            className="w-fit gap-3"
+                                        >
+                                            <Icon
+                                                icon={Cog8ToothIcon}
+                                                variant="light"
+                                                color="sky"
+                                            />
+                                            <Title className="font-semibold">
+                                                Guard rails
+                                            </Title>
+                                        </Flex>
+                                        <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                    </Flex>
+                                    <Text>
+                                        Resolve and ensure compliance, at scale
+                                        utilizing solutions where possible
+                                    </Text>
+                                </Card>
+                                <Card>
+                                    <Flex className="mb-2.5">
+                                        <Flex
+                                            justifyContent="start"
+                                            className="w-fit gap-3"
+                                        >
+                                            <Icon
+                                                icon={CreditCardIcon}
+                                                variant="light"
+                                                color="sky"
+                                            />
+                                            <Title className="font-semibold">
+                                                Programmatic
+                                            </Title>
+                                        </Flex>
+                                        <ChevronRightIcon className="w-5 text-kaytu-500" />
+                                    </Flex>
+                                    <Text>
+                                        Scripts that help you resolve the issue,
+                                        at scale
+                                    </Text>
+                                </Card>
+                            </Grid>
+                        </Flex>
                     </Grid>
                     <TabGroup>
                         <TabList>
