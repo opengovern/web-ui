@@ -79,6 +79,24 @@ export const severityBadge = (severity: any) => {
     )
 }
 
+export const statusBadge = (severity: any) => {
+    const style = {
+        color: '#fff',
+        borderRadius: '8px',
+        width: '64px',
+    }
+    if (severity === 'passed') {
+        return (
+            <Badge style={{ backgroundColor: '#54B584', ...style }}>
+                Passed
+            </Badge>
+        )
+    }
+    return (
+        <Badge style={{ backgroundColor: '#CA2B1D', ...style }}>Failed</Badge>
+    )
+}
+
 const rows = (json: any) => {
     let arr: any = []
     if (json) {
@@ -119,6 +137,8 @@ export default function Controls({ id }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
+    console.log(controls)
+    console.log(groupBy(rows(controls), 'parentName'))
 
     return (
         <Flex flexDirection="col" className="gap-4">

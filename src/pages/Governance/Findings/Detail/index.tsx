@@ -1,4 +1,5 @@
 import {
+    Card,
     Flex,
     Grid,
     List,
@@ -12,7 +13,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect } from 'react'
-import JSONPretty from 'react-json-pretty'
+import ReactJson from '@microlink/react-json-view'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../api/api'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
@@ -98,18 +99,34 @@ export default function FindingDetail({
                                         <Flex
                                             flexDirection="col"
                                             alignItems="start"
-                                            className={`gap-1 w-fit max-w-[80%] border-l-2 pl-3 ${
-                                                control.severity === 'passed'
-                                                    ? 'border-l-emerald-500'
-                                                    : 'border-l-rose-600'
-                                            }`}
+                                            className="gap-1 w-fit max-w-[80%]"
                                         >
                                             <Text className="text-gray-800 w-full truncate">
                                                 {control.controlTitle}
                                             </Text>
-                                            <Text className="w-full truncate">
-                                                {control.reason}
-                                            </Text>
+                                            <Flex justifyContent="start">
+                                                {control.severity ===
+                                                'passed' ? (
+                                                    <Flex className="w-fit gap-1.5">
+                                                        <div className="w-2 h-2 bg-emerald-500 rounded-full" />
+                                                        <Text color="emerald">
+                                                            Passed
+                                                        </Text>
+                                                    </Flex>
+                                                ) : (
+                                                    <Flex className="w-fit gap-1.5">
+                                                        <div className="w-2 h-2 bg-rose-600 rounded-full" />
+                                                        <Text color="rose">
+                                                            Failed
+                                                        </Text>
+                                                    </Flex>
+                                                )}
+                                                <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
+                                                    <Text className="text-xs">
+                                                        SECTION:
+                                                    </Text>
+                                                </Flex>
+                                            </Flex>
                                         </Flex>
                                         {severityBadge(control.severity)}
                                     </ListItem>
@@ -119,13 +136,9 @@ export default function FindingDetail({
                     </TabPanel>
                     <TabPanel>
                         <Title className="mb-2">JSON</Title>
-                        <JSONPretty
-                            json={response?.resource}
-                            className="border border-gray-200 rounded-md py-1.5 px-3 text-sm font-mono"
-                            theme={{
-                                key: 'color:#2970BC;',
-                            }}
-                        />
+                        <Card className="px-1.5 py-3 mb-2">
+                            <ReactJson src={response?.resource || {}} />
+                        </Card>
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

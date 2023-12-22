@@ -339,7 +339,8 @@ export default function BenchmarkSummary() {
                                         benchmarkChecks(benchmarkDetail).high +
                                         benchmarkChecks(benchmarkDetail)
                                             .medium +
-                                        benchmarkChecks(benchmarkDetail).low) /
+                                        benchmarkChecks(benchmarkDetail).low +
+                                        1) /
                                         benchmarkChecks(benchmarkDetail)
                                             .total) *
                                         100 || 1

@@ -691,17 +691,14 @@ export default function Findings() {
                     </Accordion>
                     <Flex flexDirection="row-reverse">
                         {showApply() && (
-                            <Button
-                                onClick={() => applyFilters()}
-                                className="mt-4"
-                            >
+                            <Button onClick={applyFilters} className="mt-4">
                                 Apply
                             </Button>
                         )}
                         {showReset() && (
                             <Button
                                 variant="light"
-                                onClick={() => resetFilters()}
+                                onClick={resetFilters}
                                 className="mt-4"
                             >
                                 Reset filters
