@@ -1,4 +1,5 @@
 import {
+    Card,
     Flex,
     Grid,
     List,
@@ -12,7 +13,7 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect } from 'react'
-import JSONPretty from 'react-json-pretty'
+import ReactJson from '@microlink/react-json-view'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../api/api'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
@@ -135,13 +136,9 @@ export default function FindingDetail({
                     </TabPanel>
                     <TabPanel>
                         <Title className="mb-2">JSON</Title>
-                        <JSONPretty
-                            json={response?.resource}
-                            className="border border-gray-200 rounded-md py-1.5 px-3 text-sm font-mono"
-                            theme={{
-                                key: 'color:#2970BC;',
-                            }}
-                        />
+                        <Card className="px-1.5 py-3 mb-2">
+                            <ReactJson src={response?.resource || {}} />
+                        </Card>
                     </TabPanel>
                 </TabPanels>
             </TabGroup>
