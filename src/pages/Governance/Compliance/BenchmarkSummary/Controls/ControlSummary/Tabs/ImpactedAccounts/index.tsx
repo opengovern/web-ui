@@ -1,11 +1,7 @@
+import { ValueFormatterParams } from 'ag-grid-community'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../../../../../api/compliance.gen'
 import Table, { IColumn } from '../../../../../../../../components/Table'
-import {
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-} from '../../../../../../../../api/api'
-import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
-import { badgeDelta } from '../../../../../../../../utilities/deltaType'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../../../../../api/api'
 
 interface IImpactedAccounts {
     controlId: string | undefined
@@ -108,7 +104,6 @@ export default function ImpactedAccounts({ controlId }: IImpactedAccounts) {
         useComplianceApiV1FindingsTopDetail('connectionID', 10000, {
             controlId: [String(controlId)],
         })
-    console.log(accounts)
     return (
         <Table
             id="impacted_accounts"
