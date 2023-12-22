@@ -267,7 +267,9 @@ export default function ControlDetail() {
                             alignItems="start"
                             className="h-full"
                         >
-                            <Title className="mb-2">Remediation</Title>
+                            <Title className="font-semibold mb-2">
+                                Remediation
+                            </Title>
                             <Grid numItems={2} className="w-full gap-4">
                                 <Card>
                                     <Flex className="mb-2.5">

@@ -11,7 +11,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
 } from '../../../../../../../../api/api'
 import AxiosAPI from '../../../../../../../../api/ApiConfig'
-import { severityBadge, statusBadge } from '../../../index'
+import { statusBadge } from '../../../index'
 import { dateTimeDisplay } from '../../../../../../../../utilities/dateDisplay'
 
 let sortKey = ''
@@ -146,7 +146,7 @@ const columns = (isDemo: boolean) => {
             sortable: false,
             filter: true,
             resizable: true,
-            width: 300,
+            width: 260,
             valueFormatter: (param: ValueFormatterParams) => {
                 return param.value ? dateTimeDisplay(param.value) : ''
             },

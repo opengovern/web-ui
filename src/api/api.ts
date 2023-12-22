@@ -516,6 +516,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
      */
     description?: string
     /**
+     * Benchmark display code
+     * @example "CIS 1.4.0"
+     */
+    displayCode?: string
+    /**
      * Benchmark document URI
      * @example "benchmarks/azure_cis_v140.md"
      */
@@ -679,6 +684,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapo
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
+    /** @example "To enable multi-factor authentication for a user, run the following command..." */
+    cliRemediation?: string
     /** @example "Azure" */
     connector?: SourceType
     /** @example "2020-01-01T00:00:00Z" */
@@ -695,6 +702,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
     id?: string
     /** @example true */
     managed?: boolean
+    /** @example "To enable multi-factor authentication for a user, run the following command..." */
+    manualRemediation?: string
     /** @example true */
     manualVerification?: boolean
     /** @example "Non-compliance to this control could result in several costs including..." */
@@ -747,6 +756,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example "azure_cis_v140_7_5" */
     controlID?: string
     controlTitle?: string
+    es_id?: string
+    es_index?: string
     /** @example 1589395200 */
     evaluatedAt?: number
     /** @example "steampipe-v0.5" */
@@ -1091,6 +1102,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
     field?: string
     resourceType?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType
     service?: string
+    totalCount?: number
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgDescribeApiEvaluationType {
