@@ -1,17 +1,13 @@
-import { List, ListItem, Text, Title } from '@tremor/react'
-import { snakeCaseToLabel } from '../../utilities/labelMaker'
+import ReactJson from '@microlink/react-json-view'
+import { Card } from '@tremor/react'
 
 interface IRenderObjectProps {
     obj: any
-    changeKeysToLabel?: boolean
 }
 
-export function RenderObject({
-    obj,
-    changeKeysToLabel = true,
-}: IRenderObjectProps) {
+export function RenderObject({ obj }: IRenderObjectProps) {
     return (
-        <List>
+        /* <List>
             {Object.keys(obj).length > 0 &&
                 Object.keys(obj).map((key) => {
                     if (typeof obj[key] === 'object' && obj[key] !== null) {
@@ -45,6 +41,9 @@ export function RenderObject({
                         </ListItem>
                     )
                 })}
-        </List>
+        </List> */
+        <Card className="px-1.5 py-3 mb-2">
+            <ReactJson src={obj} />
+        </Card>
     )
 }
