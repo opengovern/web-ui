@@ -254,8 +254,9 @@ export default function BenchmarkSummary() {
                                     </Text>
                                     <Title className="font-semibold">
                                         {`${(
-                                            (benchmarkChecks(benchmarkDetail)
-                                                .passed /
+                                            ((benchmarkDetail
+                                                ?.conformanceStatusSummary
+                                                ?.alarmCount || 0) /
                                                 benchmarkChecks(benchmarkDetail)
                                                     .total) *
                                                 100 || 0
@@ -270,8 +271,9 @@ export default function BenchmarkSummary() {
                                         <Text>Passed</Text>
                                         <Badge color="emerald">
                                             {numberDisplay(
-                                                benchmarkChecks(benchmarkDetail)
-                                                    .passed,
+                                                benchmarkDetail
+                                                    ?.conformanceStatusSummary
+                                                    ?.alarmCount || 0,
                                                 0
                                             )}
                                         </Badge>
@@ -285,9 +287,9 @@ export default function BenchmarkSummary() {
                                             {numberDisplay(
                                                 benchmarkChecks(benchmarkDetail)
                                                     .total -
-                                                    benchmarkChecks(
-                                                        benchmarkDetail
-                                                    ).passed,
+                                                    (benchmarkDetail
+                                                        ?.conformanceStatusSummary
+                                                        ?.alarmCount || 0),
                                                 0
                                             )}
                                         </Badge>
@@ -314,7 +316,8 @@ export default function BenchmarkSummary() {
                                             .total) *
                                         100 || 0,
                                     1,
-                                    (benchmarkChecks(benchmarkDetail).passed /
+                                    ((benchmarkDetail?.conformanceStatusSummary
+                                        ?.alarmCount || 0) /
                                         benchmarkChecks(benchmarkDetail)
                                             .total) *
                                         100 || 0,
@@ -323,11 +326,12 @@ export default function BenchmarkSummary() {
                                         benchmarkChecks(benchmarkDetail)
                                             .medium +
                                         benchmarkChecks(benchmarkDetail).low +
-                                        benchmarkChecks(benchmarkDetail)
-                                            .passed >
+                                        (benchmarkDetail
+                                            ?.conformanceStatusSummary
+                                            ?.alarmCount || 0) >
                                     0
                                         ? (benchmarkChecks(benchmarkDetail)
-                                              .unknown /
+                                              .none /
                                               benchmarkChecks(benchmarkDetail)
                                                   .total) *
                                               100 || 0
@@ -445,8 +449,9 @@ export default function BenchmarkSummary() {
                                         Passed
                                     </Text>
                                     <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail)
-                                            .passed /
+                                        ((benchmarkDetail
+                                            ?.conformanceStatusSummary
+                                            ?.alarmCount || 0) /
                                             benchmarkChecks(benchmarkDetail)
                                                 .total) *
                                             100 || 0
@@ -458,11 +463,10 @@ export default function BenchmarkSummary() {
                                         style={{ backgroundColor: '#9BA2AE' }}
                                     />
                                     <Text className="text-gray-800 text-xs">
-                                        Unknown
+                                        None
                                     </Text>
                                     <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail)
-                                            .unknown /
+                                        (benchmarkChecks(benchmarkDetail).none /
                                             benchmarkChecks(benchmarkDetail)
                                                 .total) *
                                             100 || 0

@@ -67,8 +67,8 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                 <SummaryCard
                     title="Security score"
                     metric={
-                        (benchmarkChecks(benchmark).passed /
-                            benchmarkChecks(benchmark).total || 0) * 100
+                        ((benchmark?.conformanceStatusSummary?.alarmCount ||
+                            0) / benchmarkChecks(benchmark).total || 0) * 100
                     }
                     isPercent
                     border={false}
@@ -91,16 +91,18 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
                             1,
-                            (benchmarkChecks(benchmark).passed /
+                            ((benchmark?.conformanceStatusSummary?.alarmCount ||
+                                0) /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
                             benchmarkChecks(benchmark).critical +
                                 benchmarkChecks(benchmark).high +
                                 benchmarkChecks(benchmark).medium +
                                 benchmarkChecks(benchmark).low +
-                                benchmarkChecks(benchmark).passed >
+                                (benchmark?.conformanceStatusSummary
+                                    ?.alarmCount || 0) >
                             0
-                                ? (benchmarkChecks(benchmark).unknown /
+                                ? (benchmarkChecks(benchmark).none /
                                       benchmarkChecks(benchmark).total) *
                                       100 || 0
                                 : 100,
@@ -201,7 +203,8 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                                 Passed
                             </Text>
                             <Text className="text-xs">{`(${(
-                                (benchmarkChecks(benchmark).passed /
+                                ((benchmark?.conformanceStatusSummary
+                                    ?.alarmCount || 0) /
                                     benchmarkChecks(benchmark).total) *
                                     100 || 0
                             ).toFixed(2)}%)`}</Text>
@@ -211,11 +214,9 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                                 className="h-2 w-2 rounded-full"
                                 style={{ backgroundColor: '#9BA2AE' }}
                             />
-                            <Text className="text-gray-800 text-xs">
-                                Unknown
-                            </Text>
+                            <Text className="text-gray-800 text-xs">None</Text>
                             <Text className="text-xs">{`(${(
-                                (benchmarkChecks(benchmark).unknown /
+                                (benchmarkChecks(benchmark).none /
                                     benchmarkChecks(benchmark).total) *
                                     100 || 0
                             ).toFixed(2)}%)`}</Text>

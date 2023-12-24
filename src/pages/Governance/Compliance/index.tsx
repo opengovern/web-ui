@@ -45,7 +45,6 @@ export const benchmarkList = (ben: any) => {
                     (ben[i].checks?.highCount || 0) +
                     (ben[i].checks?.mediumCount || 0) +
                     (ben[i].checks?.lowCount || 0) +
-                    (ben[i].checks?.passedCount || 0) +
                     (ben[i].checks?.unknownCount || 0)
                 ) {
                     const b = ben[i]
@@ -132,7 +131,7 @@ export const activeColumns: IColumn<any, any>[] = [
         ) =>
             param.data &&
             `${(
-                (benchmarkChecks(param.data).passed /
+                ((param.data?.conformanceStatusSummary?.alarmCount || 0) /
                     benchmarkChecks(param.data).total) *
                 100
             ).toFixed(2)} %`,

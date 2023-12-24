@@ -28,10 +28,9 @@ export const benchmarkChecks = (
     const high = ben?.checks?.highCount || 0
     const medium = ben?.checks?.mediumCount || 0
     const low = ben?.checks?.lowCount || 0
-    const passed = ben?.checks?.passedCount || 0
-    const unknown = ben?.checks?.unknownCount || 0
+    const none = ben?.checks?.unknownCount || 0
 
-    const total = critical + high + medium + low + passed + unknown
+    const total = critical + high + medium + low + none
     const failed = critical + high + medium + low
 
     return {
@@ -39,8 +38,7 @@ export const benchmarkChecks = (
         high,
         medium,
         low,
-        passed,
-        unknown,
+        none,
         total,
         failed,
     }
@@ -89,7 +87,8 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                         <Text>Security score:</Text>
                         <Text className="font-semibold">
                             {(
-                                (benchmarkChecks(benchmark).passed /
+                                ((benchmark?.conformanceStatusSummary
+                                    ?.alarmCount || 0) /
                                     benchmarkChecks(benchmark).total || 0) * 100
                             ).toFixed(2)}{' '}
                             %
@@ -111,16 +110,16 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
                             1,
-                            (benchmarkChecks(benchmark).passed /
+                            ((benchmark?.conformanceStatusSummary?.alarmCount ||
+                                0) /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
                             benchmarkChecks(benchmark).critical +
                                 benchmarkChecks(benchmark).high +
                                 benchmarkChecks(benchmark).medium +
-                                benchmarkChecks(benchmark).low +
-                                benchmarkChecks(benchmark).passed >
+                                benchmarkChecks(benchmark).low >
                             0
-                                ? (benchmarkChecks(benchmark).unknown /
+                                ? (benchmarkChecks(benchmark).none /
                                       benchmarkChecks(benchmark).total) *
                                       100 || 0
                                 : 100,
@@ -130,6 +129,8 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                                 benchmarkChecks(benchmark).high +
                                 benchmarkChecks(benchmark).medium +
                                 benchmarkChecks(benchmark).low +
+                                (benchmark?.conformanceStatusSummary
+                                    ?.alarmCount || 0) +
                                 1) /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 1

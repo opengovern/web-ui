@@ -58,10 +58,7 @@ import {
     generateItems,
 } from '../../../utilities/dateComparator'
 import SummaryCard from '../../../components/Cards/SummaryCard'
-import {
-    numberDisplay,
-    numericDisplay,
-} from '../../../utilities/numericDisplay'
+import { numberDisplay } from '../../../utilities/numericDisplay'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 import { generateVisualMap, resourceTrendChart } from '../../Assets'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
@@ -173,7 +170,7 @@ const complianceColumns: IColumn<any, any>[] = [
         ) =>
             param.data &&
             `${(
-                (benchmarkChecks(param.data).passed /
+                ((param.data?.conformanceStatusSummary?.okCount || 0) /
                     (benchmarkChecks(param.data).total || 1)) *
                 100
             ).toFixed(2)} %`,
