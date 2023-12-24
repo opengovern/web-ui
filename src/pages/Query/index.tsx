@@ -219,10 +219,7 @@ export default function Query() {
                         open={openDrawer}
                         onClose={() => setOpenDrawer(false)}
                     >
-                        <RenderObject
-                            obj={selectedRow}
-                            changeKeysToLabel={false}
-                        />
+                        <RenderObject obj={selectedRow} />
                     </DrawerPanel>
                     {openSearch ? (
                         <Card className="sticky w-fit">

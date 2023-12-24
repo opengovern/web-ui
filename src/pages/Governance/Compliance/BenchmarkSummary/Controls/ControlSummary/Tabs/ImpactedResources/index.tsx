@@ -117,7 +117,7 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'severity',
-            headerName: 'Evaluation',
+            headerName: 'Conformance status',
             type: 'string',
             sortable: true,
             filter: true,
