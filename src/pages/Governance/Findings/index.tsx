@@ -203,7 +203,10 @@ const severity = [
     { name: 'Medium', color: '#EE9235' },
     { name: 'Low', color: '#F4C744' },
     { name: 'None', color: '#9BA2AE' },
+]
+const status = [
     { name: 'Passed', color: '#54B584' },
+    { name: 'Failed', color: '#E01D48' },
 ]
 
 const filteredConnectionsList = (
@@ -249,6 +252,9 @@ export default function Findings() {
     const [resourceFilter, setResourceFilter] = useState([])
     const severityCheckbox = useCheckboxState({
         state: ['critical', 'high', 'medium', 'low', 'none'],
+    })
+    const statusCheckbox = useCheckboxState({
+        state: ['failed'],
     })
     const [severityFilter, setSeverityFilter] = useState([
         'critical',
@@ -468,6 +474,45 @@ export default function Findings() {
                                         <Text>Azure</Text>
                                     </Flex>
                                 </Radio>
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                    <Divider className="my-3" />
+                    <Accordion
+                        defaultOpen
+                        className="border-0 rounded-none bg-transparent mb-1"
+                    >
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="font-semibold text-gray-800">
+                                Conformance status
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
+                            >
+                                {status.map((s) => (
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    <Checkbox
+                                        shape="curve"
+                                        className="!items-start"
+                                        value={s.name.toLowerCase()}
+                                        {...statusCheckbox}
+                                    >
+                                        <Flex className="gap-1.5">
+                                            <div
+                                                className="h-4 w-1.5 rounded-sm"
+                                                style={{
+                                                    backgroundColor: s.color,
+                                                }}
+                                            />
+                                            <Text>{s.name}</Text>
+                                        </Flex>
+                                    </Checkbox>
+                                ))}
                             </Flex>
                         </AccordionBody>
                     </Accordion>
