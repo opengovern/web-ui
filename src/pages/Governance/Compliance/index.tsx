@@ -308,7 +308,7 @@ export default function Compliance() {
                             <SelectItem value="AWS">AWS</SelectItem>
                             <SelectItem value="Azure">Azure</SelectItem>
                         </Select>
-                        <TabGroup
+                        {/* <TabGroup
                             index={index}
                             onIndexChange={setIndex}
                             className="w-fit"
@@ -321,7 +321,7 @@ export default function Compliance() {
                                     <Bars3Icon className="h-5" />
                                 </Tab>
                             </TabList>
-                        </TabGroup>
+                        </TabGroup> */}
                     </Flex>
                 </Col>
             </Grid>
@@ -336,12 +336,7 @@ export default function Compliance() {
                         index === 1 ? (
                             <Grid className="w-full gap-4">
                                 {benchmarkList(benchmarks?.benchmarkSummary)
-                                    .connected?.sort(
-                                        (a, b) =>
-                                            (b?.checks?.passedCount || 0) -
-                                            (a?.checks?.passedCount || 0)
-                                    )
-                                    .filter((bm) =>
+                                    .connected.filter((bm) =>
                                         selectedProvider.length
                                             ? bm?.tags?.service?.includes(
                                                   selectedProvider
@@ -361,12 +356,7 @@ export default function Compliance() {
                         ) : (
                             <Grid numItems={3} className="w-full gap-4">
                                 {benchmarkList(benchmarks?.benchmarkSummary)
-                                    .connected?.sort(
-                                        (a, b) =>
-                                            (b?.checks?.passedCount || 0) -
-                                            (a?.checks?.passedCount || 0)
-                                    )
-                                    .filter((bm) =>
+                                    .connected.filter((bm) =>
                                         selectedProvider.length
                                             ? bm?.tags?.service?.includes(
                                                   selectedProvider
