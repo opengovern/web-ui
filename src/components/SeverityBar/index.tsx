@@ -45,7 +45,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
         },
         {
             name: 'None',
-            color: '#D0D4DA',
+            color: '#6B7280',
             percent:
                 (benchmarkChecks(benchmark).none /
                     (benchmarkChecks(benchmark).failed || 1)) *
