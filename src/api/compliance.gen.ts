@@ -2042,22 +2042,13 @@ export const useComplianceApiV1FindingsTopDetail = (
 
         connectionGroup?: string[]
 
-        resourceCollection?: string[]
-
         connector?: ('' | 'AWS' | 'Azure')[]
 
         benchmarkId?: string[]
 
         controlId?: string[]
 
-        severities?: (
-            | 'none'
-            | 'passed'
-            | 'low'
-            | 'medium'
-            | 'high'
-            | 'critical'
-        )[]
+        severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
     },
     params: RequestParams = {},
     autoExecute = true
@@ -2415,14 +2406,7 @@ export const useComplianceApiV1FindingsCountDetail = (
 
         connector?: ('' | 'AWS' | 'Azure')[]
 
-        severities?: (
-            | 'none'
-            | 'passed'
-            | 'low'
-            | 'medium'
-            | 'high'
-            | 'critical'
-        )[]
+        severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
     },
     params: RequestParams = {},
     autoExecute = true
