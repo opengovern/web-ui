@@ -43,6 +43,7 @@ import { columns } from '../../../Findings'
 import Breakdown from '../../../../../components/Breakdown'
 import FindingDetail from '../../../Findings/Detail'
 import { policyColumns } from '../Controls/ControlList'
+import { benchmarkChecks } from '../../../../../components/Cards/ComplianceCard'
 
 export default function SingleComplianceConnection() {
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -105,19 +106,9 @@ export default function SingleComplianceConnection() {
             ? { [sortModel[0].colId]: sortModel[0].sort }
             : {},
     })
-    const {
-        response: policies,
-        isLoading: policiesLoading,
-        sendNow: updatePolicy,
-    } = useComplianceApiV1BenchmarksControlsDetail(benchmark || '', {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        connectionID: [connection?.replace('account_', '') || ''],
-    })
 
     useEffect(() => {
         if (benchmark) {
-            updatePolicy()
             updateDetail()
         }
     }, [benchmark])
@@ -154,13 +145,6 @@ export default function SingleComplianceConnection() {
             }
         },
     }
-
-    const critical = benchmarkDetail?.checks?.criticalCount || 0
-    const high = benchmarkDetail?.checks?.highCount || 0
-    const medium = benchmarkDetail?.checks?.mediumCount || 0
-    const low = benchmarkDetail?.checks?.lowCount || 0
-    const passed = benchmarkDetail?.checks?.passedCount || 0
-    const unknown = benchmarkDetail?.checks?.unknownCount || 0
 
     return (
         <Layout currentPage="compliance">
@@ -279,12 +263,27 @@ export default function SingleComplianceConnection() {
                 <Breakdown
                     title={`Severity breakdown for ${benchmark}`}
                     chartData={[
-                        { name: 'Critical', value: critical },
-                        { name: 'High', value: high },
-                        { name: 'Medium', value: medium },
-                        { name: 'Low', value: low },
-                        { name: 'Passed', value: passed },
-                        { name: 'Unknown', value: unknown },
+                        {
+                            name: 'Critical',
+                            value: benchmarkChecks(benchmarkDetail).critical,
+                        },
+                        {
+                            name: 'High',
+                            value: benchmarkChecks(benchmarkDetail).high,
+                        },
+                        {
+                            name: 'Medium',
+                            value: benchmarkChecks(benchmarkDetail).medium,
+                        },
+                        {
+                            name: 'Low',
+                            value: benchmarkChecks(benchmarkDetail).low,
+                        },
+                        // { name: 'Passed', value: passed },
+                        {
+                            name: 'None',
+                            value: benchmarkChecks(benchmarkDetail).none,
+                        },
                     ]}
                     loading={detailLoading}
                 />
@@ -313,12 +312,12 @@ export default function SingleComplianceConnection() {
                         ?.map((bm) => (
                             <TabPanel>
                                 <Table
-                                    title={`${bm.benchmarkId?.title} policies`}
+                                    title={`${bm.benchmarkId?.title} controls`}
                                     downloadable
                                     id="compliance_policies"
-                                    loading={policiesLoading}
+                                    loading={detailLoading}
                                     onGridReady={(e) => {
-                                        if (policiesLoading) {
+                                        if (detailLoading) {
                                             e.api.showLoadingOverlay()
                                         }
                                     }}

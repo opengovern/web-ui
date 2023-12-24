@@ -457,6 +457,13 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary {
     accountId?: string
     accountName?: string
+    conformanceStatusesCount?: {
+        error?: number
+        failed?: number
+        info?: number
+        passed?: number
+        skip?: number
+    }
     lastCheckTime?: string
     securityScore?: number
     severitiesCount?: {
@@ -464,6 +471,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSumm
         high?: number
         low?: number
         medium?: number
+        none?: number
     }
 }
 
@@ -626,6 +634,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSumm
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary {
     /** Checks summary */
     checks?: TypesSeverityResult
+    /** Compliance result summary */
+    conformanceStatusSummary?: TypesConformanceStatusSummary
     /**
      * Cloud providers
      * @example ["[Azure]"]
@@ -656,8 +666,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example "success"
      */
     lastJobStatus?: string
-    /** Compliance result summary */
-    result?: TypesComplianceResultSummary
     /** Tags */
     tags?: Record<string, string[]>
     /**
@@ -748,6 +756,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     benchmarkID?: string
     /** @example 1 */
     complianceJobID?: number
+    /** @example "alarm" */
+    conformanceStatus?: TypesConformanceStatus
     /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
     connectionID?: string
     /** @example "Azure" */
@@ -794,8 +804,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     resourceType?: string
     /** @example "Virtual Machine" */
     resourceTypeName?: string
-    /** @example "alarm" */
-    result?: TypesComplianceResult
     /** @example "low" */
     severity?: TypesFindingSeverity
     sortKey?: any[]
@@ -822,6 +830,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      * @example ["azure_cis_v140"]
      */
     benchmarkID?: string[]
+    /** @example ["alarm"] */
+    conformanceStatus?: TypesConformanceStatus[]
     /**
      * Connection ID
      * @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"]
@@ -857,8 +867,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      * @example ["low"]
      */
     severity?: string[]
-    /** @example ["alarm"] */
-    status?: TypesComplianceResult[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata {
@@ -878,7 +886,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsS
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse {
     benchmarkSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary[]
     totalChecks?: TypesSeverityResult
-    totalResult?: TypesComplianceResultSummary
+    totalConformanceStatusSummary?: TypesConformanceStatusSummary
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
@@ -1081,6 +1089,13 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSummary {
+    conformanceStatusesCount?: {
+        error?: number
+        failed?: number
+        info?: number
+        passed?: number
+        skip?: number
+    }
     securityScore?: number
     serviceLabel?: string
     serviceName?: string
@@ -1090,7 +1105,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSumma
         low?: number
         medium?: number
         none?: number
-        passed?: number
     }
 }
 
@@ -2234,7 +2248,7 @@ export enum SourceType {
     CloudAzure = 'Azure',
 }
 
-export enum TypesComplianceResult {
+export enum TypesConformanceStatus {
     ComplianceResultOK = 'ok',
     ComplianceResultALARM = 'alarm',
     ComplianceResultINFO = 'info',
@@ -2242,7 +2256,7 @@ export enum TypesComplianceResult {
     ComplianceResultERROR = 'error',
 }
 
-export interface TypesComplianceResultSummary {
+export interface TypesConformanceStatusSummary {
     /** @example 1 */
     alarmCount?: number
     /** @example 1 */
@@ -2257,7 +2271,6 @@ export interface TypesComplianceResultSummary {
 
 export enum TypesFindingSeverity {
     FindingSeverityNone = 'none',
-    FindingSeverityPassed = 'passed',
     FindingSeverityLow = 'low',
     FindingSeverityMedium = 'medium',
     FindingSeverityHigh = 'high',
@@ -2273,8 +2286,6 @@ export interface TypesSeverityResult {
     lowCount?: number
     /** @example 1 */
     mediumCount?: number
-    /** @example 1 */
-    passedCount?: number
     /** @example 1 */
     unknownCount?: number
 }
@@ -3528,8 +3539,6 @@ export class Api<
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** BenchmarkID */
@@ -3537,14 +3546,7 @@ export class Api<
                 /** ControlID */
                 controlId?: string[]
                 /** Severities to filter by defaults to all severities except passed */
-                severities?: (
-                    | 'none'
-                    | 'passed'
-                    | 'low'
-                    | 'medium'
-                    | 'high'
-                    | 'critical'
-                )[]
+                severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
             },
             params: RequestParams = {}
         ) =>
@@ -3647,14 +3649,7 @@ export class Api<
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Severities to filter by defaults to all severities except passed */
-                severities?: (
-                    | 'none'
-                    | 'passed'
-                    | 'low'
-                    | 'medium'
-                    | 'high'
-                    | 'critical'
-                )[]
+                severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
             },
             params: RequestParams = {}
         ) =>

@@ -33,10 +33,10 @@ export const severityBadge = (severity: any) => {
         width: '64px',
     }
     if (severity) {
-        if (severity === 'unknown') {
+        if (severity === 'none') {
             return (
                 <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>
-                    Unknown
+                    None
                 </Badge>
             )
         }
@@ -74,9 +74,7 @@ export const severityBadge = (severity: any) => {
             </Badge>
         )
     }
-    return (
-        <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>Unknown</Badge>
-    )
+    return <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>None</Badge>
 }
 
 export const statusBadge = (severity: any) => {

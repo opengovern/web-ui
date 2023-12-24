@@ -33,6 +33,7 @@ import Controls from './Controls'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
+import SeverityBar from '../../../../components/SeverityBar'
 
 const topResources = (
     input:
@@ -254,8 +255,9 @@ export default function BenchmarkSummary() {
                                     </Text>
                                     <Title className="font-semibold">
                                         {`${(
-                                            (benchmarkChecks(benchmarkDetail)
-                                                .passed /
+                                            ((benchmarkDetail
+                                                ?.conformanceStatusSummary
+                                                ?.alarmCount || 0) /
                                                 benchmarkChecks(benchmarkDetail)
                                                     .total) *
                                                 100 || 0
@@ -270,8 +272,9 @@ export default function BenchmarkSummary() {
                                         <Text>Passed</Text>
                                         <Badge color="emerald">
                                             {numberDisplay(
-                                                benchmarkChecks(benchmarkDetail)
-                                                    .passed,
+                                                benchmarkDetail
+                                                    ?.conformanceStatusSummary
+                                                    ?.alarmCount || 0,
                                                 0
                                             )}
                                         </Badge>
@@ -285,190 +288,16 @@ export default function BenchmarkSummary() {
                                             {numberDisplay(
                                                 benchmarkChecks(benchmarkDetail)
                                                     .total -
-                                                    benchmarkChecks(
-                                                        benchmarkDetail
-                                                    ).passed,
+                                                    (benchmarkDetail
+                                                        ?.conformanceStatusSummary
+                                                        ?.alarmCount || 0),
                                                 0
                                             )}
                                         </Badge>
                                     </Flex>
                                 </Flex>
                             </Flex>
-                            <CategoryBar
-                                className="w-full mb-2"
-                                values={[
-                                    (benchmarkChecks(benchmarkDetail).critical /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 0,
-                                    (benchmarkChecks(benchmarkDetail).high /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 0,
-                                    (benchmarkChecks(benchmarkDetail).medium /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 0,
-                                    (benchmarkChecks(benchmarkDetail).low /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 0,
-                                    1,
-                                    (benchmarkChecks(benchmarkDetail).passed /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 0,
-                                    benchmarkChecks(benchmarkDetail).critical +
-                                        benchmarkChecks(benchmarkDetail).high +
-                                        benchmarkChecks(benchmarkDetail)
-                                            .medium +
-                                        benchmarkChecks(benchmarkDetail).low +
-                                        benchmarkChecks(benchmarkDetail)
-                                            .passed >
-                                    0
-                                        ? (benchmarkChecks(benchmarkDetail)
-                                              .unknown /
-                                              benchmarkChecks(benchmarkDetail)
-                                                  .total) *
-                                              100 || 0
-                                        : 100,
-                                ]}
-                                markerValue={
-                                    ((benchmarkChecks(benchmarkDetail)
-                                        .critical +
-                                        benchmarkChecks(benchmarkDetail).high +
-                                        benchmarkChecks(benchmarkDetail)
-                                            .medium +
-                                        benchmarkChecks(benchmarkDetail).low +
-                                        1) /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 1
-                                }
-                                showLabels={false}
-                                colors={[
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    '#6E120B',
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    '#CA2B1D',
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    '#EE9235',
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    '#F4C744',
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    '#000',
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    '#54B584',
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    '#9BA2AE',
-                                ]}
-                            />
-                            <Flex
-                                justifyContent="start"
-                                className="mt-6 flex-wrap gap-2"
-                            >
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#6E120B' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        Critical
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail)
-                                            .critical /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#CA2B1D' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        High
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail).high /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#EE9235' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        Medium
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail)
-                                            .medium /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#F4C744' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        Low
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail).low /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#54B584' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        Passed
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail)
-                                            .passed /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#9BA2AE' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        Unknown
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail)
-                                            .unknown /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                            </Flex>
+                            <SeverityBar benchmark={benchmarkDetail} />
                         </Card>
                         <Card>
                             <Flex justifyContent="between" className="mb-3">

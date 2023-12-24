@@ -105,8 +105,8 @@ export default function FindingDetail({
                                                 {control.controlTitle}
                                             </Text>
                                             <Flex justifyContent="start">
-                                                {control.severity ===
-                                                'passed' ? (
+                                                {control.conformanceStatus ===
+                                                'ok' ? (
                                                     <Flex className="w-fit gap-1.5">
                                                         <div className="w-2 h-2 bg-emerald-500 rounded-full" />
                                                         <Text color="emerald">
