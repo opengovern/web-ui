@@ -30,8 +30,14 @@ export const benchmarkChecks = (
     const low = ben?.checks?.lowCount || 0
     const none = ben?.checks?.unknownCount || 0
 
-    const total = critical + high + medium + low + none
-    const failed = critical + high + medium + low
+    const total =
+        critical +
+        high +
+        medium +
+        low +
+        none +
+        (ben?.conformanceStatusSummary?.okCount || 0)
+    const failed = critical + high + medium + low + none
 
     return {
         critical,
