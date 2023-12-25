@@ -54,7 +54,6 @@ export default function ControlDetail() {
 
     const { response: controlDetail, isLoading } =
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
-    console.log(controlDetail)
 
     return (
         <Layout currentPage="compliance">
@@ -419,7 +418,18 @@ export default function ControlDetail() {
                         <TabList>
                             <Tab>Impacted resources</Tab>
                             <Tab>Impacted accounts</Tab>
-                            <Tab>Control information</Tab>
+                            <Tab
+                                disabled={
+                                    controlDetail?.control?.explanation
+                                        ?.length === 0 &&
+                                    controlDetail?.control?.nonComplianceCost
+                                        ?.length === 0 &&
+                                    controlDetail?.control?.usefulExample
+                                        ?.length === 0
+                                }
+                            >
+                                Control information
+                            </Tab>
                             <Tab>Benchmarks</Tab>
                         </TabList>
                         <TabPanels>

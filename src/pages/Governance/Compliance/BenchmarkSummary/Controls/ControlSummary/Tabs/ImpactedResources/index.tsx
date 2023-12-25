@@ -193,7 +193,6 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                                 : [sortKey],
                     })
                     .then((resp) => {
-                        console.log(resp.data)
                         params.success({
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
