@@ -94,7 +94,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                         <Text className="font-semibold">
                             {(
                                 ((benchmark?.conformanceStatusSummary
-                                    ?.alarmCount || 0) /
+                                    ?.okCount || 0) /
                                     benchmarkChecks(benchmark).total || 0) * 100
                             ).toFixed(2)}{' '}
                             %
@@ -116,7 +116,7 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
                             1,
-                            ((benchmark?.conformanceStatusSummary?.alarmCount ||
+                            ((benchmark?.conformanceStatusSummary?.okCount ||
                                 0) /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
@@ -135,8 +135,8 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                                 benchmarkChecks(benchmark).high +
                                 benchmarkChecks(benchmark).medium +
                                 benchmarkChecks(benchmark).low +
-                                (benchmark?.conformanceStatusSummary
-                                    ?.alarmCount || 0) +
+                                (benchmark?.conformanceStatusSummary?.okCount ||
+                                    0) +
                                 1) /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 1
