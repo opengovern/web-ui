@@ -63,12 +63,12 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                 0
             )} failed`}</Text>
             {benchmarkChecks(benchmark).total > 0 ? (
-                <Flex alignItems="start">
+                <Flex alignItems="start" className="gap-0.5">
                     <Flex flexDirection="col">
-                        <Flex className="h-5 rounded-l-sm overflow-hidden">
+                        <Flex className="h-5 rounded-l-sm overflow-hidden gap-0.5">
                             {severity.map((s) => (
                                 <div
-                                    className="h-full border-r border-r-white"
+                                    className="h-full"
                                     style={{
                                         width: `${s.percent}%`,
                                         backgroundColor: s.color,
