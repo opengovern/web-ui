@@ -6,6 +6,7 @@ import {
     Card,
     Divider,
     Flex,
+    Icon,
     Text,
     TextInput,
 } from '@tremor/react'
@@ -14,7 +15,11 @@ import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { Checkbox, Radio, useCheckboxState } from 'pretty-checkbox-react'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import {
+    CheckCircleIcon,
+    MagnifyingGlassIcon,
+    XCircleIcon,
+} from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
 import { isDemoAtom, notificationAtom } from '../../../store'
@@ -205,8 +210,8 @@ const severity = [
     { name: 'None', color: '#9BA2AE' },
 ]
 const status = [
-    { name: 'Passed', color: '#54B584' },
-    { name: 'Failed', color: '#E01D48' },
+    { name: 'Passed', color: 'emerald', icon: CheckCircleIcon },
+    { name: 'Failed', color: 'rose', icon: XCircleIcon },
 ]
 
 const filteredConnectionsList = (
@@ -502,12 +507,14 @@ export default function Findings() {
                                         value={s.name.toLowerCase()}
                                         {...statusCheckbox}
                                     >
-                                        <Flex className="gap-1.5">
-                                            <div
-                                                className="h-4 w-1.5 rounded-sm"
-                                                style={{
-                                                    backgroundColor: s.color,
-                                                }}
+                                        <Flex className="gap-1">
+                                            <Icon
+                                                icon={s.icon}
+                                                size="sm"
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                color={s.color}
+                                                className="h-3 p-0 -ml-0.5"
                                             />
                                             <Text>{s.name}</Text>
                                         </Flex>

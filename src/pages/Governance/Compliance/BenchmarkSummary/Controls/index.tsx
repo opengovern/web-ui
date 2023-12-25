@@ -33,31 +33,10 @@ export const severityBadge = (severity: any) => {
         width: '64px',
     }
     if (severity) {
-        if (severity === 'none') {
+        if (severity === 'critical') {
             return (
-                <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>
-                    None
-                </Badge>
-            )
-        }
-        if (severity === 'passed') {
-            return (
-                <Badge style={{ backgroundColor: '#54B584', ...style }}>
-                    Passed
-                </Badge>
-            )
-        }
-        if (severity === 'low') {
-            return (
-                <Badge style={{ backgroundColor: '#F4C744', ...style }}>
-                    Low
-                </Badge>
-            )
-        }
-        if (severity === 'medium') {
-            return (
-                <Badge style={{ backgroundColor: '#EE9235', ...style }}>
-                    Medium
+                <Badge style={{ backgroundColor: '#6E120B', ...style }}>
+                    Critical
                 </Badge>
             )
         }
@@ -68,22 +47,43 @@ export const severityBadge = (severity: any) => {
                 </Badge>
             )
         }
+        if (severity === 'medium') {
+            return (
+                <Badge style={{ backgroundColor: '#EE9235', ...style }}>
+                    Medium
+                </Badge>
+            )
+        }
+        if (severity === 'low') {
+            return (
+                <Badge style={{ backgroundColor: '#F4C744', ...style }}>
+                    Low
+                </Badge>
+            )
+        }
+        if (severity === 'none') {
+            return (
+                <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>
+                    None
+                </Badge>
+            )
+        }
         return (
-            <Badge style={{ backgroundColor: '#6E120B', ...style }}>
-                Critical
+            <Badge style={{ backgroundColor: '#54B584', ...style }}>
+                Passed
             </Badge>
         )
     }
-    return <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>None</Badge>
+    return <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>N/A</Badge>
 }
 
-export const statusBadge = (severity: any) => {
+export const statusBadge = (status: any) => {
     const style = {
         color: '#fff',
         borderRadius: '8px',
         width: '64px',
     }
-    if (severity === 'passed') {
+    if (status === 'ok') {
         return (
             <Badge style={{ backgroundColor: '#54B584', ...style }}>
                 Passed
@@ -135,8 +135,6 @@ export default function Controls({ id }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
-    console.log(controls)
-    console.log(groupBy(rows(controls), 'parentName'))
 
     return (
         <Flex flexDirection="col" className="gap-4">

@@ -68,8 +68,8 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                 <SummaryCard
                     title="Security score"
                     metric={
-                        ((benchmark?.conformanceStatusSummary?.alarmCount ||
-                            0) / benchmarkChecks(benchmark).total || 0) * 100
+                        ((benchmark?.conformanceStatusSummary?.okCount || 0) /
+                            benchmarkChecks(benchmark).total || 0) * 100
                     }
                     isPercent
                     border={false}

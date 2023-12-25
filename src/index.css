@@ -101,3 +101,20 @@ button:focus {
 .ag-paging-page-size {
     display: none;
 }
+
+code {
+    text-wrap: normal;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+}
+
+pre {
+    margin: 8px 0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid gainsboro;
+}
+
+.language-bash {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}

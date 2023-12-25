@@ -29,6 +29,7 @@ import clipboardCopy from 'clipboard-copy'
 import { useState } from 'react'
 import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
+import Markdown from 'react-markdown'
 import Layout from '../../../../../../components/Layout'
 import { useComplianceApiV1ControlsSummaryDetail } from '../../../../../../api/compliance.gen'
 import Header from '../../../../../../components/Header'
@@ -40,13 +41,14 @@ import ImpactedResources from './Tabs/ImpactedResources'
 import Benchmarks from './Tabs/Benchmarks'
 import Modal from '../../../../../../components/Modal'
 import ImpactedAccounts from './Tabs/ImpactedAccounts'
-import { dateTimeDisplay } from '../../../../../../utilities/dateDisplay'
+import DrawerPanel from '../../../../../../components/DrawerPanel'
 
 export default function ControlDetail() {
     const { controlId, ws } = useParams()
     const setNotification = useSetAtom(notificationAtom)
 
     const [openDetail, setOpenDetail] = useState(false)
+    const [doc, setDoc] = useState('')
     const [modalData, setModalData] = useState('')
     const setQuery = useSetAtom(queryAtom)
 
@@ -267,11 +269,39 @@ export default function ControlDetail() {
                             alignItems="start"
                             className="h-full"
                         >
+                            <DrawerPanel
+                                open={doc.length > 0}
+                                onClose={() => setDoc('')}
+                            >
+                                <Markdown>{doc}</Markdown>
+                            </DrawerPanel>
                             <Title className="font-semibold mb-2">
                                 Remediation
                             </Title>
                             <Grid numItems={2} className="w-full gap-4">
-                                <Card>
+                                <Card
+                                    className={
+                                        controlDetail?.control
+                                            ?.manualRemediation &&
+                                        controlDetail?.control
+                                            ?.manualRemediation.length
+                                            ? 'cursor-pointer'
+                                            : 'grayscale bg-gray-100'
+                                    }
+                                    onClick={() => {
+                                        if (
+                                            controlDetail?.control
+                                                ?.manualRemediation &&
+                                            controlDetail?.control
+                                                ?.manualRemediation.length
+                                        ) {
+                                            setDoc(
+                                                controlDetail?.control
+                                                    ?.manualRemediation
+                                            )
+                                        }
+                                    }}
+                                >
                                     <Flex className="mb-2.5">
                                         <Flex
                                             justifyContent="start"
@@ -293,7 +323,29 @@ export default function ControlDetail() {
                                         instances of non-compliance
                                     </Text>
                                 </Card>
-                                <Card>
+                                <Card
+                                    className={
+                                        controlDetail?.control
+                                            ?.cliRemediation &&
+                                        controlDetail?.control?.cliRemediation
+                                            .length
+                                            ? 'cursor-pointer'
+                                            : 'grayscale bg-gray-100'
+                                    }
+                                    onClick={() => {
+                                        if (
+                                            controlDetail?.control
+                                                ?.cliRemediation &&
+                                            controlDetail?.control
+                                                ?.cliRemediation.length
+                                        ) {
+                                            setDoc(
+                                                controlDetail?.control
+                                                    ?.cliRemediation
+                                            )
+                                        }
+                                    }}
+                                >
                                     <Flex className="mb-2.5">
                                         <Flex
                                             justifyContent="start"
@@ -315,7 +367,7 @@ export default function ControlDetail() {
                                         utilizing CLI
                                     </Text>
                                 </Card>
-                                <Card>
+                                <Card className="grayscale bg-gray-100">
                                     <Flex className="mb-2.5">
                                         <Flex
                                             justifyContent="start"
@@ -337,7 +389,7 @@ export default function ControlDetail() {
                                         utilizing solutions where possible
                                     </Text>
                                 </Card>
-                                <Card>
+                                <Card className="grayscale bg-gray-100">
                                     <Flex className="mb-2.5">
                                         <Flex
                                             justifyContent="start"
@@ -366,7 +418,18 @@ export default function ControlDetail() {
                         <TabList>
                             <Tab>Impacted resources</Tab>
                             <Tab>Impacted accounts</Tab>
-                            <Tab>Control information</Tab>
+                            <Tab
+                                disabled={
+                                    controlDetail?.control?.explanation
+                                        ?.length === 0 &&
+                                    controlDetail?.control?.nonComplianceCost
+                                        ?.length === 0 &&
+                                    controlDetail?.control?.usefulExample
+                                        ?.length === 0
+                                }
+                            >
+                                Control information
+                            </Tab>
                             <Tab>Benchmarks</Tab>
                         </TabList>
                         <TabPanels>

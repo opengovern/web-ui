@@ -257,7 +257,7 @@ export default function BenchmarkSummary() {
                                         {`${(
                                             ((benchmarkDetail
                                                 ?.conformanceStatusSummary
-                                                ?.alarmCount || 0) /
+                                                ?.okCount || 0) /
                                                 benchmarkChecks(benchmarkDetail)
                                                     .total) *
                                                 100 || 0
@@ -274,7 +274,7 @@ export default function BenchmarkSummary() {
                                             {numberDisplay(
                                                 benchmarkDetail
                                                     ?.conformanceStatusSummary
-                                                    ?.alarmCount || 0,
+                                                    ?.okCount || 0,
                                                 0
                                             )}
                                         </Badge>
@@ -290,7 +290,7 @@ export default function BenchmarkSummary() {
                                                     .total -
                                                     (benchmarkDetail
                                                         ?.conformanceStatusSummary
-                                                        ?.alarmCount || 0),
+                                                        ?.okCount || 0),
                                                 0
                                             )}
                                         </Badge>
