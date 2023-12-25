@@ -14,6 +14,7 @@ import {
 } from '@tremor/react'
 import { useEffect } from 'react'
 import ReactJson from '@microlink/react-json-view'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../api/api'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
@@ -108,17 +109,13 @@ export default function FindingDetail({
                                                 {control.conformanceStatus ===
                                                 'ok' ? (
                                                     <Flex className="w-fit gap-1.5">
-                                                        <div className="w-2 h-2 bg-emerald-500 rounded-full" />
-                                                        <Text color="emerald">
-                                                            Passed
-                                                        </Text>
+                                                        <CheckCircleIcon className="h-4 text-emerald-500" />
+                                                        <Text>Passed</Text>
                                                     </Flex>
                                                 ) : (
                                                     <Flex className="w-fit gap-1.5">
-                                                        <div className="w-2 h-2 bg-rose-600 rounded-full" />
-                                                        <Text color="rose">
-                                                            Failed
-                                                        </Text>
+                                                        <XCircleIcon className="h-4 text-rose-600" />
+                                                        <Text>Failed</Text>
                                                     </Flex>
                                                 )}
                                                 <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
