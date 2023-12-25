@@ -77,13 +77,13 @@ export const severityBadge = (severity: any) => {
     return <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>N/A</Badge>
 }
 
-export const statusBadge = (severity: any) => {
+export const statusBadge = (status: any) => {
     const style = {
         color: '#fff',
         borderRadius: '8px',
         width: '64px',
     }
-    if (severity === 'passed') {
+    if (status === 'ok') {
         return (
             <Badge style={{ backgroundColor: '#54B584', ...style }}>
                 Passed

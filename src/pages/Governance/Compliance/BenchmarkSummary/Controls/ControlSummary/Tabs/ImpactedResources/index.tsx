@@ -116,14 +116,14 @@ const columns = (isDemo: boolean) => {
             flex: 1,
         },
         {
-            field: 'severity',
+            field: 'conformanceStatus',
             headerName: 'Conformance status',
             type: 'string',
             sortable: true,
             filter: true,
             hide: false,
             resizable: true,
-            width: 120,
+            width: 180,
             cellRenderer: (param: ValueFormatterParams) => (
                 <Flex className="h-full">{statusBadge(param.value)}</Flex>
             ),
@@ -193,6 +193,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                                 : [sortKey],
                     })
                     .then((resp) => {
+                        console.log(resp.data)
                         params.success({
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
