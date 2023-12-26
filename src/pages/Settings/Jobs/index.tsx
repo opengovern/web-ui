@@ -9,14 +9,19 @@ import {
     Text,
     Title,
 } from '@tremor/react'
-import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
-import { Radio } from 'pretty-checkbox-react'
-import Table, { IColumn } from '../../../components/Table'
-import { useScheduleApiV1JobsList } from '../../../api/schedule.gen'
 import {
+    GridOptions,
+    IServerSideGetRowsParams,
+    ValueFormatterParams,
+} from 'ag-grid-community'
+import { Radio } from 'pretty-checkbox-react'
+import { useMemo } from 'react'
+import Table, { IColumn } from '../../../components/Table'
+import {
+    Api,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJob,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus,
 } from '../../../api/api'
+import AxiosAPI from '../../../api/ApiConfig'
 
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -25,7 +30,7 @@ const columns = () => {
             headerName: 'Job ID',
             type: 'string',
             sortable: true,
-            filter: true,
+            filter: false,
             resizable: true,
             hide: true,
         },
@@ -35,6 +40,9 @@ const columns = () => {
             type: 'string',
             sortable: true,
             filter: true,
+            filterParams: {
+                values: ['compliance', 'analytics', 'insight', 'discovery'],
+            },
             resizable: true,
         },
         {
@@ -42,7 +50,7 @@ const columns = () => {
             headerName: 'Kaytu Connection ID',
             type: 'string',
             sortable: true,
-            filter: true,
+            filter: false,
             resizable: true,
             hide: true,
         },
@@ -50,8 +58,8 @@ const columns = () => {
             field: 'connectionProviderID',
             headerName: 'Account ID',
             type: 'string',
-            sortable: true,
-            filter: true,
+            sortable: false,
+            filter: false,
             resizable: true,
             hide: true,
         },
@@ -59,16 +67,16 @@ const columns = () => {
             field: 'connectionProviderName',
             headerName: 'Account Name',
             type: 'string',
-            sortable: true,
-            filter: true,
+            sortable: false,
+            filter: false,
             resizable: true,
         },
         {
             field: 'title',
             headerName: 'Title',
             type: 'string',
-            sortable: true,
-            filter: true,
+            sortable: false,
+            filter: false,
             resizable: true,
         },
         {
@@ -77,6 +85,20 @@ const columns = () => {
             type: 'string',
             sortable: true,
             filter: true,
+            filterParams: {
+                values: [
+                    'CREATED',
+                    'QUEUED',
+                    'IN_PROGRESS',
+                    'RUNNERS_IN_PROGRESS',
+                    'SUMMARIZER_IN_PROGRESS',
+                    'OLD_RESOURCE_DELETION',
+                    'SUCCEEDED',
+                    'COMPLETED',
+                    'FAILED',
+                    'TIMEOUT',
+                ],
+            },
             resizable: true,
             cellRenderer: (
                 param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgDescribeApiJob>
@@ -84,25 +106,41 @@ const columns = () => {
                 let jobStatus = ''
                 let jobColor: Color = 'gray'
                 switch (param.data?.status) {
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusCreated:
+                    case 'CREATED':
                         jobStatus = 'created'
                         break
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusQueued:
+                    case 'QUEUED':
                         jobStatus = 'queued'
                         break
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusInProgress:
+                    case 'IN_PROGRESS':
                         jobStatus = 'in progress'
                         jobColor = 'orange'
                         break
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusSuccessful:
+                    case 'RUNNERS_IN_PROGRESS':
+                        jobStatus = 'in progress'
+                        jobColor = 'orange'
+                        break
+                    case 'SUMMARIZER_IN_PROGRESS':
+                        jobStatus = 'summarizing'
+                        jobColor = 'orange'
+                        break
+                    case 'OLD_RESOURCE_DELETION':
+                        jobStatus = 'summarizing'
+                        jobColor = 'orange'
+                        break
+                    case 'SUCCEEDED':
                         jobStatus = 'succeeded'
                         jobColor = 'emerald'
                         break
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusFailure:
+                    case 'COMPLETED':
+                        jobStatus = 'completed'
+                        jobColor = 'emerald'
+                        break
+                    case 'FAILED':
                         jobStatus = 'failed'
                         jobColor = 'red'
                         break
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusTimeout:
+                    case 'TIMEOUT':
                         jobStatus = 'time out'
                         jobColor = 'red'
                         break
@@ -117,7 +155,7 @@ const columns = () => {
             field: 'failureReason',
             headerName: 'Failure Reason',
             type: 'string',
-            sortable: true,
+            sortable: false,
             filter: true,
             resizable: true,
             hide: true,
@@ -127,37 +165,79 @@ const columns = () => {
 }
 
 export default function SettingsJobs() {
-    const {
-        response: jobs,
-        isLoading,
-        error,
-    } = useScheduleApiV1JobsList({ limit: 5000 })
-    const options: GridOptions = {
-        enableGroupEdit: true,
-        columnTypes: {
-            dimension: {
-                enableRowGroup: true,
-                enablePivot: true,
+    const ssr = () => {
+        return {
+            getRows: (params: IServerSideGetRowsParams) => {
+                console.log(params)
+                let statusFilter = []
+                try {
+                    const v: any = params.request.filterModel
+                    statusFilter = v.status.values
+                } catch (e) {
+                    //
+                }
+
+                let typeFilters = []
+                try {
+                    const v: any = params.request.filterModel
+                    typeFilters = v.type.values
+                } catch (e) {
+                    //
+                }
+
+                const api = new Api()
+                api.instance = AxiosAPI
+                api.schedule
+                    .apiV1JobsCreate({
+                        hours: 24,
+                        pageStart: params.request.startRow || 0,
+                        pageEnd: params.request.endRow || 0,
+                        sortBy: params.request.sortModel.at(0)?.colId,
+                        sortOrder: params.request.sortModel
+                            .at(0)
+                            ?.sort?.toUpperCase(),
+                        statusFilter,
+                        typeFilters,
+                        // afterSortKey:
+                        //     params.request.startRow === 0 ||
+                        //     sortKey.length < 1 ||
+                        //     sortKey === 'none'
+                        //         ? []
+                        //         : [sortKey],
+                    })
+                    .then((resp) => {
+                        console.log('fffff', resp.data.jobs || [])
+                        params.success({
+                            rowData: resp.data.jobs || [],
+                            rowCount: resp.data.summaries
+                                ?.map((v) => v.count)
+                                .reduce(
+                                    (prev, curr) => (prev || 0) + (curr || 0)
+                                ),
+                        })
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                        params.fail()
+                    })
             },
-        },
-        rowGroupPanelShow: 'always',
-        groupAllowUnbalanced: true,
+        }
     }
+
+    const serverSideRows = ssr()
 
     return (
         <Card>
             <Title className="font-semibold">Jobs</Title>
+
             <Table
                 id="jobs"
                 columns={columns()}
-                rowData={jobs?.jobs}
-                options={options}
-                onGridReady={(e) => {
-                    if (isLoading) {
-                        e.api.showLoadingOverlay()
-                    }
+                serverSideDatasource={serverSideRows}
+                options={{
+                    rowModelType: 'serverSide',
+                    serverSideDatasource: serverSideRows,
                 }}
-                loading={isLoading}
             />
         </Card>
     )

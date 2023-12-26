@@ -776,6 +776,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example 1 */
     noOfOccurrences?: number
     /** @example ["Azure CIS v1.4.0"] */
+    parentBenchmarkDisplayCodes?: string[]
+    /** @example ["Azure CIS v1.4.0"] */
     parentBenchmarkNames?: string[]
     parentBenchmarks?: string[]
     /** @example 1 */
@@ -792,8 +794,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     providerConnectionName?: string
     /** @example "The VM is not using managed disks" */
     reason?: string
-    /** Resource collection */
-    resourceCollection?: string
     /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
     resourceID?: string
     /** @example "eastus" */
@@ -812,6 +812,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata {
+    /**
+     * Count
+     * @example 10
+     */
+    count?: number
     /**
      * Display Name
      * @example "displayName"
@@ -871,12 +876,20 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata {
     benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     connectionID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     connector?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     controlID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     resourceCollection?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse {
+    failedConnectionCount?: number
+    failedControlCount?: number
+    failedFindingsCount?: number
+    failedResourceCount?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse {
@@ -1138,24 +1151,15 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiJob {
     createdAt?: string
     failureReason?: string
     id?: number
-    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus
+    status?: string
     title?: string
     type?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobType
     updatedAt?: string
 }
 
-export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus {
-    JobStatusCreated = 'created',
-    JobStatusQueued = 'queued',
-    JobStatusInProgress = 'in_progress',
-    JobStatusSuccessful = 'successful',
-    JobStatusFailure = 'failure',
-    JobStatusTimeout = 'timeout',
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary {
     count?: number
-    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus
+    status?: string
     type?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobType
 }
 
@@ -1169,6 +1173,16 @@ export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobType {
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes {
     awsResourceTypes?: string[]
     azureResourceTypes?: string[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest {
+    hours?: number
+    pageEnd?: number
+    pageStart?: number
+    sortBy?: string
+    sortOrder?: string
+    statusFilter?: string[]
+    typeFilters?: string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse {
@@ -2212,6 +2226,236 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
     SizeLG = 'lg',
 }
 
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCredentialConfig {
+    clientId: string
+    clientSecret: string
+    objectId: string
+    tenantId: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection {
+    assetDiscovery?: boolean
+    /** @example "scheduled" */
+    assetDiscoveryMethod?: SourceAssetDiscoveryMethodType
+    /** @example "Azure" */
+    connector?: SourceType
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
+    cost?: number
+    credential?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential
+    /** @example "7r6123ac-ca1c-434f-b1a3-91w2w9d277c8" */
+    credentialID?: string
+    credentialName?: string
+    /** @example "manual" */
+    credentialType?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredentialType
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
+    dailyCostAtEndTime?: number
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
+    dailyCostAtStartTime?: number
+    describeJobRunning?: boolean
+    /** @example "This is an example connection" */
+    description?: string
+    /** @example "johndoe@example.com" */
+    email?: string
+    healthReason?: string
+    /** @example "healthy" */
+    healthState?: SourceHealthStatus
+    /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
+    id?: string
+    /** @example "2023-05-07T00:00:00Z" */
+    lastHealthCheckTime?: string
+    /** @example "2023-05-07T00:00:00Z" */
+    lastInventory?: string
+    /** @example "enabled" */
+    lifecycleState?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectionLifecycleState
+    metadata?: Record<string, any>
+    /**
+     * @min 0
+     * @max 1000000
+     * @example 100
+     */
+    oldResourceCount?: number
+    /** @example "2023-05-07T00:00:00Z" */
+    onboardDate?: string
+    /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
+    providerConnectionID?: string
+    /** @example "example-connection" */
+    providerConnectionName?: string
+    /**
+     * @min 0
+     * @max 1000000
+     * @example 100
+     */
+    resourceCount?: number
+    spendDiscovery?: boolean
+}
+
+export enum GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectionLifecycleState {
+    ConnectionLifecycleStateOnboard = 'ONBOARD',
+    ConnectionLifecycleStateDisabled = 'DISABLED',
+    ConnectionLifecycleStateDiscovered = 'DISCOVERED',
+    ConnectionLifecycleStateInProgress = 'IN_PROGRESS',
+    ConnectionLifecycleStateArchived = 'ARCHIVED',
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureConnectionRequest {
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCredentialConfig
+    description?: string
+    name?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse {
+    connections?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    id?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential {
+    /**
+     * @min 0
+     * @max 1000
+     * @example 0
+     */
+    archived_connections?: number
+    /** @example false */
+    autoOnboardEnabled?: boolean
+    config?: any
+    connections?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    /** @example "AWS" */
+    connectorType?: SourceType
+    /** @example "manual-aws-org" */
+    credentialType?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredentialType
+    /**
+     * @min 0
+     * @max 1000
+     * @example 0
+     */
+    disabled_connections?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 50
+     */
+    discovered_connections?: number
+    /** @example true */
+    enabled?: boolean
+    /** @example "" */
+    healthReason?: string
+    /** @example "healthy" */
+    healthStatus?: SourceHealthStatus
+    /** @example "1028642a-b22e-26ha-c5h2-22nl254678m5" */
+    id?: string
+    /**
+     * @format date-time
+     * @example "2023-06-03T12:21:33.406928Z"
+     */
+    lastHealthCheckTime?: string
+    metadata?: Record<string, any>
+    /** @example "a-1mahsl7lzk" */
+    name?: string
+    /**
+     * @format date-time
+     * @example "2023-06-03T12:21:33.406928Z"
+     */
+    onboardDate?: string
+    /**
+     * @min 0
+     * @max 1000
+     * @example 250
+     */
+    onboard_connections?: number
+    spendDiscovery?: boolean
+    /**
+     * @min 0
+     * @max 1000
+     * @example 300
+     */
+    total_connections?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 50
+     */
+    unhealthy_connections?: number
+    version?: number
+}
+
+export enum GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredentialType {
+    CredentialTypeAutoAzure = 'auto-azure',
+    CredentialTypeAutoAws = 'auto-aws',
+    CredentialTypeManualAwsOrganization = 'manual-aws-org',
+    CredentialTypeManualAzureSpn = 'manual-azure-spn',
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse {
+    /**
+     * @min 0
+     * @max 1000
+     * @example 10
+     */
+    connectionCount?: number
+    connections?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    /**
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalArchivedCount?: number
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
+    totalCost?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalDisabledCount?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalDiscoveredCount?: number
+    /**
+     * @min 0
+     * @max 1000000
+     * @example 100
+     */
+    totalOldResourceCount?: number
+    /**
+     * Also includes in-progress
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalOnboardedCount?: number
+    /**
+     * @min 0
+     * @max 1000000
+     * @example 100
+     */
+    totalResourceCount?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalUnhealthyCount?: number
+}
+
 export interface KaytuResourceCollectionFilter {
     account_ids?: string[]
     connectors?: string[]
@@ -2249,11 +2493,11 @@ export enum SourceType {
 }
 
 export enum TypesConformanceStatus {
-    ComplianceResultOK = 'ok',
-    ComplianceResultALARM = 'alarm',
-    ComplianceResultINFO = 'info',
-    ComplianceResultSKIP = 'skip',
-    ComplianceResultERROR = 'error',
+    ConformanceStatusOK = 'ok',
+    ConformanceStatusALARM = 'alarm',
+    ConformanceStatusINFO = 'info',
+    ConformanceStatusSKIP = 'skip',
+    ConformanceStatusERROR = 'error',
 }
 
 export interface TypesConformanceStatusSummary {
@@ -2287,7 +2531,7 @@ export interface TypesSeverityResult {
     /** @example 1 */
     mediumCount?: number
     /** @example 1 */
-    unknownCount?: number
+    noneCount?: number
 }
 
 import axios, {
@@ -3492,6 +3736,28 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving KPIs for findings.
+         *
+         * @tags compliance
+         * @name ApiV1FindingsKpiList
+         * @summary Get finding KPIs
+         * @request GET:/compliance/api/v1/findings/kpi
+         * @secure
+         */
+        apiV1FindingsKpiList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
+                any
+            >({
+                path: `/compliance/api/v1/findings/kpi`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving a single finding
          *
          * @tags compliance
@@ -4037,6 +4303,100 @@ export class Api<
                 method: 'GET',
                 query: query,
                 secure: true,
+                format: 'json',
+                ...params,
+            }),
+    }
+    integration = {
+        /**
+         * @description Retrieving a list of connections summaries
+         *
+         * @tags connections
+         * @name ApiV1ConnectionsSummariesList
+         * @summary List connections summaries
+         * @request GET:/integration/api/v1/connections/summaries
+         * @secure
+         */
+        apiV1ConnectionsSummariesList: (
+            query?: {
+                /** Filter costs */
+                filter?: string
+                /** Connector */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs */
+                connectionId?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
+                /** Connection Groups */
+                connectionGroups?: string[]
+                /** lifecycle state filter */
+                lifecycleState?:
+                    | 'DISABLED'
+                    | 'DISCOVERED'
+                    | 'IN_PROGRESS'
+                    | 'ONBOARD'
+                    | 'ARCHIVED'
+                /** health state filter */
+                healthState?: 'healthy' | 'unhealthy'
+                /** page size - default is 20 */
+                pageSize?: number
+                /** page number - default is 1 */
+                pageNumber?: number
+                /** start time in unix seconds */
+                startTime?: number
+                /** end time in unix seconds */
+                endTime?: number
+                /** for quicker inquiry send this parameter as false, default: true */
+                needCost?: boolean
+                /** for quicker inquiry send this parameter as false, default: true */
+                needResourceCount?: boolean
+                /** column to sort by - default is cost */
+                sortBy?:
+                    | 'onboard_date'
+                    | 'resource_count'
+                    | 'cost'
+                    | 'growth'
+                    | 'growth_rate'
+                    | 'cost_growth'
+                    | 'cost_growth_rate'
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
+                any
+            >({
+                path: `/integration/api/v1/connections/summaries`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Creating Azure credential, testing it and on-board its subscriptions
+         *
+         * @tags integration
+         * @name ApiV1CredentialsAzureCreate
+         * @summary Create Azure credential and does onboarding for its subscriptions
+         * @request POST:/integration/api/v1/credentials/azure
+         * @secure
+         */
+        apiV1CredentialsAzureCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureConnectionRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
+                any
+            >({
+                path: `/integration/api/v1/credentials/azure`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
                 format: 'json',
                 ...params,
             }),
@@ -5448,18 +5808,13 @@ export class Api<
          * No description
          *
          * @tags scheduler
-         * @name ApiV1JobsList
+         * @name ApiV1JobsCreate
          * @summary Lists all jobs
-         * @request GET:/schedule/api/v1/jobs
+         * @request POST:/schedule/api/v1/jobs
          * @secure
          */
-        apiV1JobsList: (
-            query?: {
-                /** Limit */
-                limit?: number
-                /** Hours */
-                hours?: number
-            },
+        apiV1JobsCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
             params: RequestParams = {}
         ) =>
             this.request<
@@ -5467,9 +5822,10 @@ export class Api<
                 any
             >({
                 path: `/schedule/api/v1/jobs`,
-                method: 'GET',
-                query: query,
+                method: 'POST',
+                body: request,
                 secure: true,
+                type: ContentType.Json,
                 format: 'json',
                 ...params,
             }),
