@@ -4,7 +4,6 @@ import {
     BarList,
     Button,
     Card,
-    CategoryBar,
     Flex,
     Grid,
     Tab,
@@ -15,7 +14,11 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
+import {
+    ArrowPathRoundedSquareIcon,
+    CheckCircleIcon,
+    XCircleIcon,
+} from '@heroicons/react/24/outline'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import Layout from '../../../../components/Layout'
 import { filterAtom } from '../../../../store'
@@ -244,7 +247,7 @@ export default function BenchmarkSummary() {
                     </Flex>
                     <Grid numItems={2} className="gap-4 mb-4">
                         <Card>
-                            <Flex alignItems="end" className="mb-10">
+                            <Flex alignItems="start" className="mb-10">
                                 <Flex
                                     flexDirection="col"
                                     alignItems="start"
@@ -264,27 +267,27 @@ export default function BenchmarkSummary() {
                                         ).toFixed(2)}%`}
                                     </Title>
                                 </Flex>
-                                <Flex justifyContent="end" className="gap-3">
-                                    <Flex
-                                        justifyContent="start"
-                                        className="w-fit gap-2"
-                                    >
-                                        <Text>Passed</Text>
-                                        <Badge color="emerald">
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    className="w-64 gap-1"
+                                >
+                                    <Flex className="w-fit gap-1.5">
+                                        <CheckCircleIcon className="h-4 text-emerald-500" />
+                                        <Text>
+                                            Passed resources:{' '}
                                             {numberDisplay(
                                                 benchmarkDetail
                                                     ?.conformanceStatusSummary
                                                     ?.okCount || 0,
                                                 0
                                             )}
-                                        </Badge>
+                                        </Text>
                                     </Flex>
-                                    <Flex
-                                        justifyContent="start"
-                                        className="w-fit gap-2"
-                                    >
-                                        <Text>Failed</Text>
-                                        <Badge color="rose">
+                                    <Flex className="w-fit gap-1.5">
+                                        <XCircleIcon className="h-4 text-rose-600" />
+                                        <Text>
+                                            Failed resources:{' '}
                                             {numberDisplay(
                                                 benchmarkChecks(benchmarkDetail)
                                                     .total -
@@ -293,7 +296,7 @@ export default function BenchmarkSummary() {
                                                         ?.okCount || 0),
                                                 0
                                             )}
-                                        </Badge>
+                                        </Text>
                                     </Flex>
                                 </Flex>
                             </Flex>
