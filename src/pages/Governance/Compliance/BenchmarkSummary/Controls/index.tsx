@@ -74,7 +74,7 @@ export const severityBadge = (severity: any) => {
             </Badge>
         )
     }
-    return <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>N/A</Badge>
+    return <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>None</Badge>
 }
 
 export const statusBadge = (status: any) => {
