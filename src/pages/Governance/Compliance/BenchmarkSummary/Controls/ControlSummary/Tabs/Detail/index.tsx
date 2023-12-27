@@ -1,6 +1,7 @@
 import { Flex, Text } from '@tremor/react'
 import { useState } from 'react'
 import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControl } from '../../../../../../../../api/api'
 
 interface IDetail {
@@ -11,6 +12,7 @@ export default function Detail({ control }: IDetail) {
     const [selectedTab, setSelectedTab] = useState<
         'explanation' | 'nonComplianceCost' | 'usefulExample'
     >('explanation')
+    console.log(control)
     return (
         <Flex alignItems="start" className="mt-6">
             <Flex flexDirection="col" alignItems="start" className="w-56 gap-3">
@@ -67,7 +69,9 @@ export default function Detail({ control }: IDetail) {
                 className="pl-8 border-l border-l-gray-200"
                 style={{ width: 'calc(100% - 224px)' }}
             >
-                <Markdown>{control?.[selectedTab]}</Markdown>
+                <Markdown remarkPlugins={[remarkGfm]}>
+                    {control?.[selectedTab]}
+                </Markdown>
             </div>
         </Flex>
     )

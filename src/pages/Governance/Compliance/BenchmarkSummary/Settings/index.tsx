@@ -171,7 +171,7 @@ export default function Settings({ id }: ISettings) {
                 setAllEnable(true)
             } else setAllEnable(false)
         }
-    }, [assignments])
+    }, [assignments, open])
 
     return (
         <>

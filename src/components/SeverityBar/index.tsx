@@ -17,7 +17,8 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
             percent:
                 (benchmarkChecks(benchmark).critical /
                     (benchmarkChecks(benchmark).failed || 1)) *
-                100,
+                    100 || 0,
+            count: benchmarkChecks(benchmark).critical,
         },
         {
             name: 'High',
@@ -25,7 +26,8 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
             percent:
                 (benchmarkChecks(benchmark).high /
                     (benchmarkChecks(benchmark).failed || 1)) *
-                100,
+                    100 || 0,
+            count: benchmarkChecks(benchmark).high,
         },
         {
             name: 'Medium',
@@ -33,7 +35,8 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
             percent:
                 (benchmarkChecks(benchmark).medium /
                     (benchmarkChecks(benchmark).failed || 1)) *
-                100,
+                    100 || 0,
+            count: benchmarkChecks(benchmark).medium,
         },
         {
             name: 'Low',
@@ -41,7 +44,8 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
             percent:
                 (benchmarkChecks(benchmark).low /
                     (benchmarkChecks(benchmark).failed || 1)) *
-                100,
+                    100 || 0,
+            count: benchmarkChecks(benchmark).low,
         },
         {
             name: 'None',
@@ -49,7 +53,8 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
             percent:
                 (benchmarkChecks(benchmark).none /
                     (benchmarkChecks(benchmark).failed || 1)) *
-                100,
+                    100 || 0,
+            count: benchmarkChecks(benchmark).none,
         },
     ]
 
@@ -63,18 +68,67 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                 0
             )} failed`}</Text>
             {benchmarkChecks(benchmark).total > 0 ? (
-                <Flex alignItems="start">
+                <Flex alignItems="start" style={{ gap: '3px' }}>
                     <Flex flexDirection="col">
-                        <Flex className="h-5 rounded-l-sm overflow-hidden">
-                            {severity.map((s) => (
-                                <div
-                                    className="h-full border-r border-r-white"
-                                    style={{
-                                        width: `${s.percent}%`,
-                                        backgroundColor: s.color,
-                                    }}
-                                />
-                            ))}
+                        <Flex className="h-5" style={{ gap: '3px' }}>
+                            {severity.map(
+                                (s, i) =>
+                                    s.percent > 0 && (
+                                        <div
+                                            className="group h-full relative flex justify-center"
+                                            style={{
+                                                width: `${s.percent}%`,
+                                                minWidth: '2.5%',
+                                            }}
+                                        >
+                                            <div
+                                                className={`h-full w-full ${
+                                                    i === 0
+                                                        ? 'rounded-l-sm'
+                                                        : ''
+                                                }`}
+                                                style={{
+                                                    backgroundColor: s.color,
+                                                }}
+                                            />
+                                            <div
+                                                className="absolute w-32 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
+                                                style={{
+                                                    border: `1px solid ${s.color}`,
+                                                }}
+                                            >
+                                                <Flex
+                                                    flexDirection="col"
+                                                    alignItems="start"
+                                                >
+                                                    <Text
+                                                        className={`text-[${s.color}] font-semibold mb-1`}
+                                                    >
+                                                        {s.name}
+                                                    </Text>
+                                                    <Flex>
+                                                        <Text>Count</Text>
+                                                        <Text>
+                                                            {numberDisplay(
+                                                                s.count,
+                                                                0
+                                                            )}
+                                                        </Text>
+                                                    </Flex>
+                                                    <Flex>
+                                                        <Text>Percent</Text>
+                                                        <Text>
+                                                            {s.percent.toFixed(
+                                                                2
+                                                            )}
+                                                            %
+                                                        </Text>
+                                                    </Flex>
+                                                </Flex>
+                                            </div>
+                                        </div>
+                                    )
+                            )}
                         </Flex>
                         <Flex flexDirection="col" className="mt-2">
                             <Flex className="border-x-2 h-1.5 border-x-gray-400">
@@ -88,7 +142,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                         </Flex>
                     </Flex>
                     <div
-                        className="h-5 rounded-r-sm overflow-hidden"
+                        className="group h-5 relative flex justify-center"
                         style={{
                             width: `${
                                 ((benchmark?.conformanceStatusSummary
@@ -96,9 +150,52 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                     benchmarkChecks(benchmark).total) *
                                 100
                             }%`,
-                            backgroundColor: '#54B584',
+                            minWidth: '2.5%',
                         }}
-                    />
+                    >
+                        <div
+                            className="h-full w-full rounded-r-sm"
+                            style={{
+                                backgroundColor: '#54B584',
+                            }}
+                        />
+                        <div
+                            className="absolute w-32 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
+                            style={{
+                                border: '1px solid #54B584',
+                            }}
+                        >
+                            <Flex flexDirection="col" alignItems="start">
+                                <Text className="text-[#54B584] font-semibold mb-1">
+                                    Passed
+                                </Text>
+                                <Flex>
+                                    <Text>Count</Text>
+                                    <Text>
+                                        {numberDisplay(
+                                            benchmark?.conformanceStatusSummary
+                                                ?.okCount || 0,
+                                            0
+                                        )}
+                                    </Text>
+                                </Flex>
+                                <Flex>
+                                    <Text>Percent</Text>
+                                    <Text>
+                                        {(
+                                            ((benchmark
+                                                ?.conformanceStatusSummary
+                                                ?.okCount || 0) /
+                                                benchmarkChecks(benchmark)
+                                                    .total) *
+                                            100
+                                        ).toFixed(2)}
+                                        %
+                                    </Text>
+                                </Flex>
+                            </Flex>
+                        </div>
+                    </div>
                 </Flex>
             ) : (
                 <div className="bg-gray-200 h-5 rounded-md" />

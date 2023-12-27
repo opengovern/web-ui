@@ -74,24 +74,23 @@ export const severityBadge = (severity: any) => {
             </Badge>
         )
     }
-    return <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>N/A</Badge>
+    return <Badge style={{ backgroundColor: '#9BA2AE', ...style }}>None</Badge>
 }
 
 export const statusBadge = (status: any) => {
-    const style = {
-        color: '#fff',
-        borderRadius: '8px',
-        width: '64px',
-    }
-    if (status === 'ok') {
+    if (status) {
         return (
-            <Badge style={{ backgroundColor: '#54B584', ...style }}>
-                Passed
-            </Badge>
+            <Flex className="w-fit gap-1.5">
+                <CheckCircleIcon className="h-4 text-emerald-500" />
+                <Text>Passed</Text>
+            </Flex>
         )
     }
     return (
-        <Badge style={{ backgroundColor: '#CA2B1D', ...style }}>Failed</Badge>
+        <Flex className="w-fit gap-1.5">
+            <XCircleIcon className="h-4 text-rose-600" />
+            <Text>Failed</Text>
+        </Flex>
     )
 }
 

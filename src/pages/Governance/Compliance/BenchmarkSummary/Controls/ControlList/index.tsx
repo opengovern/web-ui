@@ -1,17 +1,10 @@
-import { Badge, Flex } from '@tremor/react'
+import { Flex } from '@tremor/react'
 import { ICellRendererParams } from 'ag-grid-community'
 import { useNavigate } from 'react-router-dom'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../../../../../api/api'
 import DrawerPanel from '../../../../../../components/DrawerPanel'
 import { severityBadge } from '../index'
-
-export const renderStatus = (status: boolean) => {
-    if (status) {
-        return <Badge color="emerald">Passed</Badge>
-    }
-    return <Badge color="rose">Failed</Badge>
-}
 
 export const policyColumns: IColumn<any, any>[] = [
     {
