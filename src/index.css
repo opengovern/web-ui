@@ -102,19 +102,45 @@ button:focus {
     display: none;
 }
 
-code {
-    text-wrap: normal;
+pre {
+    display: block;
+    padding: 8px;
+    margin: 10px 0;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+pre code {
+    padding: 0;
+    font-size: 90%;
+    color: inherit;
+    font-family: monospace;
     white-space: normal !important;
     overflow-wrap: break-word !important;
+    background-color: transparent;
+    border-radius: 0;
 }
 
-pre {
-    margin: 8px 0;
-    padding: 4px 8px;
+code {
+    text-wrap: normal;
+    padding: 2px 4px;
+    /*font-size: 90%;*/
+    color: #c7254e;
+    background-color: #f9f2f4;
     border-radius: 4px;
-    border: 1px solid gainsboro;
 }
 
-.language-bash {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+code, kbd, pre, samp {
+    font-family: monospace;
+    /*font-size: 1em;*/
+}
+
+code {
+    font-family: monospace;
 }
