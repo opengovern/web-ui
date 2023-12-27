@@ -17,7 +17,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
             percent:
                 (benchmarkChecks(benchmark).critical /
                     (benchmarkChecks(benchmark).failed || 1)) *
-                100,
+                    100 || 0,
         },
         {
             name: 'High',
@@ -25,7 +25,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
             percent:
                 (benchmarkChecks(benchmark).high /
                     (benchmarkChecks(benchmark).failed || 1)) *
-                100,
+                    100 || 0,
         },
         {
             name: 'Medium',
@@ -33,7 +33,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
             percent:
                 (benchmarkChecks(benchmark).medium /
                     (benchmarkChecks(benchmark).failed || 1)) *
-                100,
+                    100 || 0,
         },
         {
             name: 'Low',
@@ -41,7 +41,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
             percent:
                 (benchmarkChecks(benchmark).low /
                     (benchmarkChecks(benchmark).failed || 1)) *
-                100,
+                    100 || 0,
         },
         {
             name: 'None',
@@ -49,7 +49,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
             percent:
                 (benchmarkChecks(benchmark).none /
                     (benchmarkChecks(benchmark).failed || 1)) *
-                100,
+                    100 || 0,
         },
     ]
 
@@ -63,14 +63,15 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                 0
             )} failed`}</Text>
             {benchmarkChecks(benchmark).total > 0 ? (
-                <Flex alignItems="start" className="gap-0.5">
+                <Flex alignItems="start" className="gap-1">
                     <Flex flexDirection="col">
-                        <Flex className="h-5 rounded-l-sm overflow-hidden gap-0.5">
+                        <Flex className="h-5 rounded-l-md overflow-hidden gap-1">
                             {severity.map((s) => (
                                 <div
                                     className="h-full"
                                     style={{
                                         width: `${s.percent}%`,
+                                        minWidth: s.percent > 0 ? '2.5%' : 0,
                                         backgroundColor: s.color,
                                     }}
                                 />
@@ -88,7 +89,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                         </Flex>
                     </Flex>
                     <div
-                        className="h-5 rounded-r-sm overflow-hidden"
+                        className="h-5 rounded-r-md overflow-hidden"
                         style={{
                             width: `${
                                 ((benchmark?.conformanceStatusSummary
