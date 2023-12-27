@@ -66,16 +66,19 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                 <Flex alignItems="start" className="gap-1">
                     <Flex flexDirection="col">
                         <Flex className="h-5 rounded-l-md overflow-hidden gap-1">
-                            {severity.map((s) => (
-                                <div
-                                    className="h-full"
-                                    style={{
-                                        width: `${s.percent}%`,
-                                        minWidth: s.percent > 0 ? '2.5%' : 0,
-                                        backgroundColor: s.color,
-                                    }}
-                                />
-                            ))}
+                            {severity.map(
+                                (s) =>
+                                    s.percent > 0 && (
+                                        <div
+                                            className="h-full"
+                                            style={{
+                                                width: `${s.percent}%`,
+                                                minWidth: '2.5%',
+                                                backgroundColor: s.color,
+                                            }}
+                                        />
+                                    )
+                            )}
                         </Flex>
                         <Flex flexDirection="col" className="mt-2">
                             <Flex className="border-x-2 h-1.5 border-x-gray-400">
