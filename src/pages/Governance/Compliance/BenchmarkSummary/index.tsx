@@ -32,7 +32,7 @@ import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedul
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
-import Controls from './Controls'
+import Controls, { severityBadge } from './Controls'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
@@ -207,14 +207,19 @@ export default function BenchmarkSummary() {
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-2 w-2/3"
+                            className="gap-2 w-3/4"
                         >
                             <Title className="font-semibold">
                                 {benchmarkDetail?.title}
                             </Title>
-                            <Text className="w-full truncate">
-                                {benchmarkDetail?.description}
-                            </Text>
+                            <div className="group w-full relative flex justify-center">
+                                <Text className="truncate">
+                                    {benchmarkDetail?.description}
+                                </Text>
+                                <div className="absolute w-full z-40 top-0 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                    <Text>{benchmarkDetail?.description}</Text>
+                                </div>
+                            </div>
                         </Flex>
                         <Flex
                             flexDirection="col"

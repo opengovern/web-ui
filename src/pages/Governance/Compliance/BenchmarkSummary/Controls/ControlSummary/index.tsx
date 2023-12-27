@@ -76,7 +76,7 @@ export default function ControlDetail() {
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-2"
+                            className="gap-2 w-3/4"
                         >
                             <Flex className="gap-3 w-fit">
                                 <Title className="font-semibold whitespace-nowrap">
@@ -86,9 +86,16 @@ export default function ControlDetail() {
                                     controlDetail?.control?.severity
                                 )}
                             </Flex>
-                            <Text className="w-2/3">
-                                {controlDetail?.control?.description}
-                            </Text>
+                            <div className="group w-full relative flex justify-center">
+                                <Text className="truncate">
+                                    {controlDetail?.control?.description}
+                                </Text>
+                                <div className="absolute w-full z-40 top-0 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                    <Text>
+                                        {controlDetail?.control?.description}
+                                    </Text>
+                                </div>
+                            </div>
                         </Flex>
                         <Button
                             variant="secondary"
