@@ -5,6 +5,7 @@ import {
     Badge,
     Card,
     Color,
+    Divider,
     Flex,
     Text,
     Title,
@@ -15,13 +16,14 @@ import {
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { Radio } from 'pretty-checkbox-react'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Table, { IColumn } from '../../../components/Table'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJob,
 } from '../../../api/api'
 import AxiosAPI from '../../../api/ApiConfig'
+import { useScheduleApiV1JobsCreate } from '../../../api/schedule.gen'
 
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -31,6 +33,7 @@ const columns = () => {
             type: 'string',
             sortable: true,
             filter: false,
+            suppressMenu: true,
             resizable: true,
             hide: true,
         },
@@ -40,6 +43,7 @@ const columns = () => {
             type: 'string',
             sortable: true,
             filter: true,
+            suppressMenu: true,
             filterParams: {
                 values: ['compliance', 'analytics', 'insight', 'discovery'],
             },
@@ -51,6 +55,7 @@ const columns = () => {
             type: 'string',
             sortable: true,
             filter: false,
+            suppressMenu: true,
             resizable: true,
             hide: true,
         },
@@ -60,6 +65,7 @@ const columns = () => {
             type: 'string',
             sortable: false,
             filter: false,
+            suppressMenu: true,
             resizable: true,
             hide: true,
         },
@@ -70,6 +76,7 @@ const columns = () => {
             sortable: false,
             filter: false,
             resizable: true,
+            suppressMenu: true,
         },
         {
             field: 'title',
@@ -78,12 +85,14 @@ const columns = () => {
             sortable: false,
             filter: false,
             resizable: true,
+            suppressMenu: true,
         },
         {
             field: 'status',
             headerName: 'Status',
             type: 'string',
             sortable: true,
+            suppressMenu: true,
             filter: true,
             filterParams: {
                 values: [
@@ -156,6 +165,7 @@ const columns = () => {
             headerName: 'Failure Reason',
             type: 'string',
             sortable: false,
+            suppressMenu: true,
             filter: true,
             resizable: true,
             hide: true,
@@ -164,27 +174,46 @@ const columns = () => {
     return temp
 }
 
+const jobTypes = [
+    {
+        label: 'All',
+        value: '',
+    },
+    {
+        label: 'Discovery',
+        value: 'discovery',
+    },
+    {
+        label: 'Insight',
+        value: 'insight',
+    },
+    {
+        label: 'Compliance',
+        value: 'compliance',
+    },
+    {
+        label: 'Metrics',
+        value: 'analytics',
+    },
+]
+
 export default function SettingsJobs() {
+    const [jobTypeFilter, setJobTypeFilter] = useState<string>('')
+    const [statusFilter, setStatusFilter] = useState<string>('')
+    const [allStatuses, setAllStatuses] = useState<string[]>([])
+    const { response } = useScheduleApiV1JobsCreate({
+        hours: 24,
+        pageStart: 0,
+        pageEnd: 1,
+    })
+
+    useEffect(() => {
+        setAllStatuses(response?.summaries?.map((v) => v.status || '') || [])
+    }, [response])
+
     const ssr = () => {
         return {
             getRows: (params: IServerSideGetRowsParams) => {
-                console.log(params)
-                let statusFilter = []
-                try {
-                    const v: any = params.request.filterModel
-                    statusFilter = v.status.values
-                } catch (e) {
-                    //
-                }
-
-                let typeFilters = []
-                try {
-                    const v: any = params.request.filterModel
-                    typeFilters = v.type.values
-                } catch (e) {
-                    //
-                }
-
                 const api = new Api()
                 api.instance = AxiosAPI
                 api.schedule
@@ -196,17 +225,11 @@ export default function SettingsJobs() {
                         sortOrder: params.request.sortModel
                             .at(0)
                             ?.sort?.toUpperCase(),
-                        statusFilter,
-                        typeFilters,
-                        // afterSortKey:
-                        //     params.request.startRow === 0 ||
-                        //     sortKey.length < 1 ||
-                        //     sortKey === 'none'
-                        //         ? []
-                        //         : [sortKey],
+                        statusFilter: statusFilter === '' ? [] : [statusFilter],
+                        typeFilters:
+                            jobTypeFilter === '' ? [] : [jobTypeFilter],
                     })
                     .then((resp) => {
-                        console.log('fffff', resp.data.jobs || [])
                         params.success({
                             rowData: resp.data.jobs || [],
                             rowCount: resp.data.summaries
@@ -228,17 +251,88 @@ export default function SettingsJobs() {
 
     return (
         <Card>
-            <Title className="font-semibold">Jobs</Title>
-
-            <Table
-                id="jobs"
-                columns={columns()}
-                serverSideDatasource={serverSideRows}
-                options={{
-                    rowModelType: 'serverSide',
-                    serverSideDatasource: serverSideRows,
-                }}
-            />
+            <Title className="font-semibold mb-5">Jobs</Title>
+            <Flex alignItems="start">
+                <Card className="sticky top-6 min-w-[200px] max-w-[200px]">
+                    <Accordion
+                        defaultOpen
+                        className="border-0 rounded-none bg-transparent mb-1"
+                    >
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="font-semibold text-gray-800">
+                                Job Type
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
+                            >
+                                {jobTypes.map((jobType) => (
+                                    <Radio
+                                        name="jobType"
+                                        onClick={() =>
+                                            setJobTypeFilter(jobType.value)
+                                        }
+                                        checked={
+                                            jobTypeFilter === jobType.value
+                                        }
+                                    >
+                                        {jobType.label}
+                                    </Radio>
+                                ))}
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                    <Divider className="my-3" />
+                    <Accordion
+                        defaultOpen
+                        className="border-0 rounded-none bg-transparent mb-1"
+                    >
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="font-semibold text-gray-800">
+                                Status
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
+                            >
+                                <Radio
+                                    name="status"
+                                    onClick={() => setStatusFilter('')}
+                                    checked={statusFilter === ''}
+                                >
+                                    All
+                                </Radio>
+                                {allStatuses.map((status) => (
+                                    <Radio
+                                        name="status"
+                                        onClick={() => setStatusFilter(status)}
+                                        checked={statusFilter === status}
+                                    >
+                                        {status}
+                                    </Radio>
+                                ))}
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                </Card>
+                <Flex className="pl-4">
+                    <Table
+                        id="jobs"
+                        columns={columns()}
+                        serverSideDatasource={serverSideRows}
+                        options={{
+                            rowModelType: 'serverSide',
+                            serverSideDatasource: serverSideRows,
+                        }}
+                    />
+                </Flex>
+            </Flex>
         </Card>
     )
 }
