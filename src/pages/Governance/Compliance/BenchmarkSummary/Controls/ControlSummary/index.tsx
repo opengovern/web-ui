@@ -16,7 +16,9 @@ import {
     Title,
 } from '@tremor/react'
 import {
+    BookOpenIcon,
     ChevronRightIcon,
+    CodeBracketIcon,
     Cog8ToothIcon,
     CommandLineIcon,
     CreditCardIcon,
@@ -286,7 +288,7 @@ export default function ControlDetail() {
                                         controlDetail?.control
                                             ?.manualRemediation.length
                                             ? 'cursor-pointer'
-                                            : 'grayscale bg-gray-100'
+                                            : 'grayscale opacity-70'
                                     }
                                     onClick={() => {
                                         if (
@@ -308,9 +310,8 @@ export default function ControlDetail() {
                                             className="w-fit gap-3"
                                         >
                                             <Icon
-                                                icon={FolderIcon}
-                                                variant="light"
-                                                color="sky"
+                                                icon={BookOpenIcon}
+                                                className="p-0"
                                             />
                                             <Title className="font-semibold">
                                                 Manual
@@ -330,7 +331,7 @@ export default function ControlDetail() {
                                         controlDetail?.control?.cliRemediation
                                             .length
                                             ? 'cursor-pointer'
-                                            : 'grayscale bg-gray-100'
+                                            : 'grayscale opacity-70'
                                     }
                                     onClick={() => {
                                         if (
@@ -353,8 +354,7 @@ export default function ControlDetail() {
                                         >
                                             <Icon
                                                 icon={CommandLineIcon}
-                                                variant="light"
-                                                color="sky"
+                                                className="p-0"
                                             />
                                             <Title className="font-semibold">
                                                 Command line (CLI)
@@ -367,7 +367,7 @@ export default function ControlDetail() {
                                         utilizing CLI
                                     </Text>
                                 </Card>
-                                <Card className="grayscale bg-gray-100">
+                                <Card className="grayscale opacity-70">
                                     <Flex className="mb-2.5">
                                         <Flex
                                             justifyContent="start"
@@ -375,8 +375,7 @@ export default function ControlDetail() {
                                         >
                                             <Icon
                                                 icon={Cog8ToothIcon}
-                                                variant="light"
-                                                color="sky"
+                                                className="p-0"
                                             />
                                             <Title className="font-semibold">
                                                 Guard rails
@@ -389,16 +388,15 @@ export default function ControlDetail() {
                                         utilizing solutions where possible
                                     </Text>
                                 </Card>
-                                <Card className="grayscale bg-gray-100">
+                                <Card className="grayscale opacity-70">
                                     <Flex className="mb-2.5">
                                         <Flex
                                             justifyContent="start"
                                             className="w-fit gap-3"
                                         >
                                             <Icon
-                                                icon={CreditCardIcon}
-                                                variant="light"
-                                                color="sky"
+                                                icon={CodeBracketIcon}
+                                                className="p-0"
                                             />
                                             <Title className="font-semibold">
                                                 Programmatic
