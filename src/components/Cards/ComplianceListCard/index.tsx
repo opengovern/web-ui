@@ -51,7 +51,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                 )
             }
         >
-            <Flex className="mb-3">
+            <Flex>
                 <Flex justifyContent="start" className="w-3/4 gap-3">
                     {getConnectorIcon(connector())}
                     <Title className="truncate">{benchmark?.title}</Title>
@@ -61,41 +61,47 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                     icon={ChevronRightIcon}
                     iconPosition="right"
                 >
-                    See detail
+                    {benchmarkChecks(benchmark).total ? 'See detail' : 'Assign'}
                 </Button>
             </Flex>
-            <Grid numItems={5}>
-                <SummaryCard
-                    title="Security score"
-                    metric={
-                        ((benchmark?.conformanceStatusSummary?.okCount || 0) /
-                            benchmarkChecks(benchmark).total || 0) * 100
-                    }
-                    isPercent
-                    border={false}
-                />
-                <Col numColSpan={2} className="px-6 border-x border-x-gray-200">
-                    <Text className="font-semibold mb-4">Severity</Text>
-                    <SeverityBar benchmark={benchmark} />
-                </Col>
-                <Col numColSpan={2} className="pl-6">
-                    <Text className="font-semibold">Top accounts</Text>
-                    <List>
-                        {benchmark?.topConnections?.map((c) => (
-                            <ListItem>
-                                <Text>
-                                    {
-                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                        // @ts-ignore
-                                        c.Connection?.providerConnectionName
-                                    }
-                                </Text>
-                                <Text>{c.count}</Text>
-                            </ListItem>
-                        ))}
-                    </List>
-                </Col>
-            </Grid>
+            {!!benchmarkChecks(benchmark).total && (
+                <Grid numItems={5} className="mt-3">
+                    <SummaryCard
+                        title="Security score"
+                        metric={
+                            ((benchmark?.conformanceStatusSummary?.okCount ||
+                                0) / benchmarkChecks(benchmark).total || 0) *
+                            100
+                        }
+                        isPercent
+                        border={false}
+                    />
+                    <Col
+                        numColSpan={2}
+                        className="px-6 border-x border-x-gray-200"
+                    >
+                        <Text className="font-semibold mb-4">Severity</Text>
+                        <SeverityBar benchmark={benchmark} />
+                    </Col>
+                    <Col numColSpan={2} className="pl-6">
+                        <Text className="font-semibold">Top accounts</Text>
+                        <List>
+                            {benchmark?.topConnections?.map((c) => (
+                                <ListItem>
+                                    <Text>
+                                        {
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            c.Connection?.providerConnectionName
+                                        }
+                                    </Text>
+                                    <Text>{c.count}</Text>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Col>
+                </Grid>
+            )}
         </Card>
     )
 }
