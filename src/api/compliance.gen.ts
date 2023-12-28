@@ -489,6 +489,8 @@ interface IuseComplianceApiV1AssignmentsConnectionCreateState {
 export const useComplianceApiV1AssignmentsConnectionCreate = (
     benchmarkId: string,
     query?: {
+        auto_assign?: boolean
+
         connectionId?: string[]
 
         connectionGroup?: string[]

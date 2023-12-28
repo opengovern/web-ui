@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom'
 import {
-    Badge,
     BarList,
     Button,
     Card,
@@ -32,11 +31,12 @@ import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedul
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
-import Controls, { severityBadge } from './Controls'
+import Controls from './Controls'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import SeverityBar from '../../../../components/SeverityBar'
+import Modal from '../../../../components/Modal'
 
 const topResources = (
     input:
@@ -118,6 +118,7 @@ export default function BenchmarkSummary() {
         'accounts'
     )
     const [openTop, setOpenTop] = useState(false)
+    const [openConfirm, setOpenConfirm] = useState(false)
 
     const topQuery = {
         ...(benchmarkId && { benchmarkId: [benchmarkId] }),
@@ -161,20 +162,36 @@ export default function BenchmarkSummary() {
                 return (
                     <BarList
                         data={topConnections(connections, benchmarkDetail?.id)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
                     />
                 )
             case 1:
                 return (
                     <BarList
                         data={topControls(controls, benchmarkDetail?.id)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
                     />
                 )
             case 2:
-                return <BarList data={topResources(resources)} />
+                return (
+                    <BarList
+                        data={topResources(resources)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
+                    />
+                )
             default:
                 return (
                     <BarList
                         data={topConnections(connections, benchmarkDetail?.id)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
                     />
                 )
         }
@@ -230,7 +247,7 @@ export default function BenchmarkSummary() {
                                 variant="light"
                                 icon={ArrowPathRoundedSquareIcon}
                                 className="mb-1"
-                                onClick={() => triggerEvaluate()}
+                                onClick={() => setOpenConfirm(true)}
                                 loading={
                                     !(
                                         benchmarkDetail?.lastJobStatus ===
@@ -249,6 +266,30 @@ export default function BenchmarkSummary() {
                                 benchmarkDetail?.evaluatedAt
                             )}`}</Text>
                         </Flex>
+                        <Modal
+                            open={openConfirm}
+                            onClose={() => setOpenConfirm(false)}
+                        >
+                            <Title>
+                                Do you want to run evaluation on X accounts?
+                            </Title>
+                            <Flex className="mt-8">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setOpenConfirm(false)}
+                                >
+                                    Close
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        triggerEvaluate()
+                                        setOpenConfirm(false)
+                                    }}
+                                >
+                                    Evaluate
+                                </Button>
+                            </Flex>
+                        </Modal>
                     </Flex>
                     <Grid numItems={2} className="gap-4 mb-4">
                         <Card>
@@ -275,7 +316,7 @@ export default function BenchmarkSummary() {
                                 <Flex
                                     flexDirection="col"
                                     alignItems="start"
-                                    className="w-64 gap-1"
+                                    className="w-80 gap-1"
                                 >
                                     <Flex className="w-fit gap-1.5">
                                         <CheckCircleIcon className="h-4 text-emerald-500" />
@@ -339,7 +380,7 @@ export default function BenchmarkSummary() {
                                         <Tab
                                             onClick={() => setType('services')}
                                         >
-                                            Services
+                                            Resource type
                                         </Tab>
                                     </TabList>
                                 </TabGroup>

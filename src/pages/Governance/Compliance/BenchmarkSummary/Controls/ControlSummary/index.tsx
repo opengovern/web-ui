@@ -23,6 +23,7 @@ import {
     Cog8ToothIcon,
     CommandLineIcon,
     DocumentDuplicateIcon,
+    InformationCircleIcon,
     Square2StackIcon,
 } from '@heroicons/react/24/outline'
 import { useSetAtom } from 'jotai/index'
@@ -102,8 +103,10 @@ export default function ControlDetail() {
                                 variant="solid"
                                 className="border border-gray-200"
                             >
-                                <Tab>Information</Tab>
-                                <Tab>Query</Tab>
+                                <Tab icon={InformationCircleIcon}>
+                                    Information
+                                </Tab>
+                                <Tab icon={CodeBracketIcon}>Query</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel className="h-full">

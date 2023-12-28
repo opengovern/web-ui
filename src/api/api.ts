@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -3331,6 +3332,8 @@ export class Api<
         apiV1AssignmentsConnectionCreate: (
             benchmarkId: string,
             query?: {
+                /** Auto enable benchmark for connections */
+                auto_assign?: boolean
                 /** Connection ID or 'all' for everything */
                 connectionId?: string[]
                 /** Connection group */
@@ -4371,6 +4374,38 @@ export class Api<
                 query: query,
                 secure: true,
                 type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Get live connection health status with given connection ID for Azure.
+         *
+         * @tags connections
+         * @name ApiV1ConnectionsAzureHealthcheckDetail
+         * @summary Get Azure connection health
+         * @request GET:/integration/api/v1/connections/{connectionId}/azure/healthcheck
+         * @secure
+         */
+        apiV1ConnectionsAzureHealthcheckDetail: (
+            connectionId: string,
+            query?: {
+                /**
+                 * Whether to update metadata or not
+                 * @default true
+                 */
+                updateMetadata?: boolean
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+                any
+            >({
+                path: `/integration/api/v1/connections/${connectionId}/azure/healthcheck`,
+                method: 'GET',
+                query: query,
+                secure: true,
                 format: 'json',
                 ...params,
             }),
