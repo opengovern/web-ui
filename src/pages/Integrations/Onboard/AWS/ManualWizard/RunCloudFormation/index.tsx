@@ -42,7 +42,7 @@ export function RunCloudFormation({
     useEffect(() => {
         axios
             .get(
-                'https://raw.githubusercontent.com/kaytu-io/cli/main/cmd/onboard/template.yaml'
+                'https://raw.githubusercontent.com/kaytu-io/cli/main/cmd/predef/onboard/template.yaml'
             )
             .then((resp) => {
                 setTemplate(resp.data)
