@@ -24,7 +24,14 @@ interface IJobCategoryItem {
     summaries?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary[]
 }
 
-const inProgressStatuses = ['CREATED', 'QUEUED', 'IN_PROGRESS']
+const inProgressStatuses = [
+    'CREATED',
+    'QUEUED',
+    'IN_PROGRESS',
+    'RUNNERS_IN_PROGRESS',
+    'SUMMARIZER_IN_PROGRESS',
+    'OLD_RESOURCE_DELETION',
+]
 const failedStatuses = ['FAILED', 'TIMEOUT', 'COMPLETED_WITH_FAILURE']
 const succeededStatuses = ['SUCCEEDED', 'COMPLETED']
 

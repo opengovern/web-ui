@@ -43,11 +43,8 @@ const columns = () => {
             headerName: 'Job Type',
             type: 'string',
             sortable: true,
-            filter: true,
+            filter: false,
             suppressMenu: true,
-            filterParams: {
-                values: ['compliance', 'analytics', 'insight', 'discovery'],
-            },
             resizable: true,
         },
         {
@@ -94,21 +91,7 @@ const columns = () => {
             type: 'string',
             sortable: true,
             suppressMenu: true,
-            filter: true,
-            filterParams: {
-                values: [
-                    'CREATED',
-                    'QUEUED',
-                    'IN_PROGRESS',
-                    'RUNNERS_IN_PROGRESS',
-                    'SUMMARIZER_IN_PROGRESS',
-                    'OLD_RESOURCE_DELETION',
-                    'SUCCEEDED',
-                    'COMPLETED',
-                    'FAILED',
-                    'TIMEOUT',
-                ],
-            },
+            filter: false,
             resizable: true,
             cellRenderer: (
                 param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgDescribeApiJob>
@@ -148,6 +131,10 @@ const columns = () => {
                         break
                     case 'FAILED':
                         jobStatus = 'failed'
+                        jobColor = 'red'
+                        break
+                    case 'COMPLETED_WITH_FAILURE':
+                        jobStatus = 'completed with failed'
                         jobColor = 'red'
                         break
                     case 'TIMEOUT':
