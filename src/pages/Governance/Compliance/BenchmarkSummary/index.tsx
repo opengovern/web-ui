@@ -36,6 +36,7 @@ import Settings from './Settings'
 import TopDetails from './TopDetails'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
 import SeverityBar from '../../../../components/SeverityBar'
+import Modal from '../../../../components/Modal'
 
 const topResources = (
     input:
@@ -117,6 +118,7 @@ export default function BenchmarkSummary() {
         'accounts'
     )
     const [openTop, setOpenTop] = useState(false)
+    const [openConfirm, setOpenConfirm] = useState(false)
 
     const topQuery = {
         ...(benchmarkId && { benchmarkId: [benchmarkId] }),
@@ -245,7 +247,7 @@ export default function BenchmarkSummary() {
                                 variant="light"
                                 icon={ArrowPathRoundedSquareIcon}
                                 className="mb-1"
-                                onClick={() => triggerEvaluate()}
+                                onClick={() => setOpenConfirm(true)}
                                 loading={
                                     !(
                                         benchmarkDetail?.lastJobStatus ===
@@ -264,6 +266,30 @@ export default function BenchmarkSummary() {
                                 benchmarkDetail?.evaluatedAt
                             )}`}</Text>
                         </Flex>
+                        <Modal
+                            open={openConfirm}
+                            onClose={() => setOpenConfirm(false)}
+                        >
+                            <Title>
+                                Do you want to run evaluation on X accounts?
+                            </Title>
+                            <Flex className="mt-8">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setOpenConfirm(false)}
+                                >
+                                    Close
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        triggerEvaluate()
+                                        setOpenConfirm(false)
+                                    }}
+                                >
+                                    Evaluate
+                                </Button>
+                            </Flex>
+                        </Modal>
                     </Flex>
                     <Grid numItems={2} className="gap-4 mb-4">
                         <Card>
