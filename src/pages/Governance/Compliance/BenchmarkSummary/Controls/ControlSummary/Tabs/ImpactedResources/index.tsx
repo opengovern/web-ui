@@ -2,7 +2,8 @@ import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/
 import { useMemo, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai/index'
 import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
-import { Flex } from '@tremor/react'
+import { Flex, Text } from '@tremor/react'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import Table, { IColumn } from '../../../../../../../../components/Table'
 import FindingDetail from '../../../../../../Findings/Detail'
 import { isDemoAtom, notificationAtom } from '../../../../../../../../store'
@@ -164,6 +165,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
     const [finding, setFinding] = useState<
         GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
     >(undefined)
+    const [error, setError] = useState('')
 
     const ssr = () => {
         return {
@@ -184,7 +186,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                                       params.request.sortModel[0].sort,
                               }
                             : {},
-                        limit: 100,
+                        limit: -100,
                         afterSortKey:
                             params.request.startRow === 0 ||
                             sortKey.length < 1 ||
@@ -206,6 +208,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                                 .sortKey[0]
                     })
                     .catch((err) => {
+                        setError(err.message)
                         params.fail()
                     })
             },
@@ -216,6 +219,12 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
 
     return (
         <>
+            {error.length > 0 && (
+                <Flex className="w-fit mb-3 gap-1">
+                    <ExclamationCircleIcon className="text-rose-600 h-5" />
+                    <Text color="rose">{error}</Text>
+                </Flex>
+            )}
             <Table
                 fullWidth
                 id="compliance_findings"

@@ -18,7 +18,12 @@ import {
 } from '@tremor/react'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
+import {
+    BookOpenIcon,
+    CheckCircleIcon,
+    CommandLineIcon,
+    XCircleIcon,
+} from '@heroicons/react/24/outline'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../api/compliance.gen'
 import Spinner from '../../../../../components/Spinner'
 import { numberDisplay } from '../../../../../utilities/numericDisplay'
@@ -135,6 +140,7 @@ export default function Controls({ id }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
+    console.log(groupBy(treeRows(controls), 'parentName'))
 
     return (
         <Flex flexDirection="col" className="gap-4">
@@ -196,7 +202,10 @@ export default function Controls({ id }: IPolicies) {
                                                 <TableHeaderCell>
                                                     Title
                                                 </TableHeaderCell>
-                                                <TableHeaderCell className="w-44">
+                                                <TableHeaderCell className="w-40">
+                                                    Remediation
+                                                </TableHeaderCell>
+                                                <TableHeaderCell className="w-48">
                                                     Passed resources
                                                 </TableHeaderCell>
                                                 <TableHeaderCell className="w-5" />
@@ -230,7 +239,28 @@ export default function Controls({ id }: IPolicies) {
                                                             </Col>
                                                         </Grid>
                                                     </TableCell>
-                                                    <TableCell className="w-44 min-w-[176px]">
+                                                    <TableCell>
+                                                        <Flex
+                                                            alignItems="start"
+                                                            className="gap-1.5"
+                                                        >
+                                                            {v?.cliRemediation &&
+                                                                v
+                                                                    ?.cliRemediation
+                                                                    .length >
+                                                                    0 && (
+                                                                    <CommandLineIcon className="text-kaytu-500 w-4" />
+                                                                )}
+                                                            {v?.manualRemediation &&
+                                                                v
+                                                                    ?.manualRemediation
+                                                                    .length >
+                                                                    0 && (
+                                                                    <BookOpenIcon className="text-kaytu-500 w-4" />
+                                                                )}
+                                                        </Flex>
+                                                    </TableCell>
+                                                    <TableCell>
                                                         <Flex
                                                             justifyContent="start"
                                                             className="gap-2"
@@ -266,7 +296,7 @@ export default function Controls({ id }: IPolicies) {
                                                             )}%)`}
                                                         </Flex>
                                                     </TableCell>
-                                                    <TableCell className="w-5 min-w-[20px]">
+                                                    <TableCell>
                                                         <ChevronRightIcon className="h-5 text-kaytu-500" />
                                                     </TableCell>
                                                 </TableRow>
