@@ -2,10 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-<<<<<<< HEAD
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
-=======
->>>>>>> 303468476ee91fd63dedb9f5a8eb64380a0ddb43
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureConnectionRequest,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
     GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
@@ -164,7 +161,6 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-<<<<<<< HEAD
 interface IuseIntegrationApiV1ConnectionsAzureHealthcheckDetailState {
     isLoading: boolean
     isExecuted: boolean
@@ -284,8 +280,6 @@ export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-=======
->>>>>>> 303468476ee91fd63dedb9f5a8eb64380a0ddb43
 interface IuseIntegrationApiV1CredentialsAzureCreateState {
     isLoading: boolean
     isExecuted: boolean

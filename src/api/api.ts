@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -4378,7 +4379,6 @@ export class Api<
             }),
 
         /**
-<<<<<<< HEAD
          * @description Get live connection health status with given connection ID for Azure.
          *
          * @tags connections
@@ -4411,8 +4411,6 @@ export class Api<
             }),
 
         /**
-=======
->>>>>>> 303468476ee91fd63dedb9f5a8eb64380a0ddb43
          * @description Creating Azure credential, testing it and on-board its subscriptions
          *
          * @tags integration
