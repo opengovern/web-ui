@@ -17,6 +17,7 @@ import {
 } from 'ag-grid-community'
 import { Radio } from 'pretty-checkbox-react'
 import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import Table, { IColumn } from '../../../components/Table'
 import {
     Api,
@@ -188,7 +189,7 @@ const jobTypes = [
         value: 'insight',
     },
     {
-        label: 'Compliance',
+        label: 'Governance',
         value: 'compliance',
     },
     {
@@ -198,8 +199,13 @@ const jobTypes = [
 ]
 
 export default function SettingsJobs() {
-    const [jobTypeFilter, setJobTypeFilter] = useState<string>('')
-    const [statusFilter, setStatusFilter] = useState<string>('')
+    const [searchParams, setSearchParams] = useSearchParams()
+    const [jobTypeFilter, setJobTypeFilter] = useState<string>(
+        searchParams.get('type') || ''
+    )
+    const [statusFilter, setStatusFilter] = useState<string>(
+        searchParams.get('status') || ''
+    )
     const [allStatuses, setAllStatuses] = useState<string[]>([])
     const { response } = useScheduleApiV1JobsCreate({
         hours: 24,
@@ -208,8 +214,33 @@ export default function SettingsJobs() {
     })
 
     useEffect(() => {
-        setAllStatuses(response?.summaries?.map((v) => v.status || '') || [])
+        setAllStatuses(
+            response?.summaries
+                ?.map((v) => v.status || '')
+                .filter(
+                    (thing, i, arr) => arr.findIndex((t) => t === thing) === i
+                ) || []
+        )
     }, [response])
+
+    useEffect(() => {
+        if (
+            searchParams.get('type') !== jobTypeFilter ||
+            searchParams.get('status') !== statusFilter
+        ) {
+            if (jobTypeFilter !== '') {
+                searchParams.set('type', jobTypeFilter)
+            } else {
+                searchParams.delete('type')
+            }
+            if (statusFilter !== '') {
+                searchParams.set('status', statusFilter)
+            } else {
+                searchParams.delete('status')
+            }
+            window.history.pushState({}, '', `?${searchParams.toString()}`)
+        }
+    }, [jobTypeFilter, statusFilter])
 
     const ssr = () => {
         return {

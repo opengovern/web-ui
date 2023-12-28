@@ -20,6 +20,7 @@ import { useScheduleApiV1JobsCreate } from '../../../api/schedule.gen'
 
 interface IJobCategoryItem {
     title: string
+    jobType: string
     summaries?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary[]
 }
 
@@ -37,7 +38,10 @@ const checkStatus = (v: string, arr: string[]) => {
     return exists
 }
 
-function JobCategoryItem({ title, summaries }: IJobCategoryItem) {
+function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
+    const navigate = useNavigate()
+    const workspace = useParams<{ ws: string }>().ws
+
     const result = () => {
         const inProgressJobs =
             summaries?.filter((job) =>
@@ -171,10 +175,12 @@ function JobCategoryItem({ title, summaries }: IJobCategoryItem) {
                 <BarList
                     key={title}
                     data={data}
-                    className="mt-2"
+                    className="mt-2 cursor-pointer"
                     color={color}
                     onClick={(e) => {
-                        console.log(String(e.target))
+                        navigate(
+                            `/${workspace}/settings?sp=jobs&type=${jobType}`
+                        )
                     }}
                     // valueFormatter={dataFormatter}
                 />
@@ -239,6 +245,7 @@ export default function JobsMenu() {
                         >
                             <JobCategoryItem
                                 title="Discovery"
+                                jobType="discovery"
                                 summaries={jobs?.summaries?.filter(
                                     (v) =>
                                         v.type ===
@@ -247,6 +254,7 @@ export default function JobsMenu() {
                             />
                             <JobCategoryItem
                                 title="Metric"
+                                jobType="analytics"
                                 summaries={jobs?.summaries?.filter(
                                     (v) =>
                                         v.type ===
@@ -255,6 +263,7 @@ export default function JobsMenu() {
                             />
                             <JobCategoryItem
                                 title="Insight"
+                                jobType="insight"
                                 summaries={jobs?.summaries?.filter(
                                     (v) =>
                                         v.type ===
@@ -263,6 +272,7 @@ export default function JobsMenu() {
                             />
                             <JobCategoryItem
                                 title="Governance"
+                                jobType="compliance"
                                 summaries={jobs?.summaries?.filter(
                                     (v) =>
                                         v.type ===
