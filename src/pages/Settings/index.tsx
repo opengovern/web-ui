@@ -6,7 +6,7 @@ import {
     FolderIcon,
     UserIcon,
 } from '@heroicons/react/24/outline'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import jwtDecode from 'jwt-decode'
 import { useAtom } from 'jotai'
@@ -32,22 +32,22 @@ const navigation = [
         children: [
             {
                 name: 'Entitlement',
-                page: '#entitlement',
+                page: 'entitlement',
                 role: ['admin', 'editor', 'viewer'],
             },
             {
                 name: 'Members',
-                page: '#members',
+                page: 'members',
                 role: ['admin'],
             },
             {
                 name: 'API Keys',
-                page: '#apikeys',
+                page: 'apikeys',
                 role: ['admin'],
             },
             {
                 name: 'Git Repositories',
-                page: '#gitrepositories',
+                page: 'gitrepositories',
                 role: ['admin'],
             },
         ],
@@ -59,7 +59,7 @@ const navigation = [
         children: [
             {
                 name: 'Organization Info',
-                page: '#org',
+                page: 'org',
                 role: ['admin', 'editor', 'viewer'],
             },
         ],
@@ -71,12 +71,12 @@ const navigation = [
         children: [
             {
                 name: 'Jobs',
-                page: '#jobs',
+                page: 'jobs',
                 role: ['admin', 'editor', 'viewer'],
             },
             {
                 name: 'Customization',
-                page: '#customization',
+                page: 'customization',
                 role: ['admin'],
             },
         ],
@@ -88,7 +88,7 @@ const navigation = [
         children: [
             {
                 name: 'Profile',
-                page: '#profile',
+                page: 'profile',
                 role: ['admin', 'editor', 'viewer'],
             },
         ],
@@ -103,7 +103,9 @@ export default function Settings() {
     const { response: curWorkspace, isLoading } =
         useWorkspaceApiV1WorkspaceCurrentList()
     const workspace = useParams<{ ws: string }>().ws
-    const currentSubPage = useLocation().hash
+
+    const [searchParams, setSearchParams] = useSearchParams()
+    const currentSubPage = searchParams.get('sp')
 
     useEffect(() => {
         getAccessTokenSilently().then((e) => {
@@ -116,28 +118,28 @@ export default function Settings() {
 
     useEffect(() => {
         switch (currentSubPage) {
-            case '#entitlement':
+            case 'entitlement':
                 setSelectedTab(<SettingsEntitlement />)
                 break
-            case '#members':
+            case 'members':
                 setSelectedTab(<SettingsMembers />)
                 break
-            case '#apikeys':
+            case 'apikeys':
                 setSelectedTab(<SettingsWorkspaceAPIKeys />)
                 break
-            case '#gitrepositories':
+            case 'gitrepositories':
                 setSelectedTab(<SettingsGitRepositories />)
                 break
-            case '#org':
+            case 'org':
                 setSelectedTab(<SettingsOrganization />)
                 break
-            case '#profile':
+            case 'profile':
                 setSelectedTab(<SettingsProfile />)
                 break
-            case '#jobs':
+            case 'jobs':
                 setSelectedTab(<SettingsJobs />)
                 break
-            case '#customization':
+            case 'customization':
                 setSelectedTab(<SettingsCustomization />)
                 break
             default:
@@ -161,7 +163,7 @@ export default function Settings() {
     return (
         <Layout currentPage="settings">
             <Header />
-            <Flex alignItems="start">
+            <Flex alignItems="start" justifyContent="start">
                 <Flex flexDirection="col" alignItems="start" className="w-fit">
                     <nav className="w-56 text-sm">
                         <ul className="space-y-1.5">
@@ -185,13 +187,13 @@ export default function Settings() {
                                         </Flex>
                                         {item.children.map((child: any) => (
                                             <Link
-                                                to={`/${workspace}/settings${child.page}`}
+                                                to={`/${workspace}/settings?sp=${child.page}`}
                                                 className={`${
                                                     child.page ===
                                                         currentSubPage ||
                                                     (!currentSubPage &&
                                                         child.page ===
-                                                            '#entitlement')
+                                                            'entitlement')
                                                         ? 'bg-kaytu-100 rounded-lg text-gray-800'
                                                         : 'text-gray-600'
                                                 } group flex gap-x-3 py-2 px-8 font-medium`}

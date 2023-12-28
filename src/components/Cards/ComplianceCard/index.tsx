@@ -28,8 +28,6 @@ export const benchmarkChecks = (
     const high = ben?.checks?.highCount || 0
     const medium = ben?.checks?.mediumCount || 0
     const low = ben?.checks?.lowCount || 0
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const none = ben?.checks?.noneCount || 0
 
     const total =

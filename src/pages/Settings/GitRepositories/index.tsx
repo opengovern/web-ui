@@ -78,7 +78,7 @@ export default function SettingsGitRepositories() {
         ConvertToBoolean(customizationEnabled?.value || 'false') || false
 
     return (
-        <Card key="summary" className="top-6">
+        <Card key="summary" className="">
             <Title className="font-semibold">Git Repositories</Title>
             <Flex justifyContent="start" className="truncate space-x-4">
                 <div className="truncate">

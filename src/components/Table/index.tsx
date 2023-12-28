@@ -44,6 +44,7 @@ export interface IColumn<TData, TValue> {
     pivot?: boolean
     hide?: boolean
     filter?: boolean
+    filterParams?: any
     sortable?: boolean
     resizable?: boolean
     flex?: number
@@ -125,10 +126,11 @@ export default function Table<TData = any, TValue = any>({
             const v: ColDef<TData> | ColGroupDef<TData> | any = {
                 field: item.field,
                 headerName: item.headerName,
-                filter: true,
+                filter: item.filter,
+                filterParams: item.filterParams,
                 width: item.width,
-                sortable: item.sortable || true,
-                resizable: item.resizable || true,
+                sortable: item.sortable === undefined ? true : item.sortable,
+                resizable: item.resizable === undefined ? true : item.resizable,
                 rowGroup: item.rowGroup || false,
                 enableRowGroup: item.enableRowGroup || false,
                 hide: item.hide || false,
