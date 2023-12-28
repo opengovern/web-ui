@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { useComplianceApiV1BenchmarksControlsDetail } from '../../../../../api/compliance.gen'
 import Spinner from '../../../../../components/Spinner'
+import { numberDisplay } from '../../../../../utilities/numericDisplay'
 
 interface IPolicies {
     id: string | undefined
@@ -156,7 +157,7 @@ export default function Controls({ id }: IPolicies) {
                                             <Flex
                                                 justifyContent="start"
                                                 className="gap-2"
-                                                style={{ width: '186px' }}
+                                                style={{ width: '200px' }}
                                             >
                                                 {value?.filter(
                                                     (c: any) => c.passed
@@ -165,13 +166,15 @@ export default function Controls({ id }: IPolicies) {
                                                 ) : (
                                                     <XCircleIcon className="w-5 text-rose-600" />
                                                 )}
-                                                <Text className="font-semibold">{`Passed rules: ${
+                                                <Text className="font-semibold">{`Passed controls: ${numberDisplay(
                                                     value?.filter(
                                                         (c: any) => c.passed
-                                                    ).length
-                                                }/${
-                                                    value?.length
-                                                } (${Math.round(
+                                                    ).length,
+                                                    0
+                                                )}/${numberDisplay(
+                                                    value?.length,
+                                                    0
+                                                )} (${Math.floor(
                                                     // eslint-disable-next-line no-unsafe-optional-chaining
                                                     (value?.filter(
                                                         (c: any) => c.passed
@@ -242,15 +245,17 @@ export default function Controls({ id }: IPolicies) {
                                                             ) : (
                                                                 <XCircleIcon className="w-5 text-rose-600" />
                                                             )}
-                                                            {`${
+                                                            {`${numberDisplay(
                                                                 (v?.totalResourcesCount ||
                                                                     0) -
-                                                                (v?.failedResourcesCount ||
-                                                                    0)
-                                                            }/${
-                                                                v?.totalResourcesCount ||
+                                                                    (v?.failedResourcesCount ||
+                                                                        0),
                                                                 0
-                                                            } (${Math.round(
+                                                            )}/${numberDisplay(
+                                                                v?.totalResourcesCount ||
+                                                                    0,
+                                                                0
+                                                            )} (${Math.floor(
                                                                 (((v?.totalResourcesCount ||
                                                                     0) -
                                                                     (v?.failedResourcesCount ||

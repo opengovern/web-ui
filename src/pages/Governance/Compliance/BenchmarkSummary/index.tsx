@@ -275,7 +275,7 @@ export default function BenchmarkSummary() {
                                 <Flex
                                     flexDirection="col"
                                     alignItems="start"
-                                    className="w-64 gap-1"
+                                    className="w-80 gap-1"
                                 >
                                     <Flex className="w-fit gap-1.5">
                                         <CheckCircleIcon className="h-4 text-emerald-500" />

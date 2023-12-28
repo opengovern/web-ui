@@ -92,7 +92,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                                 }}
                                             />
                                             <div
-                                                className="absolute w-32 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
+                                                className="absolute w-32 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
                                                 style={{
                                                     border: `1px solid ${s.color}`,
                                                 }}
@@ -160,7 +160,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                             }}
                         />
                         <div
-                            className="absolute w-32 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
+                            className="absolute w-32 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
                             style={{
                                 border: '1px solid #54B584',
                             }}
