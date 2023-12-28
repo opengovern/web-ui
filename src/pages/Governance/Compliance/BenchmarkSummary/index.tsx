@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom'
 import {
-    Badge,
     BarList,
     Button,
     Card,
@@ -32,7 +31,7 @@ import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedul
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
 import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
-import Controls, { severityBadge } from './Controls'
+import Controls from './Controls'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
@@ -161,20 +160,36 @@ export default function BenchmarkSummary() {
                 return (
                     <BarList
                         data={topConnections(connections, benchmarkDetail?.id)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
                     />
                 )
             case 1:
                 return (
                     <BarList
                         data={topControls(controls, benchmarkDetail?.id)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
                     />
                 )
             case 2:
-                return <BarList data={topResources(resources)} />
+                return (
+                    <BarList
+                        data={topResources(resources)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
+                    />
+                )
             default:
                 return (
                     <BarList
                         data={topConnections(connections, benchmarkDetail?.id)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
                     />
                 )
         }
@@ -339,7 +354,7 @@ export default function BenchmarkSummary() {
                                         <Tab
                                             onClick={() => setType('services')}
                                         >
-                                            Services
+                                            Resource type
                                         </Tab>
                                     </TabList>
                                 </TabGroup>
