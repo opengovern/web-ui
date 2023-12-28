@@ -79,7 +79,7 @@ export const severityBadge = (severity: any) => {
 }
 
 export const statusBadge = (status: any) => {
-    if (status) {
+    if (status === 'ok') {
         return (
             <Flex className="w-fit gap-1.5">
                 <CheckCircleIcon className="h-4 text-emerald-500" />
