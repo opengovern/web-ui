@@ -95,7 +95,7 @@ export const statusBadge = (status: any) => {
     )
 }
 
-const rows = (json: any) => {
+export const treeRows = (json: any) => {
     let arr: any = []
     if (json) {
         if (json.control !== null && json.control !== undefined) {
@@ -111,7 +111,7 @@ const rows = (json: any) => {
         }
         if (json.children !== null && json.children !== undefined) {
             for (let i = 0; i < json.children.length; i += 1) {
-                const res = rows(json.children[i])
+                const res = treeRows(json.children[i])
                 arr = arr.concat(res)
             }
         }
@@ -120,7 +120,7 @@ const rows = (json: any) => {
     return arr
 }
 
-const groupBy = (input: any[], key: string) => {
+export const groupBy = (input: any[], key: string) => {
     return input.reduce((acc, currentValue) => {
         const groupKey = currentValue[key]
         if (!acc[groupKey]) {
@@ -141,7 +141,7 @@ export default function Controls({ id }: IPolicies) {
             {isLoading ? (
                 <Spinner className="mt-20" />
             ) : (
-                Object.entries(groupBy(rows(controls), 'parentName'))?.map(
+                Object.entries(groupBy(treeRows(controls), 'parentName'))?.map(
                     ([name, value]: any[]) => (
                         <Card>
                             <Accordion

@@ -64,7 +64,6 @@ export default function ControlDetail() {
                         ? controlDetail?.control?.title
                         : 'Control detail',
                 ]}
-                datePicker
             />
             {isLoading ? (
                 <Spinner className="mt-56" />
