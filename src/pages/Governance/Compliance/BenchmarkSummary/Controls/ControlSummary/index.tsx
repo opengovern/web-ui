@@ -20,6 +20,7 @@ import {
     BookOpenIcon,
     ChevronRightIcon,
     CodeBracketIcon,
+    CodeBracketSquareIcon,
     Cog8ToothIcon,
     CommandLineIcon,
     DocumentDuplicateIcon,
@@ -105,7 +106,7 @@ export default function ControlDetail() {
                                 <Tab icon={InformationCircleIcon}>
                                     Information
                                 </Tab>
-                                <Tab icon={CodeBracketIcon}>Query</Tab>
+                                <Tab icon={CodeBracketSquareIcon}>Query</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel className="h-full">

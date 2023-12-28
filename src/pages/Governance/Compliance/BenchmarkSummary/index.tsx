@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react'
 import {
     ArrowPathRoundedSquareIcon,
     CheckCircleIcon,
+    InformationCircleIcon,
     XCircleIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
@@ -299,9 +300,17 @@ export default function BenchmarkSummary() {
                                     alignItems="start"
                                     className="gap-1"
                                 >
-                                    <Text className="font-semibold">
-                                        Security score
-                                    </Text>
+                                    <Flex className="w-fit gap-1 group relative">
+                                        <Text className="font-semibold">
+                                            Security score
+                                        </Text>
+                                        <InformationCircleIcon className="w-4" />
+                                        <div className="absolute w-full z-40 top-0 left-full scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                            <Text>
+                                                {benchmarkDetail?.description}
+                                            </Text>
+                                        </div>
+                                    </Flex>
                                     <Title className="font-semibold">
                                         {`${(
                                             ((benchmarkDetail
@@ -380,7 +389,7 @@ export default function BenchmarkSummary() {
                                         <Tab
                                             onClick={() => setType('services')}
                                         >
-                                            Resource type
+                                            Resource types
                                         </Tab>
                                     </TabList>
                                 </TabGroup>
