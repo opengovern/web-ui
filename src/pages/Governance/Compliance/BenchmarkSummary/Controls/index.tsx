@@ -224,9 +224,9 @@ export default function Controls({ id }: IPolicies) {
                                                         name.indexOf(' ')
                                                     )}.${i + 1}`}</TableCell>
                                                     <TableCell>
-                                                        <Grid
-                                                            numItems={10}
-                                                            className="w-full"
+                                                        <Flex
+                                                            justifyContent="start"
+                                                            className="gap-4"
                                                         >
                                                             {severityBadge(
                                                                 v?.severity
@@ -236,7 +236,7 @@ export default function Controls({ id }: IPolicies) {
                                                                     {v?.title}
                                                                 </Text>
                                                             </Col>
-                                                        </Grid>
+                                                        </Flex>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Flex
