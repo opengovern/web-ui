@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/Detail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/Detail/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedResources/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedResources/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -288,7 +291,8 @@
       <workItem from="1703535745145" duration="3105000" />
       <workItem from="1703682914192" duration="7551000" />
       <workItem from="1703757309349" duration="3852000" />
-      <workItem from="1703762253330" duration="9638000" />
+      <workItem from="1703762253330" duration="10374000" />
+      <workItem from="1703836000489" duration="91000" />
     </task>
     <servers />
   </component>
@@ -315,7 +319,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/api/api.ts</url>
-          <line>927</line>
+          <line>938</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">

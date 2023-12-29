@@ -12,7 +12,7 @@ export default function Detail({ control }: IDetail) {
     const [selectedTab, setSelectedTab] = useState<
         'explanation' | 'nonComplianceCost' | 'usefulExample'
     >('explanation')
-    console.log(control)
+
     return (
         <Flex alignItems="start" className="mt-6">
             <Flex flexDirection="col" alignItems="start" className="w-56 gap-3">

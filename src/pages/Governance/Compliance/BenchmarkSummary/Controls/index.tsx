@@ -140,7 +140,6 @@ export default function Controls({ id }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
-    console.log(groupBy(treeRows(controls), 'parentName'))
 
     return (
         <Flex flexDirection="col" className="gap-4">
