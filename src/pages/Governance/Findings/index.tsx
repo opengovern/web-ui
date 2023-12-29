@@ -377,7 +377,9 @@ export default function Findings() {
                             connectionID: connectionFilter,
                             benchmarkID: benchmarkFilter,
                             resourceTypeID: resourceFilter,
-                            // severity: severityFilter,
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            severity: severityFilter,
                         },
                         sort: params.request.sortModel.length
                             ? {
