@@ -208,7 +208,12 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                                 .sortKey[0]
                     })
                     .catch((err) => {
-                        setError(err.message)
+                        if (
+                            err.message !==
+                            "Cannot read properties of null (reading 'NaN')"
+                        ) {
+                            setError(err.message)
+                        }
                         params.fail()
                     })
             },
