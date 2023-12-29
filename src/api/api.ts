@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -2251,22 +2250,11 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
     SizeLG = 'lg',
 }
 
-export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSOrgCredentialConfig {
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSCredentialConfig {
     accountID?: string
     assumeRoleName?: string
     externalId?: string
     healthCheckPolicies?: string[]
-}
-
-export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSStandAloneCredentialConfig {
-    accessKey: string
-    accountId?: string
-    assumeAdminRoleName?: string
-    assumeRoleName?: string
-    assumeRolePolicyName?: string
-    externalId?: string
-    regions?: string[]
-    secretKey: string
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCredentialConfig {
@@ -2353,14 +2341,14 @@ export enum GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectionLif
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest {
-    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSStandAloneCredentialConfig
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSCredentialConfig
     description?: string
     email?: string
     name?: string
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest {
-    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSOrgCredentialConfig
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSCredentialConfig
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest {
@@ -2512,6 +2500,36 @@ export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConn
      * @example 10
      */
     totalUnhealthyCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest {
+    end_time_epoch_millis?: number
+    start_time_epoch_millis?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersResponse {
+    meters?: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeter[]
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeter {
+    isTotal?: boolean
+    type?: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeterType
+    value?: number
+    workspaceName?: string
+}
+
+export enum GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeterType {
+    MeterTypeInventoryDiscoveryJobCount = 'InventoryDiscoveryJobCount',
+    MeterTypeCostDiscoveryJobCount = 'CostDiscoveryJobCount',
+    MeterTypeMetricEvaluationCount = 'MetricEvaluationCount',
+    MeterTypeInsightEvaluationCount = 'InsightEvaluationCount',
+    MeterTypeBenchmarkEvaluationCount = 'BenchmarkEvaluationCount',
+    MeterTypeTotalFindings = 'TotalFindings',
+    MeterTypeTotalResource = 'TotalResource',
+    MeterTypeTotalUsers = 'TotalUsers',
+    MeterTypeTotalApiKeys = 'TotalApiKeys',
+    MeterTypeTotalRules = 'TotalRules',
+    MeterTypeAlertCount = 'AlertCount',
 }
 
 export interface KaytuResourceCollectionFilter {
@@ -4506,13 +4524,6 @@ export class Api<
          */
         apiV1ConnectionsAwsHealthcheckDetail: (
             connectionId: string,
-            query?: {
-                /**
-                 * Whether to update metadata or not
-                 * @default true
-                 */
-                updateMetadata?: boolean
-            },
             params: RequestParams = {}
         ) =>
             this.request<
@@ -4521,7 +4532,6 @@ export class Api<
             >({
                 path: `/integration/api/v1/connections/${connectionId}/aws/healthcheck`,
                 method: 'GET',
-                query: query,
                 secure: true,
                 format: 'json',
                 ...params,
@@ -6259,6 +6269,33 @@ export class Api<
                 path: `/schedule/api/v1/stacks/${stackId}/insights`,
                 method: 'GET',
                 query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+    }
+    subscription = {
+        /**
+         * No description
+         *
+         * @tags subscription
+         * @name ApiV1MeteringListCreate
+         * @summary Get meters
+         * @request POST:/subscription/api/v1/metering/list
+         * @secure
+         */
+        apiV1MeteringListCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersResponse,
+                any
+            >({
+                path: `/subscription/api/v1/metering/list`,
+                method: 'POST',
+                body: request,
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',

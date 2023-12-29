@@ -84,7 +84,7 @@ code {
     gap: 8px;
 }
 
-.pretty input[type="checkbox"] {
+.pretty input[type='checkbox'] {
     margin-top: 2px;
     border-radius: 2px !important;
     /*color: #6b7280 !important;*/
@@ -136,7 +136,10 @@ code {
     border-radius: 4px;
 }
 
-code, kbd, pre, samp {
+code,
+kbd,
+pre,
+samp {
     font-family: monospace;
     /*font-size: 1em;*/
 }

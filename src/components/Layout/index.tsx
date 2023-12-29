@@ -1,10 +1,11 @@
-import { Flex } from '@tremor/react'
+import { Flex, Title } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { ReactNode } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
 import Notification from '../Notification'
+import { KaytuIcon } from '../../icons/icons'
 
 type IProps = {
     children: ReactNode
@@ -23,8 +24,10 @@ type IProps = {
         | 'rules'
         | 'alerts'
         | 'query'
+        | 'billing'
         | '404'
     showSidebar?: boolean
+    showLogo?: boolean
     hfull?: boolean
 }
 
@@ -32,6 +35,7 @@ export default function Layout({
     children,
     currentPage,
     showSidebar = true,
+    showLogo = false,
     hfull = false,
 }: IProps) {
     const workspace = useParams<{ ws: string }>().ws
@@ -41,8 +45,9 @@ export default function Layout({
             {showSidebar && (
                 <Sidebar workspace={workspace} currentPage={currentPage} />
             )}
+
             <div className="z-10 w-full h-full relative bg-kaytu-950">
-                <Header workspace={workspace} />
+                <Header workspace={workspace} showLogo={showLogo} />
                 <Notification />
                 <Flex
                     flexDirection="col"

@@ -5,12 +5,12 @@ import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import Steps from '../../../../../../../components/Steps'
 import FirstStep from './FirstStep'
 import SecondStep from './SecondStep'
-import { useOnboardApiV1CredentialCreate } from '../../../../../../../api/onboard.gen'
 import { SourceType } from '../../../../../../../api/api'
 import FinalStep from './FinalStep'
 import Spinner from '../../../../../../../components/Spinner'
 import { getErrorMessage } from '../../../../../../../types/apierror'
 import { useWorkspaceApiV1BootstrapCredentialCreate } from '../../../../../../../api/workspace.gen'
+import { useIntegrationApiV1CredentialsAzureCreate } from '../../../../../../../api/integration.gen'
 
 interface INewPrinciple {
     open: boolean
@@ -42,17 +42,14 @@ export default function NewPrincipal({
         isExecuted,
         error,
         sendNow,
-    } = useOnboardApiV1CredentialCreate(
+    } = useIntegrationApiV1CredentialsAzureCreate(
         {
             config: {
                 clientId: data.appId,
-                secretId: data.secId,
                 tenantId: data.tenId,
                 objectId: data.objectId,
                 clientSecret: data.clientSecret,
-                subscriptionId: data.subscriptionId,
             },
-            source_type: SourceType.CloudAzure,
         },
         {},
         false

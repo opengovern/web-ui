@@ -9,7 +9,6 @@ import {
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { useAtomValue } from 'jotai'
 import AccountInfo from './AccountInfo'
-import NewAWSAccount from './NewAWSAccount'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
