@@ -355,7 +355,7 @@ export default function BenchmarkSummary() {
                                     </Flex>
                                 </Flex>
                             </Flex>
-                            <SeverityBar benchmark={benchmarkDetail} control />
+                            <SeverityBar benchmark={benchmarkDetail} />
                         </Card>
                         <Card>
                             <Flex justifyContent="between" className="mb-3">

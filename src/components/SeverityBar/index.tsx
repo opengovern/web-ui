@@ -1,44 +1,16 @@
 import { Flex, Text } from '@tremor/react'
-import { useEffect, useMemo } from 'react'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../api/api'
 import { benchmarkChecks } from '../Cards/ComplianceCard'
 import { numberDisplay } from '../../utilities/numericDisplay'
-import { useComplianceApiV1BenchmarksControlsDetail } from '../../api/compliance.gen'
-import { treeRows } from '../../pages/Governance/Compliance/BenchmarkSummary/Controls'
-import Spinner from '../Spinner'
 
 interface ISeverityBar {
     benchmark:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary
         | undefined
-    control?: boolean
 }
 
-export default function SeverityBar({
-    benchmark,
-    control = false,
-}: ISeverityBar) {
-    const {
-        response: controls,
-        isLoading,
-        sendNow,
-    } = useComplianceApiV1BenchmarksControlsDetail(
-        String(benchmark?.id),
-        {},
-        {},
-        false
-    )
-    useEffect(() => {
-        if (control) {
-            sendNow()
-        }
-    }, [control])
-    const controlData = useMemo(() => treeRows(controls), [controls])
-    const controlCount = (severity: string) => {
-        return controlData.filter((c: any) => c?.control?.severity === severity)
-            .length
-    }
-
+export default function SeverityBar({ benchmark }: ISeverityBar) {
+    console.log(benchmark)
     const severity = [
         {
             name: 'Critical',
@@ -48,10 +20,11 @@ export default function SeverityBar({
                     (benchmarkChecks(benchmark).failed || 1)) *
                     100 || 0,
             count: benchmarkChecks(benchmark).critical,
-            controlPercent: control
-                ? (controlCount('critical') / (controlData.length || 1)) * 100
-                : 0,
-            controlCount: control ? controlCount('critical') : 0,
+            controlPercent:
+                ((benchmark?.controlsSeverityStatus?.critical?.total || 0) /
+                    (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
+                100,
+            control: benchmark?.controlsSeverityStatus?.critical,
         },
         {
             name: 'High',
@@ -61,10 +34,11 @@ export default function SeverityBar({
                     (benchmarkChecks(benchmark).failed || 1)) *
                     100 || 0,
             count: benchmarkChecks(benchmark).high,
-            controlPercent: control
-                ? (controlCount('high') / (controlData.length || 1)) * 100
-                : 0,
-            controlCount: control ? controlCount('high') : 0,
+            controlPercent:
+                ((benchmark?.controlsSeverityStatus?.high?.total || 0) /
+                    (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
+                100,
+            control: benchmark?.controlsSeverityStatus?.high,
         },
         {
             name: 'Medium',
@@ -74,10 +48,11 @@ export default function SeverityBar({
                     (benchmarkChecks(benchmark).failed || 1)) *
                     100 || 0,
             count: benchmarkChecks(benchmark).medium,
-            controlPercent: control
-                ? (controlCount('medium') / (controlData.length || 1)) * 100
-                : 0,
-            controlCount: control ? controlCount('medium') : 0,
+            controlPercent:
+                ((benchmark?.controlsSeverityStatus?.medium?.total || 0) /
+                    (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
+                100,
+            control: benchmark?.controlsSeverityStatus?.medium,
         },
         {
             name: 'Low',
@@ -87,10 +62,11 @@ export default function SeverityBar({
                     (benchmarkChecks(benchmark).failed || 1)) *
                     100 || 0,
             count: benchmarkChecks(benchmark).low,
-            controlPercent: control
-                ? (controlCount('low') / (controlData.length || 1)) * 100
-                : 0,
-            controlCount: control ? controlCount('low') : 0,
+            controlPercent:
+                ((benchmark?.controlsSeverityStatus?.low?.total || 0) /
+                    (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
+                100,
+            control: benchmark?.controlsSeverityStatus?.low,
         },
         {
             name: 'None',
@@ -100,51 +76,49 @@ export default function SeverityBar({
                     (benchmarkChecks(benchmark).failed || 1)) *
                     100 || 0,
             count: benchmarkChecks(benchmark).none,
-            controlPercent: control
-                ? ((controlCount('none') + controlCount('')) /
-                      (controlData.length || 1)) *
-                  100
-                : 0,
-            controlCount: control ? controlCount('none') + controlCount('') : 0,
+            controlPercent:
+                ((benchmark?.controlsSeverityStatus?.none?.total || 0) /
+                    (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
+                100,
+            control: benchmark?.controlsSeverityStatus?.none,
         },
     ]
+    const passed = {
+        name: 'Passed',
+        color: '#54B584',
+        percent:
+            ((benchmark?.conformanceStatusSummary?.okCount || 0) /
+                benchmarkChecks(benchmark).total) *
+            100,
+        count: benchmark?.conformanceStatusSummary?.okCount || 0,
+        controlPercent:
+            ((benchmark?.controlsSeverityStatus?.total?.passed || 0) /
+                (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
+            100,
+        control: benchmark?.controlsSeverityStatus?.total?.passed || 0,
+    }
 
-    return control && isLoading ? (
-        <Spinner className="-mt-16" />
-    ) : (
+    return (
         <Flex flexDirection="col" alignItems="start">
-            <Text className="mb-2">{`${
-                control
-                    ? numberDisplay(
-                          controlCount('critical') +
-                              controlCount('high') +
-                              controlCount('medium') +
-                              controlCount('low') +
-                              controlCount('none') +
-                              controlCount(''),
-                          0
-                      )
-                    : numberDisplay(benchmarkChecks(benchmark).failed, 0)
-            } out of ${
-                control
-                    ? controlData.length
-                    : numberDisplay(benchmarkChecks(benchmark).total, 0)
-            } ${control ? 'controls' : 'resources'} failed`}</Text>
+            <Text className="mb-2">{`${numberDisplay(
+                (benchmark?.controlsSeverityStatus?.total?.total || 0) -
+                    (benchmark?.controlsSeverityStatus?.total?.passed || 0),
+                0
+            )} out of ${numberDisplay(
+                benchmark?.controlsSeverityStatus?.total?.total || 0,
+                0
+            )} controls failed`}</Text>
             {benchmarkChecks(benchmark).total > 0 ? (
                 <Flex alignItems="start" style={{ gap: '3px' }}>
                     <Flex flexDirection="col">
                         <Flex className="h-5" style={{ gap: '3px' }}>
                             {severity.map(
                                 (s, i) =>
-                                    (s.percent > 0 || s.controlPercent > 0) && (
+                                    s.controlPercent > 0 && (
                                         <div
                                             className="group h-full relative"
                                             style={{
-                                                width: `${
-                                                    control
-                                                        ? s.controlPercent
-                                                        : s.percent
-                                                }%`,
+                                                width: `${s.controlPercent}%`,
                                                 minWidth: '2.5%',
                                             }}
                                         >
@@ -171,21 +145,19 @@ export default function SeverityBar({
                                                     >
                                                         {s.name}
                                                     </Text>
-                                                    {control && (
-                                                        <Flex>
-                                                            <Text>
-                                                                Controls
-                                                            </Text>
-                                                            <Text>
-                                                                {`${numberDisplay(
-                                                                    s.controlCount,
-                                                                    0
-                                                                )} (${s.controlPercent.toFixed(
-                                                                    2
-                                                                )}%)`}
-                                                            </Text>
-                                                        </Flex>
-                                                    )}
+                                                    <Flex>
+                                                        <Text>Controls</Text>
+                                                        <Text>
+                                                            {`${
+                                                                s.control
+                                                                    ?.passed ||
+                                                                0
+                                                            } out of ${
+                                                                s.control
+                                                                    ?.total || 0
+                                                            } passed`}
+                                                        </Text>
+                                                    </Flex>
                                                     <Flex>
                                                         <Text>Issues</Text>
                                                         <Text>
@@ -207,143 +179,54 @@ export default function SeverityBar({
                             <Flex className="border-x-2 h-1.5 border-x-gray-400">
                                 <div className="w-full h-0.5 bg-gray-400" />
                             </Flex>
-                            <Text className="mt-1 text-xs">{`${
-                                control
-                                    ? (
-                                          ((controlCount('critical') +
-                                              controlCount('high') +
-                                              controlCount('medium') +
-                                              controlCount('low') +
-                                              controlCount('none') +
-                                              controlCount('')) /
-                                              controlData.length) *
-                                          100
-                                      ).toFixed(2)
-                                    : (
-                                          (benchmarkChecks(benchmark).failed /
-                                              (benchmarkChecks(benchmark)
-                                                  .total || 1)) *
-                                          100
-                                      ).toFixed(2)
-                            }% failed`}</Text>
+                            <Text className="mt-1 text-xs">{`${(
+                                (((benchmark?.controlsSeverityStatus?.total
+                                    ?.total || 0) -
+                                    (benchmark?.controlsSeverityStatus?.total
+                                        ?.passed || 0)) /
+                                    (benchmark?.controlsSeverityStatus?.total
+                                        ?.total || 1)) *
+                                100
+                            ).toFixed(2)}% failed`}</Text>
                         </Flex>
                     </Flex>
-                    {(((benchmark?.conformanceStatusSummary?.okCount || 0) /
-                        benchmarkChecks(benchmark).total) *
-                        100 >
-                        0 ||
-                        ((controlData.length -
-                            (controlCount('critical') +
-                                controlCount('high') +
-                                controlCount('medium') +
-                                controlCount('low') +
-                                controlCount('none') +
-                                controlCount(''))) /
-                            controlData.length) *
-                            100 >
-                            0) && (
+                    {passed.controlPercent > 0 && (
                         <div
                             className="group h-5 relative"
                             style={{
-                                width: `${
-                                    control
-                                        ? ((controlData.length -
-                                              (controlCount('critical') +
-                                                  controlCount('high') +
-                                                  controlCount('medium') +
-                                                  controlCount('low') +
-                                                  controlCount('none') +
-                                                  controlCount(''))) /
-                                              controlData.length) *
-                                          100
-                                        : ((benchmark?.conformanceStatusSummary
-                                              ?.okCount || 0) /
-                                              benchmarkChecks(benchmark)
-                                                  .total) *
-                                          100
-                                }%`,
+                                width: `${passed.controlPercent}%`,
                                 minWidth: '2.5%',
                             }}
                         >
                             <div
                                 className="h-full w-full"
                                 style={{
-                                    backgroundColor: '#54B584',
+                                    backgroundColor: passed.color,
                                 }}
                             />
                             <div
                                 className="absolute w-56 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
                                 style={{
-                                    border: '1px solid #54B584',
+                                    border: `1px solid ${passed.color}`,
                                 }}
                             >
                                 <Flex flexDirection="col" alignItems="start">
-                                    <Text className="text-[#54B584] font-semibold mb-1">
+                                    <Text
+                                        className={`text-[${passed.color}] font-semibold mb-1`}
+                                    >
                                         Passed
                                     </Text>
-                                    {control && (
-                                        <Flex>
-                                            <Text>Controls</Text>
-                                            <Text>
-                                                {`${numberDisplay(
-                                                    controlData.length -
-                                                        (controlCount(
-                                                            'critical'
-                                                        ) +
-                                                            controlCount(
-                                                                'high'
-                                                            ) +
-                                                            controlCount(
-                                                                'medium'
-                                                            ) +
-                                                            controlCount(
-                                                                'low'
-                                                            ) +
-                                                            controlCount(
-                                                                'none'
-                                                            ) +
-                                                            controlCount('')),
-                                                    0
-                                                )} (${(
-                                                    ((controlData.length -
-                                                        (controlCount(
-                                                            'critical'
-                                                        ) +
-                                                            controlCount(
-                                                                'high'
-                                                            ) +
-                                                            controlCount(
-                                                                'medium'
-                                                            ) +
-                                                            controlCount(
-                                                                'low'
-                                                            ) +
-                                                            controlCount(
-                                                                'none'
-                                                            ) +
-                                                            controlCount(''))) /
-                                                        controlData.length) *
-                                                    100
-                                                ).toFixed(2)}%)`}
-                                            </Text>
-                                        </Flex>
-                                    )}
+                                    <Flex>
+                                        <Text>Controls</Text>
+                                        <Text>{`${passed.control}`}</Text>
+                                    </Flex>
                                     <Flex>
                                         <Text>Issues</Text>
                                         <Text>
                                             {`${numberDisplay(
-                                                benchmark
-                                                    ?.conformanceStatusSummary
-                                                    ?.okCount || 0,
+                                                passed.count,
                                                 0
-                                            )} (${(
-                                                ((benchmark
-                                                    ?.conformanceStatusSummary
-                                                    ?.okCount || 0) /
-                                                    benchmarkChecks(benchmark)
-                                                        .total) *
-                                                100
-                                            ).toFixed(2)}%)`}
+                                            )} (${passed.percent.toFixed(2)}%)`}
                                         </Text>
                                     </Flex>
                                 </Flex>
