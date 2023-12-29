@@ -72,7 +72,7 @@ function BillingItems() {
         const v = meters
             .map((meter) => meter.value || 0)
             .reduce((sum, current) => sum + current, 0)
-        return v.toFixed(0)
+        return v
     }
 
     const dataPerWorkspace = () => {
@@ -101,7 +101,7 @@ function BillingItems() {
                     <Col>
                         <Card key={title}>
                             <Text>{title}</Text>
-                            <Metric>{v}</Metric>
+                            <Metric>{v.toFixed(0)}</Metric>
                             <Flex className="mt-6">
                                 <Text>
                                     <Bold>Workspace</Bold>
@@ -121,7 +121,7 @@ function BillingItems() {
                                                 {ws.workspaceName}
                                             </Text>
                                         </Flex>
-                                        <Text>{ws.value}</Text>
+                                        <Text>{ws.value?.toFixed(0)}</Text>
                                     </ListItem>
                                 ))}
                             </List>
