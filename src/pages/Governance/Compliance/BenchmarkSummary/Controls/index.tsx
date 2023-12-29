@@ -224,9 +224,9 @@ export default function Controls({ id }: IPolicies) {
                                                         name.indexOf(' ')
                                                     )}.${i + 1}`}</TableCell>
                                                     <TableCell>
-                                                        <Grid
-                                                            numItems={10}
-                                                            className="w-full"
+                                                        <Flex
+                                                            justifyContent="start"
+                                                            className="gap-4"
                                                         >
                                                             {severityBadge(
                                                                 v?.severity
@@ -236,11 +236,11 @@ export default function Controls({ id }: IPolicies) {
                                                                     {v?.title}
                                                                 </Text>
                                                             </Col>
-                                                        </Grid>
+                                                        </Flex>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Flex
-                                                            alignItems="start"
+                                                            justifyContent="start"
                                                             className="gap-1.5"
                                                         >
                                                             {v?.cliRemediation &&
@@ -248,14 +248,30 @@ export default function Controls({ id }: IPolicies) {
                                                                     ?.cliRemediation
                                                                     .length >
                                                                     0 && (
-                                                                    <CommandLineIcon className="text-kaytu-500 w-4" />
+                                                                    <div className="group relative flex justify-center">
+                                                                        <CommandLineIcon className="text-kaytu-500 w-5" />
+                                                                        <div className="absolute -top-2.5 left-6 border border-gray-200 w-fit z-40 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                                                            <Text>
+                                                                                Command
+                                                                                line
+                                                                                (CLI)
+                                                                            </Text>
+                                                                        </div>
+                                                                    </div>
                                                                 )}
                                                             {v?.manualRemediation &&
                                                                 v
                                                                     ?.manualRemediation
                                                                     .length >
                                                                     0 && (
-                                                                    <BookOpenIcon className="text-kaytu-500 w-4" />
+                                                                    <div className="group relative flex justify-center">
+                                                                        <BookOpenIcon className="text-kaytu-500 w-5" />
+                                                                        <div className="absolute -top-2.5 left-6 border border-gray-200 w-fit z-40 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                                                            <Text>
+                                                                                Manual
+                                                                            </Text>
+                                                                        </div>
+                                                                    </div>
                                                                 )}
                                                         </Flex>
                                                     </TableCell>

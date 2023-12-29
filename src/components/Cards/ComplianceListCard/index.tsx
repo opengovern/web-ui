@@ -44,9 +44,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
             onClick={() =>
                 navigate(
                     `${benchmark?.id}${
-                        benchmarkChecks(benchmark).total
-                            ? ''
-                            : '/details#assignments'
+                        benchmarkChecks(benchmark).total ? '' : '#settings'
                     }`
                 )
             }
@@ -69,9 +67,11 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                     <SummaryCard
                         title="Security score"
                         metric={
-                            ((benchmark?.conformanceStatusSummary?.okCount ||
-                                0) / benchmarkChecks(benchmark).total || 0) *
-                            100
+                            ((benchmark?.controlsSeverityStatus?.total
+                                ?.passed || 0) /
+                                (benchmark?.controlsSeverityStatus?.total
+                                    ?.total || 1)) *
+                                100 || 0
                         }
                         isPercent
                         border={false}
@@ -95,7 +95,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
                                             c.Connection?.providerConnectionName
                                         }
                                     </Text>
-                                    <Text>{c.count}</Text>
+                                    <Text>{c.count} issues</Text>
                                 </ListItem>
                             ))}
                         </List>

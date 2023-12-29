@@ -314,10 +314,11 @@ export default function BenchmarkSummary() {
                                     <Title className="font-semibold">
                                         {`${(
                                             ((benchmarkDetail
-                                                ?.conformanceStatusSummary
-                                                ?.okCount || 0) /
-                                                benchmarkChecks(benchmarkDetail)
-                                                    .total) *
+                                                ?.controlsSeverityStatus?.total
+                                                ?.passed || 0) /
+                                                (benchmarkDetail
+                                                    ?.controlsSeverityStatus
+                                                    ?.total?.total || 1)) *
                                                 100 || 0
                                         ).toFixed(2)}%`}
                                     </Title>
@@ -355,7 +356,7 @@ export default function BenchmarkSummary() {
                                     </Flex>
                                 </Flex>
                             </Flex>
-                            <SeverityBar benchmark={benchmarkDetail} control />
+                            <SeverityBar benchmark={benchmarkDetail} />
                         </Card>
                         <Card>
                             <Flex justifyContent="between" className="mb-3">
