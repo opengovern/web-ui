@@ -72,7 +72,7 @@ function BillingItems() {
         const v = meters
             .map((meter) => meter.value || 0)
             .reduce((sum, current) => sum + current, 0)
-        return v
+        return v.toFixed(0)
     }
 
     const dataPerWorkspace = () => {
