@@ -380,6 +380,7 @@ export default function Findings() {
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             severity: severityFilter,
+                            // conformanceStatus
                         },
                         sort: params.request.sortModel.length
                             ? {
