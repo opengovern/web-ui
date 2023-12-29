@@ -16,7 +16,6 @@ import { useSetAtom } from 'jotai'
 import {
     useOnboardApiV1CredentialDetail,
     useOnboardApiV1SourceDelete,
-    useOnboardApiV1SourceHealthcheckDetail,
 } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
@@ -24,6 +23,7 @@ import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/
 import Tag from '../../../../../../../components/Tag'
 import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
 import { notificationAtom } from '../../../../../../../store'
+import { useIntegrationApiV1ConnectionsAwsHealthcheckDetail } from '../../../../../../../api/integration.gen'
 
 interface IAccInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
@@ -80,7 +80,11 @@ export default function AccountInfo({
         isExecuted: isHealthCheckExecuted,
         isLoading: isHealthCheckLoading,
         sendNow: runHealthCheckNow,
-    } = useOnboardApiV1SourceHealthcheckDetail(data?.id || '', {}, {}, false)
+    } = useIntegrationApiV1ConnectionsAwsHealthcheckDetail(
+        data?.id || '',
+        {},
+        false
+    )
 
     const {
         isExecuted: isDiscoverExecuted,

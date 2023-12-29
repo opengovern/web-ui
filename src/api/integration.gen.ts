@@ -284,9 +284,6 @@ interface IuseIntegrationApiV1ConnectionsAwsHealthcheckDetailState {
 
 export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
     connectionId: string,
-    query?: {
-        updateMetadata?: boolean
-    },
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -302,7 +299,7 @@ export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
             isExecuted: false,
         })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, query, params, autoExecute])
+        JSON.stringify([connectionId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -327,7 +324,6 @@ export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
             api.integration
                 .apiV1ConnectionsAwsHealthcheckDetail(
                     connectionId,
-                    query,
                     paramsSignal
                 )
                 .then((resp) => {
@@ -365,10 +361,8 @@ export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
         }
     }
 
-    if (
-        JSON.stringify([connectionId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([connectionId, query, params, autoExecute]))
+    if (JSON.stringify([connectionId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([connectionId, params, autoExecute]))
     }
 
     useEffect(() => {

@@ -4,7 +4,6 @@ import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useState } from 'react'
 import { useAtomValue } from 'jotai'
 import OrganizationInfo from './OrganizationInfo'
-import NewOrganization from './NewOrganization'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,

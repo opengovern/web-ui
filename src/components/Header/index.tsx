@@ -23,6 +23,9 @@ export default function Header({
     const url = window.location.pathname.split('/')
 
     const mainPage = () => {
+        if (url[1] === 'billing') {
+            return 'Usage & Billing'
+        }
         return url[2] ? kebabCaseToLabel(url[2]) : 'Workspaces'
     }
 

@@ -5,13 +5,13 @@ import { PreRequisite } from '../PreRequisite'
 import Steps from '../../../../../components/Steps'
 import { Finish } from '../Finish'
 import { RunCloudFormation } from './RunCloudFormation'
-import {
-    useOnboardApiV1ConnectionsAwsCreate,
-    useOnboardApiV2CredentialCreate,
-} from '../../../../../api/onboard.gen'
 import { SourceType } from '../../../../../api/api'
 import { useWorkspaceApiV1BootstrapCredentialCreate } from '../../../../../api/workspace.gen'
 import { getErrorMessage } from '../../../../../types/apierror'
+import {
+    useIntegrationApiV1ConnectionsAwsCreate,
+    useIntegrationApiV1CredentialsAwsCreate,
+} from '../../../../../api/integration.gen'
 
 interface IManualWizard {
     bootstrapMode: boolean
@@ -62,15 +62,19 @@ export default function ManualWizard({
         }
     }
 
+    const awsConf = awsConfig()
     const {
         isLoading: scIsLoading,
         isExecuted: scIsExecuted,
         error: scError,
         sendNow: scSendNow,
-    } = useOnboardApiV1ConnectionsAwsCreate(
+    } = useIntegrationApiV1ConnectionsAwsCreate(
         {
-            name: '',
-            awsConfig: awsConfig(),
+            config: {
+                accountID: awsConf.accountID,
+                assumeRoleName: awsConf.assumeRoleName,
+                externalId: awsConf.externalId,
+            },
         },
         {},
         false
@@ -81,10 +85,14 @@ export default function ManualWizard({
         isExecuted: cIsExecuted,
         error: cError,
         sendNow: cSendNow,
-    } = useOnboardApiV2CredentialCreate(
+    } = useIntegrationApiV1CredentialsAwsCreate(
         {
-            connector: SourceType.CloudAWS,
-            awsConfig: awsConfig(),
+            config: {
+                accountID: awsConf.accountID,
+                assumeRoleName: awsConf.assumeRoleName,
+                externalId: awsConf.externalId,
+                healthCheckPolicies: undefined,
+            },
         },
         {},
         false
