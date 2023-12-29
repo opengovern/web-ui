@@ -186,7 +186,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                                       params.request.sortModel[0].sort,
                               }
                             : {},
-                        limit: -100,
+                        limit: 100,
                         afterSortKey:
                             params.request.startRow === 0 ||
                             sortKey.length < 1 ||

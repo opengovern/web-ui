@@ -377,7 +377,7 @@ export default function Findings() {
                             connectionID: connectionFilter,
                             benchmarkID: benchmarkFilter,
                             resourceTypeID: resourceFilter,
-                            severity: severityFilter,
+                            // severity: severityFilter,
                         },
                         sort: params.request.sortModel.length
                             ? {
