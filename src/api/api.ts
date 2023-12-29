@@ -632,6 +632,20 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSumm
     control?: GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[]
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatus {
+    critical?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+    high?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+    low?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+    medium?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+    none?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+    total?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult {
+    passed?: number
+    total?: number
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary {
     /** Checks summary */
     checks?: TypesSeverityResult
@@ -642,6 +656,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example ["[Azure]"]
      */
     connectors?: SourceType[]
+    /** Controls severity status */
+    controlsSeverityStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatus
     /**
      * Benchmark description
      * @example "The CIS Microsoft Azure Foundations Security Benchmark provides prescriptive guidance for establishing a secure baseline configuration for Microsoft Azure."
@@ -854,11 +870,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      */
     controlID?: string[]
     /**
-     * Resource Collection ID
-     * @example ["example-rc"]
-     */
-    resourceCollection?: string[]
-    /**
      * Resource unique identifier
      * @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"]
      */
@@ -872,7 +883,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      * Severity
      * @example ["low"]
      */
-    severity?: string[]
+    severity?: TypesFindingSeverity[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata {
@@ -1076,6 +1087,19 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoin
     value?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest {
+    afterSortKey?: any[]
+    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsFilters
+    /** @example 100 */
+    limit?: number
+    sort?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsSort[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse {
+    resourceFindings?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding[]
+    totalCount?: number
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     /** @example "Azure" */
     connector?: string
@@ -1102,6 +1126,47 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     updatedAt?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding {
+    evaluatedAt?: string
+    failedCount?: number
+    findings?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
+    kaytuResourceID?: string
+    resourceLocation?: string
+    resourceName?: string
+    resourceType?: string
+    sortKey?: any[]
+    totalCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsFilters {
+    /** @example ["azure_cis_v140"] */
+    benchmarkID?: string[]
+    /** @example ["alarm"] */
+    conformanceStatus?: TypesConformanceStatus[]
+    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
+    connectionID?: string[]
+    /** @example ["Azure"] */
+    connector?: SourceType[]
+    /** @example ["azure_cis_v140_7_5"] */
+    controlID?: string[]
+    /** @example ["example-rc"] */
+    resourceCollection?: string[]
+    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"] */
+    resourceID?: string[]
+    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines"] */
+    resourceTypeID?: string[]
+    /** @example ["low"] */
+    severity?: TypesFindingSeverity[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsSort {
+    failedCount?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceLocation?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceName?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceType?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSummary {
     conformanceStatusesCount?: {
         error?: number
@@ -1120,6 +1185,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSumma
         medium?: number
         none?: number
     }
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection {
+    SortDirectionAscending = 'asc',
+    SortDirectionDescending = 'desc',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
@@ -2090,22 +2160,6 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusRespon
     workspaceCreationStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest {
-    newName?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest {
-    newOrgID?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest {
-    newOwnerUserID?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest {
-    newName?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest {
     name?: string
     organization_id?: number
@@ -2143,36 +2197,6 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier {
     TierFree = 'FREE',
     TierTeams = 'TEAMS',
     TierEnterprise = 'ENTERPRISE',
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
-    /** @example "kaytu" */
-    aws_unique_id?: string
-    /** @example "kaytu" */
-    aws_user_arn?: string
-    /** @example "2023-05-17T14:39:02.707659Z" */
-    createdAt?: string
-    /** @example "ws-698542025141040315" */
-    id?: string
-    is_bootstrap_input_finished?: boolean
-    is_created?: boolean
-    /** @example "kaytu" */
-    name?: string
-    organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
-    /** @example "google-oauth2|204590896945502695694" */
-    ownerId?: string
-    /** @example "sm" */
-    size?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize
-    /** @example "PROVISIONED" */
-    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID
-    /** @example "ENTERPRISE" */
-    tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits {
-    maxConnections?: number
-    maxResources?: number
-    maxUsers?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage {
@@ -2225,6 +2249,24 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
     SizeSM = 'sm',
     SizeMD = 'md',
     SizeLG = 'lg',
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSOrgCredentialConfig {
+    accountID?: string
+    assumeRoleName?: string
+    externalId?: string
+    healthCheckPolicies?: string[]
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSStandAloneCredentialConfig {
+    accessKey: string
+    accountId?: string
+    assumeAdminRoleName?: string
+    assumeRoleName?: string
+    assumeRolePolicyName?: string
+    externalId?: string
+    regions?: string[]
+    secretKey: string
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCredentialConfig {
@@ -2310,10 +2352,25 @@ export enum GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectionLif
     ConnectionLifecycleStateArchived = 'ARCHIVED',
 }
 
-export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureConnectionRequest {
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest {
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSStandAloneCredentialConfig
+    description?: string
+    email?: string
+    name?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest {
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSOrgCredentialConfig
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest {
     config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCredentialConfig
     description?: string
     name?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse {
+    id?: string
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse {
@@ -3816,6 +3873,14 @@ export class Api<
                 controlId?: string[]
                 /** Severities to filter by defaults to all severities except passed */
                 severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+                /** ConformanceStatus to filter by defaults to all conformanceStatus except passed */
+                conformanceStatus?: (
+                    | 'ok'
+                    | 'alarm'
+                    | 'info'
+                    | 'skip'
+                    | 'error'
+                )[]
             },
             params: RequestParams = {}
         ) =>
@@ -4254,6 +4319,32 @@ export class Api<
                 type: ContentType.Json,
                 ...params,
             }),
+
+        /**
+         * @description Retrieving list of resource findings
+         *
+         * @tags compliance
+         * @name ApiV1ResourceFindingsCreate
+         * @summary List resource findings
+         * @request POST:/compliance/api/v1/resource_findings
+         * @secure
+         */
+        apiV1ResourceFindingsCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
+                any
+            >({
+                path: `/compliance/api/v1/resource_findings`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
     }
     costEstimator = {
         /**
@@ -4311,6 +4402,32 @@ export class Api<
             }),
     }
     integration = {
+        /**
+         * @description Creating AWS source [standalone]
+         *
+         * @tags onboard
+         * @name ApiV1ConnectionsAwsCreate
+         * @summary Create AWS connection [standalone]
+         * @request POST:/integration/api/v1/connections/aws
+         * @secure
+         */
+        apiV1ConnectionsAwsCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
+                any
+            >({
+                path: `/integration/api/v1/connections/aws`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
         /**
          * @description Retrieving a list of connections summaries
          *
@@ -4379,6 +4496,38 @@ export class Api<
             }),
 
         /**
+         * @description Get live connection health status with given connection ID for AWS.
+         *
+         * @tags connections
+         * @name ApiV1ConnectionsAwsHealthcheckDetail
+         * @summary Get AWS connection health
+         * @request GET:/integration/api/v1/connections/{connectionId}/aws/healthcheck
+         * @secure
+         */
+        apiV1ConnectionsAwsHealthcheckDetail: (
+            connectionId: string,
+            query?: {
+                /**
+                 * Whether to update metadata or not
+                 * @default true
+                 */
+                updateMetadata?: boolean
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+                any
+            >({
+                path: `/integration/api/v1/connections/${connectionId}/aws/healthcheck`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Get live connection health status with given connection ID for Azure.
          *
          * @tags connections
@@ -4411,7 +4560,33 @@ export class Api<
             }),
 
         /**
-         * @description Creating Azure credential, testing it and on-board its subscriptions
+         * @description Creating AWS credential, testing it and onboard its accounts (organization account)
+         *
+         * @tags integration
+         * @name ApiV1CredentialsAwsCreate
+         * @summary Create AWS credential and does onboarding for its accounts (organization account)
+         * @request POST:/integration/api/v1/credentials/aws
+         * @secure
+         */
+        apiV1CredentialsAwsCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
+                any
+            >({
+                path: `/integration/api/v1/credentials/aws`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Creating Azure credential, testing it and onboard its subscriptions
          *
          * @tags integration
          * @name ApiV1CredentialsAzureCreate
@@ -4420,7 +4595,7 @@ export class Api<
          * @secure
          */
         apiV1CredentialsAzureCreate: (
-            request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureConnectionRequest,
+            request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
             params: RequestParams = {}
         ) =>
             this.request<
@@ -6163,75 +6338,6 @@ export class Api<
             }),
 
         /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1OrganizationList
-         * @summary List all organizations
-         * @request GET:/workspace/api/v1/organization
-         * @secure
-         */
-        apiV1OrganizationList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization[],
-                any
-            >({
-                path: `/workspace/api/v1/organization`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1OrganizationCreate
-         * @summary Create an organization
-         * @request POST:/workspace/api/v1/organization
-         * @secure
-         */
-        apiV1OrganizationCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
-                any
-            >({
-                path: `/workspace/api/v1/organization`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1OrganizationDelete
-         * @summary Create an organization
-         * @request DELETE:/workspace/api/v1/organization/{organizationId}
-         * @secure
-         */
-        apiV1OrganizationDelete: (
-            organizationId: number,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/organization/${organizationId}`,
-                method: 'DELETE',
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
          * @description Returns workspace created
          *
          * @tags workspace
@@ -6301,98 +6407,6 @@ export class Api<
             }),
 
         /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspaceNameCreate
-         * @summary Change name of workspace
-         * @request POST:/workspace/api/v1/workspace/{workspace_id}/name
-         * @secure
-         */
-        apiV1WorkspaceNameCreate: (
-            workspaceId: string,
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspace/${workspaceId}/name`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspaceOrganizationCreate
-         * @summary Change organization of workspace
-         * @request POST:/workspace/api/v1/workspace/{workspace_id}/organization
-         * @secure
-         */
-        apiV1WorkspaceOrganizationCreate: (
-            workspaceId: string,
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspace/${workspaceId}/organization`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspaceOwnerCreate
-         * @summary Change ownership of workspace
-         * @request POST:/workspace/api/v1/workspace/{workspace_id}/owner
-         * @secure
-         */
-        apiV1WorkspaceOwnerCreate: (
-            workspaceId: string,
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspace/${workspaceId}/owner`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspaceTierCreate
-         * @summary Change Tier of workspace
-         * @request POST:/workspace/api/v1/workspace/{workspace_id}/tier
-         * @secure
-         */
-        apiV1WorkspaceTierCreate: (
-            workspaceId: string,
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspace/${workspaceId}/tier`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
          * @description Returns all workspaces with owner id
          *
          * @tags workspace
@@ -6407,77 +6421,6 @@ export class Api<
                 any
             >({
                 path: `/workspace/api/v1/workspaces`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspacesByidDetail
-         * @summary Get workspace
-         * @request GET:/workspace/api/v1/workspaces/byid/{workspace_id}
-         * @secure
-         */
-        apiV1WorkspacesByidDetail: (
-            workspaceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-                any
-            >({
-                path: `/workspace/api/v1/workspaces/byid/${workspaceId}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get workspace with workspace name
-         *
-         * @tags workspace
-         * @name ApiV1WorkspacesBynameDetail
-         * @summary Get workspace for workspace service
-         * @request GET:/workspace/api/v1/workspaces/byname/{workspace_name}
-         * @secure
-         */
-        apiV1WorkspacesBynameDetail: (
-            workspaceName: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspaces/byname/${workspaceName}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspacesLimitsByidDetail
-         * @summary Get workspace limits
-         * @request GET:/workspace/api/v1/workspaces/limits/byid/{workspace_id}
-         * @secure
-         */
-        apiV1WorkspacesLimitsByidDetail: (
-            workspaceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-                any
-            >({
-                path: `/workspace/api/v1/workspaces/limits/byid/${workspaceId}`,
                 method: 'GET',
                 secure: true,
                 type: ContentType.Json,
@@ -6512,27 +6455,6 @@ export class Api<
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get workspace with workspace id
-         *
-         * @tags workspace
-         * @name ApiV1WorkspacesDetail
-         * @summary Get workspace for workspace service
-         * @request GET:/workspace/api/v1/workspaces/{workspace_id}
-         * @secure
-         */
-        apiV1WorkspacesDetail: (
-            workspaceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspaces/${workspaceId}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
                 ...params,
             }),
     }
