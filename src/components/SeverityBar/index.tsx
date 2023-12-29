@@ -10,7 +10,6 @@ interface ISeverityBar {
 }
 
 export default function SeverityBar({ benchmark }: ISeverityBar) {
-    console.log(benchmark)
     const severity = [
         {
             name: 'Critical',
