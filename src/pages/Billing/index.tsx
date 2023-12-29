@@ -72,9 +72,7 @@ function BillingItems() {
         const v = meters
             .map((meter) => meter.value || 0)
             .reduce((sum, current) => sum + current, 0)
-        const isTotal = meters.at(0)?.isTotal || false
-
-        return isTotal ? v / meters.length : v
+        return v
     }
 
     const dataPerWorkspace = () => {
