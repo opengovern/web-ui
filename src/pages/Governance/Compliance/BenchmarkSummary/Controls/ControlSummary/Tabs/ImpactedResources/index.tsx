@@ -180,12 +180,21 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                         filters: {
                             controlID: [controlId || ''],
                         },
-                        // sort: params.request.sortModel.length
-                        //     ? {
-                        //           [params.request.sortModel[0].colId]:
-                        //               params.request.sortModel[0].sort,
-                        //       }
-                        //     : {},
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        sort: params.request.sortModel.length
+                            ? {
+                                  [params.request.sortModel[0].colId]:
+                                      params.request.sortModel[0].sort,
+                              }
+                            : {},
+                        conformanceStatus: [
+                            'ok',
+                            'alarm',
+                            'info',
+                            'skip',
+                            'error',
+                        ],
                         limit: 100,
                         afterSortKey:
                             params.request.startRow === 0 ||
