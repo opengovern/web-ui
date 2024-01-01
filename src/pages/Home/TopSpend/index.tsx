@@ -53,7 +53,7 @@ export default function TopSpend() {
 
     return (
         <Card>
-            <Flex flexDirection="row" justifyContent="between" className="mb-6">
+            <Flex flexDirection="row" justifyContent="between" className="mb-4">
                 <Flex flexDirection="row" justifyContent="start">
                     <Icon
                         variant="light"
@@ -64,18 +64,6 @@ export default function TopSpend() {
                     />
                     <Title>Top spend trends</Title>
                 </Flex>
-                <Button
-                    size="xs"
-                    variant="light"
-                    icon={ArrowRightIcon}
-                    iconPosition="right"
-                    className="mt-2"
-                    onClick={() => {
-                        navigate(`/${workspace}/spend/spend-details#metrics`)
-                    }}
-                >
-                    See more
-                </Button>
             </Flex>
             <Flex
                 flexDirection="row"
@@ -105,7 +93,7 @@ export default function TopSpend() {
                               <Flex
                                   flexDirection="row"
                                   justifyContent="between"
-                                  className="w-full py-2 cursor-pointer hover:bg-gray-100 rounded-md"
+                                  className="w-full py-1 cursor-pointer hover:bg-gray-100 rounded-md"
                               >
                                   <div className="h-2 w-36 my-2 bg-slate-200 rounded" />
                                   <Flex
@@ -125,7 +113,7 @@ export default function TopSpend() {
                               <Flex
                                   flexDirection="row"
                                   justifyContent="between"
-                                  className="w-full py-2 cursor-pointer hover:bg-gray-100 rounded-md"
+                                  className="w-full py-1 cursor-pointer hover:bg-gray-100 rounded-md"
                                   onClick={() => {
                                       navigate(
                                           `/${workspace}/spend/metric_${item.cost_dimension_id}`
@@ -159,6 +147,20 @@ export default function TopSpend() {
                               </Flex>
                           </>
                       ))}
+            </Flex>
+            <Flex flexDirection="row" justifyContent="end" className="mt-3">
+                <Button
+                    size="xs"
+                    variant="light"
+                    icon={ArrowRightIcon}
+                    iconPosition="right"
+                    className="mb-0"
+                    onClick={() =>
+                        navigate(`/${workspace}/spend/spend-details#metrics`)
+                    }
+                >
+                    See more
+                </Button>
             </Flex>
         </Card>
     )
