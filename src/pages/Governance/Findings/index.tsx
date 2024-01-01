@@ -324,6 +324,8 @@ export default function Findings() {
         sortKey = ''
         setProviderFilter([])
         setProvider('')
+        setStatusFilter(['alarm', 'info', 'skip', 'error'])
+        setStatus(['alarm', 'info', 'skip', 'error'])
         setConnectionFilter([])
         connectionCheckbox.setState([])
         setBenchmarkFilter([])
