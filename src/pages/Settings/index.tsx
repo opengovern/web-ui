@@ -212,7 +212,9 @@ export default function Settings() {
                         <Spinner />
                     </Flex>
                 ) : (
-                    <Flex className="w-full h-full pl-6">{selectedTab}</Flex>
+                    <Flex className="w-full h-full pl-6 max-w-7xl">
+                        {selectedTab}
+                    </Flex>
                 )}
             </Flex>
         </Layout>
