@@ -143,7 +143,7 @@ export default function Insight() {
                     className="bg-white shadow-md border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300"
                     onClick={() => navigate(`/${workspace}/insights`)}
                 >
-                    Show more
+                    See more
                 </Button>
             </div>
         </Card>

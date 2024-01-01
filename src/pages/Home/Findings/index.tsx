@@ -133,7 +133,7 @@ export default function Findings() {
                     className="mt-2"
                     onClick={() => navigate(`/${workspace}/findings`)}
                 >
-                    See all
+                    See more
                 </Button>
             </Flex>
         </Card>
