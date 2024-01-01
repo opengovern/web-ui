@@ -68,6 +68,11 @@ const navigation = [
         icon: MagnifyingGlassIcon,
     },
     {
+        name: 'Integrations',
+        page: 'integrations',
+        icon: CpuChipIcon,
+    },
+    {
         name: 'Settings',
         page: 'settings',
         icon: Cog6ToothIcon,
@@ -79,11 +84,6 @@ const preview = [
         name: 'Resource Collection',
         page: 'resource-collection',
         icon: RectangleStackIcon,
-    },
-    {
-        name: 'Integrations',
-        page: 'integrations',
-        icon: CpuChipIcon,
     },
     {
         name: 'Automation',

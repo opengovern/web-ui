@@ -24,6 +24,7 @@ import {
 } from '../../../api/api'
 import AxiosAPI from '../../../api/ApiConfig'
 import { useScheduleApiV1JobsCreate } from '../../../api/schedule.gen'
+import DrawerPanel from '../../../components/DrawerPanel'
 
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -31,6 +32,26 @@ const columns = () => {
             field: 'id',
             headerName: 'Job ID',
             type: 'string',
+            sortable: true,
+            filter: false,
+            suppressMenu: true,
+            resizable: true,
+            hide: true,
+        },
+        {
+            field: 'createdAt',
+            headerName: 'Created At',
+            type: 'date',
+            sortable: true,
+            filter: false,
+            suppressMenu: true,
+            resizable: true,
+            hide: true,
+        },
+        {
+            field: 'updatedAt',
+            headerName: 'Updated At',
+            type: 'date',
             sortable: true,
             filter: false,
             suppressMenu: true,
@@ -185,6 +206,9 @@ const jobTypes = [
 ]
 
 export default function SettingsJobs() {
+    const [open, setOpen] = useState(false)
+    const [clickedJob, setClickedJob] =
+        useState<GithubComKaytuIoKaytuEnginePkgDescribeApiJob>()
     const [searchParams, setSearchParams] = useSearchParams()
     const [jobTypeFilter, setJobTypeFilter] = useState<string>(
         searchParams.get('type') || ''
@@ -266,6 +290,19 @@ export default function SettingsJobs() {
 
     const serverSideRows = ssr()
 
+    const clickedJobDetails = [
+        { title: 'ID', value: clickedJob?.id },
+        { title: 'Title', value: clickedJob?.title },
+        { title: 'Type', value: clickedJob?.type },
+        { title: 'Created At', value: clickedJob?.createdAt },
+        { title: 'Updated At', value: clickedJob?.updatedAt },
+        { title: 'Kaytu Connection ID', value: clickedJob?.connectionID },
+        { title: 'Account ID', value: clickedJob?.connectionProviderID },
+        { title: 'Account Name', value: clickedJob?.connectionProviderName },
+        { title: 'Status', value: clickedJob?.status },
+        { title: 'Failure Reason', value: clickedJob?.failureReason },
+    ]
+
     return (
         <Card>
             <Title className="font-semibold mb-5">Jobs</Title>
@@ -343,6 +380,11 @@ export default function SettingsJobs() {
                         id="jobs"
                         columns={columns()}
                         serverSideDatasource={serverSideRows}
+                        onCellClicked={(event) => {
+                            console.log(event.data)
+                            setClickedJob(event.data)
+                            setOpen(true)
+                        }}
                         options={{
                             rowModelType: 'serverSide',
                             serverSideDatasource: serverSideRows,
@@ -350,6 +392,29 @@ export default function SettingsJobs() {
                     />
                 </Flex>
             </Flex>
+            <DrawerPanel
+                open={open}
+                onClose={() => setOpen(false)}
+                title="Job Details"
+            >
+                <Flex flexDirection="col">
+                    {clickedJobDetails.map((item) => {
+                        return (
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="between"
+                                alignItems="start"
+                                className="mt-2"
+                            >
+                                <Text className="w-56 font-bold">
+                                    {item.title}
+                                </Text>
+                                <Text className="w-full">{item.value}</Text>
+                            </Flex>
+                        )
+                    })}
+                </Flex>
+            </DrawerPanel>
         </Card>
     )
 }

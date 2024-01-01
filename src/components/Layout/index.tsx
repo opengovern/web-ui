@@ -60,9 +60,9 @@ export default function Layout({
                         className={`px-12 ${hfull ? 'h-full' : ''}`}
                     >
                         <div
-                            className={`max-w-7xl w-full py-8 ${
-                                hfull ? 'h-full' : ''
-                            }`}
+                            className={`${
+                                currentPage === 'settings' ? '' : 'max-w-7xl'
+                            } w-full py-8 ${hfull ? 'h-full' : ''}`}
                         >
                             {children}
                         </div>
