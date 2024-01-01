@@ -112,8 +112,12 @@ export default function Findings() {
                                               item.control?.severity
                                           )}
                                           <Badge color="rose">
-                                              {item.failedResourcesCount} failed
-                                              resources
+                                              {item.failedResourcesCount}{' '}
+                                              {(item.failedResourcesCount ||
+                                                  0) < 2
+                                                  ? 'resource'
+                                                  : 'resources'}{' '}
+                                              failed
                                           </Badge>
                                       </Flex>
                                   </Flex>
