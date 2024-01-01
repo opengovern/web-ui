@@ -209,10 +209,6 @@ const severity = [
     { name: 'Low', color: '#F4C744' },
     { name: 'None', color: '#9BA2AE' },
 ]
-const status = [
-    { name: 'Passed', color: 'emerald', icon: CheckCircleIcon },
-    { name: 'Failed', color: 'rose', icon: XCircleIcon },
-]
 
 const filteredConnectionsList = (
     connection:
@@ -249,6 +245,13 @@ export default function Findings() {
 
     const [provider, setProvider] = useState('')
     const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
+    const [status, setStatus] = useState(['alarm', 'info', 'skip', 'error'])
+    const [statusFilter, setStatusFilter] = useState([
+        'alarm',
+        'info',
+        'skip',
+        'error',
+    ])
     const connectionCheckbox = useCheckboxState({ state: [] })
     const [connectionFilter, setConnectionFilter] = useState([])
     const benchmarkCheckbox = useCheckboxState({ state: [] })
@@ -257,9 +260,6 @@ export default function Findings() {
     const [resourceFilter, setResourceFilter] = useState([])
     const severityCheckbox = useCheckboxState({
         state: ['critical', 'high', 'medium', 'low', 'none'],
-    })
-    const statusCheckbox = useCheckboxState({
-        state: ['failed'],
     })
     const [severityFilter, setSeverityFilter] = useState([
         'critical',
@@ -273,6 +273,7 @@ export default function Findings() {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         setProviderFilter(provider.length ? [provider] : [])
+        setStatusFilter(status)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         setConnectionFilter(connectionCheckbox.state)
@@ -294,6 +295,7 @@ export default function Findings() {
                 // @ts-ignore
                 provider.length ? [provider] : []
             ) ||
+            !compareArrays(statusFilter.sort(), status.sort()) ||
             !compareArrays(
                 connectionFilter.sort(),
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -322,6 +324,8 @@ export default function Findings() {
         sortKey = ''
         setProviderFilter([])
         setProvider('')
+        setStatusFilter(['alarm', 'info', 'skip', 'error'])
+        setStatus(['alarm', 'info', 'skip', 'error'])
         setConnectionFilter([])
         connectionCheckbox.setState([])
         setBenchmarkFilter([])
@@ -334,6 +338,7 @@ export default function Findings() {
     const showReset = () => {
         return (
             providerFilter.length ||
+            statusFilter.length !== 4 ||
             connectionFilter.length ||
             benchmarkFilter.length ||
             resourceFilter.length ||
@@ -380,14 +385,18 @@ export default function Findings() {
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             severity: severityFilter,
-                            // conformanceStatus
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            conformanceStatus: status,
                         },
-                        // sort: params.request.sortModel.length
-                        //     ? {
-                        //           [params.request.sortModel[0].colId]:
-                        //               params.request.sortModel[0].sort,
-                        //       }
-                        //     : {},
+                        sort: params.request.sortModel.length
+                            ? [
+                                  {
+                                      [params.request.sortModel[0].colId]:
+                                          params.request.sortModel[0].sort,
+                                  },
+                              ]
+                            : [],
                         limit: 100,
                         afterSortKey:
                             params.request.startRow === 0 ||
@@ -420,6 +429,7 @@ export default function Findings() {
         () => ssr(),
         [
             providerFilter,
+            statusFilter,
             connectionFilter,
             benchmarkFilter,
             resourceFilter,
@@ -501,28 +511,51 @@ export default function Findings() {
                                 alignItems="start"
                                 className="gap-1.5"
                             >
-                                {status.map((s) => (
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    <Checkbox
-                                        shape="curve"
-                                        className="!items-start"
-                                        value={s.name.toLowerCase()}
-                                        {...statusCheckbox}
-                                    >
-                                        <Flex className="gap-1">
-                                            <Icon
-                                                icon={s.icon}
-                                                size="sm"
-                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                                // @ts-ignore
-                                                color={s.color}
-                                                className="h-3 p-0 -ml-0.5"
-                                            />
-                                            <Text>{s.name}</Text>
-                                        </Flex>
-                                    </Checkbox>
-                                ))}
+                                <Radio
+                                    name="status"
+                                    onClick={() =>
+                                        setStatus([
+                                            'ok',
+                                            'alarm',
+                                            'info',
+                                            'skip',
+                                            'error',
+                                        ])
+                                    }
+                                    checked={status.length === 5}
+                                >
+                                    All
+                                </Radio>
+                                <Radio
+                                    name="status"
+                                    onClick={() => setStatus(['ok'])}
+                                    checked={
+                                        status.length === 1 &&
+                                        status.includes('ok')
+                                    }
+                                >
+                                    <Flex className="gap-1">
+                                        <CheckCircleIcon className="w-4 text-emerald-500" />
+                                        <Text>Passed</Text>
+                                    </Flex>
+                                </Radio>
+                                <Radio
+                                    name="status"
+                                    onClick={() =>
+                                        setStatus([
+                                            'alarm',
+                                            'info',
+                                            'skip',
+                                            'error',
+                                        ])
+                                    }
+                                    checked={status.length === 4}
+                                >
+                                    <Flex className="gap-1">
+                                        <XCircleIcon className="w-4 text-rose-600" />
+                                        <Text>Failed</Text>
+                                    </Flex>
+                                </Radio>
                             </Flex>
                         </AccordionBody>
                     </Accordion>
