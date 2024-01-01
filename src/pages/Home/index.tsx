@@ -23,7 +23,7 @@ export default function Home() {
                 <Col numColSpan={1}>
                     <div className="space-y-2">
                         <Integration />
-                        <Query id="smartquery-238" />
+                        <Query id="server_workload" />
                     </div>
                 </Col>
                 <Col numColSpan={1}>
