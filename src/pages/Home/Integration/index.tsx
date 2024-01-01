@@ -55,7 +55,7 @@ export default function Integration() {
                                               ? AWSIcon
                                               : AzureIcon
                                       }
-                                      className="w-24"
+                                      className="w-24 rounded-full border shadow-sm"
                                       alt="aws"
                                   />
                                   <Title>{connector.label}</Title>

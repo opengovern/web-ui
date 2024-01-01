@@ -488,7 +488,7 @@ export default function Findings() {
                                     <Flex className="gap-1">
                                         <img
                                             src={AzureIcon}
-                                            className="w-6"
+                                            className="w-6 rounded-full"
                                             alt="azure"
                                         />
                                         <Text>Azure</Text>

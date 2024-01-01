@@ -22,14 +22,14 @@ export const getConnectorIcon = (
                 <img
                     src={connector === 'Azure' ? AzureIcon : AWSIcon}
                     alt="connector"
-                    className="min-w-[36px] w-9 h-9"
+                    className="min-w-[36px] w-9 h-9 rounded-full"
                 />
             ) : (
                 connector?.map((c) => (
                     <img
                         src={c === 'Azure' ? AzureIcon : AWSIcon}
                         alt="connector"
-                        className="min-w-[36px] w-9 h-9"
+                        className="min-w-[36px] w-9 h-9 rounded-full"
                     />
                 ))
             )}
