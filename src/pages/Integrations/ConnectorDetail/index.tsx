@@ -3,11 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAtomValue } from 'jotai'
 import { Cog8ToothIcon } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
-import {
-    useOnboardApiV1CatalogMetricsList,
-    useOnboardApiV1ConnectionsSummaryList,
-    useOnboardApiV1CredentialList,
-} from '../../../api/onboard.gen'
 import { timeAtom } from '../../../store'
 import AWSTabs from './AWS/Tabs'
 import AWSSummary from './AWS/Summary'
@@ -15,6 +10,11 @@ import AzureSummary from './Azure/Summary'
 import AzureTabs from './Azure/Tabs'
 import { StringToProvider } from '../../../types/provider'
 import Header from '../../../components/Header'
+import {
+    useIntegrationApiV1ConnectionsSummariesList,
+    useIntegrationApiV1ConnectorsMetricsList,
+    useIntegrationApiV1CredentialsList,
+} from '../../../api/integration.gen'
 
 export default function ConnectorDetail() {
     const navigate = useNavigate()
@@ -23,7 +23,7 @@ export default function ConnectorDetail() {
     const activeTimeRange = useAtomValue(timeAtom)
     const provider = StringToProvider(connector || '')
     const { response: accounts, isLoading: isAccountsLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
+        useIntegrationApiV1ConnectionsSummariesList({
             ...(provider !== '' && {
                 connector: [provider],
             }),
@@ -33,11 +33,11 @@ export default function ConnectorDetail() {
             pageNumber: 1,
         })
     const { response: credentials, isLoading: isCredentialLoading } =
-        useOnboardApiV1CredentialList({
+        useIntegrationApiV1CredentialsList({
             connector: provider,
         })
     const { response: topMetrics, isLoading: metricsLoading } =
-        useOnboardApiV1CatalogMetricsList({
+        useIntegrationApiV1ConnectorsMetricsList({
             connector: provider !== '' ? [provider] : [],
         })
 

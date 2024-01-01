@@ -3,13 +3,16 @@ import { Flex } from '@tremor/react'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import Steps from '../../../../../../../components/Steps'
 import FirstStep from './FirstStep'
-import { useOnboardApiV1CredentialAutoonboardCreate } from '../../../../../../../api/onboard.gen'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+} from '../../../../../../../api/api'
 import FinalStep from './FinalStep'
 import Spinner from '../../../../../../../components/Spinner'
+import { useIntegrationApiV1CredentialsAzureAutoonboardCreate } from '../../../../../../../api/integration.gen'
 
 interface INewAzureSubscription {
-    spns: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    spns: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
     open: boolean
     onClose: () => void
 }
@@ -27,7 +30,7 @@ export default function NewAzureSubscription({
         isLoading,
         isExecuted,
         sendNow,
-    } = useOnboardApiV1CredentialAutoonboardCreate(spnID, {}, false)
+    } = useIntegrationApiV1CredentialsAzureAutoonboardCreate(spnID, {}, false)
 
     const close = () => {
         setSpnID('')

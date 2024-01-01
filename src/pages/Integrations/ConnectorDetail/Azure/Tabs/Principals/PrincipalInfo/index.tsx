@@ -9,15 +9,20 @@ import {
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
 import {
-    useOnboardApiV1CredentialAutoonboardCreate,
-    // useOnboardApiV1CredentialDelete,
-} from '../../../../../../../api/onboard.gen'
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+} from '../../../../../../../api/api'
 import { dateDisplay } from '../../../../../../../utilities/dateDisplay'
+import {
+    useIntegrationApiV1CredentialDelete,
+    useIntegrationApiV1CredentialsAzureAutoonboardCreate,
+} from '../../../../../../../api/integration.gen'
 
 interface IPriInfo {
-    data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
+    data:
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential
+        | undefined
     open: boolean
     onClose: () => void
     isDemo: boolean
@@ -34,17 +39,21 @@ export default function PrincipalInfo({
     const [value, setValue] = useState('')
     const [evalue, seteValue] = useState(false)
 
-    // const {
-    //     isExecuted: isDeleteExecuted,
-    //     isLoading: isDeleteLoading,
-    //     sendNow: deleteNow,
-    // } = useOnboardApiV1CredentialDelete(data?.id || '', {}, false)
+    const {
+        isExecuted: isDeleteExecuted,
+        isLoading: isDeleteLoading,
+        sendNow: deleteNow,
+    } = useIntegrationApiV1CredentialDelete(data?.id || '', {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,
         isLoading: isDiscoverLoading,
         sendNow: discoverNow,
-    } = useOnboardApiV1CredentialAutoonboardCreate(data?.id || '', {}, false)
+    } = useIntegrationApiV1CredentialsAzureAutoonboardCreate(
+        data?.id || '',
+        {},
+        false
+    )
 
     // useEffect(() => {
     //     if (isDeleteExecuted && !isDeleteLoading) {

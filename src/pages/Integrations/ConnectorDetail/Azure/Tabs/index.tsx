@@ -6,11 +6,13 @@ import Principals from './Principals'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
 } from '../../../../../api/api'
 
 interface IAzure {
-    principals: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
-    subscriptions: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    principals: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
+    subscriptions: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
     loading: boolean
 }
 

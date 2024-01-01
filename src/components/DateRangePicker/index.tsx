@@ -297,7 +297,6 @@ export default function DateRangePicker() {
     }
 
     const minValue = () => {
-        console.log(isSpend, currentWorkspace)
         return parseDate(
             !isSpend && currentWorkspace && currentWorkspace.current
                 ? dayjs(currentWorkspace.current?.createdAt).format(

@@ -1,11 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
+    <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Settings/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Settings/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/codegen/api.template.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Home/Compliance/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Home/Findings/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Home/Insights/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Home/Integration/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Home/Query/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Home/QuickNav/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Home/TopSpend/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/front-end-v2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/front-end-v2.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/codegen/generate.go" beforeDir="false" afterPath="$PROJECT_DIR$/codegen/generate.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/alerting.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/alerting.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/auth.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/auth.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/compliance.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/compliance.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/integration.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/integration.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/inventory.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/inventory.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/metadata.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/metadata.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/onboard.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/onboard.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/schedule.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/schedule.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/workspace.gen.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/workspace.gen.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChangeDelta/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChangeDelta/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DateRangePicker/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DateRangePicker/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Filter/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Filter/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Layout/Sidebar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout/Sidebar/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Assets/Details/Tabs/CloudAccounts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Assets/Details/Tabs/CloudAccounts/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Assets/Single/SingleConnection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Assets/Single/SingleConnection/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Assets/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Assets/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Automation/Rules/NewRule/StepTwo/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Automation/Rules/NewRule/StepTwo/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedResources/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedResources/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/SingleConnection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/SingleConnection/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Home/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Summary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Summary/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/AccountList/AccountInfo/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/AccountList/AccountInfo/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/AccountList/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/AccountList/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/Organizations/OrganizationInfo/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/Organizations/OrganizationInfo/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/Organizations/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/Organizations/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/AWS/Tabs/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Summary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Summary/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Principals/PrincipalInfo/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Principals/PrincipalInfo/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Principals/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Principals/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Subscriptions/NewSubscription/FinalStep/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Subscriptions/NewSubscription/FinalStep/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Subscriptions/NewSubscription/FirstStep/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Subscriptions/NewSubscription/FirstStep/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Subscriptions/NewSubscription/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Subscriptions/NewSubscription/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Subscriptions/SubscriptionInfo/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Subscriptions/SubscriptionInfo/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Subscriptions/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/Subscriptions/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/Azure/Tabs/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/ConnectorDetail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/Onboard/AWS/Finish/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/Onboard/AWS/Finish/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Integrations/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Integrations/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/ResourceCollection/Detail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/ResourceCollection/Detail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Spend/Single/SingleConnection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Spend/Single/SingleConnection/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Spend/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Spend/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utilities/deltaType.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/utilities/deltaType.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,9 +79,13 @@
       </list>
     </option>
   </component>
+  <component name="GOROOT" url="file:///usr/local/go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="SOFT" />
+  </component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="true" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -49,9 +107,14 @@
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;notion-fixes&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/src/pages/Governance/Compliance/BenchmarkSummary/Details/Tabs/Sevices&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/saleh/projects/keibi/front-end-v2&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -61,7 +124,7 @@
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/prettier&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/typescript/lib&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/saleh/projects/keibi/front-end-v2/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -88,6 +151,21 @@
       <recent name="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/TopDetails" />
       <recent name="$PROJECT_DIR$/src/components/Layout/Sidebar" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="go build generate.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="front-end-v2" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/codegen/generate.go" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build generate.go" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -288,9 +366,7 @@
       <workItem from="1703682914192" duration="7551000" />
       <workItem from="1703757309349" duration="3852000" />
       <workItem from="1703762253330" duration="10374000" />
-      <workItem from="1703836000489" duration="5747000" />
-      <workItem from="1704110743934" duration="345000" />
-      <workItem from="1704111114700" duration="3560000" />
+      <workItem from="1703836000489" duration="5049000" />
     </task>
     <servers />
   </component>
@@ -312,12 +388,16 @@
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
+  <component name="VgoProject">
+    <integration-enabled>false</integration-enabled>
+    <settings-migrated>true</settings-migrated>
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/api/api.ts</url>
-          <line>950</line>
+          <line>937</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">

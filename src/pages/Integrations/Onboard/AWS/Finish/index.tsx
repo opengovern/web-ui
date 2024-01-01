@@ -5,7 +5,7 @@ import {
     ValueFormatterParams,
 } from 'ag-grid-community'
 import { CheckCircleIcon } from '@heroicons/react/24/outline'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/integration.gen'
 import Table, { IColumn } from '../../../../../components/Table'
 
 interface IFinish {
@@ -74,7 +74,7 @@ const columns: IColumn<any, any>[] = [
 
 export function Finish({ bootstrapMode, onClose }: IFinish) {
     const { response, isLoading, error } =
-        useOnboardApiV1ConnectionsSummaryList(
+        useIntegrationApiV1ConnectionsSummariesList(
             { connector: ['AWS'] },
             {},
             !bootstrapMode

@@ -4,6 +4,7 @@ import { numberDisplay } from '../../utilities/numericDisplay'
 interface IChangeDelta {
     change: string | number | undefined
     isDelta?: boolean
+    valueInsideBadge?: boolean
 }
 
 const properties = (
@@ -48,17 +49,28 @@ const properties = (
     }
 }
 
-export default function ChangeDelta({ change, isDelta }: IChangeDelta) {
+export default function ChangeDelta({
+    change,
+    isDelta,
+    valueInsideBadge = false,
+}: IChangeDelta) {
     return (
         <Flex className="w-fit min-w-fit gap-1.5 h-full">
-            <BadgeDelta
-                size="sm"
-                deltaType={properties(change, isDelta).delta}
-            />
-            <Text color={properties(change, isDelta).color}>{`${numberDisplay(
-                Math.abs(Number(change)),
-                isDelta ? 0 : 2
-            )} ${isDelta ? '' : '%'}`}</Text>
+            <BadgeDelta size="sm" deltaType={properties(change, isDelta).delta}>
+                {valueInsideBadge &&
+                    `${numberDisplay(
+                        Math.abs(Number(change)),
+                        isDelta ? 0 : 2
+                    )} ${isDelta ? '' : '%'}`}
+            </BadgeDelta>
+            {!valueInsideBadge && (
+                <Text
+                    color={properties(change, isDelta).color}
+                >{`${numberDisplay(
+                    Math.abs(Number(change)),
+                    isDelta ? 0 : 2
+                )} ${isDelta ? '' : '%'}`}</Text>
+            )}
         </Flex>
     )
 }

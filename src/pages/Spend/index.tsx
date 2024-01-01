@@ -19,7 +19,7 @@ import {
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../api/inventory.gen'
 import { filterAtom, IFilter, spendTimeAtom } from '../../store'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../api/integration.gen'
 import Chart from '../../components/Chart'
 import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
 import SummaryCard from '../../components/Cards/SummaryCard'
@@ -31,7 +31,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
     SourceType,
 } from '../../api/api'
 import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
@@ -73,7 +73,7 @@ const topServices = (
 
 const topAccounts = (
     input:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse
         | undefined
 ) => {
     const top: {
@@ -254,7 +254,7 @@ export default function Spend() {
         useInventoryApiV2AnalyticsSpendMetricList(query)
 
     const { response: accountCostResponse, isLoading: accountCostLoading } =
-        useOnboardApiV1ConnectionsSummaryList(query)
+        useIntegrationApiV1ConnectionsSummariesList(query)
 
     const { response: composition, isLoading: compositionLoading } =
         useInventoryApiV2AnalyticsSpendCompositionList({

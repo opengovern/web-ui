@@ -25,7 +25,7 @@ import {
 } from 'ag-grid-community'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import Header from '../../../../../components/Header'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/integration.gen'
 import Spinner from '../../../../../components/Spinner'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
 import DrawerPanel from '../../../../../components/DrawerPanel'
@@ -63,7 +63,7 @@ export default function SingleComplianceConnection() {
         }),
     }
     const { response: accountInfo, isLoading: accountInfoLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
+        useIntegrationApiV1ConnectionsSummariesList({
             ...query,
             pageSize: 1,
             needCost: false,
@@ -102,9 +102,9 @@ export default function SingleComplianceConnection() {
             // @ts-ignore
             connectionID: [connection?.replace('account_', '') || ''],
         },
-        // sort: sortModel.length
-        //     ? { [sortModel[0].colId]: sortModel[0].sort }
-        //     : {},
+        sort: sortModel.length
+            ? [{ [sortModel[0].colId]: sortModel[0].sort }]
+            : [],
     })
 
     useEffect(() => {

@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import Layout from '../../components/Layout'
 import { filterAtom, timeAtom } from '../../store'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../api/integration.gen'
 import SummaryCard from '../../components/Cards/SummaryCard'
 import {
     useInventoryApiV2AnalyticsCompositionDetail,
@@ -14,7 +14,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
     SourceType,
 } from '../../api/api'
 import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
@@ -132,7 +132,7 @@ export const pieData = (
 
 const topAccounts = (
     input:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse
         | undefined
 ) => {
     const top: {
@@ -223,7 +223,7 @@ export default function Assets() {
             top: 4,
         })
     const { response: accountsResponse, isLoading: accountsResponseLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
+        useIntegrationApiV1ConnectionsSummariesList({
             ...query,
             pageSize: 5,
             pageNumber: 1,

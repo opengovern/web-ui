@@ -43,7 +43,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
 } from '../../../api/api'
 import Chart from '../../../components/Chart'
 import {
@@ -61,7 +61,7 @@ import SummaryCard from '../../../components/Cards/SummaryCard'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 import { generateVisualMap, resourceTrendChart } from '../../Assets'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
 import Landscape from '../../../components/Landscape'
 import Tag from '../../../components/Tag'
 import DrawerPanel from '../../../components/DrawerPanel'
@@ -86,7 +86,7 @@ const pieData = (
 
 const barData = (
     input:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse
         | undefined
 ) => {
     const data: any[] = []
@@ -267,7 +267,7 @@ export default function ResourceCollectionDetail() {
         resourceId || ''
     )
     const { response: accountInfo, isLoading: accountInfoLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
+        useIntegrationApiV1ConnectionsSummariesList({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             ...query,
