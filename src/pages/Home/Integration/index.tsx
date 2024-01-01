@@ -21,7 +21,7 @@ export default function Integration() {
                     color="blue"
                     className="mr-2"
                 />
-                <Title>Integration</Title>
+                <Title>Integrations</Title>
             </Flex>
             <Flex
                 flexDirection="row"

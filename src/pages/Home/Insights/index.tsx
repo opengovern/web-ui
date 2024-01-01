@@ -20,25 +20,32 @@ import {
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import dayjs from 'dayjs'
-import { useComplianceApiV1InsightDetail } from '../../../api/compliance.gen'
+import {
+    useComplianceApiV1InsightDetail,
+    useComplianceApiV1InsightList,
+} from '../../../api/compliance.gen'
 
-interface IInsight {
-    insightID: number
-}
-export default function Insight({ insightID }: IInsight) {
+export default function Insight() {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
     const start = dayjs.utc().subtract(1, 'week').startOf('day')
     const end = dayjs.utc().endOf('day')
 
-    const { response: insightDetail, isLoading } =
-        useComplianceApiV1InsightDetail(String(insightID), {
-            startTime: start.unix(),
-            endTime: end.unix(),
-        })
+    const { response, isLoading } = useComplianceApiV1InsightList({
+        startTime: start.unix(),
+        endTime: end.unix(),
+    })
 
-    const result = insightDetail?.result?.at(0)
-    const table = result?.details
+    const result = response
+        ?.sort((a, b) => {
+            if ((a.totalResultValue || 0) === (b.totalResultValue || 0)) {
+                return 0
+            }
+            return (a.totalResultValue || 0) < (b.totalResultValue || 0)
+                ? 1
+                : -1
+        })
+        .slice(0, 5)
 
     return (
         <Card className="relative max-w-xl mx-auto h-72 overflow-hidden">
@@ -50,14 +57,44 @@ export default function Insight({ insightID }: IInsight) {
                     color="blue"
                     className="mr-2"
                 />
-                <Title>Insight</Title>
+                <Title>Insights</Title>
             </Flex>
-            {isLoading ? (
-                <div className="h-2 w-52 mt-5 bg-slate-200 rounded animate-pulse" />
-            ) : (
-                <Title className="mt-2">{insightDetail?.longTitle}</Title>
-            )}
 
+            <Flex flexDirection="col" className="mt-2">
+                <Flex flexDirection="row" className="my-2">
+                    <Text className="font-bold">Title</Text>
+                    <Text className="font-bold">Count</Text>
+                </Flex>
+                <Divider className="m-0 p-0" />
+                {isLoading
+                    ? [1, 2, 3, 4, 5].map((i) => {
+                          return (
+                              <>
+                                  <Flex flexDirection="row" className="my-2">
+                                      <div className="h-3 w-72 my-1 bg-slate-200 rounded" />
+                                      <div className="h-3 w-12 my-1 bg-slate-200 rounded" />
+                                  </Flex>
+                                  <Divider className="m-0 p-0" />
+                              </>
+                          )
+                      })
+                    : result?.map((item) => {
+                          return (
+                              <>
+                                  <Flex flexDirection="row" className="my-2">
+                                      <Text className="text-gray-900">
+                                          {item.shortTitle}
+                                      </Text>
+                                      <Text className="text-gray-900">
+                                          {item.totalResultValue}
+                                      </Text>
+                                  </Flex>
+                                  <Divider className="m-0 p-0" />
+                              </>
+                          )
+                      })}
+            </Flex>
+            {/* 
             <Table className="mt-4">
                 <TableHead>
                     <TableRow>
@@ -99,14 +136,12 @@ export default function Insight({ insightID }: IInsight) {
                               </TableRow>
                           ))}
                 </TableBody>
-            </Table>
+            </Table> */}
             <div className="inset-x-0 bottom-0 flex justify-center bg-gradient-to-t from-white pt-12 pb-8 absolute rounded-b-lg">
                 <Button
                     icon={ArrowsPointingOutIcon}
                     className="bg-white shadow-md border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300"
-                    onClick={() =>
-                        navigate(`/${workspace}/insights/${insightID}`)
-                    }
+                    onClick={() => navigate(`/${workspace}/insights`)}
                 >
                     Show more
                 </Button>

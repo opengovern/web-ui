@@ -35,7 +35,7 @@ export default function Home() {
                 <Col numColSpan={1}>
                     <div className="space-y-2">
                         <TopSpend />
-                        <Insight insightID={11} />
+                        <Insight />
                     </div>
                 </Col>
             </Grid>

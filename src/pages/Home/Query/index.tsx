@@ -8,7 +8,9 @@ import Editor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useAtom } from 'jotai'
 import { useInventoryApiV1QueryList } from '../../../api/inventory.gen'
+import { runQueryAtom } from '../../../store'
 
 interface IQuery {
     id: string
@@ -17,6 +19,8 @@ interface IQuery {
 export default function Query({ id }: IQuery) {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
+    const [runQuery, setRunQuery] = useAtom(runQueryAtom)
+
     const [code, setCode] = useState('')
     const [open, setOpen] = useState(false)
     const {
@@ -88,6 +92,10 @@ export default function Query({ id }: IQuery) {
                         icon={ArrowRightIcon}
                         iconPosition="right"
                         className="mt-2"
+                        onClick={() => {
+                            setRunQuery(code)
+                            navigate(`/${workspace}/query`)
+                        }}
                     >
                         Run Query
                     </Button>
