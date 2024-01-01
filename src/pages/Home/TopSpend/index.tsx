@@ -30,6 +30,7 @@ import {
 } from '../../../utilities/deltaType'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
 import { spendTimeAtom } from '../../../store'
+import { getErrorMessage } from '../../../types/apierror'
 
 export default function TopSpend() {
     const workspace = useParams<{ ws: string }>().ws
@@ -42,14 +43,18 @@ export default function TopSpend() {
         .startOf('day')
     const end = dayjs.utc().subtract(3, 'day').endOf('day')
 
-    const { response: metricCost, isLoading } =
-        useInventoryApiV2AnalyticsSpendMetricList({
-            pageSize: 3,
-            pageNumber: 0,
-            sortBy: 'growth',
-            startTime: start.unix(),
-            endTime: end.unix(),
-        })
+    const {
+        response: metricCost,
+        isLoading,
+        error,
+        sendNow: refresh,
+    } = useInventoryApiV2AnalyticsSpendMetricList({
+        pageSize: 3,
+        pageNumber: 0,
+        sortBy: 'growth',
+        startTime: start.unix(),
+        endTime: end.unix(),
+    })
 
     return (
         <Card>
@@ -86,7 +91,7 @@ export default function TopSpend() {
                 flexDirection="col"
                 className={isLoading ? 'animate-pulse' : ''}
             >
-                {isLoading
+                {isLoading || getErrorMessage(error).length > 0
                     ? [1, 2, 3].map((i) => (
                           <>
                               <Divider className="p-0 m-0" />
@@ -162,6 +167,30 @@ export default function TopSpend() {
                     See more
                 </Button>
             </Flex>
+            {error && (
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                >
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Title className="mt-6">Failed to load component</Title>
+                        <Text className="mt-2">{getErrorMessage(error)}</Text>
+                    </Flex>
+                    <Button
+                        variant="secondary"
+                        className="mb-6"
+                        color="slate"
+                        onClick={refresh}
+                    >
+                        Try Again
+                    </Button>
+                </Flex>
+            )}
         </Card>
     )
 }

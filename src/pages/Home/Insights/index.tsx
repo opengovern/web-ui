@@ -24,6 +24,7 @@ import {
     useComplianceApiV1InsightDetail,
     useComplianceApiV1InsightList,
 } from '../../../api/compliance.gen'
+import { getErrorMessage } from '../../../types/apierror'
 
 export default function Insight() {
     const workspace = useParams<{ ws: string }>().ws
@@ -31,7 +32,12 @@ export default function Insight() {
     const start = dayjs.utc().subtract(1, 'week').startOf('day')
     const end = dayjs.utc().endOf('day')
 
-    const { response, isLoading } = useComplianceApiV1InsightList({
+    const {
+        response,
+        isLoading,
+        error,
+        sendNow: refresh,
+    } = useComplianceApiV1InsightList({
         startTime: start.unix(),
         endTime: end.unix(),
     })
@@ -66,7 +72,7 @@ export default function Insight() {
                     <Text className="font-bold">Count</Text>
                 </Flex>
                 <Divider className="m-0 p-0" />
-                {isLoading
+                {isLoading || getErrorMessage(error).length > 0
                     ? [1, 2, 3, 4, 5].map((i) => {
                           return (
                               <>
@@ -146,6 +152,30 @@ export default function Insight() {
                     See more
                 </Button>
             </div>
+            {error && (
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                >
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Title className="mt-6">Failed to load component</Title>
+                        <Text className="mt-2">{getErrorMessage(error)}</Text>
+                    </Flex>
+                    <Button
+                        variant="secondary"
+                        className="mb-6"
+                        color="slate"
+                        onClick={refresh}
+                    >
+                        Try Again
+                    </Button>
+                </Flex>
+            )}
         </Card>
     )
 }

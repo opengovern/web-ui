@@ -1,4 +1,5 @@
 import {
+    Button,
     Card,
     Flex,
     Icon,
@@ -13,6 +14,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useComplianceApiV1BenchmarksSummaryList } from '../../../api/compliance.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import { exactPriceDisplay } from '../../../utilities/numericDisplay'
+import { getErrorMessage } from '../../../types/apierror'
 
 const colors = [
     'fuchsia',
@@ -104,7 +106,7 @@ export default function Compliance() {
         response: benchmarks,
         isLoading,
         error,
-        sendNow,
+        sendNow: refresh,
     } = useComplianceApiV1BenchmarksSummaryList()
 
     const benchmarkSummaries = benchmarks?.benchmarkSummary?.filter(
@@ -135,7 +137,7 @@ export default function Compliance() {
                     isLoading={isLoading}
                 />
                 <Flex flexDirection="col" alignItems="start">
-                    {isLoading &&
+                    {isLoading || getErrorMessage(error).length > 0 ? (
                         [1, 2, 3].map((bs, idx) => {
                             return (
                                 <Flex
@@ -147,9 +149,8 @@ export default function Compliance() {
                                     <div className="h-2 w-24 my-2 bg-slate-200 rounded" />
                                 </Flex>
                             )
-                        })}
-
-                    {!isLoading && (
+                        })
+                    ) : (
                         <>
                             <Flex
                                 flexDirection="row"
@@ -193,6 +194,30 @@ export default function Compliance() {
                     )}
                 </Flex>
             </Flex>
+            {error && (
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                >
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Title className="mt-6">Failed to load component</Title>
+                        <Text className="mt-2">{getErrorMessage(error)}</Text>
+                    </Flex>
+                    <Button
+                        variant="secondary"
+                        className="mb-6"
+                        color="slate"
+                        onClick={refresh}
+                    >
+                        Try Again
+                    </Button>
+                </Flex>
+            )}
         </Card>
     )
 }

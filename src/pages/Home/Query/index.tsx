@@ -11,6 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAtom } from 'jotai'
 import { useInventoryApiV1QueryList } from '../../../api/inventory.gen'
 import { runQueryAtom } from '../../../store'
+import { getErrorMessage } from '../../../types/apierror'
 
 interface IQuery {
     id: string
@@ -27,6 +28,8 @@ export default function Query({ id }: IQuery) {
         response: queries,
         isExecuted,
         isLoading: queryLoading,
+        error,
+        sendNow: refresh,
     } = useInventoryApiV1QueryList({})
     const v = queries?.filter((m) => m.id === id).at(0)
 
@@ -58,7 +61,7 @@ export default function Query({ id }: IQuery) {
                     />
                     <Title>Query</Title>
                 </Flex>
-                {queryLoading ? (
+                {queryLoading || getErrorMessage(error).length > 0 ? (
                     <>
                         <div className="h-2 w-72 my-3 bg-slate-200 rounded" />
                         <div className="h-2 w-72 my-3 bg-slate-200 rounded" />
@@ -111,6 +114,30 @@ export default function Query({ id }: IQuery) {
                         Show query
                     </Button>
                 </div>
+            )}
+            {error && (
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                >
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Title className="mt-6">Failed to load component</Title>
+                        <Text className="mt-2">{getErrorMessage(error)}</Text>
+                    </Flex>
+                    <Button
+                        variant="secondary"
+                        className="mb-6"
+                        color="slate"
+                        onClick={refresh}
+                    >
+                        Try Again
+                    </Button>
+                </Flex>
             )}
         </Card>
     )

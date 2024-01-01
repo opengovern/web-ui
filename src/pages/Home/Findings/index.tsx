@@ -13,12 +13,18 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useComplianceApiV1ControlsSummaryList } from '../../../api/compliance.gen'
 import { TypesFindingSeverity } from '../../../api/api'
 import { severityBadge } from '../../Governance/Compliance/BenchmarkSummary/Controls'
+import { getErrorMessage } from '../../../types/apierror'
 
 export default function Findings() {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
-    const { response, isLoading, isExecuted } =
-        useComplianceApiV1ControlsSummaryList()
+    const {
+        response,
+        isLoading,
+        isExecuted,
+        error,
+        sendNow: refresh,
+    } = useComplianceApiV1ControlsSummaryList()
 
     const criticals =
         response?.filter(
@@ -63,7 +69,7 @@ export default function Findings() {
                 flexDirection="col"
                 className={`mt-4 ${isLoading ? 'animate-pulse' : ''}`}
             >
-                {isLoading
+                {isLoading || getErrorMessage(error).length > 0
                     ? [1, 2, 3].map((i, idx, arr) => {
                           return (
                               <>
@@ -140,6 +146,30 @@ export default function Findings() {
                     See more
                 </Button>
             </Flex>
+            {error && (
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                >
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Title className="mt-6">Failed to load component</Title>
+                        <Text className="mt-2">{getErrorMessage(error)}</Text>
+                    </Flex>
+                    <Button
+                        variant="secondary"
+                        className="mb-6"
+                        color="slate"
+                        onClick={refresh}
+                    >
+                        Try Again
+                    </Button>
+                </Flex>
+            )}
         </Card>
     )
 }

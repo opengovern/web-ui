@@ -1,15 +1,20 @@
-import { Card, Divider, Flex, Icon, Text, Title } from '@tremor/react'
+import { Button, Card, Divider, Flex, Icon, Text, Title } from '@tremor/react'
 import { CpuChipIcon } from '@heroicons/react/24/outline'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AWSIcon, AzureIcon } from '../../../icons/icons'
 import { useIntegrationApiV1ConnectorsList } from '../../../api/integration.gen'
+import { getErrorMessage } from '../../../types/apierror'
 
 export default function Integration() {
     const workspace = useParams<{ ws: string }>().ws
     const navigate = useNavigate()
 
-    const { response: responseConnectors, isLoading: connectorsLoading } =
-        useIntegrationApiV1ConnectorsList()
+    const {
+        response: responseConnectors,
+        isLoading: connectorsLoading,
+        error,
+        sendNow: refresh,
+    } = useIntegrationApiV1ConnectorsList()
 
     return (
         <Card>
@@ -27,7 +32,7 @@ export default function Integration() {
                 flexDirection="row"
                 className={`mt-2 ${connectorsLoading ? 'animate-pulse' : ''}`}
             >
-                {connectorsLoading
+                {connectorsLoading || getErrorMessage(error).length > 0
                     ? [1, 2]?.map((i) => {
                           return (
                               <Flex flexDirection="col" className=" rounded-md">
@@ -67,6 +72,30 @@ export default function Integration() {
                           )
                       })}
             </Flex>
+            {error && (
+                <Flex
+                    flexDirection="col"
+                    justifyContent="between"
+                    className="absolute top-0 w-full left-0 h-full backdrop-blur"
+                >
+                    <Flex
+                        flexDirection="col"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <Title className="mt-6">Failed to load component</Title>
+                        <Text className="mt-2">{getErrorMessage(error)}</Text>
+                    </Flex>
+                    <Button
+                        variant="secondary"
+                        className="mb-6"
+                        color="slate"
+                        onClick={refresh}
+                    >
+                        Try Again
+                    </Button>
+                </Flex>
+            )}
         </Card>
     )
 }
