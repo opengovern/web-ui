@@ -129,6 +129,7 @@ export default function Settings({ id }: ISettings) {
         isLoading,
         sendNow: refreshList,
     } = useComplianceApiV1AssignmentsBenchmarkDetail(String(id), {}, false)
+    console.log(assignments)
 
     useEffect(() => {
         if (id && !assignments) {

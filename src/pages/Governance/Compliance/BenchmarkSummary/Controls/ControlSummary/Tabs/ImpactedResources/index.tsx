@@ -179,22 +179,32 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                     .apiV1FindingsCreate({
                         filters: {
                             controlID: [controlId || ''],
+                            conformanceStatus: [
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                'ok',
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                'alarm',
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                'info',
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                'skip',
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                'error',
+                            ],
                         },
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
                         sort: params.request.sortModel.length
-                            ? {
-                                  [params.request.sortModel[0].colId]:
-                                      params.request.sortModel[0].sort,
-                              }
-                            : {},
-                        conformanceStatus: [
-                            'ok',
-                            'alarm',
-                            'info',
-                            'skip',
-                            'error',
-                        ],
+                            ? [
+                                  {
+                                      [params.request.sortModel[0].colId]:
+                                          params.request.sortModel[0].sort,
+                                  },
+                              ]
+                            : [],
                         limit: 100,
                         afterSortKey:
                             params.request.startRow === 0 ||

@@ -382,14 +382,14 @@ export default function Findings() {
                             severity: severityFilter,
                             // conformanceStatus
                         },
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
                         sort: params.request.sortModel.length
-                            ? {
-                                  [params.request.sortModel[0].colId]:
-                                      params.request.sortModel[0].sort,
-                              }
-                            : {},
+                            ? [
+                                  {
+                                      [params.request.sortModel[0].colId]:
+                                          params.request.sortModel[0].sort,
+                                  },
+                              ]
+                            : [],
                         limit: 100,
                         afterSortKey:
                             params.request.startRow === 0 ||
