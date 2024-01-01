@@ -78,7 +78,7 @@ export default function Query({ id }: IQuery) {
                         value={code}
                         className="w-full bg-white dark:bg-gray-900 dark:text-gray-50 font-mono text-sm h-full"
                         style={{
-                            minHeight: '180px',
+                            minHeight: '60px',
                             overflowY: 'scroll',
                         }}
                         placeholder="-- write your SQL query here"

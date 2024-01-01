@@ -40,13 +40,13 @@ export default function TopSpend() {
         .subtract(2, 'day')
         .subtract(1, 'week')
         .startOf('day')
-    const end = dayjs.utc().subtract(2, 'day').endOf('day')
+    const end = dayjs.utc().subtract(3, 'day').endOf('day')
 
     const { response: metricCost, isLoading } =
         useInventoryApiV2AnalyticsSpendMetricList({
             pageSize: 3,
-            pageNumber: 1,
-            sortBy: 'growth_rate',
+            pageNumber: 0,
+            sortBy: 'growth',
             startTime: start.unix(),
             endTime: end.unix(),
         })
