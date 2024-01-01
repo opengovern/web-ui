@@ -180,12 +180,12 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                         filters: {
                             controlID: [controlId || ''],
                         },
-                        sort: params.request.sortModel.length
-                            ? {
-                                  [params.request.sortModel[0].colId]:
-                                      params.request.sortModel[0].sort,
-                              }
-                            : {},
+                        // sort: params.request.sortModel.length
+                        //     ? {
+                        //           [params.request.sortModel[0].colId]:
+                        //               params.request.sortModel[0].sort,
+                        //       }
+                        //     : {},
                         limit: 100,
                         afterSortKey:
                             params.request.startRow === 0 ||
