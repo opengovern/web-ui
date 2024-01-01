@@ -102,9 +102,9 @@ export default function SingleComplianceConnection() {
             // @ts-ignore
             connectionID: [connection?.replace('account_', '') || ''],
         },
-        sort: sortModel.length
-            ? { [sortModel[0].colId]: sortModel[0].sort }
-            : {},
+        // sort: sortModel.length
+        //     ? { [sortModel[0].colId]: sortModel[0].sort }
+        //     : {},
     })
 
     useEffect(() => {

@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -903,6 +904,18 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse {
     failedResourceCount?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort {
+    benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    connectionID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    connector?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    controlID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse {
     accounts?: GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary[]
 }
@@ -918,7 +931,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
     filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
     /** @example 100 */
     limit?: number
-    sort?: Record<string, string>
+    sort?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse {
@@ -2264,6 +2277,34 @@ export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCre
     tenantId: string
 }
 
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics {
+    /**
+     * @min 0
+     * @example 20
+     */
+    connectionsEnabled?: number
+    /**
+     * @min 0
+     * @example 15
+     */
+    healthyConnections?: number
+    /**
+     * @min 0
+     * @example 5
+     */
+    inProgressConnections?: number
+    /**
+     * @min 0
+     * @example 20
+     */
+    totalConnections?: number
+    /**
+     * @min 0
+     * @example 5
+     */
+    unhealthyConnections?: number
+}
+
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection {
     assetDiscovery?: boolean
     /** @example "scheduled" */
@@ -2338,6 +2379,37 @@ export enum GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectionLif
     ConnectionLifecycleStateDiscovered = 'DISCOVERED',
     ConnectionLifecycleStateInProgress = 'IN_PROGRESS',
     ConnectionLifecycleStateArchived = 'ARCHIVED',
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount {
+    /** @example true */
+    allowNewConnections?: boolean
+    /** @example false */
+    autoOnboardSupport?: boolean
+    /**
+     * @min 0
+     * @example 1024
+     */
+    connection_count?: number
+    /** @example "This is a long volume of words for just showing the case of the description for the demo and checking value purposes only and has no meaning whatsoever" */
+    description?: string
+    direction?: SourceConnectorDirectionType
+    /** @example "Azure" */
+    label?: string
+    /** @example "https://kaytu.io/logo.png" */
+    logo?: string
+    /**
+     * @min 0
+     * @example 10000
+     */
+    maxConnectionLimit?: number
+    /** @example "Azure" */
+    name?: SourceType
+    /** @example "This is a short Description for this connector" */
+    shortDescription?: string
+    /** @example "enabled" */
+    status?: SourceConnectorStatus
+    tags?: Record<string, any>
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest {
@@ -2500,6 +2572,26 @@ export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConn
      * @example 10
      */
     totalUnhealthyCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse {
+    credentials?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
+    /**
+     * @min 0
+     * @max 20
+     * @example 5
+     */
+    totalCredentialCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest {
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSCredentialConfig
+    name?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest {
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCredentialConfig
+    name?: string
 }
 
 export interface GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest {
@@ -4514,6 +4606,26 @@ export class Api<
             }),
 
         /**
+         * @description Deleting a single connection either AWS / Azure for the given connection id. it will delete its parent credential too, if it doesn't have any other child.
+         *
+         * @tags connections
+         * @name ApiV1ConnectionsDelete
+         * @summary Delete connection
+         * @request DELETE:/integration/api/v1/connections/{connectionId}
+         * @secure
+         */
+        apiV1ConnectionsDelete: (
+            connectionId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/integration/api/v1/connections/${connectionId}`,
+                method: 'DELETE',
+                secure: true,
+                ...params,
+            }),
+
+        /**
          * @description Get live connection health status with given connection ID for AWS.
          *
          * @tags connections
@@ -4570,9 +4682,125 @@ export class Api<
             }),
 
         /**
-         * @description Creating AWS credential, testing it and onboard its accounts (organization account)
+         * @description Returns list of all connectors
+         *
+         * @tags connectors
+         * @name ApiV1ConnectorsList
+         * @summary List connectors
+         * @request GET:/integration/api/v1/connectors
+         * @secure
+         */
+        apiV1ConnectorsList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount[],
+                any
+            >({
+                path: `/integration/api/v1/connectors`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving the list of metrics for catalog page.
          *
          * @tags integration
+         * @name ApiV1ConnectorsMetricsList
+         * @summary List catalog metrics
+         * @request GET:/integration/api/v1/connectors/metrics
+         * @secure
+         */
+        apiV1ConnectorsMetricsList: (
+            query?: {
+                /** Connector */
+                connector?: ('' | 'AWS' | 'Azure')[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
+                any
+            >({
+                path: `/integration/api/v1/connectors/metrics`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Remove a credential by ID
+         *
+         * @tags credentials
+         * @name ApiV1CredentialDelete
+         * @summary Delete credential
+         * @request DELETE:/integration/api/v1/credential/{credentialId}
+         * @secure
+         */
+        apiV1CredentialDelete: (
+            credentialId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/integration/api/v1/credential/${credentialId}`,
+                method: 'DELETE',
+                secure: true,
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving list of credentials with their details
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsList
+         * @summary List credentials
+         * @request GET:/integration/api/v1/credentials
+         * @secure
+         */
+        apiV1CredentialsList: (
+            query?: {
+                /** filter by connector type */
+                connector?: '' | 'AWS' | 'Azure'
+                /** filter by health status */
+                health?: 'healthy' | 'unhealthy'
+                /** filter by credential type */
+                credentialType?: (
+                    | 'auto-azure'
+                    | 'auto-aws'
+                    | 'manual-aws-org'
+                    | 'manual-azure-spn'
+                )[]
+                /**
+                 * page size
+                 * @default 50
+                 */
+                pageSize?: number
+                /**
+                 * page number
+                 * @default 1
+                 */
+                pageNumber?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
+                any
+            >({
+                path: `/integration/api/v1/credentials`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Creating AWS credential, testing it and onboard its accounts (organization account)
+         *
+         * @tags credentials
          * @name ApiV1CredentialsAwsCreate
          * @summary Create AWS credential and does onboarding for its accounts (organization account)
          * @request POST:/integration/api/v1/credentials/aws
@@ -4591,6 +4819,53 @@ export class Api<
                 body: request,
                 secure: true,
                 type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Edit an aws credential by ID
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsAwsUpdate
+         * @summary Edit aws credential
+         * @request PUT:/integration/api/v1/credentials/aws/{credentialId}
+         * @secure
+         */
+        apiV1CredentialsAwsUpdate: (
+            credentialId: string,
+            config: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/integration/api/v1/credentials/aws/${credentialId}`,
+                method: 'PUT',
+                body: config,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description Onboard all available connections for an aws credential
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsAwsAutoonboardCreate
+         * @summary Onboard aws credential connections
+         * @request POST:/integration/api/v1/credentials/aws/{credentialId}/autoonboard
+         * @secure
+         */
+        apiV1CredentialsAwsAutoonboardCreate: (
+            credentialId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[],
+                any
+            >({
+                path: `/integration/api/v1/credentials/aws/${credentialId}/autoonboard`,
+                method: 'POST',
+                secure: true,
                 format: 'json',
                 ...params,
             }),
@@ -4617,6 +4892,77 @@ export class Api<
                 body: request,
                 secure: true,
                 type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Edit an azure credential by ID
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsAzureUpdate
+         * @summary Edit azure credential
+         * @request PUT:/integration/api/v1/credentials/azure/{credentialId}
+         * @secure
+         */
+        apiV1CredentialsAzureUpdate: (
+            credentialId: string,
+            config: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/integration/api/v1/credentials/azure/${credentialId}`,
+                method: 'PUT',
+                body: config,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description Onboard all available connections for an azure credential
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsAzureAutoonboardCreate
+         * @summary Onboard azure credential connections
+         * @request POST:/integration/api/v1/credentials/azure/{credentialId}/autoonboard
+         * @secure
+         */
+        apiV1CredentialsAzureAutoonboardCreate: (
+            credentialId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[],
+                any
+            >({
+                path: `/integration/api/v1/credentials/azure/${credentialId}/autoonboard`,
+                method: 'POST',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving credential details by credential ID
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsDetail
+         * @summary Get Credential
+         * @request GET:/integration/api/v1/credentials/{credentialId}
+         * @secure
+         */
+        apiV1CredentialsDetail: (
+            credentialId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+                any
+            >({
+                path: `/integration/api/v1/credentials/${credentialId}`,
+                method: 'GET',
+                secure: true,
                 format: 'json',
                 ...params,
             }),

@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from 'react'
 import {
     useOnboardApiV1CredentialAutoonboardCreate,
-    useOnboardApiV1CredentialDelete,
+    // useOnboardApiV1CredentialDelete,
     useOnboardApiV1CredentialDetail,
 } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
@@ -45,11 +45,11 @@ export default function OrganizationInfo({
     const [id, setId] = useState('')
     const [eid, seteId] = useState(false)
 
-    const {
-        isExecuted: isDeleteExecuted,
-        isLoading: isDeleteLoading,
-        sendNow: deleteNow,
-    } = useOnboardApiV1CredentialDelete(data?.id || '', {}, false)
+    // const {
+    //     isExecuted: isDeleteExecuted,
+    //     isLoading: isDeleteLoading,
+    //     sendNow: deleteNow,
+    // } = useOnboardApiV1CredentialDelete(data?.id || '', {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,
@@ -57,11 +57,11 @@ export default function OrganizationInfo({
         sendNow: discoverNow,
     } = useOnboardApiV1CredentialAutoonboardCreate(data?.id || '', {}, false)
 
-    useEffect(() => {
-        if (isDeleteExecuted && !isDeleteLoading) {
-            onClose()
-        }
-    }, [isDeleteLoading])
+    // useEffect(() => {
+    //     if (isDeleteExecuted && !isDeleteLoading) {
+    //         onClose()
+    //     }
+    // }, [isDeleteLoading])
 
     useEffect(() => {
         if (isDiscoverExecuted && !isDiscoverLoading) {
@@ -352,9 +352,9 @@ export default function OrganizationInfo({
                     <Button
                         variant="secondary"
                         color="rose"
-                        loading={isDeleteExecuted && isDeleteLoading}
+                        // loading={isDeleteExecuted && isDeleteLoading}
                         disabled={isDiscoverExecuted && isDiscoverLoading}
-                        onClick={deleteNow}
+                        // onClick={deleteNow}
                     >
                         Delete
                     </Button>
@@ -362,7 +362,7 @@ export default function OrganizationInfo({
                     <Button
                         className="ml-3"
                         loading={isDiscoverExecuted && isDiscoverLoading}
-                        disabled={isDeleteExecuted && isDeleteLoading}
+                        // disabled={isDeleteExecuted && isDeleteLoading}
                         onClick={discoverNow}
                     >
                         Discover New Accounts

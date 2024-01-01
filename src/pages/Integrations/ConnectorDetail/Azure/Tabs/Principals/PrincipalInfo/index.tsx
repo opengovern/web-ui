@@ -12,7 +12,7 @@ import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
 import {
     useOnboardApiV1CredentialAutoonboardCreate,
-    useOnboardApiV1CredentialDelete,
+    // useOnboardApiV1CredentialDelete,
 } from '../../../../../../../api/onboard.gen'
 import { dateDisplay } from '../../../../../../../utilities/dateDisplay'
 
@@ -34,11 +34,11 @@ export default function PrincipalInfo({
     const [value, setValue] = useState('')
     const [evalue, seteValue] = useState(false)
 
-    const {
-        isExecuted: isDeleteExecuted,
-        isLoading: isDeleteLoading,
-        sendNow: deleteNow,
-    } = useOnboardApiV1CredentialDelete(data?.id || '', {}, false)
+    // const {
+    //     isExecuted: isDeleteExecuted,
+    //     isLoading: isDeleteLoading,
+    //     sendNow: deleteNow,
+    // } = useOnboardApiV1CredentialDelete(data?.id || '', {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,
@@ -46,11 +46,11 @@ export default function PrincipalInfo({
         sendNow: discoverNow,
     } = useOnboardApiV1CredentialAutoonboardCreate(data?.id || '', {}, false)
 
-    useEffect(() => {
-        if (isDeleteExecuted && !isDeleteLoading) {
-            onClose()
-        }
-    }, [isDeleteLoading])
+    // useEffect(() => {
+    //     if (isDeleteExecuted && !isDeleteLoading) {
+    //         onClose()
+    //     }
+    // }, [isDeleteLoading])
 
     useEffect(() => {
         if (isDiscoverExecuted && !isDiscoverLoading) {
@@ -242,9 +242,9 @@ export default function PrincipalInfo({
                     <Button
                         variant="secondary"
                         color="rose"
-                        loading={isDeleteExecuted && isDeleteLoading}
+                        // loading={isDeleteExecuted && isDeleteLoading}
                         disabled={isDiscoverExecuted && isDiscoverLoading}
-                        onClick={deleteNow}
+                        // onClick={deleteNow}
                     >
                         Delete
                     </Button>
@@ -252,7 +252,7 @@ export default function PrincipalInfo({
                     <Button
                         className="ml-3"
                         loading={isDiscoverExecuted && isDiscoverLoading}
-                        disabled={isDeleteExecuted && isDeleteLoading}
+                        // disabled={isDeleteExecuted && isDeleteLoading}
                         onClick={discoverNow}
                     >
                         Discover New Subscriptions
