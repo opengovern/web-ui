@@ -26,7 +26,7 @@ const renderText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
     const startDay = s.date()
     const endDay = e.date()
 
-    if (startYear === endYear && startYear === dayjs().year()) {
+    if (startYear === endYear && startYear === dayjs().utc().year()) {
         if (startMonth === endMonth) {
             if (startDay === endDay) {
                 return `${s.format('MMM')} ${startDay}`
@@ -65,65 +65,74 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
         const month = value?.start.month || 1
         const year = value?.start.year || 1
 
-        return dayjs(new Date(year, month - 1, day))
+        return dayjs(new Date(year, month - 1, day)).utc()
     }
     const end = () => {
         const day = value?.end.day || 1
         const month = value?.end.month || 1
         const year = value?.end.year || 1
 
-        return dayjs(new Date(year, month - 1, day))
+        return dayjs(new Date(year, month - 1, day)).utc()
     }
 
     const last7Days = () => {
         return {
-            start: dayjs().subtract(1, 'week').startOf('day'),
-            end: dayjs().endOf('day'),
+            start: dayjs().utc().subtract(1, 'week').startOf('day'),
+            end: dayjs().utc().endOf('day'),
         }
     }
 
     const last30Days = () => {
         return {
-            start: dayjs().subtract(1, 'month').startOf('day'),
-            end: dayjs().endOf('day'),
+            start: dayjs().utc().subtract(1, 'month').startOf('day'),
+            end: dayjs().utc().endOf('day'),
         }
     }
 
     const thisMonth = () => {
         return {
-            start: dayjs().startOf('month').startOf('day'),
-            end: dayjs().endOf('day'),
+            start: dayjs().utc().startOf('month').startOf('day'),
+            end: dayjs().utc().endOf('day'),
         }
     }
 
     const lastMonth = () => {
         return {
-            start: dayjs().subtract(1, 'month').startOf('month').startOf('day'),
-            end: dayjs().subtract(1, 'month').endOf('month').endOf('day'),
+            start: dayjs()
+                .utc()
+                .subtract(1, 'month')
+                .startOf('month')
+                .startOf('day'),
+            end: dayjs().utc().subtract(1, 'month').endOf('month').endOf('day'),
         }
     }
 
     const thisQuarter = () => {
         return {
-            start: dayjs().startOf('quarter').startOf('day'),
-            end: dayjs().endOf('day'),
+            start: dayjs().utc().startOf('quarter').startOf('day'),
+            end: dayjs().utc().endOf('day'),
         }
     }
 
     const lastQuarter = () => {
         return {
             start: dayjs()
+                .utc()
                 .subtract(1, 'quarter')
                 .startOf('quarter')
                 .startOf('day'),
-            end: dayjs().subtract(1, 'quarter').endOf('quarter').endOf('day'),
+            end: dayjs()
+                .utc()
+                .subtract(1, 'quarter')
+                .endOf('quarter')
+                .endOf('day'),
         }
     }
 
     const thisYear = () => {
         return {
-            start: dayjs().startOf('year').startOf('day'),
-            end: dayjs().endOf('day'),
+            start: dayjs().utc().startOf('year').startOf('day'),
+            end: dayjs().utc().endOf('day'),
         }
     }
 
@@ -139,7 +148,8 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
             >
                 <div className="flex items-center bg-white dark:bg-gray-900 dark:text-gray-50 border border-gray-300 group-hover:border-gray-400 transition-colors rounded-l-lg px-5 group-focus-within:border-kaytu-600 group-focus-within:group-hover:border-kaytu-600 p-1 relative">
                     <Text className="text-gray-800">
-                        {renderText(start(), end())}
+                        {renderText(start(), end())}{' '}
+                        <span className="text-orange-600 ml-2">UTC</span>
                     </Text>
                     <button
                         type="button"
@@ -169,12 +179,12 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                     <Flex
                         flexDirection="col"
                         alignItems="start"
-                        className="gap-1 w-64"
+                        className="gap-1 w-fit"
                     >
                         <Title>Relative dates</Title>
                         <Flex
                             onClick={() => setActiveTimeRange(last7Days())}
-                            className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">Last 7 days</Text>
                             <Text>
@@ -183,7 +193,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         </Flex>
                         <Flex
                             onClick={() => setActiveTimeRange(last30Days())}
-                            className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">Last 30 days</Text>
                             <Text>
@@ -196,7 +206,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         <Title className="mt-3">Calender months</Title>
                         <Flex
                             onClick={() => setActiveTimeRange(thisMonth())}
-                            className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">This month</Text>
                             <Text>
@@ -205,7 +215,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         </Flex>
                         <Flex
                             onClick={() => setActiveTimeRange(lastMonth())}
-                            className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">Last month</Text>
                             <Text>
@@ -214,7 +224,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         </Flex>
                         <Flex
                             onClick={() => setActiveTimeRange(thisQuarter())}
-                            className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">This quarter</Text>
                             <Text>
@@ -226,7 +236,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         </Flex>
                         <Flex
                             onClick={() => setActiveTimeRange(lastQuarter())}
-                            className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">Last quarter</Text>
                             <Text>
@@ -238,7 +248,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                         </Flex>
                         <Flex
                             onClick={() => setActiveTimeRange(thisYear())}
-                            className="px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="px-4 space-x-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                         >
                             <Text className="text-gray-800">This year</Text>
                             <Text>
@@ -246,7 +256,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
                             </Text>
                         </Flex>
                         <Flex
-                            className="mt-5 px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
+                            className="mt-5 space-x-4 px-4 py-2 cursor-pointer rounded-md hover:bg-kaytu-50"
                             onClick={() => {
                                 listState.close()
                                 state.setOpen(true)
@@ -275,11 +285,11 @@ export default function DateRangePicker() {
         if (
             !isSpend &&
             currentWorkspace.current &&
-            dayjs(currentWorkspace.current?.createdAt).valueOf() >
+            dayjs(currentWorkspace.current?.createdAt).utc().valueOf() >
                 activeTimeRange.start.valueOf()
         ) {
             setActiveTimeRange({
-                start: dayjs(currentWorkspace.current?.createdAt),
+                start: dayjs(currentWorkspace.current?.createdAt).utc(),
                 end: activeTimeRange.end,
             })
         }
@@ -299,9 +309,9 @@ export default function DateRangePicker() {
     const minValue = () => {
         return parseDate(
             !isSpend && currentWorkspace && currentWorkspace.current
-                ? dayjs(currentWorkspace.current?.createdAt).format(
-                      'YYYY-MM-DD'
-                  )
+                ? dayjs(currentWorkspace.current?.createdAt)
+                      .utc()
+                      .format('YYYY-MM-DD')
                 : '2022-12-01'
         )
     }

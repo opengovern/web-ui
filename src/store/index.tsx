@@ -9,16 +9,16 @@ export const timeAtom = atom<{
     start: dayjs.Dayjs
     end: dayjs.Dayjs
 }>({
-    start: dayjs().subtract(1, 'week').startOf('day'),
-    end: dayjs().endOf('day'),
+    start: dayjs().utc().subtract(1, 'week').startOf('day'),
+    end: dayjs().utc().endOf('day'),
 })
 
 export const spendTimeAtom = atom<{
     start: dayjs.Dayjs
     end: dayjs.Dayjs
 }>({
-    start: dayjs().subtract(1, 'month').startOf('day'),
-    end: dayjs().subtract(2, 'day').endOf('day'),
+    start: dayjs().utc().subtract(1, 'month').startOf('day'),
+    end: dayjs().utc().subtract(2, 'day').endOf('day'),
 })
 
 export interface IFilter {

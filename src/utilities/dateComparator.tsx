@@ -34,7 +34,7 @@ export const checkGranularity = (start: Dayjs, end: Dayjs) => {
     // if (dayjs(end).diff(dayjs(start), 'month', true) > 2) {
     //     daily = false
     // }
-    if (dayjs(end).diff(dayjs(start), 'month', true) < 1) {
+    if (dayjs.utc(end).diff(dayjs.utc(start), 'month', true) < 1) {
         monthly = false
     }
     // if (
@@ -44,7 +44,7 @@ export const checkGranularity = (start: Dayjs, end: Dayjs) => {
     // ) {
     //     monthly = false
     // }
-    if (dayjs(end).year() === dayjs(start).year()) {
+    if (dayjs.utc(end).year() === dayjs.utc(start).year()) {
         yearly = false
     }
 

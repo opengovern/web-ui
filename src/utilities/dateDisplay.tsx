@@ -16,7 +16,7 @@ export const dateDisplay = (
         return (date as Dayjs).subtract(s, 'day').format('MMM DD, YYYY')
     }
     if (date) {
-        return dayjs(date).subtract(s, 'day').format('MMM DD, YYYY')
+        return dayjs.utc(date).subtract(s, 'day').format('MMM DD, YYYY')
     }
     return 'Not available'
 }
@@ -30,7 +30,7 @@ export const monthDisplay = (
         return (date as Dayjs).subtract(s, 'day').format('MMM, YYYY')
     }
     if (date) {
-        return dayjs(date).subtract(s, 'day').format('MMM, YYYY')
+        return dayjs.utc(date).subtract(s, 'day').format('MMM, YYYY')
     }
     return 'Not available'
 }
@@ -43,7 +43,7 @@ export const dateTimeDisplay = (
         return (date as Dayjs).format('MMM DD, YYYY kk:mm z')
     }
     if (date) {
-        return dayjs(date).format('MMM DD, YYYY kk:mm z')
+        return dayjs.utc(date).format('MMM DD, YYYY kk:mm z')
     }
     return 'Not available'
 }
