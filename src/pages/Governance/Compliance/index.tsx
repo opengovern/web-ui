@@ -233,25 +233,25 @@ export default function Compliance() {
         error,
         sendNow,
     } = useComplianceApiV1BenchmarksSummaryList()
-    const [selectedState, setSelectedState] = useState('active')
-    const [stateIndex, setStateIndex] = useState(0)
-
-    useEffect(() => {
-        switch (selectedState) {
-            case '':
-                setStateIndex(0)
-                break
-            case 'active':
-                setStateIndex(1)
-                break
-            case 'not-active':
-                setStateIndex(2)
-                break
-            default:
-                setStateIndex(0)
-                break
-        }
-    }, [selectedState])
+    const [selectedState, setSelectedState] = useState('')
+    // const [stateIndex, setStateIndex] = useState(0)
+    //
+    // useEffect(() => {
+    //     switch (selectedState) {
+    //         case '':
+    //             setStateIndex(0)
+    //             break
+    //         case 'active':
+    //             setStateIndex(1)
+    //             break
+    //         case 'not-active':
+    //             setStateIndex(2)
+    //             break
+    //         default:
+    //             setStateIndex(0)
+    //             break
+    //     }
+    // }, [selectedState])
 
     return (
         <Layout currentPage="compliance">
@@ -286,7 +286,7 @@ export default function Compliance() {
             </Flex>
             {(selectedState === '' || selectedState === 'active') && (
                 <div className="mb-6">
-                    {/* <Text className="mb-3">Active</Text> */}
+                    <Text className="mb-3">Active</Text>
                     {/* eslint-disable-next-line no-nested-ternary */}
                     {isLoading ? (
                         <Spinner className="my-56" />
