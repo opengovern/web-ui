@@ -50,7 +50,7 @@ import { RenderObject } from '../../components/RenderObject'
 import Table, { IColumn } from '../../components/Table'
 import Header from '../../components/Header'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem } from '../../api/api'
-import { isDemoAtom, queryAtom } from '../../store'
+import { isDemoAtom, queryAtom, runQueryAtom } from '../../store'
 import { snakeCaseToLabel } from '../../utilities/labelMaker'
 import { numberDisplay } from '../../utilities/numericDisplay'
 
@@ -128,6 +128,7 @@ const columns: IColumn<
 ]
 
 export default function Query() {
+    const [runQuery, setRunQuery] = useAtom(runQueryAtom)
     const [loaded, setLoaded] = useState(false)
     const [savedQuery, setSavedQuery] = useAtom(queryAtom)
     const [code, setCode] = useState(savedQuery || '')
@@ -139,6 +140,7 @@ export default function Query() {
     const [showEditor, setShowEditor] = useState(false)
     const isDemo = useAtomValue(isDemoAtom)
     const [pageSize, setPageSize] = useState(1000)
+    const [autoRun, setAutoRun] = useState(false)
 
     const { response: categories, isLoading: categoryLoading } =
         useInventoryApiV2AnalyticsCategoriesList()
@@ -156,7 +158,7 @@ export default function Query() {
             query: code,
         },
         {},
-        false
+        autoRun
     )
 
     useEffect(() => {
@@ -166,6 +168,9 @@ export default function Query() {
     }, [pageSize])
 
     useEffect(() => {
+        if (autoRun) {
+            setAutoRun(false)
+        }
         if (queryResponse?.query?.length) {
             setSelectedIndex(2)
         } else setSelectedIndex(0)
@@ -181,6 +186,15 @@ export default function Query() {
     useEffect(() => {
         if (code.length) setShowEditor(true)
     }, [code])
+
+    useEffect(() => {
+        if (runQuery.length > 0) {
+            setCode(runQuery)
+            setShowEditor(true)
+            setRunQuery('')
+            setAutoRun(true)
+        }
+    }, [runQuery])
 
     const recordToArray = (record?: Record<string, string[]> | undefined) => {
         if (record === undefined) {

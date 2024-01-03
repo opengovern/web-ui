@@ -1,25 +1,20 @@
 import { Grid } from '@tremor/react'
 import SummaryCard from '../../../../../components/Cards/SummaryCard'
 import {
-    exactPriceDisplay,
-    numberDisplay,
-    numericDisplay,
-} from '../../../../../utilities/numericDisplay'
-import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
 } from '../../../../../api/api'
 import OnboardCard from '../../../../../components/Cards/OnboardCard'
 
 interface IAzureSummary {
     principalsSummary:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse
         | undefined
     principalsLoading: boolean
     metricsLoading: boolean
     subscriptionsSummary:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse
         | undefined
     subscriptionsLoading: boolean
     metrics: GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics | undefined

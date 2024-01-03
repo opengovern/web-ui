@@ -147,7 +147,7 @@ export default function SettingsEntitlement() {
                             <Text className="text-gray-800">{item.value}</Text>
                         </ListItem>
                     ))}
-                    <ListItem>
+                    {/* <ListItem>
                         <Text>Show preview features</Text>
                         <Switch
                             onClick={() =>
@@ -157,7 +157,7 @@ export default function SettingsEntitlement() {
                             }
                             checked={preview === 'true'}
                         />
-                    </ListItem>
+                    </ListItem> */}
                 </List>
             </Card>
         </Flex>

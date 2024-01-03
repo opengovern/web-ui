@@ -11,14 +11,16 @@ import {
 } from '@tremor/react'
 import { useEffect } from 'react'
 import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
-import { useOnboardApiV1SourceDelete } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
 import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/schedule.gen'
 import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
 import Tag from '../../../../../../../components/Tag'
 import { snakeCaseToLabel } from '../../../../../../../utilities/labelMaker'
-import { useIntegrationApiV1ConnectionsAzureHealthcheckDetail } from '../../../../../../../api/integration.gen'
+import {
+    useIntegrationApiV1ConnectionsAzureHealthcheckDetail,
+    useIntegrationApiV1ConnectionsDelete,
+} from '../../../../../../../api/integration.gen'
 
 interface ISubscriptionInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
@@ -54,7 +56,7 @@ export default function SubscriptionInfo({
         isExecuted: isDeleteExecuted,
         isLoading: isDeleteLoading,
         sendNow: deleteNow,
-    } = useOnboardApiV1SourceDelete(data?.id || '', {}, false)
+    } = useIntegrationApiV1ConnectionsDelete(data?.id || '', {}, false)
 
     const {
         response: healthResponse,

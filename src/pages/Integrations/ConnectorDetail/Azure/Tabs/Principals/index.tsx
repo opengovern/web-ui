@@ -9,12 +9,15 @@ import {
 import { useAtomValue } from 'jotai'
 import PrincipalInfo from './PrincipalInfo'
 import NewPrincipal from './NewPrincipal'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+} from '../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { isDemoAtom } from '../../../../../../store'
 
 interface IPrincipals {
-    principals: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    principals: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
 }
 
 const columns = (isDemo: boolean) => {
@@ -127,7 +130,8 @@ export default function Principals({ principals }: IPrincipals) {
     const [open, setOpen] = useState(false)
     const [openInfo, setOpenInfo] = useState(false)
     const [priData, setPriData] = useState<
-        GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential
+        | undefined
     >(undefined)
     const isDemo = useAtomValue(isDemoAtom)
 
@@ -140,7 +144,7 @@ export default function Principals({ principals }: IPrincipals) {
                 columns={columns(isDemo)}
                 rowData={principals}
                 onRowClicked={(
-                    event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
+                    event: RowClickedEvent<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential>
                 ) => {
                     setPriData(event.data)
                     setOpenInfo(true)

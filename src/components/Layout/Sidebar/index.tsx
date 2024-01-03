@@ -68,6 +68,11 @@ const navigation = [
         icon: MagnifyingGlassIcon,
     },
     {
+        name: 'Integrations',
+        page: 'integrations',
+        icon: CpuChipIcon,
+    },
+    {
         name: 'Settings',
         page: 'settings',
         icon: Cog6ToothIcon,
@@ -79,11 +84,6 @@ const preview = [
         name: 'Resource Collection',
         page: 'resource-collection',
         icon: RectangleStackIcon,
-    },
-    {
-        name: 'Integrations',
-        page: 'integrations',
-        icon: CpuChipIcon,
     },
     {
         name: 'Automation',
@@ -183,8 +183,13 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         </AccordionBody>
                                     </Accordion>
                                 ) : (
+                                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
                                     <Link
-                                        to={`/${workspace}/${item.page}`}
+                                        to={
+                                            Array.isArray(item.page)
+                                                ? '#'
+                                                : `/${workspace}/${item.page}`
+                                        }
                                         className={`relative p-2 group flex rounded-md text-sm my-0.5
                                                     ${
                                                         item.page ===

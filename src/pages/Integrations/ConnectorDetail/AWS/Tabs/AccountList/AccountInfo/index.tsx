@@ -13,17 +13,17 @@ import {
 import { useEffect, useState } from 'react'
 import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
 import { useSetAtom } from 'jotai'
-import {
-    useOnboardApiV1CredentialDetail,
-    useOnboardApiV1SourceDelete,
-} from '../../../../../../../api/onboard.gen'
+import { useOnboardApiV1CredentialDetail } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
 import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../api/api'
 import { useScheduleApiV1DescribeTriggerUpdate } from '../../../../../../../api/schedule.gen'
 import Tag from '../../../../../../../components/Tag'
 import { dateTimeDisplay } from '../../../../../../../utilities/dateDisplay'
 import { notificationAtom } from '../../../../../../../store'
-import { useIntegrationApiV1ConnectionsAwsHealthcheckDetail } from '../../../../../../../api/integration.gen'
+import {
+    useIntegrationApiV1ConnectionsAwsHealthcheckDetail,
+    useIntegrationApiV1ConnectionsDelete,
+} from '../../../../../../../api/integration.gen'
 
 interface IAccInfo {
     data: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection | undefined
@@ -73,7 +73,7 @@ export default function AccountInfo({
         isExecuted: isDeleteExecuted,
         isLoading: isDeleteLoading,
         sendNow: deleteNow,
-    } = useOnboardApiV1SourceDelete(data?.id || '', {}, false)
+    } = useIntegrationApiV1ConnectionsDelete(data?.id || '', {}, false)
 
     const {
         response: healthResponse,

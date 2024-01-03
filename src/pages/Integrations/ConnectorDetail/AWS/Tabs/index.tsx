@@ -6,11 +6,13 @@ import AccountList from './AccountList'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
 } from '../../../../../api/api'
 
 interface IAWS {
-    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
-    organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    accounts: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    organizations: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
     loading: boolean
 }
 

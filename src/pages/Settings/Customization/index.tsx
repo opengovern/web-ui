@@ -183,7 +183,7 @@ export default function SettingsCustomization() {
 
             <Title className="font-semibold mt-8">App configurations</Title>
 
-            <Flex
+            {/* <Flex
                 flexDirection="row"
                 justifyContent="between"
                 className="w-full mt-2"
@@ -199,7 +199,7 @@ export default function SettingsCustomization() {
                         <Tab>Demo mode</Tab>
                     </TabList>
                 </TabGroup>
-            </Flex>
+            </Flex> */}
             <Flex
                 flexDirection="row"
                 justifyContent="between"

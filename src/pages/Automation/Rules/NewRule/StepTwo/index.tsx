@@ -23,12 +23,10 @@ import {
     MinusIcon,
     PlusIcon,
 } from '@heroicons/react/24/outline'
-import {
-    useOnboardApiV1ConnectionGroupsList,
-    useOnboardApiV1ConnectionsSummaryList,
-} from '../../../../../api/onboard.gen'
+import { useOnboardApiV1ConnectionGroupsList } from '../../../../../api/onboard.gen'
 import Spinner from '../../../../../components/Spinner'
 import { getConnectorIcon } from '../../../../../components/Cards/ConnectorCard'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/integration.gen'
 
 interface IStep {
     onNext: (
@@ -55,13 +53,15 @@ export default function StepTwo({ onNext, onBack }: IStep) {
 
     const { response: groupList, isLoading: groupListLoading } =
         useOnboardApiV1ConnectionGroupsList()
-    const { response, isLoading } = useOnboardApiV1ConnectionsSummaryList({
-        connector: [],
-        pageNumber: 1,
-        pageSize: 10000,
-        needCost: false,
-        needResourceCount: false,
-    })
+    const { response, isLoading } = useIntegrationApiV1ConnectionsSummariesList(
+        {
+            connector: [],
+            pageNumber: 1,
+            pageSize: 10000,
+            needCost: false,
+            needResourceCount: false,
+        }
+    )
 
     useEffect(() => {
         setConnections('')

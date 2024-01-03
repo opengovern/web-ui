@@ -24,7 +24,11 @@ function Connector({ onClick, icon, name, description, count }: IConnector) {
     return (
         <Card className="m-3 w-1/3 cursor-pointer" onClick={onClick}>
             <Flex className="mb-2">
-                <img src={icon} alt="connector" className="w-12 h-12 mr-1" />
+                <img
+                    src={icon}
+                    alt="connector"
+                    className="w-12 h-12 mr-1 rounded-full"
+                />
                 <Text className="text-gray-800 font-bold">{count}</Text>
             </Flex>
 

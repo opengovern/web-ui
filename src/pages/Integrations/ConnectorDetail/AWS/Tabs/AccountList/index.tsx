@@ -12,6 +12,8 @@ import AccountInfo from './AccountInfo'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
     SourceHealthStatus,
 } from '../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../components/Table'
@@ -20,8 +22,8 @@ import { isDemoAtom } from '../../../../../../store'
 import OnboardDrawer from '../../../../Onboard/AWS'
 
 interface IAccountList {
-    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
-    organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    accounts: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    organizations: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
     loading: boolean
 }
 

@@ -31,7 +31,7 @@ import {
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../../../api/inventory.gen'
 import { notificationAtom } from '../../../../store'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
 import { dateDisplay, dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
@@ -152,7 +152,7 @@ export default function SingleSpendConnection({
             top: 4,
         })
     const { response: accountInfo, isLoading: accountInfoLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
+        useIntegrationApiV1ConnectionsSummariesList({
             ...query,
             pageSize: 1,
         })

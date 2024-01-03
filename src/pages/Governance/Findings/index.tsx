@@ -29,13 +29,14 @@ import {
     useComplianceApiV1BenchmarksSummaryList,
     useComplianceApiV1FindingsFiltersCreate,
 } from '../../../api/compliance.gen'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
 import Spinner from '../../../components/Spinner'
 import { benchmarkList } from '../Compliance'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
     SourceType,
 } from '../../../api/api'
 import AxiosAPI from '../../../api/ApiConfig'
@@ -212,7 +213,7 @@ const severity = [
 
 const filteredConnectionsList = (
     connection:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
         | undefined,
     filter: string
 ) => {
@@ -352,7 +353,7 @@ export default function Findings() {
     const isDemo = useAtomValue(isDemoAtom)
 
     const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
+        useIntegrationApiV1ConnectionsSummariesList({
             connector: providerFilter,
             pageNumber: 1,
             pageSize: 2000,
@@ -389,6 +390,7 @@ export default function Findings() {
                             // @ts-ignore
                             conformanceStatus: status,
                         },
+
                         sort: params.request.sortModel.length
                             ? [
                                   {
@@ -486,7 +488,7 @@ export default function Findings() {
                                     <Flex className="gap-1">
                                         <img
                                             src={AzureIcon}
-                                            className="w-6"
+                                            className="w-6 rounded-full"
                                             alt="azure"
                                         />
                                         <Text>Azure</Text>

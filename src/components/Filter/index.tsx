@@ -22,7 +22,7 @@ import {
 import { useAtom } from 'jotai'
 import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../api/integration.gen'
 import { filterAtom } from '../../store'
 import { getConnectorIcon } from '../Cards/ConnectorCard'
 import Tag from '../Tag'
@@ -47,13 +47,15 @@ export default function Filter() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedFilters, setSelectedFilters] = useAtom(filterAtom)
 
-    const { response, isLoading } = useOnboardApiV1ConnectionsSummaryList({
-        connector: [],
-        pageNumber: 1,
-        pageSize: 10000,
-        needCost: false,
-        needResourceCount: false,
-    })
+    const { response, isLoading } = useIntegrationApiV1ConnectionsSummariesList(
+        {
+            connector: [],
+            pageNumber: 1,
+            pageSize: 10000,
+            needCost: false,
+            needResourceCount: false,
+        }
+    )
     const findConnections = () => {
         const conn = []
         if (response) {

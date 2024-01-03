@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
     GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
     RequestParams,
 } from './api'
 
@@ -52,11 +52,7 @@ export const useWorkspaceApiV1BootstrapDetail = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
-                setWorkspace('kaytu')
-            } else {
-                setWorkspace('kaytu')
-            }
+            setWorkspace('kaytu')
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
@@ -163,11 +159,7 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
-                setWorkspace('kaytu')
-            } else {
-                setWorkspace('kaytu')
-            }
+            setWorkspace('kaytu')
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
@@ -282,11 +274,7 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
-                setWorkspace('kaytu')
-            } else {
-                setWorkspace('kaytu')
-            }
+            setWorkspace('kaytu')
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
@@ -391,11 +379,7 @@ export const useWorkspaceApiV1WorkspaceCreate = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
-                setWorkspace('kaytu')
-            } else {
-                setWorkspace('kaytu')
-            }
+            setWorkspace('kaytu')
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
@@ -609,11 +593,7 @@ export const useWorkspaceApiV1WorkspaceDelete = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
-                setWorkspace('kaytu')
-            } else {
-                setWorkspace('kaytu')
-            }
+            setWorkspace('kaytu')
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
@@ -717,11 +697,7 @@ export const useWorkspaceApiV1WorkspacesList = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
-                setWorkspace('kaytu')
-            } else {
-                setWorkspace('kaytu')
-            }
+            setWorkspace('kaytu')
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace
@@ -830,11 +806,7 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (
             isExecuted: true,
         })
         try {
-            if (workspace !== undefined && workspace.length > 0) {
-                setWorkspace('kaytu')
-            } else {
-                setWorkspace('kaytu')
-            }
+            setWorkspace('kaytu')
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.workspace

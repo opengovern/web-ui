@@ -8,17 +8,22 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import {
-    useOnboardApiV1CredentialAutoonboardCreate,
-    // useOnboardApiV1CredentialDelete,
-    useOnboardApiV1CredentialDetail,
-} from '../../../../../../../api/onboard.gen'
+import { useOnboardApiV1CredentialDetail } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+} from '../../../../../../../api/api'
 import { dateDisplay } from '../../../../../../../utilities/dateDisplay'
+import {
+    useIntegrationApiV1CredentialDelete,
+    useIntegrationApiV1CredentialsAwsAutoonboardCreate,
+} from '../../../../../../../api/integration.gen'
 
 interface IOrgInfo {
-    data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
+    data:
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential
+        | undefined
     open: boolean
     onClose: () => void
     isDemo: boolean
@@ -45,17 +50,21 @@ export default function OrganizationInfo({
     const [id, setId] = useState('')
     const [eid, seteId] = useState(false)
 
-    // const {
-    //     isExecuted: isDeleteExecuted,
-    //     isLoading: isDeleteLoading,
-    //     sendNow: deleteNow,
-    // } = useOnboardApiV1CredentialDelete(data?.id || '', {}, false)
+    const {
+        isExecuted: isDeleteExecuted,
+        isLoading: isDeleteLoading,
+        sendNow: deleteNow,
+    } = useIntegrationApiV1CredentialDelete(data?.id || '', {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,
         isLoading: isDiscoverLoading,
         sendNow: discoverNow,
-    } = useOnboardApiV1CredentialAutoonboardCreate(data?.id || '', {}, false)
+    } = useIntegrationApiV1CredentialsAwsAutoonboardCreate(
+        data?.id || '',
+        {},
+        false
+    )
 
     // useEffect(() => {
     //     if (isDeleteExecuted && !isDeleteLoading) {
