@@ -1,13 +1,15 @@
-import { useState } from 'react'
 import { Flex } from '@tremor/react'
+import { useState } from 'react'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
 import { SourceType } from '../../../../api/api'
 import Table from '../../../../components/Table'
-import { policyColumns } from '../../Compliance/BenchmarkSummary/Controls/ControlList'
-import { rows } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
+import {
+    cloudAccountColumns,
+    rows,
+} from '../../Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedAccounts'
 import FindingFilters from '../FindingsWithFailure/Filters'
 
-export default function ControlsWithFailure() {
+export default function FailingCloudAccounts() {
     const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
     const [connectionFilter, setConnectionFilter] = useState<string[]>([])
     const [benchmarkFilter, setBenchmarkFilter] = useState<string[]>([])
@@ -17,8 +19,9 @@ export default function ControlsWithFailure() {
         connectionId: connectionFilter,
         benchmarkId: benchmarkFilter,
     }
-    const { response: controls, isLoading } =
-        useComplianceApiV1FindingsTopDetail('controlID', 10000, topQuery)
+
+    const { response: accounts, isLoading: accountsLoading } =
+        useComplianceApiV1FindingsTopDetail('connectionID', 10000, topQuery)
 
     return (
         <Flex alignItems="start" className="gap-4">
@@ -33,15 +36,15 @@ export default function ControlsWithFailure() {
                 }}
             />
             <Table
-                id="compliance_policies"
-                loading={isLoading}
+                id="impacted_accounts"
+                columns={cloudAccountColumns(false)}
+                rowData={rows(accounts)}
+                loading={accountsLoading}
                 onGridReady={(e) => {
-                    if (isLoading) {
+                    if (accountsLoading) {
                         e.api.showLoadingOverlay()
                     }
                 }}
-                columns={policyColumns}
-                rowData={rows(controls?.records)}
             />
         </Flex>
     )

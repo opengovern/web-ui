@@ -12,6 +12,7 @@ import Header from '../../../components/Header'
 import FindingsWithFailure from './FindingsWithFailure'
 import ResourcesWithFailure from './ResourcesWithFailure'
 import ControlsWithFailure from './ControlsWithFailure'
+import FailingCloudAccounts from './FailingCloudAccounts'
 
 const tabs = [
     {
@@ -47,6 +48,8 @@ export default function Findings() {
                 return <ResourcesWithFailure />
             case 'controls':
                 return <ControlsWithFailure />
+            case 'accounts':
+                return <FailingCloudAccounts />
             default:
                 return <FindingsWithFailure />
         }
