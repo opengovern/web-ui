@@ -15,13 +15,13 @@ import {
 import { useEffect } from 'react'
 import ReactJson from '@microlink/react-json-view'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../api/api'
-import DrawerPanel from '../../../../components/DrawerPanel'
-import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
-import SummaryCard from '../../../../components/Cards/SummaryCard'
-import { useComplianceApiV1FindingsResourceCreate } from '../../../../api/compliance.gen'
-import Spinner from '../../../../components/Spinner'
-import { severityBadge } from '../../Compliance/BenchmarkSummary/Controls'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../../api/api'
+import DrawerPanel from '../../../../../components/DrawerPanel'
+import { getConnectorIcon } from '../../../../../components/Cards/ConnectorCard'
+import SummaryCard from '../../../../../components/Cards/SummaryCard'
+import { useComplianceApiV1FindingsResourceCreate } from '../../../../../api/compliance.gen'
+import Spinner from '../../../../../components/Spinner'
+import { severityBadge } from '../../../Compliance/BenchmarkSummary/Controls'
 
 interface IFindingDetail {
     finding: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined

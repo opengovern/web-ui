@@ -24,7 +24,7 @@ import SpendDetails from '../pages/Spend/Details'
 import AssetDetails from '../pages/Assets/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
-import Findings from '../pages/Governance/Findings'
+import FindingsWithFailure from '../pages/Governance/Findings/FindingsWithFailure'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
 import Boostrap from '../pages/Workspaces/Bootstrap'
 import ResourceCollection from '../pages/ResourceCollection'
@@ -190,7 +190,7 @@ const authRoutes = [
     {
         key: 'findings',
         path: '/:ws/findings',
-        component: Findings,
+        component: FindingsWithFailure,
     },
     {
         key: 'service advisor summary',

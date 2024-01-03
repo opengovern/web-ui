@@ -5,11 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/FindingsWithFailure/Filters/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/FindingsWithFailure/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Table/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Table/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedResources/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedResources/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/SingleConnection/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/SingleConnection/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/Detail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/FindingsWithFailure/Detail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,8 +67,8 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "prettierjs.PrettierConfiguration.Package": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/prettier",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "/Users/kiaaawn/Applications/WebStorm.app/Contents/plugins/javascript-impl/jsLanguageServicesImpl/external",
+    "settings.editor.selected.configurable": "settings.javascript.prettier",
+    "ts.external.directory.path": "/Users/kiaaawn/Desktop/Kaytu/front-end-v2/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -86,11 +89,11 @@
       <recent name="$PROJECT_DIR$/src/icons" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/Governance/Findings/FindingsWithFailures" />
       <recent name="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls" />
       <recent name="$PROJECT_DIR$/src/pages/Insights/Details" />
       <recent name="$PROJECT_DIR$/src/pages/Governance/ControlSummary/Tabs" />
       <recent name="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/TopDetails" />
-      <recent name="$PROJECT_DIR$/src/components/Layout/Sidebar" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -295,6 +298,7 @@
       <workItem from="1703836000489" duration="5747000" />
       <workItem from="1704110743934" duration="345000" />
       <workItem from="1704111114700" duration="7213000" />
+      <workItem from="1704277923140" duration="3804000" />
     </task>
     <servers />
   </component>

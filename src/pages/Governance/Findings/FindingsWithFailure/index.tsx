@@ -1,27 +1,23 @@
-import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
+import { Flex } from '@tremor/react'
 import { useMemo, useState } from 'react'
-import { useAtomValue, useSetAtom } from 'jotai/index'
 import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
-import { Flex, Text } from '@tremor/react'
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
-import Table, { IColumn } from '../../../../../../../../components/Table'
-import FindingDetail from '../../../../../../Findings/FindingsWithFailure/Detail'
-import { isDemoAtom, notificationAtom } from '../../../../../../../../store'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
+import Layout from '../../../../components/Layout'
+import { isDemoAtom, notificationAtom } from '../../../../store'
+import Table, { IColumn } from '../../../../components/Table'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
-} from '../../../../../../../../api/api'
-import AxiosAPI from '../../../../../../../../api/ApiConfig'
-import { statusBadge } from '../../../index'
-import { dateTimeDisplay } from '../../../../../../../../utilities/dateDisplay'
+    SourceType,
+} from '../../../../api/api'
+import AxiosAPI from '../../../../api/ApiConfig'
+import FindingDetail from './Detail'
+import { severityBadge } from '../../Compliance/BenchmarkSummary/Controls'
+import FindingFilters from './Filters'
 
-let sortKey = ''
-
-interface IImpactedResources {
-    controlId: string | undefined
-}
-
-const columns = (isDemo: boolean) => {
+export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             width: 140,
@@ -50,7 +46,7 @@ const columns = (isDemo: boolean) => {
             type: 'string',
             enableRowGroup: true,
             sortable: true,
-            hide: true,
+            hide: false,
             filter: true,
             resizable: true,
             flex: 1,
@@ -61,11 +57,22 @@ const columns = (isDemo: boolean) => {
             type: 'string',
             enableRowGroup: true,
             sortable: false,
-            hide: true,
+            hide: false,
             filter: true,
             resizable: true,
             flex: 1,
         },
+        // {
+        //     field: 'controlID',
+        //     headerName: 'Control ID',
+        //     type: 'string',
+        //     enableRowGroup: true,
+        //     sortable: true,
+        //     filter: true,
+        //     hide: true,
+        //     resizable: true,
+        //     flex: 1,
+        // },
         {
             field: 'benchmarkID',
             headerName: 'Benchmark ID',
@@ -77,6 +84,16 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 1,
         },
+        // {
+        //     field: 'controlTitle',
+        //     headerName: 'Control title',
+        //     type: 'string',
+        //     enableRowGroup: true,
+        //     sortable: false,
+        //     filter: true,
+        //     resizable: true,
+        //     flex: 1,
+        // },
         {
             field: 'providerConnectionName',
             headerName: 'Cloud provider name',
@@ -117,23 +134,24 @@ const columns = (isDemo: boolean) => {
             flex: 1,
         },
         {
-            field: 'conformanceStatus',
-            headerName: 'Conformance status',
+            field: 'severity',
+            headerName: 'Severity',
             type: 'string',
             sortable: true,
+            // rowGroup: true,
             filter: true,
-            hide: false,
+            hide: true,
             resizable: true,
-            width: 180,
+            width: 100,
             cellRenderer: (param: ValueFormatterParams) => (
-                <Flex className="h-full">{statusBadge(param.value)}</Flex>
+                <Flex className="h-full">{severityBadge(param.value)}</Flex>
             ),
         },
         {
             field: 'noOfOccurrences',
             headerName: '# of issues',
             type: 'number',
-            hide: true,
+            hide: false,
             enableRowGroup: true,
             sortable: false,
             filter: true,
@@ -147,25 +165,45 @@ const columns = (isDemo: boolean) => {
             sortable: false,
             filter: true,
             resizable: true,
-            width: 260,
+            flex: 1,
             valueFormatter: (param: ValueFormatterParams) => {
                 return param.value ? dateTimeDisplay(param.value) : ''
             },
-            hide: false,
+            hide: true,
         },
     ]
     return temp
 }
 
-export default function ImpactedResources({ controlId }: IImpactedResources) {
-    const isDemo = useAtomValue(isDemoAtom)
+let sortKey = ''
+
+export default function FindingsWithFailure() {
     const setNotification = useSetAtom(notificationAtom)
 
     const [open, setOpen] = useState(false)
     const [finding, setFinding] = useState<
         GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
     >(undefined)
-    const [error, setError] = useState('')
+
+    const isDemo = useAtomValue(isDemoAtom)
+
+    const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
+    const [connectionFilter, setConnectionFilter] = useState<string[]>([])
+    const [benchmarkFilter, setBenchmarkFilter] = useState<string[]>([])
+    const [resourceFilter, setResourceFilter] = useState<string[]>([])
+    const [severityFilter, setSeverityFilter] = useState([
+        'critical',
+        'high',
+        'medium',
+        'low',
+        'none',
+    ])
+    const [statusFilter, setStatusFilter] = useState([
+        'alarm',
+        'info',
+        'skip',
+        'error',
+    ])
 
     const ssr = () => {
         return {
@@ -178,25 +216,18 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                 api.compliance
                     .apiV1FindingsCreate({
                         filters: {
-                            controlID: [controlId || ''],
-                            conformanceStatus: [
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                'ok',
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                'alarm',
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                'info',
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                'skip',
-                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                // @ts-ignore
-                                'error',
-                            ],
+                            connector: providerFilter,
+                            connectionID: connectionFilter,
+                            benchmarkID: benchmarkFilter,
+                            resourceTypeID: resourceFilter,
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            severity: severityFilter,
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            conformanceStatus: statusFilter,
                         },
+
                         sort: params.request.sortModel.length
                             ? [
                                   {
@@ -227,57 +258,75 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                                 .sortKey[0]
                     })
                     .catch((err) => {
-                        if (
-                            err.message !==
-                            "Cannot read properties of null (reading 'NaN')"
-                        ) {
-                            setError(err.message)
-                        }
                         params.fail()
                     })
             },
         }
     }
 
-    const serverSideRows = useMemo(() => ssr(), [])
+    const serverSideRows = useMemo(
+        () => ssr(),
+        [
+            providerFilter,
+            statusFilter,
+            connectionFilter,
+            benchmarkFilter,
+            resourceFilter,
+            severityFilter,
+        ]
+    )
 
     return (
-        <>
-            {error.length > 0 && (
-                <Flex className="w-fit mb-3 gap-1">
-                    <ExclamationCircleIcon className="text-rose-600 h-5" />
-                    <Text color="rose">{error}</Text>
+        <Layout currentPage="findings">
+            <Flex alignItems="start">
+                <FindingFilters
+                    providerFilter={providerFilter}
+                    statusFilter={statusFilter}
+                    connectionFilter={connectionFilter}
+                    benchmarkFilter={benchmarkFilter}
+                    resourceFilter={resourceFilter}
+                    severityFilter={severityFilter}
+                    onApply={(obj) => {
+                        setProviderFilter(obj.provider)
+                        setStatusFilter(obj.status)
+                        setConnectionFilter(obj.connection)
+                        setBenchmarkFilter(obj.connection)
+                        setResourceFilter(obj.resource)
+                        setSeverityFilter(obj.severity)
+                    }}
+                />
+                <Flex className="pl-4">
+                    <Table
+                        fullWidth
+                        id="compliance_findings"
+                        columns={columns(isDemo)}
+                        onCellClicked={(event: RowClickedEvent) => {
+                            if (
+                                event.data.kaytuResourceID &&
+                                event.data.kaytuResourceID.length > 0
+                            ) {
+                                setFinding(event.data)
+                                setOpen(true)
+                            } else {
+                                setNotification({
+                                    text: 'Detail for this finding is currently not available',
+                                    type: 'warning',
+                                })
+                            }
+                        }}
+                        serverSideDatasource={serverSideRows}
+                        options={{
+                            rowModelType: 'serverSide',
+                            serverSideDatasource: serverSideRows,
+                        }}
+                    />
+                    <FindingDetail
+                        finding={finding}
+                        open={open}
+                        onClose={() => setOpen(false)}
+                    />
                 </Flex>
-            )}
-            <Table
-                fullWidth
-                id="compliance_findings"
-                columns={columns(isDemo)}
-                onCellClicked={(event: RowClickedEvent) => {
-                    if (
-                        event.data.kaytuResourceID &&
-                        event.data.kaytuResourceID.length > 0
-                    ) {
-                        setFinding(event.data)
-                        setOpen(true)
-                    } else {
-                        setNotification({
-                            text: 'Detail for this finding is currently not available',
-                            type: 'warning',
-                        })
-                    }
-                }}
-                serverSideDatasource={serverSideRows}
-                options={{
-                    rowModelType: 'serverSide',
-                    serverSideDatasource: serverSideRows,
-                }}
-            />
-            <FindingDetail
-                finding={finding}
-                open={open}
-                onClose={() => setOpen(false)}
-            />
-        </>
+            </Flex>
+        </Layout>
     )
 }
