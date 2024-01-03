@@ -312,9 +312,14 @@ export default function BenchmarkSummary() {
                                             Security score
                                         </Text>
                                         <InformationCircleIcon className="w-4" />
-                                        <div className="absolute w-full z-40 top-0 left-full scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                        <div className="absolute w-60 z-40 top-0 left-full scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
                                             <Text>
-                                                {benchmarkDetail?.description}
+                                                Security scores represents the
+                                                proportion of Passed controls to
+                                                enabled controls for a given
+                                                benchmark. Kaytu calculates a
+                                                summary security score across
+                                                all enabled Benchmarks.
                                             </Text>
                                         </div>
                                     </Flex>
