@@ -73,7 +73,9 @@ export default function Findings() {
                                     icon={t.icon}
                                     className="w-6 text-kaytu-500"
                                 />
-                                <Text className="!text-base">{t.name}</Text>
+                                <Text className="!text-base truncate">
+                                    {t.name}
+                                </Text>
                             </Flex>
                             {tab === t.type ? (
                                 <div />

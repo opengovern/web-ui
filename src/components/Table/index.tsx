@@ -25,6 +25,7 @@ import {
 import { agGridDateComparator } from '../../utilities/dateComparator'
 import { getConnectorIcon } from '../Cards/ConnectorCard'
 import { dateDisplay, dateTimeDisplay } from '../../utilities/dateDisplay'
+import Spinner from '../Spinner'
 
 export interface IColumn<TData, TValue> {
     type: 'string' | 'number' | 'price' | 'date' | 'datetime' | 'connector'
@@ -326,12 +327,21 @@ export default function Table<TData = any, TValue = any>({
                 </Flex>
             </Flex>
             <div
-                className={`w-full ${
+                className={`w-full relative overflow-hidden ${
                     localStorage.theme === 'dark'
                         ? 'ag-theme-alpine-dark'
                         : 'ag-theme-alpine'
                 } ${fullHeight ? 'h-full' : ''}`}
             >
+                {loading && (
+                    <Flex
+                        justifyContent="center"
+                        alignItems="center"
+                        className="top-[50px] right-[32px] z-10 backdrop-blur h-full absolute"
+                    >
+                        <Spinner />
+                    </Flex>
+                )}
                 <AgGridReact
                     ref={gridRef}
                     domLayout="autoHeight"
