@@ -1,6 +1,6 @@
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { Flex } from '@tremor/react'
-import { RowClickedEvent } from 'ag-grid-community'
+import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import { useMemo, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai/index'
 import {
@@ -11,9 +11,84 @@ import {
 import AxiosAPI from '../../../../api/ApiConfig'
 import { isDemoAtom, notificationAtom } from '../../../../store'
 import FindingFilters from '../FindingsWithFailure/Filters'
-import Table from '../../../../components/Table'
+import Table, { IColumn } from '../../../../components/Table'
 import FindingDetail from '../FindingsWithFailure/Detail'
-import { columns } from '../FindingsWithFailure'
+import { severityBadge } from '../../Compliance/BenchmarkSummary/Controls'
+import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
+
+const columns = (isDemo: boolean) => {
+    const temp: IColumn<any, any>[] = [
+        {
+            field: 'resourceName',
+            headerName: 'Resource name',
+            hide: false,
+            type: 'string',
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'resourceType',
+            headerName: 'Resource type',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: true,
+            hide: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'resourceLocation',
+            headerName: 'Resource location',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: false,
+            hide: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'failedCount',
+            headerName: 'Failed count',
+            type: 'number',
+            hide: false,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            width: 125,
+        },
+        {
+            field: 'totalCount',
+            headerName: 'Total count',
+            type: 'number',
+            hide: false,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            width: 125,
+        },
+        {
+            field: 'evaluatedAt',
+            headerName: 'Last checked',
+            type: 'datetime',
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            valueFormatter: (param: ValueFormatterParams) => {
+                return param.value ? dateTimeDisplay(param.value) : ''
+            },
+            hide: true,
+        },
+    ]
+    return temp
+}
 
 let sortKey = ''
 
@@ -84,6 +159,7 @@ export default function ResourcesWithFailure() {
                                 : [sortKey],
                     })
                     .then((resp) => {
+                        console.log(resp.data)
                         params.success({
                             rowData: resp.data.resourceFindings || [],
                             rowCount: resp.data.totalCount || 0,
