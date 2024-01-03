@@ -17,6 +17,7 @@ import { Dialog } from './Dialog'
 dayjs.extend(quarterOfYear)
 
 const renderText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
+    console.log(st.format('DD/MMM/YYYY'), en)
     const s = st
     const e = en
     const startYear = s.year()
@@ -65,14 +66,14 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
         const month = value?.start.month || 1
         const year = value?.start.year || 1
 
-        return dayjs(new Date(year, month - 1, day)).utc()
+        return dayjs.utc(new Date(year, month - 1, day, 12)).startOf('day')
     }
     const end = () => {
         const day = value?.end.day || 1
         const month = value?.end.month || 1
         const year = value?.end.year || 1
 
-        return dayjs(new Date(year, month - 1, day)).utc()
+        return dayjs.utc(new Date(year, month - 1, day, 12)).startOf('day')
     }
 
     const last7Days = () => {
