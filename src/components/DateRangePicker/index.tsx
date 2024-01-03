@@ -67,6 +67,7 @@ function CustomDatePicker(props: AriaDateRangePickerProps<DateValue>) {
 
         return dayjs.utc(new Date(year, month - 1, day, 12)).startOf('day')
     }
+
     const end = () => {
         const day = value?.end.day || 1
         const month = value?.end.month || 1
