@@ -1,182 +1,23 @@
-import { Flex } from '@tremor/react'
-import { useMemo, useState } from 'react'
-import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
-import { useAtomValue, useSetAtom } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
-import { isDemoAtom, notificationAtom } from '../../../../store'
-import Table, { IColumn } from '../../../../components/Table'
-import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
+import { Flex } from '@tremor/react'
+import { RowClickedEvent } from 'ag-grid-community'
+import { useMemo, useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai/index'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     SourceType,
 } from '../../../../api/api'
 import AxiosAPI from '../../../../api/ApiConfig'
-import FindingDetail from './Detail'
-import { severityBadge } from '../../Compliance/BenchmarkSummary/Controls'
-import FindingFilters from './Filters'
-
-export const columns = (isDemo: boolean) => {
-    const temp: IColumn<any, any>[] = [
-        {
-            width: 140,
-            field: 'connector',
-            headerName: 'Cloud provider',
-            sortable: true,
-            filter: true,
-            hide: true,
-            enableRowGroup: true,
-            type: 'string',
-        },
-        {
-            field: 'resourceName',
-            headerName: 'Resource name',
-            hide: false,
-            type: 'string',
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-        },
-        {
-            field: 'resourceType',
-            headerName: 'Resource type',
-            type: 'string',
-            enableRowGroup: true,
-            sortable: true,
-            hide: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-        },
-        {
-            field: 'resourceTypeName',
-            headerName: 'Resource type label',
-            type: 'string',
-            enableRowGroup: true,
-            sortable: false,
-            hide: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-        },
-        // {
-        //     field: 'controlID',
-        //     headerName: 'Control ID',
-        //     type: 'string',
-        //     enableRowGroup: true,
-        //     sortable: true,
-        //     filter: true,
-        //     hide: true,
-        //     resizable: true,
-        //     flex: 1,
-        // },
-        {
-            field: 'benchmarkID',
-            headerName: 'Benchmark ID',
-            type: 'string',
-            enableRowGroup: true,
-            sortable: false,
-            hide: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
-        },
-        // {
-        //     field: 'controlTitle',
-        //     headerName: 'Control title',
-        //     type: 'string',
-        //     enableRowGroup: true,
-        //     sortable: false,
-        //     filter: true,
-        //     resizable: true,
-        //     flex: 1,
-        // },
-        {
-            field: 'providerConnectionName',
-            headerName: 'Cloud provider name',
-            type: 'string',
-            enableRowGroup: true,
-            hide: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
-            ),
-        },
-        {
-            field: 'providerConnectionID',
-            headerName: 'Cloud provider ID',
-            type: 'string',
-            hide: true,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
-            ),
-        },
-        {
-            field: 'connectionID',
-            headerName: 'Kaytu connection ID',
-            type: 'string',
-            hide: true,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-        },
-        {
-            field: 'severity',
-            headerName: 'Severity',
-            type: 'string',
-            sortable: true,
-            // rowGroup: true,
-            filter: true,
-            hide: true,
-            resizable: true,
-            width: 100,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <Flex className="h-full">{severityBadge(param.value)}</Flex>
-            ),
-        },
-        {
-            field: 'noOfOccurrences',
-            headerName: '# of issues',
-            type: 'number',
-            hide: false,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            width: 115,
-        },
-        {
-            field: 'evaluatedAt',
-            headerName: 'Last checked',
-            type: 'datetime',
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            valueFormatter: (param: ValueFormatterParams) => {
-                return param.value ? dateTimeDisplay(param.value) : ''
-            },
-            hide: true,
-        },
-    ]
-    return temp
-}
+import { isDemoAtom, notificationAtom } from '../../../../store'
+import FindingFilters from '../FindingsWithFailure/Filters'
+import Table from '../../../../components/Table'
+import FindingDetail from '../FindingsWithFailure/Detail'
+import { columns } from '../FindingsWithFailure'
 
 let sortKey = ''
 
-export default function FindingsWithFailure() {
+export default function ResourcesWithFailure() {
     const setNotification = useSetAtom(notificationAtom)
 
     const [open, setOpen] = useState(false)
@@ -203,7 +44,6 @@ export default function FindingsWithFailure() {
         'skip',
         'error',
     ])
-
     const ssr = () => {
         return {
             getRows: (params: IServerSideGetRowsParams) => {
@@ -213,7 +53,7 @@ export default function FindingsWithFailure() {
                 const api = new Api()
                 api.instance = AxiosAPI
                 api.compliance
-                    .apiV1FindingsCreate({
+                    .apiV1ResourceFindingsCreate({
                         filters: {
                             connector: providerFilter,
                             connectionID: connectionFilter,
@@ -245,7 +85,7 @@ export default function FindingsWithFailure() {
                     })
                     .then((resp) => {
                         params.success({
-                            rowData: resp.data.findings || [],
+                            rowData: resp.data.resourceFindings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
                         // eslint-disable-next-line prefer-destructuring
@@ -253,8 +93,12 @@ export default function FindingsWithFailure() {
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             // eslint-disable-next-line no-unsafe-optional-chaining
-                            resp.data.findings[resp.data.findings?.length - 1]
-                                .sortKey[0]
+                            resp.data.resourceFindings[
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                // eslint-disable-next-line no-unsafe-optional-chaining
+                                resp.data.resourceFindings?.length - 1
+                            ].sortKey[0]
                     })
                     .catch((err) => {
                         params.fail()

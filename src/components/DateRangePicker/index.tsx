@@ -17,7 +17,6 @@ import { Dialog } from './Dialog'
 dayjs.extend(quarterOfYear)
 
 const renderText = (st: dayjs.Dayjs, en: dayjs.Dayjs) => {
-    console.log(st.format('DD/MMM/YYYY'), en)
     const s = st
     const e = en
     const startYear = s.year()

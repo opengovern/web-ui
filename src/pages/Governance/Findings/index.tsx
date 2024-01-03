@@ -4,13 +4,13 @@ import {
     ChevronDownIcon,
     CloudIcon,
     DocumentCheckIcon,
-    ServerIcon,
     ServerStackIcon,
     ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
 import FindingsWithFailure from './FindingsWithFailure'
+import ResourcesWithFailure from './ResourcesWithFailure'
 
 const tabs = [
     {
@@ -42,6 +42,8 @@ export default function Findings() {
         switch (tab) {
             case 'findings':
                 return <FindingsWithFailure />
+            case 'resources':
+                return <ResourcesWithFailure />
             default:
                 return <FindingsWithFailure />
         }
