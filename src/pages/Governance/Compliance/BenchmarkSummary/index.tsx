@@ -221,7 +221,7 @@ export default function BenchmarkSummary() {
                     response={(e) =>
                         setAssignments(e?.connections?.length || 0)
                     }
-                    autoAssign={false}
+                    autoAssign={benchmarkDetail?.autoAssign}
                 />
             </Header>
             {isLoading ? (

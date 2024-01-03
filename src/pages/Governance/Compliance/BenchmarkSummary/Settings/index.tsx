@@ -1,5 +1,5 @@
 import { ValueFormatterParams } from 'ag-grid-community'
-import { Button, Callout, Flex, Text } from '@tremor/react'
+import { Button, Callout, Flex, Switch, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai/index'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
@@ -21,7 +21,7 @@ interface ISettings {
             | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities
             | undefined
     ) => void
-    autoAssign: boolean
+    autoAssign: boolean | undefined
 }
 
 const columns = (isDemo: boolean) => {
@@ -72,20 +72,7 @@ const columns = (isDemo: boolean) => {
                         justifyContent="center"
                         className="h-full w-full"
                     >
-                        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                        <label
-                            htmlFor={params.data.id}
-                            className="relative inline-flex items-center cursor-pointer"
-                        >
-                            <input
-                                id={params.data.id}
-                                type="checkbox"
-                                value=""
-                                className="sr-only peer"
-                                checked={params.data?.status}
-                            />
-                            <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-kaytu-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600" />
-                        </label>
+                        <Switch checked={params.data?.status} />
                     </Flex>
                 )
             },
@@ -107,7 +94,7 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
         connectionID: '',
         status: false,
     })
-    const [allEnable, setAllEnable] = useState(true)
+    const [allEnable, setAllEnable] = useState(autoAssign)
     const isDemo = useAtomValue(isDemoAtom)
 
     const {
@@ -117,6 +104,16 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
     } = useComplianceApiV1AssignmentsConnectionCreate(
         String(id),
         { connectionId: [transfer.connectionID] },
+        {},
+        false
+    )
+    const {
+        sendNow: sendEnableAll,
+        isLoading: enableAllLoading,
+        isExecuted: enableAllExecuted,
+    } = useComplianceApiV1AssignmentsConnectionCreate(
+        String(id),
+        { auto_assign: !allEnable },
         {},
         false
     )
@@ -173,17 +170,6 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
             refreshList()
         }
     }, [enableExecuted, disableExecuted, enableLoading, disableLoading])
-
-    useEffect(() => {
-        if (assignments) {
-            const auto = assignments.connections?.filter(
-                (a) => a.status === false
-            )
-            if (auto?.length === 0) {
-                setAllEnable(true)
-            } else setAllEnable(false)
-        }
-    }, [assignments, open])
 
     return (
         <>
@@ -244,30 +230,42 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
                                     a.providerConnectionName
                             ) || []
                         }
+                        fullWidth
                     >
-                        <Flex justifyContent="end" className="gap-x-2">
-                            <Button
-                                variant="secondary"
-                                onClick={() => {
-                                    setTransfer({
-                                        connectionID: 'all',
-                                        status: false,
-                                    })
-                                }}
-                            >
-                                Disable All
-                            </Button>
-                            <Button
-                                variant="secondary"
-                                onClick={() => {
-                                    setTransfer({
-                                        connectionID: 'all',
-                                        status: true,
-                                    })
-                                }}
-                            >
-                                Enable All
-                            </Button>
+                        <Flex>
+                            <Flex className="gap-x-2 w-fit">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setTransfer({
+                                            connectionID: 'all',
+                                            status: false,
+                                        })
+                                    }}
+                                >
+                                    Disable All
+                                </Button>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setTransfer({
+                                            connectionID: 'all',
+                                            status: true,
+                                        })
+                                    }}
+                                >
+                                    Enable All
+                                </Button>
+                            </Flex>
+                            <Flex className="w-fit gap-2">
+                                <Text className="text-gray-800">
+                                    Auto enable
+                                </Text>
+                                <Switch
+                                    checked={allEnable}
+                                    onClick={() => sendEnableAll()}
+                                />
+                            </Flex>
                         </Flex>
                     </Table>
                 )}
