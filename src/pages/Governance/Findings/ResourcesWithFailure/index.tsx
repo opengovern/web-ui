@@ -1,6 +1,10 @@
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
-import { Flex } from '@tremor/react'
-import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
+import { Flex, Text } from '@tremor/react'
+import {
+    ICellRendererParams,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import { useMemo, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai/index'
 import {
@@ -13,7 +17,6 @@ import { isDemoAtom, notificationAtom } from '../../../../store'
 import FindingFilters from '../FindingsWithFailure/Filters'
 import Table, { IColumn } from '../../../../components/Table'
 import FindingDetail from '../FindingsWithFailure/Detail'
-import { severityBadge } from '../../Compliance/BenchmarkSummary/Controls'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 
 const columns = (isDemo: boolean) => {
@@ -39,6 +42,16 @@ const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                    <Text>{param.data.kaytuResourceID}</Text>
+                </Flex>
+            ),
         },
         {
             field: 'resourceLocation',
@@ -46,32 +59,49 @@ const columns = (isDemo: boolean) => {
             type: 'string',
             enableRowGroup: true,
             sortable: false,
-            hide: false,
+            hide: true,
             filter: true,
             resizable: true,
             flex: 1,
         },
         {
-            field: 'failedCount',
-            headerName: 'Failed count',
-            type: 'number',
-            hide: false,
+            field: 'providerConnectionName',
+            headerName: 'Account info',
+            type: 'string',
             enableRowGroup: true,
             sortable: false,
+            hide: false,
             filter: true,
             resizable: true,
-            width: 125,
+            flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                    <Text>{param.data.providerConnectionID}</Text>
+                </Flex>
+            ),
         },
         {
             field: 'totalCount',
-            headerName: 'Total count',
+            headerName: 'Passed findings',
             type: 'number',
             hide: false,
             enableRowGroup: true,
             sortable: false,
             filter: true,
             resizable: true,
-            width: 125,
+            width: 140,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex className="h-full">
+                    <Text>{`${param.value - param.data.failedCount} out of ${
+                        param.value
+                    }`}</Text>
+                </Flex>
+            ),
         },
         {
             field: 'evaluatedAt',

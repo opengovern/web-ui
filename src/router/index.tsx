@@ -188,9 +188,14 @@ const authRoutes = [
         component: ServiceAdvisor,
     },
     {
-        key: 'findings',
+        key: 'findings control',
         path: '/:ws/findings',
         component: Findings,
+    },
+    {
+        key: 'findings',
+        path: '/:ws/findings/:controlId',
+        component: ControlDetail,
     },
     {
         key: 'service advisor summary',

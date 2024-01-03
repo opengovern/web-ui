@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Flex } from '@tremor/react'
+import { useNavigate } from 'react-router-dom'
+import { RowClickedEvent } from 'ag-grid-community'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
 import { SourceType } from '../../../../api/api'
 import Table from '../../../../components/Table'
@@ -8,6 +10,7 @@ import { rows } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
 import FindingFilters from '../FindingsWithFailure/Filters'
 
 export default function ControlsWithFailure() {
+    const navigate = useNavigate()
     const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
     const [connectionFilter, setConnectionFilter] = useState<string[]>([])
     const [benchmarkFilter, setBenchmarkFilter] = useState<string[]>([])
@@ -42,6 +45,11 @@ export default function ControlsWithFailure() {
                 }}
                 columns={policyColumns}
                 rowData={rows(controls?.records)}
+                onRowClicked={(event: RowClickedEvent) => {
+                    if (event.data) {
+                        navigate(event.data.id)
+                    }
+                }}
             />
         </Flex>
     )

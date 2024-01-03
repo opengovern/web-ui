@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -1198,10 +1199,21 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding {
+    connector?: SourceType
     evaluatedAt?: string
     failedCount?: number
     findings?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
     kaytuResourceID?: string
+    /**
+     * Connection ID
+     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
+     */
+    providerConnectionID?: string
+    /**
+     * Connection ID
+     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
+     */
+    providerConnectionName?: string
     resourceLocation?: string
     resourceName?: string
     resourceType?: string
