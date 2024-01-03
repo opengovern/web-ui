@@ -28,19 +28,23 @@ export const benchmarkChecks = (
     const high = ben?.checks?.highCount || 0
     const medium = ben?.checks?.mediumCount || 0
     const low = ben?.checks?.lowCount || 0
-    const passed = ben?.checks?.passedCount || 0
-    const unknown = ben?.checks?.unknownCount || 0
+    const none = ben?.checks?.noneCount || 0
 
-    const total = critical + high + medium + low + passed + unknown
-    const failed = critical + high + medium + low
+    const total =
+        critical +
+        high +
+        medium +
+        low +
+        none +
+        (ben?.conformanceStatusSummary?.okCount || 0)
+    const failed = critical + high + medium + low + none
 
     return {
         critical,
         high,
         medium,
         low,
-        passed,
-        unknown,
+        none,
         total,
         failed,
     }
@@ -89,7 +93,8 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                         <Text>Security score:</Text>
                         <Text className="font-semibold">
                             {(
-                                (benchmarkChecks(benchmark).passed /
+                                ((benchmark?.conformanceStatusSummary
+                                    ?.okCount || 0) /
                                     benchmarkChecks(benchmark).total || 0) * 100
                             ).toFixed(2)}{' '}
                             %
@@ -110,16 +115,17 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                             (benchmarkChecks(benchmark).low /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
-                            (benchmarkChecks(benchmark).passed /
+                            1,
+                            ((benchmark?.conformanceStatusSummary?.okCount ||
+                                0) /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 0,
                             benchmarkChecks(benchmark).critical +
                                 benchmarkChecks(benchmark).high +
                                 benchmarkChecks(benchmark).medium +
-                                benchmarkChecks(benchmark).low +
-                                benchmarkChecks(benchmark).passed >
+                                benchmarkChecks(benchmark).low >
                             0
-                                ? (benchmarkChecks(benchmark).unknown /
+                                ? (benchmarkChecks(benchmark).none /
                                       benchmarkChecks(benchmark).total) *
                                       100 || 0
                                 : 100,
@@ -128,18 +134,36 @@ export default function ComplianceCard({ benchmark }: IComplianceCard) {
                             ((benchmarkChecks(benchmark).critical +
                                 benchmarkChecks(benchmark).high +
                                 benchmarkChecks(benchmark).medium +
-                                benchmarkChecks(benchmark).low) /
+                                benchmarkChecks(benchmark).low +
+                                (benchmark?.conformanceStatusSummary?.okCount ||
+                                    0) +
+                                1) /
                                 benchmarkChecks(benchmark).total) *
                                 100 || 1
                         }
                         showLabels={false}
                         colors={[
-                            'rose',
-                            'orange',
-                            'amber',
-                            'yellow',
-                            'emerald',
-                            'slate',
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            '#6E120B',
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            '#CA2B1D',
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            '#EE9235',
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            '#F4C744',
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            '#000',
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            '#54B584',
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            '#9BA2AE',
                         ]}
                     />
                     <Flex

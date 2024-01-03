@@ -161,7 +161,7 @@ export default function SingleMetric({
         return (
             !resourceId &&
             activeTimeRange.end.format('DD-MM-YYYY') ===
-                dayjs().format('DD-MM-YYYY')
+                dayjs().utc().format('DD-MM-YYYY')
         )
     }
 

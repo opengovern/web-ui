@@ -8,17 +8,22 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import {
-    useOnboardApiV1CredentialAutoonboardCreate,
-    useOnboardApiV1CredentialDelete,
-    useOnboardApiV1CredentialDetail,
-} from '../../../../../../../api/onboard.gen'
+import { useOnboardApiV1CredentialDetail } from '../../../../../../../api/onboard.gen'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+} from '../../../../../../../api/api'
 import { dateDisplay } from '../../../../../../../utilities/dateDisplay'
+import {
+    useIntegrationApiV1CredentialDelete,
+    useIntegrationApiV1CredentialsAwsAutoonboardCreate,
+} from '../../../../../../../api/integration.gen'
 
 interface IOrgInfo {
-    data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
+    data:
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential
+        | undefined
     open: boolean
     onClose: () => void
     isDemo: boolean
@@ -49,19 +54,23 @@ export default function OrganizationInfo({
         isExecuted: isDeleteExecuted,
         isLoading: isDeleteLoading,
         sendNow: deleteNow,
-    } = useOnboardApiV1CredentialDelete(data?.id || '', {}, false)
+    } = useIntegrationApiV1CredentialDelete(data?.id || '', {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,
         isLoading: isDiscoverLoading,
         sendNow: discoverNow,
-    } = useOnboardApiV1CredentialAutoonboardCreate(data?.id || '', {}, false)
+    } = useIntegrationApiV1CredentialsAwsAutoonboardCreate(
+        data?.id || '',
+        {},
+        false
+    )
 
-    useEffect(() => {
-        if (isDeleteExecuted && !isDeleteLoading) {
-            onClose()
-        }
-    }, [isDeleteLoading])
+    // useEffect(() => {
+    //     if (isDeleteExecuted && !isDeleteLoading) {
+    //         onClose()
+    //     }
+    // }, [isDeleteLoading])
 
     useEffect(() => {
         if (isDiscoverExecuted && !isDiscoverLoading) {
@@ -352,9 +361,9 @@ export default function OrganizationInfo({
                     <Button
                         variant="secondary"
                         color="rose"
-                        loading={isDeleteExecuted && isDeleteLoading}
+                        // loading={isDeleteExecuted && isDeleteLoading}
                         disabled={isDiscoverExecuted && isDiscoverLoading}
-                        onClick={deleteNow}
+                        // onClick={deleteNow}
                     >
                         Delete
                     </Button>
@@ -362,7 +371,7 @@ export default function OrganizationInfo({
                     <Button
                         className="ml-3"
                         loading={isDiscoverExecuted && isDiscoverLoading}
-                        disabled={isDeleteExecuted && isDeleteLoading}
+                        // disabled={isDeleteExecuted && isDeleteLoading}
                         onClick={discoverNow}
                     >
                         Discover New Accounts

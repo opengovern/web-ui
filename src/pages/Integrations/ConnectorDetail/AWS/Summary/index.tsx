@@ -4,13 +4,14 @@ import { numericDisplay } from '../../../../../utilities/numericDisplay'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
     GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
 } from '../../../../../api/api'
 import OnboardCard from '../../../../../components/Cards/OnboardCard'
 
 interface IAWSSummary {
     metricsLoading: boolean
     credential:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse
         | undefined
     credentialLoading: boolean
     metrics: GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics | undefined

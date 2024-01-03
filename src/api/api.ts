@@ -457,6 +457,13 @@ export interface GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding {
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSummary {
     accountId?: string
     accountName?: string
+    conformanceStatusesCount?: {
+        error?: number
+        failed?: number
+        info?: number
+        passed?: number
+        skip?: number
+    }
     lastCheckTime?: string
     securityScore?: number
     severitiesCount?: {
@@ -464,6 +471,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiAccountsFindingsSumm
         high?: number
         low?: number
         medium?: number
+        none?: number
     }
 }
 
@@ -514,6 +522,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark {
      * @example "The CIS Microsoft Azure Foundations Security Benchmark provides prescriptive guidance for establishing a secure baseline configuration for Microsoft Azure."
      */
     description?: string
+    /**
+     * Benchmark display code
+     * @example "CIS 1.4.0"
+     */
+    displayCode?: string
     /**
      * Benchmark document URI
      * @example "benchmarks/azure_cis_v140.md"
@@ -618,14 +631,32 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSumm
     control?: GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[]
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatus {
+    critical?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+    high?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+    low?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+    medium?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+    none?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+    total?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult {
+    passed?: number
+    total?: number
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary {
     /** Checks summary */
     checks?: TypesSeverityResult
+    /** Compliance result summary */
+    conformanceStatusSummary?: TypesConformanceStatusSummary
     /**
      * Cloud providers
      * @example ["[Azure]"]
      */
     connectors?: SourceType[]
+    /** Controls severity status */
+    controlsSeverityStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatus
     /**
      * Benchmark description
      * @example "The CIS Microsoft Azure Foundations Security Benchmark provides prescriptive guidance for establishing a secure baseline configuration for Microsoft Azure."
@@ -651,8 +682,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example "success"
      */
     lastJobStatus?: string
-    /** Compliance result summary */
-    result?: TypesComplianceResultSummary
     /** Tags */
     tags?: Record<string, string[]>
     /**
@@ -678,6 +707,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapo
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
+    /** @example "To enable multi-factor authentication for a user, run the following command..." */
+    cliRemediation?: string
     /** @example "Azure" */
     connector?: SourceType
     /** @example "2020-01-01T00:00:00Z" */
@@ -694,6 +725,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiControl {
     id?: string
     /** @example true */
     managed?: boolean
+    /** @example "To enable multi-factor authentication for a user, run the following command..." */
+    manualRemediation?: string
     /** @example true */
     manualVerification?: boolean
     /** @example "Non-compliance to this control could result in several costs including..." */
@@ -739,6 +772,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     benchmarkID?: string
     /** @example 1 */
     complianceJobID?: number
+    /** @example "alarm" */
+    conformanceStatus?: TypesConformanceStatus
     /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
     connectionID?: string
     /** @example "Azure" */
@@ -746,6 +781,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     /** @example "azure_cis_v140_7_5" */
     controlID?: string
     controlTitle?: string
+    es_id?: string
+    es_index?: string
     /** @example 1589395200 */
     evaluatedAt?: number
     /** @example "steampipe-v0.5" */
@@ -754,6 +791,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     kaytuResourceID?: string
     /** @example 1 */
     noOfOccurrences?: number
+    /** @example ["Azure CIS v1.4.0"] */
+    parentBenchmarkDisplayCodes?: string[]
     /** @example ["Azure CIS v1.4.0"] */
     parentBenchmarkNames?: string[]
     parentBenchmarks?: string[]
@@ -771,8 +810,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     providerConnectionName?: string
     /** @example "The VM is not using managed disks" */
     reason?: string
-    /** Resource collection */
-    resourceCollection?: string
     /** @example "/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1" */
     resourceID?: string
     /** @example "eastus" */
@@ -783,8 +820,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
     resourceType?: string
     /** @example "Virtual Machine" */
     resourceTypeName?: string
-    /** @example "alarm" */
-    result?: TypesComplianceResult
     /** @example "low" */
     severity?: TypesFindingSeverity
     sortKey?: any[]
@@ -793,6 +828,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFinding {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata {
+    /**
+     * Count
+     * @example 10
+     */
+    count?: number
     /**
      * Display Name
      * @example "displayName"
@@ -811,6 +851,8 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      * @example ["azure_cis_v140"]
      */
     benchmarkID?: string[]
+    /** @example ["alarm"] */
+    conformanceStatus?: TypesConformanceStatus[]
     /**
      * Connection ID
      * @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"]
@@ -827,11 +869,6 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      */
     controlID?: string[]
     /**
-     * Resource Collection ID
-     * @example ["example-rc"]
-     */
-    resourceCollection?: string[]
-    /**
      * Resource unique identifier
      * @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"]
      */
@@ -845,19 +882,37 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters {
      * Severity
      * @example ["low"]
      */
-    severity?: string[]
-    /** @example ["alarm"] */
-    status?: TypesComplianceResult[]
+    severity?: TypesFindingSeverity[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata {
     benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     connectionID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     connector?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     controlID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     resourceCollection?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
     severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilterWithMetadata[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse {
+    failedConnectionCount?: number
+    failedControlCount?: number
+    failedFindingsCount?: number
+    failedResourceCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort {
+    benchmarkID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    conformanceStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    connectionID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    connector?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    controlID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceTypeID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    severity?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse {
@@ -867,7 +922,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsS
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse {
     benchmarkSummary?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary[]
     totalChecks?: TypesSeverityResult
-    totalResult?: TypesComplianceResultSummary
+    totalConformanceStatusSummary?: TypesConformanceStatusSummary
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
@@ -875,7 +930,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest {
     filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters
     /** @example 100 */
     limit?: number
-    sort?: Record<string, string>
+    sort?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingsSort[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse {
@@ -1043,6 +1098,19 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoin
     value?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest {
+    afterSortKey?: any[]
+    filters?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsFilters
+    /** @example 100 */
+    limit?: number
+    sort?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsSort[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse {
+    resourceFindings?: GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding[]
+    totalCount?: number
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     /** @example "Azure" */
     connector?: string
@@ -1069,7 +1137,55 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
     updatedAt?: string
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding {
+    evaluatedAt?: string
+    failedCount?: number
+    findings?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
+    kaytuResourceID?: string
+    resourceLocation?: string
+    resourceName?: string
+    resourceType?: string
+    sortKey?: any[]
+    totalCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsFilters {
+    /** @example ["azure_cis_v140"] */
+    benchmarkID?: string[]
+    /** @example ["alarm"] */
+    conformanceStatus?: TypesConformanceStatus[]
+    /** @example ["8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"] */
+    connectionID?: string[]
+    /** @example ["Azure"] */
+    connector?: SourceType[]
+    /** @example ["azure_cis_v140_7_5"] */
+    controlID?: string[]
+    /** @example ["example-rc"] */
+    resourceCollection?: string[]
+    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines/vm-1"] */
+    resourceID?: string[]
+    /** @example ["/subscriptions/123/resourceGroups/rg-1/providers/Microsoft.Compute/virtualMachines"] */
+    resourceTypeID?: string[]
+    /** @example ["low"] */
+    severity?: TypesFindingSeverity[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFindingsSort {
+    failedCount?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    kaytuResourceID?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceLocation?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceName?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+    resourceType?: GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSummary {
+    conformanceStatusesCount?: {
+        error?: number
+        failed?: number
+        info?: number
+        passed?: number
+        skip?: number
+    }
     securityScore?: number
     serviceLabel?: string
     serviceName?: string
@@ -1079,8 +1195,12 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiServiceFindingsSumma
         low?: number
         medium?: number
         none?: number
-        passed?: number
     }
+}
+
+export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection {
+    SortDirectionAscending = 'asc',
+    SortDirectionDescending = 'desc',
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
@@ -1090,6 +1210,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
     field?: string
     resourceType?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType
     service?: string
+    totalCount?: number
 }
 
 export enum GithubComKaytuIoKaytuEnginePkgDescribeApiEvaluationType {
@@ -1112,24 +1233,15 @@ export interface GithubComKaytuIoKaytuEnginePkgDescribeApiJob {
     createdAt?: string
     failureReason?: string
     id?: number
-    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus
+    status?: string
     title?: string
     type?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobType
     updatedAt?: string
 }
 
-export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus {
-    JobStatusCreated = 'created',
-    JobStatusQueued = 'queued',
-    JobStatusInProgress = 'in_progress',
-    JobStatusSuccessful = 'successful',
-    JobStatusFailure = 'failure',
-    JobStatusTimeout = 'timeout',
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary {
     count?: number
-    status?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus
+    status?: string
     type?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobType
 }
 
@@ -1143,6 +1255,16 @@ export enum GithubComKaytuIoKaytuEnginePkgDescribeApiJobType {
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes {
     awsResourceTypes?: string[]
     azureResourceTypes?: string[]
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest {
+    hours?: number
+    pageEnd?: number
+    pageStart?: number
+    sortBy?: string
+    sortOrder?: string
+    statusFilter?: string[]
+    typeFilters?: string[]
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse {
@@ -2049,22 +2171,6 @@ export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusRespon
     workspaceCreationStatus?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapProgress
 }
 
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest {
-    newName?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest {
-    newOrgID?: number
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest {
-    newOwnerUserID?: string
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest {
-    newName?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
-}
-
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest {
     name?: string
     organization_id?: number
@@ -2102,36 +2208,6 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier {
     TierFree = 'FREE',
     TierTeams = 'TEAMS',
     TierEnterprise = 'ENTERPRISE',
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace {
-    /** @example "kaytu" */
-    aws_unique_id?: string
-    /** @example "kaytu" */
-    aws_user_arn?: string
-    /** @example "2023-05-17T14:39:02.707659Z" */
-    createdAt?: string
-    /** @example "ws-698542025141040315" */
-    id?: string
-    is_bootstrap_input_finished?: boolean
-    is_created?: boolean
-    /** @example "kaytu" */
-    name?: string
-    organization?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization
-    /** @example "google-oauth2|204590896945502695694" */
-    ownerId?: string
-    /** @example "sm" */
-    size?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize
-    /** @example "PROVISIONED" */
-    status?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiStateID
-    /** @example "ENTERPRISE" */
-    tier?: GithubComKaytuIoKaytuEnginePkgWorkspaceApiTier
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits {
-    maxConnections?: number
-    maxResources?: number
-    maxUsers?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage {
@@ -2186,6 +2262,367 @@ export enum GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceSize {
     SizeLG = 'lg',
 }
 
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSCredentialConfig {
+    accountID?: string
+    assumeRoleName?: string
+    externalId?: string
+    healthCheckPolicies?: string[]
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCredentialConfig {
+    clientId: string
+    clientSecret: string
+    objectId: string
+    tenantId: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics {
+    /**
+     * @min 0
+     * @example 20
+     */
+    connectionsEnabled?: number
+    /**
+     * @min 0
+     * @example 15
+     */
+    healthyConnections?: number
+    /**
+     * @min 0
+     * @example 5
+     */
+    inProgressConnections?: number
+    /**
+     * @min 0
+     * @example 20
+     */
+    totalConnections?: number
+    /**
+     * @min 0
+     * @example 5
+     */
+    unhealthyConnections?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection {
+    assetDiscovery?: boolean
+    /** @example "scheduled" */
+    assetDiscoveryMethod?: SourceAssetDiscoveryMethodType
+    /** @example "Azure" */
+    connector?: SourceType
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
+    cost?: number
+    credential?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential
+    /** @example "7r6123ac-ca1c-434f-b1a3-91w2w9d277c8" */
+    credentialID?: string
+    credentialName?: string
+    /** @example "manual" */
+    credentialType?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredentialType
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
+    dailyCostAtEndTime?: number
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
+    dailyCostAtStartTime?: number
+    describeJobRunning?: boolean
+    /** @example "This is an example connection" */
+    description?: string
+    /** @example "johndoe@example.com" */
+    email?: string
+    healthReason?: string
+    /** @example "healthy" */
+    healthState?: SourceHealthStatus
+    /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
+    id?: string
+    /** @example "2023-05-07T00:00:00Z" */
+    lastHealthCheckTime?: string
+    /** @example "2023-05-07T00:00:00Z" */
+    lastInventory?: string
+    /** @example "enabled" */
+    lifecycleState?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectionLifecycleState
+    metadata?: Record<string, any>
+    /**
+     * @min 0
+     * @max 1000000
+     * @example 100
+     */
+    oldResourceCount?: number
+    /** @example "2023-05-07T00:00:00Z" */
+    onboardDate?: string
+    /** @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8" */
+    providerConnectionID?: string
+    /** @example "example-connection" */
+    providerConnectionName?: string
+    /**
+     * @min 0
+     * @max 1000000
+     * @example 100
+     */
+    resourceCount?: number
+    spendDiscovery?: boolean
+}
+
+export enum GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectionLifecycleState {
+    ConnectionLifecycleStateOnboard = 'ONBOARD',
+    ConnectionLifecycleStateDisabled = 'DISABLED',
+    ConnectionLifecycleStateDiscovered = 'DISCOVERED',
+    ConnectionLifecycleStateInProgress = 'IN_PROGRESS',
+    ConnectionLifecycleStateArchived = 'ARCHIVED',
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount {
+    /** @example true */
+    allowNewConnections?: boolean
+    /** @example false */
+    autoOnboardSupport?: boolean
+    /**
+     * @min 0
+     * @example 1024
+     */
+    connection_count?: number
+    /** @example "This is a long volume of words for just showing the case of the description for the demo and checking value purposes only and has no meaning whatsoever" */
+    description?: string
+    direction?: SourceConnectorDirectionType
+    /** @example "Azure" */
+    label?: string
+    /** @example "https://kaytu.io/logo.png" */
+    logo?: string
+    /**
+     * @min 0
+     * @example 10000
+     */
+    maxConnectionLimit?: number
+    /** @example "Azure" */
+    name?: SourceType
+    /** @example "This is a short Description for this connector" */
+    shortDescription?: string
+    /** @example "enabled" */
+    status?: SourceConnectorStatus
+    tags?: Record<string, any>
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest {
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSCredentialConfig
+    description?: string
+    email?: string
+    name?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest {
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSCredentialConfig
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest {
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCredentialConfig
+    description?: string
+    name?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse {
+    id?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse {
+    connections?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    id?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential {
+    /**
+     * @min 0
+     * @max 1000
+     * @example 0
+     */
+    archived_connections?: number
+    /** @example false */
+    autoOnboardEnabled?: boolean
+    config?: any
+    connections?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    /** @example "AWS" */
+    connectorType?: SourceType
+    /** @example "manual-aws-org" */
+    credentialType?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredentialType
+    /**
+     * @min 0
+     * @max 1000
+     * @example 0
+     */
+    disabled_connections?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 50
+     */
+    discovered_connections?: number
+    /** @example true */
+    enabled?: boolean
+    /** @example "" */
+    healthReason?: string
+    /** @example "healthy" */
+    healthStatus?: SourceHealthStatus
+    /** @example "1028642a-b22e-26ha-c5h2-22nl254678m5" */
+    id?: string
+    /**
+     * @format date-time
+     * @example "2023-06-03T12:21:33.406928Z"
+     */
+    lastHealthCheckTime?: string
+    metadata?: Record<string, any>
+    /** @example "a-1mahsl7lzk" */
+    name?: string
+    /**
+     * @format date-time
+     * @example "2023-06-03T12:21:33.406928Z"
+     */
+    onboardDate?: string
+    /**
+     * @min 0
+     * @max 1000
+     * @example 250
+     */
+    onboard_connections?: number
+    spendDiscovery?: boolean
+    /**
+     * @min 0
+     * @max 1000
+     * @example 300
+     */
+    total_connections?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 50
+     */
+    unhealthy_connections?: number
+    version?: number
+}
+
+export enum GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredentialType {
+    CredentialTypeAutoAzure = 'auto-azure',
+    CredentialTypeAutoAws = 'auto-aws',
+    CredentialTypeManualAwsOrganization = 'manual-aws-org',
+    CredentialTypeManualAzureSpn = 'manual-azure-spn',
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse {
+    /**
+     * @min 0
+     * @max 1000
+     * @example 10
+     */
+    connectionCount?: number
+    connections?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    /**
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalArchivedCount?: number
+    /**
+     * @min 0
+     * @max 10000000
+     * @example 1000
+     */
+    totalCost?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalDisabledCount?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalDiscoveredCount?: number
+    /**
+     * @min 0
+     * @max 1000000
+     * @example 100
+     */
+    totalOldResourceCount?: number
+    /**
+     * Also includes in-progress
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalOnboardedCount?: number
+    /**
+     * @min 0
+     * @max 1000000
+     * @example 100
+     */
+    totalResourceCount?: number
+    /**
+     * @min 0
+     * @max 100
+     * @example 10
+     */
+    totalUnhealthyCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse {
+    credentials?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
+    /**
+     * @min 0
+     * @max 20
+     * @example 5
+     */
+    totalCredentialCount?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest {
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAWSCredentialConfig
+    name?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest {
+    config?: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityAzureCredentialConfig
+    name?: string
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest {
+    end_time_epoch_millis?: number
+    start_time_epoch_millis?: number
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersResponse {
+    meters?: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeter[]
+}
+
+export interface GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeter {
+    isTotal?: boolean
+    type?: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeterType
+    value?: number
+    workspaceName?: string
+}
+
+export enum GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeterType {
+    MeterTypeInventoryDiscoveryJobCount = 'InventoryDiscoveryJobCount',
+    MeterTypeCostDiscoveryJobCount = 'CostDiscoveryJobCount',
+    MeterTypeMetricEvaluationCount = 'MetricEvaluationCount',
+    MeterTypeInsightEvaluationCount = 'InsightEvaluationCount',
+    MeterTypeBenchmarkEvaluationCount = 'BenchmarkEvaluationCount',
+    MeterTypeTotalFindings = 'TotalFindings',
+    MeterTypeTotalResource = 'TotalResource',
+    MeterTypeTotalUsers = 'TotalUsers',
+    MeterTypeTotalApiKeys = 'TotalApiKeys',
+    MeterTypeTotalRules = 'TotalRules',
+    MeterTypeAlertCount = 'AlertCount',
+}
+
 export interface KaytuResourceCollectionFilter {
     account_ids?: string[]
     connectors?: string[]
@@ -2222,15 +2659,15 @@ export enum SourceType {
     CloudAzure = 'Azure',
 }
 
-export enum TypesComplianceResult {
-    ComplianceResultOK = 'ok',
-    ComplianceResultALARM = 'alarm',
-    ComplianceResultINFO = 'info',
-    ComplianceResultSKIP = 'skip',
-    ComplianceResultERROR = 'error',
+export enum TypesConformanceStatus {
+    ConformanceStatusOK = 'ok',
+    ConformanceStatusALARM = 'alarm',
+    ConformanceStatusINFO = 'info',
+    ConformanceStatusSKIP = 'skip',
+    ConformanceStatusERROR = 'error',
 }
 
-export interface TypesComplianceResultSummary {
+export interface TypesConformanceStatusSummary {
     /** @example 1 */
     alarmCount?: number
     /** @example 1 */
@@ -2245,7 +2682,6 @@ export interface TypesComplianceResultSummary {
 
 export enum TypesFindingSeverity {
     FindingSeverityNone = 'none',
-    FindingSeverityPassed = 'passed',
     FindingSeverityLow = 'low',
     FindingSeverityMedium = 'medium',
     FindingSeverityHigh = 'high',
@@ -2262,9 +2698,7 @@ export interface TypesSeverityResult {
     /** @example 1 */
     mediumCount?: number
     /** @example 1 */
-    passedCount?: number
-    /** @example 1 */
-    unknownCount?: number
+    noneCount?: number
 }
 
 import axios, {
@@ -3064,6 +3498,8 @@ export class Api<
         apiV1AssignmentsConnectionCreate: (
             benchmarkId: string,
             query?: {
+                /** Auto enable benchmark for connections */
+                auto_assign?: boolean
                 /** Connection ID or 'all' for everything */
                 connectionId?: string[]
                 /** Connection group */
@@ -3469,6 +3905,28 @@ export class Api<
             }),
 
         /**
+         * @description Retrieving KPIs for findings.
+         *
+         * @tags compliance
+         * @name ApiV1FindingsKpiList
+         * @summary Get finding KPIs
+         * @request GET:/compliance/api/v1/findings/kpi
+         * @secure
+         */
+        apiV1FindingsKpiList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
+                any
+            >({
+                path: `/compliance/api/v1/findings/kpi`,
+                method: 'GET',
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
          * @description Retrieving a single finding
          *
          * @tags compliance
@@ -3516,8 +3974,6 @@ export class Api<
                 connectionId?: string[]
                 /** Connection groups to filter by  */
                 connectionGroup?: string[]
-                /** Resource collection IDs to filter by */
-                resourceCollection?: string[]
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** BenchmarkID */
@@ -3525,13 +3981,14 @@ export class Api<
                 /** ControlID */
                 controlId?: string[]
                 /** Severities to filter by defaults to all severities except passed */
-                severities?: (
-                    | 'none'
-                    | 'passed'
-                    | 'low'
-                    | 'medium'
-                    | 'high'
-                    | 'critical'
+                severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+                /** ConformanceStatus to filter by defaults to all conformanceStatus except passed */
+                conformanceStatus?: (
+                    | 'ok'
+                    | 'alarm'
+                    | 'info'
+                    | 'skip'
+                    | 'error'
                 )[]
             },
             params: RequestParams = {}
@@ -3635,14 +4092,7 @@ export class Api<
                 /** Connector type to filter by */
                 connector?: ('' | 'AWS' | 'Azure')[]
                 /** Severities to filter by defaults to all severities except passed */
-                severities?: (
-                    | 'none'
-                    | 'passed'
-                    | 'low'
-                    | 'medium'
-                    | 'high'
-                    | 'critical'
-                )[]
+                severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
             },
             params: RequestParams = {}
         ) =>
@@ -3978,6 +4428,32 @@ export class Api<
                 type: ContentType.Json,
                 ...params,
             }),
+
+        /**
+         * @description Retrieving list of resource findings
+         *
+         * @tags compliance
+         * @name ApiV1ResourceFindingsCreate
+         * @summary List resource findings
+         * @request POST:/compliance/api/v1/resource_findings
+         * @secure
+         */
+        apiV1ResourceFindingsCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
+                any
+            >({
+                path: `/compliance/api/v1/resource_findings`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
     }
     costEstimator = {
         /**
@@ -4029,6 +4505,462 @@ export class Api<
                 path: `/cost_estimator/api/v1/cost/azure`,
                 method: 'GET',
                 query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+    }
+    integration = {
+        /**
+         * @description Creating AWS source [standalone]
+         *
+         * @tags onboard
+         * @name ApiV1ConnectionsAwsCreate
+         * @summary Create AWS connection [standalone]
+         * @request POST:/integration/api/v1/connections/aws
+         * @secure
+         */
+        apiV1ConnectionsAwsCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
+                any
+            >({
+                path: `/integration/api/v1/connections/aws`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving a list of connections summaries
+         *
+         * @tags connections
+         * @name ApiV1ConnectionsSummariesList
+         * @summary List connections summaries
+         * @request GET:/integration/api/v1/connections/summaries
+         * @secure
+         */
+        apiV1ConnectionsSummariesList: (
+            query?: {
+                /** Filter costs */
+                filter?: string
+                /** Connector */
+                connector?: ('' | 'AWS' | 'Azure')[]
+                /** Connection IDs */
+                connectionId?: string[]
+                /** Resource collection IDs to filter by */
+                resourceCollection?: string[]
+                /** Connection Groups */
+                connectionGroups?: string[]
+                /** lifecycle state filter */
+                lifecycleState?:
+                    | 'DISABLED'
+                    | 'DISCOVERED'
+                    | 'IN_PROGRESS'
+                    | 'ONBOARD'
+                    | 'ARCHIVED'
+                /** health state filter */
+                healthState?: 'healthy' | 'unhealthy'
+                /** page size - default is 20 */
+                pageSize?: number
+                /** page number - default is 1 */
+                pageNumber?: number
+                /** start time in unix seconds */
+                startTime?: number
+                /** end time in unix seconds */
+                endTime?: number
+                /** for quicker inquiry send this parameter as false, default: true */
+                needCost?: boolean
+                /** for quicker inquiry send this parameter as false, default: true */
+                needResourceCount?: boolean
+                /** column to sort by - default is cost */
+                sortBy?:
+                    | 'onboard_date'
+                    | 'resource_count'
+                    | 'cost'
+                    | 'growth'
+                    | 'growth_rate'
+                    | 'cost_growth'
+                    | 'cost_growth_rate'
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
+                any
+            >({
+                path: `/integration/api/v1/connections/summaries`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Deleting a single connection either AWS / Azure for the given connection id. it will delete its parent credential too, if it doesn't have any other child.
+         *
+         * @tags connections
+         * @name ApiV1ConnectionsDelete
+         * @summary Delete connection
+         * @request DELETE:/integration/api/v1/connections/{connectionId}
+         * @secure
+         */
+        apiV1ConnectionsDelete: (
+            connectionId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/integration/api/v1/connections/${connectionId}`,
+                method: 'DELETE',
+                secure: true,
+                ...params,
+            }),
+
+        /**
+         * @description Get live connection health status with given connection ID for AWS.
+         *
+         * @tags connections
+         * @name ApiV1ConnectionsAwsHealthcheckDetail
+         * @summary Get AWS connection health
+         * @request GET:/integration/api/v1/connections/{connectionId}/aws/healthcheck
+         * @secure
+         */
+        apiV1ConnectionsAwsHealthcheckDetail: (
+            connectionId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+                any
+            >({
+                path: `/integration/api/v1/connections/${connectionId}/aws/healthcheck`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Get live connection health status with given connection ID for Azure.
+         *
+         * @tags connections
+         * @name ApiV1ConnectionsAzureHealthcheckDetail
+         * @summary Get Azure connection health
+         * @request GET:/integration/api/v1/connections/{connectionId}/azure/healthcheck
+         * @secure
+         */
+        apiV1ConnectionsAzureHealthcheckDetail: (
+            connectionId: string,
+            query?: {
+                /**
+                 * Whether to update metadata or not
+                 * @default true
+                 */
+                updateMetadata?: boolean
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+                any
+            >({
+                path: `/integration/api/v1/connections/${connectionId}/azure/healthcheck`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Returns list of all connectors
+         *
+         * @tags connectors
+         * @name ApiV1ConnectorsList
+         * @summary List connectors
+         * @request GET:/integration/api/v1/connectors
+         * @secure
+         */
+        apiV1ConnectorsList: (params: RequestParams = {}) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount[],
+                any
+            >({
+                path: `/integration/api/v1/connectors`,
+                method: 'GET',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving the list of metrics for catalog page.
+         *
+         * @tags integration
+         * @name ApiV1ConnectorsMetricsList
+         * @summary List catalog metrics
+         * @request GET:/integration/api/v1/connectors/metrics
+         * @secure
+         */
+        apiV1ConnectorsMetricsList: (
+            query?: {
+                /** Connector */
+                connector?: ('' | 'AWS' | 'Azure')[]
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
+                any
+            >({
+                path: `/integration/api/v1/connectors/metrics`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Remove a credential by ID
+         *
+         * @tags credentials
+         * @name ApiV1CredentialDelete
+         * @summary Delete credential
+         * @request DELETE:/integration/api/v1/credential/{credentialId}
+         * @secure
+         */
+        apiV1CredentialDelete: (
+            credentialId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/integration/api/v1/credential/${credentialId}`,
+                method: 'DELETE',
+                secure: true,
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving list of credentials with their details
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsList
+         * @summary List credentials
+         * @request GET:/integration/api/v1/credentials
+         * @secure
+         */
+        apiV1CredentialsList: (
+            query?: {
+                /** filter by connector type */
+                connector?: '' | 'AWS' | 'Azure'
+                /** filter by health status */
+                health?: 'healthy' | 'unhealthy'
+                /** filter by credential type */
+                credentialType?: (
+                    | 'auto-azure'
+                    | 'auto-aws'
+                    | 'manual-aws-org'
+                    | 'manual-azure-spn'
+                )[]
+                /**
+                 * page size
+                 * @default 50
+                 */
+                pageSize?: number
+                /**
+                 * page number
+                 * @default 1
+                 */
+                pageNumber?: number
+            },
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
+                any
+            >({
+                path: `/integration/api/v1/credentials`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Creating AWS credential, testing it and onboard its accounts (organization account)
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsAwsCreate
+         * @summary Create AWS credential and does onboarding for its accounts (organization account)
+         * @request POST:/integration/api/v1/credentials/aws
+         * @secure
+         */
+        apiV1CredentialsAwsCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
+                any
+            >({
+                path: `/integration/api/v1/credentials/aws`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Edit an aws credential by ID
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsAwsUpdate
+         * @summary Edit aws credential
+         * @request PUT:/integration/api/v1/credentials/aws/{credentialId}
+         * @secure
+         */
+        apiV1CredentialsAwsUpdate: (
+            credentialId: string,
+            config: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/integration/api/v1/credentials/aws/${credentialId}`,
+                method: 'PUT',
+                body: config,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description Onboard all available connections for an aws credential
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsAwsAutoonboardCreate
+         * @summary Onboard aws credential connections
+         * @request POST:/integration/api/v1/credentials/aws/{credentialId}/autoonboard
+         * @secure
+         */
+        apiV1CredentialsAwsAutoonboardCreate: (
+            credentialId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[],
+                any
+            >({
+                path: `/integration/api/v1/credentials/aws/${credentialId}/autoonboard`,
+                method: 'POST',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Creating Azure credential, testing it and onboard its subscriptions
+         *
+         * @tags integration
+         * @name ApiV1CredentialsAzureCreate
+         * @summary Create Azure credential and does onboarding for its subscriptions
+         * @request POST:/integration/api/v1/credentials/azure
+         * @secure
+         */
+        apiV1CredentialsAzureCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
+                any
+            >({
+                path: `/integration/api/v1/credentials/azure`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Edit an azure credential by ID
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsAzureUpdate
+         * @summary Edit azure credential
+         * @request PUT:/integration/api/v1/credentials/azure/{credentialId}
+         * @secure
+         */
+        apiV1CredentialsAzureUpdate: (
+            credentialId: string,
+            config: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<void, any>({
+                path: `/integration/api/v1/credentials/azure/${credentialId}`,
+                method: 'PUT',
+                body: config,
+                secure: true,
+                type: ContentType.Json,
+                ...params,
+            }),
+
+        /**
+         * @description Onboard all available connections for an azure credential
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsAzureAutoonboardCreate
+         * @summary Onboard azure credential connections
+         * @request POST:/integration/api/v1/credentials/azure/{credentialId}/autoonboard
+         * @secure
+         */
+        apiV1CredentialsAzureAutoonboardCreate: (
+            credentialId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[],
+                any
+            >({
+                path: `/integration/api/v1/credentials/azure/${credentialId}/autoonboard`,
+                method: 'POST',
+                secure: true,
+                format: 'json',
+                ...params,
+            }),
+
+        /**
+         * @description Retrieving credential details by credential ID
+         *
+         * @tags credentials
+         * @name ApiV1CredentialsDetail
+         * @summary Get Credential
+         * @request GET:/integration/api/v1/credentials/{credentialId}
+         * @secure
+         */
+        apiV1CredentialsDetail: (
+            credentialId: string,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+                any
+            >({
+                path: `/integration/api/v1/credentials/${credentialId}`,
+                method: 'GET',
                 secure: true,
                 format: 'json',
                 ...params,
@@ -5441,18 +6373,13 @@ export class Api<
          * No description
          *
          * @tags scheduler
-         * @name ApiV1JobsList
+         * @name ApiV1JobsCreate
          * @summary Lists all jobs
-         * @request GET:/schedule/api/v1/jobs
+         * @request POST:/schedule/api/v1/jobs
          * @secure
          */
-        apiV1JobsList: (
-            query?: {
-                /** Limit */
-                limit?: number
-                /** Hours */
-                hours?: number
-            },
+        apiV1JobsCreate: (
+            request: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
             params: RequestParams = {}
         ) =>
             this.request<
@@ -5460,9 +6387,10 @@ export class Api<
                 any
             >({
                 path: `/schedule/api/v1/jobs`,
-                method: 'GET',
-                query: query,
+                method: 'POST',
+                body: request,
                 secure: true,
+                type: ContentType.Json,
                 format: 'json',
                 ...params,
             }),
@@ -5692,6 +6620,33 @@ export class Api<
                 ...params,
             }),
     }
+    subscription = {
+        /**
+         * No description
+         *
+         * @tags subscription
+         * @name ApiV1MeteringListCreate
+         * @summary Get meters
+         * @request POST:/subscription/api/v1/metering/list
+         * @secure
+         */
+        apiV1MeteringListCreate: (
+            request: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,
+            params: RequestParams = {}
+        ) =>
+            this.request<
+                GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersResponse,
+                any
+            >({
+                path: `/subscription/api/v1/metering/list`,
+                method: 'POST',
+                body: request,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
+    }
     workspace = {
         /**
          * No description
@@ -5765,75 +6720,6 @@ export class Api<
             }),
 
         /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1OrganizationList
-         * @summary List all organizations
-         * @request GET:/workspace/api/v1/organization
-         * @secure
-         */
-        apiV1OrganizationList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization[],
-                any
-            >({
-                path: `/workspace/api/v1/organization`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1OrganizationCreate
-         * @summary Create an organization
-         * @request POST:/workspace/api/v1/organization
-         * @secure
-         */
-        apiV1OrganizationCreate: (
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiOrganization,
-                any
-            >({
-                path: `/workspace/api/v1/organization`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1OrganizationDelete
-         * @summary Create an organization
-         * @request DELETE:/workspace/api/v1/organization/{organizationId}
-         * @secure
-         */
-        apiV1OrganizationDelete: (
-            organizationId: number,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/organization/${organizationId}`,
-                method: 'DELETE',
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
          * @description Returns workspace created
          *
          * @tags workspace
@@ -5903,98 +6789,6 @@ export class Api<
             }),
 
         /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspaceNameCreate
-         * @summary Change name of workspace
-         * @request POST:/workspace/api/v1/workspace/{workspace_id}/name
-         * @secure
-         */
-        apiV1WorkspaceNameCreate: (
-            workspaceId: string,
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceNameRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspace/${workspaceId}/name`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspaceOrganizationCreate
-         * @summary Change organization of workspace
-         * @request POST:/workspace/api/v1/workspace/{workspace_id}/organization
-         * @secure
-         */
-        apiV1WorkspaceOrganizationCreate: (
-            workspaceId: string,
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOrganizationRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspace/${workspaceId}/organization`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspaceOwnerCreate
-         * @summary Change ownership of workspace
-         * @request POST:/workspace/api/v1/workspace/{workspace_id}/owner
-         * @secure
-         */
-        apiV1WorkspaceOwnerCreate: (
-            workspaceId: string,
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceOwnershipRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspace/${workspaceId}/owner`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspaceTierCreate
-         * @summary Change Tier of workspace
-         * @request POST:/workspace/api/v1/workspace/{workspace_id}/tier
-         * @secure
-         */
-        apiV1WorkspaceTierCreate: (
-            workspaceId: string,
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiChangeWorkspaceTierRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspace/${workspaceId}/tier`,
-                method: 'POST',
-                body: request,
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
          * @description Returns all workspaces with owner id
          *
          * @tags workspace
@@ -6009,77 +6803,6 @@ export class Api<
                 any
             >({
                 path: `/workspace/api/v1/workspaces`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspacesByidDetail
-         * @summary Get workspace
-         * @request GET:/workspace/api/v1/workspaces/byid/{workspace_id}
-         * @secure
-         */
-        apiV1WorkspacesByidDetail: (
-            workspaceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspace,
-                any
-            >({
-                path: `/workspace/api/v1/workspaces/byid/${workspaceId}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get workspace with workspace name
-         *
-         * @tags workspace
-         * @name ApiV1WorkspacesBynameDetail
-         * @summary Get workspace for workspace service
-         * @request GET:/workspace/api/v1/workspaces/byname/{workspace_name}
-         * @secure
-         */
-        apiV1WorkspacesBynameDetail: (
-            workspaceName: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspaces/byname/${workspaceName}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
-                ...params,
-            }),
-
-        /**
-         * No description
-         *
-         * @tags workspace
-         * @name ApiV1WorkspacesLimitsByidDetail
-         * @summary Get workspace limits
-         * @request GET:/workspace/api/v1/workspaces/limits/byid/{workspace_id}
-         * @secure
-         */
-        apiV1WorkspacesLimitsByidDetail: (
-            workspaceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimits,
-                any
-            >({
-                path: `/workspace/api/v1/workspaces/limits/byid/${workspaceId}`,
                 method: 'GET',
                 secure: true,
                 type: ContentType.Json,
@@ -6114,27 +6837,6 @@ export class Api<
                 secure: true,
                 type: ContentType.Json,
                 format: 'json',
-                ...params,
-            }),
-
-        /**
-         * @description Get workspace with workspace id
-         *
-         * @tags workspace
-         * @name ApiV1WorkspacesDetail
-         * @summary Get workspace for workspace service
-         * @request GET:/workspace/api/v1/workspaces/{workspace_id}
-         * @secure
-         */
-        apiV1WorkspacesDetail: (
-            workspaceId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<void, any>({
-                path: `/workspace/api/v1/workspaces/${workspaceId}`,
-                method: 'GET',
-                secure: true,
-                type: ContentType.Json,
                 ...params,
             }),
     }

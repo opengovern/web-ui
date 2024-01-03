@@ -84,20 +84,66 @@ code {
     gap: 8px;
 }
 
-.pretty input[type="checkbox"] {
+.pretty input[type='checkbox'] {
     margin-top: 2px;
     border-radius: 2px !important;
     /*color: #6b7280 !important;*/
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none !important;
+    --tw-ring-color: transparent !important;
 }
 
 .ag-paging-page-size {
     display: none;
 }
 
-div.selector-without-border >*{
-    border: 0;
+pre {
+    display: block;
+    padding: 8px;
+    margin: 10px 0;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-div.selector-without-shadow >*{
-    --tw-shadow: 0;
+pre code {
+    padding: 0;
+    font-size: 90%;
+    color: inherit;
+    font-family: monospace;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+code {
+    text-wrap: normal;
+    padding: 2px 4px;
+    /*font-size: 90%;*/
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+}
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace;
+    /*font-size: 1em;*/
+}
+
+code {
+    font-family: monospace;
 }

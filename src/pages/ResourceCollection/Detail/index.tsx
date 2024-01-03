@@ -43,7 +43,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
 } from '../../../api/api'
 import Chart from '../../../components/Chart'
 import {
@@ -58,13 +58,10 @@ import {
     generateItems,
 } from '../../../utilities/dateComparator'
 import SummaryCard from '../../../components/Cards/SummaryCard'
-import {
-    numberDisplay,
-    numericDisplay,
-} from '../../../utilities/numericDisplay'
+import { numberDisplay } from '../../../utilities/numericDisplay'
 import { BarChartIcon, LineChartIcon } from '../../../icons/icons'
 import { generateVisualMap, resourceTrendChart } from '../../Assets'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
 import Landscape from '../../../components/Landscape'
 import Tag from '../../../components/Tag'
 import DrawerPanel from '../../../components/DrawerPanel'
@@ -89,7 +86,7 @@ const pieData = (
 
 const barData = (
     input:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse
         | undefined
 ) => {
     const data: any[] = []
@@ -173,7 +170,7 @@ const complianceColumns: IColumn<any, any>[] = [
         ) =>
             param.data &&
             `${(
-                (benchmarkChecks(param.data).passed /
+                ((param.data?.conformanceStatusSummary?.okCount || 0) /
                     (benchmarkChecks(param.data).total || 1)) *
                 100
             ).toFixed(2)} %`,
@@ -268,7 +265,7 @@ export default function ResourceCollectionDetail() {
         resourceId || ''
     )
     const { response: accountInfo, isLoading: accountInfoLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
+        useIntegrationApiV1ConnectionsSummariesList({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             ...query,

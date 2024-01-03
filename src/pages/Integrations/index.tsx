@@ -1,19 +1,19 @@
 import { Flex, Grid, Title } from '@tremor/react'
 import Layout from '../../components/Layout'
-import {
-    useOnboardApiV1CatalogMetricsList,
-    useOnboardApiV1ConnectorList,
-} from '../../api/onboard.gen'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 import OnboardCard from '../../components/Cards/OnboardCard'
 import Header from '../../components/Header'
+import {
+    useIntegrationApiV1ConnectorsList,
+    useIntegrationApiV1ConnectorsMetricsList,
+} from '../../api/integration.gen'
 
 export default function Integrations() {
     const { response: topMetrics, isLoading: metricsLoading } =
-        useOnboardApiV1CatalogMetricsList()
+        useIntegrationApiV1ConnectorsMetricsList()
     const { response: responseConnectors, isLoading: connectorsLoading } =
-        useOnboardApiV1ConnectorList()
+        useIntegrationApiV1ConnectorsList()
 
     return (
         <Layout currentPage="integrations">

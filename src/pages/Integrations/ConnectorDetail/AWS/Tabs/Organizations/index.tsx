@@ -4,18 +4,17 @@ import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useState } from 'react'
 import { useAtomValue } from 'jotai'
 import OrganizationInfo from './OrganizationInfo'
-import NewOrganization from './NewOrganization'
 import {
-    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
 } from '../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../components/Table'
 import { isDemoAtom } from '../../../../../../store'
 import OnboardDrawer from '../../../../Onboard/AWS'
 
 interface IOrganizations {
-    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
-    organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    accounts: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    organizations: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
 }
 
 function getBadgeColor(status: string) {
@@ -125,7 +124,8 @@ export default function Organizations({
     const [open, setOpen] = useState(false)
     const [openInfo, setOpenInfo] = useState(false)
     const [orgData, setOrgData] = useState<
-        GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential
+        | undefined
     >(undefined)
     const isDemo = useAtomValue(isDemoAtom)
 
@@ -138,7 +138,7 @@ export default function Organizations({
                 columns={columns(isDemo)}
                 rowData={organizations}
                 onRowClicked={(
-                    event: RowClickedEvent<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential>
+                    event: RowClickedEvent<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential>
                 ) => {
                     setOrgData(event.data)
                     setOpenInfo(true)

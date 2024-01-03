@@ -2,28 +2,31 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
     RequestParams,
 } from './api'
 
@@ -488,6 +491,8 @@ interface IuseComplianceApiV1AssignmentsConnectionCreateState {
 export const useComplianceApiV1AssignmentsConnectionCreate = (
     benchmarkId: string,
     query?: {
+        auto_assign?: boolean
+
         connectionId?: string[]
 
         connectionGroup?: string[]
@@ -1911,6 +1916,116 @@ export const useComplianceApiV1FindingsFiltersCreate = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
+interface IuseComplianceApiV1FindingsKpiListState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useComplianceApiV1FindingsKpiList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] = useState<IuseComplianceApiV1FindingsKpiListState>(
+        {
+            isLoading: true,
+            isExecuted: false,
+        }
+    )
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([params, autoExecute])
+    )
+
+    const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            api.compliance
+                .apiV1FindingsKpiList(paramsSignal)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
 interface IuseComplianceApiV1FindingsResourceCreateState {
     isLoading: boolean
     isExecuted: boolean
@@ -2042,22 +2157,15 @@ export const useComplianceApiV1FindingsTopDetail = (
 
         connectionGroup?: string[]
 
-        resourceCollection?: string[]
-
         connector?: ('' | 'AWS' | 'Azure')[]
 
         benchmarkId?: string[]
 
         controlId?: string[]
 
-        severities?: (
-            | 'none'
-            | 'passed'
-            | 'low'
-            | 'medium'
-            | 'high'
-            | 'critical'
-        )[]
+        severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+
+        conformanceStatus?: ('ok' | 'alarm' | 'info' | 'skip' | 'error')[]
     },
     params: RequestParams = {},
     autoExecute = true
@@ -2415,14 +2523,7 @@ export const useComplianceApiV1FindingsCountDetail = (
 
         connector?: ('' | 'AWS' | 'Azure')[]
 
-        severities?: (
-            | 'none'
-            | 'passed'
-            | 'low'
-            | 'medium'
-            | 'high'
-            | 'critical'
-        )[]
+        severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
     },
     params: RequestParams = {},
     autoExecute = true
@@ -3699,6 +3800,116 @@ export const useComplianceApiV1QueriesSyncList = (
 
     if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
         setLastInput(JSON.stringify([query, params, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+
+interface IuseComplianceApiV1ResourceFindingsCreateState {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const useComplianceApiV1ResourceFindingsCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
+    const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] =
+        useState<IuseComplianceApiV1ResourceFindingsCreateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([request, params, autoExecute])
+    )
+
+    const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            api.compliance
+                .apiV1ResourceFindingsCreate(request, paramsSignal)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {

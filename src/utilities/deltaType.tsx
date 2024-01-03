@@ -31,7 +31,8 @@ export const deltaChange = (oldValue?: number, newValue?: number) => {
 export const badgeDelta = (
     oldValue?: number,
     newValue?: number,
-    isDelta?: boolean
+    isDelta?: boolean,
+    valueInsideBadge = false
 ) => {
     return oldValue !== 0 ? (
         <ChangeDelta
@@ -41,6 +42,7 @@ export const badgeDelta = (
                     : percentageByChange(oldValue, newValue)
             }
             isDelta={isDelta}
+            valueInsideBadge={valueInsideBadge}
         />
     ) : (
         ''

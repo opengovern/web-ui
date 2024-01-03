@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Api,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
     GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
     GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
     RequestParams,
 } from './api'
 
@@ -569,7 +570,7 @@ export const useScheduleApiV1InsightTriggerUpdate = (
     return { response, isLoading, isExecuted, error, sendNow }
 }
 
-interface IuseScheduleApiV1JobsListState {
+interface IuseScheduleApiV1JobsCreateState {
     isLoading: boolean
     isExecuted: boolean
     response?: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse
@@ -577,12 +578,8 @@ interface IuseScheduleApiV1JobsListState {
     error?: any
 }
 
-export const useScheduleApiV1JobsList = (
-    query?: {
-        limit?: number
-
-        hours?: number
-    },
+export const useScheduleApiV1JobsCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
     params: RequestParams = {},
     autoExecute = true
 ) => {
@@ -592,12 +589,12 @@ export const useScheduleApiV1JobsList = (
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseScheduleApiV1JobsListState>({
+    const [state, setState] = useState<IuseScheduleApiV1JobsCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -620,7 +617,7 @@ export const useScheduleApiV1JobsList = (
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
             api.schedule
-                .apiV1JobsList(query, paramsSignal)
+                .apiV1JobsCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -656,8 +653,8 @@ export const useScheduleApiV1JobsList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {

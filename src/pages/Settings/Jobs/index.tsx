@@ -5,18 +5,26 @@ import {
     Badge,
     Card,
     Color,
+    Divider,
     Flex,
     Text,
     Title,
 } from '@tremor/react'
-import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
-import { Radio } from 'pretty-checkbox-react'
-import Table, { IColumn } from '../../../components/Table'
-import { useScheduleApiV1JobsList } from '../../../api/schedule.gen'
 import {
+    IServerSideGetRowsParams,
+    ValueFormatterParams,
+} from 'ag-grid-community'
+import { Radio } from 'pretty-checkbox-react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import Table, { IColumn } from '../../../components/Table'
+import {
+    Api,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJob,
-    GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus,
 } from '../../../api/api'
+import AxiosAPI from '../../../api/ApiConfig'
+import { useScheduleApiV1JobsCreate } from '../../../api/schedule.gen'
+import DrawerPanel from '../../../components/DrawerPanel'
 
 const columns = () => {
     const temp: IColumn<any, any>[] = [
@@ -25,7 +33,28 @@ const columns = () => {
             headerName: 'Job ID',
             type: 'string',
             sortable: true,
-            filter: true,
+            filter: false,
+            suppressMenu: true,
+            resizable: true,
+            hide: true,
+        },
+        {
+            field: 'createdAt',
+            headerName: 'Created At',
+            type: 'date',
+            sortable: true,
+            filter: false,
+            suppressMenu: true,
+            resizable: true,
+            hide: true,
+        },
+        {
+            field: 'updatedAt',
+            headerName: 'Updated At',
+            type: 'date',
+            sortable: true,
+            filter: false,
+            suppressMenu: true,
             resizable: true,
             hide: true,
         },
@@ -34,7 +63,8 @@ const columns = () => {
             headerName: 'Job Type',
             type: 'string',
             sortable: true,
-            filter: true,
+            filter: false,
+            suppressMenu: true,
             resizable: true,
         },
         {
@@ -42,7 +72,8 @@ const columns = () => {
             headerName: 'Kaytu Connection ID',
             type: 'string',
             sortable: true,
-            filter: true,
+            filter: false,
+            suppressMenu: true,
             resizable: true,
             hide: true,
         },
@@ -50,8 +81,9 @@ const columns = () => {
             field: 'connectionProviderID',
             headerName: 'Account ID',
             type: 'string',
-            sortable: true,
-            filter: true,
+            sortable: false,
+            filter: false,
+            suppressMenu: true,
             resizable: true,
             hide: true,
         },
@@ -59,24 +91,27 @@ const columns = () => {
             field: 'connectionProviderName',
             headerName: 'Account Name',
             type: 'string',
-            sortable: true,
-            filter: true,
+            sortable: false,
+            filter: false,
             resizable: true,
+            suppressMenu: true,
         },
         {
             field: 'title',
             headerName: 'Title',
             type: 'string',
-            sortable: true,
-            filter: true,
+            sortable: false,
+            filter: false,
             resizable: true,
+            suppressMenu: true,
         },
         {
             field: 'status',
             headerName: 'Status',
             type: 'string',
             sortable: true,
-            filter: true,
+            suppressMenu: true,
+            filter: false,
             resizable: true,
             cellRenderer: (
                 param: ValueFormatterParams<GithubComKaytuIoKaytuEnginePkgDescribeApiJob>
@@ -84,25 +119,45 @@ const columns = () => {
                 let jobStatus = ''
                 let jobColor: Color = 'gray'
                 switch (param.data?.status) {
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusCreated:
+                    case 'CREATED':
                         jobStatus = 'created'
                         break
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusQueued:
+                    case 'QUEUED':
                         jobStatus = 'queued'
                         break
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusInProgress:
+                    case 'IN_PROGRESS':
                         jobStatus = 'in progress'
                         jobColor = 'orange'
                         break
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusSuccessful:
+                    case 'RUNNERS_IN_PROGRESS':
+                        jobStatus = 'in progress'
+                        jobColor = 'orange'
+                        break
+                    case 'SUMMARIZER_IN_PROGRESS':
+                        jobStatus = 'summarizing'
+                        jobColor = 'orange'
+                        break
+                    case 'OLD_RESOURCE_DELETION':
+                        jobStatus = 'summarizing'
+                        jobColor = 'orange'
+                        break
+                    case 'SUCCEEDED':
                         jobStatus = 'succeeded'
                         jobColor = 'emerald'
                         break
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusFailure:
+                    case 'COMPLETED':
+                        jobStatus = 'completed'
+                        jobColor = 'emerald'
+                        break
+                    case 'FAILED':
                         jobStatus = 'failed'
                         jobColor = 'red'
                         break
-                    case GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusTimeout:
+                    case 'COMPLETED_WITH_FAILURE':
+                        jobStatus = 'completed with failed'
+                        jobColor = 'red'
+                        break
+                    case 'TIMEOUT':
                         jobStatus = 'time out'
                         jobColor = 'red'
                         break
@@ -117,7 +172,8 @@ const columns = () => {
             field: 'failureReason',
             headerName: 'Failure Reason',
             type: 'string',
-            sortable: true,
+            sortable: false,
+            suppressMenu: true,
             filter: true,
             resizable: true,
             hide: true,
@@ -126,39 +182,239 @@ const columns = () => {
     return temp
 }
 
+const jobTypes = [
+    {
+        label: 'All',
+        value: '',
+    },
+    {
+        label: 'Discovery',
+        value: 'discovery',
+    },
+    {
+        label: 'Insight',
+        value: 'insight',
+    },
+    {
+        label: 'Governance',
+        value: 'compliance',
+    },
+    {
+        label: 'Metrics',
+        value: 'analytics',
+    },
+]
+
 export default function SettingsJobs() {
-    const {
-        response: jobs,
-        isLoading,
-        error,
-    } = useScheduleApiV1JobsList({ limit: 5000 })
-    const options: GridOptions = {
-        enableGroupEdit: true,
-        columnTypes: {
-            dimension: {
-                enableRowGroup: true,
-                enablePivot: true,
+    const [open, setOpen] = useState(false)
+    const [clickedJob, setClickedJob] =
+        useState<GithubComKaytuIoKaytuEnginePkgDescribeApiJob>()
+    const [searchParams, setSearchParams] = useSearchParams()
+    const [jobTypeFilter, setJobTypeFilter] = useState<string>(
+        searchParams.get('type') || ''
+    )
+    const [statusFilter, setStatusFilter] = useState<string>(
+        searchParams.get('status') || ''
+    )
+    const [allStatuses, setAllStatuses] = useState<string[]>([])
+    const { response } = useScheduleApiV1JobsCreate({
+        hours: 24,
+        pageStart: 0,
+        pageEnd: 1,
+    })
+
+    useEffect(() => {
+        setAllStatuses(
+            response?.summaries
+                ?.map((v) => v.status || '')
+                .filter(
+                    (thing, i, arr) => arr.findIndex((t) => t === thing) === i
+                ) || []
+        )
+    }, [response])
+
+    useEffect(() => {
+        if (
+            searchParams.get('type') !== jobTypeFilter ||
+            searchParams.get('status') !== statusFilter
+        ) {
+            if (jobTypeFilter !== '') {
+                searchParams.set('type', jobTypeFilter)
+            } else {
+                searchParams.delete('type')
+            }
+            if (statusFilter !== '') {
+                searchParams.set('status', statusFilter)
+            } else {
+                searchParams.delete('status')
+            }
+            window.history.pushState({}, '', `?${searchParams.toString()}`)
+        }
+    }, [jobTypeFilter, statusFilter])
+
+    const ssr = () => {
+        return {
+            getRows: (params: IServerSideGetRowsParams) => {
+                const api = new Api()
+                api.instance = AxiosAPI
+                api.schedule
+                    .apiV1JobsCreate({
+                        hours: 24,
+                        pageStart: params.request.startRow || 0,
+                        pageEnd: params.request.endRow || 0,
+                        sortBy: params.request.sortModel.at(0)?.colId,
+                        sortOrder: params.request.sortModel
+                            .at(0)
+                            ?.sort?.toUpperCase(),
+                        statusFilter: statusFilter === '' ? [] : [statusFilter],
+                        typeFilters:
+                            jobTypeFilter === '' ? [] : [jobTypeFilter],
+                    })
+                    .then((resp) => {
+                        params.success({
+                            rowData: resp.data.jobs || [],
+                            rowCount: resp.data.summaries
+                                ?.map((v) => v.count)
+                                .reduce(
+                                    (prev, curr) => (prev || 0) + (curr || 0)
+                                ),
+                        })
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                        params.fail()
+                    })
             },
-        },
-        rowGroupPanelShow: 'always',
-        groupAllowUnbalanced: true,
+        }
     }
+
+    const serverSideRows = ssr()
+
+    const clickedJobDetails = [
+        { title: 'ID', value: clickedJob?.id },
+        { title: 'Title', value: clickedJob?.title },
+        { title: 'Type', value: clickedJob?.type },
+        { title: 'Created At', value: clickedJob?.createdAt },
+        { title: 'Updated At', value: clickedJob?.updatedAt },
+        { title: 'Kaytu Connection ID', value: clickedJob?.connectionID },
+        { title: 'Account ID', value: clickedJob?.connectionProviderID },
+        { title: 'Account Name', value: clickedJob?.connectionProviderName },
+        { title: 'Status', value: clickedJob?.status },
+        { title: 'Failure Reason', value: clickedJob?.failureReason },
+    ]
 
     return (
         <Card>
-            <Title className="font-semibold">Jobs</Title>
-            <Table
-                id="jobs"
-                columns={columns()}
-                rowData={jobs?.jobs}
-                options={options}
-                onGridReady={(e) => {
-                    if (isLoading) {
-                        e.api.showLoadingOverlay()
-                    }
-                }}
-                loading={isLoading}
-            />
+            <Title className="font-semibold mb-5">Jobs</Title>
+            <Flex alignItems="start">
+                <Card className="sticky top-6 min-w-[200px] max-w-[200px]">
+                    <Accordion
+                        defaultOpen
+                        className="border-0 rounded-none bg-transparent mb-1"
+                    >
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="font-semibold text-gray-800">
+                                Job Type
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
+                            >
+                                {jobTypes.map((jobType) => (
+                                    <Radio
+                                        name="jobType"
+                                        onClick={() =>
+                                            setJobTypeFilter(jobType.value)
+                                        }
+                                        checked={
+                                            jobTypeFilter === jobType.value
+                                        }
+                                    >
+                                        {jobType.label}
+                                    </Radio>
+                                ))}
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                    <Divider className="my-3" />
+                    <Accordion
+                        defaultOpen
+                        className="border-0 rounded-none bg-transparent mb-1"
+                    >
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="font-semibold text-gray-800">
+                                Status
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
+                            >
+                                <Radio
+                                    name="status"
+                                    onClick={() => setStatusFilter('')}
+                                    checked={statusFilter === ''}
+                                >
+                                    All
+                                </Radio>
+                                {allStatuses.map((status) => (
+                                    <Radio
+                                        name="status"
+                                        onClick={() => setStatusFilter(status)}
+                                        checked={statusFilter === status}
+                                    >
+                                        {status}
+                                    </Radio>
+                                ))}
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                </Card>
+                <Flex className="pl-4">
+                    <Table
+                        id="jobs"
+                        columns={columns()}
+                        serverSideDatasource={serverSideRows}
+                        onCellClicked={(event) => {
+                            console.log(event.data)
+                            setClickedJob(event.data)
+                            setOpen(true)
+                        }}
+                        options={{
+                            rowModelType: 'serverSide',
+                            serverSideDatasource: serverSideRows,
+                        }}
+                    />
+                </Flex>
+            </Flex>
+            <DrawerPanel
+                open={open}
+                onClose={() => setOpen(false)}
+                title="Job Details"
+            >
+                <Flex flexDirection="col">
+                    {clickedJobDetails.map((item) => {
+                        return (
+                            <Flex
+                                flexDirection="row"
+                                justifyContent="between"
+                                alignItems="start"
+                                className="mt-2"
+                            >
+                                <Text className="w-56 font-bold">
+                                    {item.title}
+                                </Text>
+                                <Text className="w-full">{item.value}</Text>
+                            </Flex>
+                        )
+                    })}
+                </Flex>
+            </DrawerPanel>
         </Card>
     )
 }

@@ -4,12 +4,11 @@ import { Dayjs } from 'dayjs'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import Table, { IColumn } from '../../../../../components/Table'
 import { IFilter, isDemoAtom, notificationAtom } from '../../../../../store'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/integration.gen'
 import { options } from '../Metrics'
 import {
-    GithubComKaytuIoKaytuEnginePkgInventoryApiMetric,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
 } from '../../../../../api/api'
 import { badgeDelta } from '../../../../../utilities/deltaType'
 
@@ -19,7 +18,7 @@ interface IConnections {
     resourceId?: string | undefined
 }
 
-const columns = (isDemo: boolean) => {
+export const cloudAccountColumns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'connector',
@@ -126,7 +125,7 @@ const columns = (isDemo: boolean) => {
 
 const rowGenerator = (
     data:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse
         | undefined
 ) => {
     const rows = []
@@ -182,13 +181,13 @@ export default function CloudAccounts({
     }
 
     const { response: accounts, isLoading: isAccountsLoading } =
-        useOnboardApiV1ConnectionsSummaryList(query)
+        useIntegrationApiV1ConnectionsSummariesList(query)
 
     return (
         <Table
             title="Cloud account list"
             id="asset_connection_table"
-            columns={columns(isDemo)}
+            columns={cloudAccountColumns(isDemo)}
             downloadable
             rowData={rowGenerator(accounts)
                 ?.sort(

@@ -20,7 +20,7 @@ import {
 } from '../../../api/metadata.gen'
 import Spinner from '../../../components/Spinner'
 import { getErrorMessage } from '../../../types/apierror'
-import { isDemoAtom } from '../../../store'
+import { isDemoAtom, previewAtom } from '../../../store'
 
 interface IMetric {
     title: string
@@ -92,7 +92,7 @@ function Metric({ title, metricId, min, max }: IMetric) {
     }, [value])
 
     return (
-        <ListItem key={metricId} className="my-1">
+        <Flex flexDirection="row" className="mb-4">
             <Flex justifyContent="start" className="truncate space-x-4 ">
                 <div className="truncate">
                     <Text className="truncate text-sm">{title}:</Text>
@@ -109,11 +109,12 @@ function Metric({ title, metricId, min, max }: IMetric) {
                 icon={isLoading ? Spinner : undefined}
                 disabled={isLoading}
             />
-        </ListItem>
+        </Flex>
     )
 }
 
 export default function SettingsCustomization() {
+    const [preview, setPreview] = useAtom(previewAtom)
     const [isDemo, setIsDemo] = useAtom(isDemoAtom)
     const [selectedMode, setSelectedMode] = useState(isDemo ? 1 : 0)
     useEffect(() => {
@@ -133,7 +134,7 @@ export default function SettingsCustomization() {
     }, [selectedMode])
 
     return (
-        <Card key="summary" className="top-6">
+        <Card key="summary" className="">
             <Title className="font-semibold">Customization</Title>
             <Divider />
 
@@ -141,7 +142,7 @@ export default function SettingsCustomization() {
                 Jobs interval configurations
             </Title>
 
-            <List className="mt-4">
+            <Flex flexDirection="col" className="mt-4">
                 <Metric
                     metricId="describe_job_interval"
                     title="Fast Discovery Interval (Hours)"
@@ -178,19 +179,46 @@ export default function SettingsCustomization() {
                     min={24}
                     max={120}
                 />
-            </List>
-            <Divider />
-            <Title className="font-semibold">Demo Mode</Title>
-            <TabGroup
-                index={selectedMode}
-                onIndexChange={setSelectedMode}
-                className="mt-4"
+            </Flex>
+
+            <Title className="font-semibold mt-8">App configurations</Title>
+
+            {/* <Flex
+                flexDirection="row"
+                justifyContent="between"
+                className="w-full mt-2"
             >
-                <TabList className="border border-gray-200" variant="solid">
-                    <Tab>App mode</Tab>
-                    <Tab>Demo mode</Tab>
-                </TabList>
-            </TabGroup>
+                <Text className="font-normal">Demo Mode</Text>
+                <TabGroup
+                    index={selectedMode}
+                    onIndexChange={setSelectedMode}
+                    className="w-fit"
+                >
+                    <TabList className="border border-gray-200" variant="solid">
+                        <Tab>App mode</Tab>
+                        <Tab>Demo mode</Tab>
+                    </TabList>
+                </TabGroup>
+            </Flex> */}
+            <Flex
+                flexDirection="row"
+                justifyContent="between"
+                className="w-full mt-4"
+            >
+                <Text className="font-normal">Show preview features</Text>
+                <TabGroup
+                    index={preview === 'true' ? 0 : 1}
+                    onIndexChange={(idx) =>
+                        setPreview(idx === 0 ? 'true' : 'false')
+                    }
+                    className="w-fit"
+                >
+                    <TabList className="border border-gray-200" variant="solid">
+                        <Tab>On</Tab>
+                        <Tab>Off</Tab>
+                    </TabList>
+                </TabGroup>
+            </Flex>
         </Card>
     )
 }

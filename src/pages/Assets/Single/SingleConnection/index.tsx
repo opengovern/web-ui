@@ -29,7 +29,7 @@ import {
 import { notificationAtom } from '../../../../store'
 import Table from '../../../../components/Table'
 import { defaultColumns, rowGenerator } from '../../Details/Tabs/Metrics'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../api/integration.gen'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
 import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
@@ -99,7 +99,7 @@ export default function SingleConnection({
     const { response: metrics, isLoading: metricsLoading } =
         useInventoryApiV2AnalyticsMetricList({ ...query, pageSize: 1000 })
     const { response: accountInfo, isLoading: accountInfoLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
+        useIntegrationApiV1ConnectionsSummariesList({
             ...query,
             pageSize: 1,
             needCost: false,

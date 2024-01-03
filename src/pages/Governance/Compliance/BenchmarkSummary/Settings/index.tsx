@@ -3,6 +3,7 @@ import { Button, Callout, Flex, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai/index'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
+import { useLocation } from 'react-router-dom'
 import { isDemoAtom } from '../../../../../store'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import Table, { IColumn } from '../../../../../components/Table'
@@ -92,7 +93,8 @@ interface ITransferState {
 }
 
 export default function Settings({ id }: ISettings) {
-    const [open, setOpen] = useState(false)
+    const tab = useLocation().hash
+    const [open, setOpen] = useState(tab === '#settings')
     const [firstLoading, setFirstLoading] = useState<boolean>(true)
     const [transfer, setTransfer] = useState<ITransferState>({
         connectionID: '',
@@ -171,7 +173,7 @@ export default function Settings({ id }: ISettings) {
                 setAllEnable(true)
             } else setAllEnable(false)
         }
-    }, [assignments])
+    }, [assignments, open])
 
     return (
         <>

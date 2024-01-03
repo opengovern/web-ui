@@ -14,7 +14,11 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import { Bars3Icon, Squares2X2Icon } from '@heroicons/react/24/outline'
+import {
+    Bars3Icon,
+    ShieldCheckIcon,
+    Squares2X2Icon,
+} from '@heroicons/react/24/outline'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Layout from '../../../components/Layout'
@@ -45,7 +49,6 @@ export const benchmarkList = (ben: any) => {
                     (ben[i].checks?.highCount || 0) +
                     (ben[i].checks?.mediumCount || 0) +
                     (ben[i].checks?.lowCount || 0) +
-                    (ben[i].checks?.passedCount || 0) +
                     (ben[i].checks?.unknownCount || 0)
                 ) {
                     const b = ben[i]
@@ -132,7 +135,7 @@ export const activeColumns: IColumn<any, any>[] = [
         ) =>
             param.data &&
             `${(
-                (benchmarkChecks(param.data).passed /
+                ((param.data?.conformanceStatusSummary?.okCount || 0) /
                     benchmarkChecks(param.data).total) *
                 100
             ).toFixed(2)} %`,
@@ -271,64 +274,37 @@ export default function Compliance() {
     return (
         <Layout currentPage="compliance">
             <Header />
-            <Grid numItems={3} className="w-full gap-4 mb-4">
-                <Col numColSpan={2}>
-                    <TabGroup index={stateIndex}>
-                        <TabList variant="solid" className="px-0">
-                            <Tab
-                                className="px-4 py-2"
-                                onClick={() => setSelectedState('')}
-                            >
-                                All
-                            </Tab>
-                            <Tab
-                                className="px-4 py-2"
-                                onClick={() => setSelectedState('active')}
-                            >
-                                Active
-                            </Tab>
-                            <Tab
-                                className="px-4 py-2"
-                                onClick={() => setSelectedState('not-active')}
-                            >
-                                Not active
-                            </Tab>
-                        </TabList>
-                    </TabGroup>
-                </Col>
-                <Col numColSpan={1}>
-                    <Flex className="h-full gap-3">
-                        <Select
-                            enableClear={false}
-                            value={selectedProvider}
-                            onValueChange={setSelectedProvider}
-                            placeholder="Select Cloud Provider..."
-                            className="w-full"
+            <Flex className="mb-4">
+                <Flex className="gap-3 w-fit">
+                    <Icon icon={ShieldCheckIcon} variant="shadow" />
+                    <Title>Benchmark list</Title>
+                </Flex>
+                <TabGroup index={stateIndex} className="w-fit">
+                    <TabList variant="solid" className="px-0">
+                        <Tab
+                            className="px-4 py-2"
+                            onClick={() => setSelectedState('')}
                         >
-                            <SelectItem value="">All</SelectItem>
-                            <SelectItem value="AWS">AWS</SelectItem>
-                            <SelectItem value="Azure">Azure</SelectItem>
-                        </Select>
-                        <TabGroup
-                            index={index}
-                            onIndexChange={setIndex}
-                            className="w-fit"
+                            All
+                        </Tab>
+                        <Tab
+                            className="px-4 py-2"
+                            onClick={() => setSelectedState('active')}
                         >
-                            <TabList variant="solid" className="px-0">
-                                <Tab className="px-4 py-2">
-                                    <Squares2X2Icon className="h-5" />
-                                </Tab>
-                                <Tab className="px-4 py-2">
-                                    <Bars3Icon className="h-5" />
-                                </Tab>
-                            </TabList>
-                        </TabGroup>
-                    </Flex>
-                </Col>
-            </Grid>
+                            Active
+                        </Tab>
+                        <Tab
+                            className="px-4 py-2"
+                            onClick={() => setSelectedState('not-active')}
+                        >
+                            Not active
+                        </Tab>
+                    </TabList>
+                </TabGroup>
+            </Flex>
             {(selectedState === '' || selectedState === 'active') && (
                 <div className="mb-6">
-                    <Title className="mb-3">Active benchmarks</Title>
+                    <Text className="mb-3">Active</Text>
                     {/* eslint-disable-next-line no-nested-ternary */}
                     {isLoading ? (
                         <Spinner className="my-56" />
@@ -337,12 +313,7 @@ export default function Compliance() {
                         index === 1 ? (
                             <Grid className="w-full gap-4">
                                 {benchmarkList(benchmarks?.benchmarkSummary)
-                                    .connected?.sort(
-                                        (a, b) =>
-                                            (b?.checks?.passedCount || 0) -
-                                            (a?.checks?.passedCount || 0)
-                                    )
-                                    .filter((bm) =>
+                                    .connected.filter((bm) =>
                                         selectedProvider.length
                                             ? bm?.tags?.service?.includes(
                                                   selectedProvider
@@ -362,12 +333,7 @@ export default function Compliance() {
                         ) : (
                             <Grid numItems={3} className="w-full gap-4">
                                 {benchmarkList(benchmarks?.benchmarkSummary)
-                                    .connected?.sort(
-                                        (a, b) =>
-                                            (b?.checks?.passedCount || 0) -
-                                            (a?.checks?.passedCount || 0)
-                                    )
-                                    .filter((bm) =>
+                                    .connected.filter((bm) =>
                                         selectedProvider.length
                                             ? bm?.tags?.service?.includes(
                                                   selectedProvider
@@ -390,7 +356,7 @@ export default function Compliance() {
             )}
             {(selectedState === '' || selectedState === 'not-active') && (
                 <>
-                    <Title className="mb-3">Not active benchmarks</Title>
+                    <Text className="mb-3">Not active</Text>
                     {/* eslint-disable-next-line no-nested-ternary */}
                     {isLoading ? (
                         <Spinner className="mt-56" />

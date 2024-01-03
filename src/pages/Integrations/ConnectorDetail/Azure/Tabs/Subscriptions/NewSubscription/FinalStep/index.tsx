@@ -2,11 +2,14 @@ import { Bold, Button, Flex } from '@tremor/react'
 import { ColDef, GridOptions } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import { useRef } from 'react'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiConnection } from '../../../../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+} from '../../../../../../../../api/api'
 
 interface IStep {
     onNext: () => void
-    subscriptions: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+    subscriptions: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
 }
 
 const columns: ColDef[] = [

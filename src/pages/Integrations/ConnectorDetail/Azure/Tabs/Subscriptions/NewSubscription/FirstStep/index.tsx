@@ -2,12 +2,15 @@ import { Bold, Button, Flex } from '@tremor/react'
 import { ColDef, GridOptions, RowClickedEvent } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import { useRef, useState } from 'react'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../../api/api'
+import {
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+} from '../../../../../../../../api/api'
 
 interface IStep {
     onNext: (selectedSPNID: string) => void
     onPrevious: () => void
-    spns: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    spns: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
 }
 
 const columns: ColDef[] = [

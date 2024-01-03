@@ -9,15 +9,20 @@ import {
 } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import DrawerPanel from '../../../../../../../components/DrawerPanel'
-import { GithubComKaytuIoKaytuEnginePkgOnboardApiCredential } from '../../../../../../../api/api'
 import {
-    useOnboardApiV1CredentialAutoonboardCreate,
-    useOnboardApiV1CredentialDelete,
-} from '../../../../../../../api/onboard.gen'
+    GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
+} from '../../../../../../../api/api'
 import { dateDisplay } from '../../../../../../../utilities/dateDisplay'
+import {
+    useIntegrationApiV1CredentialDelete,
+    useIntegrationApiV1CredentialsAzureAutoonboardCreate,
+} from '../../../../../../../api/integration.gen'
 
 interface IPriInfo {
-    data: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential | undefined
+    data:
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential
+        | undefined
     open: boolean
     onClose: () => void
     isDemo: boolean
@@ -38,19 +43,23 @@ export default function PrincipalInfo({
         isExecuted: isDeleteExecuted,
         isLoading: isDeleteLoading,
         sendNow: deleteNow,
-    } = useOnboardApiV1CredentialDelete(data?.id || '', {}, false)
+    } = useIntegrationApiV1CredentialDelete(data?.id || '', {}, false)
 
     const {
         isExecuted: isDiscoverExecuted,
         isLoading: isDiscoverLoading,
         sendNow: discoverNow,
-    } = useOnboardApiV1CredentialAutoonboardCreate(data?.id || '', {}, false)
+    } = useIntegrationApiV1CredentialsAzureAutoonboardCreate(
+        data?.id || '',
+        {},
+        false
+    )
 
-    useEffect(() => {
-        if (isDeleteExecuted && !isDeleteLoading) {
-            onClose()
-        }
-    }, [isDeleteLoading])
+    // useEffect(() => {
+    //     if (isDeleteExecuted && !isDeleteLoading) {
+    //         onClose()
+    //     }
+    // }, [isDeleteLoading])
 
     useEffect(() => {
         if (isDiscoverExecuted && !isDiscoverLoading) {
@@ -242,9 +251,9 @@ export default function PrincipalInfo({
                     <Button
                         variant="secondary"
                         color="rose"
-                        loading={isDeleteExecuted && isDeleteLoading}
+                        // loading={isDeleteExecuted && isDeleteLoading}
                         disabled={isDiscoverExecuted && isDiscoverLoading}
-                        onClick={deleteNow}
+                        // onClick={deleteNow}
                     >
                         Delete
                     </Button>
@@ -252,7 +261,7 @@ export default function PrincipalInfo({
                     <Button
                         className="ml-3"
                         loading={isDiscoverExecuted && isDiscoverLoading}
-                        disabled={isDeleteExecuted && isDeleteLoading}
+                        // disabled={isDeleteExecuted && isDeleteLoading}
                         onClick={discoverNow}
                     >
                         Discover New Subscriptions

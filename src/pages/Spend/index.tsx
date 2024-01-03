@@ -21,7 +21,7 @@ import {
     useInventoryApiV2AnalyticsSpendTrendList,
 } from '../../api/inventory.gen'
 import { filterAtom, IFilter, spendTimeAtom } from '../../store'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../api/integration.gen'
 import Chart from '../../components/Chart'
 import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
 import MetricCard from '../../components/Cards/MetricCard'
@@ -33,7 +33,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-    GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
     SourceType,
 } from '../../api/api'
 import { BarChartIcon, LineChartIcon } from '../../icons/icons'
@@ -77,7 +77,7 @@ const topServices = (
 
 const topAccounts = (
     input:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse
         | undefined
 ) => {
     const top: {
@@ -280,7 +280,7 @@ export default function Spend() {
         useInventoryApiV2AnalyticsSpendMetricList(query)
 
     const { response: accountCostResponse, isLoading: accountCostLoading } =
-        useOnboardApiV1ConnectionsSummaryList(query)
+        useIntegrationApiV1ConnectionsSummariesList(query)
 
     const { response: composition, isLoading: compositionLoading } =
         useInventoryApiV2AnalyticsSpendCompositionList({
@@ -317,10 +317,10 @@ export default function Spend() {
                             <Col numColSpan={2}>
                                 <MetricCard
                                     title={getConnections(selectedConnections)}
-                                    metric={accountCostResponse?.totalCost}
+                                    metric={serviceCostResponse?.total_cost}
                                     // Check with Saleh
                                     metricPrev="2000"
-                                    loading={accountCostLoading}
+                                    loading={serviceCostLoading}
                                     url="spend-details#cloud-accounts"
                                     isPrice
                                     isExact

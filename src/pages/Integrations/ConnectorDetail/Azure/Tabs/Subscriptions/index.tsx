@@ -12,6 +12,8 @@ import NewAzureSubscription from './NewSubscription'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
 } from '../../../../../../api/api'
 import SubscriptionInfo from './SubscriptionInfo'
 import Table, { IColumn } from '../../../../../../components/Table'
@@ -19,8 +21,8 @@ import { snakeCaseToLabel } from '../../../../../../utilities/labelMaker'
 import { isDemoAtom } from '../../../../../../store'
 
 interface ISubscriptions {
-    subscriptions: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
-    spns: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    subscriptions: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    spns: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
     loading: boolean
 }
 

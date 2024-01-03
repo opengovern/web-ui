@@ -1,5 +1,5 @@
-export { default as AzureIcon } from './azure.svg'
-export { default as AWSIcon } from './aws.svg'
+export { default as AzureIcon } from './AzureIcon.png'
+export { default as AWSIcon } from './AWSIcon.png'
 
 export { ReactComponent as CisIcon } from './cis.svg'
 export { ReactComponent as HipaaIcon } from './hipaa.svg'

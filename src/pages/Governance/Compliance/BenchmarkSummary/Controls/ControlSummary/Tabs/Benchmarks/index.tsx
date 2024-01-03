@@ -9,6 +9,7 @@ interface IBenchmarks {
         | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmark[]
         | undefined
 }
+
 export default function Benchmarks({ benchmarks }: IBenchmarks) {
     const navigate = useNavigate()
     const workspace = useParams<{ ws: string }>().ws

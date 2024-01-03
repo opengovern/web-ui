@@ -75,7 +75,7 @@ export default function DrawerPanel({
                                                 </Button>
                                             </Flex>
                                         </Dialog.Title>
-                                        <div className="w-full h-full overflow-y-scroll pt-16 px-6">
+                                        <div className="max-w-full w-full h-full overflow-x-hidden overflow-y-scroll pt-16 px-6">
                                             {children}
                                         </div>
                                     </Flex>

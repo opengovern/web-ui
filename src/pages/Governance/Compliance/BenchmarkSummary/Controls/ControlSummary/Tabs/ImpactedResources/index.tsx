@@ -1,22 +1,162 @@
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { useMemo, useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai/index'
-import { RowClickedEvent } from 'ag-grid-community'
-import Table from '../../../../../../../../components/Table'
+import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
+import { Flex, Text } from '@tremor/react'
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
+import Table, { IColumn } from '../../../../../../../../components/Table'
 import FindingDetail from '../../../../../../Findings/Detail'
-import { columns } from '../../../../../../Findings'
 import { isDemoAtom, notificationAtom } from '../../../../../../../../store'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
 } from '../../../../../../../../api/api'
 import AxiosAPI from '../../../../../../../../api/ApiConfig'
+import { statusBadge } from '../../../index'
+import { dateTimeDisplay } from '../../../../../../../../utilities/dateDisplay'
 
 let sortKey = ''
 
 interface IImpactedResources {
     controlId: string | undefined
 }
+
+const columns = (isDemo: boolean) => {
+    const temp: IColumn<any, any>[] = [
+        {
+            width: 140,
+            field: 'connector',
+            headerName: 'Cloud provider',
+            sortable: true,
+            filter: true,
+            hide: true,
+            enableRowGroup: true,
+            type: 'string',
+        },
+        {
+            field: 'resourceName',
+            headerName: 'Resource name',
+            hide: false,
+            type: 'string',
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'resourceType',
+            headerName: 'Resource type',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: true,
+            hide: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'resourceTypeName',
+            headerName: 'Resource type label',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: false,
+            hide: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'benchmarkID',
+            headerName: 'Benchmark ID',
+            type: 'string',
+            enableRowGroup: true,
+            sortable: false,
+            hide: true,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'providerConnectionName',
+            headerName: 'Cloud provider name',
+            type: 'string',
+            enableRowGroup: true,
+            hide: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: 'providerConnectionID',
+            headerName: 'Cloud provider ID',
+            type: 'string',
+            hide: true,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            ),
+        },
+        {
+            field: 'connectionID',
+            headerName: 'Kaytu connection ID',
+            type: 'string',
+            hide: true,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            flex: 1,
+        },
+        {
+            field: 'conformanceStatus',
+            headerName: 'Conformance status',
+            type: 'string',
+            sortable: true,
+            filter: true,
+            hide: false,
+            resizable: true,
+            width: 180,
+            cellRenderer: (param: ValueFormatterParams) => (
+                <Flex className="h-full">{statusBadge(param.value)}</Flex>
+            ),
+        },
+        {
+            field: 'noOfOccurrences',
+            headerName: '# of issues',
+            type: 'number',
+            hide: true,
+            enableRowGroup: true,
+            sortable: false,
+            filter: true,
+            resizable: true,
+            width: 115,
+        },
+        {
+            field: 'evaluatedAt',
+            headerName: 'Last checked',
+            type: 'datetime',
+            sortable: false,
+            filter: true,
+            resizable: true,
+            width: 260,
+            valueFormatter: (param: ValueFormatterParams) => {
+                return param.value ? dateTimeDisplay(param.value) : ''
+            },
+            hide: false,
+        },
+    ]
+    return temp
+}
+
 export default function ImpactedResources({ controlId }: IImpactedResources) {
     const isDemo = useAtomValue(isDemoAtom)
     const setNotification = useSetAtom(notificationAtom)
@@ -25,6 +165,7 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
     const [finding, setFinding] = useState<
         GithubComKaytuIoKaytuEnginePkgComplianceApiFinding | undefined
     >(undefined)
+    const [error, setError] = useState('')
 
     const ssr = () => {
         return {
@@ -38,13 +179,32 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                     .apiV1FindingsCreate({
                         filters: {
                             controlID: [controlId || ''],
+                            conformanceStatus: [
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                'ok',
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                'alarm',
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                'info',
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                'skip',
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                'error',
+                            ],
                         },
                         sort: params.request.sortModel.length
-                            ? {
-                                  [params.request.sortModel[0].colId]:
-                                      params.request.sortModel[0].sort,
-                              }
-                            : {},
+                            ? [
+                                  {
+                                      [params.request.sortModel[0].colId]:
+                                          params.request.sortModel[0].sort,
+                                  },
+                              ]
+                            : [],
                         limit: 100,
                         afterSortKey:
                             params.request.startRow === 0 ||
@@ -67,6 +227,12 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
                                 .sortKey[0]
                     })
                     .catch((err) => {
+                        if (
+                            err.message !==
+                            "Cannot read properties of null (reading 'NaN')"
+                        ) {
+                            setError(err.message)
+                        }
                         params.fail()
                     })
             },
@@ -77,6 +243,12 @@ export default function ImpactedResources({ controlId }: IImpactedResources) {
 
     return (
         <>
+            {error.length > 0 && (
+                <Flex className="w-fit mb-3 gap-1">
+                    <ExclamationCircleIcon className="text-rose-600 h-5" />
+                    <Text color="rose">{error}</Text>
+                </Flex>
+            )}
             <Table
                 fullWidth
                 id="compliance_findings"

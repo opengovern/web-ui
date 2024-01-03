@@ -1,4 +1,5 @@
 import {
+    Card,
     Flex,
     Grid,
     List,
@@ -12,6 +13,8 @@ import {
     Title,
 } from '@tremor/react'
 import { useEffect } from 'react'
+import ReactJson from '@microlink/react-json-view'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiFinding } from '../../../../api/api'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
@@ -84,7 +87,7 @@ export default function FindingDetail({
             <TabGroup>
                 <TabList>
                     <Tab>Controls</Tab>
-                    <Tab disabled>Resources</Tab>
+                    <Tab disabled={!response?.resource}>Resources</Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
@@ -99,10 +102,28 @@ export default function FindingDetail({
                                             alignItems="start"
                                             className="gap-1 w-fit max-w-[80%]"
                                         >
-                                            <Text className="text-gray-800">
+                                            <Text className="text-gray-800 w-full truncate">
                                                 {control.controlTitle}
                                             </Text>
-                                            <Text>{control.reason}</Text>
+                                            <Flex justifyContent="start">
+                                                {control.conformanceStatus ===
+                                                'ok' ? (
+                                                    <Flex className="w-fit gap-1.5">
+                                                        <CheckCircleIcon className="h-4 text-emerald-500" />
+                                                        <Text>Passed</Text>
+                                                    </Flex>
+                                                ) : (
+                                                    <Flex className="w-fit gap-1.5">
+                                                        <XCircleIcon className="h-4 text-rose-600" />
+                                                        <Text>Failed</Text>
+                                                    </Flex>
+                                                )}
+                                                <Flex className="border-l border-gray-200 ml-3 pl-3 h-full">
+                                                    <Text className="text-xs">
+                                                        SECTION:
+                                                    </Text>
+                                                </Flex>
+                                            </Flex>
                                         </Flex>
                                         {severityBadge(control.severity)}
                                     </ListItem>
@@ -110,7 +131,12 @@ export default function FindingDetail({
                             </List>
                         )}
                     </TabPanel>
-                    <TabPanel>resources</TabPanel>
+                    <TabPanel>
+                        <Title className="mb-2">JSON</Title>
+                        <Card className="px-1.5 py-3 mb-2">
+                            <ReactJson src={response?.resource || {}} />
+                        </Card>
+                    </TabPanel>
                 </TabPanels>
             </TabGroup>
         </DrawerPanel>

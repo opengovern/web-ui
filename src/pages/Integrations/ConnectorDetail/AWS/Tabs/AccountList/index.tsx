@@ -9,10 +9,11 @@ import {
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { useAtomValue } from 'jotai'
 import AccountInfo from './AccountInfo'
-import NewAWSAccount from './NewAWSAccount'
 import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
     GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
     SourceHealthStatus,
 } from '../../../../../../api/api'
 import Table, { IColumn } from '../../../../../../components/Table'
@@ -21,8 +22,8 @@ import { isDemoAtom } from '../../../../../../store'
 import OnboardDrawer from '../../../../Onboard/AWS'
 
 interface IAccountList {
-    accounts: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
-    organizations: GithubComKaytuIoKaytuEnginePkgOnboardApiCredential[]
+    accounts: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
+    organizations: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential[]
     loading: boolean
 }
 

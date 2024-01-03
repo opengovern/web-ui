@@ -6,6 +6,7 @@ import {
     Card,
     Divider,
     Flex,
+    Icon,
     Text,
     TextInput,
 } from '@tremor/react'
@@ -14,7 +15,11 @@ import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { Checkbox, Radio, useCheckboxState } from 'pretty-checkbox-react'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import {
+    CheckCircleIcon,
+    MagnifyingGlassIcon,
+    XCircleIcon,
+} from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
 import { isDemoAtom, notificationAtom } from '../../../store'
@@ -24,13 +29,14 @@ import {
     useComplianceApiV1BenchmarksSummaryList,
     useComplianceApiV1FindingsFiltersCreate,
 } from '../../../api/compliance.gen'
-import { useOnboardApiV1ConnectionsSummaryList } from '../../../api/onboard.gen'
+import { useIntegrationApiV1ConnectionsSummariesList } from '../../../api/integration.gen'
 import Spinner from '../../../components/Spinner'
 import { benchmarkList } from '../Compliance'
 import {
     Api,
     GithubComKaytuIoKaytuEnginePkgComplianceApiFinding,
     GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
     SourceType,
 } from '../../../api/api'
 import AxiosAPI from '../../../api/ApiConfig'
@@ -203,12 +209,11 @@ const severity = [
     { name: 'Medium', color: '#EE9235' },
     { name: 'Low', color: '#F4C744' },
     { name: 'None', color: '#9BA2AE' },
-    { name: 'Passed', color: '#54B584' },
 ]
 
 const filteredConnectionsList = (
     connection:
-        | GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[]
+        | GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[]
         | undefined,
     filter: string
 ) => {
@@ -241,6 +246,13 @@ export default function Findings() {
 
     const [provider, setProvider] = useState('')
     const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
+    const [status, setStatus] = useState(['alarm', 'info', 'skip', 'error'])
+    const [statusFilter, setStatusFilter] = useState([
+        'alarm',
+        'info',
+        'skip',
+        'error',
+    ])
     const connectionCheckbox = useCheckboxState({ state: [] })
     const [connectionFilter, setConnectionFilter] = useState([])
     const benchmarkCheckbox = useCheckboxState({ state: [] })
@@ -262,6 +274,7 @@ export default function Findings() {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         setProviderFilter(provider.length ? [provider] : [])
+        setStatusFilter(status)
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         setConnectionFilter(connectionCheckbox.state)
@@ -283,6 +296,7 @@ export default function Findings() {
                 // @ts-ignore
                 provider.length ? [provider] : []
             ) ||
+            !compareArrays(statusFilter.sort(), status.sort()) ||
             !compareArrays(
                 connectionFilter.sort(),
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -311,6 +325,8 @@ export default function Findings() {
         sortKey = ''
         setProviderFilter([])
         setProvider('')
+        setStatusFilter(['alarm', 'info', 'skip', 'error'])
+        setStatus(['alarm', 'info', 'skip', 'error'])
         setConnectionFilter([])
         connectionCheckbox.setState([])
         setBenchmarkFilter([])
@@ -323,6 +339,7 @@ export default function Findings() {
     const showReset = () => {
         return (
             providerFilter.length ||
+            statusFilter.length !== 4 ||
             connectionFilter.length ||
             benchmarkFilter.length ||
             resourceFilter.length ||
@@ -336,7 +353,7 @@ export default function Findings() {
     const isDemo = useAtomValue(isDemoAtom)
 
     const { response: connections, isLoading: connectionsLoading } =
-        useOnboardApiV1ConnectionsSummaryList({
+        useIntegrationApiV1ConnectionsSummariesList({
             connector: providerFilter,
             pageNumber: 1,
             pageSize: 2000,
@@ -366,14 +383,22 @@ export default function Findings() {
                             connectionID: connectionFilter,
                             benchmarkID: benchmarkFilter,
                             resourceTypeID: resourceFilter,
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
                             severity: severityFilter,
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            conformanceStatus: status,
                         },
+
                         sort: params.request.sortModel.length
-                            ? {
-                                  [params.request.sortModel[0].colId]:
-                                      params.request.sortModel[0].sort,
-                              }
-                            : {},
+                            ? [
+                                  {
+                                      [params.request.sortModel[0].colId]:
+                                          params.request.sortModel[0].sort,
+                                  },
+                              ]
+                            : [],
                         limit: 100,
                         afterSortKey:
                             params.request.startRow === 0 ||
@@ -406,6 +431,7 @@ export default function Findings() {
         () => ssr(),
         [
             providerFilter,
+            statusFilter,
             connectionFilter,
             benchmarkFilter,
             resourceFilter,
@@ -462,10 +488,74 @@ export default function Findings() {
                                     <Flex className="gap-1">
                                         <img
                                             src={AzureIcon}
-                                            className="w-6"
+                                            className="w-6 rounded-full"
                                             alt="azure"
                                         />
                                         <Text>Azure</Text>
+                                    </Flex>
+                                </Radio>
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                    <Divider className="my-3" />
+                    <Accordion
+                        defaultOpen
+                        className="border-0 rounded-none bg-transparent mb-1"
+                    >
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="font-semibold text-gray-800">
+                                Conformance status
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
+                            >
+                                <Radio
+                                    name="status"
+                                    onClick={() =>
+                                        setStatus([
+                                            'ok',
+                                            'alarm',
+                                            'info',
+                                            'skip',
+                                            'error',
+                                        ])
+                                    }
+                                    checked={status.length === 5}
+                                >
+                                    All
+                                </Radio>
+                                <Radio
+                                    name="status"
+                                    onClick={() => setStatus(['ok'])}
+                                    checked={
+                                        status.length === 1 &&
+                                        status.includes('ok')
+                                    }
+                                >
+                                    <Flex className="gap-1">
+                                        <CheckCircleIcon className="w-4 text-emerald-500" />
+                                        <Text>Passed</Text>
+                                    </Flex>
+                                </Radio>
+                                <Radio
+                                    name="status"
+                                    onClick={() =>
+                                        setStatus([
+                                            'alarm',
+                                            'info',
+                                            'skip',
+                                            'error',
+                                        ])
+                                    }
+                                    checked={status.length === 4}
+                                >
+                                    <Flex className="gap-1">
+                                        <XCircleIcon className="w-4 text-rose-600" />
+                                        <Text>Failed</Text>
                                     </Flex>
                                 </Radio>
                             </Flex>
@@ -691,17 +781,14 @@ export default function Findings() {
                     </Accordion>
                     <Flex flexDirection="row-reverse">
                         {showApply() && (
-                            <Button
-                                onClick={() => applyFilters()}
-                                className="mt-4"
-                            >
+                            <Button onClick={applyFilters} className="mt-4">
                                 Apply
                             </Button>
                         )}
                         {showReset() && (
                             <Button
                                 variant="light"
-                                onClick={() => resetFilters()}
+                                onClick={resetFilters}
                                 className="mt-4"
                             >
                                 Reset filters

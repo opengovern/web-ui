@@ -1,7 +1,6 @@
 import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
-    ArrowDownIcon,
     ArrowPathRoundedSquareIcon,
     ArrowRightIcon,
     CheckIcon,
@@ -9,183 +8,74 @@ import {
     ChevronUpIcon,
     ClipboardDocumentListIcon,
     ExclamationTriangleIcon,
-    XMarkIcon,
 } from '@heroicons/react/24/outline'
-import {
-    Accordion,
-    AccordionBody,
-    AccordionHeader,
-    Badge,
-    BarList,
-    Bold,
-    Button,
-    Card,
-    Color,
-    Divider,
-    Flex,
-    Grid,
-    Icon,
-    Legend,
-    ProgressBar,
-    Text,
-    Title,
-} from '@tremor/react'
+import { BarList, Button, Card, Color, Flex, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Radio } from 'pretty-checkbox-react'
-import { stat } from 'fs'
-import { useScheduleApiV1JobsList } from '../../../api/schedule.gen'
 import {
-    GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobType,
 } from '../../../api/api'
 import { numberDisplay } from '../../../utilities/numericDisplay'
-
-interface IStatusNumber {
-    status: string
-    count?: number
-    className: string
-}
-function StatusNumber({ status, count, className }: IStatusNumber) {
-    return (
-        <Flex flexDirection="col" alignItems="start" className="p-2 w-24">
-            <Text className={className}>{status}</Text>
-            <Text className={className}>{count || 0}</Text>
-        </Flex>
-    )
-}
-
-interface ISummary {
-    title: string
-    className?: string
-    summaries?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary[]
-}
-function Summary({ title, summaries, className }: ISummary) {
-    return (
-        <Flex
-            flexDirection="col"
-            className={`p-3 ${className} rounded-lg border border-gray-200 bg-white`}
-            alignItems="start"
-            justifyContent="start"
-        >
-            <Text className="text-gray-800 !text-base font-bold mb-3">
-                {title}
-            </Text>
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                alignItems="start"
-            >
-                <StatusNumber
-                    status="Created"
-                    className="text-gray-700"
-                    count={
-                        summaries?.find(
-                            (v) =>
-                                v.status ===
-                                GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusCreated
-                        )?.count
-                    }
-                />
-                <StatusNumber
-                    status="Queued"
-                    className="text-neutral-700"
-                    count={
-                        summaries?.find(
-                            (v) =>
-                                v.status ===
-                                GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusQueued
-                        )?.count
-                    }
-                />
-                <StatusNumber
-                    status="In Progress"
-                    className="text-orange-700"
-                    count={
-                        summaries?.find(
-                            (v) =>
-                                v.status ===
-                                GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusInProgress
-                        )?.count
-                    }
-                />
-            </Flex>
-            <Flex
-                flexDirection="row"
-                justifyContent="between"
-                alignItems="start"
-            >
-                <StatusNumber
-                    status="Succeded"
-                    className="text-emerald-700"
-                    count={
-                        summaries?.find(
-                            (v) =>
-                                v.status ===
-                                GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusSuccessful
-                        )?.count
-                    }
-                />
-                <StatusNumber
-                    status="Failed"
-                    className="text-red-700"
-                    count={
-                        summaries?.find(
-                            (v) =>
-                                v.status ===
-                                GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusFailure
-                        )?.count
-                    }
-                />
-                <StatusNumber
-                    status="Timeout"
-                    className="text-rose-700"
-                    count={
-                        summaries?.find(
-                            (v) =>
-                                v.status ===
-                                GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusTimeout
-                        )?.count
-                    }
-                />
-            </Flex>
-        </Flex>
-    )
-}
+import { useScheduleApiV1JobsCreate } from '../../../api/schedule.gen'
 
 interface IJobCategoryItem {
     title: string
+    jobType: string
     summaries?: GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary[]
 }
 
-function JobCategoryItem({ title, summaries }: IJobCategoryItem) {
+const inProgressStatuses = [
+    'CREATED',
+    'QUEUED',
+    'IN_PROGRESS',
+    'RUNNERS_IN_PROGRESS',
+    'SUMMARIZER_IN_PROGRESS',
+    'OLD_RESOURCE_DELETION',
+]
+const failedStatuses = ['FAILED', 'TIMEOUT', 'COMPLETED_WITH_FAILURE']
+const succeededStatuses = ['SUCCEEDED', 'COMPLETED']
+
+const checkStatus = (v: string, arr: string[]) => {
+    let exists = false
+    arr.forEach((element) => {
+        if (element === v) {
+            exists = true
+        }
+    })
+    return exists
+}
+
+function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
+    const navigate = useNavigate()
+    const workspace = useParams<{ ws: string }>().ws
+
     const result = () => {
-        const inProgressJobs = summaries?.filter(
-            (job) =>
-                job.status ===
-                    GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusCreated ||
-                job.status ===
-                    GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusQueued ||
-                job.status ===
-                    GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusInProgress
-        )
+        const inProgressJobs =
+            summaries?.filter((job) =>
+                checkStatus(job.status || '', inProgressStatuses)
+            ) || []
 
-        const failedJobs = summaries?.filter(
-            (job) =>
-                job.status ===
-                    GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusFailure ||
-                job.status ===
-                    GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusTimeout
-        )
+        const failedJobs =
+            summaries?.filter((job) =>
+                checkStatus(job.status || '', failedStatuses)
+            ) || []
 
-        const succeeded = summaries?.filter(
-            (job) =>
-                job.status ===
-                GithubComKaytuIoKaytuEnginePkgDescribeApiJobStatus.JobStatusSuccessful
-        )
+        const succeededJobs =
+            summaries?.filter((job) =>
+                checkStatus(job.status || '', succeededStatuses)
+            ) || []
 
-        if ((inProgressJobs?.length || 0) > 0) {
+        const unknownJobs =
+            summaries?.filter(
+                (job) =>
+                    !checkStatus(job.status || '', succeededStatuses) &&
+                    !checkStatus(job.status || '', inProgressStatuses) &&
+                    !checkStatus(job.status || '', failedStatuses)
+            ) || []
+
+        if (inProgressJobs.length > 0) {
             const color: Color = 'neutral'
+
             return {
                 status: 'In Progress',
                 count:
@@ -196,7 +86,7 @@ function JobCategoryItem({ title, summaries }: IJobCategoryItem) {
                 color,
             }
         }
-        if ((failedJobs?.length || 0) > 0) {
+        if (failedJobs.length > 0) {
             const color: Color = 'rose'
             return {
                 status: 'Failed',
@@ -208,13 +98,28 @@ function JobCategoryItem({ title, summaries }: IJobCategoryItem) {
                 color,
             }
         }
+        if (unknownJobs.length > 0) {
+            const color: Color = 'neutral'
+            return {
+                status: 'Unknown',
+                count:
+                    unknownJobs
+                        ?.map((v) => v.count)
+                        .reduce((prev, curr) => (prev || 0) + (curr || 0)) || 0,
+                icon: ArrowPathRoundedSquareIcon,
+                color,
+            }
+        }
         const color: Color = 'emerald'
         return {
             status: 'Succeeded',
             count:
-                succeeded
-                    ?.map((v) => v.count)
-                    .reduce((prev, curr) => (prev || 0) + (curr || 0)) || 0,
+                (succeededJobs?.length || 0) === 0
+                    ? 0
+                    : succeededJobs
+                          ?.map((v) => v.count)
+                          .reduce((prev, curr) => (prev || 0) + (curr || 0)) ||
+                      0,
             icon: CheckIcon,
             color,
         }
@@ -277,10 +182,12 @@ function JobCategoryItem({ title, summaries }: IJobCategoryItem) {
                 <BarList
                     key={title}
                     data={data}
-                    className="mt-2"
+                    className="mt-2 cursor-pointer"
                     color={color}
                     onClick={(e) => {
-                        console.log(String(e.target))
+                        navigate(
+                            `/${workspace}/settings?sp=jobs&type=${jobType}`
+                        )
                     }}
                     // valueFormatter={dataFormatter}
                 />
@@ -296,7 +203,7 @@ export default function JobsMenu() {
         response: jobs,
         isLoading,
         error,
-    } = useScheduleApiV1JobsList({ limit: 0 })
+    } = useScheduleApiV1JobsCreate({ pageStart: 0, pageEnd: 1, hours: 24 })
 
     if (workspace === undefined || workspace === '') {
         return null
@@ -345,6 +252,7 @@ export default function JobsMenu() {
                         >
                             <JobCategoryItem
                                 title="Discovery"
+                                jobType="discovery"
                                 summaries={jobs?.summaries?.filter(
                                     (v) =>
                                         v.type ===
@@ -353,6 +261,7 @@ export default function JobsMenu() {
                             />
                             <JobCategoryItem
                                 title="Metric"
+                                jobType="analytics"
                                 summaries={jobs?.summaries?.filter(
                                     (v) =>
                                         v.type ===
@@ -361,6 +270,7 @@ export default function JobsMenu() {
                             />
                             <JobCategoryItem
                                 title="Insight"
+                                jobType="insight"
                                 summaries={jobs?.summaries?.filter(
                                     (v) =>
                                         v.type ===
@@ -369,6 +279,7 @@ export default function JobsMenu() {
                             />
                             <JobCategoryItem
                                 title="Governance"
+                                jobType="compliance"
                                 summaries={jobs?.summaries?.filter(
                                     (v) =>
                                         v.type ===

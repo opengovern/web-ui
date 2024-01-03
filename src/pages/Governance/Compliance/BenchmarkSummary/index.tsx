@@ -1,10 +1,8 @@
 import { useParams } from 'react-router-dom'
 import {
-    Badge,
     BarList,
     Button,
     Card,
-    CategoryBar,
     Flex,
     Grid,
     Tab,
@@ -15,7 +13,12 @@ import {
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import { ArrowPathRoundedSquareIcon } from '@heroicons/react/24/outline'
+import {
+    ArrowPathRoundedSquareIcon,
+    CheckCircleIcon,
+    InformationCircleIcon,
+    XCircleIcon,
+} from '@heroicons/react/24/outline'
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 import Layout from '../../../../components/Layout'
 import { filterAtom } from '../../../../store'
@@ -32,6 +35,9 @@ import { benchmarkChecks } from '../../../../components/Cards/ComplianceCard'
 import Controls from './Controls'
 import Settings from './Settings'
 import TopDetails from './TopDetails'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
+import SeverityBar from '../../../../components/SeverityBar'
+import Modal from '../../../../components/Modal'
 
 const topResources = (
     input:
@@ -113,6 +119,7 @@ export default function BenchmarkSummary() {
         'accounts'
     )
     const [openTop, setOpenTop] = useState(false)
+    const [openConfirm, setOpenConfirm] = useState(false)
 
     const topQuery = {
         ...(benchmarkId && { benchmarkId: [benchmarkId] }),
@@ -156,20 +163,36 @@ export default function BenchmarkSummary() {
                 return (
                     <BarList
                         data={topConnections(connections, benchmarkDetail?.id)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
                     />
                 )
             case 1:
                 return (
                     <BarList
                         data={topControls(controls, benchmarkDetail?.id)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
                     />
                 )
             case 2:
-                return <BarList data={topResources(resources)} />
+                return (
+                    <BarList
+                        data={topResources(resources)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
+                    />
+                )
             default:
                 return (
                     <BarList
                         data={topConnections(connections, benchmarkDetail?.id)}
+                        valueFormatter={(param: any) =>
+                            `${numberDisplay(param, 0)} issues`
+                        }
                     />
                 )
         }
@@ -180,6 +203,7 @@ export default function BenchmarkSummary() {
             updateDetail()
         }
     }, [isExecuted])
+    console.log(benchmarkDetail)
 
     return (
         <Layout currentPage="compliance">
@@ -194,7 +218,7 @@ export default function BenchmarkSummary() {
                 <Settings id={benchmarkDetail?.id} />
             </Header>
             {isLoading ? (
-                <Spinner className="mb-12" />
+                <Spinner className="mt-56" />
             ) : (
                 <>
                     <Flex alignItems="end" className="mb-6">
@@ -202,14 +226,19 @@ export default function BenchmarkSummary() {
                             flexDirection="col"
                             alignItems="start"
                             justifyContent="start"
-                            className="gap-2"
+                            className="gap-2 w-3/4"
                         >
                             <Title className="font-semibold">
                                 {benchmarkDetail?.title}
                             </Title>
-                            <Text className="w-2/3">
-                                {benchmarkDetail?.description}
-                            </Text>
+                            <div className="group w-full relative flex justify-center">
+                                <Text className="truncate">
+                                    {benchmarkDetail?.description}
+                                </Text>
+                                <div className="absolute w-full z-40 top-0 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                    <Text>{benchmarkDetail?.description}</Text>
+                                </div>
+                            </div>
                         </Flex>
                         <Flex
                             flexDirection="col"
@@ -220,7 +249,7 @@ export default function BenchmarkSummary() {
                                 variant="light"
                                 icon={ArrowPathRoundedSquareIcon}
                                 className="mb-1"
-                                onClick={() => triggerEvaluate()}
+                                onClick={() => setOpenConfirm(true)}
                                 loading={
                                     !(
                                         benchmarkDetail?.lastJobStatus ===
@@ -239,213 +268,96 @@ export default function BenchmarkSummary() {
                                 benchmarkDetail?.evaluatedAt
                             )}`}</Text>
                         </Flex>
+                        <Modal
+                            open={openConfirm}
+                            onClose={() => setOpenConfirm(false)}
+                        >
+                            <Title>
+                                Do you want to run evaluation on X accounts?
+                            </Title>
+                            <Flex className="mt-8">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setOpenConfirm(false)}
+                                >
+                                    Close
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        triggerEvaluate()
+                                        setOpenConfirm(false)
+                                    }}
+                                >
+                                    Evaluate
+                                </Button>
+                            </Flex>
+                        </Modal>
                     </Flex>
                     <Grid numItems={2} className="gap-4 mb-4">
                         <Card>
-                            <Flex alignItems="end" className="mb-10">
+                            <Flex alignItems="start" className="mb-10">
                                 <Flex
                                     flexDirection="col"
                                     alignItems="start"
                                     className="gap-1"
                                 >
-                                    <Text className="font-semibold">
-                                        Security score
-                                    </Text>
+                                    <Flex className="w-fit gap-1 group relative">
+                                        <Text className="font-semibold">
+                                            Security score
+                                        </Text>
+                                        <InformationCircleIcon className="w-4" />
+                                        <div className="absolute w-full z-40 top-0 left-full scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                            <Text>
+                                                {benchmarkDetail?.description}
+                                            </Text>
+                                        </div>
+                                    </Flex>
                                     <Title className="font-semibold">
                                         {`${(
-                                            (benchmarkChecks(benchmarkDetail)
-                                                .passed /
-                                                benchmarkChecks(benchmarkDetail)
-                                                    .total) *
-                                            100
+                                            ((benchmarkDetail
+                                                ?.controlsSeverityStatus?.total
+                                                ?.passed || 0) /
+                                                (benchmarkDetail
+                                                    ?.controlsSeverityStatus
+                                                    ?.total?.total || 1)) *
+                                                100 || 0
                                         ).toFixed(2)}%`}
                                     </Title>
                                 </Flex>
-                                <Flex justifyContent="end" className="gap-3">
-                                    <Flex
-                                        justifyContent="start"
-                                        className="w-fit gap-2"
-                                    >
-                                        <Text>Passed</Text>
-                                        <Badge color="emerald">
-                                            {
-                                                benchmarkChecks(benchmarkDetail)
-                                                    .passed
-                                            }
-                                        </Badge>
+                                <Flex
+                                    flexDirection="col"
+                                    alignItems="start"
+                                    className="w-80 gap-1"
+                                >
+                                    <Flex className="w-fit gap-1.5">
+                                        <CheckCircleIcon className="h-4 text-emerald-500" />
+                                        <Text>
+                                            Passed resources:{' '}
+                                            {numberDisplay(
+                                                benchmarkDetail
+                                                    ?.conformanceStatusSummary
+                                                    ?.okCount || 0,
+                                                0
+                                            )}
+                                        </Text>
                                     </Flex>
-                                    <Flex
-                                        justifyContent="start"
-                                        className="w-fit gap-2"
-                                    >
-                                        <Text>Failed</Text>
-                                        <Badge color="rose">
-                                            {benchmarkChecks(benchmarkDetail)
-                                                .total -
+                                    <Flex className="w-fit gap-1.5">
+                                        <XCircleIcon className="h-4 text-rose-600" />
+                                        <Text>
+                                            Failed resources:{' '}
+                                            {numberDisplay(
                                                 benchmarkChecks(benchmarkDetail)
-                                                    .passed}
-                                        </Badge>
+                                                    .total -
+                                                    (benchmarkDetail
+                                                        ?.conformanceStatusSummary
+                                                        ?.okCount || 0),
+                                                0
+                                            )}
+                                        </Text>
                                     </Flex>
                                 </Flex>
                             </Flex>
-                            <CategoryBar
-                                className="w-full mb-2"
-                                values={[
-                                    (benchmarkChecks(benchmarkDetail).critical /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 0,
-                                    (benchmarkChecks(benchmarkDetail).high /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 0,
-                                    (benchmarkChecks(benchmarkDetail).medium /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 0,
-                                    (benchmarkChecks(benchmarkDetail).low /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 0,
-                                    (benchmarkChecks(benchmarkDetail).passed /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 0,
-                                    benchmarkChecks(benchmarkDetail).critical +
-                                        benchmarkChecks(benchmarkDetail).high +
-                                        benchmarkChecks(benchmarkDetail)
-                                            .medium +
-                                        benchmarkChecks(benchmarkDetail).low +
-                                        benchmarkChecks(benchmarkDetail)
-                                            .passed >
-                                    0
-                                        ? (benchmarkChecks(benchmarkDetail)
-                                              .unknown /
-                                              benchmarkChecks(benchmarkDetail)
-                                                  .total) *
-                                              100 || 0
-                                        : 100,
-                                ]}
-                                markerValue={
-                                    ((benchmarkChecks(benchmarkDetail)
-                                        .critical +
-                                        benchmarkChecks(benchmarkDetail).high +
-                                        benchmarkChecks(benchmarkDetail)
-                                            .medium +
-                                        benchmarkChecks(benchmarkDetail).low) /
-                                        benchmarkChecks(benchmarkDetail)
-                                            .total) *
-                                        100 || 1
-                                }
-                                showLabels={false}
-                                colors={[
-                                    'rose',
-                                    'orange',
-                                    'amber',
-                                    'yellow',
-                                    'emerald',
-                                    'slate',
-                                ]}
-                            />
-                            <Flex
-                                justifyContent="start"
-                                className="mt-6 flex-wrap gap-2"
-                            >
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#F43F5E' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        Critical
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail)
-                                            .critical /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#F87315' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        High
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail).high /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#F59E0B' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        Medium
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail)
-                                            .medium /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#EAB305' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        Low
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail).low /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#11B981' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        Passed
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail)
-                                            .passed /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                                <Flex className="w-fit gap-1">
-                                    <div
-                                        className="h-2 w-2 rounded-full"
-                                        style={{ backgroundColor: '#64748B' }}
-                                    />
-                                    <Text className="text-gray-800 text-xs">
-                                        Unknown
-                                    </Text>
-                                    <Text className="text-xs">{`(${(
-                                        (benchmarkChecks(benchmarkDetail)
-                                            .unknown /
-                                            benchmarkChecks(benchmarkDetail)
-                                                .total) *
-                                            100 || 0
-                                    ).toFixed(2)}%)`}</Text>
-                                </Flex>
-                            </Flex>
+                            <SeverityBar benchmark={benchmarkDetail} />
                         </Card>
                         <Card>
                             <Flex justifyContent="between" className="mb-3">
@@ -479,7 +391,7 @@ export default function BenchmarkSummary() {
                                         <Tab
                                             onClick={() => setType('services')}
                                         >
-                                            Services
+                                            Resource types
                                         </Tab>
                                     </TabList>
                                 </TabGroup>

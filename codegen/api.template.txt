@@ -1,0 +1,122 @@
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { Api,
+{{ if ne .Imports "" }}
+    {{ .Imports }},
+{{ end }}
+ RequestParams } from './api'
+
+import AxiosAPI, { setWorkspace } from './ApiConfig'
+
+{{ range . }}
+interface I{{ .APIName }}State {
+    isLoading: boolean
+    isExecuted: boolean
+    response?: {{ .Func.ResponseType }}
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error?: any
+}
+
+export const {{ .APIName }} = ({{ .Func.Params }}, autoExecute = true) => {
+    const workspace = useParams<{ ws: string }>().ws
+    const [controller, setController] = useState(new AbortController())
+
+    const api = new Api()
+    api.instance = AxiosAPI
+
+    const [state, setState] =
+    useState<I{{ .APIName }}State>({
+        isLoading: true,
+        isExecuted: false,
+    })
+    const [lastInput, setLastInput] = useState<string>(
+        JSON.stringify([{{ .Func.Params.GetNames }}, autoExecute])
+    )
+
+    const sendRequest = (abortCtrl: AbortController) => {
+        if (!api.instance.defaults.headers.common.Authorization) {
+            return
+        }
+
+        setState({
+            ...state,
+            error: undefined,
+            isLoading: true,
+            isExecuted: true,
+        })
+        try {
+            {{ if and (eq .ModuleName "workspace") (ne .Func.Name "apiV1WorkspaceCurrentList") }}
+            setWorkspace('kaytu')
+            {{ else }}
+            if (workspace !== undefined && workspace.length > 0) {
+                setWorkspace(workspace)
+            } else {
+                setWorkspace('kaytu')
+            }
+            {{ end }}
+
+            const paramsSignal = { ...params, signal: abortCtrl.signal }
+            api
+                .{{ .ModuleName }}
+                .{{ .Func.Name }}({{ .Func.Params.GetNames }}Signal)
+                .then((resp) => {
+                    setState({
+                        ...state,
+                        error: undefined,
+                        response: resp.data,
+                        isLoading: false,
+                        isExecuted: true,
+                    })
+                })
+                .catch((err) => {
+                    if (
+                        err.name === 'AbortError' ||
+                        err.name === 'CanceledError'
+                    ) {
+                        // Request was aborted
+                    } else {
+                        setState({
+                            ...state,
+                            error: err,
+                            response: undefined,
+                            isLoading: false,
+                            isExecuted: true,
+                        })
+                    }
+                })
+        } catch (err) {
+            setState({
+                ...state,
+                error: err,
+                isLoading: false,
+                isExecuted: true,
+            })
+        }
+    }
+
+    if (JSON.stringify([{{ .Func.Params.GetNames }}, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([{{ .Func.Params.GetNames }}, autoExecute]))
+    }
+
+    useEffect(() => {
+        if (autoExecute) {
+            controller.abort()
+            const newController = new AbortController()
+            setController(newController)
+            sendRequest(newController)
+        }
+    }, [lastInput])
+
+    const { response } = state
+    const { isLoading } = state
+    const { isExecuted } = state
+    const { error } = state
+    const sendNow = () => {
+        controller.abort()
+        const newController = new AbortController()
+        setController(newController)
+        sendRequest(newController)
+    }
+    return { response, isLoading, isExecuted, error, sendNow }
+}
+{{ end }}

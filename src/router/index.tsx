@@ -31,6 +31,7 @@ import ResourceCollection from '../pages/ResourceCollection'
 import ResourceCollectionDetail from '../pages/ResourceCollection/Detail'
 import ControlDetail from '../pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary'
 import ConnectorResourceTypes from '../pages/Integrations/ConnectorDetail/ResourceTypes'
+import Billing from '../pages/Billing'
 
 const routes = [
     {
@@ -65,6 +66,11 @@ const authRoutes = [
         key: 'workspaces',
         path: '/workspaces',
         component: Workspaces,
+    },
+    {
+        key: 'billing',
+        path: '/billing',
+        component: Billing,
     },
     {
         key: 'assets',

@@ -2,18 +2,21 @@ import { ChevronDownIcon, MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 import { Flex, Title } from '@tremor/react'
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import CLIMenu from '../CLIMenu'
 import JobsMenu from '../JobsMenu'
+import { KaytuIcon } from '../../../icons/icons'
 
 interface IHeader {
+    showLogo?: boolean
     workspace: string | undefined
 }
 
-export default function Header({ workspace }: IHeader) {
+export default function Header({ workspace, showLogo = false }: IHeader) {
     const { user, logout } = useAuth0()
     const [theme, setTheme] = useState(localStorage.theme || 'light')
+    const navigate = useNavigate()
 
     const toggleTheme = () => {
         if (localStorage.theme === 'dark') {
@@ -29,12 +32,24 @@ export default function Header({ workspace }: IHeader) {
     return (
         <div className="px-12 z-10 absolute top-2 w-full flex h-16 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm rounded-tl-2xl">
             <Flex className="max-w-7xl">
-                <div className="text-gray-900">
-                    <Title>
-                        &#128075; Welcome back,{' '}
-                        {user?.given_name || user?.email || ''}
-                    </Title>
-                </div>
+                {showLogo ? (
+                    <a href="/">
+                        <Flex flexDirection="row">
+                            <KaytuIcon className="ml-5 w-7 h-7" />
+                            <Title className="text-gray-900 ml-1.5">
+                                Kaytu
+                            </Title>
+                        </Flex>
+                    </a>
+                ) : (
+                    <div className="text-gray-900">
+                        <Title>
+                            &#128075; Welcome back,{' '}
+                            {user?.given_name || user?.email || ''}
+                        </Title>
+                    </div>
+                )}
+
                 <div className="h-6 w-px bg-gray-900/10 dark:bg-white/20 lg:hidden" />
                 <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
                     <div className="flex items-center gap-x-4 lg:gap-x-6">
@@ -91,7 +106,7 @@ export default function Header({ workspace }: IHeader) {
                                             <Menu.Item key="Your profile">
                                                 {({ active }) => (
                                                     <Link
-                                                        to={`/${workspace}/settings#profile`}
+                                                        to={`/${workspace}/settings?sp=profile`}
                                                         className={`
                                                     ${
                                                         active
@@ -106,6 +121,44 @@ export default function Header({ workspace }: IHeader) {
                                             </Menu.Item>
                                         )}
 
+                                    <Menu.Item key="Workspaces">
+                                        {({ active }) => (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    navigate('/')
+                                                }}
+                                                className={`
+                                                    ${
+                                                        active
+                                                            ? 'bg-gray-50'
+                                                            : ''
+                                                    } text-start w-full block px-3 py-1 text-sm leading-6 text-gray-900'
+                                                `}
+                                            >
+                                                Workspaces
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+                                    <Menu.Item key="Billing">
+                                        {({ active }) => (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    navigate('/billing')
+                                                }}
+                                                className={`
+                                                    ${
+                                                        active
+                                                            ? 'bg-gray-50'
+                                                            : ''
+                                                    } text-start w-full block px-3 py-1 text-sm leading-6 text-gray-900'
+                                                `}
+                                            >
+                                                Billing
+                                            </button>
+                                        )}
+                                    </Menu.Item>
                                     <Menu.Item key="Sign out">
                                         {({ active }) => (
                                             <button
