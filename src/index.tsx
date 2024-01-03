@@ -11,7 +11,7 @@ import { Auth0ProviderWithNavigate } from './auth0-provider-with-navigate'
 if (
     localStorage.theme === 'dark' ||
     (!('theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
+        window.matchMedia('(prefers-color-scheme:dark)').matches)
 ) {
     document.documentElement.classList.add('dark')
 } else {

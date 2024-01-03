@@ -7,7 +7,7 @@ interface IImpactedAccounts {
     controlId: string | undefined
 }
 
-const cloudAccountColumns = (isDemo: boolean) => {
+export const cloudAccountColumns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
             field: 'connector',
@@ -77,7 +77,7 @@ const cloudAccountColumns = (isDemo: boolean) => {
     return temp
 }
 
-const rows = (
+export const rows = (
     input:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
         | undefined
@@ -110,6 +110,11 @@ export default function ImpactedAccounts({ controlId }: IImpactedAccounts) {
             columns={cloudAccountColumns(false)}
             rowData={rows(accounts)}
             loading={accountsLoading}
+            onGridReady={(e) => {
+                if (accountsLoading) {
+                    e.api.showLoadingOverlay()
+                }
+            }}
         />
     )
 }

@@ -203,7 +203,6 @@ export default function BenchmarkSummary() {
             updateDetail()
         }
     }, [isExecuted])
-    console.log(benchmarkDetail)
 
     return (
         <Layout currentPage="compliance">
