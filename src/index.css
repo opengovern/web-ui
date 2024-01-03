@@ -93,3 +93,11 @@ code {
 .ag-paging-page-size {
     display: none;
 }
+
+div.selector-without-border >*{
+    border: 0;
+}
+
+div.selector-without-shadow >*{
+    --tw-shadow: 0;
+}

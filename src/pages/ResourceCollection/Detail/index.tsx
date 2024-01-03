@@ -229,9 +229,7 @@ export default function ResourceCollectionDetail() {
     const [openDrawer, setOpenDrawer] = useState(false)
     const [showSummary, setShowSummary] = useState(false)
 
-    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
-        'line'
-    )
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar'>('line')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
@@ -476,6 +474,8 @@ export default function ResourceCollectionDetail() {
                                     <Chart
                                         labels={[]}
                                         chartType="doughnut"
+                                        chartLayout="basic"
+                                        chartAggregation="trend"
                                         chartData={pieData(complianceKPI)}
                                         loading={complianceKPILoading}
                                         colorful
@@ -627,6 +627,8 @@ export default function ResourceCollectionDetail() {
                                     ).data
                                 }
                                 chartType={selectedChart}
+                                chartLayout="basic"
+                                chartAggregation="trend"
                                 loading={resourceTrendLoading}
                                 visualMap={
                                     generateVisualMap(

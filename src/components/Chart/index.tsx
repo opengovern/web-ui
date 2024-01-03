@@ -41,7 +41,9 @@ interface IChart {
                 }
           )[]
         | undefined
-    chartType: 'bar' | 'line' | 'area' | 'doughnut' | 'half-doughnut'
+    chartType: 'bar' | 'line' | 'doughnut' | 'half-doughnut'
+    chartLayout?: 'stacked' | 'basic'
+    chartAggregation?: 'trend' | 'cumulative'
     visualMap?: any
     markArea?: any
     isCost?: boolean
@@ -58,6 +60,8 @@ export default function Chart({
     labelType = 'category',
     chartData,
     chartType,
+    chartLayout,
+    chartAggregation,
     isCost = false,
     isPercent = false,
     markArea,
@@ -69,87 +73,327 @@ export default function Chart({
     colorful = false,
 }: IChart) {
     const options = () => {
-        if (
-            chartType === 'bar' ||
-            chartType === 'line' ||
-            chartType === 'area'
-        ) {
-            return {
-                xAxis: {
-                    type: labelType,
-                    data: labels,
-                },
-                yAxis: {
-                    type: 'value',
-                    axisLabel: {
-                        formatter: (value: string | number) => {
+        if (chartLayout === 'basic') {
+            if (chartAggregation === 'trend') {
+                return {
+                    xAxis: {
+                        type: labelType,
+                        data: labels,
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: (value: string | number) => {
+                                if (isCost) {
+                                    return `$${numericDisplay(value)}`
+                                }
+                                if (isPercent) {
+                                    return `${numericDisplay(value)} %`
+                                }
+                                return numericDisplay(value)
+                            },
+                        },
+                    },
+                    visualMap,
+                    animation: false,
+                    series: [
+                        chartType === 'bar' && {
+                            data: chartData,
+                            type: chartType,
+                            areaStyle: { opacity: 0 },
+                        },
+                        chartType === 'line' && {
+                            data: chartData,
+                            markArea,
+                            type: chartType,
+                            areaStyle: { opacity: 0 },
+                        },
+                    ],
+                    grid: {
+                        left: 45,
+                        right: 0,
+                        top: 20,
+                        bottom: 40,
+                    },
+                    tooltip: {
+                        show: true,
+                        trigger: 'axis',
+                        valueFormatter: (value: string | number) => {
                             if (isCost) {
-                                return `$${numericDisplay(value)}`
+                                return `$${numberDisplay(Number(value), 2)}`
                             }
                             if (isPercent) {
                                 return `${numericDisplay(value)} %`
                             }
-                            return numericDisplay(value)
+                            return numberDisplay(Number(value), 0)
                         },
                     },
-                },
-                visualMap,
-                animation: false,
-                series: [
-                    chartType === 'area' && {
-                        data: chartData,
-                        type: 'line',
-                        areaStyle: { opacity: 0.7 },
-                    },
-                    chartType === 'bar' && {
-                        data: chartData,
-                        type: chartType,
-                        areaStyle: { opacity: 0 },
-                    },
-                    chartType === 'line' && {
-                        data: chartData,
-                        markArea,
-                        type: chartType,
-                        areaStyle: { opacity: 0 },
-                    },
-                ],
-                grid: {
-                    left: 45,
-                    right: 0,
-                    top: 20,
-                    bottom: 40,
-                },
-                tooltip: {
-                    show: true,
-                    trigger: 'axis',
-                    valueFormatter: (value: string | number) => {
-                        if (isCost) {
-                            return `$${numberDisplay(Number(value), 2)}`
-                        }
-                        if (isPercent) {
-                            return `${numericDisplay(value)} %`
-                        }
-                        return numberDisplay(Number(value), 0)
-                    },
-                },
-                color: colorful
-                    ? [
-                          '#780000',
-                          '#DC0000',
-                          '#FD8C00',
-                          '#FDC500',
-                          '#10B880',
-                          '#D0D4DA',
-                      ]
-                    : [
-                          '#1D4F85',
-                          '#2970BC',
-                          '#6DA4DF',
-                          '#96BEE8',
-                          '#C0D8F1',
-                          '#D0D4DA',
-                      ],
+                    color: colorful
+                        ? [
+                              '#780000',
+                              '#DC0000',
+                              '#FD8C00',
+                              '#FDC500',
+                              '#10B880',
+                              '#D0D4DA',
+                          ]
+                        : [
+                              '#1D4F85',
+                              '#2970BC',
+                              '#6DA4DF',
+                              '#96BEE8',
+                              '#C0D8F1',
+                              '#D0D4DA',
+                          ],
+                }
             }
+            if (chartAggregation === 'cumulative') {
+                return {
+                    xAxis: {
+                        type: labelType,
+                        data: labels,
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: (value: string | number) => {
+                                if (isCost) {
+                                    return `$${numericDisplay(value)}`
+                                }
+                                if (isPercent) {
+                                    return `${numericDisplay(value)} %`
+                                }
+                                return numericDisplay(value)
+                            },
+                        },
+                    },
+                    visualMap,
+                    animation: false,
+                    series: [
+                        chartType === 'bar' && {
+                            data: chartData,
+                            type: chartType,
+                            areaStyle: { opacity: 0 },
+                        },
+                        chartType === 'line' && {
+                            data: chartData,
+                            markArea,
+                            type: chartType,
+                            areaStyle: { opacity: 0.7 },
+                        },
+                    ],
+                    grid: {
+                        left: 45,
+                        right: 0,
+                        top: 20,
+                        bottom: 40,
+                    },
+                    tooltip: {
+                        show: true,
+                        trigger: 'axis',
+                        valueFormatter: (value: string | number) => {
+                            if (isCost) {
+                                return `$${numberDisplay(Number(value), 2)}`
+                            }
+                            if (isPercent) {
+                                return `${numericDisplay(value)} %`
+                            }
+                            return numberDisplay(Number(value), 0)
+                        },
+                    },
+                    color: colorful
+                        ? [
+                              '#780000',
+                              '#DC0000',
+                              '#FD8C00',
+                              '#FDC500',
+                              '#10B880',
+                              '#D0D4DA',
+                          ]
+                        : [
+                              '#1D4F85',
+                              '#2970BC',
+                              '#6DA4DF',
+                              '#96BEE8',
+                              '#C0D8F1',
+                              '#D0D4DA',
+                          ],
+                }
+            }
+            return {}
+        }
+        if (chartLayout === 'stacked') {
+            if (chartType === 'line') {
+                return {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985',
+                            },
+                        },
+                    },
+                    legend: {
+                        data: [
+                            'Email',
+                            'Union Ads',
+                            'Video Ads',
+                            'Direct',
+                            'Search Engine',
+                        ],
+                    },
+
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true,
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: [
+                                'Mon',
+                                'Tue',
+                                'Wed',
+                                'Thu',
+                                'Fri',
+                                'Sat',
+                                'Sun',
+                            ],
+                        },
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                        },
+                    ],
+                    series: [
+                        {
+                            name: 'Email',
+                            type: 'line',
+                            stack: 'Total',
+                            areaStyle: {},
+                            emphasis: {
+                                focus: 'series',
+                            },
+                            data: [120, 132, 101, 134, 90, 230, 210],
+                        },
+                        {
+                            name: 'Union Ads',
+                            type: 'line',
+                            stack: 'Total',
+                            areaStyle: {},
+                            emphasis: {
+                                focus: 'series',
+                            },
+                            data: [220, 182, 191, 234, 290, 330, 310],
+                        },
+                        {
+                            name: 'Video Ads',
+                            type: 'line',
+                            stack: 'Total',
+                            areaStyle: {},
+                            emphasis: {
+                                focus: 'series',
+                            },
+                            data: [150, 232, 201, 154, 190, 330, 410],
+                        },
+                        {
+                            name: 'Direct',
+                            type: 'line',
+                            stack: 'Total',
+                            areaStyle: {},
+                            emphasis: {
+                                focus: 'series',
+                            },
+                            data: [320, 332, 301, 334, 390, 330, 320],
+                        },
+                        {
+                            name: 'Search Engine',
+                            type: 'line',
+                            stack: 'Total',
+                            label: {
+                                show: true,
+                                position: 'top',
+                            },
+                            areaStyle: {},
+                            emphasis: {
+                                focus: 'series',
+                            },
+                            data: [820, 932, 901, 934, 1290, 1330, 1320],
+                        },
+                    ],
+                }
+            }
+            if (chartType === 'bar') {
+                return {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow',
+                        },
+                    },
+                    legend: {},
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true,
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            data: [
+                                'Mon',
+                                'Tue',
+                                'Wed',
+                                'Thu',
+                                'Fri',
+                                'Sat',
+                                'Sun',
+                            ],
+                        },
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                        },
+                    ],
+                    series: [
+                        {
+                            name: 'Email',
+                            type: 'bar',
+                            stack: 'Ad',
+                            emphasis: {
+                                focus: 'series',
+                            },
+                            data: [120, 132, 101, 134, 90, 230, 210],
+                        },
+                        {
+                            name: 'Union Ads',
+                            type: 'bar',
+                            stack: 'Ad',
+                            emphasis: {
+                                focus: 'series',
+                            },
+                            data: [220, 182, 191, 234, 290, 330, 310],
+                        },
+                        {
+                            name: 'Video Ads',
+                            type: 'bar',
+                            stack: 'Ad',
+                            emphasis: {
+                                focus: 'series',
+                            },
+                            data: [150, 232, 201, 154, 190, 330, 410],
+                        },
+                    ],
+                }
+            }
+            return undefined
         }
         if (chartType === 'doughnut') {
             return {
@@ -256,7 +500,7 @@ export default function Chart({
                 color: ['#C0D8F1', '#0D2239'],
             }
         }
-        return undefined
+        return {}
     }
 
     const onEvents = {

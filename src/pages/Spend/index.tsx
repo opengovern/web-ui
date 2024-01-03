@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react'
 import {
+    Bold,
     Callout,
     Card,
     Col,
     Flex,
     Grid,
-    Select,
     Tab,
     TabGroup,
     TabList,
     Text,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
+import { use } from 'echarts'
+import { CheckBadgeIcon, CheckIcon } from '@heroicons/react/24/outline'
 import Layout from '../../components/Layout'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
@@ -22,7 +24,7 @@ import { filterAtom, IFilter, spendTimeAtom } from '../../store'
 import { useOnboardApiV1ConnectionsSummaryList } from '../../api/onboard.gen'
 import Chart from '../../components/Chart'
 import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
-import SummaryCard from '../../components/Cards/SummaryCard'
+import MetricCard from '../../components/Cards/MetricCard'
 import {
     exactPriceDisplay,
     numberDisplay,
@@ -34,7 +36,7 @@ import {
     GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
     SourceType,
 } from '../../api/api'
-import { AreaChartIcon, BarChartIcon, LineChartIcon } from '../../icons/icons'
+import { BarChartIcon, LineChartIcon } from '../../icons/icons'
 import Breakdown from '../../components/Breakdown'
 import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity, generateItems } from '../../utilities/dateComparator'
@@ -42,6 +44,8 @@ import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 import Header from '../../components/Header'
 import { generateVisualMap } from '../Assets'
 import SingleSpendConnection from './Single/SingleConnection'
+import FitSelector from '../../components/FitSelector'
+import FitSelectorNew from '../../components/FitSelectorNew'
 
 const topServices = (
     input:
@@ -105,14 +109,14 @@ export const costTrendChart = (
     trend:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
         | undefined,
-    chart: 'line' | 'bar' | 'area',
+    chart: 'trend' | 'cumulative',
     granularity: 'monthly' | 'daily' | 'yearly'
 ) => {
     const label = []
     const data: any = []
     const flag = []
     if (trend) {
-        if (chart === 'bar' || chart === 'line') {
+        if (chart === 'trend') {
             for (let i = 0; i < trend?.length; i += 1) {
                 label.push(
                     granularity === 'monthly'
@@ -128,7 +132,7 @@ export const costTrendChart = (
                 } else flag.push(false)
             }
         }
-        if (chart === 'area') {
+        if (chart === 'cumulative') {
             for (let i = 0; i < trend?.length; i += 1) {
                 label.push(
                     granularity === 'monthly'
@@ -188,12 +192,10 @@ export default function Spend() {
     const activeTimeRange = useAtomValue(spendTimeAtom)
     const selectedConnections = useAtomValue(filterAtom)
 
-    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
-        'area'
-    )
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar'>('line')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedGranularity, setSelectedGranularity] = useState<
-        'monthly' | 'daily' | 'yearly'
+        'daily' | 'monthly' | 'yearly'
     >(
         checkGranularity(activeTimeRange.start, activeTimeRange.end).monthly
             ? 'monthly'
@@ -207,12 +209,36 @@ export default function Spend() {
         )
     }, [activeTimeRange])
 
+    const generateGranularityList = (
+        s = activeTimeRange.start,
+        e = activeTimeRange.end
+    ) => {
+        let List: string[] = []
+        if (checkGranularity(s, e).daily) {
+            List = [...List, 'daily']
+        }
+        if (checkGranularity(s, e).monthly) {
+            List = [...List, 'monthly']
+        }
+        if (checkGranularity(s, e).yearly) {
+            List = [...List, 'yearly']
+        }
+        return List
+    }
+
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
 
+    const [chartLayout, setChartLayout] = useState<'basic' | 'stacked'>('basic')
+    const chartLayoutValues = ['basic', 'stacked']
+
+    const [chartAggregation, setChartAggregation] = useState<
+        'trend' | 'cumulative'
+    >('trend')
+    const chartAggregationValues = ['trend', 'cumulative']
+
     useEffect(() => {
-        if (selectedIndex === 0) setSelectedChart('area')
-        if (selectedIndex === 1) setSelectedChart('line')
-        if (selectedIndex === 2) setSelectedChart('bar')
+        if (selectedIndex === 0) setSelectedChart('line')
+        if (selectedIndex === 1) setSelectedChart('bar')
     }, [selectedIndex])
 
     const query: {
@@ -288,52 +314,72 @@ export default function Spend() {
                 <>
                     <Card className="mb-4">
                         <Grid numItems={6} className="gap-4">
-                            <Col numColSpan={1}>
-                                <SummaryCard
+                            <Col numColSpan={2}>
+                                <MetricCard
                                     title={getConnections(selectedConnections)}
                                     metric={accountCostResponse?.totalCost}
+                                    // Check with Saleh
+                                    metricPrev="2000"
                                     loading={accountCostLoading}
                                     url="spend-details#cloud-accounts"
-                                    border={false}
                                     isPrice
                                     isExact
+                                    border={false}
                                 />
                             </Col>
-                            <Col numColSpan={3} />
-                            <Col numColSpan={2}>
-                                <Flex justifyContent="end" className="gap-4">
-                                    <Select
-                                        enableClear={false}
-                                        value={selectedGranularity}
-                                        placeholder={capitalizeFirstLetter(
-                                            selectedGranularity
+                            <Col numColSpan={4}>
+                                <Flex justifyContent="end" className="gap-0">
+                                    <FitSelectorNew
+                                        values={generateGranularityList(
+                                            activeTimeRange.start,
+                                            activeTimeRange.end
                                         )}
+                                        value={selectedGranularity}
+                                        title="Granularity  "
                                         onValueChange={(v) => {
                                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                             // @ts-ignore
                                             setSelectedGranularity(v)
                                         }}
-                                        className="w-10"
-                                    >
-                                        {generateItems(
-                                            activeTimeRange.start,
-                                            activeTimeRange.end
+                                    />
+
+                                    <FitSelectorNew
+                                        values={chartLayoutValues.map(
+                                            (value) => value
                                         )}
-                                    </Select>
+                                        value={chartLayout}
+                                        title="Categorization"
+                                        onValueChange={(v) => {
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            setChartLayout(v)
+                                        }}
+                                    />
+
+                                    <FitSelectorNew
+                                        values={chartAggregationValues.map(
+                                            (value) => value
+                                        )}
+                                        value={chartAggregation}
+                                        title="Data Aggregation"
+                                        onValueChange={(v) => {
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            setChartAggregation(v)
+                                        }}
+                                    />
+
                                     <TabGroup
                                         index={selectedIndex}
                                         onIndexChange={setSelectedIndex}
-                                        className="w-fit rounded-lg"
+                                        className="w-fit rounded-lg ml-2"
                                     >
                                         <TabList variant="solid">
-                                            <Tab value="area">
-                                                <AreaChartIcon className="h-5" />
-                                            </Tab>
                                             <Tab value="line">
-                                                <LineChartIcon className="h-5" />
+                                                <LineChartIcon className="h-4 w-4 m-0.5 my-1.5" />
                                             </Tab>
                                             <Tab value="bar">
-                                                <BarChartIcon className="h-5" />
+                                                <BarChartIcon className="h-4 w-4 m-0.5 my-1.5" />
                                             </Tab>
                                         </TabList>
                                     </TabGroup>
@@ -365,7 +411,7 @@ export default function Spend() {
                             ))}
                         <Flex justifyContent="end" className="mt-2 gap-2.5">
                             <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                            {selectedChart === 'area' ? (
+                            {chartAggregation === 'cumulative' ? (
                                 <Text>Accumulated spend</Text>
                             ) : (
                                 <Text>Spend</Text>
@@ -375,54 +421,56 @@ export default function Spend() {
                             labels={
                                 costTrendChart(
                                     costTrend,
-                                    selectedChart,
+                                    chartAggregation,
                                     selectedGranularity
                                 ).label
                             }
                             chartData={
                                 costTrendChart(
                                     costTrend,
-                                    selectedChart,
+                                    chartAggregation,
                                     selectedGranularity
                                 ).data
                             }
                             chartType={selectedChart}
+                            chartLayout={chartLayout}
+                            chartAggregation={chartAggregation}
                             isCost
                             loading={costTrendLoading}
                             visualMap={
-                                selectedChart === 'area'
+                                chartAggregation === 'cumulative'
                                     ? undefined
                                     : generateVisualMap(
                                           costTrendChart(
                                               costTrend,
-                                              selectedChart,
+                                              chartAggregation,
                                               selectedGranularity
                                           ).flag,
                                           costTrendChart(
                                               costTrend,
-                                              selectedChart,
+                                              chartAggregation,
                                               selectedGranularity
                                           ).label
                                       ).visualMap
                             }
                             markArea={
-                                selectedChart === 'area'
+                                chartAggregation === 'cumulative'
                                     ? undefined
                                     : generateVisualMap(
                                           costTrendChart(
                                               costTrend,
-                                              selectedChart,
+                                              chartAggregation,
                                               selectedGranularity
                                           ).flag,
                                           costTrendChart(
                                               costTrend,
-                                              selectedChart,
+                                              chartAggregation,
                                               selectedGranularity
                                           ).label
                                       ).markArea
                             }
                             onClick={
-                                selectedChart === 'area'
+                                chartAggregation === 'cumulative'
                                     ? undefined
                                     : (p) => setSelectedDatapoint(p)
                             }
@@ -441,6 +489,8 @@ export default function Spend() {
                             <Grid numItems={2} className="w-full h-full gap-4">
                                 <ListCard
                                     title="Top Cloud Accounts"
+                                    firstColumnTitle="Account Names"
+                                    secondColumnTitle="Spend"
                                     loading={accountCostLoading}
                                     items={topAccounts(accountCostResponse)}
                                     url="spend-details#cloud-accounts"
@@ -449,6 +499,8 @@ export default function Spend() {
                                 />
                                 <ListCard
                                     title="Top Metrics"
+                                    firstColumnTitle="Mertic Names"
+                                    secondColumnTitle="Spend"
                                     loading={serviceCostLoading}
                                     items={topServices(serviceCostResponse)}
                                     url="spend-details#metrics"

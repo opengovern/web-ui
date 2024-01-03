@@ -79,9 +79,7 @@ export default function Trends({
     isPercent,
     isCost,
 }: ITrends) {
-    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
-        'bar'
-    )
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar'>('bar')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
@@ -203,6 +201,8 @@ export default function Trends({
                 labels={labels}
                 chartData={chartData}
                 chartType={selectedChart}
+                chartLayout="basic"
+                chartAggregation="trend"
                 loading={loading}
                 isPercent={isPercent}
                 isCost={isCost}

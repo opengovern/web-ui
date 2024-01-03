@@ -314,6 +314,8 @@ export default function Assets() {
                             <Grid numItems={2} className="w-full h-full gap-4">
                                 <ListCard
                                     title="Top Cloud Accounts"
+                                    firstColumnTitle="Account Names"
+                                    secondColumnTitle="Count"
                                     loading={accountsResponseLoading}
                                     items={topAccounts(accountsResponse)}
                                     url="assets-details#cloud-accounts"
@@ -321,6 +323,8 @@ export default function Assets() {
                                 />
                                 <ListCard
                                     title="Top Metrics"
+                                    firstColumnTitle="Mertic Names"
+                                    secondColumnTitle="Count"
                                     loading={servicesResponseLoading}
                                     items={topServices(servicesResponse)}
                                     url="assets-details#metrics"

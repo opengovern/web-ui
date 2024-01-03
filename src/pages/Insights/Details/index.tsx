@@ -133,9 +133,7 @@ export default function InsightDetails() {
     const activeTimeRange = useAtomValue(timeAtom)
     const selectedConnections = useAtomValue(filterAtom)
     const [detailsDate, setDetailsDate] = useState<string>('')
-    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
-        'line'
-    )
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar'>('line')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const isDemo = useAtomValue(isDemoAtom)
 
@@ -376,6 +374,8 @@ export default function InsightDetails() {
                             labels={chartData(insightTrend).label}
                             chartData={chartData(insightTrend).data}
                             chartType={selectedChart}
+                            chartLayout="basic"
+                            chartAggregation="trend"
                         />
                     </Card>
                     <Card>

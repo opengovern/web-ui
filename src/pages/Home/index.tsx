@@ -108,6 +108,8 @@ export default function Home() {
                     labels={costTrendChart().label}
                     chartData={costTrendChart().data}
                     chartType="line"
+                    chartLayout="basic"
+                    chartAggregation="trend"
                     isCost
                     loading={costTrendLoading}
                     error={getErrorMessage(costTrendError)}
@@ -120,6 +122,8 @@ export default function Home() {
                 labels={resourceTrendChart().label}
                 chartData={resourceTrendChart().data}
                 chartType="line"
+                chartLayout="basic"
+                chartAggregation="trend"
                 loading={resourceTrendLoading}
                 error={getErrorMessage(trendError)}
                 onRefresh={refreshTrend}

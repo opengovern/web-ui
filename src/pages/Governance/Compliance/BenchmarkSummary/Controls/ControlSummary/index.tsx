@@ -295,6 +295,8 @@ export default function ControlDetail() {
                         </Card>
                         <ListCard
                             title="Top Cloud Accounts"
+                            firstColumnTitle="Account Names"
+                            secondColumnTitle="Spent Money"
                             loading={accountsLoading}
                             items={topAccounts(accounts)}
                             type="account"
