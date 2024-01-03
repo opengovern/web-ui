@@ -189,7 +189,6 @@ export default function ResourcesWithFailure() {
                                 : [sortKey],
                     })
                     .then((resp) => {
-                        console.log(resp.data)
                         params.success({
                             rowData: resp.data.resourceFindings || [],
                             rowCount: resp.data.totalCount || 0,
