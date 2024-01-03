@@ -62,11 +62,11 @@ const filteredConnectionsList = (
 
 interface IFindingsFilter {
     providerFilter: SourceType[]
-    statusFilter: string[]
+    statusFilter?: string[]
     connectionFilter: string[]
     benchmarkFilter: string[]
-    resourceFilter: string[]
-    severityFilter: string[]
+    resourceFilter?: string[]
+    severityFilter?: string[]
     onApply: (obj: {
         provider: SourceType[]
         status: string[]
@@ -116,7 +116,6 @@ export default function FindingFilters({
                 // @ts-ignore
                 provider.length ? [provider] : []
             ) ||
-            !compareArrays(statusFilter.sort(), status.sort()) ||
             !compareArrays(
                 connectionFilter.sort(),
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -129,15 +128,25 @@ export default function FindingFilters({
                 // @ts-ignore
                 benchmarkCheckbox.state.sort()
             ) ||
-            !compareArrays(
-                resourceFilter.sort(),
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                resourceCheckbox.state.sort()
-            ) ||
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            !compareArrays(severityFilter.sort(), severityCheckbox.state.sort())
+            (statusFilter
+                ? !compareArrays(statusFilter.sort(), status.sort())
+                : false) ||
+            (resourceFilter
+                ? !compareArrays(
+                      resourceFilter.sort(),
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
+                      resourceCheckbox.state.sort()
+                  )
+                : false) ||
+            (severityFilter
+                ? !compareArrays(
+                      severityFilter.sort(),
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
+                      severityCheckbox.state.sort()
+                  )
+                : false)
         )
     }
 
@@ -161,14 +170,21 @@ export default function FindingFilters({
     const showReset = () => {
         return (
             providerFilter.length ||
-            statusFilter.length !== 4 ||
             connectionFilter.length ||
             benchmarkFilter.length ||
-            resourceFilter.length ||
-            !compareArrays(
-                severityFilter.sort(),
-                ['critical', 'high', 'medium', 'low', 'none'].sort()
-            )
+            (statusFilter
+                ? !compareArrays(
+                      statusFilter.sort(),
+                      ['alarm', 'info', 'skip', 'error'].sort()
+                  )
+                : false) ||
+            (resourceFilter ? resourceFilter.length : false) ||
+            (severityFilter
+                ? !compareArrays(
+                      severityFilter.sort(),
+                      ['critical', 'high', 'medium', 'low', 'none'].sort()
+                  )
+                : false)
         )
     }
     const { response: connections, isLoading: connectionsLoading } =
@@ -238,103 +254,117 @@ export default function FindingFilters({
                 </AccordionBody>
             </Accordion>
             <Divider className="my-3" />
-            <Accordion
-                defaultOpen
-                className="border-0 rounded-none bg-transparent mb-1"
-            >
-                <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                    <Text className="font-semibold text-gray-800">
-                        Conformance status
-                    </Text>
-                </AccordionHeader>
-                <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        className="gap-1.5"
+            {statusFilter && (
+                <>
+                    <Accordion
+                        defaultOpen
+                        className="border-0 rounded-none bg-transparent mb-1"
                     >
-                        <Radio
-                            name="status"
-                            onClick={() =>
-                                setStatus([
-                                    'ok',
-                                    'alarm',
-                                    'info',
-                                    'skip',
-                                    'error',
-                                ])
-                            }
-                            checked={status.length === 5}
-                        >
-                            All
-                        </Radio>
-                        <Radio
-                            name="status"
-                            onClick={() => setStatus(['ok'])}
-                            checked={
-                                status.length === 1 && status.includes('ok')
-                            }
-                        >
-                            <Flex className="gap-1">
-                                <CheckCircleIcon className="w-4 text-emerald-500" />
-                                <Text>Passed</Text>
-                            </Flex>
-                        </Radio>
-                        <Radio
-                            name="status"
-                            onClick={() =>
-                                setStatus(['alarm', 'info', 'skip', 'error'])
-                            }
-                            checked={status.length === 4}
-                        >
-                            <Flex className="gap-1">
-                                <XCircleIcon className="w-4 text-rose-600" />
-                                <Text>Failed</Text>
-                            </Flex>
-                        </Radio>
-                    </Flex>
-                </AccordionBody>
-            </Accordion>
-            <Divider className="my-3" />
-            <Accordion
-                defaultOpen
-                className="border-0 rounded-none bg-transparent mb-1"
-            >
-                <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                    <Text className="font-semibold text-gray-800">
-                        Severity
-                    </Text>
-                </AccordionHeader>
-                <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        className="gap-1.5"
-                    >
-                        {severity.map((s) => (
-                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                            // @ts-ignore
-                            <Checkbox
-                                shape="curve"
-                                className="!items-start"
-                                value={s.name.toLowerCase()}
-                                {...severityCheckbox}
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="font-semibold text-gray-800">
+                                Conformance status
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
                             >
-                                <Flex className="gap-1.5">
-                                    <div
-                                        className="h-4 w-1.5 rounded-sm"
-                                        style={{
-                                            backgroundColor: s.color,
-                                        }}
-                                    />
-                                    <Text>{s.name}</Text>
-                                </Flex>
-                            </Checkbox>
-                        ))}
-                    </Flex>
-                </AccordionBody>
-            </Accordion>
-            <Divider className="my-3" />
+                                <Radio
+                                    name="status"
+                                    onClick={() =>
+                                        setStatus([
+                                            'ok',
+                                            'alarm',
+                                            'info',
+                                            'skip',
+                                            'error',
+                                        ])
+                                    }
+                                    checked={status.length === 5}
+                                >
+                                    All
+                                </Radio>
+                                <Radio
+                                    name="status"
+                                    onClick={() => setStatus(['ok'])}
+                                    checked={
+                                        status.length === 1 &&
+                                        status.includes('ok')
+                                    }
+                                >
+                                    <Flex className="gap-1">
+                                        <CheckCircleIcon className="w-4 text-emerald-500" />
+                                        <Text>Passed</Text>
+                                    </Flex>
+                                </Radio>
+                                <Radio
+                                    name="status"
+                                    onClick={() =>
+                                        setStatus([
+                                            'alarm',
+                                            'info',
+                                            'skip',
+                                            'error',
+                                        ])
+                                    }
+                                    checked={status.length === 4}
+                                >
+                                    <Flex className="gap-1">
+                                        <XCircleIcon className="w-4 text-rose-600" />
+                                        <Text>Failed</Text>
+                                    </Flex>
+                                </Radio>
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                    <Divider className="my-3" />
+                </>
+            )}
+            {severityFilter && (
+                <>
+                    <Accordion
+                        defaultOpen
+                        className="border-0 rounded-none bg-transparent mb-1"
+                    >
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="font-semibold text-gray-800">
+                                Severity
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="gap-1.5"
+                            >
+                                {severity.map((s) => (
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    <Checkbox
+                                        shape="curve"
+                                        className="!items-start"
+                                        value={s.name.toLowerCase()}
+                                        {...severityCheckbox}
+                                    >
+                                        <Flex className="gap-1.5">
+                                            <div
+                                                className="h-4 w-1.5 rounded-sm"
+                                                style={{
+                                                    backgroundColor: s.color,
+                                                }}
+                                            />
+                                            <Text>{s.name}</Text>
+                                        </Flex>
+                                    </Checkbox>
+                                ))}
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                    <Divider className="my-3" />
+                </>
+            )}
             <Accordion className="border-0 rounded-none bg-transparent mb-1">
                 <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
                     <Text className="font-semibold text-gray-800">
@@ -445,70 +475,76 @@ export default function FindingFilters({
                     )}
                 </AccordionBody>
             </Accordion>
-            <Divider className="my-3" />
-            <Accordion className="border-0 rounded-none bg-transparent mb-1">
-                <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
-                    <Text className="text-gray-800 font-semibold">
-                        Resource types
-                    </Text>
-                </AccordionHeader>
-                <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
-                    <TextInput
-                        icon={MagnifyingGlassIcon}
-                        placeholder="Search resource types..."
-                        value={resourceSearch}
-                        onChange={(e) => setResourceSearch(e.target.value)}
-                        className="mb-4"
-                    />
-                    <Flex
-                        flexDirection="col"
-                        alignItems="start"
-                        className="px-0.5 gap-2.5 max-h-[200px] overflow-y-scroll overflow-x-hidden"
-                    >
-                        {filtersLoading ? (
-                            <Spinner />
-                        ) : (
-                            filters?.resourceTypeID
-                                ?.filter(
-                                    (p) =>
-                                        p.displayName
-                                            ?.toLowerCase()
-                                            .includes(
-                                                resourceSearch.toLowerCase()
-                                            ) ||
-                                        p.key
-                                            ?.toLowerCase()
-                                            .includes(
-                                                resourceSearch.toLowerCase()
-                                            )
-                                )
-                                .map((p, i) => (
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    <Checkbox
-                                        shape="curve"
-                                        className="!items-start"
-                                        value={p.key}
-                                        {...resourceCheckbox}
-                                    >
-                                        <Flex
-                                            flexDirection="col"
-                                            alignItems="start"
-                                            className="-mt-0.5"
-                                        >
-                                            <Text className="text-gray-800 truncate">
-                                                {p.displayName}
-                                            </Text>
-                                            <Text className="text-xs truncate">
-                                                {p.key}
-                                            </Text>
-                                        </Flex>
-                                    </Checkbox>
-                                ))
-                        )}
-                    </Flex>
-                </AccordionBody>
-            </Accordion>
+            {resourceFilter && (
+                <>
+                    <Divider className="my-3" />
+                    <Accordion className="border-0 rounded-none bg-transparent mb-1">
+                        <AccordionHeader className="pl-0 pr-0.5 py-1 w-full bg-transparent">
+                            <Text className="text-gray-800 font-semibold">
+                                Resource types
+                            </Text>
+                        </AccordionHeader>
+                        <AccordionBody className="pt-3 pb-1 px-0.5 w-full cursor-default bg-transparent">
+                            <TextInput
+                                icon={MagnifyingGlassIcon}
+                                placeholder="Search resource types..."
+                                value={resourceSearch}
+                                onChange={(e) =>
+                                    setResourceSearch(e.target.value)
+                                }
+                                className="mb-4"
+                            />
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="px-0.5 gap-2.5 max-h-[200px] overflow-y-scroll overflow-x-hidden"
+                            >
+                                {filtersLoading ? (
+                                    <Spinner />
+                                ) : (
+                                    filters?.resourceTypeID
+                                        ?.filter(
+                                            (p) =>
+                                                p.displayName
+                                                    ?.toLowerCase()
+                                                    .includes(
+                                                        resourceSearch.toLowerCase()
+                                                    ) ||
+                                                p.key
+                                                    ?.toLowerCase()
+                                                    .includes(
+                                                        resourceSearch.toLowerCase()
+                                                    )
+                                        )
+                                        .map((p, i) => (
+                                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                            // @ts-ignore
+                                            <Checkbox
+                                                shape="curve"
+                                                className="!items-start"
+                                                value={p.key}
+                                                {...resourceCheckbox}
+                                            >
+                                                <Flex
+                                                    flexDirection="col"
+                                                    alignItems="start"
+                                                    className="-mt-0.5"
+                                                >
+                                                    <Text className="text-gray-800 truncate">
+                                                        {p.displayName}
+                                                    </Text>
+                                                    <Text className="text-xs truncate">
+                                                        {p.key}
+                                                    </Text>
+                                                </Flex>
+                                            </Checkbox>
+                                        ))
+                                )}
+                            </Flex>
+                        </AccordionBody>
+                    </Accordion>
+                </>
+            )}
             <Flex flexDirection="row-reverse">
                 {showApply() && (
                     <Button

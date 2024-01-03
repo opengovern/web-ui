@@ -11,6 +11,7 @@ import Layout from '../../../components/Layout'
 import Header from '../../../components/Header'
 import FindingsWithFailure from './FindingsWithFailure'
 import ResourcesWithFailure from './ResourcesWithFailure'
+import ControlsWithFailure from './ControlsWithFailure'
 
 const tabs = [
     {
@@ -44,6 +45,8 @@ export default function Findings() {
                 return <FindingsWithFailure />
             case 'resources':
                 return <ResourcesWithFailure />
+            case 'controls':
+                return <ControlsWithFailure />
             default:
                 return <FindingsWithFailure />
         }

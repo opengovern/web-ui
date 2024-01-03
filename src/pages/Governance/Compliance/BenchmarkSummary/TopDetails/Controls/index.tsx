@@ -10,7 +10,7 @@ interface IFinder {
     id: string | undefined
 }
 
-const rows = (
+export const rows = (
     input:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord[]
         | undefined
