@@ -21,6 +21,7 @@ interface ISettings {
             | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities
             | undefined
     ) => void
+    autoAssign: boolean
 }
 
 const columns = (isDemo: boolean) => {
@@ -98,7 +99,7 @@ interface ITransferState {
     status: boolean
 }
 
-export default function Settings({ id, response }: ISettings) {
+export default function Settings({ id, response, autoAssign }: ISettings) {
     const tab = useLocation().hash
     const [open, setOpen] = useState(tab === '#settings')
     const [firstLoading, setFirstLoading] = useState<boolean>(true)

@@ -157,6 +157,7 @@ export default function BenchmarkSummary() {
         3,
         topQuery
     )
+    console.log(benchmarkDetail)
 
     const renderBars = () => {
         switch (stateIndex) {
@@ -220,6 +221,7 @@ export default function BenchmarkSummary() {
                     response={(e) =>
                         setAssignments(e?.connections?.length || 0)
                     }
+                    autoAssign={false}
                 />
             </Header>
             {isLoading ? (
