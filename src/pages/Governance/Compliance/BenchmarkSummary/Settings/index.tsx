@@ -12,9 +12,15 @@ import {
     useComplianceApiV1AssignmentsConnectionCreate,
     useComplianceApiV1AssignmentsConnectionDelete,
 } from '../../../../../api/compliance.gen'
+import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities } from '../../../../../api/api'
 
 interface ISettings {
     id: string | undefined
+    response: (
+        x:
+            | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities
+            | undefined
+    ) => void
 }
 
 const columns = (isDemo: boolean) => {
@@ -92,7 +98,7 @@ interface ITransferState {
     status: boolean
 }
 
-export default function Settings({ id }: ISettings) {
+export default function Settings({ id, response }: ISettings) {
     const tab = useLocation().hash
     const [open, setOpen] = useState(tab === '#settings')
     const [firstLoading, setFirstLoading] = useState<boolean>(true)
@@ -134,7 +140,10 @@ export default function Settings({ id }: ISettings) {
         if (id && !assignments) {
             refreshList()
         }
-    }, [id])
+        if (assignments) {
+            response(assignments)
+        }
+    }, [id, assignments])
 
     useEffect(() => {
         if (transfer.connectionID !== '') {
