@@ -24,7 +24,6 @@ import SpendDetails from '../pages/Spend/Details'
 import AssetDetails from '../pages/Assets/Details'
 import Rules from '../pages/Automation/Rules'
 import Alerts from '../pages/Automation/Alerts'
-import FindingsWithFailure from '../pages/Governance/Findings/FindingsWithFailure'
 import SingleComplianceConnection from '../pages/Governance/Compliance/BenchmarkSummary/SingleConnection'
 import Boostrap from '../pages/Workspaces/Bootstrap'
 import ResourceCollection from '../pages/ResourceCollection'
@@ -32,6 +31,7 @@ import ResourceCollectionDetail from '../pages/ResourceCollection/Detail'
 import ControlDetail from '../pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary'
 import ConnectorResourceTypes from '../pages/Integrations/ConnectorDetail/ResourceTypes'
 import Billing from '../pages/Billing'
+import Findings from '../pages/Governance/Findings'
 
 const routes = [
     {
@@ -190,7 +190,7 @@ const authRoutes = [
     {
         key: 'findings',
         path: '/:ws/findings',
-        component: FindingsWithFailure,
+        component: Findings,
     },
     {
         key: 'service advisor summary',

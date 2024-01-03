@@ -277,56 +277,54 @@ export default function FindingsWithFailure() {
     )
 
     return (
-        <Layout currentPage="findings">
-            <Flex alignItems="start">
-                <FindingFilters
-                    providerFilter={providerFilter}
-                    statusFilter={statusFilter}
-                    connectionFilter={connectionFilter}
-                    benchmarkFilter={benchmarkFilter}
-                    resourceFilter={resourceFilter}
-                    severityFilter={severityFilter}
-                    onApply={(obj) => {
-                        setProviderFilter(obj.provider)
-                        setStatusFilter(obj.status)
-                        setConnectionFilter(obj.connection)
-                        setBenchmarkFilter(obj.connection)
-                        setResourceFilter(obj.resource)
-                        setSeverityFilter(obj.severity)
+        <Flex alignItems="start">
+            <FindingFilters
+                providerFilter={providerFilter}
+                statusFilter={statusFilter}
+                connectionFilter={connectionFilter}
+                benchmarkFilter={benchmarkFilter}
+                resourceFilter={resourceFilter}
+                severityFilter={severityFilter}
+                onApply={(obj) => {
+                    setProviderFilter(obj.provider)
+                    setStatusFilter(obj.status)
+                    setConnectionFilter(obj.connection)
+                    setBenchmarkFilter(obj.connection)
+                    setResourceFilter(obj.resource)
+                    setSeverityFilter(obj.severity)
+                }}
+            />
+            <Flex className="pl-4">
+                <Table
+                    fullWidth
+                    id="compliance_findings"
+                    columns={columns(isDemo)}
+                    onCellClicked={(event: RowClickedEvent) => {
+                        if (
+                            event.data.kaytuResourceID &&
+                            event.data.kaytuResourceID.length > 0
+                        ) {
+                            setFinding(event.data)
+                            setOpen(true)
+                        } else {
+                            setNotification({
+                                text: 'Detail for this finding is currently not available',
+                                type: 'warning',
+                            })
+                        }
+                    }}
+                    serverSideDatasource={serverSideRows}
+                    options={{
+                        rowModelType: 'serverSide',
+                        serverSideDatasource: serverSideRows,
                     }}
                 />
-                <Flex className="pl-4">
-                    <Table
-                        fullWidth
-                        id="compliance_findings"
-                        columns={columns(isDemo)}
-                        onCellClicked={(event: RowClickedEvent) => {
-                            if (
-                                event.data.kaytuResourceID &&
-                                event.data.kaytuResourceID.length > 0
-                            ) {
-                                setFinding(event.data)
-                                setOpen(true)
-                            } else {
-                                setNotification({
-                                    text: 'Detail for this finding is currently not available',
-                                    type: 'warning',
-                                })
-                            }
-                        }}
-                        serverSideDatasource={serverSideRows}
-                        options={{
-                            rowModelType: 'serverSide',
-                            serverSideDatasource: serverSideRows,
-                        }}
-                    />
-                    <FindingDetail
-                        finding={finding}
-                        open={open}
-                        onClose={() => setOpen(false)}
-                    />
-                </Flex>
+                <FindingDetail
+                    finding={finding}
+                    open={open}
+                    onClose={() => setOpen(false)}
+                />
             </Flex>
-        </Layout>
+        </Flex>
     )
 }
