@@ -326,9 +326,11 @@ export default function Table<TData = any, TValue = any>({
                 </Flex>
             </Flex>
             <div
-                className={`w-full ag-theme-alpine ${
-                    fullHeight ? 'h-full' : ''
-                }`}
+                className={`w-full ${
+                    localStorage.theme === 'dark'
+                        ? 'ag-theme-alpine-dark'
+                        : 'ag-theme-alpine'
+                } ${fullHeight ? 'h-full' : ''}`}
             >
                 <AgGridReact
                     ref={gridRef}
