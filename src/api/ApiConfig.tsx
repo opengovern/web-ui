@@ -27,7 +27,7 @@ export const setAuthHeader = (authToken?: string) => {
 }
 
 export const setWorkspace = (workspaceName?: string) => {
-    instance.defaults.baseURL = `${BASE_URL}/${workspaceName}`
+    instance.defaults.baseURL = `${apiHostname()}/${workspaceName}`
 }
 
 export default instance
