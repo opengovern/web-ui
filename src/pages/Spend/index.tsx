@@ -119,7 +119,7 @@ export const costTrendChart = (
                         ? monthDisplay(trend[i]?.date)
                         : dateDisplay(trend[i]?.date)
                 )
-                data.push(trend[i]?.count)
+                data.push(trend[i]?.cost)
                 if (
                     trend[i].totalConnectionCount !==
                     trend[i].totalSuccessfulDescribedConnectionCount
@@ -136,9 +136,9 @@ export const costTrendChart = (
                         : dateDisplay(trend[i]?.date)
                 )
                 if (i === 0) {
-                    data.push(trend[i]?.count)
+                    data.push(trend[i]?.cost)
                 } else {
-                    data.push((trend[i]?.count || 0) + data[i - 1])
+                    data.push((trend[i]?.cost || 0) + data[i - 1])
                 }
             }
         }
