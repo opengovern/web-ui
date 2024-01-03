@@ -157,7 +157,6 @@ export default function BenchmarkSummary() {
         3,
         topQuery
     )
-    console.log(benchmarkDetail)
 
     const renderBars = () => {
         switch (stateIndex) {
