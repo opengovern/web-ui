@@ -160,7 +160,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                                 }}
                                             />
                                             <div
-                                                className="absolute w-60 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
+                                                className="absolute w-72 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
                                                 style={{
                                                     border: `1px solid ${s.color}`,
                                                 }}
@@ -177,14 +177,17 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                                     <Flex>
                                                         <Text>Controls</Text>
                                                         <Text>
-                                                            {`${
+                                                            {`${numberDisplay(
                                                                 s.control
                                                                     ?.passed ||
+                                                                    0,
                                                                 0
-                                                            } out of ${
+                                                            )} out of ${numberDisplay(
                                                                 s.control
-                                                                    ?.total || 0
-                                                            } passed`}
+                                                                    ?.total ||
+                                                                    0,
+                                                                0
+                                                            )} passed`}
                                                         </Text>
                                                     </Flex>
                                                     <Flex>
@@ -247,7 +250,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                 }}
                             />
                             <div
-                                className="absolute w-60 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
+                                className="absolute w-72 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
                                 style={{
                                     border: `1px solid ${passed.color}`,
                                 }}
@@ -260,7 +263,10 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                     </Text>
                                     <Flex>
                                         <Text>Controls</Text>
-                                        <Text>{`${passed.control}`}</Text>
+                                        <Text>{`${numberDisplay(
+                                            passed.control,
+                                            0
+                                        )}`}</Text>
                                     </Flex>
                                     <Flex>
                                         <Text>Issues</Text>
@@ -273,7 +279,10 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                     </Flex>
                                     <Flex>
                                         <Text>Resources</Text>
-                                        <Text>{`${passed.resource}`}</Text>
+                                        <Text>{`${numberDisplay(
+                                            passed.resource,
+                                            0
+                                        )}`}</Text>
                                     </Flex>
                                 </Flex>
                             </div>

@@ -108,6 +108,7 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
         false
     )
     const {
+        response: enableAllResponse,
         sendNow: sendEnableAll,
         isLoading: enableAllLoading,
         isExecuted: enableAllExecuted,
@@ -117,6 +118,7 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
         {},
         false
     )
+    console.log(enableAllResponse)
     const {
         sendNow: sendDisable,
         isLoading: disableLoading,
