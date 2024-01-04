@@ -470,7 +470,6 @@ export default function Spend() {
                                 <MetricCard
                                     title={getConnections(selectedConnections)}
                                     metric={serviceCostResponse?.total_cost}
-                                    // Check with Saleh
                                     metricPrev={
                                         servicePrevCostResponse?.total_cost
                                     }
