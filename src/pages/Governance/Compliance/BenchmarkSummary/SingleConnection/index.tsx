@@ -39,9 +39,9 @@ import {
     useComplianceApiV1FindingsCreate,
 } from '../../../../../api/compliance.gen'
 import Table from '../../../../../components/Table'
-import { columns } from '../../../Findings'
+import { columns } from '../../../Findings/FindingsWithFailure'
 import Breakdown from '../../../../../components/Breakdown'
-import FindingDetail from '../../../Findings/Detail'
+import FindingDetail from '../../../Findings/FindingsWithFailure/Detail'
 import { policyColumns } from '../Controls/ControlList'
 import { benchmarkChecks } from '../../../../../components/Cards/ComplianceCard'
 

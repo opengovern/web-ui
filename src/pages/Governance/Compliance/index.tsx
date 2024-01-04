@@ -1,24 +1,6 @@
-import {
-    Badge,
-    Button,
-    Col,
-    Flex,
-    Grid,
-    Icon,
-    Select,
-    SelectItem,
-    Tab,
-    TabGroup,
-    TabList,
-    Text,
-    Title,
-} from '@tremor/react'
+import { Badge, Button, Flex, Grid, Icon, Text, Title } from '@tremor/react'
 import { useEffect, useState } from 'react'
-import {
-    Bars3Icon,
-    ShieldCheckIcon,
-    Squares2X2Icon,
-} from '@heroicons/react/24/outline'
+import { ShieldCheckIcon } from '@heroicons/react/24/outline'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Layout from '../../../components/Layout'
@@ -251,25 +233,25 @@ export default function Compliance() {
         error,
         sendNow,
     } = useComplianceApiV1BenchmarksSummaryList()
-    const [selectedState, setSelectedState] = useState('active')
-    const [stateIndex, setStateIndex] = useState(0)
-
-    useEffect(() => {
-        switch (selectedState) {
-            case '':
-                setStateIndex(0)
-                break
-            case 'active':
-                setStateIndex(1)
-                break
-            case 'not-active':
-                setStateIndex(2)
-                break
-            default:
-                setStateIndex(0)
-                break
-        }
-    }, [selectedState])
+    const [selectedState, setSelectedState] = useState('')
+    // const [stateIndex, setStateIndex] = useState(0)
+    //
+    // useEffect(() => {
+    //     switch (selectedState) {
+    //         case '':
+    //             setStateIndex(0)
+    //             break
+    //         case 'active':
+    //             setStateIndex(1)
+    //             break
+    //         case 'not-active':
+    //             setStateIndex(2)
+    //             break
+    //         default:
+    //             setStateIndex(0)
+    //             break
+    //     }
+    // }, [selectedState])
 
     return (
         <Layout currentPage="compliance">
@@ -279,7 +261,7 @@ export default function Compliance() {
                     <Icon icon={ShieldCheckIcon} variant="shadow" />
                     <Title>Benchmark list</Title>
                 </Flex>
-                <TabGroup index={stateIndex} className="w-fit">
+                {/* <TabGroup index={stateIndex} className="w-fit">
                     <TabList variant="solid" className="px-0">
                         <Tab
                             className="px-4 py-2"
@@ -300,7 +282,7 @@ export default function Compliance() {
                             Not active
                         </Tab>
                     </TabList>
-                </TabGroup>
+                </TabGroup> */}
             </Flex>
             {(selectedState === '' || selectedState === 'active') && (
                 <div className="mb-6">

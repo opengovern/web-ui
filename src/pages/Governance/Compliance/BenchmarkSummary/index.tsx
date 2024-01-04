@@ -120,6 +120,7 @@ export default function BenchmarkSummary() {
     )
     const [openTop, setOpenTop] = useState(false)
     const [openConfirm, setOpenConfirm] = useState(false)
+    const [assignments, setAssignments] = useState(0)
 
     const topQuery = {
         ...(benchmarkId && { benchmarkId: [benchmarkId] }),
@@ -203,7 +204,6 @@ export default function BenchmarkSummary() {
             updateDetail()
         }
     }, [isExecuted])
-    console.log(benchmarkDetail)
 
     return (
         <Layout currentPage="compliance">
@@ -215,7 +215,13 @@ export default function BenchmarkSummary() {
                 ]}
                 filter
             >
-                <Settings id={benchmarkDetail?.id} />
+                <Settings
+                    id={benchmarkDetail?.id}
+                    response={(e) =>
+                        setAssignments(e?.connections?.length || 0)
+                    }
+                    autoAssign={benchmarkDetail?.autoAssign}
+                />
             </Header>
             {isLoading ? (
                 <Spinner className="mt-56" />
@@ -273,7 +279,7 @@ export default function BenchmarkSummary() {
                             onClose={() => setOpenConfirm(false)}
                         >
                             <Title>
-                                Do you want to run evaluation on X accounts?
+                                {`Do you want to run evaluation on ${assignments} accounts?`}
                             </Title>
                             <Flex className="mt-8">
                                 <Button
@@ -306,9 +312,14 @@ export default function BenchmarkSummary() {
                                             Security score
                                         </Text>
                                         <InformationCircleIcon className="w-4" />
-                                        <div className="absolute w-full z-40 top-0 left-full scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
+                                        <div className="absolute w-60 z-40 top-0 left-full scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100">
                                             <Text>
-                                                {benchmarkDetail?.description}
+                                                Security scores represents the
+                                                proportion of Passed controls to
+                                                enabled controls for a given
+                                                benchmark. Kaytu calculates a
+                                                summary security score across
+                                                all enabled Benchmarks.
                                             </Text>
                                         </div>
                                     </Flex>

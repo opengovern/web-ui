@@ -1,5 +1,6 @@
 /* eslint-disable */
 /* tslint:disable */
+
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -632,38 +633,70 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSumm
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatus {
-    critical?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
-    high?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
-    low?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
-    medium?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
-    none?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
-    total?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult
-}
-
-export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatusResult {
-    passed?: number
-    total?: number
+    critical?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    high?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    low?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    medium?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    none?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    total?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary {
+    /**
+     * Whether the benchmark is auto assigned or not
+     * @example true
+     */
+    autoAssign?: boolean
+    /**
+     * Whether the benchmark is baseline or not
+     * @example true
+     */
+    baseline?: boolean
+    /** Benchmark category */
+    category?: string
     /** Checks summary */
     checks?: TypesSeverityResult
+    /**
+     * Benchmark children
+     * @example ["[azure_cis_v140_1"," azure_cis_v140_2]"]
+     */
+    children?: string[]
     /** Compliance result summary */
     conformanceStatusSummary?: TypesConformanceStatusSummary
     /**
-     * Cloud providers
-     * @example ["[Azure]"]
+     * Benchmark connectors
+     * @example ["[azure]"]
      */
     connectors?: SourceType[]
+    /**
+     * Benchmark controls
+     * @example ["[azure_cis_v140_1_1"," azure_cis_v140_1_2]"]
+     */
+    controls?: string[]
     /** Controls severity status */
     controlsSeverityStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlsSeverityStatus
+    /**
+     * Benchmark creation date
+     * @example "2020-01-01T00:00:00Z"
+     */
+    createdAt?: string
     /**
      * Benchmark description
      * @example "The CIS Microsoft Azure Foundations Security Benchmark provides prescriptive guidance for establishing a secure baseline configuration for Microsoft Azure."
      */
     description?: string
     /**
-     * Enabled
+     * Benchmark display code
+     * @example "CIS 1.4.0"
+     */
+    displayCode?: string
+    /**
+     * Benchmark document URI
+     * @example "benchmarks/azure_cis_v140.md"
+     */
+    documentURI?: string
+    /**
+     * Whether the benchmark is enabled or not
      * @example true
      */
     enabled?: boolean
@@ -682,7 +715,16 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
      * @example "success"
      */
     lastJobStatus?: string
-    /** Tags */
+    /** Benchmark logo URI */
+    logoURI?: string
+    /**
+     * Whether the benchmark is managed or not
+     * @example true
+     */
+    managed?: boolean
+    /** Resource severity status */
+    resourcesSeverityStatus?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResourcesSeverityStatus
+    /** Benchmark tags */
     tags?: Record<string, string[]>
     /**
      * Benchmark title
@@ -691,10 +733,29 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationS
     title?: string
     /** Top connections */
     topConnections?: GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord[]
+    /**
+     * Benchmark last update date
+     * @example "2020-01-01T00:00:00Z"
+     */
+    updatedAt?: string
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation {
     remediation?: string
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkResourcesSeverityStatus {
+    critical?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    high?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    low?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    medium?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    none?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+    total?: GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult
+}
+
+export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkSeverityStatusResult {
+    passed?: number
+    total?: number
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint {
@@ -1138,10 +1199,21 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding {
+    connector?: SourceType
     evaluatedAt?: string
     failedCount?: number
     findings?: GithubComKaytuIoKaytuEnginePkgComplianceApiFinding[]
     kaytuResourceID?: string
+    /**
+     * Connection ID
+     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
+     */
+    providerConnectionID?: string
+    /**
+     * Connection ID
+     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
+     */
+    providerConnectionName?: string
     resourceLocation?: string
     resourceName?: string
     resourceType?: string
@@ -1416,9 +1488,16 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostMetric {
     total_cost?: number
 }
 
+export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem {
+    cost?: number
+    metricID?: string
+    metricName?: string
+}
+
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint {
     /** @min 0 */
-    count?: number
+    cost?: number
+    costStacked?: GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem[]
     /** @format date-time */
     date?: string
     totalConnectionCount?: number

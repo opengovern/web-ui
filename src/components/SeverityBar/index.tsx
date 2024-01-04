@@ -24,6 +24,11 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                     (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
                 100,
             control: benchmark?.controlsSeverityStatus?.critical,
+            resourcePercent:
+                ((benchmark?.resourcesSeverityStatus?.critical?.total || 0) /
+                    (benchmark?.resourcesSeverityStatus?.total?.total || 1)) *
+                100,
+            resource: benchmark?.resourcesSeverityStatus?.critical,
         },
         {
             name: 'High',
@@ -38,6 +43,11 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                     (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
                 100,
             control: benchmark?.controlsSeverityStatus?.high,
+            resourcePercent:
+                ((benchmark?.resourcesSeverityStatus?.high?.total || 0) /
+                    (benchmark?.resourcesSeverityStatus?.total?.total || 1)) *
+                100,
+            resource: benchmark?.resourcesSeverityStatus?.high,
         },
         {
             name: 'Medium',
@@ -52,6 +62,11 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                     (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
                 100,
             control: benchmark?.controlsSeverityStatus?.medium,
+            resourcePercent:
+                ((benchmark?.resourcesSeverityStatus?.medium?.total || 0) /
+                    (benchmark?.resourcesSeverityStatus?.total?.total || 1)) *
+                100,
+            resource: benchmark?.resourcesSeverityStatus?.medium,
         },
         {
             name: 'Low',
@@ -66,6 +81,11 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                     (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
                 100,
             control: benchmark?.controlsSeverityStatus?.low,
+            resourcePercent:
+                ((benchmark?.resourcesSeverityStatus?.low?.total || 0) /
+                    (benchmark?.resourcesSeverityStatus?.total?.total || 1)) *
+                100,
+            resource: benchmark?.resourcesSeverityStatus?.low,
         },
         {
             name: 'None',
@@ -80,6 +100,11 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                     (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
                 100,
             control: benchmark?.controlsSeverityStatus?.none,
+            resourcePercent:
+                ((benchmark?.resourcesSeverityStatus?.none?.total || 0) /
+                    (benchmark?.resourcesSeverityStatus?.total?.total || 1)) *
+                100,
+            resource: benchmark?.resourcesSeverityStatus?.none,
         },
     ]
     const passed = {
@@ -95,6 +120,11 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                 (benchmark?.controlsSeverityStatus?.total?.total || 1)) *
             100,
         control: benchmark?.controlsSeverityStatus?.total?.passed || 0,
+        resourcePercent:
+            ((benchmark?.resourcesSeverityStatus?.total?.passed || 0) /
+                (benchmark?.resourcesSeverityStatus?.total?.total || 1)) *
+            100,
+        resource: benchmark?.resourcesSeverityStatus?.total?.passed,
     }
 
     return (
@@ -130,7 +160,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                                 }}
                                             />
                                             <div
-                                                className="absolute w-56 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
+                                                className="absolute w-72 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
                                                 style={{
                                                     border: `1px solid ${s.color}`,
                                                 }}
@@ -147,14 +177,17 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                                     <Flex>
                                                         <Text>Controls</Text>
                                                         <Text>
-                                                            {`${
+                                                            {`${numberDisplay(
                                                                 s.control
                                                                     ?.passed ||
+                                                                    0,
                                                                 0
-                                                            } out of ${
+                                                            )} out of ${numberDisplay(
                                                                 s.control
-                                                                    ?.total || 0
-                                                            } passed`}
+                                                                    ?.total ||
+                                                                    0,
+                                                                0
+                                                            )} passed`}
                                                         </Text>
                                                     </Flex>
                                                     <Flex>
@@ -166,6 +199,19 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                                             )} (${s.percent.toFixed(
                                                                 2
                                                             )}%)`}
+                                                        </Text>
+                                                    </Flex>
+                                                    <Flex>
+                                                        <Text>Resources</Text>
+                                                        <Text>
+                                                            {`${
+                                                                s.resource
+                                                                    ?.passed ||
+                                                                0
+                                                            } out of ${
+                                                                s.resource
+                                                                    ?.total || 0
+                                                            } passed`}
                                                         </Text>
                                                     </Flex>
                                                 </Flex>
@@ -204,7 +250,7 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                 }}
                             />
                             <div
-                                className="absolute w-56 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
+                                className="absolute w-72 z-10 top-7 scale-0 transition-all rounded p-2 shadow-md bg-white group-hover:scale-100"
                                 style={{
                                     border: `1px solid ${passed.color}`,
                                 }}
@@ -217,7 +263,10 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                     </Text>
                                     <Flex>
                                         <Text>Controls</Text>
-                                        <Text>{`${passed.control}`}</Text>
+                                        <Text>{`${numberDisplay(
+                                            passed.control,
+                                            0
+                                        )}`}</Text>
                                     </Flex>
                                     <Flex>
                                         <Text>Issues</Text>
@@ -227,6 +276,13 @@ export default function SeverityBar({ benchmark }: ISeverityBar) {
                                                 0
                                             )} (${passed.percent.toFixed(2)}%)`}
                                         </Text>
+                                    </Flex>
+                                    <Flex>
+                                        <Text>Resources</Text>
+                                        <Text>{`${numberDisplay(
+                                            passed.resource,
+                                            0
+                                        )}`}</Text>
                                     </Flex>
                                 </Flex>
                             </div>

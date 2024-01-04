@@ -381,7 +381,6 @@ export default function SettingsJobs() {
                         columns={columns()}
                         serverSideDatasource={serverSideRows}
                         onCellClicked={(event) => {
-                            console.log(event.data)
                             setClickedJob(event.data)
                             setOpen(true)
                         }}
