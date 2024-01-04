@@ -20,8 +20,8 @@ import { isDemoAtom } from '../../../store'
 
 interface ITopListCard {
     title: string
-    firstColumnTitle: string
-    secondColumnTitle: string
+    keyColumnTitle: string
+    valueColumnTitle: string
     loading: boolean
     isPercentage?: boolean
     isPrice?: boolean
@@ -49,8 +49,8 @@ interface Item {
 
 export default function ListCard({
     title,
-    firstColumnTitle,
-    secondColumnTitle,
+    keyColumnTitle,
+    valueColumnTitle,
     loading,
     isPrice,
     isPercentage,
@@ -83,10 +83,10 @@ export default function ListCard({
                         className="space-x-0 mb-2"
                     >
                         <Text className="font-medium text-gray-400">
-                            {firstColumnTitle}
+                            {keyColumnTitle}
                         </Text>
                         <Text className="font-medium text-gray-400">
-                            {secondColumnTitle}
+                            {valueColumnTitle}
                         </Text>
                     </Flex>
                     {loading ? (

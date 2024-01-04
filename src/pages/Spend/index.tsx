@@ -163,21 +163,22 @@ const takeMetricsAndOthers = (
     let others = 0
     v.forEach((item) => {
         if (
-            metricIDs.map((i) => i.metricID).indexOf(item.metricID || '') !== -1
+            metricIDs.map((i) => i.metricID).indexOf(item.metricID || '') === -1
         ) {
-            result.push(item)
-        } else {
             others += item.cost || 0
         }
     })
 
     metricIDs.forEach((item) => {
-        if (result.map((i) => i.metricID).indexOf(item.metricID) === -1) {
+        const p = v.filter((i) => i.metricID === item.metricID).at(0)
+        if (p === undefined) {
             result.push({
                 metricID: item.metricID,
                 metricName: item.metricName,
                 cost: 0,
             })
+        } else {
+            result.push(p)
         }
     })
 
@@ -327,7 +328,7 @@ export default function Spend() {
     const selectedConnections = useAtomValue(filterAtom)
 
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar'>('line')
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [selectedIndex, setSelectedIndex] = useState(1)
     const [selectedGranularity, setSelectedGranularity] = useState<
         'daily' | 'monthly' | 'yearly'
     >(
@@ -362,7 +363,9 @@ export default function Spend() {
 
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
 
-    const [chartLayout, setChartLayout] = useState<'basic' | 'stacked'>('basic')
+    const [chartLayout, setChartLayout] = useState<'basic' | 'stacked'>(
+        'stacked'
+    )
     const chartLayoutValues = ['basic', 'stacked']
 
     const [chartAggregation, setChartAggregation] = useState<
@@ -561,14 +564,6 @@ export default function Spend() {
                                     on {dateDisplay(t.date)}
                                 </Callout>
                             ))}
-                        <Flex justifyContent="end" className="mt-2 gap-2.5">
-                            <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                            {chartAggregation === 'cumulative' ? (
-                                <Text>Accumulated spend</Text>
-                            ) : (
-                                <Text>Spend</Text>
-                            )}
-                        </Flex>
                         {chartLayout === 'stacked' ? (
                             <StackedChart
                                 labels={
@@ -676,8 +671,8 @@ export default function Spend() {
                             <Grid numItems={2} className="w-full h-full gap-4">
                                 <ListCard
                                     title="Top Cloud Accounts"
-                                    firstColumnTitle="Account Names"
-                                    secondColumnTitle="Spend"
+                                    keyColumnTitle="Account Names"
+                                    valueColumnTitle="Spend"
                                     loading={accountCostLoading}
                                     items={topAccounts(accountCostResponse)}
                                     url="spend-details#cloud-accounts"
@@ -686,8 +681,8 @@ export default function Spend() {
                                 />
                                 <ListCard
                                     title="Top Metrics"
-                                    firstColumnTitle="Mertic Names"
-                                    secondColumnTitle="Spend"
+                                    keyColumnTitle="Mertic Names"
+                                    valueColumnTitle="Spend"
                                     loading={serviceCostLoading}
                                     items={topServices(serviceCostResponse)}
                                     url="spend-details#metrics"

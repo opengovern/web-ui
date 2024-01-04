@@ -77,10 +77,10 @@ export default function StackedChart({
                 order: 'valueDesc',
             },
             grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true,
+                left: 45,
+                right: 0,
+                top: 20,
+                bottom: 40,
             },
             xAxis: {
                 type: labelType,
@@ -91,6 +91,24 @@ export default function StackedChart({
                     type: 'value',
                 },
             ],
+            // color: false
+            //     ? [
+            //           '#780000',
+            //           '#DC0000',
+            //           '#FD8C00',
+            //           '#FDC500',
+            //           '#10B880',
+            //           '#D0D4DA',
+            //       ]
+            //     : [
+            //           '#1E7CE0',
+            //           '#2ECC71',
+            //           '#FFA500',
+            //           '#9B59B6',
+            //           '#D0D4DA',
+            //           '#D0D4DA',
+            //       ],
+
             series,
         }
     }
