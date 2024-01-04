@@ -1,6 +1,16 @@
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
-import { Button, Card, Flex, List, ListItem, Text, Title } from '@tremor/react'
+import {
+    Button,
+    Card,
+    Flex,
+    List,
+    ListItem,
+    Metric,
+    Subtitle,
+    Text,
+    Title,
+} from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { SourceType } from '../../../api/api'
 import { numericDisplay } from '../../../utilities/numericDisplay'
@@ -10,6 +20,8 @@ import { isDemoAtom } from '../../../store'
 
 interface ITopListCard {
     title: string
+    keyColumnTitle: string
+    valueColumnTitle: string
     loading: boolean
     isPercentage?: boolean
     isPrice?: boolean
@@ -37,6 +49,8 @@ interface Item {
 
 export default function ListCard({
     title,
+    keyColumnTitle,
+    valueColumnTitle,
     loading,
     isPrice,
     isPercentage,
@@ -62,7 +76,19 @@ export default function ListCard({
         <Card className="h-full">
             <Flex flexDirection="col" alignItems="start" className="h-full">
                 <Flex flexDirection="col" alignItems="start">
-                    <Title className="font-semibold mb-2">{title}</Title>
+                    <Title className="font-semibold mb-4">{title}</Title>
+                    <Flex
+                        alignItems="baseline"
+                        justifyContent="between"
+                        className="space-x-0 mb-2"
+                    >
+                        <Text className="font-medium text-gray-400">
+                            {keyColumnTitle}
+                        </Text>
+                        <Text className="font-medium text-gray-400">
+                            {valueColumnTitle}
+                        </Text>
+                    </Flex>
                     {loading ? (
                         <Flex className="h-56">
                             <Spinner />
