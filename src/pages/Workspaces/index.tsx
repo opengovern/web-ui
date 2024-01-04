@@ -1,5 +1,5 @@
 import { Button, Flex, Grid } from '@tremor/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useEffect } from 'react'
 import Layout from '../../components/Layout'
@@ -10,6 +10,7 @@ import Header from '../../components/Header'
 
 export default function Workspaces() {
     const navigate = useNavigate()
+    const [searchParams, setSearchParams] = useSearchParams()
 
     const {
         response: workspaces,
@@ -22,6 +23,11 @@ export default function Workspaces() {
         if (isExecuted && !isLoading) {
             if (workspaces?.length === 0) {
                 navigate(`/new-ws`)
+            } else if (
+                workspaces?.length === 1 &&
+                searchParams.has('onLogin')
+            ) {
+                window.location.href = `/${workspaces.at(0)?.name}`
             }
         }
     }, [isLoading])
