@@ -30,6 +30,7 @@ import {
     numberDisplay,
 } from '../../utilities/numericDisplay'
 import {
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
     GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
@@ -44,8 +45,8 @@ import { capitalizeFirstLetter } from '../../utilities/labelMaker'
 import Header from '../../components/Header'
 import { generateVisualMap } from '../Assets'
 import SingleSpendConnection from './Single/SingleConnection'
-import FitSelector from '../../components/FitSelector'
-import FitSelectorNew from '../../components/FitSelectorNew'
+import Selector from '../../components/Selector'
+import StackedChart, { StackItem } from '../../components/Chart/Stacked'
 
 const topServices = (
     input:
@@ -105,25 +106,127 @@ const topAccounts = (
     return top
 }
 
+const topFiveStackedMetrics = (
+    data: GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
+) => {
+    const uniqueMetricID = data
+        .flatMap((v) => v.costStacked?.map((i) => i.metricID || '') || [])
+        .filter((l, idx, arr) => arr.indexOf(l) === idx)
+
+    const idCost = uniqueMetricID
+        .map((metricID) => {
+            const totalCost = data
+                .flatMap(
+                    (v) =>
+                        v.costStacked
+                            ?.filter((i) => i.metricID === metricID)
+                            .map((j) => j.cost || 0) || []
+                )
+                .reduce((prev, curr) => prev + curr, 0)
+
+            const metricName =
+                data
+                    .flatMap(
+                        (v) =>
+                            v.costStacked
+                                ?.filter((i) => i.metricID === metricID)
+                                .map((j) => j.metricName || '') || []
+                    )
+                    .at(0) || ''
+
+            return {
+                metricID,
+                metricName,
+                totalCost,
+            }
+        })
+        .sort((a, b) => {
+            if (a.totalCost === b.totalCost) {
+                return 0
+            }
+            return a.totalCost < b.totalCost ? 1 : -1
+        })
+
+    return idCost.slice(0, 5)
+}
+
+const takeMetricsAndOthers = (
+    metricIDs: {
+        metricID: string
+        metricName: string
+        totalCost: number
+    }[],
+    v: GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem[]
+) => {
+    const result: GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem[] =
+        []
+    let others = 0
+    v.forEach((item) => {
+        if (
+            metricIDs.map((i) => i.metricID).indexOf(item.metricID || '') !== -1
+        ) {
+            result.push(item)
+        } else {
+            others += item.cost || 0
+        }
+    })
+
+    metricIDs.forEach((item) => {
+        if (result.map((i) => i.metricID).indexOf(item.metricID) === -1) {
+            result.push({
+                metricID: item.metricID,
+                metricName: item.metricName,
+                cost: 0,
+            })
+        }
+    })
+
+    result.push({
+        metricID: '___others___',
+        metricName: 'Others',
+        cost: others,
+    })
+
+    return result
+}
+
 export const costTrendChart = (
     trend:
         | GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[]
         | undefined,
     chart: 'trend' | 'cumulative',
+    layout: 'basic' | 'stacked',
     granularity: 'monthly' | 'daily' | 'yearly'
 ) => {
+    const top5 = topFiveStackedMetrics(trend || [])
     const label = []
     const data: any = []
     const flag = []
     if (trend) {
         if (chart === 'trend') {
             for (let i = 0; i < trend?.length; i += 1) {
+                const stacked = takeMetricsAndOthers(
+                    top5,
+                    trend[i].costStacked || []
+                )
                 label.push(
                     granularity === 'monthly'
                         ? monthDisplay(trend[i]?.date)
                         : dateDisplay(trend[i]?.date)
                 )
-                data.push(trend[i]?.cost)
+                if (layout === 'basic') {
+                    data.push(trend[i]?.cost)
+                } else {
+                    data.push(
+                        stacked.map((v) => {
+                            const j: StackItem = {
+                                label: v.metricName || '',
+                                value: v.cost || 0,
+                            }
+                            return j
+                        })
+                    )
+                }
                 if (
                     trend[i].totalConnectionCount !==
                     trend[i].totalSuccessfulDescribedConnectionCount
@@ -134,15 +237,46 @@ export const costTrendChart = (
         }
         if (chart === 'cumulative') {
             for (let i = 0; i < trend?.length; i += 1) {
+                const stacked = takeMetricsAndOthers(
+                    top5,
+                    trend[i].costStacked || []
+                )
                 label.push(
                     granularity === 'monthly'
                         ? monthDisplay(trend[i]?.date)
                         : dateDisplay(trend[i]?.date)
                 )
+
                 if (i === 0) {
-                    data.push(trend[i]?.cost)
-                } else {
+                    if (layout === 'basic') {
+                        data.push(trend[i]?.cost)
+                    } else {
+                        data.push(
+                            stacked.map((v) => {
+                                const j: StackItem = {
+                                    label: v.metricName || '',
+                                    value: v.cost || 0,
+                                }
+                                return j
+                            })
+                        )
+                    }
+                } else if (layout === 'basic') {
                     data.push((trend[i]?.cost || 0) + data[i - 1])
+                } else {
+                    data.push(
+                        stacked.map((v) => {
+                            const prev = data[i - 1]
+                                ?.filter((p: any) => p.label === v.metricName)
+                                ?.at(0)
+
+                            const j: StackItem = {
+                                label: v.metricName || '',
+                                value: (v.cost || 0) + (prev?.value || 0),
+                            }
+                            return j
+                        })
+                    )
                 }
             }
         }
@@ -270,6 +404,17 @@ export default function Spend() {
         sortBy: 'cost',
     }
 
+    const duration = activeTimeRange.end.diff(activeTimeRange.start, 'second')
+    const prevQuery = {
+        ...query,
+        ...(activeTimeRange.start && {
+            startTime: activeTimeRange.start.add(-duration, 'second').unix(),
+        }),
+        ...(activeTimeRange.end && {
+            endTime: activeTimeRange.end.add(-duration, 'second').unix(),
+        }),
+    }
+
     const { response: costTrend, isLoading: costTrendLoading } =
         useInventoryApiV2AnalyticsSpendTrendList({
             ...query,
@@ -278,6 +423,10 @@ export default function Spend() {
 
     const { response: serviceCostResponse, isLoading: serviceCostLoading } =
         useInventoryApiV2AnalyticsSpendMetricList(query)
+    const {
+        response: servicePrevCostResponse,
+        isLoading: servicePrevCostLoading,
+    } = useInventoryApiV2AnalyticsSpendMetricList(prevQuery)
 
     const { response: accountCostResponse, isLoading: accountCostLoading } =
         useIntegrationApiV1ConnectionsSummariesList(query)
@@ -319,8 +468,11 @@ export default function Spend() {
                                     title={getConnections(selectedConnections)}
                                     metric={serviceCostResponse?.total_cost}
                                     // Check with Saleh
-                                    metricPrev="2000"
+                                    metricPrev={
+                                        servicePrevCostResponse?.total_cost
+                                    }
                                     loading={serviceCostLoading}
+                                    prevLoading={servicePrevCostLoading}
                                     url="spend-details#cloud-accounts"
                                     isPrice
                                     isExact
@@ -329,7 +481,7 @@ export default function Spend() {
                             </Col>
                             <Col numColSpan={4}>
                                 <Flex justifyContent="end" className="gap-0">
-                                    <FitSelectorNew
+                                    <Selector
                                         values={generateGranularityList(
                                             activeTimeRange.start,
                                             activeTimeRange.end
@@ -343,7 +495,7 @@ export default function Spend() {
                                         }}
                                     />
 
-                                    <FitSelectorNew
+                                    <Selector
                                         values={chartLayoutValues.map(
                                             (value) => value
                                         )}
@@ -356,7 +508,7 @@ export default function Spend() {
                                         }}
                                     />
 
-                                    <FitSelectorNew
+                                    <Selector
                                         values={chartAggregationValues.map(
                                             (value) => value
                                         )}
@@ -417,64 +569,99 @@ export default function Spend() {
                                 <Text>Spend</Text>
                             )}
                         </Flex>
-                        <Chart
-                            labels={
-                                costTrendChart(
-                                    costTrend,
-                                    chartAggregation,
-                                    selectedGranularity
-                                ).label
-                            }
-                            chartData={
-                                costTrendChart(
-                                    costTrend,
-                                    chartAggregation,
-                                    selectedGranularity
-                                ).data
-                            }
-                            chartType={selectedChart}
-                            chartLayout={chartLayout}
-                            chartAggregation={chartAggregation}
-                            isCost
-                            loading={costTrendLoading}
-                            visualMap={
-                                chartAggregation === 'cumulative'
-                                    ? undefined
-                                    : generateVisualMap(
-                                          costTrendChart(
-                                              costTrend,
-                                              chartAggregation,
-                                              selectedGranularity
-                                          ).flag,
-                                          costTrendChart(
-                                              costTrend,
-                                              chartAggregation,
-                                              selectedGranularity
-                                          ).label
-                                      ).visualMap
-                            }
-                            markArea={
-                                chartAggregation === 'cumulative'
-                                    ? undefined
-                                    : generateVisualMap(
-                                          costTrendChart(
-                                              costTrend,
-                                              chartAggregation,
-                                              selectedGranularity
-                                          ).flag,
-                                          costTrendChart(
-                                              costTrend,
-                                              chartAggregation,
-                                              selectedGranularity
-                                          ).label
-                                      ).markArea
-                            }
-                            onClick={
-                                chartAggregation === 'cumulative'
-                                    ? undefined
-                                    : (p) => setSelectedDatapoint(p)
-                            }
-                        />
+                        {chartLayout === 'stacked' ? (
+                            <StackedChart
+                                labels={
+                                    costTrendChart(
+                                        costTrend,
+                                        chartAggregation,
+                                        chartLayout,
+                                        selectedGranularity
+                                    ).label
+                                }
+                                chartData={
+                                    costTrendChart(
+                                        costTrend,
+                                        chartAggregation,
+                                        chartLayout,
+                                        selectedGranularity
+                                    ).data
+                                }
+                                isCost
+                                chartType={selectedChart}
+                                loading={costTrendLoading}
+                                onClick={
+                                    chartAggregation === 'cumulative'
+                                        ? undefined
+                                        : (p) => setSelectedDatapoint(p)
+                                }
+                            />
+                        ) : (
+                            <Chart
+                                labels={
+                                    costTrendChart(
+                                        costTrend,
+                                        chartAggregation,
+                                        chartLayout,
+                                        selectedGranularity
+                                    ).label
+                                }
+                                chartData={
+                                    costTrendChart(
+                                        costTrend,
+                                        chartAggregation,
+                                        chartLayout,
+                                        selectedGranularity
+                                    ).data
+                                }
+                                chartType={selectedChart}
+                                chartLayout={chartLayout}
+                                chartAggregation={chartAggregation}
+                                isCost
+                                loading={costTrendLoading}
+                                visualMap={
+                                    chartAggregation === 'cumulative'
+                                        ? undefined
+                                        : generateVisualMap(
+                                              costTrendChart(
+                                                  costTrend,
+                                                  chartAggregation,
+                                                  chartLayout,
+                                                  selectedGranularity
+                                              ).flag,
+                                              costTrendChart(
+                                                  costTrend,
+                                                  chartAggregation,
+                                                  chartLayout,
+                                                  selectedGranularity
+                                              ).label
+                                          ).visualMap
+                                }
+                                markArea={
+                                    chartAggregation === 'cumulative'
+                                        ? undefined
+                                        : generateVisualMap(
+                                              costTrendChart(
+                                                  costTrend,
+                                                  chartAggregation,
+                                                  chartLayout,
+                                                  selectedGranularity
+                                              ).flag,
+                                              costTrendChart(
+                                                  costTrend,
+                                                  chartAggregation,
+                                                  chartLayout,
+                                                  selectedGranularity
+                                              ).label
+                                          ).markArea
+                                }
+                                onClick={
+                                    chartAggregation === 'cumulative'
+                                        ? undefined
+                                        : (p) => setSelectedDatapoint(p)
+                                }
+                            />
+                        )}
                     </Card>
                     <Grid numItems={5} className="w-full gap-4">
                         <Col numColSpan={2}>

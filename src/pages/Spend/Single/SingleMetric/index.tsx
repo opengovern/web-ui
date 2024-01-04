@@ -545,6 +545,7 @@ export default function SingleSpendMetric({
                         costTrendChart(
                             costTrend,
                             chartAggregation,
+                            'basic',
                             selectedGranularity
                         ).label
                     }
@@ -552,6 +553,7 @@ export default function SingleSpendMetric({
                         costTrendChart(
                             costTrend,
                             chartAggregation,
+                            'basic',
                             selectedGranularity
                         ).data
                     }
@@ -567,11 +569,13 @@ export default function SingleSpendMetric({
                                   costTrendChart(
                                       costTrend,
                                       chartAggregation,
+                                      'basic',
                                       selectedGranularity
                                   ).flag,
                                   costTrendChart(
                                       costTrend,
                                       chartAggregation,
+                                      'basic',
                                       selectedGranularity
                                   ).label
                               ).visualMap
@@ -583,11 +587,13 @@ export default function SingleSpendMetric({
                                   costTrendChart(
                                       costTrend,
                                       chartAggregation,
+                                      'basic',
                                       selectedGranularity
                                   ).flag,
                                   costTrendChart(
                                       costTrend,
                                       chartAggregation,
+                                      'basic',
                                       selectedGranularity
                                   ).label
                               ).markArea

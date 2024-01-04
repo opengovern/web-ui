@@ -12,19 +12,19 @@ function classNames(...classes: (string | null | undefined | boolean)[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-interface IFitSelectorNew {
+interface ISelector {
     values: string[]
     value: string
     title: string
     onValueChange: (value: string) => void
 }
 
-export default function FitSelectorNew({
+export default function Selector({
     values,
     value,
     title,
     onValueChange,
-}: IFitSelectorNew) {
+}: ISelector) {
     const [selectedItem, setSelected] = useState(values[0]) // Check with Saleh
     const handleChange = (item: string) => {
         setSelected(item)

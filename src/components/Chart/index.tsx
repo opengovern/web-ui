@@ -6,6 +6,7 @@ import {
     numberDisplay,
     numericDisplay,
 } from '../../utilities/numericDisplay'
+import StackedChart from './Stacked'
 
 interface IChart {
     labels: string[]

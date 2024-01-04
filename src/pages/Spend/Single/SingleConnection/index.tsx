@@ -467,6 +467,7 @@ export default function SingleSpendConnection({
                                     costTrendChart(
                                         costTrend,
                                         chartAggregation,
+                                        chartLayout,
                                         selectedGranularity
                                     ).label
                                 }
@@ -474,6 +475,7 @@ export default function SingleSpendConnection({
                                     costTrendChart(
                                         costTrend,
                                         chartAggregation,
+                                        chartLayout,
                                         selectedGranularity
                                     ).data
                                 }
@@ -489,11 +491,13 @@ export default function SingleSpendConnection({
                                               costTrendChart(
                                                   costTrend,
                                                   chartAggregation,
+                                                  chartLayout,
                                                   selectedGranularity
                                               ).flag,
                                               costTrendChart(
                                                   costTrend,
                                                   chartAggregation,
+                                                  chartLayout,
                                                   selectedGranularity
                                               ).label
                                           ).visualMap
@@ -505,11 +509,13 @@ export default function SingleSpendConnection({
                                               costTrendChart(
                                                   costTrend,
                                                   chartAggregation,
+                                                  chartLayout,
                                                   selectedGranularity
                                               ).flag,
                                               costTrendChart(
                                                   costTrend,
                                                   chartAggregation,
+                                                  chartLayout,
                                                   selectedGranularity
                                               ).label
                                           ).markArea

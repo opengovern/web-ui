@@ -16,6 +16,7 @@ import {
     numberDisplay,
     numericDisplay,
 } from '../../../utilities/numericDisplay'
+import { badgeTypeByDelta } from '../../../utilities/deltaType'
 
 type IProps = {
     title: string
@@ -24,6 +25,7 @@ type IProps = {
     unit?: string
     url?: string
     loading?: boolean
+    prevLoading?: boolean
     border?: boolean
     blueBorder?: boolean
     error?: string
@@ -42,6 +44,7 @@ export default function MetricCard({
     unit,
     url,
     loading = false,
+    prevLoading = false,
     border = true,
     blueBorder = false,
     error,
@@ -121,18 +124,12 @@ export default function MetricCard({
                 {!!metricPrev && (
                     <Flex flexDirection="row" alignItems="center">
                         <BadgeDelta
-                            deltaType={
-                                Number(changeRate) < 0
-                                    ? 'moderateDecrease'
-                                    : 'moderateIncrease'
-                            }
+                            deltaType={badgeTypeByDelta(metricPrev, metric)}
                         />
 
                         <Text
                             color={deltaColors.get(
-                                Number(changeRate) < 0
-                                    ? 'moderateDecrease'
-                                    : 'moderateIncrease'
+                                badgeTypeByDelta(metricPrev, metric)
                             )}
                             className="ml-2"
                         >
@@ -140,7 +137,7 @@ export default function MetricCard({
                         </Text>
 
                         <Text className="ml-1.5">
-                            comapred to last month for same period
+                            compared to previous period
                         </Text>
                     </Flex>
                 )}
