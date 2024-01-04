@@ -107,7 +107,7 @@ export default function Workspace({ isCollapsed }: IWorkspace) {
                         )}
                         <Flex
                             justifyContent="start"
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate('/workspaces')}
                             className="p-2 gap-3 mt-2 text-gray-300 rounded-md cursor-pointer hover:text-gray-50 hover:bg-kaytu-800"
                         >
                             <ArrowTopRightOnSquareIcon className="w-5 text-gray-400" />

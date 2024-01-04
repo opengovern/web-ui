@@ -37,7 +37,7 @@ const routes = [
     {
         key: 'url',
         path: '/',
-        element: <Navigate to="/workspaces" replace />,
+        element: <Navigate to="/workspaces?onLogin" replace />,
     },
     {
         key: 'ws name',
@@ -280,7 +280,7 @@ export default function Router() {
     const url = window.location.pathname.split('/')
     useEffect(() => {
         if (url[1] === 'undefined') {
-            navigate('/workspaces')
+            navigate('/workspaces?onLogin')
         }
     }, [url])
 
