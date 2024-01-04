@@ -25,13 +25,13 @@ export default function Selector({
     title,
     onValueChange,
 }: ISelector) {
-    const [selectedItem, setSelected] = useState(values[0]) // Check with Saleh
-    const handleChange = (item: string) => {
-        setSelected(item)
-        onValueChange(item)
-    }
     return (
-        <Listbox value={selectedItem} onChange={handleChange}>
+        <Listbox
+            value={values.indexOf(value)}
+            onChange={(newValue) => {
+                onValueChange(values[newValue])
+            }}
+        >
             {({ open }) => (
                 <Flex
                     flexDirection="col"
@@ -76,7 +76,7 @@ export default function Selector({
                             leaveTo="opacity-0"
                         >
                             <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {values.map((item) => (
+                                {values.map((item, idx) => (
                                     <Listbox.Option
                                         key={item}
                                         className={({ active }) =>
@@ -87,7 +87,7 @@ export default function Selector({
                                                 'relative cursor-default select-none py-2 pl-4 pr-6'
                                             )
                                         }
-                                        value={item}
+                                        value={idx}
                                     >
                                         {({ selected, active }) => (
                                             <>
