@@ -76,6 +76,10 @@ export default function SingleSpendConnection({
     const [selectedChartIndex, setSelectedChartIndex] = useState(0)
     const [selectedChart, setSelectedChart] = useState<'line' | 'bar'>('line')
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
+    const [chartAggregation, setChartAggregation] = useState<
+        'cumulative' | 'trend'
+    >('trend')
+
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
@@ -95,15 +99,21 @@ export default function SingleSpendConnection({
     const setNotification = useSetAtom(notificationAtom)
 
     useEffect(() => {
-        if (selectedChartIndex === 0) setSelectedChart('line')
-        if (selectedChartIndex === 1) setSelectedChart('bar')
+        if (selectedChartIndex === 0) {
+            setSelectedChart('line')
+            setChartAggregation('cumulative')
+        }
+        if (selectedChartIndex === 1) {
+            setSelectedChart('line')
+            setChartAggregation('trend')
+        }
+        if (selectedChartIndex === 2) {
+            setSelectedChart('bar')
+            setChartAggregation('trend')
+        }
     }, [selectedChartIndex])
 
     const [chartLayout, setChartLayout] = useState<'basic' | 'stacked'>('basic')
-
-    const [chartAggregation, setChartAggregation] = useState<
-        'cumulative' | 'trend'
-    >('trend')
 
     const { response: costTrend, isLoading: costTrendLoading } =
         useInventoryApiV2AnalyticsSpendTrendList({

@@ -100,8 +100,18 @@ export default function SingleSpendMetric({
     >('trend')
 
     useEffect(() => {
-        if (selectedIndex === 0) setSelectedChart('line')
-        if (selectedIndex === 1) setSelectedChart('bar')
+        if (selectedIndex === 0) {
+            setSelectedChart('line')
+            setChartAggregation('cumulative')
+        }
+        if (selectedIndex === 1) {
+            setSelectedChart('line')
+            setChartAggregation('trend')
+        }
+        if (selectedIndex === 2) {
+            setSelectedChart('bar')
+            setChartAggregation('trend')
+        }
     }, [selectedIndex])
 
     const query = {
