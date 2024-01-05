@@ -1,13 +1,21 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Api,
-
-    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,GithubComKaytuIoKaytuEnginePkgAlertingApiAction,GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,GithubComKaytuIoKaytuEnginePkgAlertingApiRule,GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
-
- RequestParams } from './api'
+import {
+    Api,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiAction,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiRule,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
+    GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+    RequestParams,
+} from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
-
 
 interface IuseAlertingApiV1ActionCreateCreateState {
     isLoading: boolean
@@ -17,8 +25,11 @@ interface IuseAlertingApiV1ActionCreateCreateState {
     error?: any
 }
 
-export const useAlertingApiV1ActionCreateCreate = (request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1ActionCreateCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateActionReq,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -26,12 +37,12 @@ export const useAlertingApiV1ActionCreateCreate = (request: GithubComKaytuIoKayt
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseAlertingApiV1ActionCreateCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseAlertingApiV1ActionCreateCreateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request,params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -46,18 +57,15 @@ export const useAlertingApiV1ActionCreateCreate = (request: GithubComKaytuIoKayt
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
-                .apiV1ActionCreateCreate(request,paramsSignal)
+            api.alerting
+                .apiV1ActionCreateCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -93,8 +101,8 @@ export const useAlertingApiV1ActionCreateCreate = (request: GithubComKaytuIoKayt
         }
     }
 
-    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request,params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -127,7 +135,11 @@ interface IuseAlertingApiV1ActionDeleteDeleteState {
     error?: any
 }
 
-export const useAlertingApiV1ActionDeleteDelete = (actionId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1ActionDeleteDelete = (
+    actionId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -135,12 +147,12 @@ export const useAlertingApiV1ActionDeleteDelete = (actionId: string, params: Req
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseAlertingApiV1ActionDeleteDeleteState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseAlertingApiV1ActionDeleteDeleteState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([actionId,params, autoExecute])
+        JSON.stringify([actionId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -155,18 +167,15 @@ export const useAlertingApiV1ActionDeleteDelete = (actionId: string, params: Req
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
-                .apiV1ActionDeleteDelete(actionId,paramsSignal)
+            api.alerting
+                .apiV1ActionDeleteDelete(actionId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -202,8 +211,8 @@ export const useAlertingApiV1ActionDeleteDelete = (actionId: string, params: Req
         }
     }
 
-    if (JSON.stringify([actionId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([actionId,params, autoExecute]))
+    if (JSON.stringify([actionId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([actionId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -236,21 +245,23 @@ interface IuseAlertingApiV1ActionJiraCreateState {
     error?: any
 }
 
-export const useAlertingApiV1ActionJiraCreate = (request: GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1ActionJiraCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseAlertingApiV1ActionJiraCreateState>({
+    const [state, setState] = useState<IuseAlertingApiV1ActionJiraCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request,params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -265,18 +276,15 @@ export const useAlertingApiV1ActionJiraCreate = (request: GithubComKaytuIoKaytuE
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
-                .apiV1ActionJiraCreate(request,paramsSignal)
+            api.alerting
+                .apiV1ActionJiraCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -312,8 +320,8 @@ export const useAlertingApiV1ActionJiraCreate = (request: GithubComKaytuIoKaytuE
         }
     }
 
-    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request,params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -346,15 +354,17 @@ interface IuseAlertingApiV1ActionListListState {
     error?: any
 }
 
-export const useAlertingApiV1ActionListList = (params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1ActionListList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseAlertingApiV1ActionListListState>({
+    const [state, setState] = useState<IuseAlertingApiV1ActionListListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -374,17 +384,14 @@ export const useAlertingApiV1ActionListList = (params: RequestParams = {}, autoE
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
+            api.alerting
                 .apiV1ActionListList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -455,21 +462,25 @@ interface IuseAlertingApiV1ActionSlackCreateState {
     error?: any
 }
 
-export const useAlertingApiV1ActionSlackCreate = (request: GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1ActionSlackCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseAlertingApiV1ActionSlackCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+    const [state, setState] = useState<IuseAlertingApiV1ActionSlackCreateState>(
+        {
+            isLoading: true,
+            isExecuted: false,
+        }
+    )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request,params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -484,18 +495,15 @@ export const useAlertingApiV1ActionSlackCreate = (request: GithubComKaytuIoKaytu
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
-                .apiV1ActionSlackCreate(request,paramsSignal)
+            api.alerting
+                .apiV1ActionSlackCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -531,8 +539,8 @@ export const useAlertingApiV1ActionSlackCreate = (request: GithubComKaytuIoKaytu
         }
     }
 
-    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request,params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -565,9 +573,12 @@ interface IuseAlertingApiV1ActionUpdateUpdateState {
     error?: any
 }
 
-export const useAlertingApiV1ActionUpdateUpdate = (actionId: string,
-            request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1ActionUpdateUpdate = (
+    actionId: string,
+    request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateActionRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -575,12 +586,12 @@ export const useAlertingApiV1ActionUpdateUpdate = (actionId: string,
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseAlertingApiV1ActionUpdateUpdateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseAlertingApiV1ActionUpdateUpdateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([actionId,request,params, autoExecute])
+        JSON.stringify([actionId, request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -595,18 +606,15 @@ export const useAlertingApiV1ActionUpdateUpdate = (actionId: string,
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
-                .apiV1ActionUpdateUpdate(actionId,request,paramsSignal)
+            api.alerting
+                .apiV1ActionUpdateUpdate(actionId, request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -642,8 +650,10 @@ export const useAlertingApiV1ActionUpdateUpdate = (actionId: string,
         }
     }
 
-    if (JSON.stringify([actionId,request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([actionId,request,params, autoExecute]))
+    if (
+        JSON.stringify([actionId, request, params, autoExecute]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([actionId, request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -676,21 +686,23 @@ interface IuseAlertingApiV1RuleCreateCreateState {
     error?: any
 }
 
-export const useAlertingApiV1RuleCreateCreate = (request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1RuleCreateCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgAlertingApiCreateRuleRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseAlertingApiV1RuleCreateCreateState>({
+    const [state, setState] = useState<IuseAlertingApiV1RuleCreateCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request,params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -705,18 +717,15 @@ export const useAlertingApiV1RuleCreateCreate = (request: GithubComKaytuIoKaytuE
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
-                .apiV1RuleCreateCreate(request,paramsSignal)
+            api.alerting
+                .apiV1RuleCreateCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -752,8 +761,8 @@ export const useAlertingApiV1RuleCreateCreate = (request: GithubComKaytuIoKaytuE
         }
     }
 
-    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request,params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -786,20 +795,23 @@ interface IuseAlertingApiV1RuleDeleteDeleteState {
     error?: any
 }
 
-export const useAlertingApiV1RuleDeleteDelete = (ruleId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1RuleDeleteDelete = (
+    ruleId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseAlertingApiV1RuleDeleteDeleteState>({
+    const [state, setState] = useState<IuseAlertingApiV1RuleDeleteDeleteState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([ruleId,params, autoExecute])
+        JSON.stringify([ruleId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -814,18 +826,15 @@ export const useAlertingApiV1RuleDeleteDelete = (ruleId: string, params: Request
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
-                .apiV1RuleDeleteDelete(ruleId,paramsSignal)
+            api.alerting
+                .apiV1RuleDeleteDelete(ruleId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -861,8 +870,8 @@ export const useAlertingApiV1RuleDeleteDelete = (ruleId: string, params: Request
         }
     }
 
-    if (JSON.stringify([ruleId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([ruleId,params, autoExecute]))
+    if (JSON.stringify([ruleId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([ruleId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -895,15 +904,17 @@ interface IuseAlertingApiV1RuleListListState {
     error?: any
 }
 
-export const useAlertingApiV1RuleListList = (params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1RuleListList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseAlertingApiV1RuleListListState>({
+    const [state, setState] = useState<IuseAlertingApiV1RuleListListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -923,17 +934,14 @@ export const useAlertingApiV1RuleListList = (params: RequestParams = {}, autoExe
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
+            api.alerting
                 .apiV1RuleListList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -1004,22 +1012,24 @@ interface IuseAlertingApiV1RuleUpdateUpdateState {
     error?: any
 }
 
-export const useAlertingApiV1RuleUpdateUpdate = (ruleId: string,
-            request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1RuleUpdateUpdate = (
+    ruleId: string,
+    request: GithubComKaytuIoKaytuEnginePkgAlertingApiUpdateRuleRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseAlertingApiV1RuleUpdateUpdateState>({
+    const [state, setState] = useState<IuseAlertingApiV1RuleUpdateUpdateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([ruleId,request,params, autoExecute])
+        JSON.stringify([ruleId, request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1034,18 +1044,15 @@ export const useAlertingApiV1RuleUpdateUpdate = (ruleId: string,
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
-                .apiV1RuleUpdateUpdate(ruleId,request,paramsSignal)
+            api.alerting
+                .apiV1RuleUpdateUpdate(ruleId, request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1081,8 +1088,8 @@ export const useAlertingApiV1RuleUpdateUpdate = (ruleId: string,
         }
     }
 
-    if (JSON.stringify([ruleId,request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([ruleId,request,params, autoExecute]))
+    if (JSON.stringify([ruleId, request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([ruleId, request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1115,20 +1122,25 @@ interface IuseAlertingApiV1RuleTriggerDetailState {
     error?: any
 }
 
-export const useAlertingApiV1RuleTriggerDetail = (ruleId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1RuleTriggerDetail = (
+    ruleId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseAlertingApiV1RuleTriggerDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+    const [state, setState] = useState<IuseAlertingApiV1RuleTriggerDetailState>(
+        {
+            isLoading: true,
+            isExecuted: false,
+        }
+    )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([ruleId,params, autoExecute])
+        JSON.stringify([ruleId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1143,18 +1155,15 @@ export const useAlertingApiV1RuleTriggerDetail = (ruleId: string, params: Reques
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
-                .apiV1RuleTriggerDetail(ruleId,paramsSignal)
+            api.alerting
+                .apiV1RuleTriggerDetail(ruleId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1190,8 +1199,8 @@ export const useAlertingApiV1RuleTriggerDetail = (ruleId: string, params: Reques
         }
     }
 
-    if (JSON.stringify([ruleId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([ruleId,params, autoExecute]))
+    if (JSON.stringify([ruleId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([ruleId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1224,15 +1233,17 @@ interface IuseAlertingApiV1TriggerListListState {
     error?: any
 }
 
-export const useAlertingApiV1TriggerListList = (params: RequestParams = {}, autoExecute = true) => {
+export const useAlertingApiV1TriggerListList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseAlertingApiV1TriggerListListState>({
+    const [state, setState] = useState<IuseAlertingApiV1TriggerListListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -1252,17 +1263,14 @@ export const useAlertingApiV1TriggerListList = (params: RequestParams = {}, auto
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .alerting
+            api.alerting
                 .apiV1TriggerListList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -1324,4 +1332,3 @@ export const useAlertingApiV1TriggerListList = (params: RequestParams = {}, auto
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
-

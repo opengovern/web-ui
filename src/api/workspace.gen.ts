@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Api,
-
-    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
-
- RequestParams } from './api'
+import {
+    Api,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
+    GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
+    RequestParams,
+} from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
-
 
 interface IuseWorkspaceApiV1BootstrapDetailState {
     isLoading: boolean
@@ -17,20 +21,23 @@ interface IuseWorkspaceApiV1BootstrapDetailState {
     error?: any
 }
 
-export const useWorkspaceApiV1BootstrapDetail = (workspaceName: string, params: RequestParams = {}, autoExecute = true) => {
+export const useWorkspaceApiV1BootstrapDetail = (
+    workspaceName: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseWorkspaceApiV1BootstrapDetailState>({
+    const [state, setState] = useState<IuseWorkspaceApiV1BootstrapDetailState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceName,params, autoExecute])
+        JSON.stringify([workspaceName, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -45,14 +52,11 @@ export const useWorkspaceApiV1BootstrapDetail = (workspaceName: string, params: 
             isExecuted: true,
         })
         try {
-            
             setWorkspace('kaytu')
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .workspace
-                .apiV1BootstrapDetail(workspaceName,paramsSignal)
+            api.workspace
+                .apiV1BootstrapDetail(workspaceName, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -88,8 +92,8 @@ export const useWorkspaceApiV1BootstrapDetail = (workspaceName: string, params: 
         }
     }
 
-    if (JSON.stringify([workspaceName,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceName,params, autoExecute]))
+    if (JSON.stringify([workspaceName, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceName, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -122,9 +126,12 @@ interface IuseWorkspaceApiV1BootstrapCredentialCreateState {
     error?: any
 }
 
-export const useWorkspaceApiV1BootstrapCredentialCreate = (workspaceName: string,
-            request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useWorkspaceApiV1BootstrapCredentialCreate = (
+    workspaceName: string,
+    request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiAddCredentialRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -132,12 +139,12 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (workspaceName: string
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseWorkspaceApiV1BootstrapCredentialCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseWorkspaceApiV1BootstrapCredentialCreateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceName,request,params, autoExecute])
+        JSON.stringify([workspaceName, request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -152,14 +159,15 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (workspaceName: string
             isExecuted: true,
         })
         try {
-            
             setWorkspace('kaytu')
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .workspace
-                .apiV1BootstrapCredentialCreate(workspaceName,request,paramsSignal)
+            api.workspace
+                .apiV1BootstrapCredentialCreate(
+                    workspaceName,
+                    request,
+                    paramsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -195,8 +203,13 @@ export const useWorkspaceApiV1BootstrapCredentialCreate = (workspaceName: string
         }
     }
 
-    if (JSON.stringify([workspaceName,request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceName,request,params, autoExecute]))
+    if (
+        JSON.stringify([workspaceName, request, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([workspaceName, request, params, autoExecute])
+        )
     }
 
     useEffect(() => {
@@ -229,7 +242,11 @@ interface IuseWorkspaceApiV1BootstrapFinishCreateState {
     error?: any
 }
 
-export const useWorkspaceApiV1BootstrapFinishCreate = (workspaceName: string, params: RequestParams = {}, autoExecute = true) => {
+export const useWorkspaceApiV1BootstrapFinishCreate = (
+    workspaceName: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -237,12 +254,12 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (workspaceName: string, pa
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseWorkspaceApiV1BootstrapFinishCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseWorkspaceApiV1BootstrapFinishCreateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceName,params, autoExecute])
+        JSON.stringify([workspaceName, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -257,14 +274,11 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (workspaceName: string, pa
             isExecuted: true,
         })
         try {
-            
             setWorkspace('kaytu')
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .workspace
-                .apiV1BootstrapFinishCreate(workspaceName,paramsSignal)
+            api.workspace
+                .apiV1BootstrapFinishCreate(workspaceName, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -300,8 +314,8 @@ export const useWorkspaceApiV1BootstrapFinishCreate = (workspaceName: string, pa
         }
     }
 
-    if (JSON.stringify([workspaceName,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceName,params, autoExecute]))
+    if (JSON.stringify([workspaceName, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceName, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -334,21 +348,23 @@ interface IuseWorkspaceApiV1WorkspaceCreateState {
     error?: any
 }
 
-export const useWorkspaceApiV1WorkspaceCreate = (request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useWorkspaceApiV1WorkspaceCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseWorkspaceApiV1WorkspaceCreateState>({
+    const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request,params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -363,14 +379,11 @@ export const useWorkspaceApiV1WorkspaceCreate = (request: GithubComKaytuIoKaytuE
             isExecuted: true,
         })
         try {
-            
             setWorkspace('kaytu')
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .workspace
-                .apiV1WorkspaceCreate(request,paramsSignal)
+            api.workspace
+                .apiV1WorkspaceCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -406,8 +419,8 @@ export const useWorkspaceApiV1WorkspaceCreate = (request: GithubComKaytuIoKaytuE
         }
     }
 
-    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request,params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -440,7 +453,10 @@ interface IuseWorkspaceApiV1WorkspaceCurrentListState {
     error?: any
 }
 
-export const useWorkspaceApiV1WorkspaceCurrentList = (params: RequestParams = {}, autoExecute = true) => {
+export const useWorkspaceApiV1WorkspaceCurrentList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -448,10 +464,10 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (params: RequestParams = {}
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseWorkspaceApiV1WorkspaceCurrentListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseWorkspaceApiV1WorkspaceCurrentListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, autoExecute])
     )
@@ -468,17 +484,14 @@ export const useWorkspaceApiV1WorkspaceCurrentList = (params: RequestParams = {}
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .workspace
+            api.workspace
                 .apiV1WorkspaceCurrentList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -549,20 +562,23 @@ interface IuseWorkspaceApiV1WorkspaceDeleteState {
     error?: any
 }
 
-export const useWorkspaceApiV1WorkspaceDelete = (workspaceId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useWorkspaceApiV1WorkspaceDelete = (
+    workspaceId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseWorkspaceApiV1WorkspaceDeleteState>({
+    const [state, setState] = useState<IuseWorkspaceApiV1WorkspaceDeleteState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceId,params, autoExecute])
+        JSON.stringify([workspaceId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -577,14 +593,11 @@ export const useWorkspaceApiV1WorkspaceDelete = (workspaceId: string, params: Re
             isExecuted: true,
         })
         try {
-            
             setWorkspace('kaytu')
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .workspace
-                .apiV1WorkspaceDelete(workspaceId,paramsSignal)
+            api.workspace
+                .apiV1WorkspaceDelete(workspaceId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -620,8 +633,8 @@ export const useWorkspaceApiV1WorkspaceDelete = (workspaceId: string, params: Re
         }
     }
 
-    if (JSON.stringify([workspaceId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceId,params, autoExecute]))
+    if (JSON.stringify([workspaceId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([workspaceId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -654,15 +667,17 @@ interface IuseWorkspaceApiV1WorkspacesListState {
     error?: any
 }
 
-export const useWorkspaceApiV1WorkspacesList = (params: RequestParams = {}, autoExecute = true) => {
+export const useWorkspaceApiV1WorkspacesList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseWorkspaceApiV1WorkspacesListState>({
+    const [state, setState] = useState<IuseWorkspaceApiV1WorkspacesListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -682,13 +697,10 @@ export const useWorkspaceApiV1WorkspacesList = (params: RequestParams = {}, auto
             isExecuted: true,
         })
         try {
-            
             setWorkspace('kaytu')
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .workspace
+            api.workspace
                 .apiV1WorkspacesList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -759,12 +771,14 @@ interface IuseWorkspaceApiV1WorkspacesLimitsDetailState {
     error?: any
 }
 
-export const useWorkspaceApiV1WorkspacesLimitsDetail = (workspaceName: string,
-            query?: {
-                
-                ignore_usage?: boolean
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useWorkspaceApiV1WorkspacesLimitsDetail = (
+    workspaceName: string,
+    query?: {
+        ignore_usage?: boolean
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -772,12 +786,12 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (workspaceName: string,
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseWorkspaceApiV1WorkspacesLimitsDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseWorkspaceApiV1WorkspacesLimitsDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([workspaceName,query,params, autoExecute])
+        JSON.stringify([workspaceName, query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -792,14 +806,11 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (workspaceName: string,
             isExecuted: true,
         })
         try {
-            
             setWorkspace('kaytu')
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .workspace
-                .apiV1WorkspacesLimitsDetail(workspaceName,query,paramsSignal)
+            api.workspace
+                .apiV1WorkspacesLimitsDetail(workspaceName, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -835,8 +846,13 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (workspaceName: string,
         }
     }
 
-    if (JSON.stringify([workspaceName,query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([workspaceName,query,params, autoExecute]))
+    if (
+        JSON.stringify([workspaceName, query, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([workspaceName, query, params, autoExecute])
+        )
     }
 
     useEffect(() => {
@@ -860,4 +876,3 @@ export const useWorkspaceApiV1WorkspacesLimitsDetail = (workspaceName: string,
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
-

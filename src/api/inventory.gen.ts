@@ -1,13 +1,28 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Api,
-
-    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
-
- RequestParams } from './api'
+import {
+    Api,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
+    GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem,
+    RequestParams,
+} from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
-
 
 interface IuseInventoryApiV1QueryListState {
     isLoading: boolean
@@ -17,21 +32,23 @@ interface IuseInventoryApiV1QueryListState {
     error?: any
 }
 
-export const useInventoryApiV1QueryList = (request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV1QueryList = (
+    request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseInventoryApiV1QueryListState>({
+    const [state, setState] = useState<IuseInventoryApiV1QueryListState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request,params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -46,18 +63,15 @@ export const useInventoryApiV1QueryList = (request: GithubComKaytuIoKaytuEngineP
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV1QueryList(request,paramsSignal)
+            api.inventory
+                .apiV1QueryList(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -93,8 +107,8 @@ export const useInventoryApiV1QueryList = (request: GithubComKaytuIoKaytuEngineP
         }
     }
 
-    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request,params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -127,21 +141,23 @@ interface IuseInventoryApiV1QueryRunCreateState {
     error?: any
 }
 
-export const useInventoryApiV1QueryRunCreate = (request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV1QueryRunCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseInventoryApiV1QueryRunCreateState>({
+    const [state, setState] = useState<IuseInventoryApiV1QueryRunCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request,params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -156,18 +172,15 @@ export const useInventoryApiV1QueryRunCreate = (request: GithubComKaytuIoKaytuEn
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV1QueryRunCreate(request,paramsSignal)
+            api.inventory
+                .apiV1QueryRunCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -203,8 +216,8 @@ export const useInventoryApiV1QueryRunCreate = (request: GithubComKaytuIoKaytuEn
         }
     }
 
-    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request,params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -237,7 +250,10 @@ interface IuseInventoryApiV1QueryRunHistoryListState {
     error?: any
 }
 
-export const useInventoryApiV1QueryRunHistoryList = (params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV1QueryRunHistoryList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -245,10 +261,10 @@ export const useInventoryApiV1QueryRunHistoryList = (params: RequestParams = {},
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV1QueryRunHistoryListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV1QueryRunHistoryListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, autoExecute])
     )
@@ -265,17 +281,14 @@ export const useInventoryApiV1QueryRunHistoryList = (params: RequestParams = {},
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
+            api.inventory
                 .apiV1QueryRunHistoryList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -346,13 +359,15 @@ interface IuseInventoryApiV2AnalyticsCategoriesListState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsCategoriesList = (query?: {
-                
-                metricType?: 'assets' | 'spend'
-                
-                minCount?: number
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsCategoriesList = (
+    query?: {
+        metricType?: 'assets' | 'spend'
+
+        minCount?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -360,12 +375,12 @@ export const useInventoryApiV2AnalyticsCategoriesList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsCategoriesListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsCategoriesListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -380,18 +395,15 @@ export const useInventoryApiV2AnalyticsCategoriesList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsCategoriesList(query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsCategoriesList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -427,8 +439,8 @@ export const useInventoryApiV2AnalyticsCategoriesList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -461,26 +473,28 @@ interface IuseInventoryApiV2AnalyticsCompositionDetailState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsCompositionDetail = (key: string,
-            query: {
-                
-                metricType?: 'assets' | 'spend'
-                
-                top: number
-                
-                connector?: ('' | 'AWS' | 'Azure')[]
-                
-                connectionId?: string[]
-                
-                connectionGroup?: string[]
-                
-                resourceCollection?: string[]
-                
-                endTime?: number
-                
-                startTime?: number
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsCompositionDetail = (
+    key: string,
+    query: {
+        metricType?: 'assets' | 'spend'
+
+        top: number
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        resourceCollection?: string[]
+
+        endTime?: number
+
+        startTime?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -488,12 +502,12 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (key: string,
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsCompositionDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsCompositionDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key,query,params, autoExecute])
+        JSON.stringify([key, query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -508,18 +522,15 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (key: string,
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsCompositionDetail(key,query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsCompositionDetail(key, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -555,8 +566,8 @@ export const useInventoryApiV2AnalyticsCompositionDetail = (key: string,
         }
     }
 
-    if (JSON.stringify([key,query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([key,query,params, autoExecute]))
+    if (JSON.stringify([key, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([key, query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -589,35 +600,37 @@ interface IuseInventoryApiV2AnalyticsMetricListState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsMetricList = (query?: {
-                
-                tag?: string[]
-                
-                metricType?: 'assets' | 'spend'
-                
-                connector?: ('' | 'AWS' | 'Azure')[]
-                
-                connectionId?: string[]
-                
-                connectionGroup?: string[]
-                
-                resourceCollection?: string[]
-                
-                metricIDs?: string[]
-                
-                endTime?: number
-                
-                startTime?: number
-                
-                minCount?: number
-                
-                sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
-                
-                pageSize?: number
-                
-                pageNumber?: number
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsMetricList = (
+    query?: {
+        tag?: string[]
+
+        metricType?: 'assets' | 'spend'
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        resourceCollection?: string[]
+
+        metricIDs?: string[]
+
+        endTime?: number
+
+        startTime?: number
+
+        minCount?: number
+
+        sortBy?: 'name' | 'count' | 'growth' | 'growth_rate'
+
+        pageSize?: number
+
+        pageNumber?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -625,12 +638,12 @@ export const useInventoryApiV2AnalyticsMetricList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsMetricListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsMetricListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -645,18 +658,15 @@ export const useInventoryApiV2AnalyticsMetricList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsMetricList(query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsMetricList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -692,8 +702,8 @@ export const useInventoryApiV2AnalyticsMetricList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -726,13 +736,15 @@ interface IuseInventoryApiV2AnalyticsMetricsListListState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsMetricsListList = (query?: {
-                
-                connector?: ('' | 'AWS' | 'Azure')[]
-                
-                metricType?: 'assets' | 'spend'
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsMetricsListList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        metricType?: 'assets' | 'spend'
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -740,12 +752,12 @@ export const useInventoryApiV2AnalyticsMetricsListList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsMetricsListListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsMetricsListListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -760,18 +772,15 @@ export const useInventoryApiV2AnalyticsMetricsListList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsMetricsListList(query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsMetricsListList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -807,8 +816,8 @@ export const useInventoryApiV2AnalyticsMetricsListList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -841,7 +850,11 @@ interface IuseInventoryApiV2AnalyticsMetricsDetailState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsMetricsDetail = (metricId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsMetricsDetail = (
+    metricId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -849,12 +862,12 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (metricId: string, params
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsMetricsDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsMetricsDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([metricId,params, autoExecute])
+        JSON.stringify([metricId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -869,18 +882,15 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (metricId: string, params
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsMetricsDetail(metricId,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsMetricsDetail(metricId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -916,8 +926,8 @@ export const useInventoryApiV2AnalyticsMetricsDetail = (metricId: string, params
         }
     }
 
-    if (JSON.stringify([metricId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([metricId,params, autoExecute]))
+    if (JSON.stringify([metricId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([metricId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -950,21 +960,23 @@ interface IuseInventoryApiV2AnalyticsSpendCompositionListState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsSpendCompositionList = (query?: {
-                
-                connector?: ('' | 'AWS' | 'Azure')[]
-                
-                connectionId?: string[]
-                
-                connectionGroup?: string[]
-                
-                top?: number
-                
-                startTime?: number
-                
-                endTime?: number
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsSpendCompositionList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        top?: number
+
+        startTime?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -972,12 +984,12 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsSpendCompositionListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsSpendCompositionListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -992,18 +1004,15 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsSpendCompositionList(query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsSpendCompositionList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1039,8 +1048,8 @@ export const useInventoryApiV2AnalyticsSpendCompositionList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1073,29 +1082,31 @@ interface IuseInventoryApiV2AnalyticsSpendMetricListState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsSpendMetricList = (query?: {
-                
-                filter?: string
-                
-                connector?: ('' | 'AWS' | 'Azure')[]
-                
-                connectionId?: string[]
-                
-                connectionGroup?: string[]
-                
-                startTime?: number
-                
-                endTime?: number
-                
-                sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
-                
-                pageSize?: number
-                
-                pageNumber?: number
-                
-                metricIDs?: string[]
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsSpendMetricList = (
+    query?: {
+        filter?: string
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        startTime?: number
+
+        endTime?: number
+
+        sortBy?: 'dimension' | 'cost' | 'growth' | 'growth_rate'
+
+        pageSize?: number
+
+        pageNumber?: number
+
+        metricIDs?: string[]
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1103,12 +1114,12 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsSpendMetricListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsSpendMetricListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1123,18 +1134,15 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsSpendMetricList(query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsSpendMetricList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1170,8 +1178,8 @@ export const useInventoryApiV2AnalyticsSpendMetricList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1204,25 +1212,27 @@ interface IuseInventoryApiV2AnalyticsSpendTableListState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsSpendTableList = (query?: {
-                
-                startTime?: number
-                
-                endTime?: number
-                
-                granularity?: 'monthly' | 'daily' | 'yearly'
-                
-                dimension?: 'connection' | 'metric'
-                
-                connectionId?: string[]
-                
-                connectionGroup?: string[]
-                
-                connector?: string[]
-                
-                metricIds?: string[]
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsSpendTableList = (
+    query?: {
+        startTime?: number
+
+        endTime?: number
+
+        granularity?: 'monthly' | 'daily' | 'yearly'
+
+        dimension?: 'connection' | 'metric'
+
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        connector?: string[]
+
+        metricIds?: string[]
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1230,12 +1240,12 @@ export const useInventoryApiV2AnalyticsSpendTableList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsSpendTableListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsSpendTableListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1250,18 +1260,15 @@ export const useInventoryApiV2AnalyticsSpendTableList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsSpendTableList(query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsSpendTableList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1297,8 +1304,8 @@ export const useInventoryApiV2AnalyticsSpendTableList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1331,23 +1338,25 @@ interface IuseInventoryApiV2AnalyticsSpendTrendListState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsSpendTrendList = (query?: {
-                
-                connector?: ('' | 'AWS' | 'Azure')[]
-                
-                connectionId?: string[]
-                
-                connectionGroup?: string[]
-                
-                metricIds?: string[]
-                
-                startTime?: number
-                
-                endTime?: number
-                
-                granularity?: 'monthly' | 'daily' | 'yearly'
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsSpendTrendList = (
+    query?: {
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        metricIds?: string[]
+
+        startTime?: number
+
+        endTime?: number
+
+        granularity?: 'monthly' | 'daily' | 'yearly'
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1355,12 +1364,12 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsSpendTrendListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsSpendTrendListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1375,18 +1384,15 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsSpendTrendList(query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsSpendTrendList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1422,8 +1428,8 @@ export const useInventoryApiV2AnalyticsSpendTrendList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1456,17 +1462,19 @@ interface IuseInventoryApiV2AnalyticsTableListState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsTableList = (query?: {
-                
-                startTime?: number
-                
-                endTime?: number
-                
-                granularity?: 'monthly' | 'daily' | 'yearly'
-                
-                dimension?: 'connection' | 'metric'
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsTableList = (
+    query?: {
+        startTime?: number
+
+        endTime?: number
+
+        granularity?: 'monthly' | 'daily' | 'yearly'
+
+        dimension?: 'connection' | 'metric'
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1474,12 +1482,12 @@ export const useInventoryApiV2AnalyticsTableList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsTableListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsTableListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1494,18 +1502,15 @@ export const useInventoryApiV2AnalyticsTableList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsTableList(query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsTableList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1541,8 +1546,8 @@ export const useInventoryApiV2AnalyticsTableList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1575,38 +1580,41 @@ interface IuseInventoryApiV2AnalyticsTagListState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsTagList = (query?: {
-                
-                connector?: string[]
-                
-                connectionId?: string[]
-                
-                connectionGroup?: string[]
-                
-                resourceCollection?: string[]
-                
-                minCount?: number
-                
-                startTime?: number
-                
-                endTime?: number
-                
-                metricType?: 'assets' | 'spend'
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsTagList = (
+    query?: {
+        connector?: string[]
+
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        resourceCollection?: string[]
+
+        minCount?: number
+
+        startTime?: number
+
+        endTime?: number
+
+        metricType?: 'assets' | 'spend'
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsTagListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+    const [state, setState] = useState<IuseInventoryApiV2AnalyticsTagListState>(
+        {
+            isLoading: true,
+            isExecuted: false,
+        }
+    )
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1621,18 +1629,15 @@ export const useInventoryApiV2AnalyticsTagList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsTagList(query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsTagList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1668,8 +1673,8 @@ export const useInventoryApiV2AnalyticsTagList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1702,29 +1707,31 @@ interface IuseInventoryApiV2AnalyticsTrendListState {
     error?: any
 }
 
-export const useInventoryApiV2AnalyticsTrendList = (query?: {
-                
-                tag?: string[]
-                
-                metricType?: 'assets' | 'spend'
-                
-                ids?: string[]
-                
-                connector?: ('' | 'AWS' | 'Azure')[]
-                
-                connectionId?: string[]
-                
-                connectionGroup?: string[]
-                
-                resourceCollection?: string[]
-                
-                startTime?: number
-                
-                endTime?: number
-                
-                granularity?: 'monthly' | 'daily' | 'yearly'
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2AnalyticsTrendList = (
+    query?: {
+        tag?: string[]
+
+        metricType?: 'assets' | 'spend'
+
+        ids?: string[]
+
+        connector?: ('' | 'AWS' | 'Azure')[]
+
+        connectionId?: string[]
+
+        connectionGroup?: string[]
+
+        resourceCollection?: string[]
+
+        startTime?: number
+
+        endTime?: number
+
+        granularity?: 'monthly' | 'daily' | 'yearly'
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1732,12 +1739,12 @@ export const useInventoryApiV2AnalyticsTrendList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2AnalyticsTrendListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2AnalyticsTrendListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1752,18 +1759,15 @@ export const useInventoryApiV2AnalyticsTrendList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2AnalyticsTrendList(query,paramsSignal)
+            api.inventory
+                .apiV2AnalyticsTrendList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1799,8 +1803,8 @@ export const useInventoryApiV2AnalyticsTrendList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1833,13 +1837,15 @@ interface IuseInventoryApiV2MetadataResourceCollectionListState {
     error?: any
 }
 
-export const useInventoryApiV2MetadataResourceCollectionList = (query?: {
-                
-                id?: string[]
-                
-                status?: ('' | 'active' | 'inactive')[]
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2MetadataResourceCollectionList = (
+    query?: {
+        id?: string[]
+
+        status?: ('' | 'active' | 'inactive')[]
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1847,12 +1853,12 @@ export const useInventoryApiV2MetadataResourceCollectionList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2MetadataResourceCollectionListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2MetadataResourceCollectionListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1867,18 +1873,15 @@ export const useInventoryApiV2MetadataResourceCollectionList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2MetadataResourceCollectionList(query,paramsSignal)
+            api.inventory
+                .apiV2MetadataResourceCollectionList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1914,8 +1917,8 @@ export const useInventoryApiV2MetadataResourceCollectionList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1948,7 +1951,11 @@ interface IuseInventoryApiV2MetadataResourceCollectionDetailState {
     error?: any
 }
 
-export const useInventoryApiV2MetadataResourceCollectionDetail = (resourceCollectionId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2MetadataResourceCollectionDetail = (
+    resourceCollectionId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1956,12 +1963,12 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (resourceCollec
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2MetadataResourceCollectionDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2MetadataResourceCollectionDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([resourceCollectionId,params, autoExecute])
+        JSON.stringify([resourceCollectionId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1976,18 +1983,18 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (resourceCollec
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2MetadataResourceCollectionDetail(resourceCollectionId,paramsSignal)
+            api.inventory
+                .apiV2MetadataResourceCollectionDetail(
+                    resourceCollectionId,
+                    paramsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2023,8 +2030,13 @@ export const useInventoryApiV2MetadataResourceCollectionDetail = (resourceCollec
         }
     }
 
-    if (JSON.stringify([resourceCollectionId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([resourceCollectionId,params, autoExecute]))
+    if (
+        JSON.stringify([resourceCollectionId, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([resourceCollectionId, params, autoExecute])
+        )
     }
 
     useEffect(() => {
@@ -2057,13 +2069,15 @@ interface IuseInventoryApiV2ResourceCollectionListState {
     error?: any
 }
 
-export const useInventoryApiV2ResourceCollectionList = (query?: {
-                
-                id?: string[]
-                
-                status?: ('' | 'active' | 'inactive')[]
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2ResourceCollectionList = (
+    query?: {
+        id?: string[]
+
+        status?: ('' | 'active' | 'inactive')[]
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -2071,12 +2085,12 @@ export const useInventoryApiV2ResourceCollectionList = (query?: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2ResourceCollectionListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2ResourceCollectionListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2091,18 +2105,15 @@ export const useInventoryApiV2ResourceCollectionList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2ResourceCollectionList(query,paramsSignal)
+            api.inventory
+                .apiV2ResourceCollectionList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2138,8 +2149,8 @@ export const useInventoryApiV2ResourceCollectionList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2172,7 +2183,11 @@ interface IuseInventoryApiV2ResourceCollectionDetailState {
     error?: any
 }
 
-export const useInventoryApiV2ResourceCollectionDetail = (resourceCollectionId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2ResourceCollectionDetail = (
+    resourceCollectionId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -2180,12 +2195,12 @@ export const useInventoryApiV2ResourceCollectionDetail = (resourceCollectionId: 
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2ResourceCollectionDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2ResourceCollectionDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([resourceCollectionId,params, autoExecute])
+        JSON.stringify([resourceCollectionId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2200,18 +2215,18 @@ export const useInventoryApiV2ResourceCollectionDetail = (resourceCollectionId: 
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2ResourceCollectionDetail(resourceCollectionId,paramsSignal)
+            api.inventory
+                .apiV2ResourceCollectionDetail(
+                    resourceCollectionId,
+                    paramsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2247,8 +2262,13 @@ export const useInventoryApiV2ResourceCollectionDetail = (resourceCollectionId: 
         }
     }
 
-    if (JSON.stringify([resourceCollectionId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([resourceCollectionId,params, autoExecute]))
+    if (
+        JSON.stringify([resourceCollectionId, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([resourceCollectionId, params, autoExecute])
+        )
     }
 
     useEffect(() => {
@@ -2281,7 +2301,11 @@ interface IuseInventoryApiV2ResourceCollectionLandscapeDetailState {
     error?: any
 }
 
-export const useInventoryApiV2ResourceCollectionLandscapeDetail = (resourceCollectionId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useInventoryApiV2ResourceCollectionLandscapeDetail = (
+    resourceCollectionId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -2289,12 +2313,12 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (resourceColle
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseInventoryApiV2ResourceCollectionLandscapeDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseInventoryApiV2ResourceCollectionLandscapeDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([resourceCollectionId,params, autoExecute])
+        JSON.stringify([resourceCollectionId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2309,18 +2333,18 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (resourceColle
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .inventory
-                .apiV2ResourceCollectionLandscapeDetail(resourceCollectionId,paramsSignal)
+            api.inventory
+                .apiV2ResourceCollectionLandscapeDetail(
+                    resourceCollectionId,
+                    paramsSignal
+                )
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2356,8 +2380,13 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (resourceColle
         }
     }
 
-    if (JSON.stringify([resourceCollectionId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([resourceCollectionId,params, autoExecute]))
+    if (
+        JSON.stringify([resourceCollectionId, params, autoExecute]) !==
+        lastInput
+    ) {
+        setLastInput(
+            JSON.stringify([resourceCollectionId, params, autoExecute])
+        )
     }
 
     useEffect(() => {
@@ -2381,4 +2410,3 @@ export const useInventoryApiV2ResourceCollectionLandscapeDetail = (resourceColle
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
-

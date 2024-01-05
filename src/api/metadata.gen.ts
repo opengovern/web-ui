@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Api,
-
-    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-
- RequestParams } from './api'
+import {
+    Api,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
+    GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
+    RequestParams,
+} from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
-
 
 interface IuseMetadataApiV1FilterListState {
     isLoading: boolean
@@ -17,15 +18,17 @@ interface IuseMetadataApiV1FilterListState {
     error?: any
 }
 
-export const useMetadataApiV1FilterList = (params: RequestParams = {}, autoExecute = true) => {
+export const useMetadataApiV1FilterList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseMetadataApiV1FilterListState>({
+    const [state, setState] = useState<IuseMetadataApiV1FilterListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -45,17 +48,14 @@ export const useMetadataApiV1FilterList = (params: RequestParams = {}, autoExecu
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .metadata
+            api.metadata
                 .apiV1FilterList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -126,20 +126,23 @@ interface IuseMetadataApiV1FilterCreateState {
     error?: any
 }
 
-export const useMetadataApiV1FilterCreate = (req: GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter, params: RequestParams = {}, autoExecute = true) => {
+export const useMetadataApiV1FilterCreate = (
+    req: GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseMetadataApiV1FilterCreateState>({
+    const [state, setState] = useState<IuseMetadataApiV1FilterCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([req,params, autoExecute])
+        JSON.stringify([req, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -154,18 +157,15 @@ export const useMetadataApiV1FilterCreate = (req: GithubComKaytuIoKaytuEnginePkg
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .metadata
-                .apiV1FilterCreate(req,paramsSignal)
+            api.metadata
+                .apiV1FilterCreate(req, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -201,8 +201,8 @@ export const useMetadataApiV1FilterCreate = (req: GithubComKaytuIoKaytuEnginePkg
         }
     }
 
-    if (JSON.stringify([req,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([req,params, autoExecute]))
+    if (JSON.stringify([req, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([req, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -235,21 +235,23 @@ interface IuseMetadataApiV1MetadataCreateState {
     error?: any
 }
 
-export const useMetadataApiV1MetadataCreate = (req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useMetadataApiV1MetadataCreate = (
+    req: GithubComKaytuIoKaytuEnginePkgMetadataApiSetConfigMetadataRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseMetadataApiV1MetadataCreateState>({
+    const [state, setState] = useState<IuseMetadataApiV1MetadataCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([req,params, autoExecute])
+        JSON.stringify([req, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -264,18 +266,15 @@ export const useMetadataApiV1MetadataCreate = (req: GithubComKaytuIoKaytuEngineP
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .metadata
-                .apiV1MetadataCreate(req,paramsSignal)
+            api.metadata
+                .apiV1MetadataCreate(req, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -311,8 +310,8 @@ export const useMetadataApiV1MetadataCreate = (req: GithubComKaytuIoKaytuEngineP
         }
     }
 
-    if (JSON.stringify([req,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([req,params, autoExecute]))
+    if (JSON.stringify([req, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([req, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -345,20 +344,23 @@ interface IuseMetadataApiV1MetadataDetailState {
     error?: any
 }
 
-export const useMetadataApiV1MetadataDetail = (key: string, params: RequestParams = {}, autoExecute = true) => {
+export const useMetadataApiV1MetadataDetail = (
+    key: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseMetadataApiV1MetadataDetailState>({
+    const [state, setState] = useState<IuseMetadataApiV1MetadataDetailState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([key,params, autoExecute])
+        JSON.stringify([key, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -373,18 +375,15 @@ export const useMetadataApiV1MetadataDetail = (key: string, params: RequestParam
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .metadata
-                .apiV1MetadataDetail(key,paramsSignal)
+            api.metadata
+                .apiV1MetadataDetail(key, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -420,8 +419,8 @@ export const useMetadataApiV1MetadataDetail = (key: string, params: RequestParam
         }
     }
 
-    if (JSON.stringify([key,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([key,params, autoExecute]))
+    if (JSON.stringify([key, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([key, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -445,4 +444,3 @@ export const useMetadataApiV1MetadataDetail = (key: string, params: RequestParam
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
-

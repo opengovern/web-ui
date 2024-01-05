@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Api,
-
-    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
-
- RequestParams } from './api'
+import {
+    Api,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
+    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
+    GithubComKaytuIoKaytuEnginePkgDescribeApiStack,
+    RequestParams,
+} from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
-
 
 interface IuseScheduleApiV1ComplianceTriggerUpdateState {
     isLoading: boolean
@@ -17,7 +22,11 @@ interface IuseScheduleApiV1ComplianceTriggerUpdateState {
     error?: any
 }
 
-export const useScheduleApiV1ComplianceTriggerUpdate = (benchmarkId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1ComplianceTriggerUpdate = (
+    benchmarkId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -25,12 +34,12 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (benchmarkId: string, par
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseScheduleApiV1ComplianceTriggerUpdateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseScheduleApiV1ComplianceTriggerUpdateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId,params, autoExecute])
+        JSON.stringify([benchmarkId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -45,18 +54,15 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (benchmarkId: string, par
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1ComplianceTriggerUpdate(benchmarkId,paramsSignal)
+            api.schedule
+                .apiV1ComplianceTriggerUpdate(benchmarkId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -92,8 +98,8 @@ export const useScheduleApiV1ComplianceTriggerUpdate = (benchmarkId: string, par
         }
     }
 
-    if (JSON.stringify([benchmarkId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId,params, autoExecute]))
+    if (JSON.stringify([benchmarkId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -126,11 +132,13 @@ interface IuseScheduleApiV1DescribeConnectionStatusUpdateState {
     error?: any
 }
 
-export const useScheduleApiV1DescribeConnectionStatusUpdate = (query: {
-                
-                connection_id: string
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1DescribeConnectionStatusUpdate = (
+    query: {
+        connection_id: string
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -138,12 +146,12 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (query: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseScheduleApiV1DescribeConnectionStatusUpdateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseScheduleApiV1DescribeConnectionStatusUpdateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -158,18 +166,15 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (query: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1DescribeConnectionStatusUpdate(query,paramsSignal)
+            api.schedule
+                .apiV1DescribeConnectionStatusUpdate(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -205,8 +210,8 @@ export const useScheduleApiV1DescribeConnectionStatusUpdate = (query: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -239,12 +244,14 @@ interface IuseScheduleApiV1DescribeTriggerUpdateState {
     error?: any
 }
 
-export const useScheduleApiV1DescribeTriggerUpdate = (connectionId: string,
-            query?: {
-                
-                resource_type?: string[]
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1DescribeTriggerUpdate = (
+    connectionId: string,
+    query?: {
+        resource_type?: string[]
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -252,12 +259,12 @@ export const useScheduleApiV1DescribeTriggerUpdate = (connectionId: string,
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseScheduleApiV1DescribeTriggerUpdateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseScheduleApiV1DescribeTriggerUpdateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId,query,params, autoExecute])
+        JSON.stringify([connectionId, query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -272,18 +279,15 @@ export const useScheduleApiV1DescribeTriggerUpdate = (connectionId: string,
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1DescribeTriggerUpdate(connectionId,query,paramsSignal)
+            api.schedule
+                .apiV1DescribeTriggerUpdate(connectionId, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -319,8 +323,10 @@ export const useScheduleApiV1DescribeTriggerUpdate = (connectionId: string,
         }
     }
 
-    if (JSON.stringify([connectionId,query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId,query,params, autoExecute]))
+    if (
+        JSON.stringify([connectionId, query, params, autoExecute]) !== lastInput
+    ) {
+        setLastInput(JSON.stringify([connectionId, query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -353,7 +359,10 @@ interface IuseScheduleApiV1DiscoveryResourcetypesListListState {
     error?: any
 }
 
-export const useScheduleApiV1DiscoveryResourcetypesListList = (params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1DiscoveryResourcetypesListList = (
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -361,10 +370,10 @@ export const useScheduleApiV1DiscoveryResourcetypesListList = (params: RequestPa
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseScheduleApiV1DiscoveryResourcetypesListListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseScheduleApiV1DiscoveryResourcetypesListListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, autoExecute])
     )
@@ -381,17 +390,14 @@ export const useScheduleApiV1DiscoveryResourcetypesListList = (params: RequestPa
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
+            api.schedule
                 .apiV1DiscoveryResourcetypesListList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -462,7 +468,11 @@ interface IuseScheduleApiV1InsightTriggerUpdateState {
     error?: any
 }
 
-export const useScheduleApiV1InsightTriggerUpdate = (insightId: number, params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1InsightTriggerUpdate = (
+    insightId: number,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -470,12 +480,12 @@ export const useScheduleApiV1InsightTriggerUpdate = (insightId: number, params: 
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseScheduleApiV1InsightTriggerUpdateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseScheduleApiV1InsightTriggerUpdateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId,params, autoExecute])
+        JSON.stringify([insightId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -490,18 +500,15 @@ export const useScheduleApiV1InsightTriggerUpdate = (insightId: number, params: 
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1InsightTriggerUpdate(insightId,paramsSignal)
+            api.schedule
+                .apiV1InsightTriggerUpdate(insightId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -537,8 +544,8 @@ export const useScheduleApiV1InsightTriggerUpdate = (insightId: number, params: 
         }
     }
 
-    if (JSON.stringify([insightId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId,params, autoExecute]))
+    if (JSON.stringify([insightId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -571,21 +578,23 @@ interface IuseScheduleApiV1JobsCreateState {
     error?: any
 }
 
-export const useScheduleApiV1JobsCreate = (request: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1JobsCreate = (
+    request: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseScheduleApiV1JobsCreateState>({
+    const [state, setState] = useState<IuseScheduleApiV1JobsCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request,params, autoExecute])
+        JSON.stringify([request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -600,18 +609,15 @@ export const useScheduleApiV1JobsCreate = (request: GithubComKaytuIoKaytuEngineP
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1JobsCreate(request,paramsSignal)
+            api.schedule
+                .apiV1JobsCreate(request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -647,8 +653,8 @@ export const useScheduleApiV1JobsCreate = (request: GithubComKaytuIoKaytuEngineP
         }
     }
 
-    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request,params, autoExecute]))
+    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -681,26 +687,27 @@ interface IuseScheduleApiV1StacksListState {
     error?: any
 }
 
-export const useScheduleApiV1StacksList = (query?: {
-                
-                tag?: string[]
-                
-                accountIds?: string[]
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1StacksList = (
+    query?: {
+        tag?: string[]
+
+        accountIds?: string[]
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseScheduleApiV1StacksListState>({
+    const [state, setState] = useState<IuseScheduleApiV1StacksListState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -715,18 +722,15 @@ export const useScheduleApiV1StacksList = (query?: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1StacksList(query,paramsSignal)
+            api.schedule
+                .apiV1StacksList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -762,8 +766,8 @@ export const useScheduleApiV1StacksList = (query?: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -796,17 +800,19 @@ interface IuseScheduleApiV1StacksCreateCreateState {
     error?: any
 }
 
-export const useScheduleApiV1StacksCreateCreate = (data: {
-                
-                stateFile?: File
-                
-                tag?: string
-                
-                config: string
-                
-                remoteStateConfig?: string
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1StacksCreateCreate = (
+    data: {
+        stateFile?: File
+
+        tag?: string
+
+        config: string
+
+        remoteStateConfig?: string
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -814,12 +820,12 @@ export const useScheduleApiV1StacksCreateCreate = (data: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseScheduleApiV1StacksCreateCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseScheduleApiV1StacksCreateCreateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([data,params, autoExecute])
+        JSON.stringify([data, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -834,18 +840,15 @@ export const useScheduleApiV1StacksCreateCreate = (data: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1StacksCreateCreate(data,paramsSignal)
+            api.schedule
+                .apiV1StacksCreateCreate(data, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -881,8 +884,8 @@ export const useScheduleApiV1StacksCreateCreate = (data: {
         }
     }
 
-    if (JSON.stringify([data,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([data,params, autoExecute]))
+    if (JSON.stringify([data, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([data, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -915,11 +918,13 @@ interface IuseScheduleApiV1StacksResourceListState {
     error?: any
 }
 
-export const useScheduleApiV1StacksResourceList = (query: {
-                
-                resourceId: string
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1StacksResourceList = (
+    query: {
+        resourceId: string
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -927,12 +932,12 @@ export const useScheduleApiV1StacksResourceList = (query: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseScheduleApiV1StacksResourceListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseScheduleApiV1StacksResourceListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -947,18 +952,15 @@ export const useScheduleApiV1StacksResourceList = (query: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1StacksResourceList(query,paramsSignal)
+            api.schedule
+                .apiV1StacksResourceList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -994,8 +996,8 @@ export const useScheduleApiV1StacksResourceList = (query: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1028,20 +1030,23 @@ interface IuseScheduleApiV1StacksDetailState {
     error?: any
 }
 
-export const useScheduleApiV1StacksDetail = (stackId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1StacksDetail = (
+    stackId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseScheduleApiV1StacksDetailState>({
+    const [state, setState] = useState<IuseScheduleApiV1StacksDetailState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([stackId,params, autoExecute])
+        JSON.stringify([stackId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1056,18 +1061,15 @@ export const useScheduleApiV1StacksDetail = (stackId: string, params: RequestPar
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1StacksDetail(stackId,paramsSignal)
+            api.schedule
+                .apiV1StacksDetail(stackId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1103,8 +1105,8 @@ export const useScheduleApiV1StacksDetail = (stackId: string, params: RequestPar
         }
     }
 
-    if (JSON.stringify([stackId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([stackId,params, autoExecute]))
+    if (JSON.stringify([stackId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([stackId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1137,20 +1139,23 @@ interface IuseScheduleApiV1StacksDeleteState {
     error?: any
 }
 
-export const useScheduleApiV1StacksDelete = (stackId: string, params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1StacksDelete = (
+    stackId: string,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseScheduleApiV1StacksDeleteState>({
+    const [state, setState] = useState<IuseScheduleApiV1StacksDeleteState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([stackId,params, autoExecute])
+        JSON.stringify([stackId, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1165,18 +1170,15 @@ export const useScheduleApiV1StacksDelete = (stackId: string, params: RequestPar
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1StacksDelete(stackId,paramsSignal)
+            api.schedule
+                .apiV1StacksDelete(stackId, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1212,8 +1214,8 @@ export const useScheduleApiV1StacksDelete = (stackId: string, params: RequestPar
         }
     }
 
-    if (JSON.stringify([stackId,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([stackId,params, autoExecute]))
+    if (JSON.stringify([stackId, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([stackId, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1246,9 +1248,12 @@ interface IuseScheduleApiV1StacksFindingsCreateState {
     error?: any
 }
 
-export const useScheduleApiV1StacksFindingsCreate = (stackId: string,
-            request: GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
-            params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1StacksFindingsCreate = (
+    stackId: string,
+    request: GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1256,12 +1261,12 @@ export const useScheduleApiV1StacksFindingsCreate = (stackId: string,
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseScheduleApiV1StacksFindingsCreateState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseScheduleApiV1StacksFindingsCreateState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([stackId,request,params, autoExecute])
+        JSON.stringify([stackId, request, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1276,18 +1281,15 @@ export const useScheduleApiV1StacksFindingsCreate = (stackId: string,
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1StacksFindingsCreate(stackId,request,paramsSignal)
+            api.schedule
+                .apiV1StacksFindingsCreate(stackId, request, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1323,8 +1325,8 @@ export const useScheduleApiV1StacksFindingsCreate = (stackId: string,
         }
     }
 
-    if (JSON.stringify([stackId,request,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([stackId,request,params, autoExecute]))
+    if (JSON.stringify([stackId, request, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([stackId, request, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1357,16 +1359,18 @@ interface IuseScheduleApiV1StacksInsightDetailState {
     error?: any
 }
 
-export const useScheduleApiV1StacksInsightDetail = (stackId: string,
-            query: {
-                
-                insightId: number
-                
-                startTime?: number
-                
-                endTime?: number
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1StacksInsightDetail = (
+    stackId: string,
+    query: {
+        insightId: number
+
+        startTime?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1374,12 +1378,12 @@ export const useScheduleApiV1StacksInsightDetail = (stackId: string,
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseScheduleApiV1StacksInsightDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseScheduleApiV1StacksInsightDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([stackId,query,params, autoExecute])
+        JSON.stringify([stackId, query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1394,18 +1398,15 @@ export const useScheduleApiV1StacksInsightDetail = (stackId: string,
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1StacksInsightDetail(stackId,query,paramsSignal)
+            api.schedule
+                .apiV1StacksInsightDetail(stackId, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1441,8 +1442,8 @@ export const useScheduleApiV1StacksInsightDetail = (stackId: string,
         }
     }
 
-    if (JSON.stringify([stackId,query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([stackId,query,params, autoExecute]))
+    if (JSON.stringify([stackId, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([stackId, query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1475,16 +1476,18 @@ interface IuseScheduleApiV1StacksInsightsDetailState {
     error?: any
 }
 
-export const useScheduleApiV1StacksInsightsDetail = (stackId: string,
-            query?: {
-                
-                insightIds?: number[]
-                
-                startTime?: number
-                
-                endTime?: number
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useScheduleApiV1StacksInsightsDetail = (
+    stackId: string,
+    query?: {
+        insightIds?: number[]
+
+        startTime?: number
+
+        endTime?: number
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1492,12 +1495,12 @@ export const useScheduleApiV1StacksInsightsDetail = (stackId: string,
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseScheduleApiV1StacksInsightsDetailState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseScheduleApiV1StacksInsightsDetailState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([stackId,query,params, autoExecute])
+        JSON.stringify([stackId, query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1512,18 +1515,15 @@ export const useScheduleApiV1StacksInsightsDetail = (stackId: string,
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .schedule
-                .apiV1StacksInsightsDetail(stackId,query,paramsSignal)
+            api.schedule
+                .apiV1StacksInsightsDetail(stackId, query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1559,8 +1559,8 @@ export const useScheduleApiV1StacksInsightsDetail = (stackId: string,
         }
     }
 
-    if (JSON.stringify([stackId,query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([stackId,query,params, autoExecute]))
+    if (JSON.stringify([stackId, query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([stackId, query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1584,4 +1584,3 @@ export const useScheduleApiV1StacksInsightsDetail = (stackId: string,
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
-

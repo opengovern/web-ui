@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Api,
-
- RequestParams } from './api'
+import { Api, RequestParams } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
-
 
 interface IuseCostEstimatorApiV1CostAwsListState {
     isLoading: boolean
@@ -15,26 +12,27 @@ interface IuseCostEstimatorApiV1CostAwsListState {
     error?: any
 }
 
-export const useCostEstimatorApiV1CostAwsList = (query: {
-                
-                resourceId: string
-                
-                resourceType: string
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useCostEstimatorApiV1CostAwsList = (
+    query: {
+        resourceId: string
+
+        resourceType: string
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] =
-    useState<IuseCostEstimatorApiV1CostAwsListState>({
+    const [state, setState] = useState<IuseCostEstimatorApiV1CostAwsListState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -49,18 +47,15 @@ export const useCostEstimatorApiV1CostAwsList = (query: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .costEstimator
-                .apiV1CostAwsList(query,paramsSignal)
+            api.costEstimator
+                .apiV1CostAwsList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -96,8 +91,8 @@ export const useCostEstimatorApiV1CostAwsList = (query: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -130,13 +125,15 @@ interface IuseCostEstimatorApiV1CostAzureListState {
     error?: any
 }
 
-export const useCostEstimatorApiV1CostAzureList = (query: {
-                
-                resourceId: string
-                
-                resourceType: string
-            },
-            params: RequestParams = {}, autoExecute = true) => {
+export const useCostEstimatorApiV1CostAzureList = (
+    query: {
+        resourceId: string
+
+        resourceType: string
+    },
+    params: RequestParams = {},
+    autoExecute = true
+) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -144,12 +141,12 @@ export const useCostEstimatorApiV1CostAzureList = (query: {
     api.instance = AxiosAPI
 
     const [state, setState] =
-    useState<IuseCostEstimatorApiV1CostAzureListState>({
-        isLoading: true,
-        isExecuted: false,
-    })
+        useState<IuseCostEstimatorApiV1CostAzureListState>({
+            isLoading: true,
+            isExecuted: false,
+        })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query,params, autoExecute])
+        JSON.stringify([query, params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -164,18 +161,15 @@ export const useCostEstimatorApiV1CostAzureList = (query: {
             isExecuted: true,
         })
         try {
-            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
-            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api
-                .costEstimator
-                .apiV1CostAzureList(query,paramsSignal)
+            api.costEstimator
+                .apiV1CostAzureList(query, paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -211,8 +205,8 @@ export const useCostEstimatorApiV1CostAzureList = (query: {
         }
     }
 
-    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query,params, autoExecute]))
+    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query, params, autoExecute]))
     }
 
     useEffect(() => {
@@ -236,4 +230,3 @@ export const useCostEstimatorApiV1CostAzureList = (query: {
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
-
