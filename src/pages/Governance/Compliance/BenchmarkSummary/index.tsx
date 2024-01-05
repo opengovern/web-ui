@@ -121,6 +121,7 @@ export default function BenchmarkSummary() {
     const [openTop, setOpenTop] = useState(false)
     const [openConfirm, setOpenConfirm] = useState(false)
     const [assignments, setAssignments] = useState(0)
+    const [recall, setRecall] = useState(false)
 
     const topQuery = {
         ...(benchmarkId && { benchmarkId: [benchmarkId] }),
@@ -198,13 +199,12 @@ export default function BenchmarkSummary() {
                 )
         }
     }
-    console.log(benchmarkDetail)
 
     useEffect(() => {
-        if (isExecuted) {
+        if (isExecuted || recall) {
             updateDetail()
         }
-    }, [isExecuted])
+    }, [isExecuted, recall])
 
     return (
         <Layout currentPage="compliance">
@@ -220,6 +220,7 @@ export default function BenchmarkSummary() {
                     id={benchmarkDetail?.id}
                     response={(e) => setAssignments(e)}
                     autoAssign={benchmarkDetail?.autoAssign}
+                    isAutoResponse={(x) => setRecall(true)}
                 />
             </Header>
             {isLoading ? (

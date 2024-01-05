@@ -3,7 +3,6 @@ import { Button, Callout, Flex, Switch, Text } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { useAtomValue } from 'jotai/index'
 import { Cog6ToothIcon } from '@heroicons/react/24/outline'
-import { useLocation } from 'react-router-dom'
 import { isDemoAtom } from '../../../../../store'
 import DrawerPanel from '../../../../../components/DrawerPanel'
 import Table, { IColumn } from '../../../../../components/Table'
@@ -12,77 +11,74 @@ import {
     useComplianceApiV1AssignmentsConnectionCreate,
     useComplianceApiV1AssignmentsConnectionDelete,
 } from '../../../../../api/compliance.gen'
-import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities } from '../../../../../api/api'
+import Spinner from '../../../../../components/Spinner'
 
 interface ISettings {
     id: string | undefined
     response: (x: number) => void
     autoAssign: boolean | undefined
+    isAutoResponse: (x: boolean) => void
 }
 
-const columns = (isDemo: boolean) => {
-    const temp: IColumn<any, any>[] = [
-        {
-            width: 120,
-            sortable: true,
-            filter: true,
-            enableRowGroup: true,
-            type: 'string',
-            field: 'connector',
+const columns: IColumn<any, any>[] = [
+    {
+        width: 120,
+        sortable: true,
+        filter: true,
+        enableRowGroup: true,
+        type: 'string',
+        field: 'connector',
+    },
+    {
+        field: 'providerConnectionName',
+        headerName: 'Connection Name',
+        type: 'string',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
+        field: 'connectionID',
+        headerName: 'Connection ID',
+        type: 'string',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        flex: 1,
+    },
+    {
+        headerName: 'Enable',
+        sortable: true,
+        type: 'string',
+        filter: true,
+        resizable: true,
+        flex: 0.5,
+        cellRenderer: (params: any) => {
+            return (
+                <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    className="h-full w-full"
+                >
+                    <Switch checked={params.data?.status} />
+                </Flex>
+            )
         },
-        {
-            field: 'providerConnectionName',
-            headerName: 'Connection Name',
-            type: 'string',
-            sortable: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
-            ),
-        },
-        {
-            field: 'connectionID',
-            headerName: 'Connection ID',
-            type: 'string',
-            sortable: true,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
-            ),
-        },
-        {
-            headerName: 'Enable',
-            sortable: true,
-            type: 'string',
-            filter: true,
-            resizable: true,
-            flex: 0.5,
-            cellRenderer: (params: any) => {
-                return (
-                    <Flex
-                        alignItems="center"
-                        justifyContent="center"
-                        className="h-full w-full"
-                    >
-                        <Switch checked={params.data?.status} />
-                    </Flex>
-                )
-            },
-        },
-    ]
-    return temp
-}
+    },
+]
 
 interface ITransferState {
     connectionID: string
     status: boolean
 }
 
-export default function Settings({ id, response, autoAssign }: ISettings) {
+export default function Settings({
+    id,
+    response,
+    autoAssign,
+    isAutoResponse,
+}: ISettings) {
     const [open, setOpen] = useState(false)
     const [firstLoading, setFirstLoading] = useState<boolean>(true)
     const [transfer, setTransfer] = useState<ITransferState>({
@@ -90,7 +86,7 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
         status: false,
     })
     const [allEnable, setAllEnable] = useState(autoAssign)
-    const isDemo = useAtomValue(isDemoAtom)
+    const [banner, setBanner] = useState(autoAssign)
 
     const {
         sendNow: sendEnable,
@@ -113,6 +109,13 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
         {},
         false
     )
+
+    useEffect(() => {
+        if (enableAllResponse) {
+            isAutoResponse(true)
+            setAllEnable(!allEnable)
+        }
+    }, [enableAllResponse])
 
     const {
         sendNow: sendDisable,
@@ -181,10 +184,13 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
             </Button>
             <DrawerPanel
                 open={open}
-                onClose={() => setOpen(false)}
+                onClose={() => {
+                    setOpen(false)
+                    setBanner(allEnable)
+                }}
                 title="Settings"
             >
-                {allEnable ? (
+                {banner ? (
                     <Callout title="Provider requirements" color="amber">
                         <Flex
                             flexDirection="col"
@@ -197,75 +203,92 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
                             <Button
                                 variant="secondary"
                                 color="amber"
-                                onClick={() => setAllEnable(false)}
+                                onClick={() => setBanner(false)}
                             >
                                 Edit
                             </Button>
                         </Flex>
                     </Callout>
                 ) : (
-                    <Table
-                        id="compliance_assignments"
-                        columns={columns(isDemo)}
-                        onCellClicked={(event) => {
-                            if (event.colDef.headerName === 'Enable') {
-                                setTransfer({
-                                    connectionID:
-                                        event.data?.connectionID || '',
-                                    status: !(event.data?.status || false),
-                                })
-                            }
-                        }}
-                        loading={isLoading}
-                        rowData={
-                            assignments?.connections?.sort(
-                                (a, b) =>
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    b.providerConnectionName -
-                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                                    // @ts-ignore
-                                    a.providerConnectionName
-                            ) || []
-                        }
-                        fullWidth
-                    >
-                        <Flex>
-                            <Flex className="gap-x-2 w-fit">
-                                <Button
-                                    variant="secondary"
-                                    onClick={() => {
-                                        setTransfer({
-                                            connectionID: 'all',
-                                            status: false,
-                                        })
-                                    }}
-                                >
-                                    Disable All
-                                </Button>
-                                <Button
-                                    variant="secondary"
-                                    onClick={() => {
-                                        setTransfer({
-                                            connectionID: 'all',
-                                            status: true,
-                                        })
-                                    }}
-                                >
-                                    Enable All
-                                </Button>
-                            </Flex>
-                            <Flex className="w-fit gap-2">
-                                <Text className="text-gray-800">
-                                    Auto enable
+                    <Flex className="relative">
+                        {allEnable && (
+                            <Flex
+                                justifyContent="center"
+                                className="w-full h-full absolute backdrop-blur-sm z-10 top-[50px] rounded-lg"
+                                style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
+                            >
+                                <Text className="py-2 px-4 rounded bg-white border">
+                                    Auto onboard enabled
                                 </Text>
-                                <Switch
-                                    checked={allEnable}
-                                    onClick={() => sendEnableAll()}
-                                />
                             </Flex>
-                        </Flex>
-                    </Table>
+                        )}
+                        <Table
+                            id="compliance_assignments"
+                            columns={columns}
+                            onCellClicked={(event) => {
+                                if (event.colDef.headerName === 'Enable') {
+                                    setTransfer({
+                                        connectionID:
+                                            event.data?.connectionID || '',
+                                        status: !(event.data?.status || false),
+                                    })
+                                }
+                            }}
+                            loading={isLoading}
+                            rowData={
+                                assignments?.connections?.sort(
+                                    (a, b) =>
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        // @ts-ignore
+                                        b.providerConnectionName -
+                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                        // @ts-ignore
+                                        a.providerConnectionName
+                                ) || []
+                            }
+                            fullWidth
+                        >
+                            <Flex>
+                                <Flex className="gap-x-2 w-fit">
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => {
+                                            setTransfer({
+                                                connectionID: 'all',
+                                                status: false,
+                                            })
+                                        }}
+                                    >
+                                        Disable All
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => {
+                                            setTransfer({
+                                                connectionID: 'all',
+                                                status: true,
+                                            })
+                                        }}
+                                    >
+                                        Enable All
+                                    </Button>
+                                </Flex>
+                                <Flex className="w-fit gap-2">
+                                    <Text className="text-gray-800 whitespace-nowrap">
+                                        Auto enable
+                                    </Text>
+                                    {enableAllLoading && enableAllExecuted ? (
+                                        <Spinner />
+                                    ) : (
+                                        <Switch
+                                            checked={allEnable}
+                                            onClick={() => sendEnableAll()}
+                                        />
+                                    )}
+                                </Flex>
+                            </Flex>
+                        </Table>
+                    </Flex>
                 )}
             </DrawerPanel>
         </>
