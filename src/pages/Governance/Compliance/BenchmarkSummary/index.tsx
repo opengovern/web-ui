@@ -217,9 +217,7 @@ export default function BenchmarkSummary() {
             >
                 <Settings
                     id={benchmarkDetail?.id}
-                    response={(e) =>
-                        setAssignments(e?.connections?.length || 0)
-                    }
+                    response={(e) => setAssignments(e)}
                     autoAssign={benchmarkDetail?.autoAssign}
                 />
             </Header>
@@ -246,34 +244,38 @@ export default function BenchmarkSummary() {
                                 </div>
                             </div>
                         </Flex>
-                        <Flex
-                            flexDirection="col"
-                            alignItems="start"
-                            className="w-fit"
-                        >
-                            <Button
-                                variant="light"
-                                icon={ArrowPathRoundedSquareIcon}
-                                className="mb-1"
-                                onClick={() => setOpenConfirm(true)}
-                                loading={
-                                    !(
-                                        benchmarkDetail?.lastJobStatus ===
-                                            'FAILED' ||
-                                        benchmarkDetail?.lastJobStatus ===
-                                            'SUCCEEDED'
-                                    )
-                                }
+                        {assignments > 0 && (
+                            <Flex
+                                flexDirection="col"
+                                alignItems="start"
+                                className="w-fit"
                             >
-                                {benchmarkDetail?.lastJobStatus === 'FAILED' ||
-                                benchmarkDetail?.lastJobStatus === 'SUCCEEDED'
-                                    ? 'Evaluate now'
-                                    : 'Evaluating'}
-                            </Button>
-                            <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
-                                benchmarkDetail?.evaluatedAt
-                            )}`}</Text>
-                        </Flex>
+                                <Button
+                                    variant="light"
+                                    icon={ArrowPathRoundedSquareIcon}
+                                    className="mb-1"
+                                    onClick={() => setOpenConfirm(true)}
+                                    loading={
+                                        !(
+                                            benchmarkDetail?.lastJobStatus ===
+                                                'FAILED' ||
+                                            benchmarkDetail?.lastJobStatus ===
+                                                'SUCCEEDED'
+                                        )
+                                    }
+                                >
+                                    {benchmarkDetail?.lastJobStatus ===
+                                        'FAILED' ||
+                                    benchmarkDetail?.lastJobStatus ===
+                                        'SUCCEEDED'
+                                        ? 'Evaluate now'
+                                        : 'Evaluating'}
+                                </Button>
+                                <Text className="whitespace-nowrap">{`Last evaluation: ${dateTimeDisplay(
+                                    benchmarkDetail?.evaluatedAt
+                                )}`}</Text>
+                            </Flex>
+                        )}
                         <Modal
                             open={openConfirm}
                             onClose={() => setOpenConfirm(false)}
@@ -335,38 +337,41 @@ export default function BenchmarkSummary() {
                                         ).toFixed(2)}%`}
                                     </Title>
                                 </Flex>
-                                <Flex
-                                    flexDirection="col"
-                                    alignItems="start"
-                                    className="w-80 gap-1"
-                                >
-                                    <Flex className="w-fit gap-1.5">
-                                        <CheckCircleIcon className="h-4 text-emerald-500" />
-                                        <Text>
-                                            Passed resources:{' '}
-                                            {numberDisplay(
-                                                benchmarkDetail
-                                                    ?.conformanceStatusSummary
-                                                    ?.okCount || 0,
-                                                0
-                                            )}
-                                        </Text>
-                                    </Flex>
-                                    <Flex className="w-fit gap-1.5">
-                                        <XCircleIcon className="h-4 text-rose-600" />
-                                        <Text>
-                                            Failed resources:{' '}
-                                            {numberDisplay(
-                                                benchmarkChecks(benchmarkDetail)
-                                                    .total -
-                                                    (benchmarkDetail
+                                {assignments > 0 && (
+                                    <Flex
+                                        flexDirection="col"
+                                        alignItems="start"
+                                        className="w-80 gap-1"
+                                    >
+                                        <Flex className="w-fit gap-1.5">
+                                            <CheckCircleIcon className="h-4 text-emerald-500" />
+                                            <Text>
+                                                Passed resources:{' '}
+                                                {numberDisplay(
+                                                    benchmarkDetail
                                                         ?.conformanceStatusSummary
-                                                        ?.okCount || 0),
-                                                0
-                                            )}
-                                        </Text>
+                                                        ?.okCount || 0,
+                                                    0
+                                                )}
+                                            </Text>
+                                        </Flex>
+                                        <Flex className="w-fit gap-1.5">
+                                            <XCircleIcon className="h-4 text-rose-600" />
+                                            <Text>
+                                                Failed resources:{' '}
+                                                {numberDisplay(
+                                                    benchmarkChecks(
+                                                        benchmarkDetail
+                                                    ).total -
+                                                        (benchmarkDetail
+                                                            ?.conformanceStatusSummary
+                                                            ?.okCount || 0),
+                                                    0
+                                                )}
+                                            </Text>
+                                        </Flex>
                                     </Flex>
-                                </Flex>
+                                )}
                             </Flex>
                             <SeverityBar benchmark={benchmarkDetail} />
                         </Card>
@@ -407,7 +412,16 @@ export default function BenchmarkSummary() {
                                     </TabList>
                                 </TabGroup>
                             </Flex>
-                            {renderBars()}
+                            {assignments > 0 ? (
+                                renderBars()
+                            ) : (
+                                <Flex
+                                    justifyContent="center"
+                                    className="h-full"
+                                >
+                                    <Text>No data</Text>
+                                </Flex>
+                            )}
                             <TopDetails
                                 open={openTop}
                                 onClose={() => setOpenTop(false)}
@@ -418,7 +432,10 @@ export default function BenchmarkSummary() {
                             />
                         </Card>
                     </Grid>
-                    <Controls id={String(benchmarkId)} />
+                    <Controls
+                        id={String(benchmarkId)}
+                        assignments={assignments}
+                    />
                 </>
             )}
         </Layout>

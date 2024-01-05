@@ -41,13 +41,7 @@ export default function ComplianceListCard({ benchmark }: IComplianceCard) {
         <Card
             key={benchmark?.id}
             className="cursor-pointer"
-            onClick={() =>
-                navigate(
-                    `${benchmark?.id}${
-                        benchmarkChecks(benchmark).total ? '' : '#settings'
-                    }`
-                )
-            }
+            onClick={() => navigate(benchmark?.id || '')}
         >
             <Flex>
                 <Flex justifyContent="start" className="w-3/4 gap-3">

@@ -16,11 +16,7 @@ import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities } 
 
 interface ISettings {
     id: string | undefined
-    response: (
-        x:
-            | GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities
-            | undefined
-    ) => void
+    response: (x: number) => void
     autoAssign: boolean | undefined
 }
 
@@ -87,8 +83,7 @@ interface ITransferState {
 }
 
 export default function Settings({ id, response, autoAssign }: ISettings) {
-    const tab = useLocation().hash
-    const [open, setOpen] = useState(tab === '#settings')
+    const [open, setOpen] = useState(false)
     const [firstLoading, setFirstLoading] = useState<boolean>(true)
     const [transfer, setTransfer] = useState<ITransferState>({
         connectionID: '',
@@ -118,7 +113,7 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
         {},
         false
     )
-    console.log(enableAllResponse)
+
     const {
         sendNow: sendDisable,
         isLoading: disableLoading,
@@ -141,7 +136,8 @@ export default function Settings({ id, response, autoAssign }: ISettings) {
             refreshList()
         }
         if (assignments) {
-            response(assignments)
+            const count = assignments.connections?.filter((c) => c.status)
+            response(count?.length || 0)
         }
     }, [id, assignments])
 

@@ -1,6 +1,10 @@
-import { Flex } from '@tremor/react'
+import { Flex, Text } from '@tremor/react'
 import { useMemo, useState } from 'react'
-import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
+import {
+    ICellRendererParams,
+    RowClickedEvent,
+    ValueFormatterParams,
+} from 'ag-grid-community'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
 import { isDemoAtom, notificationAtom } from '../../../../store'
@@ -15,18 +19,30 @@ import AxiosAPI from '../../../../api/ApiConfig'
 import FindingDetail from './Detail'
 import { severityBadge } from '../../Compliance/BenchmarkSummary/Controls'
 import FindingFilters from './Filters'
+import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
 export const columns = (isDemo: boolean) => {
     const temp: IColumn<any, any>[] = [
         {
-            width: 140,
-            field: 'connector',
-            headerName: 'Cloud provider',
-            sortable: true,
+            field: 'providerConnectionName',
+            headerName: 'Cloud account',
+            sortable: false,
             filter: true,
             hide: true,
             enableRowGroup: true,
             type: 'string',
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    justifyContent="start"
+                    className={isDemo ? 'blur-md gap-3' : 'gap-3'}
+                >
+                    {getConnectorIcon(param.data.connector)}
+                    <Flex flexDirection="col" alignItems="start">
+                        <Text className="text-gray-800">{param.value}</Text>
+                        <Text>{param.data.providerConnectionID}</Text>
+                    </Flex>
+                </Flex>
+            ),
         },
         {
             field: 'resourceName',
@@ -38,21 +54,20 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                    <Text>{param.data.resourceTypeName}</Text>
+                </Flex>
+            ),
         },
         {
             field: 'resourceType',
-            headerName: 'Resource type',
-            type: 'string',
-            enableRowGroup: true,
-            sortable: true,
-            hide: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-        },
-        {
-            field: 'resourceTypeName',
-            headerName: 'Resource type label',
+            headerName: 'Resource info',
             type: 'string',
             enableRowGroup: true,
             sortable: false,
@@ -60,18 +75,17 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                    <Text>{param.data.resourceID}</Text>
+                </Flex>
+            ),
         },
-        // {
-        //     field: 'controlID',
-        //     headerName: 'Control ID',
-        //     type: 'string',
-        //     enableRowGroup: true,
-        //     sortable: true,
-        //     filter: true,
-        //     hide: true,
-        //     resizable: true,
-        //     flex: 1,
-        // },
         {
             field: 'benchmarkID',
             headerName: 'Benchmark ID',
@@ -82,43 +96,21 @@ export const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
-        },
-        // {
-        //     field: 'controlTitle',
-        //     headerName: 'Control title',
-        //     type: 'string',
-        //     enableRowGroup: true,
-        //     sortable: false,
-        //     filter: true,
-        //     resizable: true,
-        //     flex: 1,
-        // },
-        {
-            field: 'providerConnectionName',
-            headerName: 'Cloud provider name',
-            type: 'string',
-            enableRowGroup: true,
-            hide: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
-            ),
-        },
-        {
-            field: 'providerConnectionID',
-            headerName: 'Cloud provider ID',
-            type: 'string',
-            hide: true,
-            enableRowGroup: true,
-            sortable: false,
-            filter: true,
-            resizable: true,
-            flex: 1,
-            cellRenderer: (param: ValueFormatterParams) => (
-                <span className={isDemo ? 'blur-md' : ''}>{param.value}</span>
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                    <Text>
+                        {
+                            param.data.parentBenchmarkNames[
+                                param.data.parentBenchmarkNames.length - 1
+                            ]
+                        }
+                    </Text>
+                </Flex>
             ),
         },
         {
@@ -176,7 +168,11 @@ export const columns = (isDemo: boolean) => {
 
 let sortKey = ''
 
-export default function FindingsWithFailure() {
+interface ICount {
+    count: (x: number) => void
+}
+
+export default function FindingsWithFailure({ count }: ICount) {
     const setNotification = useSetAtom(notificationAtom)
 
     const [open, setOpen] = useState(false)
@@ -244,10 +240,12 @@ export default function FindingsWithFailure() {
                                 : [sortKey],
                     })
                     .then((resp) => {
+                        console.log(resp.data.findings)
                         params.success({
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
+                        count(resp.data.totalCount || 0)
                         // eslint-disable-next-line prefer-destructuring
                         sortKey =
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -278,6 +276,7 @@ export default function FindingsWithFailure() {
     return (
         <Flex alignItems="start">
             <FindingFilters
+                type="findings"
                 providerFilter={providerFilter}
                 statusFilter={statusFilter}
                 connectionFilter={connectionFilter}

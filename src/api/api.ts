@@ -1278,8 +1278,12 @@ export enum GithubComKaytuIoKaytuEnginePkgComplianceApiSortDirection {
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord {
     connection?: GithubComKaytuIoKaytuEnginePkgOnboardApiConnection
     control?: GithubComKaytuIoKaytuEnginePkgComplianceApiControl
+    controlCount?: number
+    controlTotalCount?: number
     count?: number
     field?: string
+    resourceCount?: number
+    resourceTotalCount?: number
     resourceType?: GithubComKaytuIoKaytuEnginePkgInventoryApiResourceType
     service?: string
     totalCount?: number

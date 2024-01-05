@@ -61,6 +61,7 @@ const filteredConnectionsList = (
 }
 
 interface IFindingsFilter {
+    type: string
     providerFilter: SourceType[]
     statusFilter?: string[]
     connectionFilter: string[]
@@ -78,6 +79,7 @@ interface IFindingsFilter {
 }
 
 export default function FindingFilters({
+    type,
     providerFilter,
     statusFilter,
     connectionFilter,
@@ -203,7 +205,7 @@ export default function FindingFilters({
     const { response: filters, isLoading: filtersLoading } =
         useComplianceApiV1FindingsFiltersCreate({})
     return (
-        <Card className="sticky top-6 min-w-[300px] max-w-[300px]">
+        <Card className="sticky top-6 min-w-[300px] max-w-[300px]" key={type}>
             <Accordion
                 defaultOpen
                 className="border-0 rounded-none bg-transparent mb-1"
@@ -220,14 +222,14 @@ export default function FindingFilters({
                         className="gap-1.5"
                     >
                         <Radio
-                            name="provider"
+                            name={`${type}-provider`}
                             onClick={() => setProvider('')}
                             checked={provider === ''}
                         >
                             All
                         </Radio>
                         <Radio
-                            name="provider"
+                            name={`${type}-provider`}
                             onClick={() => setProvider('AWS')}
                             checked={provider === 'AWS'}
                         >
@@ -237,7 +239,7 @@ export default function FindingFilters({
                             </Flex>
                         </Radio>
                         <Radio
-                            name="provider"
+                            name={`${type}-provider`}
                             onClick={() => setProvider('Azure')}
                             checked={provider === 'Azure'}
                         >
@@ -272,7 +274,7 @@ export default function FindingFilters({
                                 className="gap-1.5"
                             >
                                 <Radio
-                                    name="status"
+                                    name={`${type}-status`}
                                     onClick={() =>
                                         setStatus([
                                             'ok',
@@ -287,7 +289,7 @@ export default function FindingFilters({
                                     All
                                 </Radio>
                                 <Radio
-                                    name="status"
+                                    name={`${type}-status`}
                                     onClick={() => setStatus(['ok'])}
                                     checked={
                                         status.length === 1 &&
@@ -300,7 +302,7 @@ export default function FindingFilters({
                                     </Flex>
                                 </Radio>
                                 <Radio
-                                    name="status"
+                                    name={`${type}-status`}
                                     onClick={() =>
                                         setStatus([
                                             'alarm',
