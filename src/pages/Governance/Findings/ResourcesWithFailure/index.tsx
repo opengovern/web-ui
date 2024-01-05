@@ -43,7 +43,7 @@ const columns = (isDemo: boolean) => {
             ),
         },
         {
-            field: 'resourceType',
+            field: 'resourceName',
             headerName: 'Resource type',
             type: 'string',
             enableRowGroup: true,
@@ -59,7 +59,7 @@ const columns = (isDemo: boolean) => {
                     className={isDemo ? 'blur-md' : ''}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
-                    <Text>{param.data.kaytuResourceID}</Text>
+                    <Text>{param.data.resourceTypeLabel}</Text>
                 </Flex>
             ),
         },
