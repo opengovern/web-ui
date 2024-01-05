@@ -1,21 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-    Api,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,
-    GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,
-    GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,
-    RequestParams,
-} from './api'
+import { Api,
+
+    GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse,GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding,GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey,GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
+
+ RequestParams } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
+
 
 interface IuseAuthApiV1KeyCreateCreateState {
     isLoading: boolean
@@ -25,23 +17,21 @@ interface IuseAuthApiV1KeyCreateCreateState {
     error?: any
 }
 
-export const useAuthApiV1KeyCreateCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAuthApiV1KeyCreateCreate = (request: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseAuthApiV1KeyCreateCreateState>({
+    const [state, setState] =
+    useState<IuseAuthApiV1KeyCreateCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -56,15 +46,18 @@ export const useAuthApiV1KeyCreateCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.auth
-                .apiV1KeyCreateCreate(request, paramsSignal)
+            api
+                .auth
+                .apiV1KeyCreateCreate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -100,8 +93,8 @@ export const useAuthApiV1KeyCreateCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -134,23 +127,20 @@ interface IuseAuthApiV1KeyDeleteDeleteState {
     error?: any
 }
 
-export const useAuthApiV1KeyDeleteDelete = (
-    id: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAuthApiV1KeyDeleteDelete = (id: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseAuthApiV1KeyDeleteDeleteState>({
+    const [state, setState] =
+    useState<IuseAuthApiV1KeyDeleteDeleteState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([id, params, autoExecute])
+        JSON.stringify([id,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -165,15 +155,18 @@ export const useAuthApiV1KeyDeleteDelete = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.auth
-                .apiV1KeyDeleteDelete(id, paramsSignal)
+            api
+                .auth
+                .apiV1KeyDeleteDelete(id,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -209,8 +202,8 @@ export const useAuthApiV1KeyDeleteDelete = (
         }
     }
 
-    if (JSON.stringify([id, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([id, params, autoExecute]))
+    if (JSON.stringify([id,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([id,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -243,17 +236,15 @@ interface IuseAuthApiV1KeysListState {
     error?: any
 }
 
-export const useAuthApiV1KeysList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAuthApiV1KeysList = (params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseAuthApiV1KeysListState>({
+    const [state, setState] =
+    useState<IuseAuthApiV1KeysListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -273,14 +264,17 @@ export const useAuthApiV1KeysList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.auth
+            api
+                .auth
                 .apiV1KeysList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -351,23 +345,21 @@ interface IuseAuthApiV1UserInviteCreateState {
     error?: any
 }
 
-export const useAuthApiV1UserInviteCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAuthApiV1UserInviteCreate = (request: GithubComKaytuIoKaytuEnginePkgAuthApiInviteRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseAuthApiV1UserInviteCreateState>({
+    const [state, setState] =
+    useState<IuseAuthApiV1UserInviteCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -382,15 +374,18 @@ export const useAuthApiV1UserInviteCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.auth
-                .apiV1UserInviteCreate(request, paramsSignal)
+            api
+                .auth
+                .apiV1UserInviteCreate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -426,8 +421,8 @@ export const useAuthApiV1UserInviteCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -460,25 +455,21 @@ interface IuseAuthApiV1UserRoleBindingUpdateState {
     error?: any
 }
 
-export const useAuthApiV1UserRoleBindingUpdate = (
-    request: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAuthApiV1UserRoleBindingUpdate = (request: GithubComKaytuIoKaytuEnginePkgAuthApiPutRoleBindingRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseAuthApiV1UserRoleBindingUpdateState>(
-        {
-            isLoading: true,
-            isExecuted: false,
-        }
-    )
+    const [state, setState] =
+    useState<IuseAuthApiV1UserRoleBindingUpdateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -493,15 +484,18 @@ export const useAuthApiV1UserRoleBindingUpdate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.auth
-                .apiV1UserRoleBindingUpdate(request, paramsSignal)
+            api
+                .auth
+                .apiV1UserRoleBindingUpdate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -537,8 +531,8 @@ export const useAuthApiV1UserRoleBindingUpdate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -571,27 +565,24 @@ interface IuseAuthApiV1UserRoleBindingDeleteState {
     error?: any
 }
 
-export const useAuthApiV1UserRoleBindingDelete = (
-    query: {
-        userId: string
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAuthApiV1UserRoleBindingDelete = (query: {
+                
+                userId: string
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseAuthApiV1UserRoleBindingDeleteState>(
-        {
-            isLoading: true,
-            isExecuted: false,
-        }
-    )
+    const [state, setState] =
+    useState<IuseAuthApiV1UserRoleBindingDeleteState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -606,15 +597,18 @@ export const useAuthApiV1UserRoleBindingDelete = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.auth
-                .apiV1UserRoleBindingDelete(query, paramsSignal)
+            api
+                .auth
+                .apiV1UserRoleBindingDelete(query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -650,8 +644,8 @@ export const useAuthApiV1UserRoleBindingDelete = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -684,17 +678,15 @@ interface IuseAuthApiV1UserRoleBindingsListState {
     error?: any
 }
 
-export const useAuthApiV1UserRoleBindingsList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAuthApiV1UserRoleBindingsList = (params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseAuthApiV1UserRoleBindingsListState>({
+    const [state, setState] =
+    useState<IuseAuthApiV1UserRoleBindingsListState>({
         isLoading: true,
         isExecuted: false,
     })
@@ -714,14 +706,17 @@ export const useAuthApiV1UserRoleBindingsList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.auth
+            api
+                .auth
                 .apiV1UserRoleBindingsList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -792,23 +787,20 @@ interface IuseAuthApiV1UserDetailState {
     error?: any
 }
 
-export const useAuthApiV1UserDetail = (
-    userId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAuthApiV1UserDetail = (userId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseAuthApiV1UserDetailState>({
+    const [state, setState] =
+    useState<IuseAuthApiV1UserDetailState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([userId, params, autoExecute])
+        JSON.stringify([userId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -823,15 +815,18 @@ export const useAuthApiV1UserDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.auth
-                .apiV1UserDetail(userId, paramsSignal)
+            api
+                .auth
+                .apiV1UserDetail(userId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -867,8 +862,8 @@ export const useAuthApiV1UserDetail = (
         }
     }
 
-    if (JSON.stringify([userId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([userId, params, autoExecute]))
+    if (JSON.stringify([userId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([userId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -901,23 +896,20 @@ interface IuseAuthApiV1UsersListState {
     error?: any
 }
 
-export const useAuthApiV1UsersList = (
-    request: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAuthApiV1UsersList = (request: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseAuthApiV1UsersListState>({
+    const [state, setState] =
+    useState<IuseAuthApiV1UsersListState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -932,15 +924,18 @@ export const useAuthApiV1UsersList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.auth
-                .apiV1UsersList(request, paramsSignal)
+            api
+                .auth
+                .apiV1UsersList(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -976,8 +971,8 @@ export const useAuthApiV1UsersList = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1010,10 +1005,7 @@ interface IuseAuthApiV1WorkspaceRoleBindingsListState {
     error?: any
 }
 
-export const useAuthApiV1WorkspaceRoleBindingsList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAuthApiV1WorkspaceRoleBindingsList = (params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1021,10 +1013,10 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseAuthApiV1WorkspaceRoleBindingsListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseAuthApiV1WorkspaceRoleBindingsListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, autoExecute])
     )
@@ -1041,14 +1033,17 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.auth
+            api
+                .auth
                 .apiV1WorkspaceRoleBindingsList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -1110,3 +1105,4 @@ export const useAuthApiV1WorkspaceRoleBindingsList = (
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
+

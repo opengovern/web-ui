@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-    Api,
-    GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,
-    GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersResponse,
-    RequestParams,
-} from './api'
+import { Api,
+
+    GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersResponse,
+
+ RequestParams } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
+
 
 interface IuseSubscriptionApiV1MeteringListCreateState {
     isLoading: boolean
@@ -17,11 +17,8 @@ interface IuseSubscriptionApiV1MeteringListCreateState {
     error?: any
 }
 
-export const useSubscriptionApiV1MeteringListCreate = (
-    request: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useSubscriptionApiV1MeteringListCreate = (request: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -29,12 +26,12 @@ export const useSubscriptionApiV1MeteringListCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseSubscriptionApiV1MeteringListCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseSubscriptionApiV1MeteringListCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -49,15 +46,18 @@ export const useSubscriptionApiV1MeteringListCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.subscription
-                .apiV1MeteringListCreate(request, paramsSignal)
+            api
+                .subscription
+                .apiV1MeteringListCreate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -93,8 +93,8 @@ export const useSubscriptionApiV1MeteringListCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -118,3 +118,4 @@ export const useSubscriptionApiV1MeteringListCreate = (
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
+

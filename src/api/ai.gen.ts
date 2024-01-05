@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Api, RequestParams } from './api'
+import { Api,
+
+ RequestParams } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
+
 
 interface IuseAiApiV1GptRunCreateState {
     isLoading: boolean
@@ -12,23 +15,20 @@ interface IuseAiApiV1GptRunCreateState {
     error?: any
 }
 
-export const useAiApiV1GptRunCreate = (
-    query: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useAiApiV1GptRunCreate = (query: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseAiApiV1GptRunCreateState>({
+    const [state, setState] =
+    useState<IuseAiApiV1GptRunCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -43,15 +43,18 @@ export const useAiApiV1GptRunCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.ai
-                .apiV1GptRunCreate(query, paramsSignal)
+            api
+                .ai
+                .apiV1GptRunCreate(query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -87,8 +90,8 @@ export const useAiApiV1GptRunCreate = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -112,3 +115,4 @@ export const useAiApiV1GptRunCreate = (
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
+

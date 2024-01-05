@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -1199,6 +1198,11 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiQuery {
 }
 
 export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding {
+    /**
+     * Connection ID
+     * @example "8e0f8e7a-1b1c-4e6f-b7e4-9c6af9d2b1c8"
+     */
+    connectionID?: string
     connector?: SourceType
     evaluatedAt?: string
     failedCount?: number
@@ -1217,6 +1221,7 @@ export interface GithubComKaytuIoKaytuEnginePkgComplianceApiResourceFinding {
     resourceLocation?: string
     resourceName?: string
     resourceType?: string
+    resourceTypeLabel?: string
     sortKey?: any[]
     totalCount?: number
 }
@@ -1567,10 +1572,7 @@ export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest {
 
 export interface GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse {
     others?: GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
-    top_values?: Record<
-        string,
-        GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair
-    >
+    top_values?: Record<string, GithubComKaytuIoKaytuEnginePkgInventoryApiCountPair>
     /** @min 0 */
     total_count?: number
     /** @min 0 */
@@ -2784,21 +2786,11 @@ export interface TypesSeverityResult {
     noneCount?: number
 }
 
-import axios, {
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-    HeadersDefaults,
-    ResponseType,
-} from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from 'axios'
 
 export type QueryParamsType = Record<string | number, any>
 
-export interface FullRequestParams
-    extends Omit<
-        AxiosRequestConfig,
-        'data' | 'params' | 'url' | 'responseType'
-    > {
+export interface FullRequestParams extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
     /** set parameter to `true` for call `securityWorker` for this request */
     secure?: boolean
     /** request path */
@@ -2813,13 +2805,9 @@ export interface FullRequestParams
     body?: unknown
 }
 
-export type RequestParams = Omit<
-    FullRequestParams,
-    'body' | 'method' | 'query' | 'path'
->
+export type RequestParams = Omit<FullRequestParams, 'body' | 'method' | 'query' | 'path'>
 
-export interface ApiConfig<SecurityDataType = unknown>
-    extends Omit<AxiosRequestConfig, 'data' | 'cancelToken'> {
+export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, 'data' | 'cancelToken'> {
     securityWorker?: (
         securityData: SecurityDataType | null
     ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void
@@ -2841,16 +2829,8 @@ export class HttpClient<SecurityDataType = unknown> {
     private secure?: boolean
     private format?: ResponseType
 
-    constructor({
-        securityWorker,
-        secure,
-        format,
-        ...axiosConfig
-    }: ApiConfig<SecurityDataType> = {}) {
-        this.instance = axios.create({
-            ...axiosConfig,
-            baseURL: axiosConfig.baseURL || 'https://api.kaytu.io',
-        })
+    constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
+        this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || 'https://api.kaytu.io' })
         this.secure = secure
         this.format = format
         this.securityWorker = securityWorker
@@ -2860,10 +2840,7 @@ export class HttpClient<SecurityDataType = unknown> {
         this.securityData = data
     }
 
-    protected mergeRequestParams(
-        params1: AxiosRequestConfig,
-        params2?: AxiosRequestConfig
-    ): AxiosRequestConfig {
+    protected mergeRequestParams(params1: AxiosRequestConfig, params2?: AxiosRequestConfig): AxiosRequestConfig {
         const method = params1.method || (params2 && params2.method)
 
         return {
@@ -2871,11 +2848,7 @@ export class HttpClient<SecurityDataType = unknown> {
             ...params1,
             ...(params2 || {}),
             headers: {
-                ...((method &&
-                    this.instance.defaults.headers[
-                        method.toLowerCase() as keyof HeadersDefaults
-                    ]) ||
-                    {}),
+                ...((method && this.instance.defaults.headers[method.toLowerCase() as keyof HeadersDefaults]) || {}),
                 ...(params1.headers || {}),
                 ...((params2 && params2.headers) || {}),
             },
@@ -2893,16 +2866,11 @@ export class HttpClient<SecurityDataType = unknown> {
     protected createFormData(input: Record<string, unknown>): FormData {
         return Object.keys(input || {}).reduce((formData, key) => {
             const property = input[key]
-            const propertyContent: any[] =
-                property instanceof Array ? property : [property]
+            const propertyContent: any[] = property instanceof Array ? property : [property]
 
             for (const formItem of propertyContent) {
-                const isFileType =
-                    formItem instanceof Blob || formItem instanceof File
-                formData.append(
-                    key,
-                    isFileType ? formItem : this.stringifyFormItem(formItem)
-                )
+                const isFileType = formItem instanceof Blob || formItem instanceof File
+                formData.append(key, isFileType ? formItem : this.stringifyFormItem(formItem))
             }
 
             return formData
@@ -2926,21 +2894,11 @@ export class HttpClient<SecurityDataType = unknown> {
         const requestParams = this.mergeRequestParams(params, secureParams)
         const responseFormat = format || this.format || undefined
 
-        if (
-            type === ContentType.FormData &&
-            body &&
-            body !== null &&
-            typeof body === 'object'
-        ) {
+        if (type === ContentType.FormData && body && body !== null && typeof body === 'object') {
             body = this.createFormData(body as Record<string, unknown>)
         }
 
-        if (
-            type === ContentType.Text &&
-            body &&
-            body !== null &&
-            typeof body !== 'string'
-        ) {
+        if (type === ContentType.Text && body && body !== null && typeof body !== 'string') {
             body = JSON.stringify(body)
         }
 
@@ -2948,9 +2906,7 @@ export class HttpClient<SecurityDataType = unknown> {
             ...requestParams,
             headers: {
                 ...(requestParams.headers || {}),
-                ...(type && type !== ContentType.FormData
-                    ? { 'Content-Type': type }
-                    : {}),
+                ...(type && type !== ContentType.FormData ? { 'Content-Type': type } : {}),
             },
             params: query,
             responseType: responseFormat,
@@ -2966,9 +2922,7 @@ export class HttpClient<SecurityDataType = unknown> {
  * @baseUrl https://api.kaytu.io
  * @contact
  */
-export class Api<
-    SecurityDataType extends unknown
-> extends HttpClient<SecurityDataType> {
+export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
     ai = {
         /**
          * No description
@@ -3022,10 +2976,7 @@ export class Api<
          * @request DELETE:/alerting/api/v1/action/delete/{actionId}
          * @secure
          */
-        apiV1ActionDeleteDelete: (
-            actionId: string,
-            params: RequestParams = {}
-        ) =>
+        apiV1ActionDeleteDelete: (actionId: string, params: RequestParams = {}) =>
             this.request<string, any>({
                 path: `/alerting/api/v1/action/delete/${actionId}`,
                 method: 'DELETE',
@@ -3046,10 +2997,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgAlertingApiJiraInputs,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse, any>({
                 path: `/alerting/api/v1/action/jira`,
                 method: 'POST',
                 body: request,
@@ -3068,10 +3016,7 @@ export class Api<
          * @secure
          */
         apiV1ActionListList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAlertingApiAction[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgAlertingApiAction[], any>({
                 path: `/alerting/api/v1/action/list`,
                 method: 'GET',
                 secure: true,
@@ -3092,10 +3037,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgAlertingApiSlackInputs,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgAlertingApiJiraAndStackResponse, any>({
                 path: `/alerting/api/v1/action/slack`,
                 method: 'POST',
                 body: request,
@@ -3235,10 +3177,7 @@ export class Api<
          * @secure
          */
         apiV1TriggerListList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgAlertingApiTriggers[], any>({
                 path: `/alerting/api/v1/trigger/list`,
                 method: 'GET',
                 secure: true,
@@ -3260,10 +3199,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse,
-                EchoHTTPError
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgAuthApiCreateAPIKeyResponse, EchoHTTPError>({
                 path: `/auth/api/v1/key/create`,
                 method: 'POST',
                 body: request,
@@ -3300,10 +3236,7 @@ export class Api<
          * @secure
          */
         apiV1KeysList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceApiKey[], any>({
                 path: `/auth/api/v1/keys`,
                 method: 'GET',
                 secure: true,
@@ -3389,10 +3322,7 @@ export class Api<
          * @secure
          */
         apiV1UserRoleBindingsList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgAuthApiGetRoleBindingsResponse, any>({
                 path: `/auth/api/v1/user/role/bindings`,
                 method: 'GET',
                 secure: true,
@@ -3410,10 +3340,7 @@ export class Api<
          * @secure
          */
         apiV1UserDetail: (userId: string, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgAuthApiGetUserResponse, any>({
                 path: `/auth/api/v1/user/${userId}`,
                 method: 'GET',
                 secure: true,
@@ -3430,14 +3357,8 @@ export class Api<
          * @request GET:/auth/api/v1/users
          * @secure
          */
-        apiV1UsersList: (
-            request: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse[],
-                any
-            >({
+        apiV1UsersList: (request: GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersRequest, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgAuthApiGetUsersResponse[], any>({
                 path: `/auth/api/v1/users`,
                 method: 'GET',
                 body: request,
@@ -3457,10 +3378,7 @@ export class Api<
          * @secure
          */
         apiV1WorkspaceRoleBindingsList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgAuthApiWorkspaceRoleBinding[], any>({
                 path: `/auth/api/v1/workspace/role/bindings`,
                 method: 'GET',
                 secure: true,
@@ -3478,14 +3396,8 @@ export class Api<
          * @request POST:/compliance/api/v1/ai/control/{controlID}/remediation
          * @secure
          */
-        apiV1AiControlRemediationCreate: (
-            controlId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
-                any
-            >({
+        apiV1AiControlRemediationCreate: (controlId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation, any>({
                 path: `/compliance/api/v1/ai/control/${controlId}/remediation`,
                 method: 'POST',
                 secure: true,
@@ -3503,14 +3415,8 @@ export class Api<
          * @request GET:/compliance/api/v1/assignments/benchmark/{benchmark_id}
          * @secure
          */
-        apiV1AssignmentsBenchmarkDetail: (
-            benchmarkId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
-                any
-            >({
+        apiV1AssignmentsBenchmarkDetail: (benchmarkId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities, any>({
                 path: `/compliance/api/v1/assignments/benchmark/${benchmarkId}`,
                 method: 'GET',
                 secure: true,
@@ -3528,14 +3434,8 @@ export class Api<
          * @request GET:/compliance/api/v1/assignments/connection/{connection_id}
          * @secure
          */
-        apiV1AssignmentsConnectionDetail: (
-            connectionId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark[],
-                any
-            >({
+        apiV1AssignmentsConnectionDetail: (connectionId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark[], any>({
                 path: `/compliance/api/v1/assignments/connection/${connectionId}`,
                 method: 'GET',
                 secure: true,
@@ -3553,14 +3453,8 @@ export class Api<
          * @request GET:/compliance/api/v1/assignments/resource_collection/{resource_collection_id}
          * @secure
          */
-        apiV1AssignmentsResourceCollectionDetail: (
-            resourceCollectionId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark[],
-                any
-            >({
+        apiV1AssignmentsResourceCollectionDetail: (resourceCollectionId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark[], any>({
                 path: `/compliance/api/v1/assignments/resource_collection/${resourceCollectionId}`,
                 method: 'GET',
                 secure: true,
@@ -3592,10 +3486,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment[], any>({
                 path: `/compliance/api/v1/assignments/${benchmarkId}/connection`,
                 method: 'POST',
                 query: query,
@@ -3666,10 +3557,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse, any>({
                 path: `/compliance/api/v1/benchmarks/summary`,
                 method: 'GET',
                 query: query,
@@ -3698,10 +3586,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary, any>({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/controls`,
                 method: 'GET',
                 query: query,
@@ -3733,10 +3618,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary, any>({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/controls/${controlId}`,
                 method: 'GET',
                 query: query,
@@ -3776,10 +3658,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary, any>({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/summary`,
                 method: 'GET',
                 query: query,
@@ -3816,10 +3695,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint[], any>({
                 path: `/compliance/api/v1/benchmarks/${benchmarkId}/trend`,
                 method: 'GET',
                 query: query,
@@ -3849,10 +3725,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary[], any>({
                 path: `/compliance/api/v1/controls/summary`,
                 method: 'GET',
                 query: query,
@@ -3881,10 +3754,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary, any>({
                 path: `/compliance/api/v1/controls/${controlId}/summary`,
                 method: 'GET',
                 query: query,
@@ -3922,10 +3792,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint[], any>({
                 path: `/compliance/api/v1/controls/${controlId}/trend`,
                 method: 'GET',
                 query: query,
@@ -3948,10 +3815,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse, any>({
                 path: `/compliance/api/v1/findings`,
                 method: 'POST',
                 body: request,
@@ -3974,10 +3838,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata, any>({
                 path: `/compliance/api/v1/findings/filters`,
                 method: 'POST',
                 body: request,
@@ -3997,10 +3858,7 @@ export class Api<
          * @secure
          */
         apiV1FindingsKpiList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse, any>({
                 path: `/compliance/api/v1/findings/kpi`,
                 method: 'GET',
                 secure: true,
@@ -4022,10 +3880,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse, any>({
                 path: `/compliance/api/v1/findings/resource`,
                 method: 'POST',
                 body: request,
@@ -4045,12 +3900,7 @@ export class Api<
          * @secure
          */
         apiV1FindingsTopDetail: (
-            field:
-                | 'resourceType'
-                | 'connectionID'
-                | 'resourceID'
-                | 'service'
-                | 'controlID',
+            field: 'resourceType' | 'connectionID' | 'resourceID' | 'service' | 'controlID',
             count: number,
             query?: {
                 /** Connection IDs to filter by */
@@ -4066,20 +3916,11 @@ export class Api<
                 /** Severities to filter by defaults to all severities except passed */
                 severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
                 /** ConformanceStatus to filter by defaults to all conformanceStatus except passed */
-                conformanceStatus?: (
-                    | 'ok'
-                    | 'alarm'
-                    | 'info'
-                    | 'skip'
-                    | 'error'
-                )[]
+                conformanceStatus?: ('ok' | 'alarm' | 'info' | 'skip' | 'error')[]
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse, any>({
                 path: `/compliance/api/v1/findings/top/${field}/${count}`,
                 method: 'GET',
                 query: query,
@@ -4108,10 +3949,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse, any>({
                 path: `/compliance/api/v1/findings/${benchmarkId}/accounts`,
                 method: 'GET',
                 query: query,
@@ -4140,10 +3978,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse, any>({
                 path: `/compliance/api/v1/findings/${benchmarkId}/services`,
                 method: 'GET',
                 query: query,
@@ -4179,10 +4014,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse, any>({
                 path: `/compliance/api/v1/findings/${benchmarkId}/${field}/count`,
                 method: 'GET',
                 query: query,
@@ -4220,10 +4052,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[], any>({
                 path: `/compliance/api/v1/insight`,
                 method: 'GET',
                 query: query,
@@ -4260,10 +4089,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup[], any>({
                 path: `/compliance/api/v1/insight/group`,
                 method: 'GET',
                 query: query,
@@ -4298,10 +4124,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup, any>({
                 path: `/compliance/api/v1/insight/group/${insightGroupId}`,
                 method: 'GET',
                 query: query,
@@ -4337,10 +4160,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[], any>({
                 path: `/compliance/api/v1/insight/group/${insightGroupId}/trend`,
                 method: 'GET',
                 query: query,
@@ -4374,10 +4194,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight, any>({
                 path: `/compliance/api/v1/insight/${insightId}`,
                 method: 'GET',
                 query: query,
@@ -4413,10 +4230,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint[], any>({
                 path: `/compliance/api/v1/insight/${insightId}/trend`,
                 method: 'GET',
                 query: query,
@@ -4434,14 +4248,8 @@ export class Api<
          * @request GET:/compliance/api/v1/metadata/insight/{insightId}
          * @secure
          */
-        apiV1MetadataInsightDetail: (
-            insightId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-                any
-            >({
+        apiV1MetadataInsightDetail: (insightId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight, any>({
                 path: `/compliance/api/v1/metadata/insight/${insightId}`,
                 method: 'GET',
                 secure: true,
@@ -4525,10 +4333,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse, any>({
                 path: `/compliance/api/v1/resource_findings`,
                 method: 'POST',
                 body: request,
@@ -4607,10 +4412,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse, any>({
                 path: `/integration/api/v1/connections/aws`,
                 method: 'POST',
                 body: request,
@@ -4642,12 +4444,7 @@ export class Api<
                 /** Connection Groups */
                 connectionGroups?: string[]
                 /** lifecycle state filter */
-                lifecycleState?:
-                    | 'DISABLED'
-                    | 'DISCOVERED'
-                    | 'IN_PROGRESS'
-                    | 'ONBOARD'
-                    | 'ARCHIVED'
+                lifecycleState?: 'DISABLED' | 'DISCOVERED' | 'IN_PROGRESS' | 'ONBOARD' | 'ARCHIVED'
                 /** health state filter */
                 healthState?: 'healthy' | 'unhealthy'
                 /** page size - default is 20 */
@@ -4674,10 +4471,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse, any>({
                 path: `/integration/api/v1/connections/summaries`,
                 method: 'GET',
                 query: query,
@@ -4696,10 +4490,7 @@ export class Api<
          * @request DELETE:/integration/api/v1/connections/{connectionId}
          * @secure
          */
-        apiV1ConnectionsDelete: (
-            connectionId: string,
-            params: RequestParams = {}
-        ) =>
+        apiV1ConnectionsDelete: (connectionId: string, params: RequestParams = {}) =>
             this.request<void, any>({
                 path: `/integration/api/v1/connections/${connectionId}`,
                 method: 'DELETE',
@@ -4716,14 +4507,8 @@ export class Api<
          * @request GET:/integration/api/v1/connections/{connectionId}/aws/healthcheck
          * @secure
          */
-        apiV1ConnectionsAwsHealthcheckDetail: (
-            connectionId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
-                any
-            >({
+        apiV1ConnectionsAwsHealthcheckDetail: (connectionId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection, any>({
                 path: `/integration/api/v1/connections/${connectionId}/aws/healthcheck`,
                 method: 'GET',
                 secure: true,
@@ -4751,10 +4536,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection, any>({
                 path: `/integration/api/v1/connections/${connectionId}/azure/healthcheck`,
                 method: 'GET',
                 query: query,
@@ -4773,10 +4555,7 @@ export class Api<
          * @secure
          */
         apiV1ConnectorsList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount[], any>({
                 path: `/integration/api/v1/connectors`,
                 method: 'GET',
                 secure: true,
@@ -4800,10 +4579,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics, any>({
                 path: `/integration/api/v1/connectors/metrics`,
                 method: 'GET',
                 query: query,
@@ -4821,10 +4597,7 @@ export class Api<
          * @request DELETE:/integration/api/v1/credential/{credentialId}
          * @secure
          */
-        apiV1CredentialDelete: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
+        apiV1CredentialDelete: (credentialId: string, params: RequestParams = {}) =>
             this.request<void, any>({
                 path: `/integration/api/v1/credential/${credentialId}`,
                 method: 'DELETE',
@@ -4848,12 +4621,7 @@ export class Api<
                 /** filter by health status */
                 health?: 'healthy' | 'unhealthy'
                 /** filter by credential type */
-                credentialType?: (
-                    | 'auto-azure'
-                    | 'auto-aws'
-                    | 'manual-aws-org'
-                    | 'manual-azure-spn'
-                )[]
+                credentialType?: ('auto-azure' | 'auto-aws' | 'manual-aws-org' | 'manual-azure-spn')[]
                 /**
                  * page size
                  * @default 50
@@ -4867,10 +4635,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse, any>({
                 path: `/integration/api/v1/credentials`,
                 method: 'GET',
                 query: query,
@@ -4892,10 +4657,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse, any>({
                 path: `/integration/api/v1/credentials/aws`,
                 method: 'POST',
                 body: request,
@@ -4937,14 +4699,8 @@ export class Api<
          * @request POST:/integration/api/v1/credentials/aws/{credentialId}/autoonboard
          * @secure
          */
-        apiV1CredentialsAwsAutoonboardCreate: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[],
-                any
-            >({
+        apiV1CredentialsAwsAutoonboardCreate: (credentialId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[], any>({
                 path: `/integration/api/v1/credentials/aws/${credentialId}/autoonboard`,
                 method: 'POST',
                 secure: true,
@@ -4965,10 +4721,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse, any>({
                 path: `/integration/api/v1/credentials/azure`,
                 method: 'POST',
                 body: request,
@@ -5010,14 +4763,8 @@ export class Api<
          * @request POST:/integration/api/v1/credentials/azure/{credentialId}/autoonboard
          * @secure
          */
-        apiV1CredentialsAzureAutoonboardCreate: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[],
-                any
-            >({
+        apiV1CredentialsAzureAutoonboardCreate: (credentialId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection[], any>({
                 path: `/integration/api/v1/credentials/azure/${credentialId}/autoonboard`,
                 method: 'POST',
                 secure: true,
@@ -5034,14 +4781,8 @@ export class Api<
          * @request GET:/integration/api/v1/credentials/{credentialId}
          * @secure
          */
-        apiV1CredentialsDetail: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
-                any
-            >({
+        apiV1CredentialsDetail: (credentialId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential, any>({
                 path: `/integration/api/v1/credentials/${credentialId}`,
                 method: 'GET',
                 secure: true,
@@ -5063,10 +4804,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgInventoryApiListQueryRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryItem[], any>({
                 path: `/inventory/api/v1/query`,
                 method: 'GET',
                 body: request,
@@ -5089,10 +4827,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiRunQueryResponse, any>({
                 path: `/inventory/api/v1/query/run`,
                 method: 'POST',
                 body: request,
@@ -5112,10 +4847,7 @@ export class Api<
          * @secure
          */
         apiV1QueryRunHistoryList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiSmartQueryHistory[], any>({
                 path: `/inventory/api/v1/query/run/history`,
                 method: 'GET',
                 secure: true,
@@ -5141,10 +4873,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsCategoriesResponse, any>({
                 path: `/inventory/api/v2/analytics/categories`,
                 method: 'GET',
                 query: query,
@@ -5185,10 +4914,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiListResourceTypeCompositionResponse, any>({
                 path: `/inventory/api/v2/analytics/composition/${key}`,
                 method: 'GET',
                 query: query,
@@ -5238,10 +4964,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiListMetricsResponse, any>({
                 path: `/inventory/api/v2/analytics/metric`,
                 method: 'GET',
                 query: query,
@@ -5269,10 +4992,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric[], any>({
                 path: `/inventory/api/v2/analytics/metrics/list`,
                 method: 'GET',
                 query: query,
@@ -5291,14 +5011,8 @@ export class Api<
          * @request GET:/inventory/api/v2/analytics/metrics/{metric_id}
          * @secure
          */
-        apiV2AnalyticsMetricsDetail: (
-            metricId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric,
-                any
-            >({
+        apiV2AnalyticsMetricsDetail: (metricId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiAnalyticsMetric, any>({
                 path: `/inventory/api/v2/analytics/metrics/${metricId}`,
                 method: 'GET',
                 secure: true,
@@ -5333,10 +5047,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiListCostCompositionResponse, any>({
                 path: `/inventory/api/v2/analytics/spend/composition`,
                 method: 'GET',
                 query: query,
@@ -5380,10 +5091,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiListCostMetricsResponse, any>({
                 path: `/inventory/api/v2/analytics/spend/metric`,
                 method: 'GET',
                 query: query,
@@ -5423,10 +5131,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow[], any>({
                 path: `/inventory/api/v2/analytics/spend/table`,
                 method: 'GET',
                 query: query,
@@ -5464,10 +5169,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint[], any>({
                 path: `/inventory/api/v2/analytics/spend/trend`,
                 method: 'GET',
                 query: query,
@@ -5499,10 +5201,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiAssetTableRow[], any>({
                 path: `/inventory/api/v2/analytics/table`,
                 method: 'GET',
                 query: query,
@@ -5586,10 +5285,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiResourceTypeTrendDatapoint[], any>({
                 path: `/inventory/api/v2/analytics/trend`,
                 method: 'GET',
                 query: query,
@@ -5617,10 +5313,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection[], any>({
                 path: `/inventory/api/v2/metadata/resource-collection`,
                 method: 'GET',
                 query: query,
@@ -5638,14 +5331,8 @@ export class Api<
          * @request GET:/inventory/api/v2/metadata/resource-collection/{resourceCollectionId}
          * @secure
          */
-        apiV2MetadataResourceCollectionDetail: (
-            resourceCollectionId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
-                any
-            >({
+        apiV2MetadataResourceCollectionDetail: (resourceCollectionId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection, any>({
                 path: `/inventory/api/v2/metadata/resource-collection/${resourceCollectionId}`,
                 method: 'GET',
                 secure: true,
@@ -5671,10 +5358,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection[], any>({
                 path: `/inventory/api/v2/resource-collection`,
                 method: 'GET',
                 query: query,
@@ -5692,14 +5376,8 @@ export class Api<
          * @request GET:/inventory/api/v2/resource-collection/{resourceCollectionId}
          * @secure
          */
-        apiV2ResourceCollectionDetail: (
-            resourceCollectionId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection,
-                any
-            >({
+        apiV2ResourceCollectionDetail: (resourceCollectionId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollection, any>({
                 path: `/inventory/api/v2/resource-collection/${resourceCollectionId}`,
                 method: 'GET',
                 secure: true,
@@ -5716,14 +5394,8 @@ export class Api<
          * @request GET:/inventory/api/v2/resource-collection/{resourceCollectionId}/landscape
          * @secure
          */
-        apiV2ResourceCollectionLandscapeDetail: (
-            resourceCollectionId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape,
-                any
-            >({
+        apiV2ResourceCollectionLandscapeDetail: (resourceCollectionId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgInventoryApiResourceCollectionLandscape, any>({
                 path: `/inventory/api/v2/resource-collection/${resourceCollectionId}/landscape`,
                 method: 'GET',
                 secure: true,
@@ -5742,10 +5414,7 @@ export class Api<
          * @secure
          */
         apiV1FilterList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter[], any>({
                 path: `/metadata/api/v1/filter`,
                 method: 'GET',
                 secure: true,
@@ -5762,10 +5431,7 @@ export class Api<
          * @request POST:/metadata/api/v1/filter
          * @secure
          */
-        apiV1FilterCreate: (
-            req: GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter,
-            params: RequestParams = {}
-        ) =>
+        apiV1FilterCreate: (req: GithubComKaytuIoKaytuEnginePkgMetadataModelsFilter, params: RequestParams = {}) =>
             this.request<void, any>({
                 path: `/metadata/api/v1/filter`,
                 method: 'POST',
@@ -5807,10 +5473,7 @@ export class Api<
          * @secure
          */
         apiV1MetadataDetail: (key: string, params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgMetadataModelsConfigMetadata, any>({
                 path: `/metadata/api/v1/metadata/${key}`,
                 method: 'GET',
                 secure: true,
@@ -5835,10 +5498,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiCatalogMetrics, any>({
                 path: `/onboard/api/v1/catalog/metrics`,
                 method: 'GET',
                 query: query,
@@ -5866,10 +5526,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup[], any>({
                 path: `/onboard/api/v1/connection-groups`,
                 method: 'GET',
                 query: query,
@@ -5899,10 +5556,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiConnectionGroup, any>({
                 path: `/onboard/api/v1/connection-groups/${connectionGroupName}`,
                 method: 'GET',
                 query: query,
@@ -5925,10 +5579,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateAwsConnectionRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiCreateConnectionResponse, any>({
                 path: `/onboard/api/v1/connections/aws`,
                 method: 'POST',
                 body: request,
@@ -5960,12 +5611,7 @@ export class Api<
                 /** Connection Groups */
                 connectionGroups?: string[]
                 /** lifecycle state filter */
-                lifecycleState?:
-                    | 'DISABLED'
-                    | 'DISCOVERED'
-                    | 'IN_PROGRESS'
-                    | 'ONBOARD'
-                    | 'ARCHIVED'
+                lifecycleState?: 'DISABLED' | 'DISCOVERED' | 'IN_PROGRESS' | 'ONBOARD' | 'ARCHIVED'
                 /** health state filter */
                 healthState?: 'healthy' | 'unhealthy'
                 /** page size - default is 20 */
@@ -5992,10 +5638,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiListConnectionSummaryResponse, any>({
                 path: `/onboard/api/v1/connections/summary`,
                 method: 'GET',
                 query: query,
@@ -6038,10 +5681,7 @@ export class Api<
          * @secure
          */
         apiV1ConnectorList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiConnectorCount[], any>({
                 path: `/onboard/api/v1/connector`,
                 method: 'GET',
                 secure: true,
@@ -6065,12 +5705,7 @@ export class Api<
                 /** filter by health status */
                 health?: 'healthy' | 'unhealthy'
                 /** filter by credential type */
-                credentialType?: (
-                    | 'auto-azure'
-                    | 'auto-aws'
-                    | 'manual-aws-org'
-                    | 'manual-azure-spn'
-                )[]
+                credentialType?: ('auto-azure' | 'auto-aws' | 'manual-aws-org' | 'manual-azure-spn')[]
                 /**
                  * page size
                  * @default 50
@@ -6084,10 +5719,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiListCredentialResponse, any>({
                 path: `/onboard/api/v1/credential`,
                 method: 'GET',
                 query: query,
@@ -6109,10 +5741,7 @@ export class Api<
             config: GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiCreateCredentialResponse, any>({
                 path: `/onboard/api/v1/credential`,
                 method: 'POST',
                 body: config,
@@ -6131,14 +5760,8 @@ export class Api<
          * @request GET:/onboard/api/v1/credential/{credentialId}
          * @secure
          */
-        apiV1CredentialDetail: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiCredential,
-                any
-            >({
+        apiV1CredentialDetail: (credentialId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiCredential, any>({
                 path: `/onboard/api/v1/credential/${credentialId}`,
                 method: 'GET',
                 secure: true,
@@ -6178,10 +5801,7 @@ export class Api<
          * @request DELETE:/onboard/api/v1/credential/{credentialId}
          * @secure
          */
-        apiV1CredentialDelete: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
+        apiV1CredentialDelete: (credentialId: string, params: RequestParams = {}) =>
             this.request<void, any>({
                 path: `/onboard/api/v1/credential/${credentialId}`,
                 method: 'DELETE',
@@ -6198,14 +5818,8 @@ export class Api<
          * @request POST:/onboard/api/v1/credential/{credentialId}/autoonboard
          * @secure
          */
-        apiV1CredentialAutoonboardCreate: (
-            credentialId: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[],
-                any
-            >({
+        apiV1CredentialAutoonboardCreate: (credentialId: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection[], any>({
                 path: `/onboard/api/v1/credential/${credentialId}/autoonboard`,
                 method: 'POST',
                 secure: true,
@@ -6226,10 +5840,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAwsRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse, any>({
                 path: `/onboard/api/v1/source/aws`,
                 method: 'POST',
                 body: request,
@@ -6252,10 +5863,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgOnboardApiSourceAzureRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiCreateSourceResponse, any>({
                 path: `/onboard/api/v1/source/azure`,
                 method: 'POST',
                 body: request,
@@ -6302,10 +5910,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiConnection,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiConnection, any>({
                 path: `/onboard/api/v1/source/${sourceId}/healthcheck`,
                 method: 'GET',
                 query: query,
@@ -6327,10 +5932,7 @@ export class Api<
             config: GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Request,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Response,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgOnboardApiV2CreateCredentialV2Response, any>({
                 path: `/onboard/api/v2/credential`,
                 method: 'POST',
                 body: config,
@@ -6350,10 +5952,7 @@ export class Api<
          * @request PUT:/schedule/api/v1/compliance/trigger/{benchmark_id}
          * @secure
          */
-        apiV1ComplianceTriggerUpdate: (
-            benchmarkId: string,
-            params: RequestParams = {}
-        ) =>
+        apiV1ComplianceTriggerUpdate: (benchmarkId: string, params: RequestParams = {}) =>
             this.request<void, any>({
                 path: `/schedule/api/v1/compliance/trigger/${benchmarkId}`,
                 method: 'PUT',
@@ -6420,10 +6019,7 @@ export class Api<
          * @secure
          */
         apiV1DiscoveryResourcetypesListList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiListDiscoveryResourceTypes, any>({
                 path: `/schedule/api/v1/discovery/resourcetypes/list`,
                 method: 'GET',
                 secure: true,
@@ -6440,10 +6036,7 @@ export class Api<
          * @request PUT:/schedule/api/v1/insight/trigger/{insight_id}
          * @secure
          */
-        apiV1InsightTriggerUpdate: (
-            insightId: number,
-            params: RequestParams = {}
-        ) =>
+        apiV1InsightTriggerUpdate: (insightId: number, params: RequestParams = {}) =>
             this.request<number[], any>({
                 path: `/schedule/api/v1/insight/trigger/${insightId}`,
                 method: 'PUT',
@@ -6465,10 +6058,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiListJobsResponse, any>({
                 path: `/schedule/api/v1/jobs`,
                 method: 'POST',
                 body: request,
@@ -6496,17 +6086,15 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack[], any>(
-                {
-                    path: `/schedule/api/v1/stacks`,
-                    method: 'GET',
-                    query: query,
-                    secure: true,
-                    type: ContentType.Json,
-                    format: 'json',
-                    ...params,
-                }
-            ),
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack[], any>({
+                path: `/schedule/api/v1/stacks`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
 
         /**
          * @description Create a stack by giving terraform statefile and additional resources Config structure for azure: {tenantId: string, objectId: string, secretId: string, clientId: string, clientSecret:string} Config structure for aws: {accessKey: string, secretKey: string}
@@ -6559,17 +6147,15 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack[], any>(
-                {
-                    path: `/schedule/api/v1/stacks/resource`,
-                    method: 'GET',
-                    query: query,
-                    secure: true,
-                    type: ContentType.Json,
-                    format: 'json',
-                    ...params,
-                }
-            ),
+            this.request<GithubComKaytuIoKaytuEnginePkgDescribeApiStack[], any>({
+                path: `/schedule/api/v1/stacks/resource`,
+                method: 'GET',
+                query: query,
+                secure: true,
+                type: ContentType.Json,
+                format: 'json',
+                ...params,
+            }),
 
         /**
          * @description Get stack details by ID
@@ -6622,10 +6208,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgDescribeApiGetStackFindings,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse, any>({
                 path: `/schedule/api/v1/stacks/${stackId}/findings`,
                 method: 'POST',
                 body: request,
@@ -6656,10 +6239,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight, any>({
                 path: `/schedule/api/v1/stacks/${stackId}/insight`,
                 method: 'GET',
                 query: query,
@@ -6690,10 +6270,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgComplianceApiInsight[], any>({
                 path: `/schedule/api/v1/stacks/${stackId}/insights`,
                 method: 'GET',
                 query: query,
@@ -6717,10 +6294,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesGetMetersResponse, any>({
                 path: `/subscription/api/v1/metering/list`,
                 method: 'POST',
                 body: request,
@@ -6740,14 +6314,8 @@ export class Api<
          * @request GET:/workspace/api/v1/bootstrap/{workspace_name}
          * @secure
          */
-        apiV1BootstrapDetail: (
-            workspaceName: string,
-            params: RequestParams = {}
-        ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse,
-                any
-            >({
+        apiV1BootstrapDetail: (workspaceName: string, params: RequestParams = {}) =>
+            this.request<GithubComKaytuIoKaytuEnginePkgWorkspaceApiBootstrapStatusResponse, any>({
                 path: `/workspace/api/v1/bootstrap/${workspaceName}`,
                 method: 'GET',
                 secure: true,
@@ -6789,10 +6357,7 @@ export class Api<
          * @request POST:/workspace/api/v1/bootstrap/{workspace_name}/finish
          * @secure
          */
-        apiV1BootstrapFinishCreate: (
-            workspaceName: string,
-            params: RequestParams = {}
-        ) =>
+        apiV1BootstrapFinishCreate: (workspaceName: string, params: RequestParams = {}) =>
             this.request<string, any>({
                 path: `/workspace/api/v1/bootstrap/${workspaceName}/finish`,
                 method: 'POST',
@@ -6815,10 +6380,7 @@ export class Api<
             request: GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceRequest,
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgWorkspaceApiCreateWorkspaceResponse, any>({
                 path: `/workspace/api/v1/workspace`,
                 method: 'POST',
                 body: request,
@@ -6838,10 +6400,7 @@ export class Api<
          * @secure
          */
         apiV1WorkspaceCurrentList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse, any>({
                 path: `/workspace/api/v1/workspace/current`,
                 method: 'GET',
                 secure: true,
@@ -6859,10 +6418,7 @@ export class Api<
          * @request DELETE:/workspace/api/v1/workspace/{workspace_id}
          * @secure
          */
-        apiV1WorkspaceDelete: (
-            workspaceId: string,
-            params: RequestParams = {}
-        ) =>
+        apiV1WorkspaceDelete: (workspaceId: string, params: RequestParams = {}) =>
             this.request<void, any>({
                 path: `/workspace/api/v1/workspace/${workspaceId}`,
                 method: 'DELETE',
@@ -6881,10 +6437,7 @@ export class Api<
          * @secure
          */
         apiV1WorkspacesList: (params: RequestParams = {}) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse[],
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceResponse[], any>({
                 path: `/workspace/api/v1/workspaces`,
                 method: 'GET',
                 secure: true,
@@ -6910,10 +6463,7 @@ export class Api<
             },
             params: RequestParams = {}
         ) =>
-            this.request<
-                GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage,
-                any
-            >({
+            this.request<GithubComKaytuIoKaytuEnginePkgWorkspaceApiWorkspaceLimitsUsage, any>({
                 path: `/workspace/api/v1/workspaces/limits/${workspaceName}`,
                 method: 'GET',
                 query: query,

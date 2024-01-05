@@ -104,10 +104,18 @@ export default function FindingFilters({
         return {
             provider: provider.length ? [provider] : [],
             status,
-            connection: connectionCheckbox.state,
-            benchmark: benchmarkCheckbox.state,
-            resource: resourceCheckbox.state,
-            severity: severityCheckbox.state,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            connection: [...connectionCheckbox.state],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            benchmark: [...benchmarkCheckbox.state],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            resource: [...resourceCheckbox.state],
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            severity: [...severityCheckbox.state],
         }
     }
     const showApply = () => {
