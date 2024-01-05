@@ -36,6 +36,7 @@ export default function ControlsWithFailure({ count }: ICount) {
     return (
         <Flex alignItems="start" className="gap-4">
             <FindingFilters
+                type="controls"
                 providerFilter={providerFilter}
                 connectionFilter={connectionFilter}
                 benchmarkFilter={benchmarkFilter}

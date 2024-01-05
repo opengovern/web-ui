@@ -115,6 +115,7 @@ export default function FailingCloudAccounts({ count }: ICount) {
     return (
         <Flex alignItems="start" className="gap-4">
             <FindingFilters
+                type="accounts"
                 providerFilter={providerFilter}
                 connectionFilter={connectionFilter}
                 benchmarkFilter={benchmarkFilter}

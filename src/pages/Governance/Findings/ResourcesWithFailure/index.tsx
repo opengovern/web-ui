@@ -232,6 +232,7 @@ export default function ResourcesWithFailure({ count }: ICount) {
     return (
         <Flex alignItems="start">
             <FindingFilters
+                type="resources"
                 providerFilter={providerFilter}
                 statusFilter={statusFilter}
                 connectionFilter={connectionFilter}

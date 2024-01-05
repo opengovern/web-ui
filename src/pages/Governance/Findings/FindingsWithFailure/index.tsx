@@ -283,6 +283,7 @@ export default function FindingsWithFailure({ count }: ICount) {
     return (
         <Flex alignItems="start">
             <FindingFilters
+                type="findings"
                 providerFilter={providerFilter}
                 statusFilter={statusFilter}
                 connectionFilter={connectionFilter}
