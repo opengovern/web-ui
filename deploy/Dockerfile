@@ -1,7 +1,7 @@
 # Prepare nginx
 FROM docker.io/nginx:1.25.0-alpine
-COPY --from=build ./build /usr/share/nginx/html
-COPY --from=build ./.env.example /usr/share/nginx/html/.env
+COPY ./build /usr/share/nginx/html
+COPY ./.env.example /usr/share/nginx/html/.env
 RUN rm /etc/nginx/conf.d/default.conf
 COPY deploy/nginx.conf /etc/nginx/conf.d
 
