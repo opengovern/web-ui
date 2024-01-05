@@ -198,6 +198,7 @@ export default function BenchmarkSummary() {
                 )
         }
     }
+    console.log(benchmarkDetail)
 
     useEffect(() => {
         if (isExecuted) {

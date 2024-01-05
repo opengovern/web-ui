@@ -67,23 +67,17 @@ export default function Findings() {
                     {tabs.map((t) => (
                         <Tab
                             key={t.name}
-                            className="p-0 w-1/4 rounded-lg"
+                            className="p-0 w-1/4 rounded-lg compliance-fix"
                             id={t.name}
                         >
-                            <Card
-                                className="px-4 py-3"
-                                style={{
-                                    width: document?.getElementById(t.name)
-                                        ?.offsetWidth,
-                                }}
-                            >
+                            <Card className="px-4 py-3">
                                 <Flex>
                                     <Flex className="w-fit gap-2">
                                         <Icon
                                             icon={t.icon}
-                                            className="w-6 text-kaytu-500"
+                                            className="w-6 max-w-[24px] text-kaytu-500"
                                         />
-                                        <Text className="text-gray-800">
+                                        <Text className="text-gray-800 w-fit">
                                             {t.name}
                                         </Text>
                                         <Text className="!text-xs">

@@ -111,6 +111,7 @@ export default function FailingCloudAccounts({ count }: ICount) {
             count(accounts.totalCount || 0)
         }
     }, [accounts])
+    // console.log(accounts)
 
     return (
         <Flex alignItems="start" className="gap-4">

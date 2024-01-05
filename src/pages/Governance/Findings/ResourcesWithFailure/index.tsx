@@ -31,6 +31,16 @@ const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                    <Text>{param.data.kaytuResourceID}</Text>
+                </Flex>
+            ),
         },
         {
             field: 'resourceType',
@@ -193,6 +203,7 @@ export default function ResourcesWithFailure({ count }: ICount) {
                                 : [sortKey],
                     })
                     .then((resp) => {
+                        console.log(resp.data)
                         params.success({
                             rowData: resp.data.resourceFindings || [],
                             rowCount: resp.data.totalCount || 0,
