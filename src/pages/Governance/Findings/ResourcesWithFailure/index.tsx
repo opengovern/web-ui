@@ -97,7 +97,7 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'totalCount',
-            headerName: 'Passed findings',
+            headerName: 'Findings',
             type: 'number',
             hide: false,
             enableRowGroup: true,
@@ -106,10 +106,11 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             width: 140,
             cellRenderer: (param: ICellRendererParams) => (
-                <Flex className="h-full">
-                    <Text>{`${param.value - param.data.failedCount} out of ${
-                        param.value
-                    }`}</Text>
+                <Flex flexDirection="col" alignItems="start">
+                    <Text className="text-gray-800">{`${param.value} issues`}</Text>
+                    <Text>{`${
+                        param.value - param.data.failedCount
+                    } passed`}</Text>
                 </Flex>
             ),
         },
@@ -203,7 +204,6 @@ export default function ResourcesWithFailure({ count }: ICount) {
                                 : [sortKey],
                     })
                     .then((resp) => {
-                        console.log(resp.data)
                         params.success({
                             rowData: resp.data.resourceFindings || [],
                             rowCount: resp.data.totalCount || 0,
