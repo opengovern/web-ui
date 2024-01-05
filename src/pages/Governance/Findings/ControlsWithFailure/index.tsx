@@ -1,13 +1,88 @@
 import { useEffect, useState } from 'react'
-import { Flex } from '@tremor/react'
+import { Flex, Text } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
-import { RowClickedEvent } from 'ag-grid-community'
+import { ICellRendererParams, RowClickedEvent } from 'ag-grid-community'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
 import { SourceType } from '../../../../api/api'
-import Table from '../../../../components/Table'
-import { policyColumns } from '../../Compliance/BenchmarkSummary/Controls/ControlList'
-import { rows } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
+import Table, { IColumn } from '../../../../components/Table'
+import { topControls } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
 import FindingFilters from '../FindingsWithFailure/Filters'
+import { severityBadge } from '../../Compliance/BenchmarkSummary/Controls'
+
+const policyColumns: IColumn<any, any>[] = [
+    {
+        headerName: 'Control',
+        field: 'title',
+        type: 'string',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        cellRenderer: (param: ICellRendererParams) => (
+            <Flex flexDirection="col" alignItems="start">
+                <Text className="text-gray-800">{param.value}</Text>
+                <Text>{param.data.id}</Text>
+            </Flex>
+        ),
+    },
+    {
+        headerName: 'Control ID',
+        field: 'id',
+        width: 170,
+        type: 'string',
+        hide: true,
+        sortable: true,
+        filter: true,
+        resizable: true,
+    },
+    {
+        headerName: 'Severity',
+        field: 'severity',
+        width: 120,
+        type: 'string',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        cellRenderer: (params: ICellRendererParams) => (
+            <Flex
+                className="h-full w-full"
+                justifyContent="center"
+                alignItems="center"
+            >
+                {severityBadge(params.data?.severity)}
+            </Flex>
+        ),
+    },
+    {
+        headerName: 'Findings',
+        field: 'totalCount',
+        type: 'number',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRenderer: (param: ICellRendererParams) => (
+            <Flex flexDirection="col" alignItems="start">
+                <Text className="text-gray-800">{param.value} issues</Text>
+                <Text>{param.value - param.data.count} passed</Text>
+            </Flex>
+        ),
+    },
+    {
+        headerName: 'Resources',
+        field: 'resourceTotalCount',
+        type: 'number',
+        sortable: true,
+        filter: true,
+        resizable: true,
+        width: 150,
+        cellRenderer: (param: ICellRendererParams) => (
+            <Flex flexDirection="col" alignItems="start">
+                <Text className="text-gray-800">{param.value} issues</Text>
+                <Text>{param.value - param.data.resourceCount} passed</Text>
+            </Flex>
+        ),
+    },
+]
 
 interface ICount {
     count: (x: number) => void
@@ -32,7 +107,7 @@ export default function ControlsWithFailure({ count }: ICount) {
             count(controls.totalCount || 0)
         }
     }, [controls])
-    // console.log(controls)
+    console.log(topControls(controls?.records))
 
     return (
         <Flex alignItems="start" className="gap-4">
@@ -56,7 +131,7 @@ export default function ControlsWithFailure({ count }: ICount) {
                     }
                 }}
                 columns={policyColumns}
-                rowData={rows(controls?.records)}
+                rowData={topControls(controls?.records)}
                 onRowClicked={(event: RowClickedEvent) => {
                     if (event.data) {
                         navigate(event.data.id)
