@@ -107,7 +107,6 @@ export default function ControlsWithFailure({ count }: ICount) {
             count(controls.totalCount || 0)
         }
     }, [controls])
-    console.log(topControls(controls?.records))
 
     return (
         <Flex alignItems="start" className="gap-4">

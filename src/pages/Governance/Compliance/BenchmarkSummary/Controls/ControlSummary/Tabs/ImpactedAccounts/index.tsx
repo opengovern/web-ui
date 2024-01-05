@@ -77,7 +77,7 @@ export const cloudAccountColumns = (isDemo: boolean) => {
     return temp
 }
 
-export const rows = (
+export const topConnections = (
     input:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse
         | undefined
@@ -89,10 +89,12 @@ export const rows = (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 ...input.records[i].Connection,
-                failed: input.records[i].count,
-                passed:
-                    (input.records[i].totalCount || 0) -
-                    (input.records[i].count || 0),
+                count: input.records[i].count,
+                totalCount: input.records[i].totalCount,
+                resourceCount: input.records[i].resourceCount,
+                resourceTotalCount: input.records[i].resourceTotalCount,
+                controlCount: input.records[i].controlCount,
+                controlTotalCount: input.records[i].controlTotalCount,
             })
         }
     }
@@ -108,7 +110,7 @@ export default function ImpactedAccounts({ controlId }: IImpactedAccounts) {
         <Table
             id="impacted_accounts"
             columns={cloudAccountColumns(false)}
-            rowData={rows(accounts)}
+            rowData={topConnections(accounts)}
             loading={accountsLoading}
             onGridReady={(e) => {
                 if (accountsLoading) {

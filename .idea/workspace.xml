@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="a3d3eca4-a49e-4ec2-a1fa-91d658532d10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/TopDetails/Controls/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/TopDetails/Controls/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedAccounts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedAccounts/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/ControlsWithFailure/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/ControlsWithFailure/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Governance/Findings/FailingCloudAccounts/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Governance/Findings/FailingCloudAccounts/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -295,7 +296,7 @@
       <workItem from="1704111114700" duration="7213000" />
       <workItem from="1704277923140" duration="13880000" />
       <workItem from="1704315564158" duration="5511000" />
-      <workItem from="1704445829116" duration="14429000" />
+      <workItem from="1704445829116" duration="14769000" />
     </task>
     <servers />
   </component>
