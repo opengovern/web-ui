@@ -74,10 +74,12 @@ export default function SingleSpendConnection({
 }: ISingle) {
     const [openDrawer, setOpenDrawer] = useState(false)
     const [selectedChartIndex, setSelectedChartIndex] = useState(0)
-    const [selectedChart, setSelectedChart] = useState<'line' | 'bar' | 'area'>(
-        'area'
-    )
+    const [selectedChart, setSelectedChart] = useState<'line' | 'bar'>('line')
     const [selectedDatapoint, setSelectedDatapoint] = useState<any>(undefined)
+    const [chartAggregation, setChartAggregation] = useState<
+        'cumulative' | 'trend'
+    >('trend')
+
     const [selectedGranularity, setSelectedGranularity] = useState<
         'monthly' | 'daily' | 'yearly'
     >(
@@ -97,10 +99,21 @@ export default function SingleSpendConnection({
     const setNotification = useSetAtom(notificationAtom)
 
     useEffect(() => {
-        if (selectedChartIndex === 0) setSelectedChart('area')
-        if (selectedChartIndex === 1) setSelectedChart('line')
-        if (selectedChartIndex === 2) setSelectedChart('bar')
+        if (selectedChartIndex === 0) {
+            setSelectedChart('line')
+            setChartAggregation('cumulative')
+        }
+        if (selectedChartIndex === 1) {
+            setSelectedChart('line')
+            setChartAggregation('trend')
+        }
+        if (selectedChartIndex === 2) {
+            setSelectedChart('bar')
+            setChartAggregation('trend')
+        }
     }, [selectedChartIndex])
+
+    const [chartLayout, setChartLayout] = useState<'basic' | 'stacked'>('basic')
 
     const { response: costTrend, isLoading: costTrendLoading } =
         useInventoryApiV2AnalyticsSpendTrendList({
@@ -453,7 +466,7 @@ export default function SingleSpendConnection({
                                 ))}
                             <Flex justifyContent="end" className="mt-2 gap-2.5">
                                 <div className="h-2.5 w-2.5 rounded-full bg-kaytu-950" />
-                                {selectedChart === 'area' ? (
+                                {chartAggregation === 'cumulative' ? (
                                     <Text>Accumulated spend</Text>
                                 ) : (
                                     <Text>Spend</Text>
@@ -463,54 +476,62 @@ export default function SingleSpendConnection({
                                 labels={
                                     costTrendChart(
                                         costTrend,
-                                        selectedChart,
+                                        chartAggregation,
+                                        chartLayout,
                                         selectedGranularity
                                     ).label
                                 }
                                 chartData={
                                     costTrendChart(
                                         costTrend,
-                                        selectedChart,
+                                        chartAggregation,
+                                        chartLayout,
                                         selectedGranularity
                                     ).data
                                 }
                                 chartType={selectedChart}
+                                chartLayout={chartLayout}
+                                chartAggregation={chartAggregation}
                                 isCost
                                 loading={costTrendLoading}
                                 visualMap={
-                                    selectedChart === 'area'
+                                    chartAggregation === 'cumulative'
                                         ? undefined
                                         : generateVisualMap(
                                               costTrendChart(
                                                   costTrend,
-                                                  selectedChart,
+                                                  chartAggregation,
+                                                  chartLayout,
                                                   selectedGranularity
                                               ).flag,
                                               costTrendChart(
                                                   costTrend,
-                                                  selectedChart,
+                                                  chartAggregation,
+                                                  chartLayout,
                                                   selectedGranularity
                                               ).label
                                           ).visualMap
                                 }
                                 markArea={
-                                    selectedChart === 'area'
+                                    chartAggregation === 'cumulative'
                                         ? undefined
                                         : generateVisualMap(
                                               costTrendChart(
                                                   costTrend,
-                                                  selectedChart,
+                                                  chartAggregation,
+                                                  chartLayout,
                                                   selectedGranularity
                                               ).flag,
                                               costTrendChart(
                                                   costTrend,
-                                                  selectedChart,
+                                                  chartAggregation,
+                                                  chartLayout,
                                                   selectedGranularity
                                               ).label
                                           ).markArea
                                 }
                                 onClick={
-                                    selectedChart === 'area'
+                                    chartAggregation === 'cumulative'
                                         ? undefined
                                         : (p) => setSelectedDatapoint(p)
                                 }
