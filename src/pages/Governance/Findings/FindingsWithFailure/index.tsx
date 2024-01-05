@@ -124,6 +124,7 @@ export const columns = (isDemo: boolean) => {
             resizable: true,
             flex: 1,
         },
+
         {
             field: 'severity',
             headerName: 'Severity',
@@ -240,7 +241,6 @@ export default function FindingsWithFailure({ count }: ICount) {
                                 : [sortKey],
                     })
                     .then((resp) => {
-                        console.log(resp.data.findings)
                         params.success({
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,

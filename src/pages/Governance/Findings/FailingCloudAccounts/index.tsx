@@ -63,8 +63,8 @@ const cloudAccountColumns = (isDemo: boolean) => {
             sortable: true,
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex flexDirection="col" alignItems="start">
-                    <Text className="text-gray-800">Failed: {param.value}</Text>
-                    <Text>Passed: {param.data.passed}</Text>
+                    <Text className="text-gray-800">{param.value} issues</Text>
+                    <Text>{param.data.passed} passed</Text>
                 </Flex>
             ),
         },
