@@ -4,7 +4,7 @@ import { ICellRendererParams } from 'ag-grid-community'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
 import { SourceType } from '../../../../api/api'
 import Table, { IColumn } from '../../../../components/Table'
-import { rows } from '../../Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedAccounts'
+import { topConnections } from '../../Compliance/BenchmarkSummary/Controls/ControlSummary/Tabs/ImpactedAccounts'
 import FindingFilters from '../FindingsWithFailure/Filters'
 import { getConnectorIcon } from '../../../../components/Cards/ConnectorCard'
 
@@ -40,31 +40,48 @@ const cloudAccountColumns = (isDemo: boolean) => {
                 </Flex>
             ),
         },
-        // {
-        //     field: 'failed',
-        //     headerName: 'Findings',
-        //     type: 'number',
-        //     width: 200,
-        //     resizable: true,
-        //     sortable: true,
-        //     cellRenderer: (param: ICellRendererParams) => (
-        //         <Flex flexDirection="col" alignItems="start">
-        //             <Text className="text-gray-800">Failed: {param.value}</Text>
-        //             <Text>Passed: {param.data.passed}</Text>
-        //         </Flex>
-        //     ),
-        // },
         {
-            field: 'failed',
             headerName: 'Findings',
+            field: 'totalCount',
             type: 'number',
-            width: 200,
-            resizable: true,
             sortable: true,
+            filter: true,
+            resizable: true,
+            width: 150,
             cellRenderer: (param: ICellRendererParams) => (
                 <Flex flexDirection="col" alignItems="start">
-                    <Text className="text-gray-800">Failed: {param.value}</Text>
-                    <Text>Passed: {param.data.passed}</Text>
+                    <Text className="text-gray-800">{param.value} issues</Text>
+                    <Text>{param.value - param.data.count} passed</Text>
+                </Flex>
+            ),
+        },
+        {
+            headerName: 'Resources',
+            field: 'resourceTotalCount',
+            type: 'number',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            width: 150,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex flexDirection="col" alignItems="start">
+                    <Text className="text-gray-800">{param.value} issues</Text>
+                    <Text>{param.value - param.data.resourceCount} passed</Text>
+                </Flex>
+            ),
+        },
+        {
+            headerName: 'Controls',
+            field: 'controlTotalCount',
+            type: 'number',
+            sortable: true,
+            filter: true,
+            resizable: true,
+            width: 150,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex flexDirection="col" alignItems="start">
+                    <Text className="text-gray-800">{param.value} issues</Text>
+                    <Text>{param.value - param.data.controlCount} passed</Text>
                 </Flex>
             ),
         },
@@ -111,6 +128,7 @@ export default function FailingCloudAccounts({ count }: ICount) {
             count(accounts.totalCount || 0)
         }
     }, [accounts])
+    console.log(accounts)
 
     return (
         <Flex alignItems="start" className="gap-4">
@@ -128,7 +146,7 @@ export default function FailingCloudAccounts({ count }: ICount) {
             <Table
                 id="impacted_accounts"
                 columns={cloudAccountColumns(false)}
-                rowData={rows(accounts)}
+                rowData={topConnections(accounts)}
                 loading={accountsLoading}
                 onGridReady={(e) => {
                     if (accountsLoading) {

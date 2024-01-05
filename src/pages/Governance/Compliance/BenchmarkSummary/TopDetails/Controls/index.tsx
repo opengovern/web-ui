@@ -10,7 +10,7 @@ interface IFinder {
     id: string | undefined
 }
 
-export const rows = (
+export const topControls = (
     input:
         | GithubComKaytuIoKaytuEnginePkgComplianceApiTopFieldRecord[]
         | undefined
@@ -18,9 +18,15 @@ export const rows = (
     const data = []
     if (input) {
         for (let i = 0; i < input.length; i += 1) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            data.push(input[i].Control)
+            data.push({
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                ...input[i].Control,
+                count: input[i].count,
+                totalCount: input[i].totalCount,
+                resourceCount: input[i].resourceCount,
+                resourceTotalCount: input[i].resourceTotalCount,
+            })
         }
     }
     return data
@@ -50,7 +56,7 @@ export default function Controls({ id }: IFinder) {
             id="compliance_policies"
             loading={isLoading}
             columns={policyColumns}
-            rowData={rows(controls?.records)}
+            rowData={topControls(controls?.records)}
             onRowClicked={(event) => navigate(String(event.data.id))}
         />
     )

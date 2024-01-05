@@ -31,9 +31,19 @@ const columns = (isDemo: boolean) => {
             filter: true,
             resizable: true,
             flex: 1,
+            cellRenderer: (param: ICellRendererParams) => (
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    className={isDemo ? 'blur-md' : ''}
+                >
+                    <Text className="text-gray-800">{param.value}</Text>
+                    <Text>{param.data.kaytuResourceID}</Text>
+                </Flex>
+            ),
         },
         {
-            field: 'resourceType',
+            field: 'resourceName',
             headerName: 'Resource type',
             type: 'string',
             enableRowGroup: true,
@@ -49,7 +59,7 @@ const columns = (isDemo: boolean) => {
                     className={isDemo ? 'blur-md' : ''}
                 >
                     <Text className="text-gray-800">{param.value}</Text>
-                    <Text>{param.data.kaytuResourceID}</Text>
+                    <Text>{param.data.resourceTypeLabel}</Text>
                 </Flex>
             ),
         },
@@ -87,7 +97,7 @@ const columns = (isDemo: boolean) => {
         },
         {
             field: 'totalCount',
-            headerName: 'Passed findings',
+            headerName: 'Findings',
             type: 'number',
             hide: false,
             enableRowGroup: true,
@@ -96,10 +106,11 @@ const columns = (isDemo: boolean) => {
             resizable: true,
             width: 140,
             cellRenderer: (param: ICellRendererParams) => (
-                <Flex className="h-full">
-                    <Text>{`${param.value - param.data.failedCount} out of ${
-                        param.value
-                    }`}</Text>
+                <Flex flexDirection="col" alignItems="start">
+                    <Text className="text-gray-800">{`${param.value} issues`}</Text>
+                    <Text>{`${
+                        param.value - param.data.failedCount
+                    } passed`}</Text>
                 </Flex>
             ),
         },

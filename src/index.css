@@ -173,3 +173,7 @@ samp {
 code {
     font-family: monospace;
 }
+
+.compliance-fix span {
+    width: 100%;
+}

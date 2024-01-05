@@ -1,36 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-    Api,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
-    GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,
-    RequestParams,
-} from './api'
+import { Api,
+
+    GithubComKaytuIoKaytuEnginePkgComplianceApiGetAccountsFindingsSummaryResponse,GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsResponse,GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignment,GithubComKaytuIoKaytuEnginePkgComplianceApiGetBenchmarksSummaryResponse,GithubComKaytuIoKaytuEnginePkgComplianceApiControlTrendDatapoint,GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkControlSummary,GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse,GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkRemediation,GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingResponse,GithubComKaytuIoKaytuEnginePkgComplianceApiGetServicesFindingsSummaryResponse,GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary,GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsResponse,GithubComKaytuIoKaytuEnginePkgComplianceApiFindingKPIResponse,GithubComKaytuIoKaytuEnginePkgComplianceApiInsight,GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary,GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkTrendDatapoint,GithubComKaytuIoKaytuEnginePkgComplianceApiInsightGroup,GithubComKaytuIoKaytuEnginePkgComplianceApiInsightTrendDatapoint,GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkAssignedEntities,GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFiltersWithMetadata,GithubComKaytuIoKaytuEnginePkgComplianceApiAssignedBenchmark,
+
+ RequestParams } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
+
 
 interface IuseComplianceApiV1AiControlRemediationCreateState {
     isLoading: boolean
@@ -40,11 +17,7 @@ interface IuseComplianceApiV1AiControlRemediationCreateState {
     error?: any
 }
 
-export const useComplianceApiV1AiControlRemediationCreate = (
-    controlId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1AiControlRemediationCreate = (controlId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -52,12 +25,12 @@ export const useComplianceApiV1AiControlRemediationCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1AiControlRemediationCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1AiControlRemediationCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([controlId, params, autoExecute])
+        JSON.stringify([controlId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -72,15 +45,18 @@ export const useComplianceApiV1AiControlRemediationCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1AiControlRemediationCreate(controlId, paramsSignal)
+            api
+                .compliance
+                .apiV1AiControlRemediationCreate(controlId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -116,8 +92,8 @@ export const useComplianceApiV1AiControlRemediationCreate = (
         }
     }
 
-    if (JSON.stringify([controlId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([controlId, params, autoExecute]))
+    if (JSON.stringify([controlId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([controlId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -150,11 +126,7 @@ interface IuseComplianceApiV1AssignmentsBenchmarkDetailState {
     error?: any
 }
 
-export const useComplianceApiV1AssignmentsBenchmarkDetail = (
-    benchmarkId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1AssignmentsBenchmarkDetail = (benchmarkId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -162,12 +134,12 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1AssignmentsBenchmarkDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1AssignmentsBenchmarkDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, params, autoExecute])
+        JSON.stringify([benchmarkId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -182,15 +154,18 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1AssignmentsBenchmarkDetail(benchmarkId, paramsSignal)
+            api
+                .compliance
+                .apiV1AssignmentsBenchmarkDetail(benchmarkId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -226,8 +201,8 @@ export const useComplianceApiV1AssignmentsBenchmarkDetail = (
         }
     }
 
-    if (JSON.stringify([benchmarkId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([benchmarkId, params, autoExecute]))
+    if (JSON.stringify([benchmarkId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -260,11 +235,7 @@ interface IuseComplianceApiV1AssignmentsConnectionDetailState {
     error?: any
 }
 
-export const useComplianceApiV1AssignmentsConnectionDetail = (
-    connectionId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1AssignmentsConnectionDetail = (connectionId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -272,12 +243,12 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1AssignmentsConnectionDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1AssignmentsConnectionDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, params, autoExecute])
+        JSON.stringify([connectionId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -292,15 +263,18 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1AssignmentsConnectionDetail(connectionId, paramsSignal)
+            api
+                .compliance
+                .apiV1AssignmentsConnectionDetail(connectionId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -336,8 +310,8 @@ export const useComplianceApiV1AssignmentsConnectionDetail = (
         }
     }
 
-    if (JSON.stringify([connectionId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, params, autoExecute]))
+    if (JSON.stringify([connectionId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([connectionId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -370,11 +344,7 @@ interface IuseComplianceApiV1AssignmentsResourceCollectionDetailState {
     error?: any
 }
 
-export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
-    resourceCollectionId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1AssignmentsResourceCollectionDetail = (resourceCollectionId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -382,12 +352,12 @@ export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1AssignmentsResourceCollectionDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1AssignmentsResourceCollectionDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([resourceCollectionId, params, autoExecute])
+        JSON.stringify([resourceCollectionId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -402,18 +372,18 @@ export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1AssignmentsResourceCollectionDetail(
-                    resourceCollectionId,
-                    paramsSignal
-                )
+            api
+                .compliance
+                .apiV1AssignmentsResourceCollectionDetail(resourceCollectionId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -449,13 +419,8 @@ export const useComplianceApiV1AssignmentsResourceCollectionDetail = (
         }
     }
 
-    if (
-        JSON.stringify([resourceCollectionId, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([resourceCollectionId, params, autoExecute])
-        )
+    if (JSON.stringify([resourceCollectionId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([resourceCollectionId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -488,20 +453,18 @@ interface IuseComplianceApiV1AssignmentsConnectionCreateState {
     error?: any
 }
 
-export const useComplianceApiV1AssignmentsConnectionCreate = (
-    benchmarkId: string,
-    query?: {
-        auto_assign?: boolean
-
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1AssignmentsConnectionCreate = (benchmarkId: string,
+            query?: {
+                
+                auto_assign?: boolean
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -509,12 +472,12 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1AssignmentsConnectionCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1AssignmentsConnectionCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, query, params, autoExecute])
+        JSON.stringify([benchmarkId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -529,19 +492,18 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1AssignmentsConnectionCreate(
-                    benchmarkId,
-                    query,
-                    paramsSignal
-                )
+            api
+                .compliance
+                .apiV1AssignmentsConnectionCreate(benchmarkId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -577,10 +539,8 @@ export const useComplianceApiV1AssignmentsConnectionCreate = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
+    if (JSON.stringify([benchmarkId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -613,18 +573,16 @@ interface IuseComplianceApiV1AssignmentsConnectionDeleteState {
     error?: any
 }
 
-export const useComplianceApiV1AssignmentsConnectionDelete = (
-    benchmarkId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1AssignmentsConnectionDelete = (benchmarkId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -632,12 +590,12 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1AssignmentsConnectionDeleteState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1AssignmentsConnectionDeleteState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, query, params, autoExecute])
+        JSON.stringify([benchmarkId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -652,19 +610,18 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1AssignmentsConnectionDelete(
-                    benchmarkId,
-                    query,
-                    paramsSignal
-                )
+            api
+                .compliance
+                .apiV1AssignmentsConnectionDelete(benchmarkId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -700,10 +657,8 @@ export const useComplianceApiV1AssignmentsConnectionDelete = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
+    if (JSON.stringify([benchmarkId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -736,25 +691,23 @@ interface IuseComplianceApiV1BenchmarksSummaryListState {
     error?: any
 }
 
-export const useComplianceApiV1BenchmarksSummaryList = (
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        tag?: string[]
-
-        timeAt?: number
-
-        topAccountCount?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1BenchmarksSummaryList = (query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+                
+                connector?: ('' | 'AWS' | 'Azure')[]
+                
+                tag?: string[]
+                
+                timeAt?: number
+                
+                topAccountCount?: number
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -762,12 +715,12 @@ export const useComplianceApiV1BenchmarksSummaryList = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksSummaryListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1BenchmarksSummaryListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -782,15 +735,18 @@ export const useComplianceApiV1BenchmarksSummaryList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1BenchmarksSummaryList(query, paramsSignal)
+            api
+                .compliance
+                .apiV1BenchmarksSummaryList(query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -826,8 +782,8 @@ export const useComplianceApiV1BenchmarksSummaryList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -860,16 +816,14 @@ interface IuseComplianceApiV1BenchmarksControlsDetailState {
     error?: any
 }
 
-export const useComplianceApiV1BenchmarksControlsDetail = (
-    benchmarkId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1BenchmarksControlsDetail = (benchmarkId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -877,12 +831,12 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksControlsDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1BenchmarksControlsDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, query, params, autoExecute])
+        JSON.stringify([benchmarkId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -897,15 +851,18 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1BenchmarksControlsDetail(benchmarkId, query, paramsSignal)
+            api
+                .compliance
+                .apiV1BenchmarksControlsDetail(benchmarkId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -941,10 +898,8 @@ export const useComplianceApiV1BenchmarksControlsDetail = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
+    if (JSON.stringify([benchmarkId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -977,17 +932,15 @@ interface IuseComplianceApiV1BenchmarksControlsDetail2State {
     error?: any
 }
 
-export const useComplianceApiV1BenchmarksControlsDetail2 = (
-    benchmarkId: string,
-    controlId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1BenchmarksControlsDetail2 = (benchmarkId: string,
+            controlId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -995,12 +948,12 @@ export const useComplianceApiV1BenchmarksControlsDetail2 = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksControlsDetail2State>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1BenchmarksControlsDetail2State>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, controlId, query, params, autoExecute])
+        JSON.stringify([benchmarkId,controlId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1015,20 +968,18 @@ export const useComplianceApiV1BenchmarksControlsDetail2 = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1BenchmarksControlsDetail2(
-                    benchmarkId,
-                    controlId,
-                    query,
-                    paramsSignal
-                )
+            api
+                .compliance
+                .apiV1BenchmarksControlsDetail2(benchmarkId,controlId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1064,13 +1015,8 @@ export const useComplianceApiV1BenchmarksControlsDetail2 = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, controlId, query, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([benchmarkId, controlId, query, params, autoExecute])
-        )
+    if (JSON.stringify([benchmarkId,controlId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId,controlId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1103,24 +1049,22 @@ interface IuseComplianceApiV1BenchmarksSummaryDetailState {
     error?: any
 }
 
-export const useComplianceApiV1BenchmarksSummaryDetail = (
-    benchmarkId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        timeAt?: number
-
-        topAccountCount?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1BenchmarksSummaryDetail = (benchmarkId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+                
+                connector?: ('' | 'AWS' | 'Azure')[]
+                
+                timeAt?: number
+                
+                topAccountCount?: number
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1128,12 +1072,12 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksSummaryDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1BenchmarksSummaryDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, query, params, autoExecute])
+        JSON.stringify([benchmarkId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1148,15 +1092,18 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1BenchmarksSummaryDetail(benchmarkId, query, paramsSignal)
+            api
+                .compliance
+                .apiV1BenchmarksSummaryDetail(benchmarkId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1192,10 +1139,8 @@ export const useComplianceApiV1BenchmarksSummaryDetail = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
+    if (JSON.stringify([benchmarkId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1228,24 +1173,22 @@ interface IuseComplianceApiV1BenchmarksTrendDetailState {
     error?: any
 }
 
-export const useComplianceApiV1BenchmarksTrendDetail = (
-    benchmarkId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1BenchmarksTrendDetail = (benchmarkId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+                
+                connector?: ('' | 'AWS' | 'Azure')[]
+                
+                startTime?: number
+                
+                endTime?: number
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1253,12 +1196,12 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1BenchmarksTrendDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1BenchmarksTrendDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, query, params, autoExecute])
+        JSON.stringify([benchmarkId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1273,15 +1216,18 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1BenchmarksTrendDetail(benchmarkId, query, paramsSignal)
+            api
+                .compliance
+                .apiV1BenchmarksTrendDetail(benchmarkId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1317,10 +1263,8 @@ export const useComplianceApiV1BenchmarksTrendDetail = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
+    if (JSON.stringify([benchmarkId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1353,17 +1297,15 @@ interface IuseComplianceApiV1ControlsSummaryListState {
     error?: any
 }
 
-export const useComplianceApiV1ControlsSummaryList = (
-    query?: {
-        controlId?: string[]
-
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1ControlsSummaryList = (query?: {
+                
+                controlId?: string[]
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1371,12 +1313,12 @@ export const useComplianceApiV1ControlsSummaryList = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1ControlsSummaryListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1ControlsSummaryListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1391,15 +1333,18 @@ export const useComplianceApiV1ControlsSummaryList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1ControlsSummaryList(query, paramsSignal)
+            api
+                .compliance
+                .apiV1ControlsSummaryList(query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1435,8 +1380,8 @@ export const useComplianceApiV1ControlsSummaryList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1469,16 +1414,14 @@ interface IuseComplianceApiV1ControlsSummaryDetailState {
     error?: any
 }
 
-export const useComplianceApiV1ControlsSummaryDetail = (
-    controlId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1ControlsSummaryDetail = (controlId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1486,12 +1429,12 @@ export const useComplianceApiV1ControlsSummaryDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1ControlsSummaryDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1ControlsSummaryDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([controlId, query, params, autoExecute])
+        JSON.stringify([controlId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1506,15 +1449,18 @@ export const useComplianceApiV1ControlsSummaryDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1ControlsSummaryDetail(controlId, query, paramsSignal)
+            api
+                .compliance
+                .apiV1ControlsSummaryDetail(controlId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1550,8 +1496,8 @@ export const useComplianceApiV1ControlsSummaryDetail = (
         }
     }
 
-    if (JSON.stringify([controlId, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([controlId, query, params, autoExecute]))
+    if (JSON.stringify([controlId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([controlId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1584,22 +1530,20 @@ interface IuseComplianceApiV1ControlsTrendDetailState {
     error?: any
 }
 
-export const useComplianceApiV1ControlsTrendDetail = (
-    controlId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        startTime?: number
-
-        endTime?: number
-
-        granularity?: 'daily' | 'monthly'
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1ControlsTrendDetail = (controlId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                startTime?: number
+                
+                endTime?: number
+                
+                granularity?: 'daily' | 'monthly'
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1607,12 +1551,12 @@ export const useComplianceApiV1ControlsTrendDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1ControlsTrendDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1ControlsTrendDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([controlId, query, params, autoExecute])
+        JSON.stringify([controlId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1627,15 +1571,18 @@ export const useComplianceApiV1ControlsTrendDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1ControlsTrendDetail(controlId, query, paramsSignal)
+            api
+                .compliance
+                .apiV1ControlsTrendDetail(controlId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1671,8 +1618,8 @@ export const useComplianceApiV1ControlsTrendDetail = (
         }
     }
 
-    if (JSON.stringify([controlId, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([controlId, query, params, autoExecute]))
+    if (JSON.stringify([controlId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([controlId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1705,23 +1652,21 @@ interface IuseComplianceApiV1FindingsCreateState {
     error?: any
 }
 
-export const useComplianceApiV1FindingsCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1FindingsCreate = (request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetFindingsRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseComplianceApiV1FindingsCreateState>({
+    const [state, setState] =
+    useState<IuseComplianceApiV1FindingsCreateState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1736,15 +1681,18 @@ export const useComplianceApiV1FindingsCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1FindingsCreate(request, paramsSignal)
+            api
+                .compliance
+                .apiV1FindingsCreate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1780,8 +1728,8 @@ export const useComplianceApiV1FindingsCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1814,11 +1762,8 @@ interface IuseComplianceApiV1FindingsFiltersCreateState {
     error?: any
 }
 
-export const useComplianceApiV1FindingsFiltersCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1FindingsFiltersCreate = (request: GithubComKaytuIoKaytuEnginePkgComplianceApiFindingFilters,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1826,12 +1771,12 @@ export const useComplianceApiV1FindingsFiltersCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1FindingsFiltersCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1FindingsFiltersCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1846,15 +1791,18 @@ export const useComplianceApiV1FindingsFiltersCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1FindingsFiltersCreate(request, paramsSignal)
+            api
+                .compliance
+                .apiV1FindingsFiltersCreate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1890,8 +1838,8 @@ export const useComplianceApiV1FindingsFiltersCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1924,22 +1872,18 @@ interface IuseComplianceApiV1FindingsKpiListState {
     error?: any
 }
 
-export const useComplianceApiV1FindingsKpiList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1FindingsKpiList = (params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseComplianceApiV1FindingsKpiListState>(
-        {
-            isLoading: true,
-            isExecuted: false,
-        }
-    )
+    const [state, setState] =
+    useState<IuseComplianceApiV1FindingsKpiListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, autoExecute])
     )
@@ -1956,14 +1900,17 @@ export const useComplianceApiV1FindingsKpiList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
+            api
+                .compliance
                 .apiV1FindingsKpiList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -2034,11 +1981,8 @@ interface IuseComplianceApiV1FindingsResourceCreateState {
     error?: any
 }
 
-export const useComplianceApiV1FindingsResourceCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1FindingsResourceCreate = (request: GithubComKaytuIoKaytuEnginePkgComplianceApiGetSingleResourceFindingRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -2046,12 +1990,12 @@ export const useComplianceApiV1FindingsResourceCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1FindingsResourceCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1FindingsResourceCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2066,15 +2010,18 @@ export const useComplianceApiV1FindingsResourceCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1FindingsResourceCreate(request, paramsSignal)
+            api
+                .compliance
+                .apiV1FindingsResourceCreate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2110,8 +2057,8 @@ export const useComplianceApiV1FindingsResourceCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2144,32 +2091,25 @@ interface IuseComplianceApiV1FindingsTopDetailState {
     error?: any
 }
 
-export const useComplianceApiV1FindingsTopDetail = (
-    field:
-        | 'resourceType'
-        | 'connectionID'
-        | 'resourceID'
-        | 'service'
-        | 'controlID',
-    count: number,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        benchmarkId?: string[]
-
-        controlId?: string[]
-
-        severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
-
-        conformanceStatus?: ('ok' | 'alarm' | 'info' | 'skip' | 'error')[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1FindingsTopDetail = (field: 'resourceType' | 'connectionID' | 'resourceID' | 'service' | 'controlID',
+            count: number,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                connector?: ('' | 'AWS' | 'Azure')[]
+                
+                benchmarkId?: string[]
+                
+                controlId?: string[]
+                
+                severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+                
+                conformanceStatus?: ('ok' | 'alarm' | 'info' | 'skip' | 'error')[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -2177,12 +2117,12 @@ export const useComplianceApiV1FindingsTopDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1FindingsTopDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1FindingsTopDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([field, count, query, params, autoExecute])
+        JSON.stringify([field,count,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2197,15 +2137,18 @@ export const useComplianceApiV1FindingsTopDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1FindingsTopDetail(field, count, query, paramsSignal)
+            api
+                .compliance
+                .apiV1FindingsTopDetail(field,count,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2241,10 +2184,8 @@ export const useComplianceApiV1FindingsTopDetail = (
         }
     }
 
-    if (
-        JSON.stringify([field, count, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([field, count, query, params, autoExecute]))
+    if (JSON.stringify([field,count,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([field,count,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2277,16 +2218,14 @@ interface IuseComplianceApiV1FindingsAccountsDetailState {
     error?: any
 }
 
-export const useComplianceApiV1FindingsAccountsDetail = (
-    benchmarkId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1FindingsAccountsDetail = (benchmarkId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -2294,12 +2233,12 @@ export const useComplianceApiV1FindingsAccountsDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1FindingsAccountsDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1FindingsAccountsDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, query, params, autoExecute])
+        JSON.stringify([benchmarkId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2314,15 +2253,18 @@ export const useComplianceApiV1FindingsAccountsDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1FindingsAccountsDetail(benchmarkId, query, paramsSignal)
+            api
+                .compliance
+                .apiV1FindingsAccountsDetail(benchmarkId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2358,10 +2300,8 @@ export const useComplianceApiV1FindingsAccountsDetail = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
+    if (JSON.stringify([benchmarkId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2394,16 +2334,14 @@ interface IuseComplianceApiV1FindingsServicesDetailState {
     error?: any
 }
 
-export const useComplianceApiV1FindingsServicesDetail = (
-    benchmarkId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1FindingsServicesDetail = (benchmarkId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -2411,12 +2349,12 @@ export const useComplianceApiV1FindingsServicesDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1FindingsServicesDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1FindingsServicesDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, query, params, autoExecute])
+        JSON.stringify([benchmarkId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2431,15 +2369,18 @@ export const useComplianceApiV1FindingsServicesDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1FindingsServicesDetail(benchmarkId, query, paramsSignal)
+            api
+                .compliance
+                .apiV1FindingsServicesDetail(benchmarkId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2475,10 +2416,8 @@ export const useComplianceApiV1FindingsServicesDetail = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([benchmarkId, query, params, autoExecute]))
+    if (JSON.stringify([benchmarkId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2511,23 +2450,21 @@ interface IuseComplianceApiV1FindingsCountDetailState {
     error?: any
 }
 
-export const useComplianceApiV1FindingsCountDetail = (
-    benchmarkId: string,
-    field: 'resourceType' | 'connectionID' | 'resourceID' | 'service',
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1FindingsCountDetail = (benchmarkId: string,
+            field: 'resourceType' | 'connectionID' | 'resourceID' | 'service',
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+                
+                connector?: ('' | 'AWS' | 'Azure')[]
+                
+                severities?: ('none' | 'low' | 'medium' | 'high' | 'critical')[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -2535,12 +2472,12 @@ export const useComplianceApiV1FindingsCountDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1FindingsCountDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1FindingsCountDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([benchmarkId, field, query, params, autoExecute])
+        JSON.stringify([benchmarkId,field,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2555,20 +2492,18 @@ export const useComplianceApiV1FindingsCountDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1FindingsCountDetail(
-                    benchmarkId,
-                    field,
-                    query,
-                    paramsSignal
-                )
+            api
+                .compliance
+                .apiV1FindingsCountDetail(benchmarkId,field,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2604,13 +2539,8 @@ export const useComplianceApiV1FindingsCountDetail = (
         }
     }
 
-    if (
-        JSON.stringify([benchmarkId, field, query, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([benchmarkId, field, query, params, autoExecute])
-        )
+    if (JSON.stringify([benchmarkId,field,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([benchmarkId,field,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2643,37 +2573,36 @@ interface IuseComplianceApiV1InsightListState {
     error?: any
 }
 
-export const useComplianceApiV1InsightList = (
-    query?: {
-        tag?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1InsightList = (query?: {
+                
+                tag?: string[]
+                
+                connector?: ('' | 'AWS' | 'Azure')[]
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+                
+                startTime?: number
+                
+                endTime?: number
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseComplianceApiV1InsightListState>({
+    const [state, setState] =
+    useState<IuseComplianceApiV1InsightListState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2688,15 +2617,18 @@ export const useComplianceApiV1InsightList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1InsightList(query, paramsSignal)
+            api
+                .compliance
+                .apiV1InsightList(query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2732,8 +2664,8 @@ export const useComplianceApiV1InsightList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2766,25 +2698,23 @@ interface IuseComplianceApiV1InsightGroupListState {
     error?: any
 }
 
-export const useComplianceApiV1InsightGroupList = (
-    query?: {
-        tag?: string[]
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1InsightGroupList = (query?: {
+                
+                tag?: string[]
+                
+                connector?: ('' | 'AWS' | 'Azure')[]
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+                
+                startTime?: number
+                
+                endTime?: number
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -2792,12 +2722,12 @@ export const useComplianceApiV1InsightGroupList = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1InsightGroupListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1InsightGroupListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2812,15 +2742,18 @@ export const useComplianceApiV1InsightGroupList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1InsightGroupList(query, paramsSignal)
+            api
+                .compliance
+                .apiV1InsightGroupList(query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2856,8 +2789,8 @@ export const useComplianceApiV1InsightGroupList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -2890,22 +2823,20 @@ interface IuseComplianceApiV1InsightGroupDetailState {
     error?: any
 }
 
-export const useComplianceApiV1InsightGroupDetail = (
-    insightGroupId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1InsightGroupDetail = (insightGroupId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+                
+                startTime?: number
+                
+                endTime?: number
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -2913,12 +2844,12 @@ export const useComplianceApiV1InsightGroupDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1InsightGroupDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1InsightGroupDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightGroupId, query, params, autoExecute])
+        JSON.stringify([insightGroupId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -2933,15 +2864,18 @@ export const useComplianceApiV1InsightGroupDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1InsightGroupDetail(insightGroupId, query, paramsSignal)
+            api
+                .compliance
+                .apiV1InsightGroupDetail(insightGroupId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -2977,13 +2911,8 @@ export const useComplianceApiV1InsightGroupDetail = (
         }
     }
 
-    if (
-        JSON.stringify([insightGroupId, query, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([insightGroupId, query, params, autoExecute])
-        )
+    if (JSON.stringify([insightGroupId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([insightGroupId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -3016,24 +2945,22 @@ interface IuseComplianceApiV1InsightGroupTrendDetailState {
     error?: any
 }
 
-export const useComplianceApiV1InsightGroupTrendDetail = (
-    insightGroupId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        startTime?: number
-
-        endTime?: number
-
-        datapointCount?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1InsightGroupTrendDetail = (insightGroupId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+                
+                startTime?: number
+                
+                endTime?: number
+                
+                datapointCount?: number
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -3041,12 +2968,12 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1InsightGroupTrendDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1InsightGroupTrendDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightGroupId, query, params, autoExecute])
+        JSON.stringify([insightGroupId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -3061,19 +2988,18 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1InsightGroupTrendDetail(
-                    insightGroupId,
-                    query,
-                    paramsSignal
-                )
+            api
+                .compliance
+                .apiV1InsightGroupTrendDetail(insightGroupId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3109,13 +3035,8 @@ export const useComplianceApiV1InsightGroupTrendDetail = (
         }
     }
 
-    if (
-        JSON.stringify([insightGroupId, query, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([insightGroupId, query, params, autoExecute])
-        )
+    if (JSON.stringify([insightGroupId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([insightGroupId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -3148,34 +3069,33 @@ interface IuseComplianceApiV1InsightDetailState {
     error?: any
 }
 
-export const useComplianceApiV1InsightDetail = (
-    insightId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        startTime?: number
-
-        endTime?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1InsightDetail = (insightId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+                
+                startTime?: number
+                
+                endTime?: number
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseComplianceApiV1InsightDetailState>({
+    const [state, setState] =
+    useState<IuseComplianceApiV1InsightDetailState>({
         isLoading: true,
         isExecuted: false,
     })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, query, params, autoExecute])
+        JSON.stringify([insightId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -3190,15 +3110,18 @@ export const useComplianceApiV1InsightDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1InsightDetail(insightId, query, paramsSignal)
+            api
+                .compliance
+                .apiV1InsightDetail(insightId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3234,8 +3157,8 @@ export const useComplianceApiV1InsightDetail = (
         }
     }
 
-    if (JSON.stringify([insightId, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, query, params, autoExecute]))
+    if (JSON.stringify([insightId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -3268,24 +3191,22 @@ interface IuseComplianceApiV1InsightTrendDetailState {
     error?: any
 }
 
-export const useComplianceApiV1InsightTrendDetail = (
-    insightId: string,
-    query?: {
-        connectionId?: string[]
-
-        connectionGroup?: string[]
-
-        resourceCollection?: string[]
-
-        startTime?: number
-
-        endTime?: number
-
-        datapointCount?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1InsightTrendDetail = (insightId: string,
+            query?: {
+                
+                connectionId?: string[]
+                
+                connectionGroup?: string[]
+                
+                resourceCollection?: string[]
+                
+                startTime?: number
+                
+                endTime?: number
+                
+                datapointCount?: number
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -3293,12 +3214,12 @@ export const useComplianceApiV1InsightTrendDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1InsightTrendDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1InsightTrendDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, query, params, autoExecute])
+        JSON.stringify([insightId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -3313,15 +3234,18 @@ export const useComplianceApiV1InsightTrendDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1InsightTrendDetail(insightId, query, paramsSignal)
+            api
+                .compliance
+                .apiV1InsightTrendDetail(insightId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3357,8 +3281,8 @@ export const useComplianceApiV1InsightTrendDetail = (
         }
     }
 
-    if (JSON.stringify([insightId, query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, query, params, autoExecute]))
+    if (JSON.stringify([insightId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -3391,11 +3315,7 @@ interface IuseComplianceApiV1MetadataInsightDetailState {
     error?: any
 }
 
-export const useComplianceApiV1MetadataInsightDetail = (
-    insightId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1MetadataInsightDetail = (insightId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -3403,12 +3323,12 @@ export const useComplianceApiV1MetadataInsightDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1MetadataInsightDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1MetadataInsightDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([insightId, params, autoExecute])
+        JSON.stringify([insightId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -3423,15 +3343,18 @@ export const useComplianceApiV1MetadataInsightDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1MetadataInsightDetail(insightId, paramsSignal)
+            api
+                .compliance
+                .apiV1MetadataInsightDetail(insightId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3467,8 +3390,8 @@ export const useComplianceApiV1MetadataInsightDetail = (
         }
     }
 
-    if (JSON.stringify([insightId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([insightId, params, autoExecute]))
+    if (JSON.stringify([insightId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([insightId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -3501,10 +3424,7 @@ interface IuseComplianceApiV1MetadataTagComplianceListState {
     error?: any
 }
 
-export const useComplianceApiV1MetadataTagComplianceList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1MetadataTagComplianceList = (params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -3512,10 +3432,10 @@ export const useComplianceApiV1MetadataTagComplianceList = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1MetadataTagComplianceListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1MetadataTagComplianceListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, autoExecute])
     )
@@ -3532,14 +3452,17 @@ export const useComplianceApiV1MetadataTagComplianceList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
+            api
+                .compliance
                 .apiV1MetadataTagComplianceList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -3610,10 +3533,7 @@ interface IuseComplianceApiV1MetadataTagInsightListState {
     error?: any
 }
 
-export const useComplianceApiV1MetadataTagInsightList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1MetadataTagInsightList = (params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -3621,10 +3541,10 @@ export const useComplianceApiV1MetadataTagInsightList = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1MetadataTagInsightListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1MetadataTagInsightListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, autoExecute])
     )
@@ -3641,14 +3561,17 @@ export const useComplianceApiV1MetadataTagInsightList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
+            api
+                .compliance
                 .apiV1MetadataTagInsightList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -3719,27 +3642,24 @@ interface IuseComplianceApiV1QueriesSyncListState {
     error?: any
 }
 
-export const useComplianceApiV1QueriesSyncList = (
-    query?: {
-        configzGitURL?: string
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1QueriesSyncList = (query?: {
+                
+                configzGitURL?: string
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseComplianceApiV1QueriesSyncListState>(
-        {
-            isLoading: true,
-            isExecuted: false,
-        }
-    )
+    const [state, setState] =
+    useState<IuseComplianceApiV1QueriesSyncListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -3754,15 +3674,18 @@ export const useComplianceApiV1QueriesSyncList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1QueriesSyncList(query, paramsSignal)
+            api
+                .compliance
+                .apiV1QueriesSyncList(query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3798,8 +3721,8 @@ export const useComplianceApiV1QueriesSyncList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -3832,11 +3755,8 @@ interface IuseComplianceApiV1ResourceFindingsCreateState {
     error?: any
 }
 
-export const useComplianceApiV1ResourceFindingsCreate = (
-    request: GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useComplianceApiV1ResourceFindingsCreate = (request: GithubComKaytuIoKaytuEnginePkgComplianceApiListResourceFindingsRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -3844,12 +3764,12 @@ export const useComplianceApiV1ResourceFindingsCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseComplianceApiV1ResourceFindingsCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseComplianceApiV1ResourceFindingsCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -3864,15 +3784,18 @@ export const useComplianceApiV1ResourceFindingsCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.compliance
-                .apiV1ResourceFindingsCreate(request, paramsSignal)
+            api
+                .compliance
+                .apiV1ResourceFindingsCreate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -3908,8 +3831,8 @@ export const useComplianceApiV1ResourceFindingsCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -3933,3 +3856,4 @@ export const useComplianceApiV1ResourceFindingsCreate = (
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
+

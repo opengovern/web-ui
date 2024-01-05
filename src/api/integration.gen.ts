@@ -1,24 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-    Api,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
-    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
-    RequestParams,
-} from './api'
+import { Api,
+
+    GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnectorCount,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCatalogMetrics,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListCredentialResponse,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCredential,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateConnectionResponse,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityConnection,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityListConnectionsSummaryResponse,GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateCredentialResponse,
+
+ RequestParams } from './api'
 
 import AxiosAPI, { setWorkspace } from './ApiConfig'
+
 
 interface IuseIntegrationApiV1ConnectionsAwsCreateState {
     isLoading: boolean
@@ -28,11 +17,8 @@ interface IuseIntegrationApiV1ConnectionsAwsCreateState {
     error?: any
 }
 
-export const useIntegrationApiV1ConnectionsAwsCreate = (
-    request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1ConnectionsAwsCreate = (request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSConnectionRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -40,12 +26,12 @@ export const useIntegrationApiV1ConnectionsAwsCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1ConnectionsAwsCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1ConnectionsAwsCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -60,15 +46,18 @@ export const useIntegrationApiV1ConnectionsAwsCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1ConnectionsAwsCreate(request, paramsSignal)
+            api
+                .integration
+                .apiV1ConnectionsAwsCreate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -104,8 +93,8 @@ export const useIntegrationApiV1ConnectionsAwsCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -138,51 +127,44 @@ interface IuseIntegrationApiV1ConnectionsSummariesListState {
     error?: any
 }
 
-export const useIntegrationApiV1ConnectionsSummariesList = (
-    query?: {
-        filter?: string
-
-        connector?: ('' | 'AWS' | 'Azure')[]
-
-        connectionId?: string[]
-
-        resourceCollection?: string[]
-
-        connectionGroups?: string[]
-
-        lifecycleState?:
-            | 'DISABLED'
-            | 'DISCOVERED'
-            | 'IN_PROGRESS'
-            | 'ONBOARD'
-            | 'ARCHIVED'
-
-        healthState?: 'healthy' | 'unhealthy'
-
-        pageSize?: number
-
-        pageNumber?: number
-
-        startTime?: number
-
-        endTime?: number
-
-        needCost?: boolean
-
-        needResourceCount?: boolean
-
-        sortBy?:
-            | 'onboard_date'
-            | 'resource_count'
-            | 'cost'
-            | 'growth'
-            | 'growth_rate'
-            | 'cost_growth'
-            | 'cost_growth_rate'
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1ConnectionsSummariesList = (query?: {
+                
+                filter?: string
+                
+                connector?: ('' | 'AWS' | 'Azure')[]
+                
+                connectionId?: string[]
+                
+                resourceCollection?: string[]
+                
+                connectionGroups?: string[]
+                
+                lifecycleState?: 'DISABLED' | 'DISCOVERED' | 'IN_PROGRESS' | 'ONBOARD' | 'ARCHIVED'
+                
+                healthState?: 'healthy' | 'unhealthy'
+                
+                pageSize?: number
+                
+                pageNumber?: number
+                
+                startTime?: number
+                
+                endTime?: number
+                
+                needCost?: boolean
+                
+                needResourceCount?: boolean
+                
+                sortBy?:
+                    | 'onboard_date'
+                    | 'resource_count'
+                    | 'cost'
+                    | 'growth'
+                    | 'growth_rate'
+                    | 'cost_growth'
+                    | 'cost_growth_rate'
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -190,12 +172,12 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1ConnectionsSummariesListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1ConnectionsSummariesListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -210,15 +192,18 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1ConnectionsSummariesList(query, paramsSignal)
+            api
+                .integration
+                .apiV1ConnectionsSummariesList(query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -254,8 +239,8 @@ export const useIntegrationApiV1ConnectionsSummariesList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -288,11 +273,7 @@ interface IuseIntegrationApiV1ConnectionsDeleteState {
     error?: any
 }
 
-export const useIntegrationApiV1ConnectionsDelete = (
-    connectionId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1ConnectionsDelete = (connectionId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -300,12 +281,12 @@ export const useIntegrationApiV1ConnectionsDelete = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1ConnectionsDeleteState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1ConnectionsDeleteState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, params, autoExecute])
+        JSON.stringify([connectionId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -320,15 +301,18 @@ export const useIntegrationApiV1ConnectionsDelete = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1ConnectionsDelete(connectionId, paramsSignal)
+            api
+                .integration
+                .apiV1ConnectionsDelete(connectionId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -364,8 +348,8 @@ export const useIntegrationApiV1ConnectionsDelete = (
         }
     }
 
-    if (JSON.stringify([connectionId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, params, autoExecute]))
+    if (JSON.stringify([connectionId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([connectionId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -398,11 +382,7 @@ interface IuseIntegrationApiV1ConnectionsAwsHealthcheckDetailState {
     error?: any
 }
 
-export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
-    connectionId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (connectionId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -410,12 +390,12 @@ export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1ConnectionsAwsHealthcheckDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1ConnectionsAwsHealthcheckDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, params, autoExecute])
+        JSON.stringify([connectionId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -430,18 +410,18 @@ export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1ConnectionsAwsHealthcheckDetail(
-                    connectionId,
-                    paramsSignal
-                )
+            api
+                .integration
+                .apiV1ConnectionsAwsHealthcheckDetail(connectionId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -477,8 +457,8 @@ export const useIntegrationApiV1ConnectionsAwsHealthcheckDetail = (
         }
     }
 
-    if (JSON.stringify([connectionId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([connectionId, params, autoExecute]))
+    if (JSON.stringify([connectionId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([connectionId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -511,14 +491,12 @@ interface IuseIntegrationApiV1ConnectionsAzureHealthcheckDetailState {
     error?: any
 }
 
-export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
-    connectionId: string,
-    query?: {
-        updateMetadata?: boolean
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (connectionId: string,
+            query?: {
+                
+                updateMetadata?: boolean
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -526,12 +504,12 @@ export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1ConnectionsAzureHealthcheckDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1ConnectionsAzureHealthcheckDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([connectionId, query, params, autoExecute])
+        JSON.stringify([connectionId,query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -546,19 +524,18 @@ export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1ConnectionsAzureHealthcheckDetail(
-                    connectionId,
-                    query,
-                    paramsSignal
-                )
+            api
+                .integration
+                .apiV1ConnectionsAzureHealthcheckDetail(connectionId,query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -594,10 +571,8 @@ export const useIntegrationApiV1ConnectionsAzureHealthcheckDetail = (
         }
     }
 
-    if (
-        JSON.stringify([connectionId, query, params, autoExecute]) !== lastInput
-    ) {
-        setLastInput(JSON.stringify([connectionId, query, params, autoExecute]))
+    if (JSON.stringify([connectionId,query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([connectionId,query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -630,22 +605,18 @@ interface IuseIntegrationApiV1ConnectorsListState {
     error?: any
 }
 
-export const useIntegrationApiV1ConnectorsList = (
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1ConnectorsList = (params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
     const api = new Api()
     api.instance = AxiosAPI
 
-    const [state, setState] = useState<IuseIntegrationApiV1ConnectorsListState>(
-        {
-            isLoading: true,
-            isExecuted: false,
-        }
-    )
+    const [state, setState] =
+    useState<IuseIntegrationApiV1ConnectorsListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
         JSON.stringify([params, autoExecute])
     )
@@ -662,14 +633,17 @@ export const useIntegrationApiV1ConnectorsList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
+            api
+                .integration
                 .apiV1ConnectorsList(paramsSignal)
                 .then((resp) => {
                     setState({
@@ -740,13 +714,11 @@ interface IuseIntegrationApiV1ConnectorsMetricsListState {
     error?: any
 }
 
-export const useIntegrationApiV1ConnectorsMetricsList = (
-    query?: {
-        connector?: ('' | 'AWS' | 'Azure')[]
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1ConnectorsMetricsList = (query?: {
+                
+                connector?: ('' | 'AWS' | 'Azure')[]
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -754,12 +726,12 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1ConnectorsMetricsListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1ConnectorsMetricsListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -774,15 +746,18 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1ConnectorsMetricsList(query, paramsSignal)
+            api
+                .integration
+                .apiV1ConnectorsMetricsList(query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -818,8 +793,8 @@ export const useIntegrationApiV1ConnectorsMetricsList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -852,11 +827,7 @@ interface IuseIntegrationApiV1CredentialDeleteState {
     error?: any
 }
 
-export const useIntegrationApiV1CredentialDelete = (
-    credentialId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1CredentialDelete = (credentialId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -864,12 +835,12 @@ export const useIntegrationApiV1CredentialDelete = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1CredentialDeleteState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1CredentialDeleteState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, autoExecute])
+        JSON.stringify([credentialId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -884,15 +855,18 @@ export const useIntegrationApiV1CredentialDelete = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1CredentialDelete(credentialId, paramsSignal)
+            api
+                .integration
+                .apiV1CredentialDelete(credentialId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -928,8 +902,8 @@ export const useIntegrationApiV1CredentialDelete = (
         }
     }
 
-    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
+    if (JSON.stringify([credentialId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -962,26 +936,19 @@ interface IuseIntegrationApiV1CredentialsListState {
     error?: any
 }
 
-export const useIntegrationApiV1CredentialsList = (
-    query?: {
-        connector?: '' | 'AWS' | 'Azure'
-
-        health?: 'healthy' | 'unhealthy'
-
-        credentialType?: (
-            | 'auto-azure'
-            | 'auto-aws'
-            | 'manual-aws-org'
-            | 'manual-azure-spn'
-        )[]
-
-        pageSize?: number
-
-        pageNumber?: number
-    },
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1CredentialsList = (query?: {
+                
+                connector?: '' | 'AWS' | 'Azure'
+                
+                health?: 'healthy' | 'unhealthy'
+                
+                credentialType?: ('auto-azure' | 'auto-aws' | 'manual-aws-org' | 'manual-azure-spn')[]
+                
+                pageSize?: number
+                
+                pageNumber?: number
+            },
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -989,12 +956,12 @@ export const useIntegrationApiV1CredentialsList = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1CredentialsListState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1CredentialsListState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([query, params, autoExecute])
+        JSON.stringify([query,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1009,15 +976,18 @@ export const useIntegrationApiV1CredentialsList = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1CredentialsList(query, paramsSignal)
+            api
+                .integration
+                .apiV1CredentialsList(query,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1053,8 +1023,8 @@ export const useIntegrationApiV1CredentialsList = (
         }
     }
 
-    if (JSON.stringify([query, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([query, params, autoExecute]))
+    if (JSON.stringify([query,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([query,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1087,11 +1057,8 @@ interface IuseIntegrationApiV1CredentialsAwsCreateState {
     error?: any
 }
 
-export const useIntegrationApiV1CredentialsAwsCreate = (
-    request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1CredentialsAwsCreate = (request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAWSCredentialRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1099,12 +1066,12 @@ export const useIntegrationApiV1CredentialsAwsCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1CredentialsAwsCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1CredentialsAwsCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1119,15 +1086,18 @@ export const useIntegrationApiV1CredentialsAwsCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1CredentialsAwsCreate(request, paramsSignal)
+            api
+                .integration
+                .apiV1CredentialsAwsCreate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1163,8 +1133,8 @@ export const useIntegrationApiV1CredentialsAwsCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1197,12 +1167,9 @@ interface IuseIntegrationApiV1CredentialsAwsUpdateState {
     error?: any
 }
 
-export const useIntegrationApiV1CredentialsAwsUpdate = (
-    credentialId: string,
-    config: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1CredentialsAwsUpdate = (credentialId: string,
+            config: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAWSCredentialRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1210,12 +1177,12 @@ export const useIntegrationApiV1CredentialsAwsUpdate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1CredentialsAwsUpdateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1CredentialsAwsUpdateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, config, params, autoExecute])
+        JSON.stringify([credentialId,config,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1230,15 +1197,18 @@ export const useIntegrationApiV1CredentialsAwsUpdate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1CredentialsAwsUpdate(credentialId, config, paramsSignal)
+            api
+                .integration
+                .apiV1CredentialsAwsUpdate(credentialId,config,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1274,13 +1244,8 @@ export const useIntegrationApiV1CredentialsAwsUpdate = (
         }
     }
 
-    if (
-        JSON.stringify([credentialId, config, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([credentialId, config, params, autoExecute])
-        )
+    if (JSON.stringify([credentialId,config,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId,config,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1313,11 +1278,7 @@ interface IuseIntegrationApiV1CredentialsAwsAutoonboardCreateState {
     error?: any
 }
 
-export const useIntegrationApiV1CredentialsAwsAutoonboardCreate = (
-    credentialId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1CredentialsAwsAutoonboardCreate = (credentialId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1325,12 +1286,12 @@ export const useIntegrationApiV1CredentialsAwsAutoonboardCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1CredentialsAwsAutoonboardCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1CredentialsAwsAutoonboardCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, autoExecute])
+        JSON.stringify([credentialId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1345,18 +1306,18 @@ export const useIntegrationApiV1CredentialsAwsAutoonboardCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1CredentialsAwsAutoonboardCreate(
-                    credentialId,
-                    paramsSignal
-                )
+            api
+                .integration
+                .apiV1CredentialsAwsAutoonboardCreate(credentialId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1392,8 +1353,8 @@ export const useIntegrationApiV1CredentialsAwsAutoonboardCreate = (
         }
     }
 
-    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
+    if (JSON.stringify([credentialId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1426,11 +1387,8 @@ interface IuseIntegrationApiV1CredentialsAzureCreateState {
     error?: any
 }
 
-export const useIntegrationApiV1CredentialsAzureCreate = (
-    request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1CredentialsAzureCreate = (request: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityCreateAzureCredentialRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1438,12 +1396,12 @@ export const useIntegrationApiV1CredentialsAzureCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1CredentialsAzureCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1CredentialsAzureCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([request, params, autoExecute])
+        JSON.stringify([request,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1458,15 +1416,18 @@ export const useIntegrationApiV1CredentialsAzureCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1CredentialsAzureCreate(request, paramsSignal)
+            api
+                .integration
+                .apiV1CredentialsAzureCreate(request,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1502,8 +1463,8 @@ export const useIntegrationApiV1CredentialsAzureCreate = (
         }
     }
 
-    if (JSON.stringify([request, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([request, params, autoExecute]))
+    if (JSON.stringify([request,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([request,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1536,12 +1497,9 @@ interface IuseIntegrationApiV1CredentialsAzureUpdateState {
     error?: any
 }
 
-export const useIntegrationApiV1CredentialsAzureUpdate = (
-    credentialId: string,
-    config: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1CredentialsAzureUpdate = (credentialId: string,
+            config: GithubComKaytuIoKaytuEngineServicesIntegrationApiEntityUpdateAzureCredentialRequest,
+            params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1549,12 +1507,12 @@ export const useIntegrationApiV1CredentialsAzureUpdate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1CredentialsAzureUpdateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1CredentialsAzureUpdateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, config, params, autoExecute])
+        JSON.stringify([credentialId,config,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1569,15 +1527,18 @@ export const useIntegrationApiV1CredentialsAzureUpdate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1CredentialsAzureUpdate(credentialId, config, paramsSignal)
+            api
+                .integration
+                .apiV1CredentialsAzureUpdate(credentialId,config,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1613,13 +1574,8 @@ export const useIntegrationApiV1CredentialsAzureUpdate = (
         }
     }
 
-    if (
-        JSON.stringify([credentialId, config, params, autoExecute]) !==
-        lastInput
-    ) {
-        setLastInput(
-            JSON.stringify([credentialId, config, params, autoExecute])
-        )
+    if (JSON.stringify([credentialId,config,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId,config,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1652,11 +1608,7 @@ interface IuseIntegrationApiV1CredentialsAzureAutoonboardCreateState {
     error?: any
 }
 
-export const useIntegrationApiV1CredentialsAzureAutoonboardCreate = (
-    credentialId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1CredentialsAzureAutoonboardCreate = (credentialId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1664,12 +1616,12 @@ export const useIntegrationApiV1CredentialsAzureAutoonboardCreate = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1CredentialsAzureAutoonboardCreateState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1CredentialsAzureAutoonboardCreateState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, autoExecute])
+        JSON.stringify([credentialId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1684,18 +1636,18 @@ export const useIntegrationApiV1CredentialsAzureAutoonboardCreate = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1CredentialsAzureAutoonboardCreate(
-                    credentialId,
-                    paramsSignal
-                )
+            api
+                .integration
+                .apiV1CredentialsAzureAutoonboardCreate(credentialId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1731,8 +1683,8 @@ export const useIntegrationApiV1CredentialsAzureAutoonboardCreate = (
         }
     }
 
-    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
+    if (JSON.stringify([credentialId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1765,11 +1717,7 @@ interface IuseIntegrationApiV1CredentialsDetailState {
     error?: any
 }
 
-export const useIntegrationApiV1CredentialsDetail = (
-    credentialId: string,
-    params: RequestParams = {},
-    autoExecute = true
-) => {
+export const useIntegrationApiV1CredentialsDetail = (credentialId: string, params: RequestParams = {}, autoExecute = true) => {
     const workspace = useParams<{ ws: string }>().ws
     const [controller, setController] = useState(new AbortController())
 
@@ -1777,12 +1725,12 @@ export const useIntegrationApiV1CredentialsDetail = (
     api.instance = AxiosAPI
 
     const [state, setState] =
-        useState<IuseIntegrationApiV1CredentialsDetailState>({
-            isLoading: true,
-            isExecuted: false,
-        })
+    useState<IuseIntegrationApiV1CredentialsDetailState>({
+        isLoading: true,
+        isExecuted: false,
+    })
     const [lastInput, setLastInput] = useState<string>(
-        JSON.stringify([credentialId, params, autoExecute])
+        JSON.stringify([credentialId,params, autoExecute])
     )
 
     const sendRequest = (abortCtrl: AbortController) => {
@@ -1797,15 +1745,18 @@ export const useIntegrationApiV1CredentialsDetail = (
             isExecuted: true,
         })
         try {
+            
             if (workspace !== undefined && workspace.length > 0) {
                 setWorkspace(workspace)
             } else {
                 setWorkspace('kaytu')
             }
+            
 
             const paramsSignal = { ...params, signal: abortCtrl.signal }
-            api.integration
-                .apiV1CredentialsDetail(credentialId, paramsSignal)
+            api
+                .integration
+                .apiV1CredentialsDetail(credentialId,paramsSignal)
                 .then((resp) => {
                     setState({
                         ...state,
@@ -1841,8 +1792,8 @@ export const useIntegrationApiV1CredentialsDetail = (
         }
     }
 
-    if (JSON.stringify([credentialId, params, autoExecute]) !== lastInput) {
-        setLastInput(JSON.stringify([credentialId, params, autoExecute]))
+    if (JSON.stringify([credentialId,params, autoExecute]) !== lastInput) {
+        setLastInput(JSON.stringify([credentialId,params, autoExecute]))
     }
 
     useEffect(() => {
@@ -1866,3 +1817,4 @@ export const useIntegrationApiV1CredentialsDetail = (
     }
     return { response, isLoading, isExecuted, error, sendNow }
 }
+
