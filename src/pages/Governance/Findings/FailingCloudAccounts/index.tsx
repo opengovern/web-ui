@@ -1,5 +1,5 @@
 import { Flex, Text } from '@tremor/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ICellRendererParams } from 'ag-grid-community'
 import { useComplianceApiV1FindingsTopDetail } from '../../../../api/compliance.gen'
 import { SourceType } from '../../../../api/api'
@@ -88,7 +88,11 @@ const cloudAccountColumns = (isDemo: boolean) => {
     return temp
 }
 
-export default function FailingCloudAccounts() {
+interface ICount {
+    count: (x: number) => void
+}
+
+export default function FailingCloudAccounts({ count }: ICount) {
     const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
     const [connectionFilter, setConnectionFilter] = useState<string[]>([])
     const [benchmarkFilter, setBenchmarkFilter] = useState<string[]>([])
@@ -101,7 +105,12 @@ export default function FailingCloudAccounts() {
 
     const { response: accounts, isLoading: accountsLoading } =
         useComplianceApiV1FindingsTopDetail('connectionID', 10000, topQuery)
-    console.log(accounts)
+
+    useEffect(() => {
+        if (accounts) {
+            count(accounts.totalCount || 0)
+        }
+    }, [accounts])
 
     return (
         <Flex alignItems="start" className="gap-4">

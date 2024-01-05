@@ -176,7 +176,11 @@ export const columns = (isDemo: boolean) => {
 
 let sortKey = ''
 
-export default function FindingsWithFailure() {
+interface ICount {
+    count: (x: number) => void
+}
+
+export default function FindingsWithFailure({ count }: ICount) {
     const setNotification = useSetAtom(notificationAtom)
 
     const [open, setOpen] = useState(false)
@@ -248,6 +252,7 @@ export default function FindingsWithFailure() {
                             rowData: resp.data.findings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
+                        count(resp.data.totalCount || 0)
                         // eslint-disable-next-line prefer-destructuring
                         sortKey =
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment

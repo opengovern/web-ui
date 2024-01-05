@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Flex } from '@tremor/react'
 import { useNavigate } from 'react-router-dom'
 import { RowClickedEvent } from 'ag-grid-community'
@@ -9,7 +9,11 @@ import { policyColumns } from '../../Compliance/BenchmarkSummary/Controls/Contro
 import { rows } from '../../Compliance/BenchmarkSummary/TopDetails/Controls'
 import FindingFilters from '../FindingsWithFailure/Filters'
 
-export default function ControlsWithFailure() {
+interface ICount {
+    count: (x: number) => void
+}
+
+export default function ControlsWithFailure({ count }: ICount) {
     const navigate = useNavigate()
     const [providerFilter, setProviderFilter] = useState<SourceType[]>([])
     const [connectionFilter, setConnectionFilter] = useState<string[]>([])
@@ -22,6 +26,12 @@ export default function ControlsWithFailure() {
     }
     const { response: controls, isLoading } =
         useComplianceApiV1FindingsTopDetail('controlID', 10000, topQuery)
+
+    useEffect(() => {
+        if (controls) {
+            count(controls.totalCount || 0)
+        }
+    }, [controls])
 
     return (
         <Flex alignItems="start" className="gap-4">

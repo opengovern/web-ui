@@ -122,7 +122,11 @@ const columns = (isDemo: boolean) => {
 
 let sortKey = ''
 
-export default function ResourcesWithFailure() {
+interface ICount {
+    count: (x: number) => void
+}
+
+export default function ResourcesWithFailure({ count }: ICount) {
     const setNotification = useSetAtom(notificationAtom)
 
     const [open, setOpen] = useState(false)
@@ -193,6 +197,7 @@ export default function ResourcesWithFailure() {
                             rowData: resp.data.resourceFindings || [],
                             rowCount: resp.data.totalCount || 0,
                         })
+                        count(resp.data.totalCount || 0)
                         // eslint-disable-next-line prefer-destructuring
                         sortKey =
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
