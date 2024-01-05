@@ -29,6 +29,7 @@ import { numberDisplay } from '../../../../../utilities/numericDisplay'
 
 interface IPolicies {
     id: string | undefined
+    assignments: number
 }
 
 export const severityBadge = (severity: any) => {
@@ -135,7 +136,7 @@ export const groupBy = (input: any[], key: string) => {
     }, {})
 }
 
-export default function Controls({ id }: IPolicies) {
+export default function Controls({ id, assignments }: IPolicies) {
     const { response: controls, isLoading } =
         useComplianceApiV1BenchmarksControlsDetail(String(id))
     const navigate = useNavigate()
@@ -158,35 +159,39 @@ export default function Controls({ id }: IPolicies) {
                                             <Title className="font-semibold">
                                                 {name}
                                             </Title>
-                                            <Flex
-                                                justifyContent="start"
-                                                className="gap-2"
-                                                style={{ width: '200px' }}
-                                            >
-                                                {value?.filter(
-                                                    (c: any) => c.passed
-                                                ).length === value?.length ? (
-                                                    <CheckCircleIcon className="w-5 text-emerald-500" />
-                                                ) : (
-                                                    <XCircleIcon className="w-5 text-rose-600" />
-                                                )}
-                                                <Text className="font-semibold">{`Passed controls: ${numberDisplay(
-                                                    value?.filter(
+                                            {assignments > 0 && (
+                                                <Flex
+                                                    justifyContent="start"
+                                                    className="gap-2"
+                                                    style={{ width: '200px' }}
+                                                >
+                                                    {value?.filter(
                                                         (c: any) => c.passed
-                                                    ).length,
-                                                    0
-                                                )}/${numberDisplay(
-                                                    value?.length,
-                                                    0
-                                                )} (${Math.floor(
-                                                    // eslint-disable-next-line no-unsafe-optional-chaining
-                                                    (value?.filter(
-                                                        (c: any) => c.passed
-                                                    ).length /
-                                                        (value?.length || 0)) *
-                                                        100
-                                                )}%)`}</Text>
-                                            </Flex>
+                                                    ).length ===
+                                                    value?.length ? (
+                                                        <CheckCircleIcon className="w-5 text-emerald-500" />
+                                                    ) : (
+                                                        <XCircleIcon className="w-5 text-rose-600" />
+                                                    )}
+                                                    <Text className="font-semibold">{`Passed controls: ${numberDisplay(
+                                                        value?.filter(
+                                                            (c: any) => c.passed
+                                                        ).length,
+                                                        0
+                                                    )}/${numberDisplay(
+                                                        value?.length,
+                                                        0
+                                                    )} (${Math.floor(
+                                                        // eslint-disable-next-line no-unsafe-optional-chaining
+                                                        (value?.filter(
+                                                            (c: any) => c.passed
+                                                        ).length /
+                                                            (value?.length ||
+                                                                0)) *
+                                                            100
+                                                    )}%)`}</Text>
+                                                </Flex>
+                                            )}
                                         </Flex>
                                     </Flex>
                                 </AccordionHeader>
@@ -203,9 +208,11 @@ export default function Controls({ id }: IPolicies) {
                                                 <TableHeaderCell className="w-40">
                                                     Remediation
                                                 </TableHeaderCell>
-                                                <TableHeaderCell className="w-48">
-                                                    Passed resources
-                                                </TableHeaderCell>
+                                                {assignments > 0 && (
+                                                    <TableHeaderCell className="w-48">
+                                                        Passed resources
+                                                    </TableHeaderCell>
+                                                )}
                                                 <TableHeaderCell className="w-5" />
                                             </TableRow>
                                         </TableHead>
@@ -274,42 +281,44 @@ export default function Controls({ id }: IPolicies) {
                                                                 )}
                                                         </Flex>
                                                     </TableCell>
-                                                    <TableCell>
-                                                        <Flex
-                                                            justifyContent="start"
-                                                            className="gap-2"
-                                                        >
-                                                            {(v?.totalResourcesCount ||
-                                                                0) -
-                                                                (v?.failedResourcesCount ||
-                                                                    0) ===
-                                                            (v?.totalResourcesCount ||
-                                                                0) ? (
-                                                                <CheckCircleIcon className="w-5 text-emerald-500" />
-                                                            ) : (
-                                                                <XCircleIcon className="w-5 text-rose-600" />
-                                                            )}
-                                                            {`${numberDisplay(
+                                                    {assignments > 0 && (
+                                                        <TableCell>
+                                                            <Flex
+                                                                justifyContent="start"
+                                                                className="gap-2"
+                                                            >
+                                                                {(v?.totalResourcesCount ||
+                                                                    0) -
+                                                                    (v?.failedResourcesCount ||
+                                                                        0) ===
                                                                 (v?.totalResourcesCount ||
-                                                                    0) -
-                                                                    (v?.failedResourcesCount ||
-                                                                        0),
-                                                                0
-                                                            )}/${numberDisplay(
-                                                                v?.totalResourcesCount ||
-                                                                    0,
-                                                                0
-                                                            )} (${Math.floor(
-                                                                (((v?.totalResourcesCount ||
-                                                                    0) -
-                                                                    (v?.failedResourcesCount ||
-                                                                        0)) /
+                                                                    0) ? (
+                                                                    <CheckCircleIcon className="w-5 text-emerald-500" />
+                                                                ) : (
+                                                                    <XCircleIcon className="w-5 text-rose-600" />
+                                                                )}
+                                                                {`${numberDisplay(
                                                                     (v?.totalResourcesCount ||
-                                                                        1)) *
-                                                                    100
-                                                            )}%)`}
-                                                        </Flex>
-                                                    </TableCell>
+                                                                        0) -
+                                                                        (v?.failedResourcesCount ||
+                                                                            0),
+                                                                    0
+                                                                )}/${numberDisplay(
+                                                                    v?.totalResourcesCount ||
+                                                                        0,
+                                                                    0
+                                                                )} (${Math.floor(
+                                                                    (((v?.totalResourcesCount ||
+                                                                        0) -
+                                                                        (v?.failedResourcesCount ||
+                                                                            0)) /
+                                                                        (v?.totalResourcesCount ||
+                                                                            1)) *
+                                                                        100
+                                                                )}%)`}
+                                                            </Flex>
+                                                        </TableCell>
+                                                    )}
                                                     <TableCell>
                                                         <ChevronRightIcon className="h-5 text-kaytu-500" />
                                                     </TableCell>
