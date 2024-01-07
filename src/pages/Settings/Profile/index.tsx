@@ -16,7 +16,9 @@ export default function SettingsProfile() {
             <List className="mt-4">
                 <ListItem className="my-1">
                     <Text className="w-1/2">First Name</Text>
-                    <Text className="w-1/2 text-gray-800">{user?.name}</Text>
+                    <Text className="w-1/2 text-gray-800">
+                        {user?.given_name}
+                    </Text>
                 </ListItem>
                 <ListItem className="my-1">
                     <Text className="w-1/2">Last Name</Text>
