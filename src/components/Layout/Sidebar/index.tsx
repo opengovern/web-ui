@@ -221,7 +221,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                     className="p-2 gap-0.5"
                 >
                     <JobsMenu isCollapsed={collapsed} />
-                    <CLIMenu />
+                    <CLIMenu isCollapsed={collapsed} />
                 </Flex>
             </Flex>
         </Flex>
