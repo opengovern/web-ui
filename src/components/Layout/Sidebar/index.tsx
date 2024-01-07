@@ -50,10 +50,9 @@ const navigation = [
     {
         name: 'Governance',
         icon: ShieldCheckIcon,
-        page: ['compliance', 'service-advisor', 'findings'],
+        page: ['compliance', 'findings'],
         children: [
             { name: 'Compliance', page: 'compliance' },
-            // { name: 'Service Advisor', page: 'service-advisor' },
             { name: 'Findings', page: 'findings' },
         ],
     },
@@ -125,13 +124,62 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             alignItems="start"
             className="z-20 h-full w-fit pb-4 bg-kaytu-950 relative"
         >
-            {isDemo && (
-                <Flex className="absolute -left-7 top-3 bg-rose-800 w-fit px-8 -rotate-45">
-                    <Text className="text-white">Demo</Text>
-                </Flex>
-            )}
-            <Flex flexDirection="col" className="h-full w-full gap-y-5">
+            <Flex flexDirection="col" className="h-full">
                 <Workspace isCollapsed={collapsed} />
+                <Flex
+                    flexDirection="col"
+                    alignItems="start"
+                    justifyContent="start"
+                    className="h-full p-2 gap-0.5"
+                >
+                    {navigation.map((item) =>
+                        item.children && !collapsed ? (
+                            <Accordion
+                                className="bg-transparent border-0"
+                                defaultOpen={isOpen(item)}
+                            >
+                                hi
+                            </Accordion>
+                        ) : (
+                            <button
+                                type="button"
+                                className={`w-full relative px-6 py-3 flex rounded-md
+                                                    ${
+                                                        item.page ===
+                                                            currentPage ||
+                                                        (collapsed &&
+                                                            item.page.includes(
+                                                                currentPage
+                                                            ))
+                                                            ? 'bg-kaytu-500 text-gray-200 font-semibold'
+                                                            : 'text-gray-50 hover:bg-kaytu-800'
+                                                    }
+                                                    ${
+                                                        collapsed
+                                                            ? 'w-fit gap-x-0'
+                                                            : 'gap-x-3'
+                                                    }`}
+                            >
+                                <Flex justifyContent="start" className="gap-2">
+                                    <item.icon
+                                        className={`h-5 w-5 ${
+                                            item.page === currentPage ||
+                                            (collapsed &&
+                                                item.page.includes(currentPage))
+                                                ? 'text-gray-200'
+                                                : 'text-gray-400'
+                                        }`}
+                                    />
+                                    {!collapsed && (
+                                        <Text className="text-inherit !text-base">
+                                            {item.name}
+                                        </Text>
+                                    )}
+                                </Flex>
+                            </button>
+                        )
+                    )}
+                </Flex>
                 <nav className="w-full flex flex-1 flex-col px-4 justify-between items-center">
                     <ul className="w-full">
                         {navigation.map((item) => (
