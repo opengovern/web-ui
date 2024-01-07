@@ -37,7 +37,6 @@ import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../components/RenderObject'
 import { costTrendChart, pieData } from '../../index'
-import Header from '../../../../components/Header'
 import {
     checkGranularity,
     generateItems,
@@ -57,9 +56,9 @@ import Chart from '../../../../components/Chart'
 import { generateVisualMap } from '../../../Assets'
 import Table, { IColumn } from '../../../../components/Table'
 import {
+    defaultColumns,
     gridOptions,
     rowGenerator,
-    defaultColumns,
 } from '../../Details/Tabs/Metrics'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../api/api'
 
@@ -246,16 +245,6 @@ export default function SingleSpendConnection({
 
     return (
         <>
-            {!!window.location.pathname.split('/')[3] && (
-                <Header
-                    breadCrumb={[
-                        connection
-                            ? connection?.providerConnectionName
-                            : 'Single account detail',
-                    ]}
-                    datePicker
-                />
-            )}
             <Grid numItems={2} className="w-full gap-4">
                 <Card className="w-full">
                     <Flex

@@ -24,7 +24,6 @@ import {
     SortModelItem,
 } from 'ag-grid-community'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
-import Header from '../../../../../components/Header'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/integration.gen'
 import Spinner from '../../../../../components/Spinner'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
@@ -34,7 +33,6 @@ import { isDemoAtom, notificationAtom } from '../../../../../store'
 import Layout from '../../../../../components/Layout'
 import {
     useComplianceApiV1AssignmentsConnectionDetail,
-    useComplianceApiV1BenchmarksControlsDetail,
     useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1FindingsCreate,
 } from '../../../../../api/compliance.gen'
@@ -147,12 +145,12 @@ export default function SingleComplianceConnection() {
     }
 
     return (
-        <Layout currentPage="compliance">
-            <Header
-                breadCrumb={[
-                    con ? con?.providerConnectionName : 'Single account detail',
-                ]}
-            />
+        <Layout
+            currentPage="compliance"
+            breadCrumb={[
+                con ? con?.providerConnectionName : 'Single account detail',
+            ]}
+        >
             <Grid numItems={2} className="w-full gap-4">
                 <Card className="w-full">
                     <Flex

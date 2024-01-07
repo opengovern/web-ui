@@ -35,7 +35,6 @@ import { highlight, languages } from 'prismjs'
 import Markdown from 'react-markdown'
 import Layout from '../../../../../../components/Layout'
 import { useComplianceApiV1ControlsSummaryDetail } from '../../../../../../api/compliance.gen'
-import Header from '../../../../../../components/Header'
 import { notificationAtom, queryAtom } from '../../../../../../store'
 import { severityBadge } from '../index'
 import Spinner from '../../../../../../components/Spinner'
@@ -58,14 +57,14 @@ export default function ControlDetail() {
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
 
     return (
-        <Layout currentPage="compliance">
-            <Header
-                breadCrumb={[
-                    controlDetail
-                        ? controlDetail?.control?.title
-                        : 'Control detail',
-                ]}
-            />
+        <Layout
+            currentPage="compliance"
+            breadCrumb={[
+                controlDetail
+                    ? controlDetail?.control?.title
+                    : 'Control detail',
+            ]}
+        >
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (

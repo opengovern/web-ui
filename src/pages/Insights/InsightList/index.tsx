@@ -26,7 +26,6 @@ import {
     useComplianceApiV1MetadataTagInsightList,
 } from '../../../api/compliance.gen'
 import { filterAtom, notificationAtom, timeAtom } from '../../../store'
-import Header from '../../../components/Header'
 import Table, { IColumn } from '../../../components/Table'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiInsight } from '../../../api/api'
 import { badgeDelta } from '../../../utilities/deltaType'
@@ -131,8 +130,7 @@ export default function InsightList() {
     }
 
     return (
-        <Layout currentPage="insights">
-            <Header datePicker filter />
+        <Layout currentPage="insights" datePicker filter>
             <Flex alignItems="start" className="gap-4">
                 <Card className="sticky w-fit">
                     <TextInput

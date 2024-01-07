@@ -1,14 +1,17 @@
-import { Flex, Title } from '@tremor/react'
+import { Flex } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { ReactNode } from 'react'
-import Header from './Header'
+import TopHeader from './Header'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
 import Notification from '../Notification'
-import { KaytuIcon } from '../../icons/icons'
 
 type IProps = {
     children: ReactNode
+    headerChildren?: ReactNode | undefined
+    filter?: boolean
+    datePicker?: boolean
+    breadCrumb?: (string | undefined)[]
     currentPage:
         | 'home'
         | 'insights'
@@ -27,16 +30,18 @@ type IProps = {
         | 'billing'
         | '404'
     showSidebar?: boolean
-    showLogo?: boolean
-    hfull?: boolean
+    hFull?: boolean
 }
 
 export default function Layout({
     children,
     currentPage,
     showSidebar = true,
-    showLogo = false,
-    hfull = false,
+    hFull = false,
+    headerChildren,
+    filter = false,
+    datePicker = false,
+    breadCrumb,
 }: IProps) {
     const workspace = useParams<{ ws: string }>().ws
 
@@ -47,7 +52,13 @@ export default function Layout({
             )}
 
             <div className="z-10 w-full h-full relative bg-kaytu-950">
-                <Header workspace={workspace} showLogo={showLogo} />
+                <TopHeader
+                    filter={filter}
+                    datePicker={datePicker}
+                    breadCrumb={breadCrumb}
+                >
+                    {headerChildren}
+                </TopHeader>
                 <Notification />
                 <Flex
                     flexDirection="col"
@@ -57,12 +68,12 @@ export default function Layout({
                 >
                     <Flex
                         justifyContent="center"
-                        className={`px-12 ${hfull ? 'h-full' : ''}`}
+                        className={`px-12 ${hFull ? 'h-full' : ''}`}
                     >
                         <div
                             className={`${
                                 currentPage === 'settings' ? '' : 'max-w-7xl'
-                            } w-full py-8 ${hfull ? 'h-full' : ''}`}
+                            } w-full py-6 ${hFull ? 'h-full' : ''}`}
                         >
                             {children}
                         </div>

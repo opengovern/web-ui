@@ -39,7 +39,6 @@ import {
     useComplianceApiV1InsightDetail,
     useComplianceApiV1InsightTrendDetail,
 } from '../../../api/compliance.gen'
-import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
 import Modal from '../../../components/Modal'
 import SummaryCard from '../../../components/Cards/SummaryCard'
@@ -226,16 +225,14 @@ export default function InsightDetails() {
     }
 
     return (
-        <Layout currentPage="insights">
-            <Header
-                breadCrumb={[
-                    insightDetail
-                        ? insightDetail?.shortTitle
-                        : 'Insight detail',
-                ]}
-                datePicker
-                filter
-            />
+        <Layout
+            currentPage="insights"
+            breadCrumb={[
+                insightDetail ? insightDetail?.shortTitle : 'Insight detail',
+            ]}
+            datePicker
+            filter
+        >
             {trendLoading || detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />

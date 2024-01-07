@@ -3,7 +3,6 @@ import { useAtomValue } from 'jotai'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@tremor/react'
 import { useEffect, useState } from 'react'
 import { filterAtom, timeAtom } from '../../../store'
-import Header from '../../../components/Header'
 import Layout from '../../../components/Layout'
 import Metrics from './Tabs/Metrics'
 import CloudAccounts from './Tabs/CloudAccounts'
@@ -38,12 +37,10 @@ export default function AssetDetails() {
                     ? 'resource-collection'
                     : 'assets'
             }
+            breadCrumb={['Assets detail']}
+            filter={!url.includes('resource-collection')}
+            datePicker
         >
-            <Header
-                breadCrumb={['Assets detail']}
-                filter={!url.includes('resource-collection')}
-                datePicker
-            />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#metrics')}>Metrics</Tab>

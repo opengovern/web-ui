@@ -2,21 +2,21 @@ import { Fragment, useState } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import {
     ArrowPathRoundedSquareIcon,
-    ArrowRightIcon,
     CheckIcon,
     ChevronDownIcon,
+    ChevronRightIcon,
     ChevronUpIcon,
     ClipboardDocumentListIcon,
     ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline'
-import { BarList, Button, Card, Color, Flex, Title } from '@tremor/react'
+import { BarList, Button, Card, Color, Flex, Text, Title } from '@tremor/react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobSummary,
     GithubComKaytuIoKaytuEnginePkgDescribeApiJobType,
-} from '../../../api/api'
-import { numberDisplay } from '../../../utilities/numericDisplay'
-import { useScheduleApiV1JobsCreate } from '../../../api/schedule.gen'
+} from '../../../../api/api'
+import { numberDisplay } from '../../../../utilities/numericDisplay'
+import { useScheduleApiV1JobsCreate } from '../../../../api/schedule.gen'
 
 interface IJobCategoryItem {
     title: string
@@ -153,7 +153,6 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
 
     return (
         <Card
-            decoration="left"
             decorationColor={color}
             key={title}
             className="h-fit w-96 m-2 p-3 px-3"
@@ -164,12 +163,6 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
                 onClick={() => setOpen(!open)}
             >
                 <Flex justifyContent="start" className="space-x-4">
-                    {/* <Icon
-                        variant="outlined"
-                        icon={icon}
-                        size="sm"
-                        color={color}
-                    /> */}
                     <Title className="!text-base truncate">{fullTitle()}</Title>
                 </Flex>
                 {open ? (
@@ -196,26 +189,32 @@ function JobCategoryItem({ title, jobType, summaries }: IJobCategoryItem) {
     )
 }
 
-export default function JobsMenu() {
+interface IJobsMenu {
+    isCollapsed: boolean
+}
+
+export default function JobsMenu({ isCollapsed }: IJobsMenu) {
     const navigate = useNavigate()
     const workspace = useParams<{ ws: string }>().ws
-    const {
-        response: jobs,
-        isLoading,
-        error,
-    } = useScheduleApiV1JobsCreate({ pageStart: 0, pageEnd: 1, hours: 24 })
+    const { response: jobs } = useScheduleApiV1JobsCreate({
+        pageStart: 0,
+        pageEnd: 1,
+        hours: 24,
+    })
 
     if (workspace === undefined || workspace === '') {
         return null
     }
     return (
-        <Popover className="relative isolate z-50 border-0">
+        <Popover className="relative z-50 border-0 w-full">
             <Popover.Button
-                className="-mx-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                className="w-full px-6 py-3 flex rounded-md gap-2 text-gray-50 hover:bg-kaytu-800"
                 id="Jobs"
             >
-                <span className="sr-only">Jobs</span>
-                <ClipboardDocumentListIcon className="h-6 w-6" />
+                <ClipboardDocumentListIcon className="h-5 w-5 stroke-2 text-gray-400" />
+                {!isCollapsed && (
+                    <Text className="text-inherit !text-base">Jobs</Text>
+                )}
             </Popover.Button>
             <Transition
                 as={Fragment}
@@ -226,8 +225,8 @@ export default function JobsMenu() {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
             >
-                <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
-                    <Card className="w-fit ">
+                <Popover.Panel className="absolute left-[515px] bottom-0 z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
+                    <Card className="w-fit">
                         <Flex justifyContent="between">
                             <Title className="font-bold text-gray-800">
                                 Jobs in last 24 hours
@@ -235,13 +234,13 @@ export default function JobsMenu() {
                             <Button
                                 size="xs"
                                 variant="light"
-                                icon={ArrowRightIcon}
+                                icon={ChevronRightIcon}
                                 iconPosition="right"
                                 onClick={() =>
                                     navigate(`/${workspace}/settings#jobs`)
                                 }
                             >
-                                See All
+                                See all
                             </Button>
                         </Flex>
                         <Flex

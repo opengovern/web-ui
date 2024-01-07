@@ -6,9 +6,9 @@ import {
 } from '@heroicons/react/24/outline'
 import { Button, Card, Flex, Text } from '@tremor/react'
 import clipboardCopy from 'clipboard-copy'
-import { ReactComponent as AppleIcon } from '../../../icons/Apple.svg'
-import { ReactComponent as LinuxIcon } from '../../../icons/Vector.svg'
-import { ReactComponent as WindowsIcon } from '../../../icons/windows-174-svgrepo-com 1.svg'
+import { ReactComponent as AppleIcon } from '../../../../icons/Apple.svg'
+import { ReactComponent as LinuxIcon } from '../../../../icons/Vector.svg'
+import { ReactComponent as WindowsIcon } from '../../../../icons/windows-174-svgrepo-com 1.svg'
 
 const tabs = [
     {
@@ -129,15 +129,21 @@ export function CLITabs() {
     )
 }
 
-export default function CLIMenu() {
+interface ICLIMenu {
+    isCollapsed: boolean
+}
+
+export default function CLIMenu({ isCollapsed }: ICLIMenu) {
     return (
-        <Popover className="relative isolate z-50 border-0">
+        <Popover className="relative z-50 border-0 w-full">
             <Popover.Button
-                className="-mx-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                className="w-full px-6 py-3 flex rounded-md gap-2 text-gray-50 hover:bg-kaytu-800"
                 id="CLI"
             >
-                <span className="sr-only">CLI</span>
-                <CommandLineIcon className="h-6 w-6" />
+                <CommandLineIcon className="h-5 w-5 stroke-2 text-gray-400" />
+                {!isCollapsed && (
+                    <Text className="text-inherit !text-base">CLI</Text>
+                )}
             </Popover.Button>
             <Transition
                 as={Fragment}
@@ -148,7 +154,7 @@ export default function CLIMenu() {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
             >
-                <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
+                <Popover.Panel className="absolute left-[515px] bottom-0 z-10 flex w-screen max-w-max -translate-x-1/2 px-4">
                     <div className="w-screen max-w-md flex-auto overflow-hidden rounded-lg bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
                         <CLITabs />
                     </div>

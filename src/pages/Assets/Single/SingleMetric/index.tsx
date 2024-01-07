@@ -39,7 +39,6 @@ import {
     notificationAtom,
     queryAtom,
 } from '../../../../store'
-import Header from '../../../../components/Header'
 import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numberDisplay } from '../../../../utilities/numericDisplay'
@@ -167,13 +166,6 @@ export default function SingleMetric({
 
     return (
         <>
-            <Header
-                breadCrumb={[
-                    metricDetail ? metricDetail?.name : 'Metric detail',
-                ]}
-                datePicker
-                filter
-            />
             <Flex className="mb-6">
                 <Flex alignItems="start" className="gap-2">
                     {getConnectorIcon(

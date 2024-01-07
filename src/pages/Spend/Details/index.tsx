@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useAtomValue } from 'jotai/index'
 import { useEffect, useState } from 'react'
 import Layout from '../../../components/Layout'
-import Header from '../../../components/Header'
 import Metrics from './Tabs/Metrics'
 import { checkGranularity } from '../../../utilities/dateComparator'
 import { filterAtom, spendTimeAtom } from '../../../store'
@@ -45,8 +44,12 @@ export default function SpendDetails() {
     }, [activeTimeRange])
 
     return (
-        <Layout currentPage="spend">
-            <Header breadCrumb={['Spend detail']} filter datePicker />
+        <Layout
+            currentPage="spend"
+            breadCrumb={['Spend detail']}
+            filter
+            datePicker
+        >
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#metrics')}>Metrics</Tab>

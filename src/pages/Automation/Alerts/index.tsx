@@ -3,7 +3,6 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import { useState } from 'react'
 import Layout from '../../../components/Layout'
-import Header from '../../../components/Header'
 import Table, { IColumn } from '../../../components/Table'
 import { useAlertingApiV1TriggerListList } from '../../../api/alerting.gen'
 import { numericDisplay } from '../../../utilities/numericDisplay'
@@ -54,7 +53,6 @@ export default function Alerts() {
 
     return (
         <Layout currentPage="alerts">
-            <Header />
             <Flex justifyContent="end" className="mb-4">
                 <TextInput
                     icon={MagnifyingGlassIcon}

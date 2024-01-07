@@ -18,7 +18,6 @@ import {
     ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
-import Header from '../../../components/Header'
 import FindingsWithFailure from './FindingsWithFailure'
 import ResourcesWithFailure from './ResourcesWithFailure'
 import ControlsWithFailure from './ControlsWithFailure'
@@ -61,7 +60,6 @@ export default function Findings() {
 
     return (
         <Layout currentPage="findings">
-            <Header />
             <TabGroup index={tab} onIndexChange={setTab}>
                 <TabList className="border-0">
                     {tabs.map((t) => (

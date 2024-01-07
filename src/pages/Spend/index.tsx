@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import {
-    Bold,
     Callout,
     Card,
     Col,
@@ -9,11 +8,8 @@ import {
     Tab,
     TabGroup,
     TabList,
-    Text,
 } from '@tremor/react'
 import { useAtomValue } from 'jotai'
-import { use } from 'echarts'
-import { CheckBadgeIcon, CheckIcon } from '@heroicons/react/24/outline'
 import Layout from '../../components/Layout'
 import {
     useInventoryApiV2AnalyticsSpendCompositionList,
@@ -25,10 +21,7 @@ import { useIntegrationApiV1ConnectionsSummariesList } from '../../api/integrati
 import Chart from '../../components/Chart'
 import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
 import MetricCard from '../../components/Cards/MetricCard'
-import {
-    exactPriceDisplay,
-    numberDisplay,
-} from '../../utilities/numericDisplay'
+import { numberDisplay } from '../../utilities/numericDisplay'
 import {
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostStackedItem,
     GithubComKaytuIoKaytuEnginePkgInventoryApiCostTrendDatapoint,
@@ -40,9 +33,7 @@ import {
 import { BarChartIcon, LineChartIcon } from '../../icons/icons'
 import Breakdown from '../../components/Breakdown'
 import ListCard from '../../components/Cards/ListCard'
-import { checkGranularity, generateItems } from '../../utilities/dateComparator'
-import { capitalizeFirstLetter } from '../../utilities/labelMaker'
-import Header from '../../components/Header'
+import { checkGranularity } from '../../utilities/dateComparator'
 import { generateVisualMap } from '../Assets'
 import SingleSpendConnection from './Single/SingleConnection'
 import Selector from '../../components/Selector'
@@ -455,8 +446,7 @@ export default function Spend() {
         })
 
     return (
-        <Layout currentPage="spend">
-            <Header datePicker filter />
+        <Layout currentPage="spend" datePicker filter>
             {selectedConnections.connections.length === 1 ? (
                 <SingleSpendConnection
                     activeTimeRange={activeTimeRange}

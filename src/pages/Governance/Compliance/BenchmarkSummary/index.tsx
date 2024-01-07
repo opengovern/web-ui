@@ -27,7 +27,6 @@ import {
     useComplianceApiV1FindingsTopDetail,
 } from '../../../../api/compliance.gen'
 import { dateTimeDisplay } from '../../../../utilities/dateDisplay'
-import Header from '../../../../components/Header'
 import { useScheduleApiV1ComplianceTriggerUpdate } from '../../../../api/schedule.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiGetTopFieldResponse } from '../../../../api/api'
 import Spinner from '../../../../components/Spinner'
@@ -207,22 +206,23 @@ export default function BenchmarkSummary() {
     }, [isExecuted, recall])
 
     return (
-        <Layout currentPage="compliance">
-            <Header
-                breadCrumb={[
-                    benchmarkDetail?.title
-                        ? benchmarkDetail?.title
-                        : 'Benchmark summary',
-                ]}
-                filter
-            >
+        <Layout
+            currentPage="compliance"
+            breadCrumb={[
+                benchmarkDetail?.title
+                    ? benchmarkDetail?.title
+                    : 'Benchmark summary',
+            ]}
+            filter
+            headerChildren={
                 <Settings
                     id={benchmarkDetail?.id}
                     response={(e) => setAssignments(e)}
                     autoAssign={benchmarkDetail?.autoAssign}
                     isAutoResponse={(x) => setRecall(true)}
                 />
-            </Header>
+            }
+        >
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (

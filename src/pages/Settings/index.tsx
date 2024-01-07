@@ -18,7 +18,7 @@ import SettingsOrganization from './Organization'
 import SettingsGitRepositories from './GitRepositories'
 import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
-import Header from '../../components/Header'
+
 import { tokenAtom } from '../../store'
 import SettingsJobs from './Jobs'
 import SettingsCustomization from './Customization'
@@ -156,7 +156,6 @@ export default function Settings() {
 
     return (
         <Layout currentPage="settings">
-            <Header />
             <Flex alignItems="start" justifyContent="start">
                 <Flex flexDirection="col" alignItems="start" className="w-fit">
                     <nav className="w-56 text-sm">

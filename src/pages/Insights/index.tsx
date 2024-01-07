@@ -2,7 +2,6 @@ import { Button, Flex, Grid, Title } from '@tremor/react'
 import { useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../../components/Layout'
-import Header from '../../components/Header'
 import PersonaCard from '../../components/Cards/PersonaCard'
 import { filterAtom, timeAtom } from '../../store'
 import { useComplianceApiV1InsightList } from '../../api/compliance.gen'
@@ -41,8 +40,7 @@ export default function Insights() {
     } = useComplianceApiV1InsightList(query)
 
     return (
-        <Layout currentPage="insights">
-            <Header datePicker filter />
+        <Layout currentPage="insights" datePicker filter>
             <Title className="font-semibold mb-4">Personas</Title>
             <Grid numItems={9} className="w-full gap-4 mb-12">
                 <PersonaCard type="Engineer" />

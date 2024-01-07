@@ -6,7 +6,6 @@ import Layout from '../../components/Layout'
 import { useWorkspaceApiV1WorkspacesList } from '../../api/workspace.gen'
 import WorkspaceCard from '../../components/Cards/WorkspaceCard'
 import Spinner from '../../components/Spinner'
-import Header from '../../components/Header'
 
 export default function Workspaces() {
     const navigate = useNavigate()
@@ -33,7 +32,25 @@ export default function Workspaces() {
     }, [isLoading])
 
     return (
-        <Layout currentPage="assets" showSidebar={false}>
+        <Layout
+            currentPage="assets"
+            showSidebar={false}
+            headerChildren={
+                !isLoading && (
+                    <Flex className="w-fit gap-3">
+                        <Button variant="secondary" onClick={refreshList}>
+                            <ArrowPathIcon className="h-5 text-kaytu-500" />
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => navigate(`/new-ws`)}
+                        >
+                            Add new Kaytu workspace
+                        </Button>
+                    </Flex>
+                )
+            }
+        >
             {isLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />
@@ -41,21 +58,6 @@ export default function Workspaces() {
             ) : (
                 <Flex justifyContent="center" flexDirection="row">
                     <div className="max-w-6xl w-2/3">
-                        <Header>
-                            <Button
-                                variant="secondary"
-                                onClick={refreshList}
-                                className="mx-2"
-                            >
-                                <ArrowPathIcon className="h-5 text-kaytu-500" />
-                            </Button>
-                            <Button
-                                variant="secondary"
-                                onClick={() => navigate(`/new-ws`)}
-                            >
-                                Add new Kaytu workspace
-                            </Button>
-                        </Header>
                         <Grid numItems={1} className="gap-4">
                             {workspaces?.map((ws) => {
                                 return (

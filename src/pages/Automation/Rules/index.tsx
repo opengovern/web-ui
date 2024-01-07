@@ -16,7 +16,6 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { RowClickedEvent, ValueFormatterParams } from 'ag-grid-community'
 import { QueryBuilder } from 'react-querybuilder/dist/cjs/react-querybuilder.cjs.development'
 import Layout from '../../../components/Layout'
-import Header from '../../../components/Header'
 import {
     useAlertingApiV1RuleDeleteDelete,
     useAlertingApiV1RuleListList,
@@ -108,7 +107,6 @@ export default function Rules() {
 
     return (
         <Layout currentPage="rules">
-            <Header />
             <Flex className="mb-4">
                 <TabGroup
                     index={selectedIndex}

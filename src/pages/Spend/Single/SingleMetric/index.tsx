@@ -41,7 +41,6 @@ import {
     checkGranularity,
     generateItems,
 } from '../../../../utilities/dateComparator'
-import Header from '../../../../components/Header'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import {
     exactPriceDisplay,
@@ -377,13 +376,6 @@ export default function SingleSpendMetric({
 
     return (
         <>
-            <Header
-                breadCrumb={[
-                    metricName ? metricName.name : 'Single metric detail',
-                ]}
-                datePicker
-                filter
-            />
             <Flex className="mb-6">
                 <Flex alignItems="start" className="gap-2">
                     {getConnectorIcon(

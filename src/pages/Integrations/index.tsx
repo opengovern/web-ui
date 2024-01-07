@@ -3,7 +3,6 @@ import Layout from '../../components/Layout'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 import OnboardCard from '../../components/Cards/OnboardCard'
-import Header from '../../components/Header'
 import {
     useIntegrationApiV1ConnectorsList,
     useIntegrationApiV1ConnectorsMetricsList,
@@ -17,7 +16,6 @@ export default function Integrations() {
 
     return (
         <Layout currentPage="integrations">
-            <Header />
             <Grid numItems={3} className="gap-4 mb-10">
                 <OnboardCard
                     title="Active Accounts"

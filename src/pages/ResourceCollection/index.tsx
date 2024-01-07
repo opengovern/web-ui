@@ -1,15 +1,11 @@
-import { Button, Flex, TextInput } from '@tremor/react'
-import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { Flex, TextInput } from '@tremor/react'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { ICellRendererParams } from 'ag-grid-community'
 import Layout from '../../components/Layout'
-import Header from '../../components/Header'
 import Table, { IColumn } from '../../components/Table'
-import {
-    useInventoryApiV2MetadataResourceCollectionList,
-    useInventoryApiV2ResourceCollectionList,
-} from '../../api/inventory.gen'
+import { useInventoryApiV2ResourceCollectionList } from '../../api/inventory.gen'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiControlSummary } from '../../api/api'
 import Tag from '../../components/Tag'
 
@@ -84,7 +80,6 @@ export default function ResourceCollection() {
 
     return (
         <Layout currentPage="resource-collection">
-            <Header />
             <Table
                 id="resource_collection"
                 columns={resourceCollectionColumns}

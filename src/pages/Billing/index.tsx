@@ -14,7 +14,6 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useAtomValue } from 'jotai'
 import Layout from '../../components/Layout'
 import Spinner from '../../components/Spinner'
-import Header from '../../components/Header'
 import { timeAtom } from '../../store'
 import { getErrorMessage } from '../../types/apierror'
 import { GithubComKaytuIoKaytuEngineServicesSubscriptionApiEntitiesMeter } from '../../api/api'
@@ -135,9 +134,7 @@ function BillingItems() {
 
 export default function Billing() {
     return (
-        <Layout currentPage="billing" showSidebar={false} showLogo>
-            <Header datePicker />
-
+        <Layout currentPage="billing" datePicker showSidebar={false}>
             <Grid numItems={4} className="gap-4">
                 <BillingItems />
             </Grid>

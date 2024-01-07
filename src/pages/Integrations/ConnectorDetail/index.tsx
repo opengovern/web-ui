@@ -9,7 +9,6 @@ import AWSSummary from './AWS/Summary'
 import AzureSummary from './Azure/Summary'
 import AzureTabs from './Azure/Tabs'
 import { StringToProvider } from '../../../types/provider'
-import Header from '../../../components/Header'
 import {
     useIntegrationApiV1ConnectionsSummariesList,
     useIntegrationApiV1ConnectorsMetricsList,
@@ -42,9 +41,8 @@ export default function ConnectorDetail() {
         })
 
     return (
-        <Layout currentPage="integrations">
+        <Layout currentPage="integrations" breadCrumb={[connector]}>
             <Flex flexDirection="col" alignItems="start">
-                <Header breadCrumb={[connector]} />
                 <Flex flexDirection="row">
                     <Title className="font-semibold">{connector}</Title>
                     <Button

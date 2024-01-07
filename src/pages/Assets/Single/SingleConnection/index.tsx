@@ -35,7 +35,6 @@ import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../components/RenderObject'
 import { pieData, resourceTrendChart } from '../../index'
-import Header from '../../../../components/Header'
 import { checkGranularity } from '../../../../utilities/dateComparator'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import Trends from '../../../../components/Trends'
@@ -115,16 +114,6 @@ export default function SingleConnection({
 
     return (
         <>
-            {!!window.location.pathname.split('/')[3] && (
-                <Header
-                    breadCrumb={[
-                        connection
-                            ? connection?.providerConnectionName
-                            : 'Single cloud account detail',
-                    ]}
-                    datePicker
-                />
-            )}
             <Grid numItems={2} className="w-full gap-4">
                 <Card>
                     <Flex

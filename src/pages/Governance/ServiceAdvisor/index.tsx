@@ -15,7 +15,6 @@ import {
     useComplianceApiV1MetadataTagComplianceList,
 } from '../../../api/compliance.gen'
 import Layout from '../../../components/Layout'
-import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import ComplianceCard from '../../../components/Cards/ComplianceCard'
@@ -36,7 +35,6 @@ export default function ServiceAdvisor() {
 
     return (
         <Layout currentPage="service-advisor">
-            <Header />
             <Grid numItems={3} className="w-full gap-4 mb-4">
                 <Col numColSpan={2}>
                     <TabGroup>
