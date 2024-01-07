@@ -25,6 +25,7 @@ import Workspace from './Workspace'
 import JobsMenu from './JobsMenu'
 import CLIMenu from './CLIMenu'
 import Profile from './Profile'
+import { KaytuIconBig } from '../../../icons/icons'
 
 const navigation = [
     {
@@ -102,16 +103,18 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
         <Flex
             flexDirection="col"
             alignItems="start"
-            className="z-20 h-full w-fit pb-4 bg-kaytu-950 relative"
+            className="z-20 h-full w-fit py-4 bg-kaytu-950 relative"
         >
             <Flex flexDirection="col" className="h-full w-72">
+                <Flex className="pl-5 pb-[18px] pt-[12px] border-b border-b-gray-700">
+                    <KaytuIconBig />
+                </Flex>
                 <Flex
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="start"
                     className="h-full p-2 gap-0.5"
                 >
-                    <Workspace isCollapsed={collapsed} />
                     <Text className="ml-3 mt-4 mb-2">OVERVIEW</Text>
                     {navigation.map((item) =>
                         item.children && !collapsed ? (
