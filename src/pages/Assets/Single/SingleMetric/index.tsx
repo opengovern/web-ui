@@ -39,7 +39,6 @@ import {
     notificationAtom,
     queryAtom,
 } from '../../../../store'
-import Header from '../../../../components/Header'
 import { resourceTrendChart } from '../../index'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import { numberDisplay } from '../../../../utilities/numericDisplay'

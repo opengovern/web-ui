@@ -9,7 +9,6 @@ import AWSSummary from './AWS/Summary'
 import AzureSummary from './Azure/Summary'
 import AzureTabs from './Azure/Tabs'
 import { StringToProvider } from '../../../types/provider'
-import Header from '../../../components/Header'
 import {
     useIntegrationApiV1ConnectionsSummariesList,
     useIntegrationApiV1ConnectorsMetricsList,

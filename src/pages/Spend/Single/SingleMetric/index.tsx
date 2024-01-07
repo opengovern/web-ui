@@ -41,7 +41,6 @@ import {
     checkGranularity,
     generateItems,
 } from '../../../../utilities/dateComparator'
-import Header from '../../../../components/Header'
 import SummaryCard from '../../../../components/Cards/SummaryCard'
 import {
     exactPriceDisplay,

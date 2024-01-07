@@ -21,7 +21,6 @@ import { dateDisplay, monthDisplay } from '../../utilities/dateDisplay'
 import Breakdown from '../../components/Breakdown'
 import ListCard from '../../components/Cards/ListCard'
 import { checkGranularity } from '../../utilities/dateComparator'
-import Header from '../../components/Header'
 import SingleConnection from './Single/SingleConnection'
 import Trends from '../../components/Trends'
 

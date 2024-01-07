@@ -3,7 +3,6 @@ import Layout from '../../components/Layout'
 import ConnectorCard from '../../components/Cards/ConnectorCard'
 import Spinner from '../../components/Spinner'
 import OnboardCard from '../../components/Cards/OnboardCard'
-import Header from '../../components/Header'
 import {
     useIntegrationApiV1ConnectorsList,
     useIntegrationApiV1ConnectorsMetricsList,

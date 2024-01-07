@@ -1,16 +1,11 @@
 import { Flex, Switch, Text, Title } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { GridOptions, ValueFormatterParams } from 'ag-grid-community'
-import { useEffect, useState } from 'react'
 import Layout from '../../../../components/Layout'
-import Header from '../../../../components/Header'
 import Table, { IColumn } from '../../../../components/Table'
 import { useScheduleApiV1DiscoveryResourcetypesListList } from '../../../../api/schedule.gen'
 import AxiosAPI from '../../../../api/ApiConfig'
-import {
-    useMetadataApiV1MetadataCreate,
-    useMetadataApiV1MetadataDetail,
-} from '../../../../api/metadata.gen'
+import { useMetadataApiV1MetadataDetail } from '../../../../api/metadata.gen'
 import { Api } from '../../../../api/api'
 
 const columns = () => {

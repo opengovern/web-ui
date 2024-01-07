@@ -1,14 +1,14 @@
-import { Flex, Title } from '@tremor/react'
+import { Flex } from '@tremor/react'
 import { useParams } from 'react-router-dom'
 import { ReactNode } from 'react'
 import TopHeader from './Header'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
 import Notification from '../Notification'
-import { KaytuIcon } from '../../icons/icons'
 
 type IProps = {
     children: ReactNode
+    headerChildren?: ReactNode | undefined
     filter?: boolean
     datePicker?: boolean
     breadCrumb?: (string | undefined)[]
@@ -30,14 +30,15 @@ type IProps = {
         | 'billing'
         | '404'
     showSidebar?: boolean
-    hfull?: boolean
+    hFull?: boolean
 }
 
 export default function Layout({
     children,
     currentPage,
     showSidebar = true,
-    hfull = false,
+    hFull = false,
+    headerChildren,
     filter = false,
     datePicker = false,
     breadCrumb,
@@ -55,7 +56,9 @@ export default function Layout({
                     filter={filter}
                     datePicker={datePicker}
                     breadCrumb={breadCrumb}
-                />
+                >
+                    {headerChildren}
+                </TopHeader>
                 <Notification />
                 <Flex
                     flexDirection="col"
@@ -65,12 +68,12 @@ export default function Layout({
                 >
                     <Flex
                         justifyContent="center"
-                        className={`px-12 ${hfull ? 'h-full' : ''}`}
+                        className={`px-12 ${hFull ? 'h-full' : ''}`}
                     >
                         <div
                             className={`${
                                 currentPage === 'settings' ? '' : 'max-w-7xl'
-                            } w-full py-8 ${hfull ? 'h-full' : ''}`}
+                            } w-full py-8 ${hFull ? 'h-full' : ''}`}
                         >
                             {children}
                         </div>

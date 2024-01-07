@@ -1,6 +1,5 @@
 import { Col, Grid } from '@tremor/react'
 import Layout from '../../components/Layout'
-import Header from '../../components/Header'
 import QuickNav from './QuickNav'
 import Query from './Query'
 import TopSpend from './TopSpend'

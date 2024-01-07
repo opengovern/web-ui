@@ -33,7 +33,6 @@ import {
     useInventoryApiV2ResourceCollectionDetail,
     useInventoryApiV2ResourceCollectionLandscapeDetail,
 } from '../../../api/inventory.gen'
-import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
 import {
     useComplianceApiV1AssignmentsResourceCollectionDetail,

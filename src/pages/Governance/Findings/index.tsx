@@ -18,7 +18,6 @@ import {
     ShieldExclamationIcon,
 } from '@heroicons/react/24/outline'
 import Layout from '../../../components/Layout'
-import Header from '../../../components/Header'
 import FindingsWithFailure from './FindingsWithFailure'
 import ResourcesWithFailure from './ResourcesWithFailure'
 import ControlsWithFailure from './ControlsWithFailure'

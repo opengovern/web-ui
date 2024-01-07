@@ -37,7 +37,6 @@ import Spinner from '../../../../components/Spinner'
 import DrawerPanel from '../../../../components/DrawerPanel'
 import { RenderObject } from '../../../../components/RenderObject'
 import { costTrendChart, pieData } from '../../index'
-import Header from '../../../../components/Header'
 import {
     checkGranularity,
     generateItems,
@@ -57,9 +56,9 @@ import Chart from '../../../../components/Chart'
 import { generateVisualMap } from '../../../Assets'
 import Table, { IColumn } from '../../../../components/Table'
 import {
+    defaultColumns,
     gridOptions,
     rowGenerator,
-    defaultColumns,
 } from '../../Details/Tabs/Metrics'
 import { GithubComKaytuIoKaytuEnginePkgInventoryApiSpendTableRow } from '../../../../api/api'
 

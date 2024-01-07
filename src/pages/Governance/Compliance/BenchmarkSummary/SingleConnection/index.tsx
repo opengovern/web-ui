@@ -24,7 +24,6 @@ import {
     SortModelItem,
 } from 'ag-grid-community'
 import { IServerSideGetRowsParams } from 'ag-grid-community/dist/lib/interfaces/iServerSideDatasource'
-import Header from '../../../../../components/Header'
 import { useIntegrationApiV1ConnectionsSummariesList } from '../../../../../api/integration.gen'
 import Spinner from '../../../../../components/Spinner'
 import { dateTimeDisplay } from '../../../../../utilities/dateDisplay'
@@ -34,7 +33,6 @@ import { isDemoAtom, notificationAtom } from '../../../../../store'
 import Layout from '../../../../../components/Layout'
 import {
     useComplianceApiV1AssignmentsConnectionDetail,
-    useComplianceApiV1BenchmarksControlsDetail,
     useComplianceApiV1BenchmarksSummaryDetail,
     useComplianceApiV1FindingsCreate,
 } from '../../../../../api/compliance.gen'

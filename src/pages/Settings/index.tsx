@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Flex, Tab, TabGroup, TabList } from '@tremor/react'
+import { Flex } from '@tremor/react'
 import {
     BugAntIcon,
     BuildingOfficeIcon,
     FolderIcon,
     UserIcon,
 } from '@heroicons/react/24/outline'
-import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import jwtDecode from 'jwt-decode'
-import { useAtom } from 'jotai'
 import Layout from '../../components/Layout'
 import SettingsEntitlement from './Entitlement'
 import SettingsMembers from './Members'
@@ -19,8 +18,6 @@ import SettingsOrganization from './Organization'
 import SettingsGitRepositories from './GitRepositories'
 import { useWorkspaceApiV1WorkspaceCurrentList } from '../../api/workspace.gen'
 import Spinner from '../../components/Spinner'
-import Header from '../../components/Header'
-import { isDemoAtom } from '../../store'
 import SettingsJobs from './Jobs'
 import SettingsCustomization from './Customization'
 

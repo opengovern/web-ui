@@ -15,7 +15,6 @@ import {
     useComplianceApiV1MetadataTagComplianceList,
 } from '../../../api/compliance.gen'
 import Layout from '../../../components/Layout'
-import Header from '../../../components/Header'
 import Spinner from '../../../components/Spinner'
 import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary } from '../../../api/api'
 import ComplianceCard from '../../../components/Cards/ComplianceCard'

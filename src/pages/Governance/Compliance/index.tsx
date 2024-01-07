@@ -1,5 +1,5 @@
 import { Badge, Button, Flex, Grid, Icon, Text, Title } from '@tremor/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ShieldCheckIcon } from '@heroicons/react/24/outline'
 import { ICellRendererParams, ValueFormatterParams } from 'ag-grid-community'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
@@ -10,7 +10,6 @@ import { GithubComKaytuIoKaytuEnginePkgComplianceApiBenchmarkEvaluationSummary }
 import ComplianceCard, {
     benchmarkChecks,
 } from '../../../components/Cards/ComplianceCard'
-import Header from '../../../components/Header'
 import { IColumn } from '../../../components/Table'
 import { numberDisplay } from '../../../utilities/numericDisplay'
 import ComplianceListCard from '../../../components/Cards/ComplianceListCard'
