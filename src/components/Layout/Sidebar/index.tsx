@@ -21,7 +21,6 @@ import {
 } from '@heroicons/react/24/outline'
 import { useAtom } from 'jotai'
 import { sideBarCollapsedAtom } from '../../../store'
-import Workspace from './Workspace'
 import JobsMenu from './JobsMenu'
 import CLIMenu from './CLIMenu'
 import Profile from './Profile'
