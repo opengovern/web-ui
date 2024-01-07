@@ -102,13 +102,14 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
             className="z-20 h-full w-fit pb-4 bg-kaytu-950 relative"
         >
             <Flex flexDirection="col" className="h-full">
-                <Workspace isCollapsed={collapsed} />
                 <Flex
                     flexDirection="col"
                     alignItems="start"
                     justifyContent="start"
                     className="h-full p-2 gap-0.5 w-72"
                 >
+                    <Workspace isCollapsed={collapsed} />
+                    <Text className="ml-3 mt-4">OVERVIEW</Text>
                     {navigation.map((item) =>
                         item.children && !collapsed ? (
                             <Accordion
@@ -121,7 +122,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                             >
                                 <AccordionHeader className="text-gray-50 bg-transparent px-6 py-3 sidebar-accordion relative">
                                     <ChevronRightIcon
-                                        className="w-3.5 absolute left-1 text-gray-400"
+                                        className="w-3.5 absolute left-1 text-gray-400 stroke-2"
                                         style={{ top: 'calc(50% - 7px)' }}
                                     />
                                     <Flex
@@ -129,7 +130,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                                         className="h-full gap-2"
                                     >
                                         <item.icon
-                                            className={`h-5 w-5 ${
+                                            className={`h-5 w-5 stroke-2 ${
                                                 collapsed &&
                                                 item.page.includes(currentPage)
                                                     ? 'text-gray-200'
@@ -186,7 +187,7 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                             >
                                 <Flex justifyContent="start" className="gap-2">
                                     <item.icon
-                                        className={`h-5 w-5 ${
+                                        className={`h-5 w-5 stroke-2 ${
                                             item.page === currentPage ||
                                             (collapsed &&
                                                 item.page.includes(currentPage))
@@ -204,6 +205,9 @@ export default function Sidebar({ workspace, currentPage }: ISidebar) {
                         )
                     )}
                 </Flex>
+            </Flex>
+            <Flex flexDirection="col" alignItems="start">
+                <Text className="ml-3 mt-4">ACTIONS</Text>
             </Flex>
         </Flex>
     )
