@@ -147,12 +147,12 @@ export default function SingleComplianceConnection() {
     }
 
     return (
-        <Layout currentPage="compliance">
-            <Header
-                breadCrumb={[
-                    con ? con?.providerConnectionName : 'Single account detail',
-                ]}
-            />
+        <Layout
+            currentPage="compliance"
+            breadCrumb={[
+                con ? con?.providerConnectionName : 'Single account detail',
+            ]}
+        >
             <Grid numItems={2} className="w-full gap-4">
                 <Card className="w-full">
                     <Flex

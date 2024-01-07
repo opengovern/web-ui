@@ -285,13 +285,11 @@ export default function ResourceCollectionDetail() {
     const rows = useMemo(() => bmList(response, complianceKPI), [response])
 
     return (
-        <Layout currentPage="resource-collection">
-            <Header
-                breadCrumb={[
-                    detail ? detail.name : 'Resource collection detail',
-                ]}
-                datePicker
-            />
+        <Layout
+            currentPage="resource-collection"
+            breadCrumb={[detail ? detail.name : 'Resource collection detail']}
+            datePicker
+        >
             <Flex alignItems="end" className="mb-4">
                 <Flex flexDirection="col" alignItems="start">
                     <Title className="font-semibold">{detail?.name}</Title>

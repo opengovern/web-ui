@@ -45,8 +45,12 @@ export default function SpendDetails() {
     }, [activeTimeRange])
 
     return (
-        <Layout currentPage="spend">
-            <Header breadCrumb={['Spend detail']} filter datePicker />
+        <Layout
+            currentPage="spend"
+            breadCrumb={['Spend detail']}
+            filter
+            datePicker
+        >
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#metrics')}>Metrics</Tab>

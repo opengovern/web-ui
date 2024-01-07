@@ -38,12 +38,10 @@ export default function AssetDetails() {
                     ? 'resource-collection'
                     : 'assets'
             }
+            breadCrumb={['Assets detail']}
+            filter={!url.includes('resource-collection')}
+            datePicker
         >
-            <Header
-                breadCrumb={['Assets detail']}
-                filter={!url.includes('resource-collection')}
-                datePicker
-            />
             <TabGroup index={selectedTab} onIndexChange={setSelectedTab}>
                 <TabList className="mb-3">
                     <Tab onClick={() => navigate('#metrics')}>Metrics</Tab>

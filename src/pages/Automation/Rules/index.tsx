@@ -108,7 +108,6 @@ export default function Rules() {
 
     return (
         <Layout currentPage="rules">
-            <Header />
             <Flex className="mb-4">
                 <TabGroup
                     index={selectedIndex}

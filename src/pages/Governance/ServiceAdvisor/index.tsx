@@ -36,7 +36,6 @@ export default function ServiceAdvisor() {
 
     return (
         <Layout currentPage="service-advisor">
-            <Header />
             <Grid numItems={3} className="w-full gap-4 mb-4">
                 <Col numColSpan={2}>
                     <TabGroup>

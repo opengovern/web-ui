@@ -135,9 +135,7 @@ function BillingItems() {
 
 export default function Billing() {
     return (
-        <Layout currentPage="billing" showSidebar={false} showLogo>
-            <Header datePicker />
-
+        <Layout currentPage="billing" datePicker showSidebar={false}>
             <Grid numItems={4} className="gap-4">
                 <BillingItems />
             </Grid>

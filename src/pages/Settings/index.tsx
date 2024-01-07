@@ -162,7 +162,6 @@ export default function Settings() {
 
     return (
         <Layout currentPage="settings">
-            <Header />
             <Flex alignItems="start" justifyContent="start">
                 <Flex flexDirection="col" alignItems="start" className="w-fit">
                     <nav className="w-56 text-sm">

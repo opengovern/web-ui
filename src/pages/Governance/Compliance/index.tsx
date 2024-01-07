@@ -255,7 +255,6 @@ export default function Compliance() {
 
     return (
         <Layout currentPage="compliance">
-            <Header />
             <Flex className="mb-4">
                 <Flex className="gap-3 w-fit">
                     <Icon icon={ShieldCheckIcon} variant="shadow" />

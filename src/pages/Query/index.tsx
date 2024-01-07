@@ -224,7 +224,6 @@ export default function Query() {
 
     return (
         <Layout currentPage="query">
-            <Header />
             {categoryLoading || queryLoading ? (
                 <Spinner className="mt-56" />
             ) : (

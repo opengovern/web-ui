@@ -226,16 +226,14 @@ export default function InsightDetails() {
     }
 
     return (
-        <Layout currentPage="insights">
-            <Header
-                breadCrumb={[
-                    insightDetail
-                        ? insightDetail?.shortTitle
-                        : 'Insight detail',
-                ]}
-                datePicker
-                filter
-            />
+        <Layout
+            currentPage="insights"
+            breadCrumb={[
+                insightDetail ? insightDetail?.shortTitle : 'Insight detail',
+            ]}
+            datePicker
+            filter
+        >
             {trendLoading || detailLoading ? (
                 <Flex justifyContent="center" className="mt-56">
                     <Spinner />

@@ -12,7 +12,6 @@ import Findings from './Findings'
 export default function Home() {
     return (
         <Layout currentPage="home">
-            <Header />
             <QuickNav />
             <Grid
                 numItemsLg={3}

@@ -58,14 +58,14 @@ export default function ControlDetail() {
         useComplianceApiV1ControlsSummaryDetail(String(controlId))
 
     return (
-        <Layout currentPage="compliance">
-            <Header
-                breadCrumb={[
-                    controlDetail
-                        ? controlDetail?.control?.title
-                        : 'Control detail',
-                ]}
-            />
+        <Layout
+            currentPage="compliance"
+            breadCrumb={[
+                controlDetail
+                    ? controlDetail?.control?.title
+                    : 'Control detail',
+            ]}
+        >
             {isLoading ? (
                 <Spinner className="mt-56" />
             ) : (

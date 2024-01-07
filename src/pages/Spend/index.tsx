@@ -455,8 +455,7 @@ export default function Spend() {
         })
 
     return (
-        <Layout currentPage="spend">
-            <Header datePicker filter />
+        <Layout currentPage="spend" datePicker filter>
             {selectedConnections.connections.length === 1 ? (
                 <SingleSpendConnection
                     activeTimeRange={activeTimeRange}

@@ -42,9 +42,8 @@ export default function ConnectorDetail() {
         })
 
     return (
-        <Layout currentPage="integrations">
+        <Layout currentPage="integrations" breadCrumb={[connector]}>
             <Flex flexDirection="col" alignItems="start">
-                <Header breadCrumb={[connector]} />
                 <Flex flexDirection="row">
                     <Title className="font-semibold">{connector}</Title>
                     <Button

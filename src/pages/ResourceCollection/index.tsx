@@ -84,7 +84,6 @@ export default function ResourceCollection() {
 
     return (
         <Layout currentPage="resource-collection">
-            <Header />
             <Table
                 id="resource_collection"
                 columns={resourceCollectionColumns}

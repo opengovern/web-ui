@@ -1,22 +1,56 @@
-import { ChevronDownIcon, MoonIcon, SunIcon } from '@heroicons/react/24/outline'
-import { Flex, Title } from '@tremor/react'
-import { Menu, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Button, Flex, Title } from '@tremor/react'
+import { ReactNode, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
-import CLIMenu from '../CLIMenu'
-import JobsMenu from '../JobsMenu'
-import { KaytuIcon } from '../../../icons/icons'
+import { ChevronRightIcon } from '@heroicons/react/20/solid'
+import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
+import {
+    kebabCaseToLabel,
+    snakeCaseToLabel,
+} from '../../../utilities/labelMaker'
+import DateRangePicker from '../../DateRangePicker'
+import Filter from '../../Filter'
 
 interface IHeader {
-    showLogo?: boolean
-    workspace: string | undefined
+    filter?: boolean
+    datePicker?: boolean
+    children?: ReactNode
+    breadCrumb?: (string | undefined)[]
 }
 
-export default function Header({ workspace, showLogo = false }: IHeader) {
+export default function TopHeader({
+    filter = false,
+    datePicker = false,
+    children,
+    breadCrumb,
+}: IHeader) {
     const { user, logout } = useAuth0()
     const [theme, setTheme] = useState(localStorage.theme || 'light')
     const navigate = useNavigate()
+    const url = window.location.pathname.split('/')
+
+    const mainPage = () => {
+        if (url[1] === 'billing') {
+            return 'Usage & Billing'
+        }
+        return url[2] ? kebabCaseToLabel(url[2]) : 'Workspaces'
+    }
+
+    const subPages = () => {
+        const pages = []
+        for (let i = 3; i < url.length; i += 1) {
+            pages.push(kebabCaseToLabel(url[i]))
+        }
+        return pages
+    }
+
+    const goBack = (n: number) => {
+        let temp = '.'
+        for (let i = 0; i < n; i += 1) {
+            temp += '/..'
+        }
+        return temp
+    }
 
     const toggleTheme = () => {
         if (localStorage.theme === 'dark') {
@@ -32,7 +66,74 @@ export default function Header({ workspace, showLogo = false }: IHeader) {
     return (
         <div className="px-12 z-10 absolute top-2 w-full flex h-16 items-center justify-center gap-x-4 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-900 shadow-sm rounded-tl-2xl">
             <Flex className="max-w-7xl">
-                {showLogo ? (
+                {subPages().length > 0 ? (
+                    <Flex justifyContent="start">
+                        <Button
+                            onClick={() =>
+                                navigate(
+                                    goBack(
+                                        subPages().length > 1
+                                            ? subPages().length
+                                            : 1
+                                    )
+                                )
+                            }
+                            variant="light"
+                            className="!text-lg mr-2 hover:text-kaytu-600"
+                        >
+                            {mainPage()}
+                        </Button>
+                        {subPages().map((page, i) => (
+                            <Flex
+                                key={page}
+                                justifyContent="start"
+                                className="w-fit mr-2"
+                            >
+                                <ChevronRightIcon className="h-5 w-5 text-gray-600" />
+                                <Button
+                                    onClick={() =>
+                                        navigate(
+                                            goBack(subPages().length - i - 1)
+                                        )
+                                    }
+                                    variant="light"
+                                    className={`${
+                                        i === subPages().length - 1
+                                            ? 'text-black'
+                                            : ''
+                                    } opacity-100 ml-2 !text-lg`}
+                                    disabled={i === subPages().length - 1}
+                                >
+                                    {i === subPages().length - 1 &&
+                                    breadCrumb?.length
+                                        ? breadCrumb
+                                        : snakeCaseToLabel(page)}
+                                </Button>
+                            </Flex>
+                        ))}
+                    </Flex>
+                ) : (
+                    <Title className="font-semibold !text-xl whitespace-nowrap">
+                        {mainPage()}
+                    </Title>
+                )}
+                <Flex justifyContent="end">
+                    {children}
+                    {datePicker && <DateRangePicker />}
+                    {filter && <Filter />}
+                    <button
+                        type="button"
+                        className="ml-3 text-gray-400 hover:text-gray-500"
+                        onClick={toggleTheme}
+                    >
+                        {theme === 'dark' ? (
+                            <SunIcon className="h-6 w-6" />
+                        ) : (
+                            <MoonIcon className="h-6 w-6" />
+                        )}
+                    </button>
+                </Flex>
+                {/* {showLogo ? (
                     <a href="/">
                         <Flex flexDirection="row">
                             <KaytuIcon className="ml-5 w-7 h-7" />
@@ -68,7 +169,7 @@ export default function Header({ workspace, showLogo = false }: IHeader) {
                         </button>
                         <CLIMenu />
                         <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 lg:dark:bg-white/20" />
-                        {/* Profile dropdown */}
+                        Profile dropdown
                         <Menu as="div" className="relative">
                             <Menu.Button className="-m-1.5 flex items-center p-1.5">
                                 {user?.picture && (
@@ -177,7 +278,7 @@ export default function Header({ workspace, showLogo = false }: IHeader) {
                             </Transition>
                         </Menu>
                     </div>
-                </div>
+                </div> */}
             </Flex>
         </div>
     )

@@ -61,7 +61,6 @@ export default function Findings() {
 
     return (
         <Layout currentPage="findings">
-            <Header />
             <TabGroup index={tab} onIndexChange={setTab}>
                 <TabList className="border-0">
                     {tabs.map((t) => (

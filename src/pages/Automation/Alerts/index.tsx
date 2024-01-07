@@ -54,7 +54,6 @@ export default function Alerts() {
 
     return (
         <Layout currentPage="alerts">
-            <Header />
             <Flex justifyContent="end" className="mb-4">
                 <TextInput
                     icon={MagnifyingGlassIcon}

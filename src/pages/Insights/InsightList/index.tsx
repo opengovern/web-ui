@@ -131,8 +131,7 @@ export default function InsightList() {
     }
 
     return (
-        <Layout currentPage="insights">
-            <Header datePicker filter />
+        <Layout currentPage="insights" datePicker filter>
             <Flex alignItems="start" className="gap-4">
                 <Card className="sticky w-fit">
                     <TextInput

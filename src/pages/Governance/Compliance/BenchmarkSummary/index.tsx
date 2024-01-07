@@ -207,15 +207,16 @@ export default function BenchmarkSummary() {
     }, [isExecuted, recall])
 
     return (
-        <Layout currentPage="compliance">
-            <Header
-                breadCrumb={[
-                    benchmarkDetail?.title
-                        ? benchmarkDetail?.title
-                        : 'Benchmark summary',
-                ]}
-                filter
-            >
+        <Layout
+            currentPage="compliance"
+            breadCrumb={[
+                benchmarkDetail?.title
+                    ? benchmarkDetail?.title
+                    : 'Benchmark summary',
+            ]}
+            filter
+        >
+            <Header>
                 <Settings
                     id={benchmarkDetail?.id}
                     response={(e) => setAssignments(e)}

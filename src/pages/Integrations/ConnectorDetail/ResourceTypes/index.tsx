@@ -81,9 +81,8 @@ export default function ConnectorResourceTypes() {
     api.instance = AxiosAPI
 
     return (
-        <Layout currentPage="integrations">
+        <Layout currentPage="integrations" breadCrumb={['Resource Types']}>
             <Flex flexDirection="col" alignItems="start">
-                <Header breadCrumb={['Resource Types']} />
                 <Flex flexDirection="row">
                     <Title className="font-semibold">{connector}</Title>
                 </Flex>

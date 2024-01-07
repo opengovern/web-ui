@@ -41,8 +41,7 @@ export default function Insights() {
     } = useComplianceApiV1InsightList(query)
 
     return (
-        <Layout currentPage="insights">
-            <Header datePicker filter />
+        <Layout currentPage="insights" datePicker filter>
             <Title className="font-semibold mb-4">Personas</Title>
             <Grid numItems={9} className="w-full gap-4 mb-12">
                 <PersonaCard type="Engineer" />

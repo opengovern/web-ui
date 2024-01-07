@@ -239,8 +239,7 @@ export default function Assets() {
         })
 
     return (
-        <Layout currentPage="assets">
-            <Header datePicker filter />
+        <Layout currentPage="assets" datePicker filter>
             {selectedConnections.connections.length === 1 ? (
                 <SingleConnection
                     activeTimeRange={activeTimeRange}
